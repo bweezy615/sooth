@@ -75,6 +75,44 @@ Branch: `overnight/published-figures`
 different filtering, n=2,750). It was not wrong, but it was a second source of
 truth. There is now one.
 
+### P2 — Grading pipeline ✅
+
+`engine/grade.py` grades a revealed slate: per-model record, Brier, and CLV.
+`scripts/replay_grade.py` replays a settled week to test it end to end.
+
+**Bug found and fixed before it could mislead.** Three ID spaces exist in this
+project and none agree: predictions use nflverse `game_id`, live capture rows
+carry ESPN event ids, backfill rows carry Odds API hashes. Keying CLV on the
+raw `event_id` matched nothing, so CLV would have reported "unavailable"
+forever — a silent zero indistinguishable from a genuine data gap. Now joined
+on (season, home, away) via the team map.
+
+**CLV is provenance-gated.** Only `own_capture` and `oddsapi_historical_close`
+rows may contribute. Where no qualifying price exists, CLV is `None` with a
+stated reason, never estimated from the nearest available number.
+
+**Verification — the number that matters:**
+
+```
+replay 2025 W5   : 4-10 (28.6%)   <- looked like a bug
+manual recount   : 4-10            <- confirmed correct by hand
+2025 season agg  : 181-103 = 0.6373
+backtest accuracy: 0.6372
+```
+
+The pipeline independently reproduces the backtest to four decimal places.
+Week 5 was simply the worst week of the season (range across 2025: 0.286 to
+1.000) — the model's four most confident picks all lost, Baltimore losing
+44–10 as a 74% favourite. **That weekly spread is the strongest argument on
+the site for why a single week's record is noise**, and worth using.
+
+**NOT publishable yet:** the replay's CLV (+0.0025) used nflverse moneylines
+as the reference price. Those are undocumented, so this is a pipeline test,
+not a substantiated claim. A publishable CLV needs our own pre-close capture
+as the reference, which only exists going forward. Guardrail 1 applies.
+
+Branch: `overnight/grading-pipeline`
+
 ---
 
 ## Process failures this pass
