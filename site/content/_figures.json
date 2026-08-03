@@ -1,0 +1,178 @@
+{
+  "generated_at": "2026-08-03T10:36:45.971165+00:00",
+  "command": "python scripts/published_figures.py",
+  "breakeven_ats": 0.5238,
+  "confidence_cap": 0.85,
+  "evaluation_a": {
+    "label": "nflverse lines, 2016-2025",
+    "provenance": "nflverse spread_line - an undocumented periodic snapshot, not a documented close",
+    "seasons": "2016-2025",
+    "results": {
+      "elo": {
+        "n": 2671,
+        "brier": 0.22217,
+        "log_loss": 0.63517,
+        "accuracy": 0.6398,
+        "ece": 0.02698,
+        "ats_record": "1287-1321-63",
+        "ats_pct": 0.4935,
+        "beats_breakeven": false
+      },
+      "independent": {
+        "n": 2671,
+        "brier": 0.22148,
+        "log_loss": 0.63312,
+        "accuracy": 0.6372,
+        "ece": 0.03122,
+        "ats_record": "1291-1317-63",
+        "ats_pct": 0.495,
+        "beats_breakeven": false
+      },
+      "consensus": {
+        "n": 2671,
+        "brier": 0.21455,
+        "log_loss": 0.61763,
+        "accuracy": 0.6649,
+        "ece": 0.03343,
+        "ats_record": "1300-1308-63",
+        "ats_pct": 0.4985,
+        "beats_breakeven": false
+      },
+      "market": {
+        "n": 2671,
+        "brier": 0.21038,
+        "log_loss": 0.60818,
+        "accuracy": 0.6664,
+        "ece": 0.01913,
+        "ats_record": "1327-1281-63",
+        "ats_pct": 0.5088,
+        "beats_breakeven": false
+      }
+    }
+  },
+  "evaluation_b": {
+    "label": "real consensus closes, 2023-2025",
+    "provenance": "median across books, captured 5-28 min before each kickoff, from our own paid backfill",
+    "seasons": "2023-2025",
+    "results": {
+      "elo": {
+        "n": 854,
+        "brier": 0.22246,
+        "log_loss": 0.63628,
+        "accuracy": 0.637,
+        "ece": 0.03265,
+        "ats_record": "402-431-21",
+        "ats_pct": 0.4826,
+        "beats_breakeven": false
+      },
+      "independent": {
+        "n": 854,
+        "brier": 0.22164,
+        "log_loss": 0.63378,
+        "accuracy": 0.6417,
+        "ece": 0.03269,
+        "ats_record": "406-427-21",
+        "ats_pct": 0.4874,
+        "beats_breakeven": false
+      },
+      "consensus": {
+        "n": 854,
+        "brier": 0.21399,
+        "log_loss": 0.61661,
+        "accuracy": 0.6745,
+        "ece": 0.04231,
+        "ats_record": "412-421-21",
+        "ats_pct": 0.4946,
+        "beats_breakeven": false
+      },
+      "market": {
+        "n": 854,
+        "brier": 0.21061,
+        "log_loss": 0.60869,
+        "accuracy": 0.6815,
+        "ece": 0.02396,
+        "ats_record": "406-427-21",
+        "ats_pct": 0.4874,
+        "beats_breakeven": false
+      }
+    }
+  },
+  "line_provenance": {
+    "matched_games": 855,
+    "mean_abs_spread_delta": 0.217,
+    "median_abs_spread_delta": 0.0,
+    "pct_spread_differs": 0.3287,
+    "pct_spread_differs_by_half_pt_or_more": 0.2982,
+    "pct_spread_differs_by_full_pt_or_more": 0.055
+  },
+  "reliability_independent": [
+    {
+      "bucket": "0.1-0.2",
+      "n": 26,
+      "predicted": 0.167,
+      "actual": 0.2692,
+      "gap": -0.1023
+    },
+    {
+      "bucket": "0.2-0.3",
+      "n": 152,
+      "predicted": 0.2616,
+      "actual": 0.2895,
+      "gap": -0.0279
+    },
+    {
+      "bucket": "0.3-0.4",
+      "n": 270,
+      "predicted": 0.3602,
+      "actual": 0.337,
+      "gap": 0.0232
+    },
+    {
+      "bucket": "0.4-0.5",
+      "n": 419,
+      "predicted": 0.4537,
+      "actual": 0.4129,
+      "gap": 0.0408
+    },
+    {
+      "bucket": "0.5-0.6",
+      "n": 569,
+      "predicted": 0.5499,
+      "actual": 0.5026,
+      "gap": 0.0472
+    },
+    {
+      "bucket": "0.6-0.7",
+      "n": 593,
+      "predicted": 0.6497,
+      "actual": 0.6239,
+      "gap": 0.0258
+    },
+    {
+      "bucket": "0.7-0.8",
+      "n": 440,
+      "predicted": 0.7486,
+      "actual": 0.7295,
+      "gap": 0.019
+    },
+    {
+      "bucket": "0.8-0.9",
+      "n": 190,
+      "predicted": 0.8393,
+      "actual": 0.8526,
+      "gap": -0.0134
+    },
+    {
+      "bucket": "0.9-1.0",
+      "n": 12,
+      "predicted": 0.9113,
+      "actual": 0.9167,
+      "gap": -0.0053
+    }
+  ],
+  "models": {
+    "elo": "Elo + margin-of-victory. The transparent baseline.",
+    "independent": "Elo + opponent-aware EPA + rest. Never sees the line.",
+    "consensus": "The above plus the de-vigged market price."
+  }
+}

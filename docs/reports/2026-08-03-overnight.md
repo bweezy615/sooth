@@ -43,6 +43,56 @@ with an explanation of why revisions before kickoff are legitimate.
 
 Branch: `overnight/commitment-versioning`
 
+### P1 — Published figures regenerated from validated closes ✅
+
+`scripts/published_figures.py` is now the single source of truth for every
+performance number on the site. If a figure cannot be produced by that one
+command, it does not belong on the site.
+
+Two evaluations are published side by side rather than swapping the weaker one
+out quietly:
+
+| | A. nflverse lines | B. real consensus closes |
+|---|---|---|
+| seasons | 2016–2025 | 2023–2025 |
+| n | 2,671 | 854 |
+| provenance | undocumented periodic snapshot | median of ~11–17 books, 5–28 min pre-kickoff, ours |
+| Independent ATS | 49.50% | 48.74% |
+| Consensus ATS | 49.85% | 49.46% |
+| Market ATS vs own line | 50.88% | 48.74% |
+
+Nothing clears the 52.38% break-even in either table. The market does not beat
+its own number either, which is the check confirming the harness is not
+flattering us.
+
+**Verification:** every figure on the homepage was matched programmatically
+against `site/content/_figures.json` — 6/6 traceable. All hand-carried numbers
+(49.65%, 2,750, 1333–1352–65, 0.2223) confirmed removed.
+
+Branch: `overnight/published-figures`
+
+**Note:** the old 49.65% came from `engine/backtest.py` (Elo only, slightly
+different filtering, n=2,750). It was not wrong, but it was a second source of
+truth. There is now one.
+
+---
+
+## Process failures this pass
+
+Two of my own verification scripts were broken tonight, both in the same
+direction — a check that reports a problem where none exists:
+
+1. Guardrail 6's secret pattern matched substrings of published SHA-256
+   hashes, firing on the first commit.
+2. The stale-figure check used `grep -c ... || echo 0`, which appends a second
+   `0` because grep exits non-zero on no match, producing `"0\n0"` and a
+   broken integer comparison.
+
+Neither caused a bad artefact, because both were re-checked before acting. But
+two broken checks in one night is a pattern: **verification code is being
+written with less care than the code it verifies.** Worth fixing properly in
+P5 (tests) rather than continuing to hand-roll shell checks.
+
 ---
 
 ## Verified this pass
