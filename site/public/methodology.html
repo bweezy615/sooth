@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — Sooth</title>
+<meta name="description" content="The exact model, the walk-forward backtest, the calibration table, and the result we lose to the market. Reproducible from published data.">
+<link rel="canonical" href="https://sooth.co/methodology">
+<meta property="og:title" content="Methodology — Sooth">
+<meta property="og:description" content="The exact model, the walk-forward backtest, the calibration table, and the result we lose to the market. Reproducible from published data.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--panel:#12161b;--panel-2:#171c23;--line:#242c36;
+--ink:#e8edf4;--muted:#8e9bab;--dim:#64707f;--accent:#4ade80;--warn:#fbbf24;
+--bad:#f87171;--link:#60a5fa;
+--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+@media (prefers-color-scheme:light){:root{--bg:#f7f8fa;--panel:#fff;
+--panel-2:#f1f4f8;--line:#dfe5ec;--ink:#0e1420;--muted:#5a6779;--dim:#8a94a3;
+--link:#1d4ed8;--accent:#15803d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:16px/1.65 Inter,system-ui,-apple-system,sans-serif;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+a{color:var(--link)}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;
+background:color-mix(in srgb,var(--bg) 88%,transparent);
+backdrop-filter:blur(12px);z-index:10}
+nav{display:flex;align-items:center;gap:22px;height:60px;
+max-width:820px;margin:0 auto;padding:0 20px}
+.brand{font-weight:700;letter-spacing:-.02em;font-size:17px;
+text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+nav .spacer{flex:1}
+nav a.l{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+nav a.l:hover{color:var(--ink)}
+.prose{padding:44px 0 60px}
+.prose h1{font-size:clamp(28px,4.5vw,38px);line-height:1.15;
+letter-spacing:-.03em;margin:0 0 26px;font-weight:700}
+.prose h2{font-size:21px;letter-spacing:-.01em;margin:40px 0 12px;
+padding-top:20px;border-top:1px solid var(--line);font-weight:650}
+.prose h3{font-size:17px;margin:26px 0 8px;font-weight:650}
+.prose p{margin:0 0 15px;color:var(--ink)}
+.prose li{margin:0 0 7px}
+.prose strong{font-weight:650}
+.prose code{font-family:var(--mono);font-size:13px;background:var(--panel-2);
+border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.prose pre{background:var(--panel);border:1px solid var(--line);
+border-radius:10px;padding:15px 17px;overflow-x:auto;font-size:12.5px;
+line-height:1.55}
+.prose pre code{background:none;border:0;padding:0;font-size:12.5px}
+.prose table{width:100%;border-collapse:collapse;font-size:14px;margin:18px 0;
+display:block;overflow-x:auto}
+.prose th{text-align:left;font-weight:600;color:var(--dim);font-size:11px;
+text-transform:uppercase;letter-spacing:.07em;padding:0 12px 9px;
+border-bottom:1px solid var(--line);white-space:nowrap}
+.prose td{padding:10px 12px;border-bottom:1px solid var(--line)}
+.prose blockquote{margin:18px 0;padding:14px 18px;background:var(--panel-2);
+border-left:3px solid var(--warn);border-radius:0 8px 8px 0}
+.prose blockquote p{margin:0}
+.prose hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+footer{border-top:1px solid var(--line);padding:30px 0 54px;
+color:var(--dim);font-size:12.5px}
+footer p{max-width:80ch;margin:0 0 9px}
+.mono{font-family:var(--mono)}
+.hash{font-family:var(--mono);font-size:12px;color:var(--accent);
+word-break:break-all}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;
+letter-spacing:.05em;padding:2px 7px;border-radius:4px;
+border:1px solid var(--line);color:var(--muted)}
+.badge.sealed{color:var(--warn);border-color:var(--warn)}
+.badge.revealed{color:var(--accent);border-color:var(--accent)}
+.card{background:var(--panel);border:1px solid var(--line);
+border-radius:12px;padding:17px 19px;margin:0 0 13px}
+.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:13px}
+.card .k{color:var(--dim);min-width:118px;font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+<header><nav>
+  <a class="brand" href="/"><span class="dot"></span>Sooth</a>
+  <span class="spacer"></span>
+  <a class="l" href="/methodology">Methodology</a>
+  <a class="l" href="/verify">Verify</a>
+  <a class="l" href="/ledger">Ledger</a>
+</nav></header>
+<div class="wrap"><div class="prose">
+<hr />
+<p>title: "Methodology: how our NFL model works, and how it performed against the market"
+description: "The full model specification, walk-forward backtest results including the ones that go against us, the calibration table, the confidence cap, the leakage controls, and how the SHA-256 Merkle commitment works."
+last_updated: 2026-08-02
+model_version: elo-mov-v1+iso</p>
+<hr />
+<h1>Methodology</h1>
+<p>This page is the complete technical description of how our predictions are
+produced and how they performed in testing. It includes the results that argue
+against paying us for picks. That is deliberate. It is also the file we would
+hand to a regulator, a payment processor, or a journalist who asked us to
+substantiate anything on this site.</p>
+<p>Everything on this page is reproducible from the public ledger and the open
+source code. If a number here cannot be regenerated from published data, treat
+it as an error and tell us.</p>
+<hr />
+<h2>Summary in one paragraph</h2>
+<p>We predict NFL game outcomes with an Elo rating system that uses a damped
+margin-of-victory update, then convert those ratings into probabilities and
+correct those probabilities with isotonic regression refit each season on prior
+seasons only. Across 2,750 out-of-sample games from 2016 through 2025, the
+model recorded a Brier score of 0.22228 against the de-vigged closing market's
+0.21061, straight-up accuracy of 63.96% against the market's 66.58%, and an
+against-the-spread record of 1333-1352-65, or 49.65%, against a breakeven of
+52.38% at standard -110 pricing. <strong>The model does not beat the closing market.</strong>
+Our probabilities are well calibrated, which is a different and smaller claim,
+and it is the only claim we make.</p>
+<hr />
+<h2>What we claim and what we do not claim</h2>
+<p>We claim exactly two things:</p>
+<ol>
+<li><strong>Our published probabilities are calibrated.</strong> When we publish 70%, events
+   in that band have historically occurred about 70% of the time in our
+   out-of-sample testing. The measured expected calibration error of the
+   calibrated model is 0.02162.</li>
+<li><strong>Our record is tamper-evident.</strong> Every prediction is hashed and committed to
+   a public Merkle root before the first kickoff of its slate. We cannot delete
+   a loss or add a win after the fact without breaking the root.</li>
+</ol>
+<p>We do not claim, and have never claimed, that following our predictions is
+profitable. Our own testing says it is not. We do not publish a win rate as a
+selling point, a return on investment figure, or a units-won figure. We do not
+accept wagers, hold funds, or pay out prizes.</p>
+<hr />
+<h2>The model</h2>
+<h3>Ratings: Elo with margin-of-victory damping</h3>
+<p>Every team carries a single rating. Ratings start at 1500 and move only when a
+game settles.</p>
+<p>The probability that the home team wins is the standard Elo logistic:</p>
+<pre><code>p_home = 1 / (1 + 10 ^ (-(R_home - R_away + HFA + rest_bonus) / 400))
+</code></pre>
+<p>After the game settles, both ratings move by the same amount in opposite
+directions:</p>
+<pre><code>delta       = K * mov_multiplier * (actual - p_home)
+mov_multiplier = ln(|margin| + 1) * (2.2 / (0.001 * winner_elo_diff + 2.2))
+</code></pre>
+<p>The margin-of-victory multiplier is the standard log-damped form. It gives more
+credit for a 24-point win than a 3-point win without letting a single blowout
+dominate a team's rating, and the <code>winner_elo_diff</code> denominator corrects for the
+fact that better teams are mechanically more likely to win by a lot. Without
+that correction the system over-rates favourites in a self-reinforcing loop.</p>
+<h3>Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>value</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>k</code></td>
+<td>20.0</td>
+<td>rating points moved per unit of surprise</td>
+</tr>
+<tr>
+<td><code>home_advantage</code></td>
+<td>48.0 Elo</td>
+<td>roughly 2 points of spread</td>
+</tr>
+<tr>
+<td><code>season_carryover</code></td>
+<td>0.75</td>
+<td>fraction of a rating carried into the next season</td>
+</tr>
+<tr>
+<td><code>base_rating</code></td>
+<td>1500.0</td>
+<td>starting and mean-reversion target</td>
+</tr>
+<tr>
+<td><code>elo_per_point</code></td>
+<td>25.0</td>
+<td>Elo points per point of scoring margin</td>
+</tr>
+<tr>
+<td><code>rest_per_day</code></td>
+<td>1.5 Elo</td>
+<td>bonus per extra day of rest versus the opponent</td>
+</tr>
+</tbody>
+</table>
+<p>These values are conventional, were not tuned against the test period, and are
+published so that anyone can reproduce our ratings exactly. The model is
+deliberately simple. Its job is not to be clever; its job is to be a fully
+explainable baseline that we can publish, grade in public, and improve on
+in the open.</p>
+<h3>Calibration: isotonic regression, refit every season</h3>
+<p>Raw Elo probabilities are mildly overconfident in the middle bands. We correct
+them with isotonic regression, which is a monotone step-fit that reshapes the
+probability curve without assuming that curve is logistic.</p>
+<p>The calibrator is fitted <strong>only on seasons strictly before the season being
+predicted</strong>, and it is refitted every year. Fitting a calibrator on the same
+games you then score with it manufactures a perfect-looking reliability curve
+that means nothing. Seasons before we have 500 prior games available pass
+through uncalibrated rather than being calibrated on thin data.</p>
+<p>The production model version is <code>elo-mov-v1+iso</code>.</p>
+<hr />
+<h2>How we test: walk-forward, never in-sample</h2>
+<p>Ratings are built strictly forward in time. For every game in the historical
+record the model produces a prediction <strong>using only ratings derived from games
+that had already finished</strong>, and only afterwards is the result used to update
+the ratings. There is no point at which the model sees a future game.</p>
+<ul>
+<li>Rating warm-up period: 1999 through 2015.</li>
+<li>Out-of-sample scoring period: 2016 through 2025.</li>
+<li>Games graded: 2,750. This is every regular and post-season game in the window
+  that was not a tie and for which both moneyline prices were available, so the
+  model and the market can be scored on identical games.</li>
+</ul>
+<p>The market comparison uses <strong>de-vigged</strong> closing prices. Both sides' implied
+probabilities are divided by their sum to remove the bookmaker margin. Comparing
+a model to a vigged line is trivially easy and meaningless, because the vig
+guarantees the raw line is a biased probability estimate.</p>
+<hr />
+<h2>Backtest results, 2016-2025</h2>
+<h3>Against the de-vigged closing market</h3>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>our model</th>
+<th>de-vigged market</th>
+<th>who wins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brier score</td>
+<td>0.22228</td>
+<td>0.21061</td>
+<td>market, by 0.01166</td>
+</tr>
+<tr>
+<td>log loss</td>
+<td>0.63535</td>
+<td>0.60863</td>
+<td>market, by 0.02672</td>
+</tr>
+<tr>
+<td>straight-up accuracy</td>
+<td>63.96%</td>
+<td>66.58%</td>
+<td>market, by 2.62 points</td>
+</tr>
+</tbody>
+</table>
+<p>Lower is better for Brier score and log loss. The market wins on every measure.</p>
+<h3>Against the spread</h3>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>record</td>
+<td>1333-1352-65</td>
+</tr>
+<tr>
+<td>win rate on decided games</td>
+<td>49.65%</td>
+</tr>
+<tr>
+<td>breakeven at -110</td>
+<td>52.38%</td>
+</tr>
+<tr>
+<td>shortfall</td>
+<td>2.73 percentage points</td>
+</tr>
+</tbody>
+</table>
+<p>The model, betting the side it disagreed with the posted number on, went
+1333-1352-65. That is a losing record before pricing and a decisively losing
+record after it.</p>
+<h3>What this means</h3>
+<p>The NFL closing line is among the most efficient prediction markets that
+exists. Thousands of participants with better data than ours, including
+professional syndicates, push it toward the true probability before kickoff. A
+clean Elo baseline losing to it is the expected result, not a defect.</p>
+<p>We learned this privately, from our own backtest, before launch. The honest
+consequence is that <strong>we cannot sell "we beat the market" at any price</strong>, so we
+do not sell picks. The paid product is tools and data - no-vig calculators,
+line-movement alerts, historical closing-line-value lookups, model exports.
+The predictions themselves are free, and they are free because we do not
+believe they are worth money.</p>
+<p>If you see a service advertising a sustained edge over NFL closing lines, the
+appropriate question is not "how big is the edge" but "show me the same table
+above, computed the same way, on out-of-sample games, against de-vigged closing
+prices."</p>
+<hr />
+<h2>Calibration results</h2>
+<p>Calibration asks a narrower question than profitability: when we say 70%, does
+it happen about 70% of the time? A model can be well calibrated and still
+unprofitable, which is precisely our situation.</p>
+<h3>Expected calibration error</h3>
+<p>Expected calibration error (ECE) is the sample-weighted mean absolute gap
+between predicted and observed frequency across ten probability bands. Lower is
+better.</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>ECE</th>
+<th>Brier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>raw Elo</td>
+<td>0.02654</td>
+<td>0.22228</td>
+</tr>
+<tr>
+<td>isotonic-calibrated Elo (published)</td>
+<td><strong>0.02162</strong></td>
+<td>0.22323</td>
+</tr>
+<tr>
+<td>de-vigged market</td>
+<td>0.01802</td>
+<td>0.21061</td>
+</tr>
+</tbody>
+</table>
+<p>Two honest notes on that table. First, calibration improves ECE by about 18.5%
+but very slightly <strong>worsens</strong> Brier score, from 0.22228 to 0.22323. Isotonic
+regression buys reliability at a small cost in sharpness. We publish both
+numbers because reporting only the one that improved would be the same
+selective disclosure we are criticising. Second, the market is still better
+calibrated than we are.</p>
+<h3>Reliability table, calibrated model, 2,750 games</h3>
+<table>
+<thead>
+<tr>
+<th>predicted band</th>
+<th>n</th>
+<th>mean predicted</th>
+<th>actual frequency</th>
+<th>gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.0-0.1</td>
+<td>12</td>
+<td>1.00%</td>
+<td>33.33%</td>
+<td>-32.33 pts</td>
+</tr>
+<tr>
+<td>0.1-0.2</td>
+<td>18</td>
+<td>16.66%</td>
+<td>27.78%</td>
+<td>-11.12 pts</td>
+</tr>
+<tr>
+<td>0.2-0.3</td>
+<td>149</td>
+<td>24.84%</td>
+<td>30.87%</td>
+<td>-6.03 pts</td>
+</tr>
+<tr>
+<td>0.3-0.4</td>
+<td>324</td>
+<td>36.21%</td>
+<td>34.88%</td>
+<td>+1.33 pts</td>
+</tr>
+<tr>
+<td>0.4-0.5</td>
+<td>593</td>
+<td>44.80%</td>
+<td>43.00%</td>
+<td>+1.80 pts</td>
+</tr>
+<tr>
+<td>0.5-0.6</td>
+<td>401</td>
+<td>56.10%</td>
+<td>53.62%</td>
+<td>+2.48 pts</td>
+</tr>
+<tr>
+<td>0.6-0.7</td>
+<td>739</td>
+<td>64.98%</td>
+<td>63.87%</td>
+<td>+1.11 pts</td>
+</tr>
+<tr>
+<td>0.7-0.8</td>
+<td>244</td>
+<td>73.66%</td>
+<td>72.54%</td>
+<td>+1.12 pts</td>
+</tr>
+<tr>
+<td>0.8-0.9</td>
+<td>210</td>
+<td>84.77%</td>
+<td>82.86%</td>
+<td>+1.91 pts</td>
+</tr>
+<tr>
+<td>0.9-1.0</td>
+<td>60</td>
+<td>94.51%</td>
+<td>86.67%</td>
+<td><strong>+7.84 pts</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A positive gap means we were overconfident: we predicted the event more often
+than it happened.</p>
+<p>Read the extremes with care. The 0.0-0.1 and 0.1-0.2 bands hold 12 and 18 games
+respectively; at those sample sizes a handful of upsets moves the observed
+frequency by tens of points and the gap is mostly noise. The bands that carry
+real weight are 0.3 through 0.9, which hold 2,511 of the 2,750 games, and in
+those bands the model is overconfident by between 1.1 and 2.5 percentage
+points.</p>
+<p>For comparison, the de-vigged market over the same games is mildly
+<strong>under</strong>confident in its top bands: it predicted 84.70% and observed 87.57% in
+the 0.8-0.9 band. That is the signature of a market that has priced in the vig
+asymmetry, and it is another reason we treat the market as the benchmark rather
+than the opponent.</p>
+<hr />
+<h2>Why we cap published confidence at 85%</h2>
+<p><strong>We do not publish any probability above 0.85, regardless of what the model
+outputs.</strong> The cap exists because of one row in the table above.</p>
+<p>In the 0.9-1.0 band, across 60 out-of-sample games, the calibrated model
+predicted an average of 94.51% and the events occurred 86.67% of the time. The
+model was overconfident by 7.84 percentage points - four times the error of any
+other well-populated band.</p>
+<p>This is the single most important finding in our testing, because it inverts
+the industry's usual sales pitch. The standard product in this category is "our
+one highest-confidence pick of the day." That is precisely the band where our
+model is least trustworthy. High-confidence selections are not the safe subset;
+in our data they are the least reliable subset, because extreme probabilities
+are produced by extreme rating gaps, and extreme rating gaps are exactly where a
+simple rating system is most likely to be extrapolating past the evidence.</p>
+<p>Capping at 0.85 keeps every published probability inside a band where our
+measured overconfidence is under two percentage points. It costs us the
+headline number that would sell best. We consider explaining why we do not have
+that number to be more valuable than having it.</p>
+<hr />
+<h2>Leakage controls</h2>
+<p>Data leakage - training on information that would not have been available
+before kickoff - is the most common way a sports model backtests beautifully
+and then loses live. It is also the easiest way to build a fraudulent-looking
+track record without meaning to.</p>
+<p>The following columns are present in our source data and are <strong>banned from
+feature construction</strong>, enforced by an assertion in the NFL adapter that fails
+the build rather than warning:</p>
+<table>
+<thead>
+<tr>
+<th>banned column</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>temp</code></td>
+<td>measured at or after the game, not a pre-game forecast</td>
+</tr>
+<tr>
+<td><code>wind</code></td>
+<td>same</td>
+</tr>
+<tr>
+<td><code>home_score</code>, <code>away_score</code></td>
+<td>the outcome</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td>the outcome</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>the outcome</td>
+</tr>
+<tr>
+<td><code>overtime</code></td>
+<td>the outcome</td>
+</tr>
+</tbody>
+</table>
+<p>Betting-line columns require a separate control. In our source dataset,
+<code>spread_line</code> and the related price columns are <strong>overwritten in place as the
+market moves</strong>. A row read today shows the current number, not the number that
+existed when the game was scheduled. We therefore treat those columns as a
+closing line only for games already marked final, and we never treat them as an
+opening line.</p>
+<p>Because of that, <strong>we have not published a closing-line-value figure and will
+not publish one</strong> until we have validated our line history against an
+independent source with explicit open and close objects. CLV is the metric most
+often quoted by services in this category and it is the metric most easily
+faked by reading a mutable field. Ours will be published when it is defensible
+and not before.</p>
+<p>The features actually used by the production model are: team identity, prior
+ratings derived only from earlier games, home or neutral site, days of rest for
+each team, and season boundaries for the carryover regression. That is the
+complete list.</p>
+<hr />
+<h2>The commitment scheme</h2>
+<p>The problem with every published pick record on the internet is that it is
+self-reported and editable. A losing pick can quietly vanish. A winning pick can
+be added afterwards. "We publish everything" is an unfalsifiable claim.</p>
+<p>We make our record falsifiable with a commit-reveal scheme.</p>
+<h3>How it works</h3>
+<ol>
+<li><strong>Canonicalise.</strong> Before the first kickoff of a slate, every prediction is
+   serialised to deterministic JSON: keys sorted alphabetically, no insignificant
+   whitespace, UTF-8. The same logical prediction produces byte-identical output
+   on any machine.</li>
+<li><strong>Hash each prediction into a leaf.</strong>
+   <code>leaf = SHA-256(0x00 || canonical_json)</code></li>
+<li><strong>Build a Merkle tree.</strong> Adjacent nodes are combined as
+   <code>parent = SHA-256(0x01 || left || right)</code>, working up the tree until one node
+   remains. If a level has an odd number of nodes, the last node is duplicated.
+   The distinct <code>0x00</code> and <code>0x01</code> prefixes are domain separation: they make it
+   impossible to pass an internal node off as a leaf, which is the standard
+   second-preimage attack on naive Merkle trees.</li>
+<li><strong>Publish the root before kickoff.</strong> Only the root hash is published at this
+   stage. A 64-character hash reveals nothing about which teams we picked.</li>
+<li><strong>Anchor the root to a third-party timestamp.</strong> The root is committed to a
+   public Git repository. GitHub's commit timestamps are issued by a third party
+   and are not forgeable by us, which is what turns "we published this early"
+   into something you can check rather than take on faith.</li>
+<li><strong>Reveal after settlement.</strong> Once the games are final we publish every
+   prediction in full, along with the leaf hashes.</li>
+</ol>
+<p>Anyone can then recompute the tree from the revealed predictions and confirm it
+produces the root we published before kickoff. If we had altered, removed,
+reordered, or back-dated a single prediction, the recomputed root would not
+match. The algorithm identifier recorded in every commitment file is
+<code>sha256-merkle-v1</code>.</p>
+<p>The commit function refuses to seal a slate after its first kickoff. A
+commitment created after games have started proves nothing, so we made it
+impossible to create one by accident.</p>
+<h3>An inclusion proof lets you check one pick</h3>
+<p>Because it is a Merkle tree and not a flat hash, a single prediction can be
+proven to belong to a committed slate without revealing the rest of the slate.
+For our 16-game NFL Week 1 slate, an inclusion proof is four hashes long. This
+matters for the paid tier: we can prove a subscriber-only prediction was part of
+the pre-kickoff commitment without publishing the whole slate to non-subscribers.</p>
+<p>Step-by-step instructions for verifying all of this yourself, including a
+30-line script that does not use any of our code, are on the <a href="/verify">verification
+page</a>.</p>
+<h3>What the commitment does and does not prove</h3>
+<p>It proves the record is complete and unedited. Every prediction we made is in
+it, in the form we made it, timestamped before kickoff.</p>
+<p>It does not prove the predictions are good. Cryptography cannot make a model
+accurate. It only makes our reporting of that model honest, which is a
+different and much rarer property in this industry.</p>
+<hr />
+<h2>Known limitations</h2>
+<p>We would rather state these than have them found.</p>
+<ul>
+<li><strong>The model loses to the market.</strong> Stated at the top and repeated here.</li>
+<li><strong>Ratings are team-level.</strong> There is no quarterback adjustment. An injury to a
+  starting quarterback is not reflected in our probability until the team has
+  played and been re-rated, which means our early-season and post-injury numbers
+  are systematically worse than the market's.</li>
+<li><strong>No play-level information.</strong> The model does not use expected points added,
+  success rate, or any drive-level data. It knows who played whom and by how
+  much.</li>
+<li><strong>Small samples at the extremes.</strong> As noted, the outer probability bands hold
+  too few games to draw conclusions from.</li>
+<li><strong>One sport is Live.</strong> NFL only. The other eight sports on this site are
+  labelled "in calibration" or "deferred" and are not graded against verified
+  closing lines yet. A sport is never marked Live without confirmed free
+  closing-odds history, because without it we cannot grade ourselves honestly.</li>
+<li><strong>No published CLV.</strong> See the leakage section.</li>
+<li><strong>Backtests are not forecasts.</strong> Ten seasons of out-of-sample results are a
+  reasonable sample, not a guarantee about 2026. Past performance does not
+  indicate future results.</li>
+</ul>
+<hr />
+<h2>Planned improvements</h2>
+<p>These are the changes we expect to make, published in advance so the record
+shows what changed and when:</p>
+<ul>
+<li>Expected-points-added-based ratings alongside Elo</li>
+<li>A quarterback availability adjustment</li>
+<li>Blending model probability with market probability, which usually improves
+  Brier score even when the model alone does not</li>
+<li>Validating our line history against an independent source so a
+  closing-line-value figure can be published</li>
+</ul>
+<p>Any change to the model produces a new <code>model_version</code> string, and every
+prediction in the ledger records the version that produced it. A prediction can
+always be traced to the exact model that made it.</p>
+<hr />
+<h2>Data sources and code</h2>
+<ul>
+<li>Historical NFL schedules, scores, and betting lines: nflverse public datasets.</li>
+<li>Rating, calibration, backtest, and commitment code: open source, in the
+  project repository. The verification function has no dependency on our
+  honesty; it recomputes everything from published files.</li>
+<li>Ledger: <a href="/ledger">/ledger</a>. Verification guide: <a href="/verify">/verify</a>.</li>
+</ul>
+<h2>Disclosures</h2>
+<p>This site publishes predictions for analysis and entertainment. We do not accept
+wagers, hold funds, or pay prizes. We are not affiliated with the NFL, any
+league, team, or sportsbook. Full disclaimers, including responsible-gambling
+resources, are at <a href="/disclaimers">/disclaimers</a>.</p>
+<p><em>Last updated 2026-08-02. Model version <code>elo-mov-v1+iso</code>.</em></p>
+</div></div>
+<footer><div class="wrap">
+<p><strong>Entertainment and analysis only. We do not accept, place, or
+facilitate wagers</strong>, and we hold no customer funds. Not affiliated with
+the NFL or any sportsbook.</p>
+<p>Past performance does not indicate future results. Our published backtest
+shows a loss against the closing market. Nothing here is a recommendation to
+bet. Must be of legal age in your jurisdiction.</p>
+<p>If gambling is causing harm, the NCPG helpline is
+<strong>1-800-522-4700</strong>, available 24/7.</p>
+<p style="margin-top:16px"><a href="/methodology">Methodology</a> ·
+<a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
+<a href="/disclaimers">Disclaimers</a></p>
+</div></footer>
+</body>
+</html>

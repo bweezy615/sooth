@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify our record — Sooth</title>
+<meta name="description" content="How to independently recompute our Merkle root and prove no prediction was altered after the fact. Standard library only.">
+<link rel="canonical" href="https://sooth.co/verify">
+<meta property="og:title" content="Verify our record — Sooth">
+<meta property="og:description" content="How to independently recompute our Merkle root and prove no prediction was altered after the fact. Standard library only.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--panel:#12161b;--panel-2:#171c23;--line:#242c36;
+--ink:#e8edf4;--muted:#8e9bab;--dim:#64707f;--accent:#4ade80;--warn:#fbbf24;
+--bad:#f87171;--link:#60a5fa;
+--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+@media (prefers-color-scheme:light){:root{--bg:#f7f8fa;--panel:#fff;
+--panel-2:#f1f4f8;--line:#dfe5ec;--ink:#0e1420;--muted:#5a6779;--dim:#8a94a3;
+--link:#1d4ed8;--accent:#15803d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:16px/1.65 Inter,system-ui,-apple-system,sans-serif;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+a{color:var(--link)}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;
+background:color-mix(in srgb,var(--bg) 88%,transparent);
+backdrop-filter:blur(12px);z-index:10}
+nav{display:flex;align-items:center;gap:22px;height:60px;
+max-width:820px;margin:0 auto;padding:0 20px}
+.brand{font-weight:700;letter-spacing:-.02em;font-size:17px;
+text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+nav .spacer{flex:1}
+nav a.l{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+nav a.l:hover{color:var(--ink)}
+.prose{padding:44px 0 60px}
+.prose h1{font-size:clamp(28px,4.5vw,38px);line-height:1.15;
+letter-spacing:-.03em;margin:0 0 26px;font-weight:700}
+.prose h2{font-size:21px;letter-spacing:-.01em;margin:40px 0 12px;
+padding-top:20px;border-top:1px solid var(--line);font-weight:650}
+.prose h3{font-size:17px;margin:26px 0 8px;font-weight:650}
+.prose p{margin:0 0 15px;color:var(--ink)}
+.prose li{margin:0 0 7px}
+.prose strong{font-weight:650}
+.prose code{font-family:var(--mono);font-size:13px;background:var(--panel-2);
+border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.prose pre{background:var(--panel);border:1px solid var(--line);
+border-radius:10px;padding:15px 17px;overflow-x:auto;font-size:12.5px;
+line-height:1.55}
+.prose pre code{background:none;border:0;padding:0;font-size:12.5px}
+.prose table{width:100%;border-collapse:collapse;font-size:14px;margin:18px 0;
+display:block;overflow-x:auto}
+.prose th{text-align:left;font-weight:600;color:var(--dim);font-size:11px;
+text-transform:uppercase;letter-spacing:.07em;padding:0 12px 9px;
+border-bottom:1px solid var(--line);white-space:nowrap}
+.prose td{padding:10px 12px;border-bottom:1px solid var(--line)}
+.prose blockquote{margin:18px 0;padding:14px 18px;background:var(--panel-2);
+border-left:3px solid var(--warn);border-radius:0 8px 8px 0}
+.prose blockquote p{margin:0}
+.prose hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+footer{border-top:1px solid var(--line);padding:30px 0 54px;
+color:var(--dim);font-size:12.5px}
+footer p{max-width:80ch;margin:0 0 9px}
+.mono{font-family:var(--mono)}
+.hash{font-family:var(--mono);font-size:12px;color:var(--accent);
+word-break:break-all}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;
+letter-spacing:.05em;padding:2px 7px;border-radius:4px;
+border:1px solid var(--line);color:var(--muted)}
+.badge.sealed{color:var(--warn);border-color:var(--warn)}
+.badge.revealed{color:var(--accent);border-color:var(--accent)}
+.card{background:var(--panel);border:1px solid var(--line);
+border-radius:12px;padding:17px 19px;margin:0 0 13px}
+.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:13px}
+.card .k{color:var(--dim);min-width:118px;font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+<header><nav>
+  <a class="brand" href="/"><span class="dot"></span>Sooth</a>
+  <span class="spacer"></span>
+  <a class="l" href="/methodology">Methodology</a>
+  <a class="l" href="/verify">Verify</a>
+  <a class="l" href="/ledger">Ledger</a>
+</nav></header>
+<div class="wrap"><div class="prose">
+<hr />
+<p>title: "How to verify our prediction record yourself"
+description: "A plain-English guide to checking that our published record is complete and unedited, using a 30-line script that does not trust any of our code."
+last_updated: 2026-08-02</p>
+<hr />
+<h1>How to verify our record</h1>
+<p>Every sports prediction site says it publishes its results. Almost none of them
+publish results you can check. The record is stored on their server, it is
+editable, and a losing pick can quietly disappear between the day it was made
+and the day you look at it.</p>
+<p>This page shows you how to prove, for yourself, that our record has not been
+edited. You do not have to trust us, and you do not have to run our software.
+The whole check is about thirty lines of code that you can read in a minute.</p>
+<p>You do need to be comfortable copying a command into a terminal. You do not need
+to be a programmer.</p>
+<hr />
+<h2>The idea, in plain English</h2>
+<p>Imagine that before every NFL Sunday we write our predictions on a sheet of
+paper, seal it in an envelope, and post the envelope to ourselves. Then, after
+the games, we open it in public. If the postmark is from Friday, we could not
+have changed anything after the games.</p>
+<p>A <strong>cryptographic hash</strong> is the digital version of that sealed envelope. It is a
+one-way fingerprint: you feed in any text, and you get back a 64-character
+string. Change a single character of the text - a probability from 0.66 to 0.67,
+a team name, a timestamp - and the fingerprint changes completely and
+unpredictably. You cannot work backwards from the fingerprint to the text, and
+you cannot construct different text that produces the same fingerprint.</p>
+<p>So before the first kickoff of every slate we publish one fingerprint. It gives
+nothing away: it is 64 characters of noise, and no one can read our picks out of
+it. After the games finish we publish the predictions themselves. Anyone can
+then re-run the fingerprint on the published predictions and check it matches
+the one we published on Friday.</p>
+<p>If it matches, the record is exactly what we committed to before kickoff. If we
+had deleted a loss, added a win, changed a probability, or even reordered the
+list, the fingerprint would not match and you would catch us.</p>
+<h3>Why a "Merkle tree" rather than one big fingerprint</h3>
+<p>We could hash the whole slate as one blob. Instead we hash each prediction
+individually, then hash those hashes together in pairs, then hash those results
+in pairs, and so on up to a single fingerprint at the top. That top fingerprint
+is called the <strong>Merkle root</strong>.</p>
+<p>The tree structure buys one useful property: we can prove that a single
+prediction was part of the committed slate without revealing the other
+predictions. That short list of hashes is called an <strong>inclusion proof</strong>. It
+matters for subscriber-only predictions, where we want to prove a pick was
+committed before kickoff without publishing it to everyone.</p>
+<h3>The timestamp</h3>
+<p>A fingerprint published before kickoff only means something if you can tell it
+was published before kickoff. We commit the root to a public Git repository, so
+the timestamp comes from GitHub, not from us. We cannot back-date a GitHub
+commit that is already public, and you can look at the commit history yourself.</p>
+<hr />
+<h2>What we publish for every slate</h2>
+<p>Two files, both plain JSON.</p>
+<p><strong><code>/data/&lt;slate-id&gt;.commitment.json</code></strong> goes up before the first kickoff. It
+contains only the root fingerprint and the counts. For NFL Week 1 of 2026 it
+reads:</p>
+<pre><code class="language-json">{
+  &quot;algorithm&quot;: &quot;sha256-merkle-v1&quot;,
+  &quot;committed_at&quot;: &quot;2026-08-03T02:50:37.265208+00:00&quot;,
+  &quot;earliest_kickoff&quot;: &quot;2026-09-09T20:20:00+00:00&quot;,
+  &quot;merkle_root&quot;: &quot;d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a&quot;,
+  &quot;n_predictions&quot;: 16,
+  &quot;slate_id&quot;: &quot;2026-W01-nfl&quot;,
+  &quot;sport&quot;: &quot;nfl&quot;
+}
+</code></pre>
+<p>Note that <code>committed_at</code> is over a month before <code>earliest_kickoff</code>. Note also
+that this file tells you nothing about who we picked. That is the point.</p>
+<p><strong><code>/data/&lt;slate-id&gt;.reveal.json</code></strong> goes up after the games settle. It contains
+the same root, every prediction in full, and the individual leaf fingerprints.</p>
+<p>Both files are also in the public code repository under <code>data/ledger/</code>.</p>
+<hr />
+<h2>The check, step by step</h2>
+<h3>Step 1: get the two files</h3>
+<pre><code>curl -O https://sooth.co/data/2026-W01-nfl.commitment.json
+curl -O https://sooth.co/data/2026-W01-nfl.reveal.json
+</code></pre>
+<h3>Step 2: save this script as <code>verify.py</code></h3>
+<p>It uses nothing but Python's standard library, which means there is nothing to
+install and no package of ours anywhere in the process. Read it before you run
+it - that is the point of it being short.</p>
+<pre><code class="language-python"># verify.py - independently check a committed slate.
+# Standard library only. No dependency on the publisher's code.
+import hashlib, json, sys
+
+def sha(prefix, *parts):
+    h = hashlib.sha256()
+    h.update(prefix)
+    for p in parts:
+        h.update(p)
+    return h.hexdigest()
+
+def canonical(obj):
+    # Deterministic JSON: keys sorted, no extra whitespace.
+    return json.dumps(obj, sort_keys=True, separators=(&quot;,&quot;, &quot;:&quot;)).encode()
+
+def leaf(prediction):
+    return sha(b&quot;\x00&quot;, canonical(prediction))
+
+def pair(left, right):
+    return sha(b&quot;\x01&quot;, bytes.fromhex(left), bytes.fromhex(right))
+
+def root(leaves):
+    level = list(leaves)
+    while len(level) &gt; 1:
+        if len(level) % 2:
+            level.append(level[-1])   # duplicate the odd one out
+        level = [pair(level[i], level[i + 1]) for i in range(0, len(level), 2)]
+    return level[0]
+
+commitment = json.load(open(sys.argv[1]))
+reveal     = json.load(open(sys.argv[2]))
+
+leaves = [leaf(p) for p in reveal[&quot;predictions&quot;]]
+
+print(&quot;predictions revealed :&quot;, len(reveal[&quot;predictions&quot;]))
+print(&quot;predictions committed:&quot;, commitment[&quot;n_predictions&quot;])
+print(&quot;committed at         :&quot;, commitment[&quot;committed_at&quot;])
+print(&quot;earliest kickoff     :&quot;, commitment[&quot;earliest_kickoff&quot;])
+print()
+print(&quot;published root       :&quot;, commitment[&quot;merkle_root&quot;])
+print(&quot;recomputed root      :&quot;, root(leaves))
+print()
+
+ok = (len(reveal[&quot;predictions&quot;]) == commitment[&quot;n_predictions&quot;]
+      and leaves == reveal[&quot;leaves&quot;]
+      and root(leaves) == commitment[&quot;merkle_root&quot;])
+print(&quot;VERIFIED&quot; if ok else &quot;MISMATCH - the record does not match the commitment&quot;)
+</code></pre>
+<h3>Step 3: run it</h3>
+<pre><code>python3 verify.py 2026-W01-nfl.commitment.json 2026-W01-nfl.reveal.json
+</code></pre>
+<p>Output for NFL Week 1 of 2026:</p>
+<pre><code>predictions revealed : 16
+predictions committed: 16
+committed at         : 2026-08-03T02:50:37.265208+00:00
+earliest kickoff     : 2026-09-09T20:20:00+00:00
+
+published root       : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
+recomputed root      : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
+
+VERIFIED
+</code></pre>
+<p>The two roots match, so the sixteen predictions in the reveal file are exactly
+the sixteen we sealed on 3 August 2026, five weeks before kickoff.</p>
+<h3>Step 4: prove to yourself that it would catch us</h3>
+<p>Do not take our word for the fact that the check is sensitive. Break something
+and watch it fail. Open the reveal file in a text editor, find any prediction,
+change its <code>probability</code> from <code>0.6615</code> to <code>0.99</code>, save, and run the script
+again. The recomputed root becomes a completely different string
+(<code>13a070aa9e...</code> in our test) and the script prints <code>MISMATCH</code>.</p>
+<p>That is the entire security argument. One digit in one of sixteen predictions
+is enough to break the match. There is no way for us to quietly improve the
+record after the fact.</p>
+<hr />
+<h2>Checking a single prediction: inclusion proofs</h2>
+<p>Sometimes you only want to check one pick, and sometimes we only publish one
+pick - for example a subscriber-only prediction where the rest of the slate is
+not public. An inclusion proof handles that case.</p>
+<p>The proof is a short list of sibling fingerprints, one for each level of the
+tree. You start with the fingerprint of your prediction, combine it with the
+first sibling, combine that result with the second sibling, and keep going. If
+you end up at the published root, your prediction was definitely in the
+committed slate.</p>
+<p>For a 16-prediction slate the proof is four hashes long. Sixteen becomes eight,
+eight becomes four, four becomes two, two becomes one.</p>
+<h3>Worked example</h3>
+<p>The first prediction in the Week 1 slate, in canonical form, is this exact
+string of 281 characters:</p>
+<pre><code>{&quot;created_at&quot;:&quot;2026-09-09T20:20:00+00:00&quot;,&quot;event_id&quot;:&quot;2026_01_NE_SEA&quot;,&quot;line&quot;:null,&quot;market&quot;:&quot;moneyline&quot;,&quot;model_version&quot;:&quot;elo-mov-v1+iso&quot;,&quot;probability&quot;:0.6615,&quot;rationale&quot;:&quot;elo 1692 vs 1604, rest diff +0&quot;,&quot;reference_line&quot;:3.5,&quot;reference_price&quot;:-198,&quot;selection&quot;:&quot;side_a&quot;,&quot;sport&quot;:&quot;nfl&quot;}
+</code></pre>
+<p>Its leaf fingerprint is:</p>
+<pre><code>2ee7fb4740fafe6bbadab1e45bd2f3e9ce0578ced2f1628a82cba5d4b8b2f5bc
+</code></pre>
+<p>And its inclusion proof, four steps, is:</p>
+<pre><code class="language-json">[
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;4d433651a9f54a1fdf0ee279a08911cd66ad0b1f35dcf309eb45e68af3beccaa&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;259bd611b859eb91d815444c743cf6129d0e122116e79285f18f5a8f7b79c2c8&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;27c786e1d14b4dd9c47b0f5bee0d4d685c1cfb7e9a886299d4a2c9d6e40c26ad&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;9a0355b99163949c25926e550389102e8c5786d9c0aa987885a2fb33c11d369b&quot;}
+]
+</code></pre>
+<p><code>"side": "right"</code> means the sibling goes on the right of your running value;
+<code>"left"</code> means it goes on the left. Order matters, which is why we record it.</p>
+<p>Add this to the script above and run it to confirm:</p>
+<pre><code class="language-python">def check_proof(leaf_hash, proof, expected_root):
+    node = leaf_hash
+    for step in proof:
+        if step[&quot;side&quot;] == &quot;right&quot;:
+            node = pair(node, step[&quot;hash&quot;])
+        else:
+            node = pair(step[&quot;hash&quot;], node)
+    return node == expected_root
+</code></pre>
+<p>Feed it the leaf, the four proof steps, and the published root
+<code>d081c00f90...</code>, and it returns <code>True</code>.</p>
+<hr />
+<h2>The technical specification, for anyone writing their own checker</h2>
+<p>You do not have to use Python. Any language with SHA-256 will do. The rules are:</p>
+<ol>
+<li><strong>Canonical JSON.</strong> Serialise each prediction with keys sorted in ascending
+   byte order, no whitespace between tokens, UTF-8 encoding. Numbers appear
+   exactly as they do in the published file.</li>
+<li><strong>Leaf hash.</strong> <code>SHA-256(0x00 || canonical_json_bytes)</code>, output as lowercase
+   hexadecimal.</li>
+<li><strong>Internal node.</strong> <code>SHA-256(0x01 || left_32_bytes || right_32_bytes)</code>, where
+   the two child hashes are decoded from hex to raw bytes before being
+   concatenated.</li>
+<li><strong>Odd levels.</strong> If a level of the tree has an odd number of nodes, duplicate
+   the last node so it pairs with itself.</li>
+<li><strong>Order.</strong> Predictions are hashed in the order they appear in the reveal
+   file. Reordering changes the root.</li>
+<li><strong>Identifier.</strong> Every commitment file records <code>"algorithm":
+   "sha256-merkle-v1"</code>. If we ever change any of the rules above, the identifier
+   changes with them, and old slates remain verifiable under the old rules.</li>
+</ol>
+<p>The distinct <code>0x00</code> and <code>0x01</code> prefixes on leaves and internal nodes are
+deliberate. Without them, an internal node could be presented as though it were
+a leaf, which is a known weakness in naively built Merkle trees.</p>
+<hr />
+<h2>What this proves, and what it does not</h2>
+<p><strong>It proves</strong> that the predictions you are reading are the complete, unaltered
+set we committed to before the first kickoff of that slate, and that we
+committed to them at the time the public Git history says we did.</p>
+<p><strong>It does not prove</strong> that the predictions are any good. Cryptography cannot
+make a forecast accurate. Our own backtest says our model does not beat the
+closing market - the numbers are on the <a href="/methodology">methodology page</a>,
+including the ones that make us look bad.</p>
+<p>Verification makes our reporting honest. It does not make our model right.
+Those are separate things, and conflating them is one of the more common tricks
+in this industry.</p>
+<hr />
+<h2>If a check ever fails</h2>
+<p>Tell us, publicly, and tell anyone else you like. A failed verification on a
+published slate would mean either a bug in our pipeline or that we tampered with
+the record. Both are things you are entitled to know about, and a system that
+only works when nobody checks is not worth building.</p>
+<hr />
+<p><em>We publish predictions for analysis and entertainment. We do not accept wagers.
+See <a href="/disclaimers">/disclaimers</a>.</em></p>
+</div></div>
+<footer><div class="wrap">
+<p><strong>Entertainment and analysis only. We do not accept, place, or
+facilitate wagers</strong>, and we hold no customer funds. Not affiliated with
+the NFL or any sportsbook.</p>
+<p>Past performance does not indicate future results. Our published backtest
+shows a loss against the closing market. Nothing here is a recommendation to
+bet. Must be of legal age in your jurisdiction.</p>
+<p>If gambling is causing harm, the NCPG helpline is
+<strong>1-800-522-4700</strong>, available 24/7.</p>
+<p style="margin-top:16px"><a href="/methodology">Methodology</a> ·
+<a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
+<a href="/disclaimers">Disclaimers</a></p>
+</div></footer>
+</body>
+</html>
