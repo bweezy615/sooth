@@ -194,10 +194,20 @@ before the site.
 
 Public CLV claims may only be computed from `own_capture` rows.
 
-Known limits: single book (DraftKings) via ESPN; multi-book needs The Odds
-API. launchd only runs while the laptop is awake — the GitHub Actions workflow
-in `.github/workflows/capture.yml` is written but inactive until the repo is
-pushed.
+**Runs on GitHub Actions**, not locally — `.github/workflows/capture.yml`,
+every 3 hours. Verified end to end 2026-08-03: GitHub's runner captured odds
+and committed them autonomously (commit `cf54ae3`, 572 rows).
+
+The commit timestamp is the point. GitHub attests that we held a given price
+at a given time, which is what makes a closing-line-value claim auditable
+instead of asserted — the same role the Merkle root plays for predictions.
+
+The local launchd agent was **deliberately disabled** (kept at
+`scripts/co.sooth.capture.plist.disabled`). It appended to the same file the
+Actions runner commits, which would have produced rebase conflicts every time
+the laptop woke. Actions is strictly better: it runs while the laptop is off.
+
+Known limit: single book (DraftKings) via ESPN. Multi-book needs The Odds API.
 
 ---
 
