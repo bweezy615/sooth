@@ -1,0 +1,25 @@
+# This is a STATIC site. Everything Vercel needs is pre-built in site/public.
+#
+# pyproject.toml at the repo root makes Vercel's runtime detection classify
+# this as a Python project and demand an app entrypoint (app.py / wsgi.py /
+# etc), which does not exist and never will. Excluding it from the upload is
+# what stops that detection - setting "framework": null does not, because
+# runtime detection is separate from framework detection.
+pyproject.toml
+uv.lock
+
+# The engine runs on GitHub Actions and locally, never on Vercel.
+engine/
+scripts/
+docs/
+.venv/
+.github/
+
+# Source data and research artefacts - not served.
+data/raw/
+data/backfill/
+data/capture/
+
+# Secrets, belt and braces (already in .gitignore, so never pushed anyway).
+.env
+.env.*
