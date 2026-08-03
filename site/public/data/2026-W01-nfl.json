@@ -4,221 +4,346 @@
   "season": 2026,
   "week": 1,
   "status": "committed",
-  "model_version": "elo-mov-v1+iso",
-  "trained_on_games": 7261,
+  "models": {
+    "independent": {
+      "version": "elo+epa-v1+iso",
+      "description": "Elo + opponent-aware EPA + rest. Does not see the betting line. This is our own opinion.",
+      "backtest_brier": 0.22164,
+      "backtest_ece": 0.03269
+    },
+    "consensus": {
+      "version": "elo+epa+market-v1+iso",
+      "description": "The same features plus the de-vigged market probability. Best calibrated, but largely reproduces the market.",
+      "backtest_brier": 0.21399,
+      "backtest_ece": 0.01858
+    }
+  },
   "confidence_cap": 0.85,
-  "merkle_root": "d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a",
-  "committed_at": "2026-08-03T02:50:37.265208+00:00",
+  "merkle_root": "4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b",
+  "committed_at": "2026-08-03T05:05:48.347187+00:00",
   "earliest_kickoff": "2026-09-09T20:20:00+00:00",
+  "n_predictions": 32,
   "games": [
     {
       "game_id": "2026_01_NE_SEA",
       "kickoff": "2026-09-09T20:20:00+00:00",
       "home": "SEA",
       "away": "NE",
-      "pick": "SEA",
-      "our_prob": 0.6615,
-      "our_fair_odds": -195,
+      "independent": {
+        "pick": "SEA",
+        "prob": 0.6466,
+        "fair_odds": -183
+      },
+      "consensus": {
+        "pick": "SEA",
+        "prob": 0.703,
+        "fair_odds": -237
+      },
       "market_prob": 0.6369,
-      "market_price": -198,
       "spread_line": 3.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_SF_LA",
       "kickoff": "2026-09-10T20:35:00+00:00",
       "home": "LA",
       "away": "SF",
-      "pick": "LA",
-      "our_prob": 0.6019,
-      "our_fair_odds": -151,
+      "independent": {
+        "pick": "LA",
+        "prob": 0.5619,
+        "fair_odds": -128
+      },
+      "consensus": {
+        "pick": "LA",
+        "prob": 0.6292,
+        "fair_odds": -170
+      },
       "market_prob": 0.6164,
-      "market_price": -180,
       "spread_line": 3.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_CHI_CAR",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "CAR",
       "away": "CHI",
-      "pick": "CHI",
-      "our_prob": 0.5677,
-      "our_fair_odds": -131,
-      "market_prob": 0.5721,
-      "market_price": -148,
+      "independent": {
+        "pick": "CHI",
+        "prob": 0.5787,
+        "fair_odds": -137
+      },
+      "consensus": {
+        "pick": "CHI",
+        "prob": 0.6009,
+        "fair_odds": -151
+      },
+      "market_prob": 0.4279,
       "spread_line": -2.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_TB_CIN",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "CIN",
       "away": "TB",
-      "pick": "CIN",
-      "our_prob": 0.5848,
-      "our_fair_odds": -141,
+      "independent": {
+        "pick": "CIN",
+        "prob": 0.5619,
+        "fair_odds": -128
+      },
+      "consensus": {
+        "pick": "CIN",
+        "prob": 0.6292,
+        "fair_odds": -170
+      },
       "market_prob": 0.6309,
-      "market_price": -192,
       "spread_line": 3.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_NO_DET",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "DET",
       "away": "NO",
-      "pick": "DET",
-      "our_prob": 0.7308,
-      "our_fair_odds": -271,
+      "independent": {
+        "pick": "DET",
+        "prob": 0.7347,
+        "fair_odds": -277
+      },
+      "consensus": {
+        "pick": "DET",
+        "prob": 0.7631,
+        "fair_odds": -322
+      },
       "market_prob": 0.7258,
-      "market_price": -310,
       "spread_line": 7.0,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_BUF_HOU",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "HOU",
       "away": "BUF",
-      "pick": "HOU",
-      "our_prob": 0.5848,
-      "our_fair_odds": -141,
+      "independent": {
+        "pick": "HOU",
+        "prob": 0.5325,
+        "fair_odds": -114
+      },
+      "consensus": {
+        "pick": "HOU",
+        "prob": 0.5383,
+        "fair_odds": -117
+      },
       "market_prob": 0.4739,
-      "market_price": 102,
       "spread_line": -1.5,
-      "disagrees_with_market": true
+      "models_disagree": false,
+      "independent_vs_market": true
     },
     {
       "game_id": "2026_01_BAL_IND",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "IND",
       "away": "BAL",
-      "pick": "BAL",
-      "our_prob": 0.5677,
-      "our_fair_odds": -131,
-      "market_prob": 0.6164,
-      "market_price": -180,
+      "independent": {
+        "pick": "BAL",
+        "prob": 0.5664,
+        "fair_odds": -131
+      },
+      "consensus": {
+        "pick": "BAL",
+        "prob": 0.6375,
+        "fair_odds": -176
+      },
+      "market_prob": 0.3836,
       "spread_line": -3.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_CLE_JAX",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "JAX",
       "away": "CLE",
-      "pick": "JAX",
-      "our_prob": 0.7553,
-      "our_fair_odds": -309,
+      "independent": {
+        "pick": "JAX",
+        "prob": 0.7452,
+        "fair_odds": -292
+      },
+      "consensus": {
+        "pick": "JAX",
+        "prob": 0.7631,
+        "fair_odds": -322
+      },
       "market_prob": 0.76,
-      "market_price": -380,
       "spread_line": 7.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_ATL_PIT",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "PIT",
       "away": "ATL",
-      "pick": "PIT",
-      "our_prob": 0.6061,
-      "our_fair_odds": -154,
+      "independent": {
+        "pick": "PIT",
+        "prob": 0.6214,
+        "fair_odds": -164
+      },
+      "consensus": {
+        "pick": "PIT",
+        "prob": 0.6292,
+        "fair_odds": -170
+      },
       "market_prob": 0.6038,
-      "market_price": -170,
       "spread_line": 3.0,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_NYJ_TEN",
       "kickoff": "2026-09-13T13:00:00+00:00",
       "home": "TEN",
       "away": "NYJ",
-      "pick": "TEN",
-      "our_prob": 0.5704,
-      "our_fair_odds": -133,
+      "independent": {
+        "pick": "TEN",
+        "prob": 0.5619,
+        "fair_odds": -128
+      },
+      "consensus": {
+        "pick": "TEN",
+        "prob": 0.5878,
+        "fair_odds": -143
+      },
       "market_prob": 0.583,
-      "market_price": -155,
       "spread_line": 3.0,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_ARI_LAC",
       "kickoff": "2026-09-13T16:25:00+00:00",
       "home": "LAC",
       "away": "ARI",
-      "pick": "LAC",
-      "our_prob": 0.7553,
-      "our_fair_odds": -309,
+      "independent": {
+        "pick": "LAC",
+        "prob": 0.7347,
+        "fair_odds": -277
+      },
+      "consensus": {
+        "pick": "LAC",
+        "prob": 0.7631,
+        "fair_odds": -322
+      },
       "market_prob": 0.8271,
-      "market_price": -625,
       "spread_line": 11.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_MIA_LV",
       "kickoff": "2026-09-13T16:25:00+00:00",
       "home": "LV",
       "away": "MIA",
-      "pick": "MIA",
-      "our_prob": 0.5677,
-      "our_fair_odds": -131,
-      "market_prob": 0.3553,
-      "market_price": 170,
+      "independent": {
+        "pick": "MIA",
+        "prob": 0.6055,
+        "fair_odds": -153
+      },
+      "consensus": {
+        "pick": "LV",
+        "prob": 0.5383,
+        "fair_odds": -117
+      },
+      "market_prob": 0.6447,
       "spread_line": 3.5,
-      "disagrees_with_market": true
+      "models_disagree": true,
+      "independent_vs_market": true
     },
     {
       "game_id": "2026_01_GB_MIN",
       "kickoff": "2026-09-13T16:25:00+00:00",
       "home": "MIN",
       "away": "GB",
-      "pick": "MIN",
-      "our_prob": 0.6026,
-      "our_fair_odds": -152,
+      "independent": {
+        "pick": "MIN",
+        "prob": 0.5325,
+        "fair_odds": -114
+      },
+      "consensus": {
+        "pick": "MIN",
+        "prob": 0.5383,
+        "fair_odds": -117
+      },
       "market_prob": 0.4957,
-      "market_price": -108,
       "spread_line": -1.5,
-      "disagrees_with_market": true
+      "models_disagree": false,
+      "independent_vs_market": true
     },
     {
       "game_id": "2026_01_WAS_PHI",
       "kickoff": "2026-09-13T16:25:00+00:00",
       "home": "PHI",
       "away": "WAS",
-      "pick": "PHI",
-      "our_prob": 0.7226,
-      "our_fair_odds": -260,
+      "independent": {
+        "pick": "PHI",
+        "prob": 0.7028,
+        "fair_odds": -236
+      },
+      "consensus": {
+        "pick": "PHI",
+        "prob": 0.707,
+        "fair_odds": -241
+      },
       "market_prob": 0.6575,
-      "market_price": -218,
       "spread_line": 4.5,
-      "disagrees_with_market": false
+      "models_disagree": false,
+      "independent_vs_market": false
     },
     {
       "game_id": "2026_01_DAL_NYG",
       "kickoff": "2026-09-13T20:20:00+00:00",
       "home": "NYG",
       "away": "DAL",
-      "pick": "NYG",
-      "our_prob": 0.517,
-      "our_fair_odds": -107,
+      "independent": {
+        "pick": "NYG",
+        "prob": 0.5075,
+        "fair_odds": -103
+      },
+      "consensus": {
+        "pick": "DAL",
+        "prob": 0.5409,
+        "fair_odds": -118
+      },
       "market_prob": 0.4279,
-      "market_price": 124,
       "spread_line": -2.5,
-      "disagrees_with_market": true
+      "models_disagree": true,
+      "independent_vs_market": true
     },
     {
       "game_id": "2026_01_DEN_KC",
       "kickoff": "2026-09-14T20:15:00+00:00",
       "home": "KC",
       "away": "DEN",
-      "pick": "DEN",
-      "our_prob": 0.6118,
-      "our_fair_odds": -158,
-      "market_prob": 0.4066,
-      "market_price": 136,
+      "independent": {
+        "pick": "DEN",
+        "prob": 0.5787,
+        "fair_odds": -137
+      },
+      "consensus": {
+        "pick": "KC",
+        "prob": 0.5383,
+        "fair_odds": -117
+      },
+      "market_prob": 0.5934,
       "spread_line": 3.0,
-      "disagrees_with_market": true
+      "models_disagree": true,
+      "independent_vs_market": true
     }
   ],
-  "disclaimer": "Predictions are published for analysis and entertainment. We do not accept wagers. Our backtest does not beat the closing market - see /methodology."
+  "disclaimer": "Analysis and entertainment only. We do not accept wagers. Our backtest does not beat the closing market - see /methodology."
 }

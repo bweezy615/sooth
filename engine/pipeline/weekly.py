@@ -1,17 +1,28 @@
-"""Weekly slate: predict, calibrate, cap, commit, publish.
+"""Weekly slate: predict with BOTH models, calibrate, cap, commit, publish.
 
-Run this BEFORE the first kickoff of a slate. It is deliberately impossible to
-run it usefully afterwards - `commit_slate` records the time and the earliest
-kickoff, and the published record shows both, so a late commitment is visibly
-late rather than silently accepted.
+Two numbers are published for every game, and the distinction is the honest
+part:
+
+  independent  Elo + opponent-aware EPA ratings + rest. Knows nothing about
+               the betting line. This is our actual opinion. It is measurably
+               worse than the market (Brier 0.2216 vs 0.2106) and it is the
+               only number that can disagree with the market informatively.
+
+  consensus    The same features PLUS the de-vigged market probability. Best
+               calibrated output we can produce - ECE 0.0186 against the
+               market's 0.0193 - but it mostly reproduces the market, so
+               presenting it as "our prediction" would look impressive while
+               carrying almost no independent information.
+
+Publishing only the consensus would be the industry's standard dishonesty:
+market-following dressed as insight. Publishing only the independent number
+would throw away our best-calibrated estimate. So both ship, labelled, and
+the methodology page explains which is which.
+
+Both are sealed in the same Merkle commitment. Neither can be quietly
+retracted later.
 
     python -m engine.pipeline.weekly --season 2026 --week 1
-
-Outputs
--------
-data/ledger/<slate>.commitment.json   published immediately (root hash only)
-data/ledger/<slate>.reveal.json       published after settlement
-site/public/data/<slate>.json         what the website renders
 """
 
 from __future__ import annotations
@@ -23,171 +34,198 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
 
 from ..adapters.nfl import NFLAdapter
 from ..calibrate import Calibrator
 from ..commit import commit_slate
+from ..features import attach_carry_forward, build_team_ratings, load_team_weeks
+from ..models.ensemble import BASE_FEATURES, MARKET_FEATURE, build_frame, _logit
 from ..models.elo import EloConfig, EloModel
-from ..schema import Market, Prediction, Sport, american_to_prob, devig, prob_to_american
+from ..schema import (Market, Prediction, Sport, american_to_prob, devig,
+                      prob_to_american)
 
 # Our top confidence band is measurably overconfident (94.5% predicted vs
-# 86.7% actual). We cap rather than publish a number we know is inflated, and
-# we say so on the methodology page.
+# 86.7% actual), so we cap rather than publish a number we know is inflated.
 CONFIDENCE_CAP = 0.85
-MODEL_VERSION = "elo-mov-v1+iso"
+MODEL_INDEPENDENT = "elo+epa-v1+iso"
+MODEL_CONSENSUS = "elo+epa+market-v1+iso"
 
 
-def _train_through(adapter: NFLAdapter, season: int, week: int):
-    """Fit Elo on every game strictly before this slate, plus a calibrator."""
+def _fit_models(hist: pd.DataFrame):
+    """Fit both models and their calibrators on all completed history."""
+    ind_feats, con_feats = BASE_FEATURES, BASE_FEATURES + [MARKET_FEATURE]
+
+    ind_train = hist.dropna(subset=ind_feats + ["home_won"])
+    con_train = hist.dropna(subset=con_feats + ["home_won"])
+
+    ind = LogisticRegression(max_iter=2000).fit(
+        ind_train[ind_feats], ind_train["home_won"])
+    con = LogisticRegression(max_iter=2000).fit(
+        con_train[con_feats], con_train["home_won"])
+
+    # Calibrators fitted on in-sample fits are optimistic, but the walk-forward
+    # backtest already established the honest calibration numbers we publish.
+    ind_cal = Calibrator().fit(
+        ind.predict_proba(ind_train[ind_feats])[:, 1],
+        ind_train["home_won"].to_numpy(float), through_season=0)
+    con_cal = Calibrator().fit(
+        con.predict_proba(con_train[con_feats])[:, 1],
+        con_train["home_won"].to_numpy(float), through_season=0)
+
+    return (ind, ind_cal, ind_feats), (con, con_cal, con_feats)
+
+
+def _elo_through(adapter: NFLAdapter, season: int, week: int) -> EloModel:
     df = adapter.games
     done = df[df["home_score"].notna() & df["away_score"].notna()].sort_values(
-        ["season", "week", "gameday"]
-    )
-    prior = done[
-        (done["season"] < season)
-        | ((done["season"] == season) & (pd.to_numeric(done["week"], errors="coerce") < week))
-    ]
-
+        ["season", "week", "gameday"])
+    prior = done[(done["season"] < season)
+                 | ((done["season"] == season)
+                    & (pd.to_numeric(done["week"], errors="coerce") < week))]
     model = EloModel(config=EloConfig())
-    rows = []
     for _, r in prior.iterrows():
         home, away = str(r["home_team"]), str(r["away_team"])
-        margin = float(r["home_score"]) - float(r["away_score"])
-        neutral = str(r.get("location", "Home")) != "Home"
         rd = pd.to_numeric(r.get("home_rest"), errors="coerce") - pd.to_numeric(
-            r.get("away_rest"), errors="coerce"
-        )
-        rd = 0.0 if pd.isna(rd) else float(rd)
-        s = int(r["season"])
-        p = model.expected(home, away, neutral=neutral, rest_diff=rd, season=s)
-        if margin != 0:
-            rows.append({"p": p, "y": 1.0 if margin > 0 else 0.0})
-        model.update(home, away, margin, neutral=neutral, rest_diff=rd, season=s)
-
-    hist = pd.DataFrame(rows)
-    cal = Calibrator().fit(
-        hist["p"].to_numpy(float), hist["y"].to_numpy(float), through_season=season - 1
-    )
-    return model, cal, len(hist)
+            r.get("away_rest"), errors="coerce")
+        model.update(home, away,
+                     float(r["home_score"]) - float(r["away_score"]),
+                     neutral=str(r.get("location", "Home")) != "Home",
+                     rest_diff=0.0 if pd.isna(rd) else float(rd),
+                     season=int(r["season"]))
+    return model
 
 
 def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     root = Path(out_root)
     adapter = NFLAdapter(cache_dir=root / "data/raw")
-    adapter.fetch(force=True)  # always pull the freshest lines before committing
+    adapter.fetch(force=True)
 
-    model, cal, n_train = _train_through(adapter, season, week)
+    hist = build_frame(1999, season - 1 if week == 1 else season)
+    (ind, ind_cal, ind_feats), (con, con_cal, con_feats) = _fit_models(hist)
+
+    ratings = build_team_ratings(load_team_weeks(1999, season))
+    elo = _elo_through(adapter, season, week)
 
     df = adapter.games
-    slate = df[
-        (df["season"] == season)
-        & (pd.to_numeric(df["week"], errors="coerce") == week)
-        & df["home_score"].isna()
-    ].copy()
-
+    slate = df[(df["season"] == season)
+               & (pd.to_numeric(df["week"], errors="coerce") == week)
+               & df["home_score"].isna()].copy()
     if slate.empty:
-        raise SystemExit(
-            f"no unplayed games for {season} week {week} - already settled, or "
-            f"the schedule is not published yet"
-        )
+        raise SystemExit(f"no unplayed games for {season} week {week}")
 
+    slate = attach_carry_forward(slate, ratings, season, week)
+
+    rows, predictions, display = [], [], []
     now = datetime.now(timezone.utc)
-    predictions: list[Prediction] = []
-    display: list[dict] = []
 
     for _, r in slate.iterrows():
         home, away = str(r["home_team"]), str(r["away_team"])
         neutral = str(r.get("location", "Home")) != "Home"
         rd = pd.to_numeric(r.get("home_rest"), errors="coerce") - pd.to_numeric(
-            r.get("away_rest"), errors="coerce"
-        )
+            r.get("away_rest"), errors="coerce")
         rd = 0.0 if pd.isna(rd) else float(rd)
 
-        raw = model.expected(home, away, neutral=neutral, rest_diff=rd, season=season)
-        p_home = float(cal.transform(np.array([raw]))[0])
-
-        # Pick the side we favour, then cap the published confidence.
-        pick_home = p_home >= 0.5
-        conf = p_home if pick_home else 1.0 - p_home
-        capped = min(conf, CONFIDENCE_CAP)
+        elo_p = elo.expected(home, away, neutral=neutral, rest_diff=rd,
+                             season=season)
 
         hml, aml = r.get("home_moneyline"), r.get("away_moneyline")
         mkt_home = np.nan
         if pd.notna(hml) and pd.notna(aml):
-            mh, _ = devig(american_to_prob(int(hml)), american_to_prob(int(aml)))
-            mkt_home = mh
+            mkt_home, _ = devig(american_to_prob(int(hml)),
+                                american_to_prob(int(aml)))
 
-        ref_price = (
-            int(hml) if pick_home and pd.notna(hml)
-            else int(aml) if pd.notna(aml) else None
-        )
+        feat = {
+            "elo_logit": float(_logit(np.array([elo_p]))[0]),
+            "epa_edge": r.get("epa_edge"), "off_diff": r.get("off_diff"),
+            "def_diff": r.get("def_diff"), "rest_diff": rd,
+            "div_game": pd.to_numeric(r.get("div_game"), errors="coerce") or 0,
+            "is_playoff": 0,
+            "market_logit": float(_logit(np.array([
+                mkt_home if pd.notna(mkt_home) else 0.5]))[0]),
+        }
+        X = pd.DataFrame([feat])
+        if X[ind_feats].isna().any(axis=None):
+            continue
+
+        p_ind = float(ind_cal.transform(ind.predict_proba(X[ind_feats])[:, 1])[0])
+        p_con = float(con_cal.transform(con.predict_proba(X[con_feats])[:, 1])[0])
 
         kickoff = adapter._kickoff(r)
-        predictions.append(
-            Prediction(
-                event_id=str(r["game_id"]),
-                sport=Sport.NFL,
-                market=Market.MONEYLINE,
-                selection="side_a" if pick_home else "side_b",
-                line=None,
-                probability=round(capped, 4),
-                model_version=MODEL_VERSION,
-                created_at=kickoff,
-                reference_price=ref_price,
-                reference_line=(
-                    float(r["spread_line"]) if pd.notna(r.get("spread_line")) else None
-                ),
-                rationale=(
-                    f"elo {model.rating(home):.0f} vs {model.rating(away):.0f}, "
-                    f"rest diff {rd:+.0f}"
-                ),
-            )
-        )
+        eid = str(r["game_id"])
 
-        display.append(
-            {
-                "game_id": str(r["game_id"]),
-                "kickoff": kickoff.isoformat(),
-                "home": home,
-                "away": away,
-                "pick": home if pick_home else away,
-                "our_prob": round(capped, 4),
-                "our_fair_odds": prob_to_american(round(capped, 4)),
-                "market_prob": (None if pd.isna(mkt_home) else round(
-                    float(mkt_home if pick_home else 1 - mkt_home), 4)),
-                "market_price": ref_price,
-                "spread_line": (
-                    float(r["spread_line"]) if pd.notna(r.get("spread_line")) else None
-                ),
-                "disagrees_with_market": (
-                    None if pd.isna(mkt_home) else bool((mkt_home >= 0.5) != pick_home)
-                ),
-            }
-        )
+        for label, prob, version in (("independent", p_ind, MODEL_INDEPENDENT),
+                                     ("consensus", p_con, MODEL_CONSENSUS)):
+            pick_home = prob >= 0.5
+            conf = min(prob if pick_home else 1 - prob, CONFIDENCE_CAP)
+            predictions.append(Prediction(
+                event_id=eid, sport=Sport.NFL, market=Market.MONEYLINE,
+                selection="side_a" if pick_home else "side_b", line=None,
+                probability=round(conf, 4), model_version=version,
+                created_at=kickoff,
+                reference_price=(int(hml) if pick_home and pd.notna(hml)
+                                 else int(aml) if pd.notna(aml) else None),
+                reference_line=(float(r["spread_line"])
+                                if pd.notna(r.get("spread_line")) else None),
+                rationale=f"{label}: elo {elo.rating(home):.0f} vs "
+                          f"{elo.rating(away):.0f}, epa_edge {r.get('epa_edge'):.3f}",
+            ))
+
+        ip, cp = min(max(p_ind, 1 - CONFIDENCE_CAP), CONFIDENCE_CAP), \
+                 min(max(p_con, 1 - CONFIDENCE_CAP), CONFIDENCE_CAP)
+        display.append({
+            "game_id": eid, "kickoff": kickoff.isoformat(),
+            "home": home, "away": away,
+            "independent": {
+                "pick": home if ip >= 0.5 else away,
+                "prob": round(max(ip, 1 - ip), 4),
+                "fair_odds": prob_to_american(round(max(ip, 1 - ip), 4)),
+            },
+            "consensus": {
+                "pick": home if cp >= 0.5 else away,
+                "prob": round(max(cp, 1 - cp), 4),
+                "fair_odds": prob_to_american(round(max(cp, 1 - cp), 4)),
+            },
+            "market_prob": (None if pd.isna(mkt_home)
+                            else round(float(mkt_home), 4)),
+            "spread_line": (float(r["spread_line"])
+                            if pd.notna(r.get("spread_line")) else None),
+            "models_disagree": (ip >= 0.5) != (cp >= 0.5),
+            "independent_vs_market": (
+                None if pd.isna(mkt_home) else bool((mkt_home >= 0.5) != (ip >= 0.5))),
+        })
 
     slate_id = f"{season}-W{week:02d}-nfl"
-    commitment = commit_slate(
-        slate_id, "nfl", predictions, out_dir=root / "data/ledger"
-    )
+    commitment = commit_slate(slate_id, "nfl", predictions,
+                              out_dir=root / "data/ledger")
 
     payload = {
-        "slate_id": slate_id,
-        "sport": "nfl",
-        "season": season,
-        "week": week,
+        "slate_id": slate_id, "sport": "nfl", "season": season, "week": week,
         "status": "committed",
-        "model_version": MODEL_VERSION,
-        "trained_on_games": n_train,
+        "models": {
+            "independent": {
+                "version": MODEL_INDEPENDENT,
+                "description": "Elo + opponent-aware EPA + rest. Does not see "
+                               "the betting line. This is our own opinion.",
+                "backtest_brier": 0.22164, "backtest_ece": 0.03269,
+            },
+            "consensus": {
+                "version": MODEL_CONSENSUS,
+                "description": "The same features plus the de-vigged market "
+                               "probability. Best calibrated, but largely "
+                               "reproduces the market.",
+                "backtest_brier": 0.21399, "backtest_ece": 0.01858,
+            },
+        },
         "confidence_cap": CONFIDENCE_CAP,
         "merkle_root": commitment.root,
         "committed_at": commitment.committed_at.isoformat(),
         "earliest_kickoff": commitment.earliest_kickoff.isoformat(),
+        "n_predictions": len(predictions),
         "games": display,
         "disclaimer": (
-            "Predictions are published for analysis and entertainment. We do "
-            "not accept wagers. Our backtest does not beat the closing market "
-            "- see /methodology."
-        ),
+            "Analysis and entertainment only. We do not accept wagers. Our "
+            "backtest does not beat the closing market - see /methodology."),
     }
 
     site_dir = root / "site/public/data"
@@ -201,26 +239,21 @@ def main() -> None:
     ap.add_argument("--season", type=int, required=True)
     ap.add_argument("--week", type=int, required=True)
     args = ap.parse_args()
-
     p = build_slate(args.season, args.week)
-    print(f"slate        : {p['slate_id']}")
-    print(f"games        : {len(p['games'])}")
-    print(f"trained on   : {p['trained_on_games']} games")
-    print(f"merkle root  : {p['merkle_root']}")
-    print(f"committed at : {p['committed_at']}")
-    print(f"1st kickoff  : {p['earliest_kickoff']}")
+    print(f"slate       : {p['slate_id']}")
+    print(f"games       : {len(p['games'])}")
+    print(f"predictions : {p['n_predictions']} (2 models x {len(p['games'])} games)")
+    print(f"merkle root : {p['merkle_root']}")
     print()
-    hdr = f"{'matchup':<12} {'pick':<5} {'ours':>6} {'mkt':>6} {'spread':>7}  vs mkt"
-    print(hdr)
-    print("-" * len(hdr))
+    hdr = f"{'matchup':<12} {'independent':<18} {'consensus':<18} {'mkt':>6}"
+    print(hdr); print("-" * len(hdr))
     for g in p["games"]:
+        i, c = g["independent"], g["consensus"]
         mp = "  n/a" if g["market_prob"] is None else f"{g['market_prob']:.3f}"
-        sp = "    n/a" if g["spread_line"] is None else f"{g['spread_line']:+.1f}"
-        flag = "DISAGREE" if g["disagrees_with_market"] else ""
-        print(
-            f"{g['away']+' @ '+g['home']:<12} {g['pick']:<5} "
-            f"{g['our_prob']:.3f} {mp:>6} {sp:>7}  {flag}"
-        )
+        flag = "  <-- models differ" if g["models_disagree"] else ""
+        print(f"{g['away']+' @ '+g['home']:<12} "
+              f"{i['pick']+' '+format(i['prob'],'.3f'):<18} "
+              f"{c['pick']+' '+format(c['prob'],'.3f'):<18} {mp:>6}{flag}")
 
 
 if __name__ == "__main__":

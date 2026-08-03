@@ -148,3 +148,49 @@ def attach_to_games(games: pd.DataFrame, ratings: pd.DataFrame) -> pd.DataFrame:
         g["away_off"] - g["away_def"]
     )
     return g
+
+
+def carry_forward_ratings(ratings: pd.DataFrame, season: int, week: int) -> pd.DataFrame:
+    """Each team's most recent rating as of (season, week), carried forward.
+
+    Needed because a fixture in a season that has not started yet has no
+    team-week row of its own. Week 1 of 2026 must be predicted from ratings
+    earned in 2025, regressed toward the mean exactly as the in-season
+    boundary rule does - otherwise a team starts September carrying last
+    January's form at full weight.
+    """
+    prior = ratings[
+        (ratings["season"] < season)
+        | ((ratings["season"] == season) & (ratings["week"] < week))
+    ]
+    if prior.empty:
+        return pd.DataFrame(columns=["team", "off_rating", "def_rating", "games_seen"])
+
+    latest = (
+        prior.sort_values(["season", "week"])
+        .groupby("team", as_index=False)
+        .last()[["team", "off_rating", "def_rating", "games_seen"]]
+    )
+    # If the most recent rating predates this season, regress it.
+    last_season = int(prior["season"].max())
+    if last_season < season:
+        for col in ("off_rating", "def_rating"):
+            latest[col] = latest[col] * SEASON_CARRYOVER
+    return latest
+
+
+def attach_carry_forward(games: pd.DataFrame, ratings: pd.DataFrame,
+                         season: int, week: int) -> pd.DataFrame:
+    """Join carry-forward ratings onto upcoming fixtures."""
+    latest = carry_forward_ratings(ratings, season, week)
+    g = games.copy()
+    for side, prefix in (("home_team", "home"), ("away_team", "away")):
+        r = latest.rename(columns={
+            "team": side, "off_rating": f"{prefix}_off",
+            "def_rating": f"{prefix}_def", "games_seen": f"{prefix}_seen",
+        })
+        g = g.merge(r, on=side, how="left")
+    g["off_diff"] = g["home_off"] - g["away_off"]
+    g["def_diff"] = g["away_def"] - g["home_def"]
+    g["epa_edge"] = (g["home_off"] - g["home_def"]) - (g["away_off"] - g["away_def"])
+    return g

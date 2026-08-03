@@ -127,11 +127,25 @@
   <h2>This week's sealed slate <span class="badge live">NFL · LIVE</span></h2>
   <div class="scroll"><table id="slate">
     <thead><tr>
-      <th>Kickoff</th><th>Matchup</th><th>Our pick</th>
-      <th>Our prob</th><th>Market</th><th>Spread</th><th></th>
+      <th>Kickoff</th><th>Matchup</th>
+      <th>Independent</th><th>Consensus</th>
+      <th>Market</th><th>Spread</th><th></th>
     </tr></thead>
     <tbody><tr><td colspan="7" style="color:var(--dim)">loading…</td></tr></tbody>
   </table></div>
+
+  <div class="callout" style="border-left-color:var(--link)">
+    <b>Two numbers, and the difference is the honest part.</b>
+    <strong>Independent</strong> is our own opinion — Elo plus opponent-adjusted
+    EPA — and it has never seen the betting line. It is measurably worse than
+    the market, and it is the only number of ours that can disagree with the
+    market meaningfully. <strong>Consensus</strong> adds the de-vigged market
+    price as an input. It is our best-calibrated output, but it largely
+    reproduces the market, so calling it "our prediction" would look clever
+    while telling you almost nothing you couldn't read off a sportsbook.
+    Publishing only the consensus is how this industry dresses up
+    market-following as insight. So we publish both.
+  </div>
 
   <div class="callout">
     <b>Read the disagreements as a warning, not a tip.</b>
@@ -222,23 +236,25 @@ fetch(SLATE).then(r => r.json()).then(d => {
   const kick = new Date(d.earliest_kickoff);
   document.getElementById('seal').innerHTML = `
     <div class="row"><span class="k">slate</span><span class="v">${esc(d.slate_id)}</span></div>
-    <div class="row"><span class="k">predictions</span><span class="v">${d.games.length}</span></div>
+    <div class="row"><span class="k">predictions</span><span class="v">${d.n_predictions} sealed (${d.games.length} games × 2 models)</span></div>
     <div class="row"><span class="k">merkle root</span><span class="v hash">${esc(d.merkle_root)}</span></div>
     <div class="row"><span class="k">sealed at</span><span class="v">${esc(d.committed_at)}</span></div>
     <div class="row"><span class="k">first kickoff</span><span class="v">${kick.toUTCString()}</span></div>
-    <div class="row"><span class="k">model</span><span class="v">${esc(d.model_version)} · trained on ${d.trained_on_games.toLocaleString()} games</span></div>`;
+    <div class="row"><span class="k">models</span><span class="v">${esc(d.models.independent.version)} &nbsp;+&nbsp; ${esc(d.models.consensus.version)}</span></div>
+    <div class="row"><span class="k">confidence cap</span><span class="v">${(d.confidence_cap*100).toFixed(0)}%</span></div>`;
 
   document.querySelector('#slate tbody').innerHTML = d.games.map(g => {
     const t = new Date(g.kickoff);
     const day = t.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric',timeZone:'UTC'});
+    const cell = m => m ? `<span class="team">${esc(m.pick)}</span> <span class="num">${pct(m.prob)}</span>` : '—';
     return `<tr>
       <td class="num" style="color:var(--muted)">${day}</td>
       <td>${esc(g.away)} @ <span class="team">${esc(g.home)}</span></td>
-      <td class="team">${esc(g.pick)}</td>
-      <td class="num">${pct(g.our_prob)}</td>
+      <td>${cell(g.independent)}</td>
+      <td style="color:var(--muted)">${cell(g.consensus)}</td>
       <td class="num" style="color:var(--muted)">${pct(g.market_prob)}</td>
       <td class="num" style="color:var(--muted)">${g.spread_line==null?'—':(g.spread_line>0?'+':'')+g.spread_line}</td>
-      <td>${g.disagrees_with_market ? '<span class="flag">DISAGREES</span>' : ''}</td>
+      <td>${g.models_disagree ? '<span class="flag">MODELS DIFFER</span>' : ''}</td>
     </tr>`;
   }).join('');
 }).catch(e => {
