@@ -56,11 +56,13 @@ Branch: `overnight/commitment-versioning`
 
 ## Outstanding / unverified
 
-- **The GitHub Actions capture cron has still never fired unattended.** Every
-  successful run so far was `workflow_dispatch` (manual). A watcher is armed
-  and will report the first `schedule` run. Until that fires, autonomous
-  capture is an assumption, not a fact. GitHub is known to delay or skip
-  schedules on new repositories.
+- ~~The GitHub Actions capture cron has never fired unattended.~~
+  **RESOLVED 2026-08-03.** A `schedule`-triggered run succeeded at
+  `10:05:42Z` and the bot committed a 4th snapshot (`7138476`,
+  `observed_at 2026-08-03T10:06:02`) with no machine of ours involved.
+  Autonomous capture is now a verified fact. This was the largest open risk
+  in the project: every night it silently failed to fire would have cost
+  closing-line data that cannot be recovered.
 - **Vercel deploy still failing as of the last check.** Two fixes pushed
   (`framework: null`, then `.vercelignore` excluding `pyproject.toml`). If the
   build still fails, the fallback is setting Root Directory to `site/public`
