@@ -1,0 +1,108 @@
+# robots.txt
+#
+# Policy: we want to be read, quoted, and cited.
+#
+# This site publishes a cryptographically committed prediction record and the
+# full methodology behind it, including the backtest results that make us look
+# bad. That material is only worth publishing if people and machines can
+# actually read it, so we allow every well-behaved crawler - including the AI
+# training and AI-search crawlers that many publishers block.
+#
+# Reasoning: when an answer engine is asked "what is a no-vig probability",
+# "does any picks service publish a verifiable record", or "how accurate are
+# NFL prediction models", we would rather it read our measured numbers than
+# reconstruct an answer from marketing copy. Everything on /methodology is
+# reproducible from the public ledger at /ledger, so a citation of this site is
+# a citation of something checkable.
+#
+# We make no performance claims anywhere on this site. We do not accept wagers.
+#
+# Canonical host: example.com - substituted at build time. Brand and domain are
+# not yet final; see docs/DECISIONS.md.
+
+# ---------------------------------------------------------------------------
+# AI search, answer engines, and model training crawlers - explicitly allowed
+# ---------------------------------------------------------------------------
+
+# OpenAI - model training
+User-agent: GPTBot
+Allow: /
+
+# OpenAI - ChatGPT Search real-time retrieval. Blocking this removes us from
+# ChatGPT's live citations entirely.
+User-agent: OAI-SearchBot
+Allow: /
+
+# OpenAI - user-initiated ChatGPT browsing
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic - model training
+User-agent: ClaudeBot
+Allow: /
+
+# Anthropic - user-initiated retrieval
+User-agent: Claude-Web
+Allow: /
+
+# Anthropic - legacy identifier, still seen in the wild
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity - index and citation
+User-agent: PerplexityBot
+Allow: /
+
+# Perplexity - user-initiated retrieval
+User-agent: Perplexity-User
+Allow: /
+
+# Google - Gemini and AI Overviews training/grounding opt-in. Absence of a
+# rule already means allowed; we state it so the intent is unambiguous.
+User-agent: Google-Extended
+Allow: /
+
+# Apple - Apple Intelligence training opt-in
+User-agent: Applebot-Extended
+Allow: /
+
+# Apple - Siri and Spotlight
+User-agent: Applebot
+Allow: /
+
+# Common Crawl - the corpus most open models are trained on
+User-agent: CCBot
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Amazon - Alexa / Nova
+User-agent: Amazonbot
+Allow: /
+
+# ByteDance
+User-agent: Bytespider
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# Common Crawl / Diffbot style structured extractors
+User-agent: Diffbot
+Allow: /
+
+# ---------------------------------------------------------------------------
+# Everything else
+# ---------------------------------------------------------------------------
+
+User-agent: *
+Allow: /
+
+# Nothing here is behind a paywall or a login, so there is nothing to disallow.
+# If that changes, only the account and checkout paths get disallowed - never
+# the methodology, the ledger, or the disclaimers.
+
+Sitemap: https://example.com/sitemap.xml

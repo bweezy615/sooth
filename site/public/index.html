@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sealed — verifiable sports predictions</title>
+<meta name="description" content="Every prediction is cryptographically sealed before kickoff and graded in public. Including the losses. Including the weeks we lose to the market.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d10; --panel:#12161b; --panel-2:#171c23; --line:#242c36;
+    --ink:#e8edf4; --muted:#8e9bab; --dim:#64707f;
+    --accent:#4ade80; --warn:#fbbf24; --bad:#f87171; --link:#60a5fa;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f7f8fa; --panel:#fff; --panel-2:#f1f4f8; --line:#dfe5ec;
+      --ink:#0e1420; --muted:#5a6779; --dim:#8a94a3; --link:#1d4ed8; --accent:#15803d; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  a{color:var(--link)}
+
+  header{border-bottom:1px solid var(--line);position:sticky;top:0;
+    background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(12px);z-index:10}
+  nav{display:flex;align-items:center;gap:24px;height:60px}
+  .brand{font-weight:700;letter-spacing:-.02em;font-size:17px;
+    text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  nav .spacer{flex:1}
+  nav a.l{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  nav a.l:hover{color:var(--ink)}
+
+  .hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  h1{font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.03em;
+    margin:0 0 18px;font-weight:700;max-width:19ch}
+  .lede{font-size:18px;color:var(--muted);max-width:62ch;margin:0 0 28px}
+  .lede strong{color:var(--ink);font-weight:600}
+
+  .seal{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;margin:28px 0 0;font-family:var(--mono);font-size:12.5px}
+  .seal .row{display:flex;gap:14px;padding:5px 0;flex-wrap:wrap}
+  .seal .k{color:var(--dim);min-width:112px}
+  .seal .v{color:var(--ink);word-break:break-all}
+  .seal .v.hash{color:var(--accent)}
+
+  section{padding:48px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--dim);margin:0 0 20px;font-weight:600}
+  h3{font-size:19px;margin:0 0 10px;letter-spacing:-.01em}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  th{text-align:left;font-weight:600;color:var(--dim);font-size:11px;
+    text-transform:uppercase;letter-spacing:.07em;
+    padding:0 12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody tr:hover{background:var(--panel)}
+  .num{font-family:var(--mono);font-size:13px}
+  .team{font-weight:600}
+  .flag{font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:2px 6px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:18px}
+  .card .lab{font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--dim);margin-bottom:6px}
+  .card .big{font-family:var(--mono);font-size:26px;font-weight:700;letter-spacing:-.02em}
+  .card .sub{font-size:12.5px;color:var(--muted);margin-top:5px}
+  .bad{color:var(--bad)} .good{color:var(--accent)}
+
+  .callout{background:var(--panel-2);border-left:3px solid var(--warn);
+    border-radius:0 8px 8px 0;padding:16px 18px;margin:20px 0;font-size:14.5px}
+  .callout b{color:var(--warn)}
+
+  footer{padding:36px 0 56px;color:var(--dim);font-size:12.5px}
+  footer p{max-width:80ch;margin:0 0 10px}
+  .badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted)}
+  .badge.live{color:var(--accent);border-color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><nav>
+  <a class="brand" href="/"><span class="dot"></span>SEALED</a>
+  <span class="spacer"></span>
+  <a class="l" href="/methodology">Methodology</a>
+  <a class="l" href="/verify">Verify</a>
+  <a class="l" href="/ledger">Ledger</a>
+</nav></div></header>
+
+<div class="wrap">
+
+<div class="hero">
+  <h1>Predictions sealed before kickoff. Graded in public.</h1>
+  <p class="lede">
+    Every prediction we publish is hashed into a cryptographic commitment
+    <strong>before the first game starts</strong>. After the games settle we
+    reveal everything, and anyone can recompute the hash to prove we didn't
+    change a thing. <strong>Including the losses.</strong>
+  </p>
+  <p class="lede">
+    We also publish the one number every other picks site hides:
+    <strong>how we score against the market.</strong> Right now, we lose to it.
+    That's on the front page because it's true.
+  </p>
+
+  <div class="seal" id="seal">
+    <div class="row"><span class="k">loading…</span></div>
+  </div>
+</div>
+
+<section>
+  <h2>This week's sealed slate <span class="badge live">NFL · LIVE</span></h2>
+  <div class="scroll"><table id="slate">
+    <thead><tr>
+      <th>Kickoff</th><th>Matchup</th><th>Our pick</th>
+      <th>Our prob</th><th>Market</th><th>Spread</th><th></th>
+    </tr></thead>
+    <tbody><tr><td colspan="7" style="color:var(--dim)">loading…</td></tr></tbody>
+  </table></div>
+
+  <div class="callout">
+    <b>Read the disagreements as a warning, not a tip.</b>
+    Where our model differs sharply from the market, the market is usually
+    right. Our rating system carries last season forward and knows nothing
+    about free agency, the draft, or quarterback changes — information the
+    market prices in immediately. Early-season gaps are our blind spots, and
+    they should shrink as the season supplies real data. You can watch that
+    happen in the ledger.
+  </div>
+</section>
+
+<section>
+  <h2>How we actually score</h2>
+  <p style="color:var(--muted);max-width:66ch;margin:0 0 20px">
+    Walk-forward backtest, 2,750 out-of-sample games (2016–2025). No post-game
+    information in any feature. Measured against the de-vigged closing market,
+    not against a raw vigged line.
+  </p>
+  <div class="grid">
+    <div class="card">
+      <div class="lab">Against the spread</div>
+      <div class="big bad">49.65%</div>
+      <div class="sub">1333–1352–65 · needs 52.38% to break even</div>
+    </div>
+    <div class="card">
+      <div class="lab">Brier — us vs market</div>
+      <div class="big">0.2223 <span style="color:var(--dim);font-size:16px">/ 0.2106</span></div>
+      <div class="sub bad">The market is better. Lower is better.</div>
+    </div>
+    <div class="card">
+      <div class="lab">Calibration error</div>
+      <div class="big good">0.0216</div>
+      <div class="sub">Market 0.0180. This is what we're actually good at.</div>
+    </div>
+    <div class="card">
+      <div class="lab">Confidence cap</div>
+      <div class="big">85%</div>
+      <div class="sub">Our 90%+ band ran 94.5% predicted vs 86.7% actual, so we cap it.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <b>We do not beat the closing line.</b>
+    A calibrated probability and a profitable bet are different things, and
+    conflating them is the central dishonesty of this industry. Our
+    probabilities are well calibrated. Betting them at −110 loses money. Both
+    statements are true, both are published, and we'd rather you know.
+  </div>
+</section>
+
+<section>
+  <h2>Other sports</h2>
+  <p style="color:var(--muted);max-width:66ch">
+    A sport only gets marked <span class="badge live">LIVE</span> once we have
+    free, verifiable closing-line history to grade it against. Anything we
+    can't grade honestly stays <span class="badge">IN CALIBRATION</span> and is
+    labelled as unproven on every page it appears. We'd rather ship fewer
+    sports than claim coverage we can't audit.
+  </p>
+</section>
+
+<footer>
+  <p><strong>Entertainment and analysis only. We do not accept, place, or
+  facilitate wagers</strong>, and we hold no customer funds. We are not
+  affiliated with the NFL or any sportsbook.</p>
+  <p>Past performance does not predict future results. Our published backtest
+  shows a loss against the closing market; nothing here is a recommendation to
+  bet. Must be of legal age in your jurisdiction.</p>
+  <p>If gambling is causing harm: call the NCPG helpline at
+  <strong>1-800-522-4700</strong>, available 24/7, or contact the Council on
+  Compulsive Gambling of New Jersey.</p>
+  <p style="margin-top:18px;color:var(--dim)">
+    <a href="/methodology">Methodology</a> ·
+    <a href="/verify">Verify our record</a> ·
+    <a href="/ledger">Full ledger</a></p>
+</footer>
+
+</div>
+
+<script>
+const SLATE = '/data/2026-W01-nfl.json';
+const pct = v => v == null ? '—' : (v*100).toFixed(1) + '%';
+const esc = s => String(s).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+fetch(SLATE).then(r => r.json()).then(d => {
+  const kick = new Date(d.earliest_kickoff);
+  document.getElementById('seal').innerHTML = `
+    <div class="row"><span class="k">slate</span><span class="v">${esc(d.slate_id)}</span></div>
+    <div class="row"><span class="k">predictions</span><span class="v">${d.games.length}</span></div>
+    <div class="row"><span class="k">merkle root</span><span class="v hash">${esc(d.merkle_root)}</span></div>
+    <div class="row"><span class="k">sealed at</span><span class="v">${esc(d.committed_at)}</span></div>
+    <div class="row"><span class="k">first kickoff</span><span class="v">${kick.toUTCString()}</span></div>
+    <div class="row"><span class="k">model</span><span class="v">${esc(d.model_version)} · trained on ${d.trained_on_games.toLocaleString()} games</span></div>`;
+
+  document.querySelector('#slate tbody').innerHTML = d.games.map(g => {
+    const t = new Date(g.kickoff);
+    const day = t.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric',timeZone:'UTC'});
+    return `<tr>
+      <td class="num" style="color:var(--muted)">${day}</td>
+      <td>${esc(g.away)} @ <span class="team">${esc(g.home)}</span></td>
+      <td class="team">${esc(g.pick)}</td>
+      <td class="num">${pct(g.our_prob)}</td>
+      <td class="num" style="color:var(--muted)">${pct(g.market_prob)}</td>
+      <td class="num" style="color:var(--muted)">${g.spread_line==null?'—':(g.spread_line>0?'+':'')+g.spread_line}</td>
+      <td>${g.disagrees_with_market ? '<span class="flag">DISAGREES</span>' : ''}</td>
+    </tr>`;
+  }).join('');
+}).catch(e => {
+  document.getElementById('seal').innerHTML =
+    '<div class="row"><span class="k">error</span><span class="v">could not load slate</span></div>';
+});
+</script>
+</body>
+</html>

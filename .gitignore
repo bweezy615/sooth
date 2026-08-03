@@ -1,0 +1,15 @@
+.venv/
+.tmp/
+__pycache__/
+*.pyc
+
+# Re-downloadable source data. Captured odds are NOT ignored - they are the
+# one thing we cannot re-acquire, and their git timestamps are the evidence.
+data/raw/
+data/capture/*.log
+data/capture/launchd.*
+site/public/.DS_Store
+.DS_Store
+
+# Local-only competitor notes - deliberately not published
+docs/*.local.md

@@ -1,0 +1,48 @@
+name: capture-odds
+
+# Runs on GitHub's infrastructure, so it keeps capturing when the laptop is
+# closed. The commit it pushes is also the point: GitHub's commit timestamp is
+# a third-party attestation that we held a given price at a given time, which
+# is what makes our closing-line-value numbers auditable rather than asserted.
+
+on:
+  schedule:
+    # Every 3 hours, then tighten near kickoff windows during the season.
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-odds
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy
+
+      - name: Capture odds
+        run: python -m engine.capture --season 2026 --weeks 3
+
+      - name: Commit captured odds
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/capture
+          if git diff --staged --quiet; then
+            echo "no new observations"
+          else
+            git commit -m "capture: odds snapshot $(date -u +%FT%TZ)"
+            git push
+          fi
