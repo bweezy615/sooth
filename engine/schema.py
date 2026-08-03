@@ -168,7 +168,10 @@ def prob_to_american(prob: float) -> int:
     """Inverse of american_to_prob, rounded to a whole cent."""
     if not 0.0 < prob < 1.0:
         raise ValueError(f"probability out of range: {prob}")
-    if prob >= 0.5:
+    # At exactly 0.5 both +100 and -100 are valid representations of an
+    # even-money price. Sportsbooks display +100, so we do too - otherwise
+    # price -> probability -> price does not round-trip at the boundary.
+    if prob > 0.5:
         return int(round(-100.0 * prob / (1.0 - prob)))
     return int(round(100.0 * (1.0 - prob) / prob))
 

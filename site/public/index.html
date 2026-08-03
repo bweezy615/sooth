@@ -160,40 +160,45 @@
 
 <section>
   <h2>How we actually score</h2>
-  <p style="color:var(--muted);max-width:66ch;margin:0 0 20px">
-    Walk-forward backtest, 2,750 out-of-sample games (2016–2025). No post-game
-    information in any feature. Measured against the de-vigged closing market,
-    not against a raw vigged line.
+  <p style="color:var(--muted);max-width:68ch;margin:0 0 20px">
+    Walk-forward. No post-game information in any feature. Scored against the
+    <em>de-vigged</em> market, never a raw vigged line. We publish two
+    evaluations rather than the flattering one: a larger sample on weaker line
+    data, and a smaller sample on closing lines we bought and hold ourselves.
+    Every number here regenerates from
+    <code style="font-family:var(--mono);font-size:12.5px">python scripts/published_figures.py</code>.
   </p>
   <div class="grid">
     <div class="card">
-      <div class="lab">Against the spread</div>
-      <div class="big bad">49.65%</div>
-      <div class="sub">1333–1352–65 · needs 52.38% to break even</div>
+      <div class="lab">Against the spread — real closes</div>
+      <div class="big bad">48.74%</div>
+      <div class="sub">406-427-21 · n=854 · needs 52.38%</div>
     </div>
     <div class="card">
-      <div class="lab">Brier — us vs market</div>
-      <div class="big">0.2223 <span style="color:var(--dim);font-size:16px">/ 0.2106</span></div>
+      <div class="lab">Against the spread — larger sample</div>
+      <div class="big bad">49.50%</div>
+      <div class="sub">1291-1317-63 · n=2671 · needs 52.38%</div>
+    </div>
+    <div class="card">
+      <div class="lab">Brier — ours vs market</div>
+      <div class="big">0.22164 <span style="color:var(--dim);font-size:16px">/ 0.21061</span></div>
       <div class="sub bad">The market is better. Lower is better.</div>
     </div>
     <div class="card">
       <div class="lab">Calibration error</div>
-      <div class="big good">0.0216</div>
-      <div class="sub">Market 0.0180. This is what we're actually good at.</div>
-    </div>
-    <div class="card">
-      <div class="lab">Confidence cap</div>
-      <div class="big">85%</div>
-      <div class="sub">Our 90%+ band ran 94.5% predicted vs 86.7% actual, so we cap it.</div>
+      <div class="big good">0.03343</div>
+      <div class="sub">Market 0.01913. Calibration is what we're actually good at.</div>
     </div>
   </div>
 
   <div class="callout">
     <b>We do not beat the closing line.</b>
-    A calibrated probability and a profitable bet are different things, and
+    Not on either sample, and neither does the closing market against its own
+    number — which is how you know the test isn't rigged in our favour. A
+    calibrated probability and a profitable bet are different things, and
     conflating them is the central dishonesty of this industry. Our
     probabilities are well calibrated. Betting them at −110 loses money. Both
-    statements are true, both are published, and we'd rather you know.
+    are true, both are published, and you can regenerate both yourself.
   </div>
 </section>
 

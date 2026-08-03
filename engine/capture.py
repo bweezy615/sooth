@@ -45,6 +45,8 @@ from typing import Any, Iterator
 
 import requests
 
+from .adapters.nfl import NFLAdapter
+
 CORE = "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
 UA = "sooth-odds-capture/1.0 (+https://sooth.co)"
 TIMEOUT = 20
@@ -122,6 +124,43 @@ def _number(node: Any) -> float | None:
         except ValueError:
             return None
     return None
+
+
+
+def minutes_to_next_kickoff(season: int, now: datetime) -> float | None:
+    """Minutes until the next unplayed kickoff, from LOCAL data only.
+
+    Deliberately does no HTTP. The 15-minute workflow fires ~96 times a day
+    and would otherwise hammer an undocumented free endpoint around the clock
+    to discover that the next game is four days away. nflverse gametime is
+    US/Eastern; converting it properly matters, because an hour of drift turns
+    a closing-line capture into a mid-afternoon one.
+    """
+    from zoneinfo import ZoneInfo
+    import pandas as _pd
+
+    et = ZoneInfo("America/New_York")
+    df = NFLAdapter().games
+    sub = df[(df["season"] == season) & df["home_score"].isna()
+             & df["gametime"].notna()]
+    best = None
+    for _, r in sub.iterrows():
+        day = _pd.to_datetime(r["gameday"], errors="coerce")
+        t = str(r["gametime"])
+        if _pd.isna(day) or ":" not in t:
+            continue
+        hh, mm = t.split(":")[:2]
+        try:
+            ko = datetime(day.year, day.month, day.day, int(hh), int(mm),
+                          tzinfo=et).astimezone(timezone.utc)
+        except ValueError:
+            continue
+        if ko < now:
+            continue
+        delta = (ko - now).total_seconds() / 60.0
+        if best is None or delta < best:
+            best = delta
+    return best
 
 
 def weeks_with_events(season: int, session: requests.Session) -> list[int]:
@@ -296,7 +335,18 @@ def main() -> None:
     ap.add_argument("--season", type=int, default=2026)
     ap.add_argument("--weeks", type=int, default=2)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--within-minutes", type=float, default=None,
+                    help="only capture if a kickoff is within N minutes; "
+                         "otherwise exit doing nothing")
     args = ap.parse_args()
+
+    if args.within_minutes is not None:
+        mins = minutes_to_next_kickoff(args.season, datetime.now(timezone.utc))
+        if mins is None or mins > args.within_minutes:
+            nxt = "none scheduled" if mins is None else f"{mins:.0f} min away"
+            print(f"skip: next kickoff {nxt}, window is "
+                  f"{args.within_minutes:.0f} min")
+            return
 
     rows = capture(args.season, args.weeks, dry_run=args.dry_run)
     books = sorted({r.book for r in rows})
