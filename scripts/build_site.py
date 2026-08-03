@@ -21,6 +21,10 @@ from pathlib import Path
 
 import markdown
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from engine.commit import commitment_history
+
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "site/content"
 PUBLIC = ROOT / "site/public"
@@ -181,22 +185,44 @@ def build_markdown_pages() -> list[str]:
 
 def build_ledger() -> None:
     """Render every committed slate straight from data/ledger/."""
+    slate_ids = sorted({p.name.split(".commitment")[0]
+                        for p in LEDGER.glob("*.commitment.v*.json")})
+    if not slate_ids:  # legacy unversioned layout
+        slate_ids = sorted({p.name.split(".commitment")[0]
+                            for p in LEDGER.glob("*.commitment.json")})
+
     slates = []
-    for commitment_file in sorted(LEDGER.glob("*.commitment.json")):
-        c = json.loads(commitment_file.read_text())
-        slate_id = c["slate_id"]
-        reveal_path = LEDGER / f"{slate_id}.reveal.json"
-        revealed = reveal_path.exists()
+    now = datetime.now(timezone.utc)
+    for slate_id in slate_ids:
+        history = commitment_history(slate_id, LEDGER)
+        if not history:
+            history = [json.loads((LEDGER / f"{slate_id}.commitment.json").read_text())]
+        c = history[-1]
         kickoff = datetime.fromisoformat(c["earliest_kickoff"])
-        now = datetime.now(timezone.utc)
-        # A slate is only "revealed" publicly once its games have started.
-        public_state = "revealed" if revealed and kickoff < now else "sealed"
-        slates.append({**c, "state": public_state})
+        public_state = "revealed" if kickoff < now else "sealed"
+        slates.append({**c, "state": public_state, "history": history})
 
     rows = []
     for s in sorted(slates, key=lambda x: x["slate_id"], reverse=True):
         badge = "revealed" if s["state"] == "revealed" else "sealed"
         label = "REVEALED" if s["state"] == "revealed" else "SEALED"
+        hist = s.get("history", [])
+        superseded = ""
+        if len(hist) > 1:
+            items = "".join(
+                f'<div class="row"><span class="k">v{h["version"]} '
+                f'({h["n_predictions"]})</span>'
+                f'<span class="hash" style="color:var(--dim)">{h["merkle_root"]}</span></div>'
+                for h in hist[:-1]
+            )
+            superseded = (
+                f'<div class="row"><span class="k">superseded</span>'
+                f'<span style="font-size:12.5px;color:var(--muted)">'
+                f'{len(hist)-1} earlier commitment(s), retained and still '
+                f'verifiable. Predictions may be revised until kickoff; what '
+                f'is never permitted is a root quietly disappearing.'
+                f'</span></div>{items}'
+            )
         rows.append(f"""
 <div class="card">
   <div class="row"><span class="k">slate</span>
@@ -207,6 +233,7 @@ def build_ledger() -> None:
   <div class="row"><span class="k">sealed at</span><span class="mono">{s['committed_at']}</span></div>
   <div class="row"><span class="k">first kickoff</span><span class="mono">{s['earliest_kickoff']}</span></div>
   <div class="row"><span class="k">algorithm</span><span class="mono">{s['algorithm']}</span></div>
+  {superseded}
   <div class="row"><span class="k">files</span><span>
     <a href="/data/{s['slate_id']}.json">slate</a></span></div>
 </div>""")

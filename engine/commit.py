@@ -112,6 +112,8 @@ class Commitment:
     n_predictions: int
     committed_at: datetime
     earliest_kickoff: datetime
+    version: int = 1
+    supersedes: str | None = None  # merkle root of the previous version
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -122,7 +124,37 @@ class Commitment:
             "committed_at": self.committed_at.isoformat(),
             "earliest_kickoff": self.earliest_kickoff.isoformat(),
             "algorithm": "sha256-merkle-v1",
+            "version": self.version,
+            "supersedes": self.supersedes,
         }
+
+
+def commitment_history(slate_id: str,
+                       ledger_dir: Path | str = "data/ledger") -> list[dict]:
+    """Every commitment ever made for a slate, oldest first.
+
+    Predictions may legitimately be revised until kickoff, so a slate can have
+    several commitments. What is NOT legitimate is quietly replacing one: a
+    reader who recorded an earlier root would find it simply gone, which looks
+    exactly like tampering. So every version is retained and published, and
+    each points at the root it supersedes.
+    """
+    d = Path(ledger_dir)
+    out = []
+    for path in sorted(d.glob(f"{slate_id}.commitment.v*.json")):
+        try:
+            out.append(json.loads(path.read_text()))
+        except json.JSONDecodeError:
+            continue
+    return sorted(out, key=lambda c: c.get("version", 0))
+
+
+def _next_version(slate_id: str, ledger_dir: Path) -> tuple[int, str | None]:
+    history = commitment_history(slate_id, ledger_dir)
+    if not history:
+        return 1, None
+    latest = history[-1]
+    return int(latest.get("version", len(history))) + 1, latest.get("merkle_root")
 
 
 def commit_slate(
@@ -146,6 +178,15 @@ def commit_slate(
     leaves = [leaf_hash(p) for p in predictions]
     root = merkle_root(leaves)
 
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    version, supersedes = _next_version(slate_id, out)
+
+    if supersedes == root:
+        # Nothing changed - do not mint a pointless new version.
+        return Commitment(slate_id, sport, root, len(predictions), now,
+                          min(kickoffs), version - 1, None)
+
     commitment = Commitment(
         slate_id=slate_id,
         sport=sport,
@@ -153,20 +194,21 @@ def commit_slate(
         n_predictions=len(predictions),
         committed_at=now,
         earliest_kickoff=min(kickoffs),
+        version=version,
+        supersedes=supersedes,
     )
 
-    out = Path(out_dir)
-    out.mkdir(parents=True, exist_ok=True)
-
-    # Public half - safe to publish immediately, reveals nothing.
-    (out / f"{slate_id}.commitment.json").write_bytes(
+    # Versioned files are append-only. A prior commitment is NEVER overwritten,
+    # because a root that vanishes is indistinguishable from a root that was
+    # tampered with.
+    (out / f"{slate_id}.commitment.v{version}.json").write_bytes(
         canonical(commitment.to_dict())
     )
-    # Sealed half - published after settlement.
-    (out / f"{slate_id}.reveal.json").write_bytes(
+    (out / f"{slate_id}.reveal.v{version}.json").write_bytes(
         canonical(
             {
                 "slate_id": slate_id,
+                "version": version,
                 "merkle_root": root,
                 "leaves": leaves,
                 "predictions": [p.to_dict() for p in predictions],
@@ -176,16 +218,35 @@ def commit_slate(
     return commitment
 
 
-def verify_slate(slate_id: str, ledger_dir: Path | str = "data/ledger") -> bool:
+def verify_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
+                 version: int | None = None) -> bool:
     """Recompute the root from the revealed predictions and compare.
 
     This is the function a skeptical reader runs. It is deliberately trivial
     to read and has no dependency on our code being honest, because it
     recomputes everything from the published data.
+
+    ``version`` defaults to the latest commitment. Passing an older version
+    verifies a superseded commitment, so a reader who recorded an earlier root
+    can still confirm we published exactly what we said we did at that time.
     """
     d = Path(ledger_dir)
-    commitment = json.loads((d / f"{slate_id}.commitment.json").read_text())
-    reveal = json.loads((d / f"{slate_id}.reveal.json").read_text())
+
+    history = commitment_history(slate_id, d)
+    if history:
+        target = (history[-1] if version is None
+                  else next((c for c in history
+                             if int(c.get("version", 0)) == version), None))
+        if target is None:
+            raise FileNotFoundError(
+                f"{slate_id} has no commitment version {version}")
+        v = int(target["version"])
+        commitment = target
+        reveal = json.loads((d / f"{slate_id}.reveal.v{v}.json").read_text())
+    else:
+        # Legacy unversioned layout, retained so old published roots verify.
+        commitment = json.loads((d / f"{slate_id}.commitment.json").read_text())
+        reveal = json.loads((d / f"{slate_id}.reveal.json").read_text())
 
     if len(reveal["predictions"]) != commitment["n_predictions"]:
         return False
