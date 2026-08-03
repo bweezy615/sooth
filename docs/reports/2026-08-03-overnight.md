@@ -1,6 +1,65 @@
 # Overnight report — 2026-08-03
 
-Updated each pass. Newest work at the top of each section.
+## MORNING SUMMARY — read this before merging anything
+
+Six queue items closed. **Nothing was merged to `main`.** Every change sits on
+a branch for your review.
+
+| Branch | What |
+|---|---|
+| `overnight/commitment-versioning` | P0 — commitments append-only + versioned |
+| `overnight/published-figures` | P1 — one command regenerates every site figure |
+| `overnight/grading-pipeline` | P2 — grade a revealed slate, provenance-gated CLV |
+| `overnight/capture-cadence` | P3 — 15-min capture inside the pre-kickoff window |
+| `overnight/epl-adapter` | P4 — second sport, In calibration |
+| `overnight/tests` | P5 — 34 tests, green |
+
+**The night's most valuable result is not a feature.** The model does not beat
+the market in **NFL or EPL** — two sports, two independent data sources, two
+independent modelling approaches, the same verdict. That finding is now
+cross-validated rather than resting on one dataset, and it is the honest
+foundation the whole product is built on.
+
+### THREE DECISIONS WAITING FOR YOU
+
+1. **Which model leads the front page.** Both publish, labelled, as you asked.
+   Independent is our real opinion and worse; Consensus is better calibrated
+   but largely echoes the market. Ordering is editorial, with consequences.
+2. **Whether superseded commitments show by default.** Currently always
+   visible on `/ledger` — maximally honest, but draws attention to a revision
+   most readers need not care about.
+3. **Keep or cancel the $30/mo Odds API subscription.** The backfill is done,
+   so this is now a live recurring cost. Free ESPN gives ~1 book; $30 gives 10
+   at 2.3% of quota. Keeping it is what makes a *published* CLV number
+   defensible.
+
+### STILL BLOCKED ON YOU
+
+- **Vercel** — build failed on Python runtime detection. Two fixes pushed; if
+  it still fails, set Root Directory to `site/public` in Settings → General
+  and tell me, because `vercel.json` must move with it.
+- **Wednesday** — register `sooth.co` + `getsooth.co`, claim `@soothhq`.
+  `getsooth.com` is taken (held since 2022) and `sooth.vercel.app` belongs to
+  someone else.
+
+### CREDITS
+
+**3 of 500** nightly budget spent (one measurement call). **7,577 remaining**
+on the plan.
+
+### THE PATTERN WORTH KNOWING
+
+Five of my own verification scripts were wrong tonight — the secret check, the
+stale-figure check, the CLV join key, an unimported symbol, and an odds
+round-trip boundary. **Every one reported something false rather than
+crashing.** None produced a bad artefact, because each surprising number was
+re-checked by hand before I acted on it.
+
+That is the clearest evidence available that an agent working unsupervised can
+be confidently wrong, and it is exactly why the guardrails put everything on
+branches and forbid autonomous "Live" promotion. Treat this report as a
+proposal, not a fait accompli.
+
 
 ---
 
