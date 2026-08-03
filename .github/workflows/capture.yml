@@ -1,13 +1,22 @@
 name: capture-odds
 
-# Runs on GitHub's infrastructure, so it keeps capturing when the laptop is
-# closed. The commit it pushes is also the point: GitHub's commit timestamp is
-# a third-party attestation that we held a given price at a given time, which
-# is what makes our closing-line-value numbers auditable rather than asserted.
+# Two cadences, one workflow.
+#
+#   */15  near-kickoff sweep. Exits immediately unless a game starts within 90
+#         minutes. The closing line forms in that last hour; a 3-hourly poll
+#         can miss the actual close by 90+ minutes.
+#   17 */3  routine sweep, so line movement is tracked all week.
+#
+# The 15-minute job costs nothing when idle: the window check reads local
+# nflverse data and makes no HTTP request at all. GitHub Actions minutes are
+# free on public repos, and ESPN charges nothing.
+#
+# The commit is the point as much as the data: GitHub's timestamp is a
+# third-party attestation that we held a price at a given time.
 
 on:
   schedule:
-    # Every 3 hours, then tighten near kickoff windows during the season.
+    - cron: "*/15 * * * *"
     - cron: "17 */3 * * *"
   workflow_dispatch:
 
@@ -24,15 +33,18 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install deps
         run: pip install --quiet requests pandas numpy
 
-      - name: Capture odds
+      - name: Capture (near-kickoff, gated)
+        if: github.event.schedule == '*/15 * * * *'
+        run: python -m engine.capture --season 2026 --weeks 2 --within-minutes 90
+
+      - name: Capture (routine sweep)
+        if: github.event.schedule != '*/15 * * * *'
         run: python -m engine.capture --season 2026 --weeks 3
 
       - name: Commit captured odds
@@ -44,5 +56,6 @@ jobs:
             echo "no new observations"
           else
             git commit -m "capture: odds snapshot $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
             git push
           fi

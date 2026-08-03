@@ -113,6 +113,50 @@ as the reference, which only exists going forward. Guardrail 1 applies.
 
 Branch: `overnight/grading-pipeline`
 
+### P3 — Capture cadence tightened ✅
+
+Two cadences now: `*/15` gated to fire only when a kickoff is within 90
+minutes, plus the existing 3-hourly sweep. The closing line forms in that last
+hour; a 3-hourly poll can miss the actual close by 90+ minutes.
+
+**The 15-minute job is free when idle.** Its window check reads local nflverse
+data and makes zero HTTP calls, so it does not hammer an undocumented free
+endpoint 96 times a day to learn the next game is four days out.
+
+**Verified by hand:** the gate reported the next kickoff 54,044 minutes away
+= 37.53 days, which matches NE @ SEA on 2026-09-10 00:20Z. That confirms the
+US/Eastern to UTC conversion — an hour of drift would turn a closing capture
+into a mid-afternoon one.
+
+**Full-week credit projection (measured, not assumed — one live call cost 3
+credits and returned all 272 games across 10 books):**
+
+| path | polls/wk | credits/wk | books |
+|---|---|---|---|
+| ESPN (current) | 36 | **0** | ~1 (DraftKings) |
+| Odds API (optional) | 36 | 108 | 10 |
+
+Odds API multi-book would run ~464 credits/month — **2.3% of the 20K plan**.
+
+Branch: `overnight/capture-cadence`
+
+---
+
+## DECISION NEEDED — keep the $30/mo Odds API subscription?
+
+The plan was buy one month, backfill, cancel. The backfill is done, so this is
+live now.
+
+- **Cancel (free path):** ESPN only. Costs nothing, but closing lines come
+  from a single book. Usable for grading; weaker as a consensus.
+- **Keep ($30/mo):** 10-book consensus closing lines going forward at 2.3% of
+  quota. This is what makes a *published* CLV number defensible, since our own
+  multi-book capture becomes the reference price.
+
+I have not made this call. It is a recurring cost against a project with no
+revenue yet, which is your decision and not a technical one. The capture code
+works either way; only the book count changes.
+
 ---
 
 ## Process failures this pass
