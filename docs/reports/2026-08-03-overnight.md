@@ -140,6 +140,46 @@ Odds API multi-book would run ~464 credits/month — **2.3% of the 20K plan**.
 
 Branch: `overnight/capture-cadence`
 
+### P4 — EPL adapter ✅ (In calibration, NOT Live)
+
+`engine/adapters/epl.py` implements `SportAdapter` only. **The engine needed
+no changes** to accept a second sport, which is the result that matters — the
+interface holds.
+
+**EPL has better provenance than NFL.** football-data.co.uk documents its
+`C`-infixed columns as *closing* prices (PSCH/PSCD/PSCA = Pinnacle Closing),
+with 380/380 coverage in 2024-25. It is the only source in this project whose
+closing odds are labelled as such by the publisher — NFL needed a paid
+backfill to reach the same standard.
+
+**Schema extension, recorded not hidden:** football has draws, so this adapter
+emits an explicit `draw` selection alongside `side_a`/`side_b`. Downstream code
+assuming exactly two outcomes will be wrong here and should fail loudly rather
+than renormalise silently.
+
+**Verified:** 2,660 fixtures 2019-2025, 100% result coverage, exactly 3.00
+lines per event, all `is_closing=True`. Decimal→American conversion
+hand-checked on four known values (1.65→−154, 2.00→+100, 4.23→+323, 5.28→+428).
+
+**Walk-forward backtest, 3,420 fixtures (2017-2025):**
+
+| | Brier | log loss | accuracy |
+|---|---|---|---|
+| Elo | 0.57961 | 0.97628 | 0.5360 |
+| Market (closing) | 0.56444 | 0.95324 | 0.5494 |
+
+Model loses by 0.01518 Brier. **Two sports, two independent data sources, same
+verdict** — the "we do not beat the market" finding is not an artefact of NFL
+data or of one modelling choice. That cross-validation is worth more than the
+adapter.
+
+Draw calibration is genuinely good: model 0.2340 vs actual 0.2336 (market
+0.2400). Same pattern as NFL — competitive on calibration, behind on accuracy.
+
+Reproduce: `python scripts/epl_backtest.py`
+
+Branch: `overnight/epl-adapter`
+
 ---
 
 ## DECISION NEEDED — keep the $30/mo Odds API subscription?
