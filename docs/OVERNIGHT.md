@@ -30,8 +30,19 @@ looks wrong, write a new one and record why - never edit history.
 **5. Never push anything that names a competitor.** See
 `docs/competitor-notes.local.md` (gitignored) for why.
 
-**6. Never commit a secret.** `.env` is gitignored. Verify with
-`git diff --staged | grep -iE 'apikey|api_key|[0-9a-f]{32}'` before every push.
+**6. Never commit a secret.** `.env` is gitignored. Verify before every push
+with the WORD-BOUNDARY form:
+
+```bash
+git diff --staged --name-only | grep -qx '.env' && echo "LEAK: .env staged"
+git diff --staged | grep -oE '\b[0-9a-f]{32}\b' | sort -u   # empty == clean
+```
+
+The boundaries matter. `[0-9a-f]{32}` without them matches a substring of
+every 64-char SHA-256 Merkle hash we publish, so it fires on literally every
+commit. A check that always cries wolf trains you to ignore it, which is worse
+than having no check at all. This exact mistake happened on the first
+overnight pass.
 
 **7. Work on `overnight/<topic>` branches, not `main`.** `main` deploys to
 production on push. Merge in the morning after review.
