@@ -51,8 +51,13 @@ Branch: `overnight/commitment-versioning`
   the plan.
 - **Nothing under `data/capture/` or `data/ledger/` was rewritten.** The v1/v2
   migration only added files.
-- **No secrets staged.** Checked with
-  `git diff --staged | grep -iE 'apikey|api_key|[0-9a-f]{32}'` — clean.
+- **No secrets staged**, but the check itself was broken and is now fixed.
+  The original pattern `[0-9a-f]{32}` matches a substring of every 64-char
+  SHA-256 Merkle hash we publish, so guardrail 6 reported a leak on its first
+  use. Verified no key was ever committed (0 matches for either real key
+  across all history; `.env` untracked). Corrected to the word-boundary form
+  `\b[0-9a-f]{32}\b`, which still catches a real key and ignores hashes.
+  A check that always fires is worse than no check.
 
 ## Outstanding / unverified
 
