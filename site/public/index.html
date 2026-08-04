@@ -131,6 +131,10 @@ h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;
 
 /* board table */
 .wide{grid-column:1/3}
+.scroller{max-height:430px;overflow-y:auto;overscroll-behavior:contain}
+.scroller::-webkit-scrollbar{width:9px}
+.scroller::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+.scroller::-webkit-scrollbar-track{background:transparent}
 .thead,.trow{display:grid;grid-template-columns:1.45fr 1.1fr .72fr .78fr .9fr;
   gap:14px;align-items:center}
 .thead{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
@@ -169,6 +173,10 @@ footer .l a{margin-right:20px;font-weight:600;color:var(--muted)}
   .split{grid-template-columns:1fr;gap:34px}
   .grid{grid-template-columns:1fr 1fr}
   .wide{grid-column:1/3}
+.scroller{max-height:430px;overflow-y:auto;overscroll-behavior:contain}
+.scroller::-webkit-scrollbar{width:9px}
+.scroller::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+.scroller::-webkit-scrollbar-track{background:transparent}
 }
 @media (max-width:780px){
   .wrap{padding:0 18px}
@@ -324,7 +332,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="thead">
           <span>Side</span><span>Matchup</span><span>Best</span><span>Fair</span><span>Gain</span>
         </div>
-        <div id="rows"><div class="trow"><span class="t-side">Loading…</span></div></div>
+        <div class="scroller"><div id="rows"><div class="trow"><span class="t-side">Loading…</span></div></div></div>
         <a class="more" href="/ledger">Full board and history
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
@@ -403,7 +411,7 @@ function draw(i){
   document.getElementById('s-games').textContent=b.n_events;
   document.getElementById('s-books').textContent=b.n_books;
   document.getElementById('s-max').textContent='+'+b.max_gain_pts.toFixed(2);
-  document.getElementById('b-count').textContent=b.label+' · '+b.n_events+' games';
+  document.getElementById('b-count').textContent=b.label+' · '+b.n_events+' games · '+sides.length+' sides';
 
   /* sparkline of every side's gain, largest first */
   var pts=sides.map(function(o,k){
@@ -421,7 +429,7 @@ function draw(i){
   document.getElementById('arc').setAttribute('stroke-dasharray',(C*frac).toFixed(1)+' '+C.toFixed(1));
 
   /* board rows */
-  document.getElementById('rows').innerHTML=sides.slice(0,7).map(function(o){
+  document.getElementById('rows').innerHTML=sides.map(function(o){
     var s=o.s,e=o.e;
     return '<div class="trow">'
       +'<span><span class="t-side">'+esc(s.name)+'</span>'
