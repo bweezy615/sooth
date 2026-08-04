@@ -46,6 +46,7 @@ from typing import Any, Iterator
 import requests
 
 from .adapters.nfl import NFLAdapter
+from .schema import canonical_book
 
 CORE = "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
 UA = "sooth-odds-capture/1.0 (+https://sooth.co)"
@@ -189,7 +190,7 @@ def _extract(
     observed_at: str,
 ) -> Iterator[Observation]:
     """Pull every market we care about out of one provider's odds block."""
-    book = str(odds_item.get("provider", {}).get("name", "unknown"))
+    book = canonical_book(odds_item.get("provider", {}).get("name", "unknown"))
 
     def emit(market, selection, line, price, provenance):
         yield Observation(

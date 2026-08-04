@@ -188,3 +188,35 @@ def devig(prob_a: float, prob_b: float) -> tuple[float, float]:
     if total <= 0:
         raise ValueError("degenerate market")
     return prob_a / total, prob_b / total
+
+
+# --------------------------------------------------------------------------
+# Book identity
+# --------------------------------------------------------------------------
+
+# Sources spell the same operator differently. ESPN has returned both
+# "DraftKings" and "Draft Kings" for the same book; The Odds API uses lowercase
+# keys. Left unnormalised, one operator is counted as two books, which inflates
+# the book count behind a consensus and can manufacture a divergence alert that
+# does not exist. Identity is normalised once, at write time.
+_BOOK_CANON = {
+    "draftkings": "DraftKings", "fanduel": "FanDuel", "betmgm": "BetMGM",
+    "betrivers": "BetRivers", "betus": "BetUS", "bovada": "Bovada",
+    "lowvig": "LowVig", "lowvigag": "LowVig",
+    "betonline": "BetOnline", "betonlineag": "BetOnline",
+    "mybookie": "MyBookie", "mybookieag": "MyBookie",
+    "williamhillus": "Caesars", "caesars": "Caesars", "williamhill": "Caesars",
+    "espnbet": "ESPN BET", "fanatics": "Fanatics", "pointsbetus": "PointsBet",
+    "barstool": "ESPN BET", "wynnbet": "WynnBET", "superbook": "SuperBook",
+    "unibet": "Unibet", "twinspires": "TwinSpires", "betfred": "Betfred",
+}
+
+
+def canonical_book(name: str) -> str:
+    """One operator, one name, whatever the source called it."""
+    if not name:
+        return "unknown"
+    key = "".join(ch for ch in str(name).lower() if ch.isalnum())
+    if key.endswith("com"):
+        key = key[:-3]
+    return _BOOK_CANON.get(key, str(name).strip())
