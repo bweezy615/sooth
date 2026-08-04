@@ -33,6 +33,8 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any, Iterable
 
+from .schema import canonical_book
+
 # Only prices we watched ourselves may raise an alert.
 ALERT_PROVENANCE = frozenset({"own_capture"})
 
@@ -79,6 +81,13 @@ def load_observations(pattern: str = "data/capture/*/*.jsonl") -> list[dict]:
                 except json.JSONDecodeError:
                     continue
                 if r.get("provenance") in ALERT_PROVENANCE and r.get("price") is not None:
+                    # Normalise identity on READ as well as on write. Rows
+                    # captured before canonical_book existed still carry the
+                    # source's spelling, and data/capture is append-only
+                    # evidence that must never be rewritten to fix them. One
+                    # operator counted as two books can manufacture a consensus
+                    # that does not exist.
+                    r["book"] = canonical_book(r.get("book", ""))
                     rows.append(r)
     rows.sort(key=lambda r: str(r.get("observed_at", "")))
     return rows
