@@ -30,19 +30,19 @@ looks wrong, write a new one and record why - never edit history.
 **5. Never push anything that names a competitor.** See
 `docs/competitor-notes.local.md` (gitignored) for why.
 
-**6. Never commit a secret.** `.env` is gitignored. Verify before every push
-with the WORD-BOUNDARY form:
+**6. Never commit a secret.** `.env` is gitignored. Check for the ACTUAL key
+values, not a pattern:
 
 ```bash
 git diff --staged --name-only | grep -qx '.env' && echo "LEAK: .env staged"
-git diff --staged | grep -oE '\b[0-9a-f]{32}\b' | sort -u   # empty == clean
+K=$(grep '^ODDS_API_KEY=' .env | cut -d= -f2)
+git diff --staged | grep -qF "$K" && echo "LEAK: real key staged"
 ```
 
-The boundaries matter. `[0-9a-f]{32}` without them matches a substring of
-every 64-char SHA-256 Merkle hash we publish, so it fires on literally every
-commit. A check that always cries wolf trains you to ignore it, which is worse
-than having no check at all. This exact mistake happened on the first
-overnight pass.
+Do NOT use `[0-9a-f]{32}` as the test. It matches SHA-256 Merkle hashes AND
+Odds API event ids, both of which we publish deliberately. That pattern has
+now produced three false alarms and zero real findings. A check that always
+fires is worse than no check, because it trains you to click through it.
 
 **7. Work on `overnight/<topic>` branches, not `main`.** `main` deploys to
 production on push. Merge in the morning after review.

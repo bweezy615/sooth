@@ -47,11 +47,17 @@ jobs:
         if: github.event.schedule != '*/15 * * * *'
         run: python -m engine.capture --season 2026 --weeks 3
 
+      - name: Refresh multi-sport line board
+        run: python -m engine.lines --window-hours 36 --max-credits 40
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        continue-on-error: true
+
       - name: Commit captured odds
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add data/capture
+          git add data/capture site/public/data/board.json
           if git diff --staged --quiet; then
             echo "no new observations"
           else
