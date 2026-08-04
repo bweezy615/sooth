@@ -39,6 +39,8 @@ from typing import Any
 
 import requests
 
+from .schema import canonical_book
+
 API = "https://api.the-odds-api.com/v4"
 MARKETS = "h2h"           # 1 credit per sport per call
 REGIONS = "us"
@@ -156,10 +158,11 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
             fp = fair.get(name)
             sides.append({
                 "name": name,
+                "quotes": ranked,
                 "best_price": best["price"],
-                "best_book": BOOK_NAMES.get(best["book"], best["book"]),
+                "best_book": canonical_book(best["book"]),
                 "worst_price": worst["price"],
-                "worst_book": BOOK_NAMES.get(worst["book"], worst["book"]),
+                "worst_book": canonical_book(worst["book"]),
                 "n_books": len(ranked),
                 "gain_pts": gain,
                 "fair_prob": round(fp, 4) if fp else None,
@@ -177,6 +180,42 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
             "n_books": max((s["n_books"] for s in sides), default=0),
         })
     return out, spent
+
+
+
+def _capture_rows(sport_slug: str, events: list[dict], observed_at: str) -> list[dict]:
+    """Every individual book quote, in the capture schema.
+
+    engine/lines.py already pays for these quotes to build the board; it was
+    discarding everything except the summary. Persisting them costs no extra
+    credits and unlocks two things at once: divergence alerts, which need at
+    least three books to have a consensus worth diverging from, and multi-book
+    closing-line value, which until now had a single book behind it.
+
+    Written with provenance ``own_capture`` because we did observe these
+    ourselves, at ``observed_at``, and paid for the observation.
+    """
+    rows = []
+    for e in events:
+        for side in e.get("sides", []):
+            for q in side.get("quotes", []):
+                rows.append({
+                    "observed_at": observed_at,
+                    "event_id": e.get("id", ""),
+                    "sport": sport_slug,
+                    "season": None,
+                    "week": None,
+                    "kickoff": e.get("starts", ""),
+                    "home": e.get("home", ""),
+                    "away": e.get("away", ""),
+                    "book": canonical_book(q.get("book", "")),
+                    "market": "moneyline",
+                    "selection": side.get("name", ""),
+                    "line": None,
+                    "price": q.get("price"),
+                    "provenance": "own_capture",
+                })
+    return rows
 
 
 def collect(window_hours: float = 36, max_credits: int = 60,
@@ -232,6 +271,19 @@ def collect(window_hours: float = 36, max_credits: int = 60,
         d = Path(out_dir)
         d.mkdir(parents=True, exist_ok=True)
         (d / "board.json").write_text(json.dumps(doc, indent=1))
+
+        # Append-only capture, never rewritten. One file per sport per UTC day.
+        stamp = now.strftime("%Y-%m-%d")
+        for board in boards:
+            rows = _capture_rows(board["sport"], board["events"], now.isoformat())
+            if not rows:
+                continue
+            cap = Path("data/capture") / board["sport"]
+            cap.mkdir(parents=True, exist_ok=True)
+            with (cap / f"{stamp}.jsonl").open("a") as fh:
+                for r in rows:
+                    fh.write(json.dumps(r, separators=(",", ":"), sort_keys=True) + "\n")
+            doc.setdefault("captured", {})[board["sport"]] = len(rows)
     return doc
 
 
