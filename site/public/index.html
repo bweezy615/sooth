@@ -3,455 +3,372 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — predictions sealed before kickoff, graded in public</title>
-<meta name="description" content="A public record of sports predictions. Sealed before kickoff, graded after, wins and losses alike. We do not beat the betting market and we publish the record.">
+<title>Sooth — sealed before kickoff, graded in public</title>
+<meta name="description" content="We seal every pick before kickoff and grade them all in public. Wins and losses. We do not beat the market and we say so.">
 <link rel="canonical" href="https://sooth.co/">
-<meta property="og:title" content="Sooth — public record. always.">
+<meta property="og:title" content="Sooth — sealed before kickoff, graded in public">
 <meta property="og:description" content="We don't beat the market. We publish the record.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sooth.co/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080a0f; --panel:#0d1118; --panel-2:#12171f; --raise:#161c26;
-  --line:#1e2530; --line-2:#2a3340;
-  --ink:#e9eef5; --muted:#8e9aa9; --dim:#5c6775;
-  --gold:#c9a227; --gold-soft:#e0bd5a;
-  --bad:#d8564d; --good:#4f9c68; --note:#c9a227;
+  --bg:#05070a; --ink:#f2f6fb; --muted:#8b98a9; --dim:#57626f;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --glass:rgba(255,255,255,.03);
+  --hot:#e8c46a; --bad:#e0655c; --good:#5aa872;
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme:light){
   :root{
-    --bg:#f4f6f9; --panel:#fff; --panel-2:#f7f9fc; --raise:#eef2f7;
-    --line:#dde3ec; --line-2:#c6d0dd;
-    --ink:#0c1119; --muted:#4d596a; --dim:#7b8697;
-    --gold:#8a6d12; --gold-soft:#8a6d12;
-    --bad:#b03a32; --good:#2c6b45;
+    --bg:#f2f4f7; --ink:#0a0e14; --muted:#4a5563; --dim:#78828f;
+    --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.20);
+    --glass:rgba(0,0,0,.02);
+    --hot:#8a6a14; --bad:#b1382f; --good:#2b6742;
   }
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font:15px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px;border-radius:4px}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:12px;top:12px;z-index:99;background:var(--panel);
-  border:1px solid var(--line-2);padding:10px 14px;border-radius:8px}
+.skip:focus{left:14px;top:14px;z-index:99;background:#111;padding:10px 14px;border-radius:8px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-.shell{display:grid;grid-template-columns:320px minmax(0,1fr) 300px;min-height:100vh}
+/* atmosphere */
+.sky{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+   radial-gradient(1100px 620px at 50% -12%, rgba(232,196,106,.10), transparent 62%),
+   radial-gradient(900px 700px at 88% 22%, rgba(90,140,200,.07), transparent 60%),
+   radial-gradient(800px 800px at 8% 70%, rgba(120,90,200,.05), transparent 60%)}
+.sky::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%)}
+@media (prefers-color-scheme:light){.sky::after{background:none}}
 
-/* ---------------- left rail ---------------- */
-.rail-l{border-right:1px solid var(--line);padding:26px 24px 30px;
-  background:linear-gradient(180deg,var(--panel) 0%,var(--bg) 70%)}
-.brand{display:flex;align-items:center;gap:13px;margin-bottom:40px}
-.mark{width:44px;height:44px;border-radius:50%;flex:none;
-  border:1.5px solid var(--gold);display:grid;place-items:center;position:relative}
-.mark::after{content:"";position:absolute;inset:7px;border-radius:50%;
-  border:1px solid color-mix(in srgb,var(--gold) 55%,transparent)}
-.mark i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.brand .n{font-size:23px;font-weight:700;letter-spacing:.16em;line-height:1}
-.brand .t{font-size:8.5px;letter-spacing:.2em;color:var(--dim);margin-top:5px;font-weight:600}
-h1{font-size:32px;line-height:1.16;letter-spacing:-.025em;margin:0 0 16px;font-weight:700}
-h1 .g{color:var(--gold-soft)}
-.sub{color:var(--muted);font-size:14px;margin:0 0 24px}
-.sub b{color:var(--ink);font-weight:600}
-.btn{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  width:100%;padding:13px 16px;border-radius:8px;text-decoration:none;
-  font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid var(--line-2);background:transparent;color:var(--ink);
-  margin-bottom:9px;min-height:44px;cursor:pointer;font-family:inherit}
-.btn.gold{background:var(--gold);border-color:var(--gold);color:#12100a}
-.btn:hover{border-color:var(--gold)}
+/* nav */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);
+  background:color-mix(in srgb,var(--bg) 76%,transparent);border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;gap:28px;height:68px;max-width:1180px;
+  margin:0 auto;padding:0 24px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;
+  letter-spacing:.2em;font-size:14px}
+.ring{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--hot);
+  display:grid;place-items:center}
+.ring i{width:6px;height:6px;border-radius:50%;background:var(--hot)}
+nav .sp{flex:1}
+nav a.l{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500}
+nav a.l:hover{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;
+  border:1px solid var(--line-2);text-decoration:none;font-size:13px;font-weight:600;
+  min-height:44px;background:var(--glass)}
+.pill:hover{border-color:var(--hot)}
+.pill.hot{background:var(--hot);border-color:var(--hot);color:#0d0b06}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:16px 17px;margin-top:20px}
-.hd{display:flex;justify-content:space-between;align-items:center;
-  font-size:9.5px;letter-spacing:.16em;color:var(--dim);font-weight:700;
-  text-transform:uppercase;margin-bottom:11px}
-.slate{font-family:var(--mono);font-size:20px;font-weight:700;margin-bottom:4px}
-.meta{color:var(--muted);font-size:12px;margin-bottom:14px}
-.f{margin-bottom:11px}
-.f .l{font-size:9px;letter-spacing:.15em;color:var(--dim);font-weight:700;
-  text-transform:uppercase;margin-bottom:3px}
-.f .v{font-family:var(--mono);font-size:11.5px;word-break:break-all;line-height:1.45}
+/* hero */
+.hero{padding:118px 0 92px;text-align:center}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;
+  color:var(--hot);text-transform:uppercase;margin-bottom:26px}
+h1{font-size:clamp(46px,8.2vw,104px);line-height:.94;letter-spacing:-.045em;
+  font-weight:800;margin:0 0 26px}
+h1 .d{display:block;color:var(--muted)}
+.tag{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:24ch;margin:0 auto 40px}
+.tag b{color:var(--ink);font-weight:600}
+.acts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-/* ---------------- main ---------------- */
-.main{padding:22px 24px 30px;min-width:0}
-.topbar{display:flex;align-items:center;gap:22px;margin-bottom:18px;flex-wrap:wrap}
-.tabs{display:flex;gap:24px;flex-wrap:wrap}
-.tabs a{color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;padding-bottom:6px;
-  border-bottom:2px solid transparent}
-.tabs a.on{color:var(--ink);border-bottom-color:var(--gold)}
-.tabs a:hover{color:var(--ink)}
-.topbar .sp{flex:1}
+/* the number */
+.truth{padding:76px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  text-align:center;background:var(--glass)}
+.truth .k{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:20px}
+.truth .big{font-family:var(--mono);font-size:clamp(64px,13vw,150px);line-height:.9;
+  font-weight:700;letter-spacing:-.05em;color:var(--bad)}
+.truth .cap{font-size:clamp(19px,2.4vw,27px);font-weight:600;margin:26px 0 8px}
+.truth .sm{color:var(--muted);font-size:15px;max-width:40ch;margin:0 auto}
 
-.bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
-  background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:15px 18px;margin-bottom:16px}
-.bar .id{font-family:var(--mono);font-size:17px;font-weight:700}
-.bar .chip{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
-  color:var(--dim);text-transform:uppercase}
-.bar .chip b{color:var(--ink);font-weight:700}
+/* sections */
+section{padding:76px 0}
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.28em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:26px}
+h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.03em;font-weight:700;margin:0 0 16px}
+.lead{color:var(--muted);font-size:17px;max-width:52ch;margin:0 0 34px}
 
-.pane{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:17px 18px;margin-bottom:16px}
-.pane h2{font-size:10.5px;letter-spacing:.16em;color:var(--muted);font-weight:700;
-  text-transform:uppercase;margin:0 0 4px}
-.warn{background:var(--raise);border-left:3px solid var(--note);
-  border-radius:0 7px 7px 0;padding:11px 13px;margin:12px 0 14px;
-  font-size:12.5px;color:var(--muted);line-height:1.5}
-.warn b{color:var(--note);font-weight:700}
-.chartwrap{overflow-x:auto}
-svg.chart{width:100%;min-width:560px;height:290px;display:block}
-.lg{display:flex;gap:20px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);
-  font-family:var(--mono);margin-top:10px}
-.lg i{display:inline-block;width:16px;height:2px;vertical-align:middle;
-  margin-right:6px;background:currentColor}
-.lg .o{color:var(--gold-soft)} .lg .b{color:var(--dim)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.step{background:var(--bg);padding:30px 26px}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--hot);margin-bottom:14px}
+.step h3{font-size:19px;margin:0 0 8px;font-weight:650;letter-spacing:-.01em}
+.step p{color:var(--muted);font-size:14.5px;margin:0}
 
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:11px}
-.g{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:13px 14px}
-.g .mu{font-family:var(--mono);font-size:11.5px;color:var(--muted);
-  display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:7px}
-.g .pk{font-size:19px;font-weight:700;font-family:var(--mono);letter-spacing:-.02em}
-.g .pk .t{color:var(--gold-soft)}
-.g .three{display:flex;justify-content:space-between;gap:6px;margin-top:9px;
-  padding-top:9px;border-top:1px solid var(--line)}
-.g .three .k{font-size:8px;letter-spacing:.1em;color:var(--dim);
-  text-transform:uppercase;font-weight:700}
-.g .three .v{font-family:var(--mono);font-size:12px;margin-top:2px}
-.g .sp{font-family:var(--mono);font-size:11.5px;color:var(--muted);
-  margin-top:9px;padding-top:8px;border-top:1px solid var(--line);text-align:center}
-.tagd{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--note);
-  border:1px solid var(--note);border-radius:3px;padding:2px 5px;white-space:nowrap}
-
-/* ---------------- right rail ---------------- */
-.rail-r{border-left:1px solid var(--line);padding:22px 20px 30px;background:var(--panel)}
-.arow{padding:11px 0;border-bottom:1px solid var(--line)}
-.arow .n{font-family:var(--mono);font-size:13px;font-weight:600}
-.arow .c{font-size:11px;color:var(--dim);margin-top:2px}
-.empty{font-size:12px;color:var(--muted);line-height:1.5;padding:10px 0}
-.rec{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid var(--line)}
-.rec:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
-.rec .l{font-size:10.5px;color:var(--muted);margin-bottom:5px}
-.rec .l s{color:var(--dim);text-decoration:none;font-size:9.5px}
-.rec .big{font-family:var(--mono);font-size:28px;font-weight:700;letter-spacing:-.025em}
-.rec .big.bad{color:var(--bad)}
-.rec .side{float:right;text-align:right;font-size:10.5px;color:var(--muted);
-  font-family:var(--mono);line-height:1.4}
-.rec .pair{display:flex;justify-content:space-between;font-family:var(--mono);
-  font-size:12.5px;margin-top:3px}
-.rec .verdict{font-size:11.5px;margin-top:5px}
-.rec .verdict.bad{color:var(--bad)} .rec .verdict.good{color:var(--good)}
-
-/* ---------------- bottom strip ---------------- */
-.strip{grid-column:1/-1;border-top:1px solid var(--line);background:var(--panel);
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr))}
-.st{padding:15px 18px;border-right:1px solid var(--line)}
-.st:last-child{border-right:0}
-.st .l{font-size:9px;letter-spacing:.14em;color:var(--dim);font-weight:700;
-  text-transform:uppercase;line-height:1.35}
-.st .v{font-family:var(--mono);font-size:21px;font-weight:700;margin-top:6px;
+/* seal */
+.seal{border:1px solid var(--line-2);border-radius:16px;padding:30px;background:var(--glass);
+  display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center}
+.seal .id{font-family:var(--mono);font-size:clamp(24px,3.4vw,38px);font-weight:700;
   letter-spacing:-.02em}
-.st .v.bad{color:var(--bad)} .st .v.good{color:var(--good)}
-.st .d{font-size:10.5px;color:var(--muted);margin-top:3px}
+.seal .sub{color:var(--muted);font-size:14px;margin-top:6px}
+.seal .root{font-family:var(--mono);font-size:11px;color:var(--hot);word-break:break-all;
+  margin-top:18px;line-height:1.6;max-width:62ch}
+.seal .rl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:5px}
 
-/* ---------------- table + footer ---------------- */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:740px}
-caption{text-align:left;padding:13px 17px;color:var(--muted);font-size:12px;
-  border-bottom:1px solid var(--line)}
-th{text-align:left;font-size:9px;letter-spacing:.13em;color:var(--dim);
-  font-weight:700;text-transform:uppercase;padding:10px 15px;
-  border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:11px 15px;border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent);
-  white-space:nowrap;font-family:var(--mono);font-size:12px}
+/* chart */
+.chartbox{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--glass)}
+.note{font-family:var(--mono);font-size:11.5px;color:var(--hot);letter-spacing:.06em;
+  margin-bottom:16px}
+.chartwrap{overflow-x:auto}
+svg.chart{width:100%;min-width:540px;height:300px;display:block}
+.key{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;
+  color:var(--muted);margin-top:14px}
+.key i{display:inline-block;width:16px;height:2px;vertical-align:middle;margin-right:7px;
+  background:currentColor}
+.key .o{color:var(--hot)}
+
+/* slate cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(212px,1fr));gap:12px}
+.c{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--glass)}
+.c .m{font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;
+  justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px}
+.c .p{font-size:30px;font-weight:800;font-family:var(--mono);letter-spacing:-.035em}
+.c .p span{color:var(--hot)}
+.c .r{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;
+  color:var(--dim);margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.diff{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--hot);
+  border:1px solid var(--hot);border-radius:3px;padding:2px 5px;white-space:nowrap}
+
+/* record row */
+.rec{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.r{background:var(--bg);padding:24px 22px}
+.r .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase;line-height:1.4}
+.r .v{font-family:var(--mono);font-size:30px;font-weight:700;margin-top:10px;
+  letter-spacing:-.035em}
+.r .v.bad{color:var(--bad)} .r .v.good{color:var(--good)}
+.r .s{font-size:12px;color:var(--muted);margin-top:5px}
+
+/* table */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+caption{text-align:left;padding:16px 20px;color:var(--muted);font-size:12.5px;
+  border-bottom:1px solid var(--line);font-family:var(--mono)}
+th{text-align:left;font-size:9.5px;letter-spacing:.16em;color:var(--dim);font-weight:700;
+  text-transform:uppercase;padding:12px 18px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px 18px;border-bottom:1px solid var(--line);white-space:nowrap;
+  font-family:var(--mono);font-size:12.5px}
 tbody tr:last-child td{border-bottom:0}
-tbody tr:hover{background:var(--panel-2)}
-td.tm{font-family:Inter,sans-serif;font-weight:600}
-footer{grid-column:1/-1;border-top:1px solid var(--line);padding:22px 24px 40px;
-  color:var(--dim);font-size:12px}
-footer p{max-width:88ch;margin:0 0 8px}
+tbody tr:hover{background:var(--glass)}
+td.t{font-family:Inter,sans-serif;font-weight:600}
 
-@media (max-width:1240px){
-  .shell{grid-template-columns:280px minmax(0,1fr)}
-  .rail-r{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);
-    display:grid;grid-template-columns:1fr 1fr;gap:24px}
-}
-@media (max-width:860px){
-  .shell{grid-template-columns:1fr}
-  .rail-l{border-right:0;border-bottom:1px solid var(--line)}
-  .rail-r{grid-template-columns:1fr}
-  .st{border-right:0;border-bottom:1px solid var(--line)}
-  h1{font-size:28px}
-  td{padding:15px}
+footer{border-top:1px solid var(--line);padding:44px 0 70px;color:var(--dim);font-size:12.5px}
+footer p{max-width:84ch;margin:0 0 9px}
+footer .big{font-family:var(--mono);font-size:13px;color:var(--muted);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:20px}
+
+@media (max-width:760px){
+  .hero{padding:76px 0 60px}
+  .seal{grid-template-columns:1fr}
+  td{padding:16px 18px}
+  nav .links{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<a class="skip" href="#slate-table">Skip to the full slate table</a>
-<div class="shell">
+<div class="sky"></div>
+<a class="skip" href="#slate">Skip to the slate</a>
 
-<aside class="rail-l">
-  <div class="brand">
-    <div class="mark"><i></i></div>
-    <div><div class="n">SOOTH</div><div class="t">PUBLIC RECORD. ALWAYS.</div></div>
+<header><nav>
+  <a class="logo" href="/"><span class="ring"><i></i></span>SOOTH</a>
+  <span class="sp"></span>
+  <a class="l" href="#how">How it works</a>
+  <a class="l" href="#record">Record</a>
+  <a class="l" href="#slate">Slate</a>
+  <a class="l" href="/verify">Verify</a>
+  <a class="pill" href="/ledger">Ledger</a>
+</nav></header>
+
+<main>
+
+<div class="wrap hero">
+  <div class="eyebrow">Public record. Always.</div>
+  <h1>Sealed before kickoff.<span class="d">Graded in public.</span></h1>
+  <p class="tag">Every pick. Every week. <b>Wins and losses.</b></p>
+  <div class="acts">
+    <a class="pill hot" href="#slate">See this week</a>
+    <a class="pill" href="#how">How it works</a>
   </div>
+</div>
 
-  <h1>Predictions sealed before kickoff.<br><span class="g">Graded in public.</span></h1>
-  <p class="sub"><b>We don't beat the market.</b><br>We publish the record.</p>
-
-  <a class="btn gold" href="#slate-table">View latest slate <span>&rarr;</span></a>
-  <a class="btn" href="/methodology">How it works <span>&rsaquo;</span></a>
-
-  <div class="card">
-    <div class="hd"><span>Current sealed slate</span><span aria-hidden="true">&#128274;</span></div>
-    <div class="slate" id="c-slate">&mdash;</div>
-    <div class="meta" id="c-meta">loading&hellip;</div>
-    <div class="f"><div class="l">Sealed</div><div class="v" id="c-sealed">&mdash;</div></div>
-    <div class="f"><div class="l">First kickoff</div><div class="v" id="c-kick">&mdash;</div></div>
-    <div class="f"><div class="l">Merkle root</div><div class="v" id="c-root">&mdash;</div></div>
-    <a class="btn" style="margin-top:14px" href="/verify">Verify seal <span>&rarr;</span></a>
+<div class="truth">
+  <div class="wrap">
+    <div class="k">Our record against the spread</div>
+    <div class="big">49.5%</div>
+    <div class="cap">We lose to the market.</div>
+    <p class="sm">You need 52.38% to break even. We don't get there. It's the
+    first thing on the page because it's true.</p>
   </div>
-</aside>
+</div>
 
-<main class="main">
-  <div class="topbar">
-    <nav class="tabs">
-      <a class="on" href="#slate-table">Predictions</a>
-      <a href="/methodology">Method</a>
-      <a href="#performance">Performance</a>
-      <a href="/ledger">Archive</a>
-      <a href="/disclaimers">About</a>
-    </nav>
-    <span class="sp"></span>
-    <a class="btn" style="width:auto;padding:10px 15px;margin:0" href="/ledger">View archive <span>&rarr;</span></a>
+<section class="wrap" id="how">
+  <div class="lbl">How it works</div>
+  <h2>Three steps. No wiggle room.</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div>
+      <h3>We seal</h3>
+      <p>Every pick is locked and hashed before the first game starts.</p></div>
+    <div class="step"><div class="n">02</div>
+      <h3>We reveal</h3>
+      <p>After kickoff the picks go public. Nothing can be changed.</p></div>
+    <div class="step"><div class="n">03</div>
+      <h3>We grade</h3>
+      <p>Every result is posted. The bad weeks stay up too.</p></div>
   </div>
+</section>
 
-  <div class="bar">
-    <span class="id" id="b-slate">&mdash;</span>
-    <span class="chip"><b id="b-preds">&mdash;</b> predictions</span>
-    <span class="chip"><b id="b-games">&mdash;</b> games</span>
-    <span class="chip"><b>2</b> models</span>
-    <span class="chip">sealed <b id="b-sealed">&mdash;</b></span>
-    <span class="chip">kickoff <b id="b-kick">&mdash;</b></span>
-  </div>
-
-  <section class="pane" id="performance">
-    <h2>Performance</h2>
-    <div class="warn">
-      <b>BACKTEST &mdash; NOT A LIVE RECORD.</b>
-      Every point below comes from a walk-forward backtest on games that had
-      already been played. <b>Nothing here was published in advance.</b> Our live
-      record starts empty and begins with Week 1. We show the backtest because
-      it is the only honest evidence we have today &mdash; and because it says we
-      lose to the market.
-    </div>
-    <div class="chartwrap"><svg class="chart" id="chart" role="img"
-      aria-label="Cumulative against-the-spread rate across the backtest. Our model ends at 49.5 percent and the closing market at 50.88 percent, both below the 52.38 percent break-even line."></svg></div>
-    <div class="lg">
-      <span class="o"><i></i>Sooth ATS (backtest)</span>
-      <span><i></i>Market ATS</span>
-      <span class="b"><i style="height:0;border-top:2px dashed currentColor;background:none"></i>Break-even 52.38%</span>
-    </div>
-    <p style="font-size:11.5px;color:var(--dim);margin:9px 0 0">
-      ATS is the share of picks that would have covered the closing line.
-      Regenerate with <code style="font-family:var(--mono)">python scripts/published_figures.py</code>.
-    </p>
-  </section>
-
-  <section class="pane">
-    <h2 style="display:flex;justify-content:space-between;gap:12px">
-      <span>Current slate preview</span>
-      <a href="#slate-table" style="color:var(--gold-soft);text-decoration:none;letter-spacing:.06em">All games &rarr;</a>
-    </h2>
-    <div class="grid4" id="preview" style="margin-top:12px"></div>
-  </section>
-
-  <section id="slate-table">
-    <h2 style="font-size:10.5px;letter-spacing:.16em;color:var(--muted);
-      font-weight:700;text-transform:uppercase;margin:0 0 12px">Full slate</h2>
-    <div class="tbl-wrap">
-      <table>
-        <caption id="cap">Loading&hellip;</caption>
-        <thead><tr>
-          <th scope="col">Kickoff</th><th scope="col">Matchup</th>
-          <th scope="col">Our model</th><th scope="col">Consensus</th>
-          <th scope="col">Market</th><th scope="col">Spread</th><th scope="col">State</th>
-        </tr></thead>
-        <tbody id="tbody"><tr><td colspan="7">Loading&hellip;</td></tr></tbody>
-      </table>
-    </div>
-    <p style="font-size:12px;color:var(--muted);max-width:82ch;margin-top:12px">
-      <b>Our model</b> has never seen the betting line and is measurably worse
-      than the market. <b>Consensus</b> adds the de-vigged market price: better
-      calibrated, but it largely reproduces the market. Publishing only the
-      consensus would be market-following dressed as insight, so we publish both.
-    </p>
-  </section>
-</main>
-
-<aside class="rail-r">
-  <div>
-    <div class="hd"><span>Slate archive</span>
-      <a href="/ledger" style="color:var(--gold-soft);text-decoration:none">View all</a></div>
-    <div id="archive"></div>
-  </div>
-
-  <div style="margin-top:26px">
-    <div class="hd"><span>The honest record</span></div>
-
-    <div class="rec">
-      <div class="side">Break-even<br><b style="color:var(--ink)">52.38%</b></div>
-      <div class="l">Against the spread <s>(backtest, n=2,608)</s></div>
-      <div class="big bad">49.50%</div>
-    </div>
-
-    <div class="rec">
-      <div class="l">Brier score <s>(lower is better)</s></div>
-      <div class="pair"><span>Ours</span><span>0.22164</span></div>
-      <div class="pair"><span>Market</span><span>0.21061</span></div>
-      <div class="verdict bad">The market is better</div>
-    </div>
-
-    <div class="rec">
-      <div class="l">Calibration error <s>(lower is better)</s></div>
-      <div class="pair"><span>Ours</span><span>0.01858</span></div>
-      <div class="pair"><span>Market</span><span>0.01913</span></div>
-      <div class="verdict good">We're slightly better</div>
-    </div>
-
-    <div class="rec">
-      <div class="l">Confidence capped at 85%</div>
-      <div style="font-size:11.5px;color:var(--muted);margin-top:4px">
-        Our 90%+ band ran 94.5% predicted against 86.7% actual, so we cap what
-        we publish rather than show a number we know is inflated.
+<section class="wrap">
+  <div class="lbl">This week</div>
+  <div class="seal">
+    <div>
+      <div class="id" id="s-id">&mdash;</div>
+      <div class="sub" id="s-sub">loading&hellip;</div>
+      <div class="root">
+        <div class="rl">Sealed with</div>
+        <span id="s-root">&mdash;</span>
       </div>
     </div>
+    <a class="pill" href="/verify">Check it yourself</a>
   </div>
-</aside>
+</section>
 
-<div class="strip">
-  <div class="st"><div class="l">ATS<br>(backtest)</div>
-    <div class="v bad">49.50%</div><div class="d">below break-even</div></div>
-  <div class="st"><div class="l">Break-even</div>
-    <div class="v">52.38%</div><div class="d">at &minus;110 both sides</div></div>
-  <div class="st"><div class="l">Brier<br>ours / market</div>
-    <div class="v">0.22164<span style="color:var(--dim);font-size:15px"> / 0.21061</span></div>
-    <div class="d" style="color:var(--bad)">market is better</div></div>
-  <div class="st"><div class="l">Calibration<br>ours / market</div>
-    <div class="v good">0.01858<span style="color:var(--dim);font-size:15px"> / 0.01913</span></div>
-    <div class="d" style="color:var(--good)">we're slightly better</div></div>
-  <div class="st"><div class="l">Backtest games<br>graded</div>
-    <div class="v">2,608</div><div class="d">already played, not published</div></div>
-  <div class="st"><div class="l">Predictions<br>published live</div>
-    <div class="v">0</div><div class="d">first grades after Week 1</div></div>
-  <div class="st"><div class="l">Live record<br>W &mdash; L &mdash; P</div>
-    <div class="v">0 &mdash; 0 &mdash; 0</div><div class="d">nothing settled yet</div></div>
-</div>
+<section class="wrap" id="record">
+  <div class="lbl">The record</div>
+  <h2>Here's everything.</h2>
+  <p class="lead">Two numbers matter. We're worse than the market at picking
+  winners, and slightly better at knowing how sure to be.</p>
 
-<footer>
-  <p><b>Sooth is a public record of predictions and outcomes. Not advice. Not
-  picks. Not betting.</b> We do not accept, place, or facilitate wagers, and we
-  hold no customer funds. We are not affiliated with any league, team, or
-  sportsbook.</p>
-  <p>Past performance does not indicate future results. Our published backtest
-  shows a loss against the closing market. You must be 18 or older and in a
-  jurisdiction where this is lawful. If gambling is causing harm, the National
-  Council on Problem Gambling helpline is <b>1-800-522-4700</b>, 24/7.</p>
-  <p style="margin-top:14px"><a href="/methodology">Methodology</a> &middot;
+  <div class="rec">
+    <div class="r"><div class="k">Against<br>the spread</div>
+      <div class="v bad">49.50%</div><div class="s">need 52.38%</div></div>
+    <div class="r"><div class="k">Accuracy<br>vs market</div>
+      <div class="v bad">worse</div><div class="s">0.22164 / 0.21061</div></div>
+    <div class="r"><div class="k">Calibration<br>vs market</div>
+      <div class="v good">better</div><div class="s">0.01858 / 0.01913</div></div>
+    <div class="r"><div class="k">Live picks<br>so far</div>
+      <div class="v">0</div><div class="s">first grades after week 1</div></div>
+  </div>
+
+  <div class="chartbox" style="margin-top:26px">
+    <div class="note">This is a backtest. Not a live record. Nothing here was published in advance.</div>
+    <div class="chartwrap"><svg class="chart" id="chart" role="img"
+      aria-label="Our against-the-spread rate across the backtest ends at 49.5 percent and the market at 50.88 percent. Both sit below the 52.38 percent break-even line."></svg></div>
+    <div class="key">
+      <span class="o"><i></i>Us</span>
+      <span><i></i>Market</span>
+      <span style="color:var(--dim)"><i style="height:0;border-top:2px dashed currentColor;background:none"></i>Break-even</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="slate">
+  <div class="lbl">The slate</div>
+  <h2>This week's picks.</h2>
+  <p class="lead">Two models. One never sees the betting line, the other does.
+  Where they disagree, we show that too.</p>
+  <div class="cards" id="cards"></div>
+
+  <div class="tbl" style="margin-top:22px">
+    <table>
+      <caption id="cap">Loading&hellip;</caption>
+      <thead><tr>
+        <th scope="col">Day</th><th scope="col">Game</th><th scope="col">Our pick</th>
+        <th scope="col">With market</th><th scope="col">Market</th>
+        <th scope="col">Spread</th><th scope="col">State</th>
+      </tr></thead>
+      <tbody id="tbody"><tr><td colspan="7">Loading&hellip;</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <div class="big">We don't beat the market. We publish the record.</div>
+  <p><b>Not advice. Not betting.</b> We don't take bets, hold money, or pay out.
+  We're not connected to any league, team, or sportsbook.</p>
+  <p>Past results don't predict future ones. 18+, where legal. If gambling is
+  hurting you, call <b>1-800-522-4700</b>, any time.</p>
+  <p style="margin-top:18px"><a href="/methodology">Method</a> &middot;
     <a href="/verify">Verify</a> &middot; <a href="/ledger">Ledger</a> &middot;
     <a href="/disclaimers">Disclaimers</a></p>
-</footer>
-</div>
+</div></footer>
 
 <script>
-const pct = v => v==null ? '—' : (v*100).toFixed(1)+'%';
-const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+var pct=function(v){return v==null?'—':(v*100).toFixed(1)+'%';};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 
-/* chart: the real backtest curve, drawn from published JSON */
-fetch('/data/backtest_curve.json').then(r=>r.json()).then(d=>{
-  const W=980,H=290,L=44,R=58,T=14,B=34,pts=d.points;
-  const x=i=>L+(W-L-R)*(i/(pts.length-1));
-  const lo=0.35,hi=0.65,y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
-  const path=k=>pts.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p[k]).toFixed(1)).join(' ');
-  let g='';
-  [0.40,0.45,0.50,0.55,0.60].forEach(v=>{
+fetch('/data/backtest_curve.json').then(function(r){return r.json();}).then(function(d){
+  var W=980,H=300,L=42,R=56,T=16,B=32,pts=d.points;
+  var x=function(i){return L+(W-L-R)*(i/(pts.length-1));};
+  var lo=0.35,hi=0.65,y=function(v){return T+(H-T-B)*(1-(v-lo)/(hi-lo));};
+  var path=function(k){return pts.map(function(p,i){
+    return (i?'L':'M')+x(i).toFixed(1)+' '+y(p[k]).toFixed(1);}).join(' ');};
+  var g='';
+  [0.40,0.45,0.50,0.55,0.60].forEach(function(v){
     g+='<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="var(--line)" stroke-width="1"/>'
-      +'<text x="'+(L-9)+'" y="'+(y(v)+4)+'" fill="var(--dim)" font-size="10" text-anchor="end" font-family="JetBrains Mono,monospace">'+(v*100).toFixed(0)+'%</text>';
+      +'<text x="'+(L-8)+'" y="'+(y(v)+4)+'" fill="var(--dim)" font-size="10" text-anchor="end" font-family="JetBrains Mono,monospace">'+(v*100).toFixed(0)+'</text>';
   });
-  const seen=new Set();
-  pts.forEach((p,i)=>{ if(!seen.has(p.season)&&i%18===0){ seen.add(p.season);
-    g+='<text x="'+x(i)+'" y="'+(H-12)+'" fill="var(--dim)" font-size="10" text-anchor="middle" font-family="JetBrains Mono,monospace">'+p.season+'</text>'; }});
+  var seen={};
+  pts.forEach(function(p,i){ if(!seen[p.season]&&i%18===0){ seen[p.season]=1;
+    g+='<text x="'+x(i)+'" y="'+(H-10)+'" fill="var(--dim)" font-size="10" text-anchor="middle" font-family="JetBrains Mono,monospace">'+p.season+'</text>'; }});
   g+='<line x1="'+L+'" y1="'+y(d.breakeven)+'" x2="'+(W-R)+'" y2="'+y(d.breakeven)+'" stroke="var(--dim)" stroke-width="1.2" stroke-dasharray="4 4"/>'
-    +'<text x="'+(W-R+6)+'" y="'+(y(d.breakeven)+4)+'" fill="var(--dim)" font-size="10" font-family="JetBrains Mono,monospace">52.38</text>'
-    +'<path d="'+path('market')+'" fill="none" stroke="var(--muted)" stroke-width="1.5" opacity=".85"/>'
-    +'<path d="'+path('ours')+'" fill="none" stroke="var(--gold-soft)" stroke-width="2"/>'
-    +'<text x="'+(W-R+6)+'" y="'+(y(d.final_market)+4)+'" fill="var(--muted)" font-size="10.5" font-family="JetBrains Mono,monospace">'+(d.final_market*100).toFixed(2)+'</text>'
-    +'<text x="'+(W-R+6)+'" y="'+(y(d.final_ours)+4)+'" fill="var(--gold-soft)" font-size="10.5" font-family="JetBrains Mono,monospace">'+(d.final_ours*100).toFixed(2)+'</text>';
-  const svg=document.getElementById('chart');
-  svg.setAttribute('viewBox','0 0 '+W+' '+H); svg.innerHTML=g;
+    +'<text x="'+(W-R+6)+'" y="'+(y(d.breakeven)+4)+'" fill="var(--dim)" font-size="10.5" font-family="JetBrains Mono,monospace">52.38</text>'
+    +'<path d="'+path('market')+'" fill="none" stroke="var(--muted)" stroke-width="1.5" opacity=".8"/>'
+    +'<path d="'+path('ours')+'" fill="none" stroke="var(--hot)" stroke-width="2.2"/>'
+    +'<text x="'+(W-R+6)+'" y="'+(y(d.final_market)+4)+'" fill="var(--muted)" font-size="10.5" font-family="JetBrains Mono,monospace">'+(d.final_market*100).toFixed(1)+'</text>'
+    +'<text x="'+(W-R+6)+'" y="'+(y(d.final_ours)+4)+'" fill="var(--hot)" font-size="10.5" font-family="JetBrains Mono,monospace">'+(d.final_ours*100).toFixed(1)+'</text>';
+  var s=document.getElementById('chart');
+  s.setAttribute('viewBox','0 0 '+W+' '+H); s.innerHTML=g;
 }).catch(function(){
-  document.getElementById('chart').outerHTML =
-    '<p style="color:var(--muted);font-size:12.5px">Backtest curve unavailable &mdash; the raw data is at <a href="/data/backtest_curve.json">/data/backtest_curve.json</a>.</p>';
+  document.getElementById('chart').outerHTML='<p style="color:var(--muted);font-size:13px">Chart unavailable. Raw data: <a href="/data/backtest_curve.json">backtest_curve.json</a></p>';
 });
 
-/* slate */
-fetch('/data/2026-W01-nfl.json').then(r=>r.json()).then(d=>{
-  const kick=new Date(d.earliest_kickoff), short=s=>s.slice(5,10);
-  document.getElementById('c-slate').textContent=d.slate_id;
-  document.getElementById('c-meta').textContent=
-    d.n_predictions+' predictions · '+d.games.length+' games · 2 models';
-  document.getElementById('c-sealed').textContent=d.committed_at.slice(0,19)+'Z';
-  document.getElementById('c-kick').textContent=kick.toISOString().slice(0,19)+'Z';
-  document.getElementById('c-root').textContent=d.merkle_root;
-  document.getElementById('b-slate').textContent=d.slate_id;
-  document.getElementById('b-preds').textContent=d.n_predictions;
-  document.getElementById('b-games').textContent=d.games.length;
-  document.getElementById('b-sealed').textContent=short(d.committed_at);
-  document.getElementById('b-kick').textContent=short(d.earliest_kickoff);
+fetch('/data/2026-W01-nfl.json').then(function(r){return r.json();}).then(function(d){
+  document.getElementById('s-id').textContent=d.slate_id;
+  document.getElementById('s-sub').textContent=
+    d.games.length+' games · sealed '+d.committed_at.slice(0,10)+' · first kickoff '+d.earliest_kickoff.slice(0,10);
+  document.getElementById('s-root').textContent=d.merkle_root;
 
-  document.getElementById('archive').innerHTML =
-    '<div class="arow"><div class="n">'+esc(d.slate_id)+'</div>'
-    +'<div class="c">'+d.games.length+' games · sealed, not yet graded</div></div>'
-    +'<div class="empty">No settled slates yet. The first graded results post '
-    +'after Week 1 &mdash; wins and losses alike. This list will never be curated.</div>';
-
-  document.getElementById('preview').innerHTML=d.games.slice(0,4).map(function(g){
-    return '<div class="g">'
-      +'<div class="mu"><span>'+esc(g.away)+' @ '+esc(g.home)+'</span>'
-      +(g.models_disagree?'<span class="tagd">MODELS DIFFER</span>':'')+'</div>'
-      +'<div class="pk"><span class="t">'+esc(g.independent.pick)+'</span> '+pct(g.independent.prob)+'</div>'
-      +'<div class="three">'
-      +'<div><div class="k">Our model</div><div class="v">'+esc(g.independent.pick)+' '+pct(g.independent.prob)+'</div></div>'
-      +'<div><div class="k">Consensus</div><div class="v">'+esc(g.consensus.pick)+' '+pct(g.consensus.prob)+'</div></div>'
-      +'<div><div class="k">Market</div><div class="v">'+pct(g.market_prob)+'</div></div>'
-      +'</div><div class="sp">'+(g.spread_line>0?'+':'')+g.spread_line+'</div></div>';
+  document.getElementById('cards').innerHTML=d.games.slice(0,4).map(function(g){
+    return '<div class="c"><div class="m"><span>'+esc(g.away)+' @ '+esc(g.home)+'</span>'
+      +(g.models_disagree?'<span class="diff">SPLIT</span>':'')+'</div>'
+      +'<div class="p"><span>'+esc(g.independent.pick)+'</span> '+pct(g.independent.prob)+'</div>'
+      +'<div class="r"><span>market '+pct(g.market_prob)+'</span><span>'
+      +(g.spread_line>0?'+':'')+g.spread_line+'</span></div></div>';
   }).join('');
 
-  document.getElementById('cap').textContent =
-    d.slate_id+' · sealed '+d.committed_at.slice(0,10)+' · root '
-    +d.merkle_root.slice(0,16)+'… · '+d.n_predictions+' predictions · none graded yet';
+  document.getElementById('cap').textContent=
+    d.slate_id+' · '+d.n_predictions+' picks sealed · none graded yet';
   document.getElementById('tbody').innerHTML=d.games.map(function(g){
-    const t=new Date(g.kickoff);
-    const day=t.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric',timeZone:'UTC'});
-    return '<tr><td style="color:var(--muted)">'+day+'</td>'
-      +'<td class="tm">'+esc(g.away)+' @ '+esc(g.home)+'</td>'
-      +'<td><b style="color:var(--gold-soft)">'+esc(g.independent.pick)+'</b> '+pct(g.independent.prob)+'</td>'
-      +'<td style="color:var(--muted)"><b>'+esc(g.consensus.pick)+'</b> '+pct(g.consensus.prob)+'</td>'
+    var t=new Date(g.kickoff);
+    var day=t.toLocaleDateString('en-US',{weekday:'short',timeZone:'UTC'});
+    return '<tr><td style="color:var(--dim)">'+day+'</td>'
+      +'<td class="t">'+esc(g.away)+' @ '+esc(g.home)+'</td>'
+      +'<td><b style="color:var(--hot)">'+esc(g.independent.pick)+'</b> '+pct(g.independent.prob)+'</td>'
+      +'<td style="color:var(--muted)">'+esc(g.consensus.pick)+' '+pct(g.consensus.prob)+'</td>'
       +'<td style="color:var(--muted)">'+pct(g.market_prob)+'</td>'
       +'<td style="color:var(--muted)">'+(g.spread_line>0?'+':'')+g.spread_line+'</td>'
-      +'<td>'+(g.models_disagree?'<span class="tagd">MODELS DIFFER</span>'
-        :'<span style="color:var(--dim);font-family:var(--mono);font-size:10px">SEALED</span>')+'</td></tr>';
+      +'<td>'+(g.models_disagree?'<span class="diff">SPLIT</span>'
+        :'<span style="color:var(--dim);font-size:10px">SEALED</span>')+'</td></tr>';
   }).join('');
 }).catch(function(){
-  document.getElementById('c-meta').textContent='Could not load the slate.';
-  document.getElementById('cap').textContent='Slate unavailable — raw data at /data/2026-W01-nfl.json';
-  document.getElementById('tbody').innerHTML='<tr><td colspan="7">Unavailable — see <a href="/ledger">the ledger</a>.</td></tr>';
+  document.getElementById('s-sub').textContent='Could not load this week.';
+  document.getElementById('cap').textContent='Unavailable. Raw data: /data/2026-W01-nfl.json';
+  document.getElementById('tbody').innerHTML='<tr><td colspan="7">Unavailable — see the <a href="/ledger">ledger</a>.</td></tr>';
 });
 </script>
 </body>
