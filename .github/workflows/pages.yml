@@ -1,0 +1,37 @@
+name: deploy-site
+
+# Publishes site/public to GitHub Pages. The site is pre-built static files,
+# so there is no build step - which is also why it can be hosted anywhere and
+# why the published data stays independently verifiable.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/public/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/public
+      - id: deployment
+        uses: actions/deploy-pages@v4
