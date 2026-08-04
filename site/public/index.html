@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — the same bet, the best price</title>
-<meta name="description" content="We watch every sportsbook and show you the best available number on every game. Same bet, better price.">
+<title>Sooth — the best number on every game</title>
+<meta name="description" content="Sooth reads every sportsbook and publishes the best available price and the de-vigged fair line on every game. NFL, MLB, NHL, NBA, UFC.">
 <link rel="canonical" href="https://sooth.co/">
-<meta property="og:title" content="Sooth — the same bet, the best price">
-<meta property="og:description" content="We watch every book so you never take a bad number.">
+<meta property="og:title" content="Sooth — the best number on every game">
+<meta property="og:description" content="Every book, every game. Best price and fair line, published.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sooth.co/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,270 +15,309 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#04060a; --ink:#f4f7fb; --muted:#8d99a9; --dim:#556170;
-  --line:rgba(255,255,255,.07); --line-2:rgba(255,255,255,.15);
-  --glass:rgba(255,255,255,.025);
-  --hot:#57d6a0; --warm:#e8c46a; --bad:#e0655c;
+  --bg:#000; --ink:#fff; --muted:#9a9a9a; --dim:#616161;
+  --line:#1c1c1c; --line-2:#2e2e2e; --panel:#0a0a0a;
+  --up:#fff; --down:#8a8a8a;
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme:light){
-  :root{--bg:#f3f5f8;--ink:#080c12;--muted:#4a5563;--dim:#78828f;
-    --line:rgba(0,0,0,.09);--line-2:rgba(0,0,0,.18);--glass:rgba(0,0,0,.02);
-    --hot:#127a52;--warm:#8a6a14;--bad:#b1382f}
+  :root{--bg:#fff;--ink:#000;--muted:#5a5a5a;--dim:#8a8a8a;
+    --line:#e6e6e6;--line-2:#cfcfcf;--panel:#fafafa;--up:#000;--down:#767676}
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
-  font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  font:16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--hot);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:14px;top:14px;z-index:99;background:#111;padding:10px 14px;border-radius:8px}
-.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+.skip:focus{left:14px;top:14px;z-index:99;background:var(--panel);
+  border:1px solid var(--line-2);padding:10px 14px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 
-.sky{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
-  radial-gradient(1000px 560px at 50% -10%, rgba(87,214,160,.10), transparent 62%),
-  radial-gradient(820px 640px at 88% 26%, rgba(70,120,190,.07), transparent 60%)}
-.sky::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(120% 92% at 50% 42%, transparent 55%, rgba(0,0,0,.6) 100%)}
-@media (prefers-color-scheme:light){.sky::after{background:none}}
-
-/* ---- wordmark only ---- */
-header{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);
-  background:color-mix(in srgb,var(--bg) 74%,transparent);border-bottom:1px solid var(--line)}
-nav{display:flex;align-items:center;height:70px;max-width:1140px;margin:0 auto;padding:0 24px}
-.mark{text-decoration:none;font-weight:900;font-size:21px;letter-spacing:.42em;
-  text-transform:uppercase;line-height:1;padding-left:2px}
-.mark b{color:var(--hot);font-weight:900}
+header{position:sticky;top:0;z-index:50;background:var(--bg);
+  border-bottom:1px solid var(--line)}
+nav{display:flex;align-items:center;height:66px;max-width:1120px;margin:0 auto;padding:0 24px}
+.mark{text-decoration:none;font-weight:900;font-size:20px;letter-spacing:.44em;
+  text-transform:uppercase;line-height:1}
 nav .sp{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;margin-left:26px}
+nav a.l{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;margin-left:28px}
 nav a.l:hover{color:var(--ink)}
 
-.pill{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;
-  border:1px solid var(--line-2);text-decoration:none;font-size:13.5px;font-weight:600;
-  min-height:44px;background:var(--glass)}
-.pill:hover{border-color:var(--hot)}
-.pill.hot{background:var(--hot);border-color:var(--hot);color:#04120c}
-
-/* ---- hero ---- */
-.hero{padding:112px 0 78px;text-align:center}
-.eye{font-family:var(--mono);font-size:11px;letter-spacing:.34em;color:var(--hot);
-  text-transform:uppercase;margin-bottom:26px}
-h1{font-size:clamp(42px,7.4vw,92px);line-height:.96;letter-spacing:-.045em;
-  font-weight:800;margin:0 0 24px}
-h1 .d{display:block;color:var(--muted)}
-.tag{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:30ch;margin:0 auto 38px}
-.tag b{color:var(--ink);font-weight:600}
-.acts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-
-/* ---- edge band ---- */
-.band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  background:var(--glass);padding:56px 0;text-align:center}
-.band .k{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--dim);
-  text-transform:uppercase;margin-bottom:16px}
-.band .n{font-family:var(--mono);font-size:clamp(56px,11vw,120px);line-height:.9;
-  font-weight:700;letter-spacing:-.05em;color:var(--hot)}
-.band .n small{font-size:.34em;letter-spacing:0;color:var(--muted);font-weight:500}
-.band .c{font-size:clamp(17px,2.2vw,23px);font-weight:600;margin:20px 0 6px}
-.band .s{color:var(--muted);font-size:14.5px;max-width:46ch;margin:0 auto}
-
-section{padding:74px 0}
-.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.28em;color:var(--dim);
+.hero{padding:96px 0 64px;border-bottom:1px solid var(--line)}
+.eye{font-family:var(--mono);font-size:10.5px;letter-spacing:.34em;color:var(--dim);
   text-transform:uppercase;margin-bottom:22px}
-h2{font-size:clamp(27px,3.4vw,40px);letter-spacing:-.03em;font-weight:700;margin:0 0 14px}
-.lead{color:var(--muted);font-size:16.5px;max-width:54ch;margin:0 0 32px}
+h1{font-size:clamp(40px,6.6vw,82px);line-height:.98;letter-spacing:-.045em;
+  font-weight:800;margin:0 0 22px;max-width:16ch}
+.tag{font-size:clamp(16px,1.9vw,19px);color:var(--muted);max-width:52ch;margin:0 0 34px}
+.tag b{color:var(--ink);font-weight:600}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;padding:12px 22px;text-decoration:none;
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line-2);min-height:44px;background:transparent}
+.pill:hover{border-color:var(--ink)}
+.pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-/* ---- board ---- */
-.board{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--glass)}
-.brow{display:grid;grid-template-columns:132px 1fr 92px 118px 118px 84px;gap:14px;
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  border-bottom:1px solid var(--line)}
+.num{padding:26px 24px;border-right:1px solid var(--line)}
+.num:last-child{border-right:0}
+.num .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;line-height:1.4}
+.num .v{font-family:var(--mono);font-size:clamp(26px,3.4vw,38px);font-weight:700;
+  letter-spacing:-.04em;margin-top:10px}
+.num .s{font-size:11.5px;color:var(--muted);margin-top:4px}
+
+section{padding:66px 0;border-bottom:1px solid var(--line)}
+.lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:20px}
+h2{font-size:clamp(25px,3.2vw,36px);letter-spacing:-.03em;font-weight:700;margin:0 0 12px}
+.lead{color:var(--muted);font-size:16px;max-width:58ch;margin:0 0 30px}
+
+.tabs{display:flex;gap:0;border:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:12px 20px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;border-right:1px solid var(--line);cursor:pointer;
+  background:transparent;color:var(--muted);font-weight:700;min-height:44px}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab:last-child{border-right:0}
+
+.board{border:1px solid var(--line)}
+.row{display:grid;grid-template-columns:120px 1fr 128px 112px 96px;gap:16px;
   align-items:center;padding:15px 20px;border-bottom:1px solid var(--line)}
-.brow:last-child{border-bottom:0}
-.brow.h{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim);
-  text-transform:uppercase;background:var(--glass)}
-.brow .g{font-weight:600;font-size:14.5px}
-.brow .g s{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);
-  text-decoration:none;margin-top:2px}
-.brow .pk{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--warm)}
-.price{font-family:var(--mono);font-size:17px;font-weight:700}
-.price.best{color:var(--hot)}
-.price s{display:block;font-size:10px;color:var(--dim);text-decoration:none;
-  font-weight:500;margin-top:2px;letter-spacing:.04em}
-.gain{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--hot);text-align:right}
-@media (max-width:820px){
-  .brow{grid-template-columns:1fr 1fr;gap:10px}
-  .brow.h{display:none}
-  .brow .g{grid-column:1/-1}
+.row:last-child{border-bottom:0}
+.row.h{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase}
+.row .g{font-weight:600;font-size:14.5px}
+.row .g s{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);
+  text-decoration:none;margin-top:3px}
+.p{font-family:var(--mono);font-size:17px;font-weight:700}
+.p s{display:block;font-size:10px;color:var(--dim);text-decoration:none;
+  font-weight:500;margin-top:3px;letter-spacing:.06em}
+.fair{font-family:var(--mono);font-size:15px;color:var(--muted)}
+.fair s{display:block;font-size:9.5px;color:var(--dim);text-decoration:none;
+  margin-top:3px;letter-spacing:.14em;text-transform:uppercase}
+.gain{font-family:var(--mono);font-size:15px;font-weight:700;text-align:right}
+@media (max-width:860px){
+  .row{grid-template-columns:1fr 1fr;gap:10px}
+  .row.h{display:none}
+  .row .g{grid-column:1/-1}
 }
 
-/* ---- honest ---- */
-.honest{border:1px solid var(--line-2);border-radius:14px;padding:30px;background:var(--glass)}
-.honest .t{font-size:clamp(21px,2.6vw,28px);font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
-.honest p{color:var(--muted);font-size:15.5px;max-width:62ch;margin:0 0 10px}
-.honest .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:1px;background:var(--line);border:1px solid var(--line);border-radius:11px;
-  overflow:hidden;margin-top:22px}
-.honest .cell{background:var(--bg);padding:20px}
-.honest .cell .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
-  color:var(--dim);text-transform:uppercase;line-height:1.4}
-.honest .cell .v{font-family:var(--mono);font-size:26px;font-weight:700;margin-top:9px;
-  letter-spacing:-.03em}
-.honest .cell .v.bad{color:var(--bad)}
-.honest .cell .s{font-size:11.5px;color:var(--muted);margin-top:4px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;
+  border:1px solid var(--line)}
+.half{padding:30px 26px;border-right:1px solid var(--line)}
+.half:last-child{border-right:0}
+.half h3{font-size:19px;margin:0 0 10px;font-weight:700;letter-spacing:-.015em}
+.half p{color:var(--muted);font-size:14.5px;margin:0 0 10px}
+.half .fig{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:-.04em;
+  margin:14px 0 4px}
+.half .cap{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;
+  text-transform:uppercase}
 
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(236px,1fr));gap:1px;
-  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.step{background:var(--bg);padding:28px 24px}
-.step .n{font-family:var(--mono);font-size:12px;color:var(--hot);margin-bottom:12px}
-.step h3{font-size:18px;margin:0 0 7px;font-weight:650;letter-spacing:-.01em}
-.step p{color:var(--muted);font-size:14.5px;margin:0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));
+  border:1px solid var(--line)}
+.step{padding:26px 24px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .n{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:12px;
+  letter-spacing:.2em}
+.step h3{font-size:17px;margin:0 0 7px;font-weight:700}
+.step p{color:var(--muted);font-size:14px;margin:0}
 
-footer{border-top:1px solid var(--line);padding:42px 0 66px;color:var(--dim);font-size:12.5px}
-footer p{max-width:84ch;margin:0 0 9px}
-footer .big{font-family:var(--mono);font-size:12.5px;color:var(--muted);
-  letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px}
-@media (max-width:760px){.hero{padding:72px 0 56px} nav a.l{display:none}}
+footer{padding:40px 0 64px;color:var(--dim);font-size:12px}
+footer p{max-width:86ch;margin:0 0 9px}
+footer .m{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:18px}
+@media (max-width:760px){.hero{padding:64px 0 48px} nav a.l{margin-left:16px;font-size:11px}
+  .num{border-right:0;border-bottom:1px solid var(--line)} .half{border-right:0;border-bottom:1px solid var(--line)}
+  .step{border-right:0;border-bottom:1px solid var(--line)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div class="sky"></div>
 <a class="skip" href="#board">Skip to the board</a>
 
 <header><nav>
-  <a class="mark" href="/">Soo<b>t</b>h</a>
+  <a class="mark" href="/">Sooth</a>
   <span class="sp"></span>
   <a class="l" href="#board">Board</a>
-  <a class="l" href="#honest">Our record</a>
+  <a class="l" href="#method">Method</a>
+  <a class="l" href="#record">Record</a>
   <a class="l" href="/ledger">Ledger</a>
 </nav></header>
 
 <main>
 
 <div class="wrap hero">
-  <div class="eye">Every book. Every game.</div>
-  <h1>Same bet.<span class="d">Better price.</span></h1>
-  <p class="tag">Books don't agree on what a game is worth.
-    <b>We show you who's paying the most.</b></p>
+  <div class="eye">NFL · MLB · NHL · NBA · UFC</div>
+  <h1>The best number on every game.</h1>
+  <p class="tag">Sportsbooks price the same game differently. Sooth reads all of
+    them and publishes two figures: <b>the best price available right now</b>,
+    and <b>the fair line with the margin stripped out.</b></p>
   <div class="acts">
-    <a class="pill hot" href="#board">See this week's board</a>
-    <a class="pill" href="#honest">Our record</a>
+    <a class="pill on" href="#board">Open the board</a>
+    <a class="pill" href="#method">Method</a>
   </div>
 </div>
 
-<div class="band">
-  <div class="wrap">
-    <div class="k">Average gap between best and worst book</div>
-    <div class="n" id="edge">—<small> pts</small></div>
-    <div class="c">That's free money, every week.</div>
-    <p class="s">Same game, same side. One book just pays more than another.
-      Taking the best number costs you nothing.</p>
-  </div>
+<div class="nums wrap" style="border-left:0;border-right:0">
+  <div class="num"><div class="k">Average gap<br>best to worst</div>
+    <div class="v" id="n-gap">—</div><div class="s">points of implied probability</div></div>
+  <div class="num"><div class="k">Widest gap<br>on the board</div>
+    <div class="v" id="n-max">—</div><div class="s">single game, right now</div></div>
+  <div class="num"><div class="k">Books<br>read</div>
+    <div class="v" id="n-books">—</div><div class="s">US market</div></div>
+  <div class="num"><div class="k">Games<br>priced</div>
+    <div class="v" id="n-events">—</div><div class="s" id="n-sports">—</div></div>
 </div>
 
 <section class="wrap" id="board">
-  <div class="lbl">This week</div>
-  <h2>The board.</h2>
-  <p class="lead">Every game, the side we like, and where the best price is
-    right now across <span id="nbooks">10</span> books.</p>
+  <div class="lbl">The board</div>
+  <h2>Every game, every book.</h2>
+  <p class="lead">Sorted by how much you gain from taking the best available
+    number instead of the worst. Fair line is the consensus across all books
+    with the margin removed.</p>
 
+  <div class="tabs" id="tabs" role="tablist"></div>
   <div class="board" id="board-el">
-    <div class="brow h">
-      <span>Kickoff</span><span>Game</span><span>Side</span>
-      <span>Best price</span><span>Worst price</span><span style="text-align:right">Gain</span>
-    </div>
-    <div class="brow"><span class="g">Loading…</span></div>
+    <div class="row"><span class="g">Loading…</span></div>
   </div>
-  <p style="font-size:12px;color:var(--dim);margin-top:14px;font-family:var(--mono)"
+  <p style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:14px"
      id="stamp">—</p>
 </section>
 
-<section class="wrap" id="honest">
-  <div class="lbl">Our record</div>
-  <div class="honest">
-    <div class="t">We don't beat the market. We beat the price.</div>
-    <p>Our model picks winners about as well as a sharp bettor — and worse than
-      the closing line. We tested it on thousands of games and it does not clear
-      the bar you'd need to profit from picks alone.</p>
-    <p><b style="color:var(--ink)">That's exactly why we built the board.</b>
-      Shopping for the best number works whether or not anyone's picks are good.
-      It's the one edge nobody can take away from you.</p>
-    <div class="row">
-      <div class="cell"><div class="k">Our picks<br>vs the spread</div>
-        <div class="v bad">49.5%</div><div class="s">need 52.38% to profit</div></div>
-      <div class="cell"><div class="k">Best-price<br>gain</div>
-        <div class="v" id="edge2">—</div><div class="s">this week's average</div></div>
-      <div class="cell"><div class="k">Books<br>watched</div>
-        <div class="v">10</div><div class="s">updated near kickoff</div></div>
-      <div class="cell"><div class="k">Picks graded<br>in public</div>
-        <div class="v">0</div><div class="s">first results after week 1</div></div>
+<section class="wrap" id="method">
+  <div class="lbl">Method</div>
+  <h2>Two numbers. Both checkable.</h2>
+  <div class="two">
+    <div class="half">
+      <h3>Best price</h3>
+      <p>The most generous quote on a side across every book we read. Same bet,
+        same outcome — one book simply pays more.</p>
+      <p>Taking it costs nothing and requires no opinion about who wins.</p>
+      <div class="fig" id="m-gap">—</div>
+      <div class="cap">Average gain this board</div>
+    </div>
+    <div class="half">
+      <h3>Fair line</h3>
+      <p>Every posted price carries the book's margin, so it always understates
+        your real chances. We take the median across books and remove the
+        margin.</p>
+      <p>Median, not average — one stale quote near kickoff shouldn't move a
+        consensus.</p>
+      <div class="fig" id="m-books">—</div>
+      <div class="cap">Books in the consensus</div>
     </div>
   </div>
 </section>
 
-<section class="wrap">
-  <div class="lbl">How it works</div>
-  <h2>Three things. That's it.</h2>
+<section class="wrap" id="record">
+  <div class="lbl">Record</div>
+  <h2>What our own model does.</h2>
+  <p class="lead">We also run a prediction model. It is worse than the closing
+    market, we measured it, and we publish the number. Nothing on this site
+    depends on it being good.</p>
   <div class="steps">
-    <div class="step"><div class="n">01</div><h3>We watch</h3>
-      <p>Prices from every major book, pulled again and again as kickoff gets close.</p></div>
-    <div class="step"><div class="n">02</div><h3>We compare</h3>
-      <p>Same bet at ten books is ten different prices. We rank them.</p></div>
-    <div class="step"><div class="n">03</div><h3>We post the score</h3>
-      <p>Our own picks get graded in public. The bad weeks stay up.</p></div>
+    <div class="step"><div class="n">01</div><h3>49.5%</h3>
+      <p>Our picks against the spread across 2,608 tested games.</p></div>
+    <div class="step"><div class="n">02</div><h3>52.38%</h3>
+      <p>What you'd need to break even. We don't reach it.</p></div>
+    <div class="step"><div class="n">03</div><h3>0</h3>
+      <p>Picks graded in public so far. First results post after NFL Week 1.</p></div>
+  </div>
+  <p style="color:var(--muted);font-size:14.5px;max-width:62ch;margin-top:24px">
+    Line shopping works whether or not a model is any good. That's the point,
+    and it's why the board comes first.</p>
+</section>
+
+<section class="wrap">
+  <div class="lbl">How it runs</div>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h3>Read</h3>
+      <p>Prices pulled from every major US book, refreshed as kickoff approaches.</p></div>
+    <div class="step"><div class="n">02</div><h3>Strip</h3>
+      <p>Margin removed. The consensus becomes a fair probability, not a sales price.</p></div>
+    <div class="step"><div class="n">03</div><h3>Publish</h3>
+      <p>Board goes out with a timestamp. Our own record is graded alongside it.</p></div>
   </div>
 </section>
 
 </main>
 
 <footer><div class="wrap">
-  <div class="big">Same bet. Better price.</div>
-  <p><b>Not advice. Not betting.</b> We don't take bets, hold money, or pay out.
-    We're not connected to any league, team, or sportsbook. Prices shown are what
-    books were offering when we last checked and can move at any time.</p>
-  <p>Past results don't predict future ones. 18+, where legal. If gambling is
-    hurting you, call <b>1-800-522-4700</b>, any time.</p>
-  <p style="margin-top:18px"><a href="/methodology">Method</a> &middot;
-    <a href="/verify">Verify</a> &middot; <a href="/ledger">Ledger</a> &middot;
+  <div class="m">The best number on every game.</div>
+  <p><b>Sooth is an odds analysis tool. Not advice. Not a sportsbook.</b> We do
+    not take, place, or facilitate wagers, and we hold no customer funds. We are
+    not affiliated with any league, team, or sportsbook. Prices shown are what
+    books were offering when we last read them and can move at any time.</p>
+  <p>Past results do not indicate future results. 18+, where lawful. If gambling
+    is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
+  <p style="margin-top:18px"><a href="/methodology">Methodology</a> ·
+    <a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
     <a href="/disclaimers">Disclaimers</a></p>
 </div></footer>
 
 <script>
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
-var sgn=function(p){return (p>0?'+':'')+p;};
-var BOOK={betus:'BetUS',betrivers:'BetRivers',draftkings:'DraftKings',fanduel:'FanDuel',
-  bovada:'Bovada',betmgm:'BetMGM',lowvig:'LowVig',betonlineag:'BetOnline',
-  mybookieag:'MyBookie',williamhill_us:'Caesars'};
-var bk=function(k){return BOOK[k]||k;};
+var sg=function(p){return p==null?'—':(p>0?'+':'')+p;};
+var DATA=null,CUR=0;
 
-fetch('/data/best_lines.json').then(function(r){return r.json();}).then(function(d){
-  document.getElementById('edge').innerHTML=d.avg_edge_pts.toFixed(2)+'<small> pts</small>';
-  document.getElementById('edge2').textContent='+'+d.avg_edge_pts.toFixed(2);
-  document.getElementById('nbooks').textContent=d.n_books;
-  document.getElementById('stamp').textContent=
-    'Prices last checked '+d.generated_at.slice(0,16).replace('T',' ')+' UTC · '
-    +d.games.length+' games · '+d.n_books+' books';
-
-  var rows=d.games.slice().sort(function(a,b){return b.edge_pts-a.edge_pts;}).map(function(g){
-    var t=new Date(g.kickoff);
-    var day=t.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric',timeZone:'UTC'});
-    return '<div class="brow">'
-      +'<span style="font-family:var(--mono);font-size:12px;color:var(--dim)">'+day+'</span>'
-      +'<span class="g">'+esc(g.away)+' @ '+esc(g.home)+'</span>'
-      +'<span class="pk">'+esc(g.pick)+'</span>'
-      +'<span class="price best">'+sgn(g.best_price)+'<s>'+esc(bk(g.best_book))+'</s></span>'
-      +'<span class="price" style="color:var(--dim)">'+sgn(g.worst_price)+'<s>'+esc(bk(g.worst_book))+'</s></span>'
-      +'<span class="gain">+'+g.edge_pts.toFixed(2)+'</span>'
-      +'</div>';
+function draw(i){
+  CUR=i;
+  var b=DATA.boards[i];
+  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(t,k){
+    t.setAttribute('aria-selected',String(k===i));});
+  var rows=b.events.map(function(e){
+    var t=new Date(e.starts);
+    var hh=String(t.getUTCHours()).padStart(2,'0');
+    var when=t.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric',timeZone:'UTC'})
+      +' '+hh+':'+String(t.getUTCMinutes()).padStart(2,'0')+'Z';
+    return e.sides.map(function(s,si){
+      return '<div class="row">'
+        +'<span style="font-family:var(--mono);font-size:11px;color:var(--dim)">'+(si?'':when)+'</span>'
+        +'<span class="g">'+esc(s.name)+(si?'':'<s>'+esc(e.away)+' @ '+esc(e.home)+'</s>')+'</span>'
+        +'<span class="p">'+sg(s.best_price)+'<s>'+esc(s.best_book)+'</s></span>'
+        +'<span class="fair">'+sg(s.fair_price)+'<s>fair</s></span>'
+        +'<span class="gain">+'+s.gain_pts.toFixed(2)+'</span>'
+        +'</div>';}).join('');
   }).join('');
   document.getElementById('board-el').innerHTML=
-    '<div class="brow h"><span>Kickoff</span><span>Game</span><span>Side</span>'
-    +'<span>Best price</span><span>Worst price</span><span style="text-align:right">Gain</span></div>'
-    +rows;
+    '<div class="row h"><span>Start</span><span>Side</span><span>Best price</span>'
+    +'<span>Fair line</span><span style="text-align:right">Gain</span></div>'+rows;
+}
+
+fetch('/data/board.json').then(function(r){return r.json();}).then(function(d){
+  DATA=d;
+  var T=d.totals;
+  document.getElementById('n-gap').textContent='+'+T.avg_gain_pts.toFixed(2);
+  document.getElementById('n-max').textContent='+'+T.max_gain_pts.toFixed(2);
+  document.getElementById('n-events').textContent=T.events;
+  document.getElementById('m-gap').textContent='+'+T.avg_gain_pts.toFixed(2);
+  var books=Math.max.apply(null,d.boards.map(function(b){return b.n_books;}).concat([0]));
+  document.getElementById('n-books').textContent=books;
+  document.getElementById('m-books').textContent=books;
+  document.getElementById('n-sports').textContent=d.boards.map(function(b){return b.label;}).join(' · ')||'—';
+  document.getElementById('stamp').textContent=
+    'Read '+d.generated_at.slice(0,16).replace('T',' ')+' UTC · in season: '
+    +(d.sports_live.join(', ')||'none')+' · window '+d.window_hours+'h';
+
+  if(!d.boards.length){
+    document.getElementById('board-el').innerHTML=
+      '<div class="row"><span class="g">No games inside the window right now.'
+      +'<s>The board fills as the next slate approaches.</s></span></div>';
+    document.getElementById('tabs').style.display='none';
+    return;
+  }
+  document.getElementById('tabs').innerHTML=d.boards.map(function(b,i){
+    return '<button class="tab" role="tab" aria-selected="'+(i===0)+'">'
+      +esc(b.label)+' <span style="color:var(--dim)">'+b.n_events+'</span></button>';}).join('');
+  [].forEach.call(document.querySelectorAll('#tabs .tab'),function(t,i){
+    t.addEventListener('click',function(){draw(i);});});
+  draw(0);
 }).catch(function(){
   document.getElementById('board-el').innerHTML=
-    '<div class="brow"><span class="g">Board unavailable. Raw data: '
-    +'<a href="/data/best_lines.json">best_lines.json</a></span></div>';
-  document.getElementById('edge').textContent='—';
+    '<div class="row"><span class="g">Board unavailable.<s>Raw data: '
+    +'<a href="/data/board.json">board.json</a></s></span></div>';
 });
 </script>
 </body>
