@@ -1,0 +1,51 @@
+name: grade-settled
+
+# Grades every slate whose games have finished and republishes the live record.
+#
+# Runs daily. Until Week 1 settles there is nothing to grade, and the correct
+# output in that state is an explicit zero rather than silence — a record that
+# says "0 graded" is information, one that says nothing invites someone to fill
+# the gap.
+#
+# Grading is append-only: it writes .graded.vN.json beside the commitment and
+# never touches the commitment or reveal it grades.
+
+on:
+  schedule:
+    - cron: "40 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: grade-settled
+  cancel-in-progress: false
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy scikit-learn
+
+      - name: Grade settled slates
+        run: python scripts/grade_settled.py
+
+      - name: Commit graded results
+        run: |
+          git config user.name  "sooth-grader"
+          git config user.email "grader@users.noreply.github.com"
+          git add data/ledger site/public/data/record.json
+          if git diff --staged --quiet; then
+            echo "nothing newly settled"
+          else
+            git commit -m "grade: settled slates $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
