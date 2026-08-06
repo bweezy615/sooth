@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Player Props</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta property="og:title" content="Sooth — Player Props">
+<meta property="og:description" content="Player props with the best available price across books and the de-vigged fair line.">
+<meta property="og:type" content="website">
+<meta name="description" content="Player props with the best available price across books and the de-vigged fair line. Same-line comparison only.">
+<style>
+  :root{
+    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
+    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
+    --pos:#4ADE80; --neg:#F87171;
+    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  html{background:var(--bg)}
+  body{background:
+      radial-gradient(900px 380px at 80% -100px, rgba(56,189,248,.13), transparent 65%),
+      var(--bg);
+    color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
+  .wrap{max-width:1060px; margin:0 auto}
+  header{padding:40px 0 20px}
+  .mark{display:flex; align-items:baseline; gap:14px; margin-bottom:18px}
+  .logo{font-weight:800; font-size:20px; letter-spacing:.04em;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .logo a{text-decoration:none; color:inherit}
+  .eyebrow{font-family:var(--num); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
+  .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
+  .sub b{color:var(--ink)}
+
+  .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:22px 0 14px}
+  select,input[type=search]{background:var(--card); color:var(--ink); border:1px solid var(--line);
+    border-radius:10px; padding:8px 12px; font-family:var(--num); font-size:13px}
+  select{cursor:pointer}
+  select:hover,input[type=search]:hover{border-color:var(--dim)}
+  input[type=search]{width:190px}
+  input[type=search]::placeholder{color:var(--dim)}
+  .count{font-family:var(--num); font-size:12px; color:var(--dim); margin-left:auto}
+  .count b{color:var(--muted); font-weight:600}
+
+  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+    border-radius:16px; padding:0; overflow:hidden}
+  .scroll{overflow-x:auto; max-height:72vh; overflow-y:auto}
+  table{border-collapse:collapse; width:100%; font-size:12.5px; min-width:900px}
+  thead th{position:sticky; top:0; background:#131A30; z-index:1;
+    font-family:var(--num); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--dim); font-weight:600; text-align:right; padding:10px 12px;
+    border-bottom:1px solid var(--line)}
+  th.l,td.l{text-align:left}
+  td{padding:8px 12px; border-bottom:1px solid rgba(30,37,64,.55); text-align:right;
+    font-variant-numeric:tabular-nums; font-family:var(--num); color:var(--muted); white-space:nowrap}
+  tr:hover td{background:rgba(56,189,248,.06)}
+  td.pl{font-family:var(--sans); font-size:13px; color:var(--ink); font-weight:600}
+  td.pl .mk{display:block; font-size:11px; color:var(--dim); font-weight:500}
+  td .bk{display:block; font-size:10px; color:var(--pos); font-weight:600}
+  td .fair{color:var(--dim)}
+  td.gain{color:var(--pos); font-weight:700}
+  .match{font-family:var(--num); font-size:10.5px; color:var(--dim)}
+  .empty{padding:44px 24px; text-align:center; color:var(--muted); font-size:14px}
+  .empty b{color:var(--ink)}
+  .empty p{max-width:52ch; margin:8px auto 0; font-size:13px; color:var(--dim)}
+
+  footer{margin-top:16px; font-size:11.5px; color:var(--dim); display:flex;
+    justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
+  footer a{color:#7DD3FC; text-decoration:none}
+  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
+
+  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
+    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .shellnav::-webkit-scrollbar{display:none}
+  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;
+    color:transparent;text-decoration:none}
+  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
+  .shellnav a.sn:hover{color:var(--ink)}
+  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
+</style>
+</head>
+<body>
+<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/board">Board</a><a class="sn on" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
+<div class="wrap">
+<header>
+  <h1>Props, shopped and de-vigged.</h1>
+  <p class="sub">Every prop below is compared <b>at the same line</b> across books: the best
+  available price per side next to the fair price with the margin removed. A prop needs three
+  or more books on both sides to appear — fewer than that is a price list, not a market. <b>L10 over</b> is how often the player actually cleared this line in his last ten games (MLB game logs, statsapi).</p>
+</header>
+
+<div class="controls">
+  <select id="sport" aria-label="Sport"></select>
+  <select id="market" aria-label="Market"><option value="">All markets</option></select>
+  <input type="search" id="q" placeholder="Search player…" aria-label="Search player">
+  <span class="count" id="count"></span>
+</div>
+
+<div id="snapnote" style="display:none;margin:0 0 12px;padding:11px 16px;
+  border:1px solid rgba(232,180,90,.35);border-radius:12px;background:rgba(232,180,90,.06);
+  font-size:12.5px;color:var(--muted)"><b style="color:#E8B45A">CLOSING SNAPSHOT</b> —
+  these games have started or finished. Books have not posted the next slate yet;
+  these are the last lines they offered, kept for reference. Fresh props land here
+  automatically, usually by mid-morning.</div>
+<div class="card">
+  <div class="scroll" id="scrollbox">
+  <table>
+    <thead><tr>
+      <th class="l">Player · Market</th><th class="l">Game</th><th>Line</th>
+      <th>Over best</th><th>Over fair</th><th>Under best</th><th>Under fair</th>
+      <th>L10 over</th><th>Books</th><th>Gain</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty" style="display:none"></div>
+  </div>
+</div>
+
+<footer>
+  <div>prices move constantly · board is a snapshot, timestamped · <a href="index.html">game lines</a> · <a href="methodology.html">methodology</a></div>
+  <div id="stamp"></div>
+</footer>
+<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 18+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const am=v=>v>0?'+'+v:String(v);
+let DOC=null;
+
+fetch('data/props.json').then(r=>{
+  if(!r.ok) throw new Error(r.status);
+  return r.json();
+}).then(doc=>{ DOC=doc; init(); }).catch(()=>{
+  $('empty').style.display='block';
+  $('empty').innerHTML='<b>No props board yet.</b><p>The props engine has not published a snapshot. Books post player props closer to game time; check back near the next slate.</p>';
+});
+
+function init(){
+  const selS=$('sport');
+  DOC.boards.forEach(b=>{
+    const o=document.createElement('option');
+    o.value=b.sport; o.textContent=b.label+' ('+b.n_props+')';
+    selS.appendChild(o);
+  });
+  if(!DOC.boards.length){
+    $('empty').style.display='block';
+    $('empty').innerHTML='<b>No props published in this window.</b><p>Books post player props closer to game time. The board refreshes automatically; check back near the next slate.</p>';
+    $('stamp').textContent='captured '+new Date(DOC.generated_at).toLocaleString();
+    return;
+  }
+  selS.addEventListener('change',()=>{fillMarkets();render();});
+  $('market').addEventListener('change',render);
+  $('q').addEventListener('input',render);
+  fillMarkets(); render();
+  $('stamp').textContent='captured '+new Date(DOC.generated_at).toLocaleString();
+}
+
+function board(){ return DOC.boards.find(b=>b.sport===$('sport').value)||DOC.boards[0]; }
+
+function fillMarkets(){
+  const sel=$('market'); sel.innerHTML='<option value="">All markets</option>';
+  const seen=new Set();
+  board().events.forEach(e=>e.props.forEach(p=>{
+    if(seen.has(p.market)) return; seen.add(p.market);
+    const o=document.createElement('option');
+    o.value=p.market; o.textContent=p.market_label; sel.appendChild(o);
+  }));
+}
+
+function render(){
+  const b=board(), mk=$('market').value, q=$('q').value.trim().toLowerCase();
+  const rows=[];
+  const nowMs=Date.now();
+  const hasUpcoming=b.events.some(e=>new Date(e.starts).getTime()>nowMs);
+  document.getElementById('snapnote').style.display=hasUpcoming?'none':'block';
+  b.events.forEach(e=>{
+    if(hasUpcoming&&new Date(e.starts).getTime()<=nowMs) return;
+    const t=new Date(e.starts);
+    const when=t.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+
+               t.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+    e.props.forEach(p=>{
+      if(mk&&p.market!==mk) return;
+      if(q&&!p.player.toLowerCase().includes(q)) return;
+      rows.push({e,p,when});
+    });
+  });
+  rows.sort((a,b2)=>b2.p.gain_pts-a.p.gain_pts);
+  const tb=$('tbody'); tb.innerHTML='';
+  const frag=document.createDocumentFragment();
+  rows.forEach(({e,p,when})=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      `<td class="l pl">${p.player}<span class="mk">${p.market_label}</span></td>`+
+      `<td class="l"><span class="match">${e.away} @ ${e.home}<br>${when}</span></td>`+
+      `<td>${p.line}</td>`+
+      `<td>${am(p.over.best_price)}<span class="bk">${p.over.best_book}</span></td>`+
+      `<td class="fair">${am(p.over.fair_price)}</td>`+
+      `<td>${am(p.under.best_price)}<span class="bk">${p.under.best_book}</span></td>`+
+      `<td class="fair">${am(p.under.fair_price)}</td>`+
+      `<td>${p.hit?`<span title="last 5: ${p.hit.l5.over}/${p.hit.l5.n} · season: ${p.hit.season.over}/${p.hit.season.n}"${(p.hit.l10.over>=8||p.hit.l10.over<=2)?' style="color:var(--ink);font-weight:700"':''}>${p.hit.l10.over}/${p.hit.l10.n}</span>`:'—'}</td>`+
+      `<td>${Math.min(p.over.n_books,p.under.n_books)}</td>`+
+      `<td class="gain">+${p.gain_pts.toFixed(1)}</td>`;
+    frag.appendChild(tr);
+  });
+  tb.appendChild(frag);
+  $('empty').style.display=rows.length?'none':'block';
+  if(!rows.length) $('empty').innerHTML='<b>Nothing matches that filter.</b>';
+  $('count').innerHTML=`<b>${rows.length}</b> props · ${b.label}`;
+}
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

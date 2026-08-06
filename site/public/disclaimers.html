@@ -4,8 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Disclaimers — Sooth</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
 <meta name="description" content="Entertainment and analysis only. We accept no wagers, hold no funds, and make no performance claims.">
-<link rel="canonical" href="https://sooth.co/disclaimers">
+<link rel="canonical" href="https://sooth.bet/disclaimers">
 <meta property="og:title" content="Disclaimers — Sooth">
 <meta property="og:description" content="Entertainment and analysis only. We accept no wagers, hold no funds, and make no performance claims.">
 <meta property="og:type" content="article">
@@ -13,13 +18,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0d10;--panel:#12161b;--panel-2:#171c23;--line:#242c36;
---ink:#e8edf4;--muted:#8e9bab;--dim:#64707f;--accent:#4ade80;--warn:#fbbf24;
---bad:#f87171;--link:#60a5fa;
+:root{--bg:#080B16;--panel:#111629;--panel-2:#0B1022;--line:#1E2540;
+--ink:#EEF1F8;--muted:#8C96B2;--dim:#5D6786;--accent:#4ade80;--warn:#fbbf24;
+--bad:#f87171;--link:#38BDF8;
 --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
-@media (prefers-color-scheme:light){:root{--bg:#f7f8fa;--panel:#fff;
---panel-2:#f1f4f8;--line:#dfe5ec;--ink:#0e1420;--muted:#5a6779;--dim:#8a94a3;
---link:#1d4ed8;--accent:#15803d}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
 font:16px/1.65 Inter,system-ui,-apple-system,sans-serif;
@@ -83,16 +85,13 @@ border-radius:12px;padding:17px 19px;margin:0 0 13px}
 <header><nav>
   <a class="brand" href="/"><span class="dot"></span>Sooth</a>
   <span class="spacer"></span>
-  <a class="l" href="/methodology">Methodology</a>
-  <a class="l" href="/verify">Verify</a>
-  <a class="l" href="/ledger">Ledger</a>
+  <a class="l" href="/board">Board</a>
+  <a class="l" href="/props">Props</a>
+  <a class="l" href="/edges">Edges</a>
+  <a class="l" href="/tools">Tools</a>
+  <a class="l" href="/trust">Trust</a>
 </nav></header>
 <div class="wrap"><div class="prose">
-<hr />
-<p>title: "Disclaimers and disclosures"
-description: "The complete set of legal, compliance, and responsible-gambling disclosures for this site, including our record methodology, material connections, and subscription terms."
-last_updated: 2026-08-02</p>
-<hr />
 <h1>Disclaimers and disclosures</h1>
 <p>Nine disclosures. They are written to be read rather than to be skipped, and
 they are linked from every page of this site rather than buried in a terms
@@ -275,5 +274,6 @@ bet. Must be of legal age in your jurisdiction.</p>
 <a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
 <a href="/disclaimers">Disclaimers</a></p>
 </div></footer>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>

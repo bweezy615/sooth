@@ -4,8 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ledger — Sooth</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
 <meta name="description" content="Every slate we have committed, sealed before kickoff and verifiable afterward. Nothing edited, nothing removed.">
-<link rel="canonical" href="https://sooth.co/ledger">
+<link rel="canonical" href="https://sooth.bet/ledger">
 <meta property="og:title" content="Ledger — Sooth">
 <meta property="og:description" content="Every slate we have committed, sealed before kickoff and verifiable afterward. Nothing edited, nothing removed.">
 <meta property="og:type" content="article">
@@ -13,13 +18,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0d10;--panel:#12161b;--panel-2:#171c23;--line:#242c36;
---ink:#e8edf4;--muted:#8e9bab;--dim:#64707f;--accent:#4ade80;--warn:#fbbf24;
---bad:#f87171;--link:#60a5fa;
+:root{--bg:#080B16;--panel:#111629;--panel-2:#0B1022;--line:#1E2540;
+--ink:#EEF1F8;--muted:#8C96B2;--dim:#5D6786;--accent:#4ade80;--warn:#fbbf24;
+--bad:#f87171;--link:#38BDF8;
 --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
-@media (prefers-color-scheme:light){:root{--bg:#f7f8fa;--panel:#fff;
---panel-2:#f1f4f8;--line:#dfe5ec;--ink:#0e1420;--muted:#5a6779;--dim:#8a94a3;
---link:#1d4ed8;--accent:#15803d}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
 font:16px/1.65 Inter,system-ui,-apple-system,sans-serif;
@@ -83,9 +85,11 @@ border-radius:12px;padding:17px 19px;margin:0 0 13px}
 <header><nav>
   <a class="brand" href="/"><span class="dot"></span>Sooth</a>
   <span class="spacer"></span>
-  <a class="l" href="/methodology">Methodology</a>
-  <a class="l" href="/verify">Verify</a>
-  <a class="l" href="/ledger">Ledger</a>
+  <a class="l" href="/board">Board</a>
+  <a class="l" href="/props">Props</a>
+  <a class="l" href="/edges">Edges</a>
+  <a class="l" href="/tools">Tools</a>
+  <a class="l" href="/trust">Trust</a>
 </nav></header>
 <div class="wrap"><div class="prose">
 
@@ -104,11 +108,11 @@ that is the entire point, and <a href="/verify">you can check it yourself</a>.</
     <span><strong>2026-W01-nfl</strong>
     <span class="badge sealed">SEALED</span></span></div>
   <div class="row"><span class="k">predictions</span><span>32</span></div>
-  <div class="row"><span class="k">merkle root</span><span class="hash">4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b</span></div>
-  <div class="row"><span class="k">sealed at</span><span class="mono">2026-08-03T05:05:48.347187+00:00</span></div>
+  <div class="row"><span class="k">merkle root</span><span class="hash">438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec</span></div>
+  <div class="row"><span class="k">sealed at</span><span class="mono">2026-08-06T05:36:17.176614+00:00</span></div>
   <div class="row"><span class="k">first kickoff</span><span class="mono">2026-09-09T20:20:00+00:00</span></div>
   <div class="row"><span class="k">algorithm</span><span class="mono">sha256-merkle-v1</span></div>
-  <div class="row"><span class="k">superseded</span><span style="font-size:12.5px;color:var(--muted)">1 earlier commitment(s), retained and still verifiable. Predictions may be revised until kickoff; what is never permitted is a root quietly disappearing.</span></div><div class="row"><span class="k">v1 (16)</span><span class="hash" style="color:var(--dim)">d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a</span></div>
+  <div class="row"><span class="k">superseded</span><span style="font-size:12.5px;color:var(--muted)">2 earlier commitment(s), retained and still verifiable. Predictions may be revised until kickoff; what is never permitted is a root quietly disappearing.</span></div><div class="row"><span class="k">v1 (16)</span><span class="hash" style="color:var(--dim)">d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a</span></div><div class="row"><span class="k">v2 (32)</span><span class="hash" style="color:var(--dim)">4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b</span></div>
   <div class="row"><span class="k">files</span><span>
     <a href="/data/2026-W01-nfl.json">slate</a></span></div>
 </div>
@@ -132,5 +136,6 @@ bet. Must be of legal age in your jurisdiction.</p>
 <a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
 <a href="/disclaimers">Disclaimers</a></p>
 </div></footer>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>

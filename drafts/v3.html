@@ -4,20 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — every book, one board</title>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#04060C">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Sooth">
-<meta name="description" content="Every sportsbook's price on one board: best number flagged, vig stripped out. Games, player props, and the edges between books.">
-<link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="Sooth — every sportsbook's price on one board">
-<meta property="og:description" content="Live odds from 11+ books with the vig stripped out. Games and player props, timestamped and verifiable — free to look.">
-<meta property="og:image" content="https://sooth.bet/og.png">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://sooth.bet/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sooth.bet/og.png">
 <style>
   :root{
     --bg:#04060C; --frame:#0A0D16; --card:#10141F; --card2:#151A28;
@@ -157,12 +143,12 @@
   <div class="hd">
     <a class="brand" href="/">sooth<em>.bet</em></a>
     <nav>
-      <a href="/board">Board</a><a href="/props">Props</a><a href="/edges">Edges</a>
-      <a href="/tools">Tools</a><a href="/trust">Trust</a>
+      <a href="/">Board</a><a href="/props">Props</a><a href="/ev">+EV</a>
+      <a href="/middles">Middles</a><a href="/tools">Tools</a><a href="/methodology">Method</a>
     </nav>
     <div class="act">
-      <a class="btn" href="/trust">Why trust us</a>
-      <a class="btn go" href="/board">Open the board</a>
+      <a class="btn" href="/engine">The engine</a>
+      <a class="btn go" href="#board">Open the board</a>
     </div>
   </div>
 
@@ -172,17 +158,17 @@
       <h1>All the books.<br>One <em>clean</em> board.</h1>
       <p>Every sportsbook's price, the vig stripped out, the best number flagged.
       Compare. Verify. Take the better price.</p>
-      <a class="cta" href="/board">Open the board</a>
+      <a class="cta" href="#board">Open the board</a>
       <a class="more" href="/methodology">How the numbers work →</a>
     </section>
 
-    <section class="card live">
+    <section class="card live" id="board">
       <h2>On the board now <span class="n" id="ln-count"></span></h2>
       <div class="ln-tag" id="ln-league">—</div>
       <div class="match" id="ln-match"></div>
       <div class="chips" id="ln-chips"></div>
       <div class="foot">
-        <a href="/board">View full board</a>
+        <a href="/">View full board</a>
         <span class="stamp" id="ln-stamp"></span>
       </div>
     </section>
@@ -290,6 +276,5 @@ function rows(){
   :'<div class="empty">No upcoming sides in this window.</div>';
 }
 </script>
-<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>

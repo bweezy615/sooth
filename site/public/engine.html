@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Engine Room</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta property="og:title" content="Sooth — Engine Room">
+<meta property="og:description" content="The data and measurement behind the Sooth board.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
+    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
+    --teal:#10A372; --amber:#BC862B; --pos:#4ADE80;
+    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  html{background:var(--bg)}
+  body{background:
+      radial-gradient(900px 400px at 70% -90px, rgba(56,189,248,.13), transparent 65%),
+      var(--bg);
+    color:var(--ink); font-family:var(--sans); line-height:1.55; margin:0; padding:0 20px 64px}
+  .wrap{max-width:980px; margin:0 auto}
+  header{padding:44px 0 10px}
+  .mark{display:flex; align-items:baseline; gap:14px; margin-bottom:20px}
+  .logo{font-weight:800; font-size:20px; letter-spacing:.04em;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .eyebrow{font-family:var(--num); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+  h1{font-size:clamp(26px,4.5vw,38px); font-weight:770; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance}
+  .sub{color:var(--muted); max-width:66ch; margin:0 0 8px; font-size:15px}
+  .live{display:inline-flex; align-items:center; gap:7px; font-family:var(--num); font-size:11px;
+    letter-spacing:.1em; color:var(--pos); border:1px solid rgba(74,222,128,.25);
+    border-radius:999px; padding:3px 11px; margin-top:10px}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--pos)}
+  h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted); font-weight:600; margin:44px 0 14px}
+  h2 .n{color:var(--dim); margin-right:10px}
+  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+    border-radius:16px; padding:22px}
+  .panel-sub{margin:0 0 16px; font-size:13.5px; color:var(--muted); max-width:68ch}
+
+  /* pipeline */
+  .pipe{display:grid; grid-template-columns:repeat(5,1fr); gap:0; align-items:stretch}
+  @media(max-width:760px){.pipe{grid-template-columns:1fr}}
+  .stage{position:relative; padding:14px 16px 12px; border-left:1px solid var(--line)}
+  .stage:first-child{border-left:none}
+  @media(max-width:760px){.stage{border-left:none; border-top:1px solid var(--line)}
+    .stage:first-child{border-top:none}}
+  .stage h3{margin:0 0 4px; font-size:13px; font-weight:650}
+  .stage p{margin:0; font-size:11.5px; color:var(--muted); line-height:1.5}
+  .stage code{display:inline-block; margin-top:8px; font-family:var(--num); font-size:10px;
+    color:#7DD3FC; background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:1px 6px}
+  .stage .num{font-family:var(--num); font-size:10px; color:var(--dim); letter-spacing:.14em}
+
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:16px}
+  .tile{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:14px 16px 12px}
+  .tile b{display:block; font-family:var(--num); font-size:24px; font-weight:600;
+    font-variant-numeric:tabular-nums}
+  .tile span{font-size:11.5px; color:var(--muted)}
+  .tile .c-ours b{color:var(--iris)}
+  .tile.ours b{color:#4CC3F7}.tile.mkt b{color:#34C08B}.tile.brk b{color:var(--muted)}
+
+  #chartbox{position:relative}
+  #btchart{width:100%; height:auto; display:block}
+  .tip{position:absolute; pointer-events:none; background:#0B1022; border:1px solid var(--line);
+    border-radius:10px; padding:9px 12px; font-size:12px; color:var(--muted); display:none;
+    box-shadow:0 8px 30px rgba(0,0,0,.55); white-space:nowrap; z-index:2; line-height:1.7}
+  .tip b{color:var(--ink); font-family:var(--num); font-weight:600}
+  .tip i{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:7px}
+  .axis{font-family:var(--num); font-size:10px; fill:var(--dim)}
+  .slabel{font-family:var(--num); font-size:11px; font-weight:600}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; font-size:12px; color:var(--muted); margin:0 0 14px}
+  .legend i{display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:7px; vertical-align:3px}
+  .legend .dash i{background:repeating-linear-gradient(90deg,var(--dim) 0 4px,transparent 4px 7px)}
+
+  .verdict{border-left:3px solid var(--violet); padding:4px 0 4px 16px; margin-top:18px}
+  .verdict p{margin:0; font-size:13.5px; color:var(--muted); max-width:66ch}
+  .verdict b{color:var(--ink)}
+
+  .gains{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+  .gain{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:13px 15px 11px}
+  .gain b{display:block; font-family:var(--num); font-size:21px; font-weight:600; color:var(--pos)}
+  .gain span{font-size:11px; color:var(--muted)}
+  .gain em{font-style:normal; display:block; font-family:var(--num); font-size:10px; color:var(--dim); margin-top:2px}
+  .stamp{font-family:var(--num); font-size:11px; color:var(--dim); margin-top:14px}
+  .err{color:#F87171; font-size:12.5px; font-family:var(--num)}
+  footer{margin-top:52px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
+  footer a{color:#7DD3FC; text-decoration:none}
+  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
+
+  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
+    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .shellnav::-webkit-scrollbar{display:none}
+  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;
+    color:transparent;text-decoration:none}
+  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
+  .shellnav a.sn:hover{color:var(--ink)}
+  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
+</style>
+</head>
+<body>
+<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/board">Board</a><a class="sn" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn on" href="/trust">Trust</a></nav>
+<div class="wrap">
+<header>
+  <h1>What 27 seasons of data actually buys us.</h1>
+  <p class="sub">The archive doesn't exist to make hero picks. It exists to measure everything:
+  it trained the model, then proved the market prices games better than the model does. That
+  measurement is the product — honest calibration, a de-vigged consensus, and the one edge that
+  survives scrutiny: never paying a worse price than you have to.</p>
+  <span class="live"><i></i>READING LIVE ENGINE OUTPUT</span>
+</header>
+
+<h2><span class="n">01</span>The pipeline this data runs</h2>
+<div class="card">
+  <div class="pipe">
+    <div class="stage"><span class="num">STAGE 1</span>
+      <h3>Archive</h3><p>7,548 games since '99 + 68,120 per-book closing prices.</p>
+      <code>backfill/ · raw/</code></div>
+    <div class="stage"><span class="num">STAGE 2</span>
+      <h3>Calibrate</h3><p>Elo + independent models fit walk-forward, never on future games.</p>
+      <code>calibrate.py · features.py</code></div>
+    <div class="stage"><span class="num">STAGE 3</span>
+      <h3>Backtest</h3><p>2,608 graded ATS calls, 2016–25 — model vs market, no cherry-picks.</p>
+      <code>backtest.py</code></div>
+    <div class="stage"><span class="num">STAGE 4</span>
+      <h3>De-vig &amp; shop</h3><p>Strip the juice from every book, surface the best price per side.</p>
+      <code>lines.py · closing.py</code></div>
+    <div class="stage"><span class="num">STAGE 5</span>
+      <h3>Commit &amp; grade</h3><p>Hash-committed before kickoff, graded and revealed after.</p>
+      <code>commit.py · grade.py</code></div>
+  </div>
+</div>
+
+<h2><span class="n">02</span>The honesty proof — model vs market, walk-forward</h2>
+<div class="card">
+  <p class="panel-sub">Cumulative against-the-spread rate across every graded backtest game.
+  If a line stays under the 52.4% breakeven, betting it at −110 loses money. Ours does. So does
+  a naive read of the market — which is the point: <b style="color:var(--ink)">nobody on this
+  chart clears breakeven, and we publish that instead of hiding it.</b></p>
+  <div class="tiles" id="bt-tiles"></div>
+  <div class="legend">
+    <span><i style="background:#0C9BDB"></i>Sooth model</span>
+    <span><i style="background:var(--teal)"></i>Market (closing line)</span>
+    <span class="dash"><i></i>Breakeven at −110 (52.4%)</span>
+  </div>
+  <div id="chartbox">
+    <svg id="btchart" viewBox="0 0 900 320" role="img"
+      aria-label="Line chart of cumulative against-the-spread rate for the Sooth model versus the closing market, 2016 to 2025, both below the 52.4 percent breakeven line"></svg>
+    <div class="tip" id="tip"></div>
+  </div>
+  <div class="verdict"><p id="verdict"></p></div>
+  <p class="stamp" id="bt-stamp"></p>
+</div>
+
+<h2><span class="n">03</span>Where the edge actually is — live from the board</h2>
+<div class="card">
+  <p class="panel-sub">Because the archive holds every book's price on every game, the engine
+  knows the spread <i>between</i> books. Taking the best number instead of the worst is pure,
+  measurable value — no prediction required. These figures are read live from
+  <code style="font-family:var(--num);font-size:11px;color:#7DD3FC">board.json</code>, the same
+  file the public board renders.</p>
+  <div class="gains" id="gains"><span class="err" style="display:none" id="gains-err"></span></div>
+  <p class="stamp" id="board-stamp"></p>
+</div>
+
+<h2><span class="n">04</span>The edge in dollars — same bets, better price</h2>
+<div class="card">
+  <p class="panel-sub" id="pe-method"></p>
+  <div class="tiles" id="pe-tiles"></div>
+  <div class="legend">
+    <span><i style="background:#0C9BDB"></i>Settled at best price</span>
+    <span><i style="background:var(--dim)"></i>Settled at median price</span>
+    <span><i style="background:rgba(74,222,128,.35)"></i>The price edge (gap)</span>
+  </div>
+  <div id="pebox" style="position:relative">
+    <svg id="pechart" viewBox="0 0 900 300" role="img"
+      aria-label="Cumulative profit and loss of identical moneyline bets settled at the best available price versus the median price, 2023 to 2025; the widening gap between the lines is the value of line shopping"></svg>
+    <div class="tip" id="petip"></div>
+  </div>
+  <div class="verdict"><p id="pe-verdict"></p></div>
+  <p class="stamp" id="pe-stamp"></p>
+</div>
+
+<footer>
+  <div>Sooth · engine room — <a href="index.html">live board</a> · <a href="methodology.html">methodology</a> · <a href="ledger.html">ledger</a></div>
+  <div style="font-family:var(--num)">walk-forward · no future data · no cherry-picks</div>
+</footer>
+<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 18+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
+</div>
+
+<script>
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS='http://www.w3.org/2000/svg';
+const pct=v=>(v*100).toFixed(1)+'%';
+
+fetch('data/backtest_curve.json').then(r=>r.json()).then(bt=>{
+  document.getElementById('bt-tiles').innerHTML=
+    `<div class="tile"><b>${bt.n.toLocaleString()}</b><span>graded backtest games</span></div>`+
+    `<div class="tile ours"><b>${pct(bt.final_ours)}</b><span>Sooth model, ATS</span></div>`+
+    `<div class="tile mkt"><b>${pct(bt.final_market)}</b><span>market close, ATS</span></div>`+
+    `<div class="tile brk"><b>${pct(bt.breakeven)}</b><span>breakeven at −110</span></div>`;
+  document.getElementById('verdict').innerHTML=
+    `<b>Verdict:</b> across ${bt.n.toLocaleString()} walk-forward games the model lands at `+
+    `<b>${pct(bt.final_ours)}</b> vs the market's <b>${pct(bt.final_market)}</b> — the market wins, `+
+    `and neither clears breakeven. That measurement is why Sooth sells price transparency `+
+    `instead of picks: the edge below survives; picks don't.`;
+  document.getElementById('bt-stamp').textContent=(bt.warning||'')+' · source: data/backtest_curve.json';
+  drawCurve(bt);
+}).catch(()=>{
+  document.getElementById('verdict').innerHTML='<span class="err">Could not load data/backtest_curve.json — is the server running from site/public?</span>';
+});
+
+function drawCurve(bt){
+  const svg=document.getElementById('btchart');
+  const W=900,H=320,padL=44,padR=110,padT=14,padB=30;
+  const pts=bt.points.filter(p=>p.n>=60); /* skip noisy first weeks */
+  const xs=i=>padL+i/(pts.length-1)*(W-padL-padR);
+  const lo=.44, hi=.60;
+  const ys=v=>padT+(hi-v)/(hi-lo)*(H-padT-padB);
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
+  for(let v=.45;v<=.59;v+=.05){
+    el('line',{x1:padL,x2:W-padR,y1:ys(v),y2:ys(v),stroke:css('--line'),'stroke-width':1});
+    const t=el('text',{x:padL-8,y:ys(v)+3,'text-anchor':'end','class':'axis'});t.textContent=Math.round(v*100)+'%';
+  }
+  const seasons={};pts.forEach((p,i)=>{if(!(p.season in seasons))seasons[p.season]=i;});
+  Object.entries(seasons).forEach(([s,i],k)=>{ if(k%2==0){
+    const t=el('text',{x:xs(i),y:H-8,'text-anchor':'start','class':'axis'});t.textContent="'"+String(s).slice(2);}});
+  el('line',{x1:padL,x2:W-padR,y1:ys(bt.breakeven),y2:ys(bt.breakeven),
+    stroke:css('--dim'),'stroke-width':1.5,'stroke-dasharray':'5 5'});
+  const bl=el('text',{x:W-padR+8,y:ys(bt.breakeven)+3,'class':'slabel',fill:css('--muted')});
+  bl.textContent='breakeven';
+  const path=(key)=>pts.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[key]).toFixed(1)).join(' ');
+  el('path',{d:path('market'),fill:'none',stroke:css('--teal'),'stroke-width':2,'stroke-linejoin':'round'});
+  el('path',{d:path('ours'),fill:'none',stroke:'#0C9BDB','stroke-width':2,'stroke-linejoin':'round'});
+  const last=pts[pts.length-1];
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.ours),r:4,fill:'#0C9BDB'});
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.market),r:4,fill:css('--teal')});
+  const l1=el('text',{x:W-padR+8,y:ys(last.market)+3,'class':'slabel',fill:css('--teal')});l1.textContent='market '+pct(last.market);
+  const l2=el('text',{x:W-padR+8,y:ys(last.ours)+9,'class':'slabel',fill:'#0C9BDB'});l2.textContent='model '+pct(last.ours);
+  if(Math.abs(ys(last.ours)-ys(last.market))<14){l2.setAttribute('y',ys(last.market)+17);}
+  /* crosshair + tooltip */
+  const tip=document.getElementById('tip');
+  const cross=el('line',{y1:padT,y2:H-padB,stroke:css('--dim'),'stroke-width':1,visibility:'hidden'});
+  const hit=el('rect',{x:padL,y:padT,width:W-padL-padR,height:H-padT-padB,fill:'transparent'});
+  hit.addEventListener('mousemove',ev=>{
+    const box=document.getElementById('chartbox').getBoundingClientRect();
+    const fx=(ev.clientX-box.left)/box.width*W;
+    const i=Math.max(0,Math.min(pts.length-1,Math.round((fx-padL)/(W-padL-padR)*(pts.length-1))));
+    const p=pts[i], x=xs(i);
+    cross.setAttribute('x1',x);cross.setAttribute('x2',x);cross.setAttribute('visibility','visible');
+    tip.style.display='block';
+    tip.innerHTML=`<b>${p.t}</b> · ${p.n.toLocaleString()} games graded<br>`+
+      `<i style="background:${'#0C9BDB'}"></i>model <b>${pct(p.ours)}</b><br>`+
+      `<i style="background:${css('--teal')}"></i>market <b>${pct(p.market)}</b>`;
+    let tx=x/W*box.width+14; if(tx+tip.offsetWidth>box.width) tx=x/W*box.width-tip.offsetWidth-14;
+    tip.style.left=tx+'px'; tip.style.top=(ev.clientY-box.top-20)+'px';
+  });
+  hit.addEventListener('mouseleave',()=>{cross.setAttribute('visibility','hidden');tip.style.display='none';});
+}
+
+const usd=v=>(v<0?'−$':'$')+Math.abs(v).toLocaleString(undefined,{maximumFractionDigits:0});
+fetch('data/priceedge.json').then(r=>r.json()).then(pe=>{
+  document.getElementById('pe-method').textContent=pe.method;
+  document.getElementById('pe-tiles').innerHTML=
+    `<div class="tile"><b>${pe.n_bets.toLocaleString()}</b><span>identical bets · ${pe.n_games} games</span></div>`+
+    `<div class="tile"><b style="color:var(--pos)">+${(pe.edge_pts*100).toFixed(2)}%</b><span>of stake recovered by shopping</span></div>`+
+    `<div class="tile"><b style="color:var(--pos)">${usd(pe.pnl_best-pe.pnl_median)}</b><span>saved on ${usd(pe.staked)} staked</span></div>`+
+    `<div class="tile"><b>${pe.arb_games}</b><span>games with outright arbitrage</span></div>`;
+  document.getElementById('pe-verdict').innerHTML=
+    `<b>Verdict:</b> blind bets at the consensus price lose <b>${(pe.roi_median*100).toFixed(2)}%</b> — the vig. `+
+    `The <i>same</i> bets at the best available price lose <b>${(Math.abs(pe.roi_best)*100).toFixed(2)}%</b>. `+
+    `Shopping recovers <b>+${(pe.edge_pts*100).toFixed(2)}%</b> on every dollar before any prediction is made — `+
+    `it halves the house edge, and it stacks with whatever skill a bettor brings.`;
+  document.getElementById('pe-stamp').textContent=pe.warning+' · source: data/priceedge.json';
+  drawEdge(pe);
+}).catch(()=>{
+  document.getElementById('pe-verdict').innerHTML='<span class="err">Could not load data/priceedge.json</span>';
+});
+
+function drawEdge(pe){
+  const svg=document.getElementById('pechart');
+  const W=900,H=300,padL=56,padR=96,padT=12,padB=30;
+  const pts=pe.points;
+  const xs=i=>padL+i/(pts.length-1)*(W-padL-padR);
+  let lo=0,hi=0;
+  pts.forEach(p=>{lo=Math.min(lo,p.median,p.best);hi=Math.max(hi,p.median,p.best);});
+  lo=Math.floor(lo/2000)*2000; hi=Math.ceil(hi/2000)*2000;
+  const ys=v=>padT+(hi-v)/(hi-lo)*(H-padT-padB);
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
+  for(let v=lo;v<=hi;v+=2000){
+    el('line',{x1:padL,x2:W-padR,y1:ys(v),y2:ys(v),stroke:css('--line'),'stroke-width':v===0?1.5:1});
+    const t=el('text',{x:padL-8,y:ys(v)+3,'text-anchor':'end','class':'axis'});
+    t.textContent=(v<0?'−':'')+'$'+Math.abs(v/1000)+'k';
+  }
+  const seasons={};pts.forEach((p,i)=>{const s=p.t.slice(0,4);if(!(s in seasons))seasons[s]=i;});
+  Object.entries(seasons).forEach(([s,i])=>{
+    const t=el('text',{x:xs(i),y:H-8,'text-anchor':'start','class':'axis'});t.textContent="'"+s.slice(2);});
+  const path=k=>pts.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[k]).toFixed(1)).join(' ');
+  el('path',{d:path('best')+' '+pts.map((p,i)=>'L'+xs(pts.length-1-i).toFixed(1)+' '+ys(pts[pts.length-1-i].median).toFixed(1)).join(' ')+' Z',
+    fill:'rgba(74,222,128,.13)',stroke:'none'});
+  el('path',{d:path('median'),fill:'none',stroke:css('--dim'),'stroke-width':2,'stroke-linejoin':'round'});
+  el('path',{d:path('best'),fill:'none',stroke:'#0C9BDB','stroke-width':2,'stroke-linejoin':'round'});
+  const last=pts[pts.length-1];
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.best),r:4,fill:'#0C9BDB'});
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.median),r:4,fill:css('--dim')});
+  const kfmt=v=>(v<0?'−$':'$')+(Math.abs(v)/1000).toFixed(1)+'k';
+  const t1=el('text',{x:W-padR+8,y:ys(last.best)+3,'class':'slabel',fill:'#0C9BDB'});t1.textContent='best '+kfmt(last.best);
+  const t2=el('text',{x:W-padR+8,y:ys(last.median)+3,'class':'slabel',fill:css('--muted')});t2.textContent='median '+kfmt(last.median);
+  if(Math.abs(ys(last.best)-ys(last.median))<14)t2.setAttribute('y',ys(last.median)+15);
+  const tip=document.getElementById('petip');
+  const cross=el('line',{y1:padT,y2:H-padB,stroke:css('--dim'),'stroke-width':1,visibility:'hidden'});
+  const hit=el('rect',{x:padL,y:padT,width:W-padL-padR,height:H-padT-padB,fill:'transparent'});
+  hit.addEventListener('mousemove',ev=>{
+    const box=document.getElementById('pebox').getBoundingClientRect();
+    const fx=(ev.clientX-box.left)/box.width*W;
+    const i=Math.max(0,Math.min(pts.length-1,Math.round((fx-padL)/(W-padL-padR)*(pts.length-1))));
+    const p=pts[i],x=xs(i);
+    cross.setAttribute('x1',x);cross.setAttribute('x2',x);cross.setAttribute('visibility','visible');
+    tip.style.display='block';
+    tip.innerHTML=`<b>${p.t}</b> · ${usd(p.staked)} staked<br>`+
+      `<i style="background:${'#0C9BDB'}"></i>best price <b>${usd(p.best)}</b><br>`+
+      `<i style="background:${css('--dim')}"></i>median price <b>${usd(p.median)}</b><br>`+
+      `<i style="background:rgba(74,222,128,.6)"></i>gap <b>${usd(p.best-p.median)}</b>`;
+    let tx=x/W*box.width+14; if(tx+tip.offsetWidth>box.width) tx=x/W*box.width-tip.offsetWidth-14;
+    tip.style.left=tx+'px'; tip.style.top=(ev.clientY-box.top-20)+'px';
+  });
+  hit.addEventListener('mouseleave',()=>{cross.setAttribute('visibility','hidden');tip.style.display='none';});
+}
+
+fetch('data/board.json').then(r=>r.json()).then(b=>{
+  const g=document.getElementById('gains');
+  g.innerHTML=(b.boards||[]).map(s=>
+    `<div class="gain"><b>+${s.avg_gain_pts.toFixed(2)} pts</b>`+
+    `<span>${s.label} · avg best-vs-worst</span>`+
+    `<em>${s.n_events} events · ${s.n_books} books · max +${s.max_gain_pts.toFixed(2)}</em></div>`).join('');
+  document.getElementById('board-stamp').textContent=
+    'board generated '+new Date(b.generated_at).toLocaleString()+' · sports live: '+(b.sports_live||[]).join(', ');
+}).catch(()=>{
+  const e=document.getElementById('gains-err');e.style.display='block';
+  e.textContent='Could not load data/board.json';
+});
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

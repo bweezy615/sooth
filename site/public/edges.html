@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Edges</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta name="description" content="Everywhere the books disagree, on one page: prices beating fair, live arbs, middle windows, and line moves.">
+<link rel="canonical" href="https://sooth.bet/edges">
+<meta property="og:title" content="Sooth — Edges">
+<meta property="og:description" content="Everywhere the books disagree: +EV prices, arbs, middles, and line moves.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
+    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
+    --pos:#4ADE80; --neg:#F87171;
+    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  html{background:var(--bg)}
+  body{background:
+      radial-gradient(900px 380px at 80% -100px, rgba(56,189,248,.13), transparent 65%),
+      var(--bg);
+    color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
+  .wrap{max-width:940px; margin:0 auto}
+  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
+    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .shellnav::-webkit-scrollbar{display:none}
+  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;
+    color:transparent;text-decoration:none}
+  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
+  .shellnav a.sn:hover{color:var(--ink)}
+  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
+
+  header{padding:36px 0 16px}
+  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
+  .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
+  .sub b{color:var(--ink)}
+
+  .views{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 18px}
+  .view{font-family:var(--num);font-size:12.5px;font-weight:600;padding:9px 18px;
+    border-radius:999px;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);cursor:pointer}
+  .view.on{background:var(--ink);color:#0A0D16;border-color:transparent}
+  .view .ct{opacity:.65;margin-left:6px}
+
+  h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted); font-weight:600; margin:26px 0 6px}
+  .h2sub{font-size:12.5px; color:var(--dim); margin:0 0 12px; max-width:66ch}
+  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+    border-radius:16px; overflow:hidden}
+  .row{display:flex; align-items:center; gap:16px; padding:13px 18px;
+    border-bottom:1px solid rgba(30,37,64,.55); flex-wrap:wrap}
+  .row:last-child{border-bottom:none}
+  .lead{font-family:var(--num); font-size:16px; font-weight:700; color:var(--pos); min-width:76px}
+  .lead.dn{color:var(--neg)}
+  .what{flex:1; min-width:240px}
+  .what b{font-size:13.5px}
+  .what p{margin:2px 0 0; font-size:12.5px; color:var(--muted); line-height:1.55}
+  .what .bk{color:#7DD3FC; font-family:var(--num); font-size:11.5px}
+  .what .tag{display:inline-block;font-family:var(--num);font-size:9.5px;letter-spacing:.08em;
+    border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#7DD3FC;
+    margin-left:8px;vertical-align:2px;text-transform:uppercase}
+  .meta{text-align:right; font-family:var(--num); font-size:11px; color:var(--dim)}
+  .meta .bk{display:block; font-size:12.5px; color:var(--ink); font-weight:600}
+  .empty{padding:34px 24px; text-align:center; color:var(--muted); font-size:13.5px}
+  .empty b{color:var(--ink)}
+  .empty p{max-width:56ch; margin:8px auto 0; font-size:12.5px; color:var(--dim)}
+
+  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:11.5px; color:var(--dim); display:flex;
+    justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
+  footer a{color:#7DD3FC; text-decoration:none}
+  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
+</style>
+</head>
+<body>
+<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/board">Board</a><a class="sn" href="/props">Props</a><a class="sn on" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
+<div class="wrap">
+<header>
+  <h1>Everywhere the books disagree.</h1>
+  <p class="sub">One page, three kinds of disagreement. <b>+EV</b>: a best price currently
+  beating the de-vigged consensus. <b>Arbs &amp; middles</b>: two books far enough apart to
+  play both sides. <b>Moves</b>: books drifting from their own numbers or from the pack.
+  All observation, no prediction.</p>
+</header>
+
+<div class="views" id="views">
+  <button class="view on" data-v="ev">+EV<span class="ct" id="ct-ev"></span></button>
+  <button class="view" data-v="arb">Arbs &amp; middles<span class="ct" id="ct-arb"></span></button>
+  <button class="view" data-v="mov">Moves<span class="ct" id="ct-mov"></span></button>
+</div>
+
+<div id="v-ev">
+  <h2>Prices beating fair right now</h2>
+  <p class="h2sub">Best available price vs the de-vigged median across books — games and props,
+  ranked by edge. These close fast; the timestamp is part of the data.</p>
+  <div class="card" id="evCard"><div class="empty">Loading…</div></div>
+</div>
+
+<div id="v-arb" style="display:none">
+  <h2>Live arbitrage — moneylines</h2>
+  <p class="h2sub">Best price per side across all books, implied probabilities summing under 100%.</p>
+  <div class="card" id="arbCard"><div class="empty">Loading…</div></div>
+  <h2>Middle windows — spreads &amp; totals</h2>
+  <p class="h2sub">One book's line below another's, with landing numbers that win both bets.</p>
+  <div class="card" id="midCard"><div class="empty">Loading…</div></div>
+</div>
+
+<div id="v-mov" style="display:none">
+  <h2>Diverging from consensus now</h2>
+  <p class="h2sub">Books currently paying more than the cross-book consensus says the side is worth.</p>
+  <div class="card" id="divCard"><div class="empty">Loading…</div></div>
+  <h2>Largest recent moves</h2>
+  <p class="h2sub">Single-book price changes between our observations, last two days.</p>
+  <div class="card" id="driftCard"><div class="empty">Loading…</div></div>
+</div>
+
+<footer>
+  <div><a href="/board">board</a> · <a href="/props">props</a> · <a href="/tools">tools</a> · <a href="/trust">why trust these numbers</a></div>
+  <div id="stamp"></div>
+</footer>
+<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 18+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
+</div>
+
+<script>
+const am=v=>v>0?'+'+v:String(v);
+const implied=a=>a<0?(-a)/((-a)+100):100/(a+100);
+const now=Date.now();
+const upcoming=iso=>new Date(iso).getTime()>now;
+
+/* tab switching */
+document.getElementById('views').addEventListener('click',e=>{
+  const b=e.target.closest('.view'); if(!b) return;
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x===b));
+  ['ev','arb','mov'].forEach(v=>
+    document.getElementById('v-'+v).style.display=b.dataset.v===v?'':'none');
+});
+
+Promise.allSettled([
+  fetch('data/board.json').then(r=>r.json()),
+  fetch('data/props.json').then(r=>r.json()),
+  fetch('data/middles.json').then(r=>r.json()),
+  fetch('data/moves.json').then(r=>r.json()),
+]).then(([b,p,m,mv])=>{
+  /* ---- +EV ---- */
+  const evs=[];
+  if(b.status==='fulfilled'){
+    document.getElementById('stamp').textContent=
+      'snapshot '+new Date(b.value.generated_at).toLocaleString();
+    b.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
+      e.sides.forEach(s=>{
+        if(s.edge_vs_fair_pts>0) evs.push({kind:'game',edge:s.edge_vs_fair_pts,
+          t:s.name,sub:`${e.away} @ ${e.home} · ${bd.label} moneyline`,
+          bk:s.best_book,pr:s.best_price,fair:s.fair_price});})));
+  }
+  if(p.status==='fulfilled'){
+    p.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
+      e.props.forEach(pr=>[['Over',pr.over],['Under',pr.under]].forEach(([sd,d])=>{
+        if(d.edge_vs_fair_pts>0) evs.push({kind:'prop',edge:d.edge_vs_fair_pts,
+          t:`${pr.player} ${sd} ${pr.line}`,sub:`${pr.market_label} · ${e.away} @ ${e.home}`,
+          bk:d.best_book,pr:d.best_price,fair:d.fair_price});}))));
+  }
+  evs.sort((a,b2)=>b2.edge-a.edge);
+  document.getElementById('ct-ev').textContent=evs.length?`· ${evs.length}`:'';
+  document.getElementById('evCard').innerHTML=evs.length?evs.slice(0,20).map(r=>
+    `<div class="row"><span class="lead">+${r.edge.toFixed(1)}</span>
+      <span class="what"><b>${r.t}</b><span class="tag">${r.kind}</span><p>${r.sub}</p></span>
+      <span class="meta"><span class="bk">${r.bk} ${am(r.pr)}</span>fair ${am(r.fair)}</span></div>`).join('')
+  :'<div class="empty"><b>Nothing beats fair right now.</b><p>The honest state of an efficient market most of the day. Edges appear when news breaks and books lag — closest to game time.</p></div>';
+
+  /* ---- arbs ---- */
+  const arbs=[];
+  if(b.status==='fulfilled'){
+    b.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)&&e.sides.length===2)
+      .forEach(e=>{const [s1,s2]=e.sides;
+        const tot=implied(s1.best_price)+implied(s2.best_price);
+        if(tot<1) arbs.push({e,s1,s2,label:bd.label,lock:(1-tot)*100});}));
+  }
+  arbs.sort((a,b2)=>b2.lock-a.lock);
+  document.getElementById('arbCard').innerHTML=arbs.length?arbs.map(a=>
+    `<div class="row"><span class="lead">+${a.lock.toFixed(2)}%</span>
+      <span class="what"><b>${a.e.away} @ ${a.e.home}</b>
+        <p><span class="bk">${a.s1.best_book} ${am(a.s1.best_price)}</span> on ${a.s1.name} ·
+           <span class="bk">${a.s2.best_book} ${am(a.s2.best_price)}</span> on ${a.s2.name}</p></span>
+      <span class="meta">${a.label} · moneyline</span></div>`).join('')
+  :'<div class="empty"><b>No live arb at this snapshot.</b><p>Arbs open when one book lags a move and close within minutes. Our 2023–25 replay found one in roughly every 39 NFL games.</p></div>';
+
+  /* ---- middles ---- */
+  let mids=[];
+  if(m.status==='fulfilled') mids=m.value.middles.filter(x=>upcoming(x.starts));
+  document.getElementById('ct-arb').textContent=(arbs.length+mids.length)?`· ${arbs.length+mids.length}`:'';
+  document.getElementById('midCard').innerHTML=mids.length?mids.map(x=>
+    `<div class="row"><span class="lead">${x.numbers.join(' · ')}</span>
+      <span class="what"><b>${x.away} @ ${x.home}</b>
+        <p><span class="bk">${x.low_book}</span> ${x.low_label} (${am(x.low_price)}) ·
+           <span class="bk">${x.high_book}</span> ${x.high_label} (${am(x.high_price)}) — window ${x.width}</p></span>
+      <span class="meta">${x.label} · ${x.market}</span></div>`).join('')
+  :'<div class="empty"><b>No middle windows open.</b><p>Windows open when lines move and books lag each other.</p></div>';
+
+  /* ---- moves ---- */
+  if(mv.status==='fulfilled'){
+    const cutoff=now-48*3600*1000;
+    const recent=a=>new Date(a.observed_at).getTime()>=cutoff;
+    const matchup=a=>{
+      const wrap=t=>t===a.selection?`<b>${t}</b>`:t;
+      return (a.selection===a.home||a.selection===a.away)
+        ?`${wrap(a.away)} @ ${wrap(a.home)}`
+        :`<b>${a.selection}</b> · ${a.away} @ ${a.home}`;};
+    const div=(mv.value.divergence||[]).filter(recent)
+      .sort((a,b2)=>Math.abs(b2.move_pts)-Math.abs(a.move_pts));
+    const dr=(mv.value.drift||[]).filter(recent)
+      .sort((a,b2)=>Math.abs(b2.move_pts)-Math.abs(a.move_pts)).slice(0,15);
+    document.getElementById('ct-mov').textContent=(div.length+dr.length)?`· ${div.length+dr.length}`:'';
+    document.getElementById('divCard').innerHTML=div.length?div.map(a=>
+      `<div class="row"><span class="lead">+${Math.abs(a.move_pts).toFixed(1)}</span>
+        <span class="what">${matchup(a)}<p>${a.detail}</p></span>
+        <span class="meta"><span class="bk">${a.book} ${am(a.to_price)}</span>${a.sport.toUpperCase()} · ${a.market}</span></div>`).join('')
+    :'<div class="empty">No book is more than 1.5 pts from consensus right now.</div>';
+    document.getElementById('driftCard').innerHTML=dr.length?dr.map(a=>{
+      const up=a.move_pts>0;
+      return `<div class="row"><span class="lead ${up?'':'dn'}">${up?'+':'−'}${Math.abs(a.move_pts).toFixed(1)}</span>
+        <span class="what">${matchup(a)}<p>${a.detail}</p></span>
+        <span class="meta"><span class="bk">${a.book} ${am(a.from_price)} → ${am(a.to_price)}</span>${a.sport.toUpperCase()} · ${a.market}</span></div>`}).join('')
+    :'<div class="empty">No single-book moves above threshold in the last two days.</div>';
+  }
+});
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

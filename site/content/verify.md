@@ -101,8 +101,8 @@ Both files are also in the public code repository under `data/ledger/`.
 ### Step 1: get the two files
 
 ```
-curl -O https://sooth.co/data/2026-W01-nfl.commitment.json
-curl -O https://sooth.co/data/2026-W01-nfl.reveal.json
+curl -O https://sooth.bet/data/2026-W01-nfl.commitment.json
+curl -O https://sooth.bet/data/2026-W01-nfl.reveal.json
 ```
 
 ### Step 2: save this script as `verify.py`

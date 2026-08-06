@@ -31,7 +31,7 @@ PUBLIC = ROOT / "site/public"
 LEDGER = ROOT / "data/ledger"
 
 BRAND = "Sooth"
-DOMAIN = "https://sooth.co"
+DOMAIN = "https://sooth.bet"
 
 # Pages built from markdown: (slug, source, title, description)
 PAGES = [
@@ -47,13 +47,10 @@ PAGES = [
 ]
 
 CSS = """
-:root{--bg:#0b0d10;--panel:#12161b;--panel-2:#171c23;--line:#242c36;
---ink:#e8edf4;--muted:#8e9bab;--dim:#64707f;--accent:#4ade80;--warn:#fbbf24;
---bad:#f87171;--link:#60a5fa;
+:root{--bg:#080B16;--panel:#111629;--panel-2:#0B1022;--line:#1E2540;
+--ink:#EEF1F8;--muted:#8C96B2;--dim:#5D6786;--accent:#4ade80;--warn:#fbbf24;
+--bad:#f87171;--link:#38BDF8;
 --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
-@media (prefers-color-scheme:light){:root{--bg:#f7f8fa;--panel:#fff;
---panel-2:#f1f4f8;--line:#dfe5ec;--ink:#0e1420;--muted:#5a6779;--dim:#8a94a3;
---link:#1d4ed8;--accent:#15803d}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
 font:16px/1.65 Inter,system-ui,-apple-system,sans-serif;
@@ -119,6 +116,11 @@ SHELL = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} — {brand}</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080B16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
 <meta name="description" content="{description}">
 <link rel="canonical" href="{domain}/{slug}">
 <meta property="og:title" content="{title} — {brand}">
@@ -133,9 +135,11 @@ SHELL = """<!doctype html>
 <header><nav>
   <a class="brand" href="/"><span class="dot"></span>{brand}</a>
   <span class="spacer"></span>
-  <a class="l" href="/methodology">Methodology</a>
-  <a class="l" href="/verify">Verify</a>
-  <a class="l" href="/ledger">Ledger</a>
+  <a class="l" href="/board">Board</a>
+  <a class="l" href="/props">Props</a>
+  <a class="l" href="/edges">Edges</a>
+  <a class="l" href="/tools">Tools</a>
+  <a class="l" href="/trust">Trust</a>
 </nav></header>
 <div class="wrap"><div class="prose">
 {body}
@@ -153,6 +157,7 @@ bet. Must be of legal age in your jurisdiction.</p>
 <a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
 <a href="/disclaimers">Disclaimers</a></p>
 </div></footer>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>
 """
@@ -176,7 +181,12 @@ def build_markdown_pages() -> list[str]:
             print(f"  SKIP {slug}: {src} missing")
             continue
         md.reset()
-        html = md.convert(path.read_text())
+        text = path.read_text()
+        if text.startswith("---\n"):
+            end = text.find("\n---\n", 4)
+            if end != -1:
+                text = text[end + 5:]
+        html = md.convert(text)
         (PUBLIC / f"{slug}.html").write_text(render(slug, title, desc, html))
         built.append(slug)
         print(f"  built /{slug}")

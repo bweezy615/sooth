@@ -6,6 +6,11 @@
   "outputDirectory": "site/public",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/ev", "destination": "/edges", "permanent": false },
+    { "source": "/middles", "destination": "/edges", "permanent": false },
+    { "source": "/moves", "destination": "/edges", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/data/(.*)",
