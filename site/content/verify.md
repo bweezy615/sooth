@@ -225,7 +225,7 @@ The first prediction in the Week 1 slate, in canonical form, is this exact
 string of 281 characters:
 
 ```
-{"created_at":"2026-09-09T20:20:00+00:00","event_id":"2026_01_NE_SEA","line":null,"market":"moneyline","model_version":"elo-mov-v1+iso","probability":0.6615,"rationale":"elo 1692 vs 1604, rest diff +0","reference_line":3.5,"reference_price":-198,"selection":"side_a","sport":"nfl"}
+{"created_at":"2026-09-09T20:20:00+00:00","event_id":"2026_01_NE_SEA","line":null,"market":"moneyline","model_version":"elo+epa-v1+iso","probability":0.6615,"rationale":"elo 1692 vs 1604, rest diff +0","reference_line":3.5,"reference_price":-198,"selection":"side_a","sport":"nfl"}
 ```
 
 Its leaf fingerprint is:
