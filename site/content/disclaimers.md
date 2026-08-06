@@ -45,10 +45,10 @@ Every historical figure on this site - backtest results, calibration
 statistics, graded records - describes what has already happened. None of it
 predicts what will happen next.
 
-Our published backtest covers 2,750 out-of-sample games from 2016 through 2025.
+Our published backtest covers 2,671 out-of-sample games from 2016 through 2025.
 In that sample, our model **did not beat the closing betting market**. It
-recorded a Brier score of 0.22228 against the de-vigged market's 0.21061, and an
-against-the-spread record of 1333-1352-65, or 49.65%, against a 52.38%
+recorded a Brier score of 0.22148 against the de-vigged market's 0.21038, and an
+against-the-spread record of 1291-1317-63, or 49.50%, against a 52.38%
 breakeven at standard -110 pricing. The full figures and the methods behind them
 are on the [methodology page](/methodology).
 

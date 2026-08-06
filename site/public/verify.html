@@ -147,12 +147,14 @@ contains only the root fingerprint and the counts. For NFL Week 1 of 2026 it
 reads:</p>
 <pre><code class="language-json">{
   &quot;algorithm&quot;: &quot;sha256-merkle-v1&quot;,
-  &quot;committed_at&quot;: &quot;2026-08-03T02:50:37.265208+00:00&quot;,
+  &quot;committed_at&quot;: &quot;2026-08-06T05:36:17.176614+00:00&quot;,
   &quot;earliest_kickoff&quot;: &quot;2026-09-09T20:20:00+00:00&quot;,
-  &quot;merkle_root&quot;: &quot;d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a&quot;,
-  &quot;n_predictions&quot;: 16,
+  &quot;merkle_root&quot;: &quot;438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec&quot;,
+  &quot;n_predictions&quot;: 32,
   &quot;slate_id&quot;: &quot;2026-W01-nfl&quot;,
-  &quot;sport&quot;: &quot;nfl&quot;
+  &quot;sport&quot;: &quot;nfl&quot;,
+  &quot;supersedes&quot;: &quot;4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b&quot;,
+  &quot;version&quot;: 3
 }
 </code></pre>
 <p>Note that <code>committed_at</code> is over a month before <code>earliest_kickoff</code>. Note also
@@ -224,25 +226,27 @@ print(&quot;VERIFIED&quot; if ok else &quot;MISMATCH - the record does not match
 <pre><code>python3 verify.py 2026-W01-nfl.commitment.json 2026-W01-nfl.reveal.json
 </code></pre>
 <p>Output for NFL Week 1 of 2026:</p>
-<pre><code>predictions revealed : 16
-predictions committed: 16
+<pre><code>predictions revealed : 32
+predictions committed: 32
 committed at         : 2026-08-03T02:50:37.265208+00:00
 earliest kickoff     : 2026-09-09T20:20:00+00:00
 
-published root       : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
-recomputed root      : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
+published root       : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
+recomputed root      : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
 
 VERIFIED
 </code></pre>
-<p>The two roots match, so the sixteen predictions in the reveal file are exactly
-the sixteen we sealed on 3 August 2026, five weeks before kickoff.</p>
+<p>The two roots match, so the thirty-two predictions in the reveal file are exactly
+the thirty-two we sealed on 6 August 2026, five weeks before kickoff. The
+<code>version</code>/<code>supersedes</code> fields chain this seal to the earlier ones on the
+ledger; re-sealing before kickoff is allowed, silent editing is not.</p>
 <h3>Step 4: prove to yourself that it would catch us</h3>
 <p>Do not take our word for the fact that the check is sensitive. Break something
 and watch it fail. Open the reveal file in a text editor, find any prediction,
 change its <code>probability</code> from <code>0.6615</code> to <code>0.99</code>, save, and run the script
 again. The recomputed root becomes a completely different string
 (<code>13a070aa9e...</code> in our test) and the script prints <code>MISMATCH</code>.</p>
-<p>That is the entire security argument. One digit in one of sixteen predictions
+<p>That is the entire security argument. One digit in one of thirty-two predictions
 is enough to break the match. There is no way for us to quietly improve the
 record after the fact.</p>
 <hr />
@@ -286,7 +290,7 @@ string of 281 characters:</p>
     return node == expected_root
 </code></pre>
 <p>Feed it the leaf, the four proof steps, and the published root
-<code>d081c00f90...</code>, and it returns <code>True</code>.</p>
+<code>438f360...</code>, and it returns <code>True</code>.</p>
 <hr />
 <h2>The technical specification, for anyone writing their own checker</h2>
 <p>You do not have to use Python. Any language with SHA-256 will do. The rules are:</p>

@@ -77,12 +77,14 @@ reads:
 ```json
 {
   "algorithm": "sha256-merkle-v1",
-  "committed_at": "2026-08-03T02:50:37.265208+00:00",
+  "committed_at": "2026-08-06T05:36:17.176614+00:00",
   "earliest_kickoff": "2026-09-09T20:20:00+00:00",
-  "merkle_root": "d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a",
-  "n_predictions": 16,
+  "merkle_root": "438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec",
+  "n_predictions": 32,
   "slate_id": "2026-W01-nfl",
-  "sport": "nfl"
+  "sport": "nfl",
+  "supersedes": "4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b",
+  "version": 3
 }
 ```
 
@@ -172,19 +174,21 @@ python3 verify.py 2026-W01-nfl.commitment.json 2026-W01-nfl.reveal.json
 Output for NFL Week 1 of 2026:
 
 ```
-predictions revealed : 16
-predictions committed: 16
+predictions revealed : 32
+predictions committed: 32
 committed at         : 2026-08-03T02:50:37.265208+00:00
 earliest kickoff     : 2026-09-09T20:20:00+00:00
 
-published root       : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
-recomputed root      : d081c00f901874be7a1d868f0f6f77d3b76125643a1416d8463b10ede33d7f7a
+published root       : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
+recomputed root      : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
 
 VERIFIED
 ```
 
-The two roots match, so the sixteen predictions in the reveal file are exactly
-the sixteen we sealed on 3 August 2026, five weeks before kickoff.
+The two roots match, so the thirty-two predictions in the reveal file are exactly
+the thirty-two we sealed on 6 August 2026, five weeks before kickoff. The
+`version`/`supersedes` fields chain this seal to the earlier ones on the
+ledger; re-sealing before kickoff is allowed, silent editing is not.
 
 ### Step 4: prove to yourself that it would catch us
 
@@ -194,7 +198,7 @@ change its `probability` from `0.6615` to `0.99`, save, and run the script
 again. The recomputed root becomes a completely different string
 (`13a070aa9e...` in our test) and the script prints `MISMATCH`.
 
-That is the entire security argument. One digit in one of sixteen predictions
+That is the entire security argument. One digit in one of thirty-two predictions
 is enough to break the match. There is no way for us to quietly improve the
 record after the fact.
 
@@ -258,7 +262,7 @@ def check_proof(leaf_hash, proof, expected_root):
 ```
 
 Feed it the leaf, the four proof steps, and the published root
-`d081c00f90...`, and it returns `True`.
+`438f360...`, and it returns `True`.
 
 ---
 

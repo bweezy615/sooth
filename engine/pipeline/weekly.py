@@ -8,9 +8,9 @@ part:
                worse than the market (Brier 0.2216 vs 0.2106) and it is the
                only number that can disagree with the market informatively.
 
-  consensus    The same features PLUS the de-vigged market probability. Best
-               calibrated output we can produce - ECE 0.0186 against the
-               market's 0.0193 - but it mostly reproduces the market, so
+  consensus    The same features PLUS the de-vigged market probability. The
+               sharpest output we can produce (Brier 0.2140 vs the market's
+               0.2106 on eval B) - but it mostly reproduces the market, so
                presenting it as "our prediction" would look impressive while
                carrying almost no independent information.
 
@@ -45,8 +45,9 @@ from ..models.elo import EloConfig, EloModel
 from ..schema import (Market, Prediction, Sport, american_to_prob, devig,
                       prob_to_american)
 
-# Our top confidence band is measurably overconfident (94.5% predicted vs
-# 86.7% actual), so we cap rather than publish a number we know is inflated.
+# The top confidence band is too thin to trust (n=12 in the current record)
+# and an earlier larger run measured ~8 pts of overconfidence there, so we cap
+# rather than publish a number we cannot substantiate.
 CONFIDENCE_CAP = 0.85
 MODEL_INDEPENDENT = "elo+epa-v1+iso"
 MODEL_CONSENSUS = "elo+epa+market-v1+iso"
@@ -199,6 +200,10 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     commitment = commit_slate(slate_id, "nfl", predictions,
                               out_dir=root / "data/ledger")
 
+    # Backtest metadata comes from the regenerated figures file, never from
+    # hand-typed constants — the one hard rule this project has.
+    _fig = json.loads((root / "site/content/_figures.json").read_text())
+    _evb = _fig["evaluation_b"]["results"]
     payload = {
         "slate_id": slate_id, "sport": "nfl", "season": season, "week": week,
         "status": "committed",
@@ -207,14 +212,16 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
                 "version": MODEL_INDEPENDENT,
                 "description": "Elo + opponent-aware EPA + rest. Does not see "
                                "the betting line. This is our own opinion.",
-                "backtest_brier": 0.22164, "backtest_ece": 0.03269,
+                "backtest_brier": _evb["independent"]["brier"],
+                "backtest_ece": _evb["independent"]["ece"],
             },
             "consensus": {
                 "version": MODEL_CONSENSUS,
                 "description": "The same features plus the de-vigged market "
                                "probability. Best calibrated, but largely "
                                "reproduces the market.",
-                "backtest_brier": 0.21399, "backtest_ece": 0.01858,
+                "backtest_brier": _evb["consensus"]["brier"],
+                "backtest_ece": _evb["consensus"]["ece"],
             },
         },
         "confidence_cap": CONFIDENCE_CAP,
@@ -231,6 +238,19 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     site_dir = root / "site/public/data"
     site_dir.mkdir(parents=True, exist_ok=True)
     (site_dir / f"{slate_id}.json").write_text(json.dumps(payload, indent=2))
+
+    # The /verify walkthrough curls the un-versioned commitment and reveal.
+    # Re-sealing MUST refresh both, or the published pair stops matching and
+    # the flagship check fails for anyone who runs it.
+    ledger_dir = root / "data/ledger"
+    versions = sorted(ledger_dir.glob(f"{slate_id}.commitment.v*.json"))
+    if versions:
+        (site_dir / f"{slate_id}.commitment.json").write_text(
+            versions[-1].read_text())
+    reveals = sorted(ledger_dir.glob(f"{slate_id}.reveal.v*.json"))
+    if reveals:
+        (site_dir / f"{slate_id}.reveal.json").write_text(
+            reveals[-1].read_text())
     return payload
 
 

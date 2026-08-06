@@ -106,15 +106,16 @@ it as an error and tell us.</p>
 <hr />
 <h2>Summary in one paragraph</h2>
 <p>We predict NFL game outcomes with an Elo rating system that uses a damped
-margin-of-victory update, then convert those ratings into probabilities and
-correct those probabilities with isotonic regression refit each season on prior
-seasons only. Across 2,750 out-of-sample games from 2016 through 2025, the
-model recorded a Brier score of 0.22228 against the de-vigged closing market's
-0.21061, straight-up accuracy of 63.96% against the market's 66.58%, and an
-against-the-spread record of 1333-1352-65, or 49.65%, against a breakeven of
-52.38% at standard -110 pricing. <strong>The model does not beat the closing market.</strong>
-Our probabilities are well calibrated, which is a different and smaller claim,
-and it is the only claim we make.</p>
+margin-of-victory update, augmented with opponent-aware expected-points-added
+form and rest, then convert those ratings into probabilities and correct them
+with isotonic regression refit each season on prior seasons only. Across 2,671
+out-of-sample games from 2016 through 2025, the published model recorded a
+Brier score of 0.22148 against the de-vigged closing market's 0.21038,
+straight-up accuracy of 63.72% against the market's 66.64%, and an
+against-the-spread record of 1291-1317-63, or 49.50% of decided games, against
+a breakeven of 52.38% at standard -110 pricing. <strong>The model does not beat the
+closing market.</strong> Our probabilities are reasonably calibrated, which is a
+different and smaller claim, and it is the only claim we make.</p>
 <hr />
 <h2>What we claim and what we do not claim</h2>
 <p>We claim exactly two things:</p>
@@ -122,7 +123,8 @@ and it is the only claim we make.</p>
 <li><strong>Our published probabilities are calibrated.</strong> When we publish 70%, events
    in that band have historically occurred about 70% of the time in our
    out-of-sample testing. The measured expected calibration error of the
-   calibrated model is 0.02162.</li>
+   published model is 0.03122; the de-vigged market's is 0.01913. The market
+   is better calibrated than we are, and we say so.</li>
 <li><strong>Our record is tamper-evident.</strong> Every prediction is hashed and committed to
    a public Merkle root before the first kickoff of its slate. We cannot delete
    a loss or add a win after the fact without breaking the root.</li>
@@ -205,7 +207,8 @@ predicted</strong>, and it is refitted every year. Fitting a calibrator on the s
 games you then score with it manufactures a perfect-looking reliability curve
 that means nothing. Seasons before we have 500 prior games available pass
 through uncalibrated rather than being calibrated on thin data.</p>
-<p>The production model version is <code>elo-mov-v1+iso</code>.</p>
+<p>The production model versions are <code>elo+epa-v1+iso</code> (independent) and
+<code>elo+epa+market-v1+iso</code> (consensus).</p>
 <hr />
 <h2>How we test: walk-forward, never in-sample</h2>
 <p>Ratings are built strictly forward in time. For every game in the historical
@@ -215,7 +218,7 @@ the ratings. There is no point at which the model sees a future game.</p>
 <ul>
 <li>Rating warm-up period: 1999 through 2015.</li>
 <li>Out-of-sample scoring period: 2016 through 2025.</li>
-<li>Games graded: 2,750. This is every regular and post-season game in the window
+<li>Games graded: 2,671. This is every regular and post-season game in the window
   that was not a tie and for which both moneyline prices were available, so the
   model and the market can be scored on identical games.</li>
 </ul>
@@ -362,29 +365,29 @@ better.</p>
 </thead>
 <tbody>
 <tr>
-<td>raw Elo</td>
-<td>0.02654</td>
-<td>0.22228</td>
+<td>Elo baseline</td>
+<td>0.02698</td>
+<td>0.22217</td>
 </tr>
 <tr>
-<td>isotonic-calibrated Elo (published)</td>
-<td><strong>0.02162</strong></td>
-<td>0.22323</td>
+<td>Elo + EPA + rest, isotonic (published)</td>
+<td><strong>0.03122</strong></td>
+<td>0.22148</td>
 </tr>
 <tr>
 <td>de-vigged market</td>
-<td>0.01802</td>
-<td>0.21061</td>
+<td>0.01913</td>
+<td>0.21038</td>
 </tr>
 </tbody>
 </table>
-<p>Two honest notes on that table. First, calibration improves ECE by about 18.5%
-but very slightly <strong>worsens</strong> Brier score, from 0.22228 to 0.22323. Isotonic
-regression buys reliability at a small cost in sharpness. We publish both
+<p>Two honest notes on that table. First, adding EPA form and rest improves the
+Brier score over the Elo baseline but slightly <strong>worsens</strong> measured ECE. Extra
+features buy sharpness at a small cost in reliability, and we publish both
 numbers because reporting only the one that improved would be the same
-selective disclosure we are criticising. Second, the market is still better
-calibrated than we are.</p>
-<h3>Reliability table, calibrated model, 2,750 games</h3>
+selective disclosure we are criticising. Second, the market is better
+calibrated than we are — on this test, meaningfully so.</p>
+<h3>Reliability table, published model, 2,671 games</h3>
 <table>
 <thead>
 <tr>
@@ -397,109 +400,91 @@ calibrated than we are.</p>
 </thead>
 <tbody>
 <tr>
-<td>0.0-0.1</td>
-<td>12</td>
-<td>1.00%</td>
-<td>33.33%</td>
-<td>-32.33 pts</td>
-</tr>
-<tr>
 <td>0.1-0.2</td>
-<td>18</td>
-<td>16.66%</td>
-<td>27.78%</td>
-<td>-11.12 pts</td>
+<td>26</td>
+<td>16.70%</td>
+<td>26.92%</td>
+<td>-10.22 pts</td>
 </tr>
 <tr>
 <td>0.2-0.3</td>
-<td>149</td>
-<td>24.84%</td>
-<td>30.87%</td>
-<td>-6.03 pts</td>
+<td>152</td>
+<td>26.16%</td>
+<td>28.95%</td>
+<td>-2.79 pts</td>
 </tr>
 <tr>
 <td>0.3-0.4</td>
-<td>324</td>
-<td>36.21%</td>
-<td>34.88%</td>
-<td>+1.33 pts</td>
+<td>270</td>
+<td>36.02%</td>
+<td>33.70%</td>
+<td>+2.32 pts</td>
 </tr>
 <tr>
 <td>0.4-0.5</td>
-<td>593</td>
-<td>44.80%</td>
-<td>43.00%</td>
-<td>+1.80 pts</td>
+<td>419</td>
+<td>45.37%</td>
+<td>41.29%</td>
+<td>+4.08 pts</td>
 </tr>
 <tr>
 <td>0.5-0.6</td>
-<td>401</td>
-<td>56.10%</td>
-<td>53.62%</td>
-<td>+2.48 pts</td>
+<td>569</td>
+<td>54.99%</td>
+<td>50.26%</td>
+<td>+4.73 pts</td>
 </tr>
 <tr>
 <td>0.6-0.7</td>
-<td>739</td>
-<td>64.98%</td>
-<td>63.87%</td>
-<td>+1.11 pts</td>
+<td>593</td>
+<td>64.97%</td>
+<td>62.39%</td>
+<td>+2.58 pts</td>
 </tr>
 <tr>
 <td>0.7-0.8</td>
-<td>244</td>
-<td>73.66%</td>
-<td>72.54%</td>
-<td>+1.12 pts</td>
-</tr>
-<tr>
-<td>0.8-0.9</td>
-<td>210</td>
-<td>84.77%</td>
-<td>82.86%</td>
+<td>440</td>
+<td>74.86%</td>
+<td>72.95%</td>
 <td>+1.91 pts</td>
 </tr>
 <tr>
+<td>0.8-0.9</td>
+<td>190</td>
+<td>83.93%</td>
+<td>85.26%</td>
+<td>-1.33 pts</td>
+</tr>
+<tr>
 <td>0.9-1.0</td>
-<td>60</td>
-<td>94.51%</td>
-<td>86.67%</td>
-<td><strong>+7.84 pts</strong></td>
+<td>12</td>
+<td>91.13%</td>
+<td>91.67%</td>
+<td>-0.54 pts</td>
 </tr>
 </tbody>
 </table>
 <p>A positive gap means we were overconfident: we predicted the event more often
 than it happened.</p>
-<p>Read the extremes with care. The 0.0-0.1 and 0.1-0.2 bands hold 12 and 18 games
-respectively; at those sample sizes a handful of upsets moves the observed
-frequency by tens of points and the gap is mostly noise. The bands that carry
-real weight are 0.3 through 0.9, which hold 2,511 of the 2,750 games, and in
-those bands the model is overconfident by between 1.1 and 2.5 percentage
-points.</p>
-<p>For comparison, the de-vigged market over the same games is mildly
-<strong>under</strong>confident in its top bands: it predicted 84.70% and observed 87.57% in
-the 0.8-0.9 band. That is the signature of a market that has priced in the vig
-asymmetry, and it is another reason we treat the market as the benchmark rather
-than the opponent.</p>
+<p>Read the extremes with care. The 0.1-0.2 and 0.9-1.0 bands hold 26 and 12
+games respectively; at those sample sizes a handful of results moves the
+observed frequency by tens of points and the gap is mostly noise. The bands
+that carry real weight are 0.3 through 0.8, which hold 2,291 of the 2,671
+games, and in those bands the model runs overconfident by between 1.9 and 4.7
+percentage points.</p>
 <hr />
 <h2>Why we cap published confidence at 85%</h2>
 <p><strong>We do not publish any probability above 0.85, regardless of what the model
-outputs.</strong> The cap exists because of one row in the table above.</p>
-<p>In the 0.9-1.0 band, across 60 out-of-sample games, the calibrated model
-predicted an average of 94.51% and the events occurred 86.67% of the time. The
-model was overconfident by 7.84 percentage points - four times the error of any
-other well-populated band.</p>
-<p>This is the single most important finding in our testing, because it inverts
-the industry's usual sales pitch. The standard product in this category is "our
-one highest-confidence pick of the day." That is precisely the band where our
-model is least trustworthy. High-confidence selections are not the safe subset;
-in our data they are the least reliable subset, because extreme probabilities
-are produced by extreme rating gaps, and extreme rating gaps are exactly where a
-simple rating system is most likely to be extrapolating past the evidence.</p>
-<p>Capping at 0.85 keeps every published probability inside a band where our
-measured overconfidence is under two percentage points. It costs us the
-headline number that would sell best. We consider explaining why we do not have
-that number to be more valuable than having it.</p>
+outputs.</strong></p>
+<p>The honest reason is sample size. In the current out-of-sample record the
+0.9-1.0 band holds twelve games — far too few to demonstrate that the model
+deserves that much confidence. An earlier, larger evaluation of the raw Elo
+baseline showed the opposite problem: roughly eight points of overconfidence
+at the top of the range. Between a band too thin to trust and a history of
+overconfidence exactly where the industry sells its "locks", the conservative
+policy is a hard cap, and we keep it as a design rule rather than a measured
+finding. If the extreme bands ever accumulate enough games to be measured
+properly, we will publish that table and revisit the cap in the open.</p>
 <hr />
 <h2>Leakage controls</h2>
 <p>Data leakage - training on information that would not have been available
@@ -555,10 +540,12 @@ independent source with explicit open and close objects. CLV is the metric most
 often quoted by services in this category and it is the metric most easily
 faked by reading a mutable field. Ours will be published when it is defensible
 and not before.</p>
-<p>The features actually used by the production model are: team identity, prior
-ratings derived only from earlier games, home or neutral site, days of rest for
-each team, and season boundaries for the carryover regression. That is the
-complete list.</p>
+<p>The features actually used by the production models are: team identity, prior
+Elo ratings derived only from earlier games, opponent-aware expected-points-
+added form (also computed only from earlier games), home or neutral site, days
+of rest for each team, and season boundaries for the carryover regression. The
+consensus model additionally uses the de-vigged market probability. That is
+the complete list.</p>
 <hr />
 <h2>The commitment scheme</h2>
 <p>The problem with every published pick record on the internet is that it is
@@ -639,7 +626,6 @@ different and much rarer property in this industry.</p>
 <p>These are the changes we expect to make, published in advance so the record
 shows what changed and when:</p>
 <ul>
-<li>Expected-points-added-based ratings alongside Elo</li>
 <li>A quarterback availability adjustment</li>
 <li>Blending model probability with market probability, which usually improves
   Brier score even when the model alone does not</li>
@@ -663,7 +649,7 @@ always be traced to the exact model that made it.</p>
 wagers, hold funds, or pay prizes. We are not affiliated with the NFL, any
 league, team, or sportsbook. Full disclaimers, including responsible-gambling
 resources, are at <a href="/disclaimers">/disclaimers</a>.</p>
-<p><em>Last updated 2026-08-02. Model version <code>elo-mov-v1+iso</code>.</em></p>
+<p><em>Last updated 2026-08-06. Model versions <code>elo+epa-v1+iso</code> (independent) and <code>elo+epa+market-v1+iso</code> (consensus).</em></p>
 </div></div>
 <footer><div class="wrap">
 <p><strong>Entertainment and analysis only. We do not accept, place, or
