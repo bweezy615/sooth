@@ -1,8 +1,8 @@
 /* Sooth service worker — network-first everywhere.
    A price board must never show stale numbers silently, so the network always
    wins; the cache only answers when the network can't (offline shell). */
-const CACHE = 'sooth-v1';
-const SHELL = ['/', '/props', '/ev', '/middles', '/moves', '/tools',
+const CACHE = 'sooth-v2';
+const SHELL = ['/', '/props', '/edges', '/tools', '/trust',
                '/engine', '/gamelog', '/ledger', '/methodology'];
 
 self.addEventListener('install', e => {
@@ -21,9 +21,16 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
     fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy));
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
       return res;
-    }).catch(() => caches.match(e.request, {ignoreSearch: true}))
+    }).catch(() =>
+      caches.match(e.request, {ignoreSearch: true}).then(hit =>
+        hit || (e.request.mode === 'navigate'
+          ? caches.match('/')
+          : Response.error()))
+    )
   );
 });

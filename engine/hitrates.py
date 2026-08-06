@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import time
 import unicodedata
 from pathlib import Path
@@ -47,10 +48,12 @@ def find_player(name: str, session: requests.Session) -> int | None:
         return None
     people = r.json().get("people", [])
     want = norm(name)
-    for p in people:
-        if norm(p.get("fullName", "")) == want:
-            return p.get("id")
-    return people[0]["id"] if people else None
+    matches = [p for p in people if norm(p.get("fullName", "")) == want]
+    if len(matches) == 1:
+        return matches[0].get("id")
+    # No exact match, or an ambiguous duplicate name (two Luis Garcias):
+    # publishing the WRONG player's record is worse than publishing none.
+    return None
 
 
 def game_log(pid: int, group: str, season: int,
@@ -129,7 +132,9 @@ def annotate(props_path: str = "site/public/data/props.json",
     doc["hitrates"] = {"source": "statsapi.mlb.com gameLog",
                        "season": season,
                        "annotated": hit, "eligible": looked}
-    path.write_text(json.dumps(doc, indent=1))
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(doc, indent=1))
+    os.replace(tmp, path)
     return doc["hitrates"]
 
 

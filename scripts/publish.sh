@@ -33,19 +33,37 @@ fi
 # ~3h of books posting them. Cheap when books have nothing up: the engine
 # bails after two empty events (~6 credits) and keeps the previous snapshot.
 PROPS="$REPO/site/public/data/props.json"
-PAGE_H=999
-[ -f "$PROPS" ] && PAGE_H=$(( ( $(date +%s) - $(stat -f %m "$PROPS") ) / 3600 ))
+# Freshness is judged by the CONTENT (generated_at / checked_at), never file
+# mtime — annotation rewrites touch the file without refreshing the data.
+PAGE_H=$("$REPO/.venv/bin/python" - <<'PY'
+import json, datetime
+try:
+    d = json.load(open("/Users/b/pick-engine/site/public/data/props.json"))
+    ts = max(d.get("generated_at", ""), d.get("checked_at", ""))
+    dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    print(int((datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() // 3600))
+except Exception:
+    print(999)
+PY
+)
 if [ "$PAGE_H" -ge 2 ]; then
-  echo "$(date -u +%FT%TZ) PROPS refresh (age ${PAGE_H}h)" >>"$LOG"
+  echo "$(date -u +%FT%TZ) PROPS refresh (content age ${PAGE_H}h)" >>"$LOG"
+  GEN_BEFORE=$(grep -m1 '"generated_at"' "$PROPS" 2>/dev/null || echo none)
   if "$REPO/.venv/bin/python" -m engine.props --window-hours 30 --max-credits 20 >>"$LOG" 2>&1; then
-    # Annotate fresh props with player game-log hit rates (free public API).
-    "$REPO/.venv/bin/python" -m engine.hitrates >>"$LOG" 2>&1 \
-      || echo "$(date -u +%FT%TZ) HITRATES FAILED — props stay unannotated" >>"$LOG"
+    GEN_AFTER=$(grep -m1 '"generated_at"' "$PROPS" 2>/dev/null || echo none)
+    if [ "$GEN_BEFORE" != "$GEN_AFTER" ]; then
+      # Fresh capture: annotate with player game-log hit rates (free API).
+      # A kept closing snapshot is NOT re-annotated — rosters move on.
+      "$REPO/.venv/bin/python" -m engine.hitrates >>"$LOG" 2>&1 \
+        || echo "$(date -u +%FT%TZ) HITRATES FAILED — props stay unannotated" >>"$LOG"
+    else
+      echo "$(date -u +%FT%TZ) PROPS kept previous snapshot — hitrates skipped" >>"$LOG"
+    fi
   else
     echo "$(date -u +%FT%TZ) PROPS refresh FAILED — keeping previous board" >>"$LOG"
   fi
 else
-  echo "$(date -u +%FT%TZ) PROPS fresh (age ${PAGE_H}h) — skipping" >>"$LOG"
+  echo "$(date -u +%FT%TZ) PROPS fresh (content age ${PAGE_H}h) — skipping" >>"$LOG"
 fi
 
 # Middles/arbs: spreads+totals in one bulk call per sport (~8 credits),
@@ -82,6 +100,8 @@ if vercel --prod --yes >>"$LOG" 2>&1; then
 else
   rc=$?
   echo "$(date -u +%FT%TZ) DEPLOY FAILED rc=$rc (vercel login?)" >>"$LOG"
+  tail -n 2000 "$LOG" >"$LOG.tmp" 2>/dev/null && mv "$LOG.tmp" "$LOG"
+  exit 1
 fi
 
 tail -n 2000 "$LOG" >"$LOG.tmp" 2>/dev/null && mv "$LOG.tmp" "$LOG"

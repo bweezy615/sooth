@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import statistics
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -244,12 +245,17 @@ def collect(window_hours: float = 30, max_credits: int = 20,
                 if prev.get("totals", {}).get("props"):
                     prev["checked_at"] = now.isoformat()
                     prev["credits_remaining"] = remaining
-                    out.write_text(json.dumps(prev, indent=1))
+                    tmp = out.with_suffix(".tmp")
+                    tmp.write_text(json.dumps(prev, indent=1))
+                    os.replace(tmp, out)
                     doc["kept_previous"] = True
                     return doc
             except (json.JSONDecodeError, OSError):
                 pass
-        (d / "props.json").write_text(json.dumps(doc, indent=1))
+        out = d / "props.json"
+        tmp = out.with_suffix(".tmp")
+        tmp.write_text(json.dumps(doc, indent=1))
+        os.replace(tmp, out)
 
         # Append-only raw capture, one file per sport per UTC day, same shape
         # as the game-line capture so future backtests can replay both.

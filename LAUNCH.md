@@ -15,7 +15,7 @@ the fair one — games and player props, timestamped, free to look at.
 
 We even publish our own model losing to the market. That's the point.
 
-[link]
+https://sooth.bet
 
 ---
 
@@ -43,7 +43,7 @@ Books can't repost every prop every time news breaks. That lag is the edge.
 best number highlighted. Games and props. Timestamped snapshots, committed
 to a public ledger before kickoff so nothing can be quietly edited later.
 
-No picks. No "locks." The arithmetic is the product. [link]
+No picks. No "locks." The arithmetic is the product. https://sooth.bet
 
 ---
 

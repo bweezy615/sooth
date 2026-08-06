@@ -13,6 +13,8 @@
 <meta property="og:title" content="Sooth — Player Props">
 <meta property="og:description" content="Player props with the best available price across books and the de-vigged fair line.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/props">
 <meta name="description" content="Player props with the best available price across books and the de-vigged fair line. Same-line comparison only.">
 <style>
   :root{
@@ -92,7 +94,7 @@
 </style>
 </head>
 <body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/board">Board</a><a class="sn on" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
+<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn on" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
 <div class="wrap">
 <header>
   <h1>Props, shopped and de-vigged.</h1>
@@ -137,6 +139,7 @@
 
 <script>
 const $=id=>document.getElementById(id);
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const am=v=>v>0?'+'+v:String(v);
 let DOC=null;
 
@@ -203,12 +206,12 @@ function render(){
   rows.forEach(({e,p,when})=>{
     const tr=document.createElement('tr');
     tr.innerHTML=
-      `<td class="l pl">${p.player}<span class="mk">${p.market_label}</span></td>`+
-      `<td class="l"><span class="match">${e.away} @ ${e.home}<br>${when}</span></td>`+
+      `<td class="l pl">${esc(p.player)}<span class="mk">${esc(p.market_label)}</span></td>`+
+      `<td class="l"><span class="match">${esc(e.away)} @ ${esc(e.home)}<br>${when}</span></td>`+
       `<td>${p.line}</td>`+
-      `<td>${am(p.over.best_price)}<span class="bk">${p.over.best_book}</span></td>`+
+      `<td>${am(p.over.best_price)}<span class="bk">${esc(p.over.best_book)}</span></td>`+
       `<td class="fair">${am(p.over.fair_price)}</td>`+
-      `<td>${am(p.under.best_price)}<span class="bk">${p.under.best_book}</span></td>`+
+      `<td>${am(p.under.best_price)}<span class="bk">${esc(p.under.best_book)}</span></td>`+
       `<td class="fair">${am(p.under.fair_price)}</td>`+
       `<td>${p.hit?`<span title="last 5: ${p.hit.l5.over}/${p.hit.l5.n} · season: ${p.hit.season.over}/${p.hit.season.n}"${(p.hit.l10.over>=8||p.hit.l10.over<=2)?' style="color:var(--ink);font-weight:700"':''}>${p.hit.l10.over}/${p.hit.l10.n}</span>`:'—'}</td>`+
       `<td>${Math.min(p.over.n_books,p.under.n_books)}</td>`+

@@ -14,6 +14,8 @@
 <meta property="og:title" content="Sooth — Edges">
 <meta property="og:description" content="Everywhere the books disagree: +EV prices, arbs, middles, and line moves.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/edges">
 <style>
   :root{
     --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
@@ -86,7 +88,7 @@
 </style>
 </head>
 <body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/board">Board</a><a class="sn" href="/props">Props</a><a class="sn on" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
+<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn on" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
 <div class="wrap">
 <header>
   <h1>Everywhere the books disagree.</h1>
@@ -137,8 +139,7 @@
 <script>
 const am=v=>v>0?'+'+v:String(v);
 const implied=a=>a<0?(-a)/((-a)+100):100/(a+100);
-const now=Date.now();
-const upcoming=iso=>new Date(iso).getTime()>now;
+const upcoming=iso=>new Date(iso).getTime()>Date.now();
 
 /* tab switching */
 document.getElementById('views').addEventListener('click',e=>{
@@ -154,6 +155,7 @@ Promise.allSettled([
   fetch('data/middles.json').then(r=>r.json()),
   fetch('data/moves.json').then(r=>r.json()),
 ]).then(([b,p,m,mv])=>{
+  const ERR='<div class="empty"><b>Live data unavailable.</b><p>Could not load the board feed — check your connection and refresh. Prices shown elsewhere may be stale.</p></div>';
   /* ---- +EV ---- */
   const evs=[];
   if(b.status==='fulfilled'){
@@ -178,6 +180,7 @@ Promise.allSettled([
     `<div class="row"><span class="lead">+${r.edge.toFixed(1)}</span>
       <span class="what"><b>${r.t}</b><span class="tag">${r.kind}</span><p>${r.sub}</p></span>
       <span class="meta"><span class="bk">${r.bk} ${am(r.pr)}</span>fair ${am(r.fair)}</span></div>`).join('')
+  :(b.status!=='fulfilled'&&p.status!=='fulfilled')?ERR
   :'<div class="empty"><b>Nothing beats fair right now.</b><p>The honest state of an efficient market most of the day. Edges appear when news breaks and books lag — closest to game time.</p></div>';
 
   /* ---- arbs ---- */
@@ -195,6 +198,7 @@ Promise.allSettled([
         <p><span class="bk">${a.s1.best_book} ${am(a.s1.best_price)}</span> on ${a.s1.name} ·
            <span class="bk">${a.s2.best_book} ${am(a.s2.best_price)}</span> on ${a.s2.name}</p></span>
       <span class="meta">${a.label} · moneyline</span></div>`).join('')
+  :(b.status!=='fulfilled')?ERR
   :'<div class="empty"><b>No live arb at this snapshot.</b><p>Arbs open when one book lags a move and close within minutes. Our 2023–25 replay found one in roughly every 39 NFL games.</p></div>';
 
   /* ---- middles ---- */
@@ -210,8 +214,12 @@ Promise.allSettled([
   :'<div class="empty"><b>No middle windows open.</b><p>Windows open when lines move and books lag each other.</p></div>';
 
   /* ---- moves ---- */
+  if(mv.status!=='fulfilled'){
+    document.getElementById('divCard').innerHTML=ERR;
+    document.getElementById('driftCard').innerHTML=ERR;
+  }
   if(mv.status==='fulfilled'){
-    const cutoff=now-48*3600*1000;
+    const cutoff=Date.now()-48*3600*1000;
     const recent=a=>new Date(a.observed_at).getTime()>=cutoff;
     const matchup=a=>{
       const wrap=t=>t===a.selection?`<b>${t}</b>`:t;

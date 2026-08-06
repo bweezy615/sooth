@@ -14,6 +14,8 @@
 <meta property="og:title" content="Verify our record — Sooth">
 <meta property="og:description" content="How to independently recompute our Merkle root and prove no prediction was altered after the fact. Standard library only.">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/verify">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -85,7 +87,7 @@ border-radius:12px;padding:17px 19px;margin:0 0 13px}
 <header><nav>
   <a class="brand" href="/"><span class="dot"></span>Sooth</a>
   <span class="spacer"></span>
-  <a class="l" href="/board">Board</a>
+  <a class="l" href="/">Board</a>
   <a class="l" href="/props">Props</a>
   <a class="l" href="/edges">Edges</a>
   <a class="l" href="/tools">Tools</a>
@@ -155,8 +157,10 @@ reads:</p>
 </code></pre>
 <p>Note that <code>committed_at</code> is over a month before <code>earliest_kickoff</code>. Note also
 that this file tells you nothing about who we picked. That is the point.</p>
-<p><strong><code>/data/&lt;slate-id&gt;.reveal.json</code></strong> goes up after the games settle. It contains
-the same root, every prediction in full, and the individual leaf fingerprints.</p>
+<p><strong><code>/data/&lt;slate-id&gt;.reveal.json</code></strong> is published alongside the commitment. It
+contains the same root, every prediction in full, and the individual leaf
+fingerprints — so the check below works before kickoff, not only after.
+Grading is added once the games settle.</p>
 <p>Both files are also in the public code repository under <code>data/ledger/</code>.</p>
 <hr />
 <h2>The check, step by step</h2>

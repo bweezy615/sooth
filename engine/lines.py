@@ -267,10 +267,27 @@ def collect(window_hours: float = 36, max_credits: int = 60,
         },
     }
 
+    all_failed = spent == 0 and not boards and bool(live)
+    doc["all_fetches_failed"] = all_failed
     if not dry_run:
         d = Path(out_dir)
         d.mkdir(parents=True, exist_ok=True)
-        (d / "board.json").write_text(json.dumps(doc, indent=1))
+        out = d / "board.json"
+        if all_failed and out.exists():
+            # Every sport call failed (API outage, bad key): a blank board is
+            # worse than yesterday's board with an honest checked_at stamp.
+            try:
+                prev = json.loads(out.read_text())
+                prev["checked_at"] = now.isoformat()
+                tmp = out.with_suffix(".tmp")
+                tmp.write_text(json.dumps(prev, indent=1))
+                os.replace(tmp, out)
+                return doc
+            except (json.JSONDecodeError, OSError):
+                pass
+        tmp = out.with_suffix(".tmp")
+        tmp.write_text(json.dumps(doc, indent=1))
+        os.replace(tmp, out)
 
         # Append-only capture, never rewritten. One file per sport per UTC day.
         stamp = now.strftime("%Y-%m-%d")
@@ -280,9 +297,12 @@ def collect(window_hours: float = 36, max_credits: int = 60,
                 continue
             cap = Path("data/capture") / board["sport"]
             cap.mkdir(parents=True, exist_ok=True)
+            # One buffered write per batch: two launchd jobs append to the
+            # same day-file, and interleaved partial lines corrupt evidence.
+            blob = "".join(json.dumps(r, separators=(",", ":"), sort_keys=True) + "\n"
+                           for r in rows)
             with (cap / f"{stamp}.jsonl").open("a") as fh:
-                for r in rows:
-                    fh.write(json.dumps(r, separators=(",", ":"), sort_keys=True) + "\n")
+                fh.write(blob)
             doc.setdefault("captured", {})[board["sport"]] = len(rows)
     return doc
 

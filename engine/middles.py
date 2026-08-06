@@ -23,6 +23,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -47,7 +49,10 @@ def _windows(low_quotes: list[dict], high_quotes: list[dict]) -> dict | None:
     hi = max(high_quotes, key=lambda q: q["line"])
     if hi["line"] <= lo["line"]:
         return None
-    inside = [n for n in range(int(lo["line"]) + 1, int(hi["line"]) + 1)
+    # floor/ceil, not int(): int() truncates toward zero, which for negative
+    # half-point lines (home underdogs) skips real landing numbers entirely.
+    inside = [n for n in range(math.floor(lo["line"]) + 1,
+                               math.ceil(hi["line"]))
               if lo["line"] < n < hi["line"]]
     if not inside:
         return None
@@ -154,10 +159,25 @@ def collect(window_hours: float = 36,
         "middles": middles,
         "totals": {"middles": len(middles)},
     }
+    doc["all_fetches_failed"] = spent == 0 and not middles and bool(live)
     if not dry_run:
         d = Path(out_dir)
         d.mkdir(parents=True, exist_ok=True)
-        (d / "middles.json").write_text(json.dumps(doc, indent=1))
+        out = d / "middles.json"
+        if doc["all_fetches_failed"] and out.exists():
+            # API trouble, not an empty market: keep the previous board.
+            try:
+                prev = json.loads(out.read_text())
+                prev["checked_at"] = now.isoformat()
+                tmp = out.with_suffix(".tmp")
+                tmp.write_text(json.dumps(prev, indent=1))
+                os.replace(tmp, out)
+                return doc
+            except (json.JSONDecodeError, OSError):
+                pass
+        tmp = out.with_suffix(".tmp")
+        tmp.write_text(json.dumps(doc, indent=1))
+        os.replace(tmp, out)
     return doc
 
 

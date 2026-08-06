@@ -126,6 +126,8 @@ SHELL = """<!doctype html>
 <meta property="og:title" content="{title} — {brand}">
 <meta property="og:description" content="{description}">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="{domain}/{slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -135,7 +137,7 @@ SHELL = """<!doctype html>
 <header><nav>
   <a class="brand" href="/"><span class="dot"></span>{brand}</a>
   <span class="spacer"></span>
-  <a class="l" href="/board">Board</a>
+  <a class="l" href="/">Board</a>
   <a class="l" href="/props">Props</a>
   <a class="l" href="/edges">Edges</a>
   <a class="l" href="/tools">Tools</a>
@@ -251,9 +253,10 @@ def build_ledger() -> None:
     body = f"""
 <h1>Ledger</h1>
 <p>Every slate we have ever committed, newest first. A <span class="badge sealed">SEALED</span>
-slate has had its Merkle root published but its predictions withheld until the
-games begin. A <span class="badge revealed">REVEALED</span> slate has been
-opened in full and can be recomputed by anyone.</p>
+slate has had its Merkle root published before kickoff; its predictions are
+published alongside it, and the root proves they cannot be altered afterwards.
+A <span class="badge revealed">REVEALED</span> slate has been graded after the
+games settled and can be recomputed by anyone.</p>
 <p>Nothing is ever edited or removed from this page. If a prediction were
 altered after sealing, the recomputed root would not match the published one —
 that is the entire point, and <a href="/verify">you can check it yourself</a>.</p>
@@ -277,7 +280,12 @@ def main() -> None:
     PUBLIC.mkdir(parents=True, exist_ok=True)
     print("building site...")
     build_markdown_pages()
-    build_ledger()
+    try:
+        build_ledger()
+    except Exception as e:                       # noqa: BLE001
+        # A ledger-render bug must not halt every deploy: keep the previous
+        # ledger.html on disk and say so loudly in the log.
+        print(f"  LEDGER BUILD FAILED — keeping previous ledger.html: {e!r}")
     print("done")
 
 

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — every book, one board</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#04060C">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta name="description" content="Every sportsbook's price on one board: best number flagged, vig stripped out. Games, player props, and the edges between books.">
+<link rel="canonical" href="https://sooth.bet/">
+<meta property="og:title" content="Sooth — every sportsbook's price on one board">
+<meta property="og:description" content="Live odds from 11+ books with the vig stripped out. Games and player props, timestamped and verifiable — free to look.">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sooth.bet/og.png">
+<style>
+  :root{
+    --bg:#04060C; --frame:#0A0D16; --card:#10141F; --card2:#151A28;
+    --line:#1E2436; --line2:#2A3145;
+    --ink:#EEF1F8; --muted:#8C96B2; --dim:#5D6786;
+    --ice:#38BDF8; --green:#4ADE80; --green-deep:#22C55E;
+    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;background:
+      radial-gradient(900px 500px at 70% -10%, rgba(56,189,248,.07), transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:var(--sans);line-height:1.45;
+    min-height:100vh;display:grid;place-items:start center;padding:26px 18px 40px}
+
+  .frame{width:100%;max-width:1240px;background:var(--frame);
+    border:1px solid var(--line);border-radius:26px;overflow:hidden;
+    box-shadow:0 40px 120px rgba(0,0,0,.6)}
+
+  /* header */
+  .hd{display:flex;align-items:center;gap:30px;padding:18px 28px;
+    border-bottom:1px solid var(--line)}
+  .brand{font-weight:800;font-size:18px;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+  .brand em{font-style:normal;color:var(--green)}
+  .hd nav{display:flex;gap:26px;flex:1;justify-content:center;flex-wrap:wrap}
+  .hd nav a{color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:600}
+  .hd nav a:hover{color:var(--ink)}
+  .hd .act{display:flex;gap:10px}
+  .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-weight:700;font-size:13.5px;padding:10px 20px;border-radius:11px;cursor:pointer;
+    border:1px solid var(--line2);color:var(--ink);background:var(--card)}
+  .btn:hover{border-color:var(--dim)}
+  .btn.go{background:var(--green);border-color:transparent;color:#08130A}
+  .btn.go:hover{filter:brightness(1.08)}
+
+  /* layout grid */
+  .grid{display:grid;gap:16px;padding:20px;
+    grid-template-columns:288px minmax(0,1fr) 268px;
+    grid-template-areas:"hero live sports" "edge top top"}
+  @media(max-width:1020px){.grid{grid-template-columns:1fr 1fr;
+    grid-template-areas:"hero sports" "live live" "top top" "edge edge"}}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;
+    grid-template-areas:"hero" "live" "sports" "top" "edge"}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+  .card h2{margin:0 0 14px;font-size:15px;font-weight:700;letter-spacing:-.01em;
+    display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .card h2 .n{font-family:var(--num);font-size:11px;color:var(--dim);font-weight:500}
+
+  /* hero */
+  .hero{grid-area:hero;display:flex;flex-direction:column;justify-content:center;
+    background:linear-gradient(180deg,var(--card),var(--card2));padding:26px 22px}
+  .hero h1{font-size:31px;line-height:1.12;letter-spacing:-.025em;font-weight:800;margin:0 0 10px}
+  .hero h1 em{font-style:normal;color:var(--green)}
+  .hero p{color:var(--muted);font-size:13.5px;margin:0 0 20px}
+  .hero .cta{align-self:flex-start;display:inline-flex;background:var(--green);
+    color:#08130A;font-weight:700;font-size:14px;padding:12px 24px;border-radius:11px;
+    text-decoration:none}
+  .hero .cta:hover{filter:brightness(1.08)}
+  .hero .more{margin-top:12px;font-size:12.5px;color:var(--dim);text-decoration:none}
+  .hero .more:hover{color:var(--muted)}
+
+  /* live/board now */
+  .live{grid-area:live}
+  .ln-tag{font-family:var(--num);font-size:10.5px;letter-spacing:.14em;color:var(--dim);
+    text-transform:uppercase;margin-bottom:10px}
+  .match{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+  .mrow{display:flex;align-items:center;gap:12px}
+  .mrow .team{font-size:15.5px;font-weight:700;flex:1}
+  .mrow .at{color:var(--dim);font-size:12px;font-family:var(--num)}
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{flex:1;min-width:104px;background:var(--card2);border:1px solid var(--line2);
+    border-radius:12px;padding:10px 12px;text-align:center}
+  .chip .v{font-family:var(--num);font-size:17px;font-weight:700}
+  .chip .k{font-size:10.5px;color:var(--dim);margin-top:2px}
+  .chip.best{border-color:rgba(74,222,128,.5);background:rgba(74,222,128,.07)}
+  .chip.best .v{color:var(--green)}
+  .live .foot{margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .live .foot a{font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;
+    border:1px solid var(--line2);padding:9px 16px;border-radius:10px}
+  .live .foot a:hover{border-color:var(--dim)}
+  .stamp{font-family:var(--num);font-size:10.5px;color:var(--dim)}
+
+  /* sports */
+  .sports{grid-area:sports}
+  .srow{display:flex;align-items:center;gap:12px;padding:10px 2px;
+    border-bottom:1px solid rgba(30,36,54,.6)}
+  .srow:last-child{border-bottom:none}
+  .srow .dot{width:30px;height:30px;border-radius:9px;background:var(--card2);
+    border:1px solid var(--line2);display:grid;place-items:center;
+    font-family:var(--num);font-size:11px;color:var(--ice);font-weight:700}
+  .srow .nm{flex:1;font-size:13.5px;font-weight:600}
+  .srow .ct{font-family:var(--num);font-size:11.5px;color:var(--dim)}
+
+  /* edge stat (replaces "bonus") */
+  .edge{grid-area:edge;background:linear-gradient(180deg,var(--card),var(--card2));
+    display:flex;flex-direction:column;justify-content:center;gap:14px;padding:26px 22px}
+  .edge .big{font-family:var(--num);font-size:46px;font-weight:700;color:var(--green);
+    line-height:1}
+  .edge .txt{min-width:0}
+  .edge .txt b{display:block;font-size:14.5px;margin-bottom:4px}
+  .edge .txt p{margin:0;font-size:12.5px;color:var(--muted)}
+  .edge a{font-size:12.5px;color:var(--ice);text-decoration:none;white-space:nowrap}
+
+  /* top edges table */
+  .top{grid-area:top}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .tab{font-family:var(--num);font-size:11.5px;padding:6px 14px;border-radius:999px;
+    border:1px solid var(--line2);background:transparent;color:var(--muted);cursor:pointer}
+  .tab.on{background:var(--ink);color:#0A0D16;border-color:transparent;font-weight:700}
+  .trow{display:flex;align-items:center;gap:14px;padding:12px 2px;
+    border-bottom:1px solid rgba(30,36,54,.6);flex-wrap:wrap}
+  .trow:last-child{border-bottom:none}
+  .trow .who{flex:1;min-width:190px}
+  .trow .who b{font-size:14px;display:block}
+  .trow .who span{font-size:11.5px;color:var(--dim);font-family:var(--num)}
+  .pill{font-family:var(--num);font-size:13.5px;font-weight:700;padding:8px 14px;
+    border-radius:10px;background:var(--card2);border:1px solid var(--line2);min-width:86px;
+    text-align:center}
+  .pill small{display:block;font-size:9.5px;color:var(--dim);font-weight:500;letter-spacing:.06em}
+  .pill.b{border-color:rgba(74,222,128,.5)}
+  .pill.b,.pill.b small b{color:var(--green)}
+  .gain{font-family:var(--num);font-size:12.5px;color:var(--green);font-weight:700;min-width:52px;
+    text-align:right}
+  .empty{color:var(--dim);font-size:13px;padding:16px 0}
+
+  .fine{padding:14px 28px 20px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    font-size:11px;color:var(--dim)}
+  .fine .mono{font-family:var(--num)}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="hd">
+    <a class="brand" href="/">sooth<em>.bet</em></a>
+    <nav>
+      <a href="/board">Board</a><a href="/props">Props</a><a href="/edges">Edges</a>
+      <a href="/tools">Tools</a><a href="/trust">Trust</a>
+    </nav>
+    <div class="act">
+      <a class="btn" href="/trust">Why trust us</a>
+      <a class="btn go" href="/board">Open the board</a>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <section class="card hero">
+      <h1>All the books.<br>One <em>clean</em> board.</h1>
+      <p>Every sportsbook's price, the vig stripped out, the best number flagged.
+      Compare. Verify. Take the better price.</p>
+      <a class="cta" href="/board">Open the board</a>
+      <a class="more" href="/methodology">How the numbers work →</a>
+    </section>
+
+    <section class="card live">
+      <h2>On the board now <span class="n" id="ln-count"></span></h2>
+      <div class="ln-tag" id="ln-league">—</div>
+      <div class="match" id="ln-match"></div>
+      <div class="chips" id="ln-chips"></div>
+      <div class="foot">
+        <a href="/board">View full board</a>
+        <span class="stamp" id="ln-stamp"></span>
+      </div>
+    </section>
+
+    <section class="card sports">
+      <h2>Sports covered</h2>
+      <div id="sports"></div>
+    </section>
+
+    <section class="card edge">
+      <span class="big">+2.71%</span>
+      <span class="txt">
+        <b>The measured price edge</b>
+        <p>Identical bets settled at the best available price instead of the consensus,
+        across 854 NFL games. No prediction involved — just the better number.</p>
+      </span>
+      <a href="/engine">See the proof →</a>
+    </section>
+
+    <section class="card top">
+      <h2>Widest edges right now <span class="tabs" id="tabs"></span></h2>
+      <div id="rows"></div>
+    </section>
+
+  </div>
+
+  <div class="fine">
+    <span>Analysis only — no wagers taken, no picks sold. 18+, where lawful.
+      Problem gambling: <b>1-800-522-4700</b>.</span>
+    <span class="mono" id="gen"></span>
+  </div>
+</div>
+
+<script>
+const am=v=>v>0?'+'+v:String(v);
+let DOC=null, tab='';
+
+fetch('data/board.json').then(r=>r.json()).then(d=>{
+  DOC=d;
+  document.getElementById('gen').textContent=
+    'snapshot '+new Date(d.generated_at).toLocaleString();
+
+  /* sports card */
+  const s=document.getElementById('sports');
+  s.innerHTML=d.boards.map(b=>
+    `<div class="srow"><span class="dot">${b.label.slice(0,2)}</span>
+     <span class="nm">${b.label}</span>
+     <span class="ct">${b.n_events} events · +${b.avg_gain_pts} avg</span></div>`).join('')
+   +`<div class="srow"><span class="dot">PR</span><span class="nm">Player props</span>
+     <span class="ct"><a href="/props" style="color:var(--ice);text-decoration:none">open →</a></span></div>`;
+
+  /* board-now card: next upcoming event */
+  const evs=d.boards.flatMap(b=>b.events.map(e=>({...e,label:b.label})))
+    .filter(e=>new Date(e.starts)>new Date())
+    .sort((a,b)=>new Date(a.starts)-new Date(b.starts));
+  const e=evs[0];
+  document.getElementById('ln-count').textContent=evs.length+' upcoming';
+  if(e){
+    const t=new Date(e.starts);
+    document.getElementById('ln-league').textContent=
+      e.label+' · '+t.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})
+      +' '+t.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+    document.getElementById('ln-match').innerHTML=
+      `<div class="mrow"><span class="team">${e.away}</span><span class="at">AWAY</span></div>
+       <div class="mrow"><span class="team">${e.home}</span><span class="at">HOME</span></div>`;
+    const best=Math.max(...e.sides.map(x=>x.gain_pts));
+    document.getElementById('ln-chips').innerHTML=e.sides.map(x=>
+      `<div class="chip${x.gain_pts===best?' best':''}">
+        <div class="v">${am(x.best_price)}</div>
+        <div class="k">${x.name.split(' ').slice(-1)[0]} · ${x.best_book} · fair ${am(x.fair_price)}</div>
+      </div>`).join('');
+  }else{
+    document.getElementById('ln-match').innerHTML='<div class="empty">No games in the current window — the board refreshes automatically.</div>';
+  }
+
+  /* tabs + top edges */
+  const tabs=document.getElementById('tabs');
+  tabs.innerHTML=`<button class="tab on" data-s="">All</button>`+
+    d.boards.map(b=>`<button class="tab" data-s="${b.label}">${b.label}</button>`).join('');
+  tabs.addEventListener('click',ev=>{
+    if(!ev.target.dataset) return;
+    if(ev.target.classList.contains('tab')){
+      tab=ev.target.dataset.s;
+      tabs.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b===ev.target));
+      rows();
+    }});
+  rows();
+});
+
+function rows(){
+  const now=new Date();
+  const list=DOC.boards.filter(b=>!tab||b.label===tab)
+    .flatMap(b=>b.events.filter(e=>new Date(e.starts)>now)
+      .flatMap(e=>e.sides.map(s=>({e,s,label:b.label}))))
+    .sort((a,b)=>b.s.gain_pts-a.s.gain_pts).slice(0,6);
+  document.getElementById('rows').innerHTML=list.length?list.map(({e,s,label})=>
+    `<div class="trow">
+      <span class="who"><b>${s.name}</b>
+        <span>${e.away} @ ${e.home} · ${label}</span></span>
+      <span class="pill b"><b>${am(s.best_price)}</b><small>BEST · ${s.best_book}</small></span>
+      <span class="pill">${am(s.fair_price)}<small>FAIR</small></span>
+      <span class="pill">${am(s.worst_price)}<small>WORST</small></span>
+      <span class="gain">+${s.gain_pts.toFixed(1)}</span>
+    </div>`).join('')
+  :'<div class="empty">No upcoming sides in this window.</div>';
+}
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
+</body>
+</html>

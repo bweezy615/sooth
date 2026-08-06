@@ -89,8 +89,10 @@ reads:
 Note that `committed_at` is over a month before `earliest_kickoff`. Note also
 that this file tells you nothing about who we picked. That is the point.
 
-**`/data/<slate-id>.reveal.json`** goes up after the games settle. It contains
-the same root, every prediction in full, and the individual leaf fingerprints.
+**`/data/<slate-id>.reveal.json`** is published alongside the commitment. It
+contains the same root, every prediction in full, and the individual leaf
+fingerprints — so the check below works before kickoff, not only after.
+Grading is added once the games settle.
 
 Both files are also in the public code repository under `data/ledger/`.
 
