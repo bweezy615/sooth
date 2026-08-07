@@ -85,6 +85,19 @@ a{color:inherit}
   font-family:var(--num);font-size:12.5px;width:170px;min-height:36px}
 .bar input::placeholder{color:var(--dim)}
 
+.hint{padding:9px 18px 0;font-size:12px;color:var(--dim)}
+.hint b{color:var(--muted)}
+.sealed{display:inline-block;font-family:var(--num);font-size:9px;letter-spacing:.1em;
+  border:1px solid rgba(232,180,90,.5);color:#E8B45A;border-radius:5px;
+  padding:1px 7px;vertical-align:2px;margin-left:8px}
+.g-picks{grid-template-columns:1.5fr .9fr .7fr .8fr .8fr}
+@media(max-width:760px){
+  .g-picks{grid-template-columns:1.4fr .8fr .9fr}
+  .g-picks .col-conf,.g-picks .col-when{display:none}
+}
+.pickbar{display:block;height:3px;border-radius:99px;background:var(--card-2);
+  overflow:hidden;margin-top:4px;max-width:64px}
+.pickbar i{display:block;height:100%;background:#E8B45A}
 .note{margin:12px 16px 0;padding:10px 14px;border:1px solid rgba(232,180,90,.35);
   border-radius:11px;background:rgba(232,180,90,.06);font-size:12px;color:var(--muted);
   display:none}
@@ -195,10 +208,12 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
       <div class="tabs" role="tablist" aria-label="View">
         <button class="tab" data-view="games" aria-selected="true">Games</button>
         <button class="tab" data-view="props" aria-selected="false">Props<span class="ct" id="ct-props"></span></button>
+        <button class="tab" data-view="picks" aria-selected="false">Picks<span class="ct" id="ct-picks"></span></button>
         <button class="tab" data-view="edges" aria-selected="false">Edges<span class="ct" id="ct-edges"></span></button>
       </div>
       <input type="search" id="q" placeholder="team or player…" aria-label="Search">
     </div>
+    <div class="hint" id="hint"></div>
     <div class="note" id="closingNote"><b>CLOSING SNAPSHOT</b> — these games have started or
     finished. Fresh lines land automatically when books post the next slate.</div>
     <div class="content" id="content"><div class="empty">Loading the board…</div></div>
@@ -250,7 +265,7 @@ var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
 var sg=function(p){return p==null?'·':(p>0?'+':'')+p;};
 var implied=function(a){return a<0?(-a)/((-a)+100):100/(a+100);};
 
-var DATA={board:null,props:null,middles:null,moves:null};
+var DATA={board:null,props:null,middles:null,moves:null,slate:null};
 var state={view:'games',sport:'',q:''};
 
 Promise.allSettled([
@@ -258,11 +273,14 @@ Promise.allSettled([
   fetch('/data/props.json').then(function(r){return r.json();}),
   fetch('/data/middles.json').then(function(r){return r.json();}),
   fetch('/data/moves.json').then(function(r){return r.json();}),
+  fetch('/data/slates.json').then(function(r){return r.json();})
+    .then(function(ix){return fetch('/data/'+ix.latest+'.json').then(function(r){return r.json();});}),
 ]).then(function(rs){
   DATA.board=rs[0].status==='fulfilled'?rs[0].value:null;
   DATA.props=rs[1].status==='fulfilled'?rs[1].value:null;
   DATA.middles=rs[2].status==='fulfilled'?rs[2].value:null;
   DATA.moves=rs[3].status==='fulfilled'?rs[3].value:null;
+  DATA.slate=rs[4].status==='fulfilled'?rs[4].value:null;
   init();
 });
 
@@ -310,18 +328,59 @@ function init(){
     'read '+latest.slice(0,16).replace('T',' ')+' UTC · prices move constantly';
   var np=0;(DATA.props&&DATA.props.boards||[]).forEach(function(b){np+=b.n_props||0;});
   if(np)document.getElementById('ct-props').textContent=np;
+  if(DATA.slate)document.getElementById('ct-picks').textContent=(DATA.slate.games||[]).length;
   render();
 }
 
 function match(txt){return !state.q||txt.toLowerCase().indexOf(state.q)>=0;}
 function upcoming(iso){return new Date(iso).getTime()>Date.now();}
 
+var HINTS={
+  games:'<b>How to read this:</b> Best is the most generous price on that side right now, Fair is the consensus with the bookmaker margin removed, Gain is how much better Best pays than the worst book.',
+  props:'<b>How to read this:</b> each player prop compared at the same line across books. L10 = how often the player actually cleared this line in his last ten games.',
+  picks:'<b>Straight talk:</b> these are our model\u2019s sides, sealed before kickoff and graded in public. Our model has NOT beaten the closing market historically \u2014 49.50% ATS vs 52.38% breakeven. Shop the price, not the pick.',
+  edges:'<b>How to read this:</b> places where books disagree right now \u2014 prices above fair, both-sides arbs, middle windows, and books off the consensus.'};
 function render(){
   var el=document.getElementById('content');
   document.getElementById('closingNote').style.display='none';
+  document.getElementById('hint').innerHTML=HINTS[state.view]||'';
   if(state.view==='games')el.innerHTML=renderGames();
   else if(state.view==='props')el.innerHTML=renderProps();
+  else if(state.view==='picks')el.innerHTML=renderPicks();
   else el.innerHTML=renderEdges();
+}
+
+/* ---------- picks ---------- */
+function renderPicks(){
+  if(!DATA.slate||!(DATA.slate.games||[]).length)
+    return '<div class="empty"><b>No sealed slate right now.</b><p>Picks are committed before each NFL week and appear here the moment they are sealed.</p></div>';
+  var d=DATA.slate;
+  var games=d.games.filter(function(g){
+    return match(g.home+' '+g.away+' '+g.independent.pick);});
+  if(!games.length)return '<div class="empty"><b>Nothing matches that filter.</b></div>';
+  var head='<div class="esec">'+esc(d.slate_id)+' \u00b7 '+d.n_predictions+
+    ' predictions sealed '+esc(String(d.committed_at).slice(0,10))+
+    '<span class="sealed">SEALED \u00b7 root '+esc(String(d.merkle_root).slice(0,8))+'\u2026</span>'+
+    '<a href="/verify" style="color:#7DD3FC;margin-left:10px;text-decoration:none">check it \u2192</a></div>';
+  return '<div class="scroller">'+head+
+    '<div class="thead g-picks"><span>Matchup</span><span>Our side</span>'+
+    '<span class="col-conf">Confidence</span><span>Fair odds</span><span class="col-when">Kickoff</span></div>'+
+    games.map(function(g){
+      var ind=g.independent, dis=g.models_disagree;
+      var t=new Date(g.kickoff);
+      var when=t.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+
+               t.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+      return '<div class="trow g-picks">'+
+        '<span><span class="t-side">'+esc(g.away)+' at '+esc(g.home)+'</span>'+
+          '<span class="t-sub">spread '+sg(g.spread_line)+(dis?' \u00b7 models disagree':'')+'</span></span>'+
+        '<span class="t-num">'+esc(ind.pick)+'</span>'+
+        '<span class="col-conf t-dim">'+(ind.prob*100).toFixed(1)+'%'+
+          '<span class="pickbar"><i style="width:'+Math.min(100,ind.prob*100).toFixed(0)+'%"></i></span></span>'+
+        '<span class="t-num">'+sg(ind.fair_odds)+'</span>'+
+        '<span class="t-dim col-when">'+when+'</span>'+
+      '</div>';}).join('')+
+    '<div class="esec" style="padding-top:14px">Record: graded in public after games settle \u00b7 <a href="/ledger" style="color:#7DD3FC;text-decoration:none">the ledger \u2192</a></div>'+
+    '</div>';
 }
 
 /* ---------- games ---------- */

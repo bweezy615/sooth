@@ -251,6 +251,17 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     if reveals:
         (site_dir / f"{slate_id}.reveal.json").write_text(
             reveals[-1].read_text())
+
+    # The board's Picks tab discovers slates through this index.
+    idx_path = site_dir / "slates.json"
+    try:
+        idx = json.loads(idx_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        idx = {"slates": []}
+    if slate_id not in idx["slates"]:
+        idx["slates"].append(slate_id)
+    idx["latest"] = slate_id
+    idx_path.write_text(json.dumps(idx))
     return payload
 
 
