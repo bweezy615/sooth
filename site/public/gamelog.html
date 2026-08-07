@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <title>Sooth — NFL Game Log</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#080B16">
+<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Sooth">
 <meta property="og:title" content="Sooth — NFL Game Log">
 <meta property="og:description" content="Every NFL game since 1999 with its closing lines.">
@@ -13,16 +13,16 @@
 <meta property="og:url" content="https://sooth.bet/gamelog">
 <style>
   :root{
-    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
-    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
-    --pos:#4ADE80; --push:#8C96B2;
-    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
+    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
+    --pos:#16A34A; --push:#5A6472;
+    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
     --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   }
   html{background:var(--bg)}
   body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(56,189,248,.13), transparent 65%),
+      radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
     color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
   .wrap{max-width:1020px; margin:0 auto}
@@ -45,27 +45,27 @@
     border-radius:16px; padding:0; overflow:hidden}
   .scroll{overflow-x:auto; max-height:72vh; overflow-y:auto}
   table{border-collapse:collapse; width:100%; font-size:12.5px; min-width:760px}
-  thead th{position:sticky; top:0; background:#131A30; z-index:1;
+  thead th{position:sticky; top:0; background:#F3F4F0; z-index:1;
     font-family:var(--num); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
     color:var(--dim); font-weight:600; text-align:right; padding:10px 12px;
     border-bottom:1px solid var(--line)}
   th.l,td.l{text-align:left}
-  td{padding:7px 12px; border-bottom:1px solid rgba(30,37,64,.55); text-align:right;
+  td{padding:7px 12px; border-bottom:1px solid rgba(229,231,225,.55); text-align:right;
     font-variant-numeric:tabular-nums; font-family:var(--num); color:var(--muted); white-space:nowrap}
-  tr:hover td{background:rgba(56,189,248,.06)}
+  tr:hover td{background:rgba(2,132,199,.06)}
   td .w{color:var(--ink); font-weight:700}
   td.mu{font-family:var(--sans); font-size:13px}
   .chip{display:inline-block; font-size:9.5px; letter-spacing:.08em; border:1px solid var(--line);
-    border-radius:5px; padding:1px 5px; color:#7DD3FC; margin-left:7px; vertical-align:1px}
+    border-radius:5px; padding:1px 5px; color:#0369A1; margin-left:7px; vertical-align:1px}
   .cov{color:var(--pos); font-weight:600}
   .push{color:var(--push)}
-  .ou-o{color:#E8B45A} .ou-u{color:#5FA8EC}
+  .ou-o{color:#B45309} .ou-u{color:#0369A1}
   footer{margin-top:16px; font-size:11.5px; color:var(--dim); display:flex;
     justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
   :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
 
   .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
     -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}

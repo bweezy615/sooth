@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Engine Room</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#080B16">
+<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Sooth">
 <meta property="og:title" content="Sooth — Engine Room">
 <meta property="og:description" content="The data and measurement behind the Sooth board.">
@@ -17,16 +17,16 @@
 <meta property="og:url" content="https://sooth.bet/engine">
 <style>
   :root{
-    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
-    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
-    --teal:#10A372; --amber:#BC862B; --pos:#4ADE80;
-    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
+    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
+    --teal:#10A372; --amber:#BC862B; --pos:#16A34A;
+    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
     --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   }
   html{background:var(--bg)}
   body{background:
-      radial-gradient(900px 400px at 70% -90px, rgba(56,189,248,.13), transparent 65%),
+      radial-gradient(900px 400px at 70% -90px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
     color:var(--ink); font-family:var(--sans); line-height:1.55; margin:0; padding:0 20px 64px}
   .wrap{max-width:980px; margin:0 auto}
@@ -38,7 +38,7 @@
   h1{font-size:clamp(26px,4.5vw,38px); font-weight:770; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance}
   .sub{color:var(--muted); max-width:66ch; margin:0 0 8px; font-size:15px}
   .live{display:inline-flex; align-items:center; gap:7px; font-family:var(--num); font-size:11px;
-    letter-spacing:.1em; color:var(--pos); border:1px solid rgba(74,222,128,.25);
+    letter-spacing:.1em; color:var(--pos); border:1px solid rgba(22,163,74,.25);
     border-radius:999px; padding:3px 11px; margin-top:10px}
   .live i{width:7px;height:7px;border-radius:50%;background:var(--pos)}
   h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
@@ -58,7 +58,7 @@
   .stage h3{margin:0 0 4px; font-size:13px; font-weight:650}
   .stage p{margin:0; font-size:11.5px; color:var(--muted); line-height:1.5}
   .stage code{display:inline-block; margin-top:8px; font-family:var(--num); font-size:10px;
-    color:#7DD3FC; background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:1px 6px}
+    color:#0369A1; background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:1px 6px}
   .stage .num{font-family:var(--num); font-size:10px; color:var(--dim); letter-spacing:.14em}
 
   .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:16px}
@@ -67,13 +67,13 @@
     font-variant-numeric:tabular-nums}
   .tile span{font-size:11.5px; color:var(--muted)}
   .tile .c-ours b{color:var(--iris)}
-  .tile.ours b{color:#4CC3F7}.tile.mkt b{color:#34C08B}.tile.brk b{color:var(--muted)}
+  .tile.ours b{color:#0284C7}.tile.mkt b{color:#15803D}.tile.brk b{color:var(--muted)}
 
   #chartbox{position:relative}
   #btchart{width:100%; height:auto; display:block}
-  .tip{position:absolute; pointer-events:none; background:#0B1022; border:1px solid var(--line);
+  .tip{position:absolute; pointer-events:none; background:#F6F7F3; border:1px solid var(--line);
     border-radius:10px; padding:9px 12px; font-size:12px; color:var(--muted); display:none;
-    box-shadow:0 8px 30px rgba(0,0,0,.55); white-space:nowrap; z-index:2; line-height:1.7}
+    box-shadow:0 8px 30px rgba(16,20,24,.10); white-space:nowrap; z-index:2; line-height:1.7}
   .tip b{color:var(--ink); font-family:var(--num); font-weight:600}
   .tip i{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:7px}
   .axis{font-family:var(--num); font-size:10px; fill:var(--dim)}
@@ -92,14 +92,14 @@
   .gain span{font-size:11px; color:var(--muted)}
   .gain em{font-style:normal; display:block; font-family:var(--num); font-size:10px; color:var(--dim); margin-top:2px}
   .stamp{font-family:var(--num); font-size:11px; color:var(--dim); margin-top:14px}
-  .err{color:#F87171; font-size:12.5px; font-family:var(--num)}
+  .err{color:#DC2626; font-size:12.5px; font-family:var(--num)}
   footer{margin-top:52px; padding-top:16px; border-top:1px solid var(--line);
     font-size:12px; color:var(--dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
-  footer a{color:#7DD3FC; text-decoration:none}
+  footer a{color:#0369A1; text-decoration:none}
   :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
 
   .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
     -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -172,7 +172,7 @@
   <p class="panel-sub">Because the archive holds every book's price on every game, the engine
   knows the spread <i>between</i> books. Taking the best number instead of the worst is pure,
   measurable value — no prediction required. These figures are read live from
-  <code style="font-family:var(--num);font-size:11px;color:#7DD3FC">board.json</code>, the same
+  <code style="font-family:var(--num);font-size:11px;color:#0369A1">board.json</code>, the same
   file the public board renders.</p>
   <div class="gains" id="gains"><span class="err" style="display:none" id="gains-err"></span></div>
   <p class="stamp" id="board-stamp"></p>
@@ -185,7 +185,7 @@
   <div class="legend">
     <span><i style="background:#0C9BDB"></i>Settled at best price</span>
     <span><i style="background:var(--dim)"></i>Settled at median price</span>
-    <span><i style="background:rgba(74,222,128,.35)"></i>The price edge (gap)</span>
+    <span><i style="background:rgba(22,163,74,.35)"></i>The price edge (gap)</span>
   </div>
   <div id="pebox" style="position:relative">
     <svg id="pechart" viewBox="0 0 900 300" role="img"
@@ -312,7 +312,7 @@ function drawEdge(pe){
     const t=el('text',{x:xs(i),y:H-8,'text-anchor':'start','class':'axis'});t.textContent="'"+s.slice(2);});
   const path=k=>pts.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[k]).toFixed(1)).join(' ');
   el('path',{d:path('best')+' '+pts.map((p,i)=>'L'+xs(pts.length-1-i).toFixed(1)+' '+ys(pts[pts.length-1-i].median).toFixed(1)).join(' ')+' Z',
-    fill:'rgba(74,222,128,.13)',stroke:'none'});
+    fill:'rgba(22,163,74,.13)',stroke:'none'});
   el('path',{d:path('median'),fill:'none',stroke:css('--dim'),'stroke-width':2,'stroke-linejoin':'round'});
   el('path',{d:path('best'),fill:'none',stroke:'#0C9BDB','stroke-width':2,'stroke-linejoin':'round'});
   const last=pts[pts.length-1];
@@ -335,7 +335,7 @@ function drawEdge(pe){
     tip.innerHTML=`<b>${p.t}</b> · ${usd(p.staked)} staked<br>`+
       `<i style="background:${'#0C9BDB'}"></i>best price <b>${usd(p.best)}</b><br>`+
       `<i style="background:${css('--dim')}"></i>median price <b>${usd(p.median)}</b><br>`+
-      `<i style="background:rgba(74,222,128,.6)"></i>gap <b>${usd(p.best-p.median)}</b>`;
+      `<i style="background:rgba(22,163,74,.6)"></i>gap <b>${usd(p.best-p.median)}</b>`;
     let tx=x/W*box.width+14; if(tx+tip.offsetWidth>box.width) tx=x/W*box.width-tip.offsetWidth-14;
     tip.style.left=tx+'px'; tip.style.top=(ev.clientY-box.top-20)+'px';
   });

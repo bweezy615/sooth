@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Line Moves</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#080B16">
+<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Sooth">
 <meta property="og:title" content="Sooth — Line Moves">
 <meta property="og:description" content="Books diverging from consensus right now, and prices that moved between observations.">
@@ -18,16 +18,16 @@
 <meta name="description" content="Books diverging from the consensus right now, and prices that moved between our observations. Detected from Sooth's own capture history.">
 <style>
   :root{
-    --bg:#080B16; --card:#111629; --card2:#0B1022; --line:#1E2540; --ink:#EEF1F8;
-    --muted:#8C96B2; --dim:#5D6786; --iris:#38BDF8; --violet:#0EA5E9;
-    --pos:#4ADE80; --neg:#F87171;
-    --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
+    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
+    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
+    --pos:#16A34A; --neg:#DC2626;
+    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
     --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
     --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   }
   html{background:var(--bg)}
   body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(56,189,248,.13), transparent 65%),
+      radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
     color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
   .wrap{max-width:900px; margin:0 auto}
@@ -48,7 +48,7 @@
   .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
     border-radius:16px; overflow:hidden}
   .row{display:flex; align-items:center; gap:16px; padding:13px 18px;
-    border-bottom:1px solid rgba(30,37,64,.55); flex-wrap:wrap}
+    border-bottom:1px solid rgba(229,231,225,.55); flex-wrap:wrap}
   .row:last-child{border-bottom:none}
   .row .move{font-family:var(--num); font-size:17px; font-weight:700; min-width:74px}
   .row .move.up{color:var(--pos)} .row .move.dn{color:var(--neg)}
@@ -63,11 +63,11 @@
   footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
     font-size:11.5px; color:var(--dim); display:flex;
     justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
-  footer a{color:#7DD3FC; text-decoration:none}
+  footer a{color:#0369A1; text-decoration:none}
   :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
 
   .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(8,11,22,.88);
+    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
     -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
