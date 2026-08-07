@@ -267,6 +267,8 @@ var implied=function(a){return a<0?(-a)/((-a)+100):100/(a+100);};
 
 var DATA={board:null,props:null,middles:null,moves:null,slate:null};
 var state={view:'games',sport:'',q:''};
+var h=(location.hash||'').replace('#','');
+if(['games','props','picks','edges'].indexOf(h)>=0)state.view=h;
 
 Promise.allSettled([
   fetch('/data/board.json').then(function(r){return r.json();}),
@@ -313,11 +315,14 @@ function init(){
   document.querySelectorAll('.tab[data-view]').forEach(function(b){
     b.addEventListener('click',function(){
       state.view=b.dataset.view;
+      history.replaceState(null,'','#'+state.view);
       document.querySelectorAll('.tab[data-view]').forEach(function(t){
         t.setAttribute('aria-selected',String(t===b));});
       render();
     });
   });
+  document.querySelectorAll('.tab[data-view]').forEach(function(t){
+    t.setAttribute('aria-selected',String(t.dataset.view===state.view));});
   document.getElementById('q').addEventListener('input',function(e){
     state.q=e.target.value.trim().toLowerCase();render();});
   var stamps=[];
