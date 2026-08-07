@@ -68,6 +68,30 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){.ticker .tk{animation:none}}
 .ticker b{color:var(--ink)} .ticker .up{color:var(--pos)} .ticker .bk{color:#7DD3FC}
 
+/* ---------- offer card (loud block) ---------- */
+.offer{background:linear-gradient(160deg,#4ADE80,#2EBE66);border-radius:var(--r);
+  padding:22px 20px;color:#08130A;position:relative}
+.offer .k{display:flex;align-items:center;gap:8px;font-family:var(--num);
+  font-size:10px;letter-spacing:.2em;font-weight:700;margin-bottom:10px}
+.offer .k::before{content:'◆';font-size:11px}
+.offer h2{margin:0 0 14px;font-size:26px;line-height:.98;letter-spacing:-.02em;
+  font-weight:800;text-transform:uppercase}
+.offer ul{margin:0 0 16px;padding:0;list-style:none}
+.offer li{font-size:13.5px;font-weight:600;padding:5px 0 5px 26px;position:relative}
+.offer li::before{content:'✓';position:absolute;left:0;top:4px;width:17px;height:17px;
+  border-radius:50%;background:#08130A;color:#4ADE80;font-size:10px;font-weight:800;
+  display:grid;place-items:center}
+.offer .price{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap}
+.offer .pill{background:#08130A;color:#7DF2A8;font-family:var(--num);font-size:11.5px;
+  font-weight:700;letter-spacing:.08em;padding:10px 16px;border-radius:999px;
+  text-decoration:none}
+.offer .pill:hover{filter:brightness(1.2)}
+.offer .cancel{font-size:12px;color:#0B3A1E;font-weight:600}
+.offer .go{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;
+  background:#08130A;color:#7DF2A8;display:grid;place-items:center;font-size:17px;
+  text-decoration:none}
+.offer .go:hover{filter:brightness(1.25)}
+
 /* ---------- pro v2 ---------- */
 .pro2{position:relative;border-radius:var(--r);padding:1.5px;
   background:linear-gradient(140deg,rgba(74,222,128,.7),rgba(56,189,248,.35) 40%,rgba(30,37,64,.8) 70%,rgba(74,222,128,.5))}
@@ -270,7 +294,21 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
   </div>
 
   <div class="side">
-    <div class="pro2" id="pro"><div class="in">
+    <div class="offer" id="pro">
+      <a class="go" href="mailto:packhalla@gmail.com?subject=Sooth%20Pro%20waitlist&body=Put%20me%20on%20the%20Sooth%20Pro%20founding%20list.">→</a>
+      <span class="k">SOOTH PRO</span>
+      <h2>Unlock every<br>edge.</h2>
+      <ul>
+        <li>Every pick — and the reasoning behind each call</li>
+        <li>Alerts the moment any book overpays</li>
+        <li>Best line across 11 sportsbooks, live</li>
+      </ul>
+      <span class="price">
+        <a class="pill" href="mailto:packhalla@gmail.com?subject=Sooth%20Pro%20waitlist&body=Put%20me%20on%20the%20Sooth%20Pro%20founding%20list.">FOUNDING · $9.99/MO AT LAUNCH</a>
+        <span class="cancel">Cancel anytime</span>
+      </span>
+    </div>
+    <div class="pro2"><div class="in">
       <div class="livehead"><i></i>Sooth Pro · alert feed preview</div>
       <h2>These fired today. Pro got pinged.</h2>
       <p class="sub2">The board shows the best price when you look. Pro watches
