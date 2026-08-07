@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sooth">
-<meta name="description" content="Sooth reads 11 major US sportsbooks and shows the best available price against the fair line, margin removed. NFL, MLB, NHL, NBA, UFC.">
+<meta name="description" content="You already know the bet. Sooth reads 11 major US sportsbooks and shows the fair price with the vig stripped and the best number flagged — games, player props, and the edges between books.">
 <link rel="canonical" href="https://sooth.bet/">
 <meta property="og:title" content="Sooth — 11 sportsbooks' prices on one board">
 <meta property="og:description" content="Live odds from 11+ books with the vig stripped out. Games and player props, timestamped and verifiable — free to look.">
@@ -26,9 +26,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080B16; --bg-2:#0B0F1E;
-  --card:#111629; --card-2:#151B31; --line:#1E2540; --line-2:#2A3355;
-  --ink:#EEF1F8; --muted:#8C96B2; --dim:#5D6786;
+  --bg:#080B16; --bg-2:#0B0F1E; --card:#111629; --card-2:#151B31;
+  --line:#1E2540; --line-2:#2A3355; --ink:#EEF1F8; --muted:#8C96B2; --dim:#5D6786;
   --iris:#38BDF8; --violet:#0EA5E9; --pos:#4ADE80; --neg:#F87171;
   --grad:linear-gradient(96deg,#38BDF8 0%,#0EA5E9 100%);
   --num:'JetBrains Mono',ui-monospace,Menlo,monospace;
@@ -39,469 +38,438 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
   font:16px/1.5 Archivo,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:6px}
-.skip{position:absolute;left:-9999px}
-.skip:focus{left:12px;top:12px;z-index:99;background:var(--card);padding:10px 16px;
-  border:1px solid var(--line-2);border-radius:8px}
-.wrap{max-width:1400px;margin:0 auto;padding:0 32px}
-
+:focus-visible{outline:2px solid var(--iris);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 22px}
 .aura{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-  radial-gradient(760px 520px at 12% 6%, rgba(56,189,248,.16), transparent 62%),
-  radial-gradient(680px 520px at 88% 24%, rgba(14,165,233,.13), transparent 60%)}
+  radial-gradient(760px 520px at 12% 6%, rgba(56,189,248,.15), transparent 62%),
+  radial-gradient(680px 520px at 88% 24%, rgba(14,165,233,.12), transparent 60%)}
 .stage{position:relative;z-index:1}
 
-/* ---------- brand ---------- */
-.logo{display:inline-flex;align-items:center;gap:11px;text-decoration:none}
-.glyph{width:34px;height:34px;flex:none}
-.wordmark{font-size:27px;font-weight:600;letter-spacing:-.03em;line-height:1}
+/* ---------- top bar ---------- */
+.top{display:flex;align-items:center;gap:20px;padding:18px 0 6px;flex-wrap:wrap}
+.logo{display:inline-flex;align-items:baseline;gap:10px;text-decoration:none}
+.wordmark{font-size:24px;font-weight:800;letter-spacing:-.02em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top nav{margin-left:auto;display:flex;gap:20px;align-items:center}
+.top nav a{font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+.top nav a.pro{color:#08130A;background:var(--pos);padding:9px 18px;border-radius:10px}
+.top nav a.pro:hover{filter:brightness(1.08)}
 
-/* ---------- hero split ---------- */
-.split{display:grid;grid-template-columns:minmax(340px,430px) minmax(0,1fr);
-  gap:56px;padding:44px 0 70px;align-items:start}
-h1{font-size:clamp(38px,3.9vw,56px);line-height:1.02;letter-spacing:-.038em;
-  font-weight:800;margin:34px 0 20px}
-h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;
-  color:transparent;display:block}
-.lede{color:var(--muted);font-size:16.5px;max-width:44ch;margin:0 0 28px}
-.cta{display:inline-flex;align-items:center;gap:10px;background:var(--grad);
-  color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:15px 28px;
-  border-radius:11px;min-height:50px;border:0;cursor:pointer;font-family:inherit}
-.cta:hover{filter:brightness(1.12)}
-.cta svg{width:17px;height:17px}
-.fine{font-size:12.5px;color:var(--dim);margin-top:14px}
+/* ---------- pitch ---------- */
+.pitch{padding:22px 0 18px;max-width:760px}
+.pitch h1{font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.035em;
+  font-weight:800;margin:0 0 10px}
+.pitch h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pitch p{color:var(--muted);font-size:15.5px;margin:0;max-width:64ch}
+.pitch p b{color:var(--ink)}
 
-.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
-.pillar .ic{width:52px;height:52px;border-radius:13px;background:var(--card);
-  border:1px solid var(--line);display:grid;place-items:center;margin-bottom:11px}
-.pillar .ic svg{width:22px;height:22px;stroke:var(--violet);fill:none;
-  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.pillar p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.35;font-weight:500}
+/* ---------- app layout ---------- */
+.appgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;
+  padding:18px 0 8px;align-items:start}
+@media(max-width:960px){.appgrid{grid-template-columns:1fr}}
 
-/* ---------- app shell ---------- */
 .app{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;
   overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.appbar{display:flex;align-items:center;gap:26px;padding:16px 22px;
+.bar{display:flex;align-items:center;gap:10px;padding:14px 16px;
   border-bottom:1px solid var(--line);flex-wrap:wrap}
-.appnav{display:flex;gap:24px;flex:1;flex-wrap:wrap}
-.appnav a{font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:none;
-  padding-bottom:5px;border-bottom:2px solid transparent}
-.appnav a.on{color:var(--ink);border-bottom-color:var(--violet)}
-.appnav a:hover{color:var(--ink)}
-.upg{background:var(--grad);color:#fff;text-decoration:none;font-size:13px;
-  font-weight:700;padding:10px 20px;border-radius:9px;min-height:44px;
-  display:inline-flex;align-items:center}
-
-.grid{display:grid;grid-template-columns:1.35fr 1fr .82fr;gap:16px;padding:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:17px 19px}
-.card h3{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--dim);font-weight:700;margin:0 0 14px;display:flex;
-  justify-content:space-between;align-items:center;gap:10px}
-.chip{font-size:10px;font-weight:700;letter-spacing:.04em;padding:4px 10px;
-  border-radius:999px;background:rgba(74,222,128,.13);color:var(--pos);
-  text-transform:none}
-.chip.n{background:rgba(14,165,233,.14);color:#7DD3FC}
-
-/* top edge card */
-.te-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-.te-side{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
-.te-match{font-size:12.5px;color:var(--muted);margin-top:4px}
-.te-price{font-family:var(--num);font-size:27px;font-weight:700;text-align:right;
-  line-height:1}
-.te-book{font-size:11px;color:var(--pos);text-align:right;margin-top:4px;font-weight:600}
-.te-why{list-style:none;margin:15px 0 0;padding:0}
-.te-why li{font-size:12.5px;color:var(--muted);padding:5px 0 5px 22px;position:relative}
-.te-why li svg{position:absolute;left:0;top:8px;width:13px;height:13px;
-  stroke:var(--pos);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.meter{margin-top:15px}
-.meter .lab{display:flex;justify-content:space-between;font-size:11.5px;
-  color:var(--dim);margin-bottom:7px}
-.meter .lab b{color:var(--ink);font-family:var(--num)}
-.track{height:7px;border-radius:99px;background:var(--card-2);overflow:hidden}
-.fill{height:100%;border-radius:99px;background:var(--grad);width:100%;
-  transform:scaleX(0);transform-origin:left center;
-  transition:transform .7s cubic-bezier(.2,.8,.25,1)}
-
-/* slate card */
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.tab{font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;
+.tabs{display:flex;gap:7px;flex-wrap:wrap}
+.tab{font-size:12.5px;font-weight:700;padding:8px 16px;border-radius:999px;
   border:1px solid var(--line-2);background:transparent;color:var(--muted);
-  cursor:pointer;font-family:inherit;min-height:34px}
+  cursor:pointer;font-family:inherit;min-height:36px}
 .tab[aria-selected="true"]{background:var(--grad);border-color:transparent;color:#fff}
-.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.stat .v{font-family:var(--num);font-size:23px;font-weight:700;letter-spacing:-.03em}
-.stat .k{font-size:11px;color:var(--dim);margin-top:3px}
-.spark{width:100%;height:74px;display:block}
+.tab .ct{font-family:var(--num);font-weight:500;font-size:10.5px;opacity:.75;margin-left:5px}
+.bar .sep{width:1px;align-self:stretch;background:var(--line);margin:0 4px}
+.bar input[type=search]{margin-left:auto;background:var(--card);color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;padding:8px 12px;
+  font-family:var(--num);font-size:12.5px;width:170px;min-height:36px}
+.bar input::placeholder{color:var(--dim)}
 
-/* edge gauge */
-.gauge{display:grid;place-items:center;padding:4px 0 2px}
-.gauge svg{width:132px;height:132px}
-.gauge .val{font-family:var(--num);font-size:25px;font-weight:700;fill:var(--ink)}
-.gauge .cap{font-size:9.5px;fill:var(--dim);letter-spacing:.1em}
-.note{font-size:12px;color:var(--muted);margin:12px 0 0;line-height:1.45}
+.note{margin:12px 16px 0;padding:10px 14px;border:1px solid rgba(232,180,90,.35);
+  border-radius:11px;background:rgba(232,180,90,.06);font-size:12px;color:var(--muted);
+  display:none}
+.note b{color:#E8B45A}
 
-/* board table */
-.wide{grid-column:1/3}
-.scroller{max-height:430px;overflow-y:auto;overscroll-behavior:contain}
+.content{min-height:420px}
+.scroller{max-height:60vh;overflow-y:auto;overscroll-behavior:contain;padding:6px 0 10px}
 .scroller::-webkit-scrollbar{width:9px}
 .scroller::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
-.scroller::-webkit-scrollbar-track{background:transparent}
-.thead,.trow{display:grid;grid-template-columns:1.45fr 1.1fr .72fr .78fr .9fr;
-  gap:14px;align-items:center}
-.thead{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
-  font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--line)}
-.trow{padding:13px 0;border-bottom:1px solid var(--line)}
-.trow:last-child{border-bottom:0}
-.t-side{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
-.t-sub{display:block;font-size:11.5px;color:var(--dim);margin-top:3px}
-.t-side{display:block}
-.t-num{font-family:var(--num);font-size:14.5px;font-weight:700}
-.t-dim{font-family:var(--num);font-size:13px;color:var(--muted)}
-.t-gain{display:flex;align-items:center;gap:9px}
-.t-gain b{font-family:var(--num);font-size:13.5px;color:var(--pos);min-width:44px}
-.gbar{flex:1;height:5px;border-radius:99px;background:var(--card-2);overflow:hidden}
-.gbar i{display:block;height:100%;border-radius:99px;background:var(--pos)}
-.more{display:inline-flex;align-items:center;gap:8px;margin-top:15px;font-size:12.5px;
-  font-weight:600;color:var(--muted);text-decoration:none}
-.more:hover{color:var(--ink)}
 
-/* record card: the honest one */
-.rec .row{display:flex;justify-content:space-between;padding:11px 0;
-  border-bottom:1px solid var(--line);font-size:13px}
-.rec .row:last-child{border-bottom:0}
-.rec .row b{font-family:var(--num);font-weight:700}
-.rec .row b.neg{color:var(--neg)}
-.stamp{font-family:var(--num);font-size:11px;color:var(--dim);padding:2px 20px 18px}
-
-footer{border-top:1px solid var(--line);margin-top:56px;padding:34px 0 60px;
-  color:var(--dim);font-size:12.5px;line-height:1.6}
-footer p{max-width:88ch;margin:0 0 9px}
-footer b{color:var(--muted)}
-footer .l{margin-top:16px}
-footer .l a{margin-right:20px;font-weight:600;color:var(--muted)}
-
-@media (max-width:1180px){
-  .split{grid-template-columns:1fr;gap:34px}
-  .grid{grid-template-columns:1fr 1fr}
-  .wide{grid-column:1/3}
-.scroller{max-height:430px;overflow-y:auto;overscroll-behavior:contain}
-.scroller::-webkit-scrollbar{width:9px}
-.scroller::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
-.scroller::-webkit-scrollbar-track{background:transparent}
+.thead{display:grid;gap:12px;align-items:center;padding:10px 18px 8px;
+  font-family:var(--num);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);position:sticky;top:0;background:var(--bg-2);z-index:2}
+.trow{display:grid;gap:12px;align-items:center;padding:9px 18px;
+  border-top:1px solid rgba(30,37,64,.55);font-size:13.5px}
+.trow:hover{background:rgba(56,189,248,.05)}
+.g-games{grid-template-columns:1.4fr 1.1fr .6fr .6fr .9fr}
+.g-props{grid-template-columns:1.4fr 1fr .5fr .8fr .8fr .55fr .5fr}
+@media(max-width:760px){
+  .g-games{grid-template-columns:1.4fr .7fr .7fr .9fr}
+  .g-games .col-match{display:none}
+  .g-props{grid-template-columns:1.3fr .5fr .9fr .6fr}
+  .g-props .col-match,.g-props .col-under{display:none}
 }
-@media (max-width:780px){
-  .wrap{padding:0 18px}
-  .grid{grid-template-columns:1fr;padding:14px}
-  .wide{grid-column:1}
-  .pillars{grid-template-columns:repeat(2,1fr)}
-  .thead{display:none}
-  .trow{grid-template-columns:1fr 1fr;gap:9px;padding:15px 0}
-  .t-side{grid-column:1/-1}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.t-side{font-weight:700}
+.t-sub{display:block;font-size:11px;color:var(--dim);font-weight:500}
+.t-dim{color:var(--muted);font-size:12px}
+.t-num{font-family:var(--num);font-weight:700}
+.t-num .bk{display:block;font-size:10px;color:var(--pos);font-weight:600}
+.t-fair{font-family:var(--num);color:var(--dim)}
+.t-gain{font-family:var(--num);color:var(--pos);font-weight:700}
+.gbar{display:block;height:3px;border-radius:99px;background:var(--card-2);
+  overflow:hidden;margin-top:4px;max-width:70px}
+.gbar i{display:block;height:100%;background:var(--grad)}
+.empty{padding:44px 24px;text-align:center;color:var(--muted);font-size:13.5px}
+.empty b{color:var(--ink)}
+.empty p{max-width:52ch;margin:8px auto 0;font-size:12.5px;color:var(--dim)}
 
-.shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-  padding:13px 32px;background:rgba(8,11,22,.88);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none}
-.shellnav::-webkit-scrollbar{display:none}
-.shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
-  background:var(--grad);-webkit-background-clip:text;background-clip:text;
-  color:transparent;text-decoration:none}
-.shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
-  flex:none;padding:3px 1px;border-bottom:2px solid transparent}
-.shellnav a.sn:hover{color:var(--ink)}
-.shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
+/* edges view rows */
+.erow{display:flex;align-items:center;gap:14px;padding:11px 18px;
+  border-top:1px solid rgba(30,37,64,.55);flex-wrap:wrap}
+.erow .lead{font-family:var(--num);font-size:15px;font-weight:700;color:var(--pos);min-width:66px}
+.erow .what{flex:1;min-width:220px;font-size:13.5px}
+.erow .what p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.erow .what .bk{color:#7DD3FC;font-family:var(--num);font-size:11px}
+.erow .meta{text-align:right;font-family:var(--num);font-size:10.5px;color:var(--dim)}
+.erow .meta .bk{display:block;font-size:12px;color:var(--ink);font-weight:600}
+.esec{font-family:var(--num);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);padding:16px 18px 6px}
+
+.stamp{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  padding:10px 18px;border-top:1px solid var(--line);
+  font-family:var(--num);font-size:10.5px;color:var(--dim)}
+
+/* ---------- side column ---------- */
+.side{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.pro-card h2{margin:0 0 4px;font-size:16px;letter-spacing:-.01em}
+.pro-card .tag{font-family:var(--num);font-size:10px;letter-spacing:.16em;color:var(--pos);
+  text-transform:uppercase;display:block;margin-bottom:8px}
+.pro-card p{margin:0 0 12px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.pro-card ul{margin:0 0 14px;padding:0;list-style:none}
+.pro-card li{font-size:12.5px;color:var(--muted);padding:4px 0 4px 20px;position:relative}
+.pro-card li::before{content:'✓';position:absolute;left:2px;color:var(--pos);font-weight:700}
+.pro-card .cta{display:block;text-align:center;background:var(--pos);color:#08130A;
+  font-weight:700;font-size:13.5px;padding:11px 16px;border-radius:10px;text-decoration:none}
+.pro-card .cta:hover{filter:brightness(1.08)}
+.pro-card .fine{font-size:10.5px;color:var(--dim);margin:8px 0 0;text-align:center}
+
+.trust-card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.trust-card b{color:var(--ink)}
+.trust-card .num{font-family:var(--num)}
+.trust-card a{color:#7DD3FC;text-decoration:none;font-size:12px}
+
+/* ---------- footer ---------- */
+footer{margin-top:26px;padding:20px 0 40px;border-top:1px solid var(--line)}
+footer .menu{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;margin-bottom:12px}
+footer .menu a{color:var(--muted);text-decoration:none}
+footer .menu a:hover{color:var(--ink)}
+footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
 </style>
 </head>
 <body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn on" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
-<!--
-THESIS: One system reads every book and names who is underpaying you. The category
-sells confident forecasts; we sell the price, because the forecast is the part we
-cannot honestly promise.
-OWN-WORLD: Deep navy ground, ice-blue gradient (sky 400 to sky 500) reserved for
-actions and the single edge figure, card shell on a 1px hairline, mono only for numbers.
-STORY: A bettor sees the widest spread on today's board, reads which book pays most,
-and subscribes to have it every week.
-FIRST VIEWPORT: Brand and claim in a left column, the live product beside it as a
-working dashboard, not a screenshot.
-FORM: Dark product-dashboard split, supplied by the user as a pinned concept.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
--->
-<div class="aura" aria-hidden="true"></div>
-<a class="skip" href="#board">Skip to the board</a>
-
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#0EA5E9"/>
-  </linearGradient>
-  <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#0EA5E9" stop-opacity=".42"/>
-    <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
-  </linearGradient>
-</defs></svg>
-
+<div class="aura"></div>
 <div class="stage"><div class="wrap">
 
-<div class="split">
+<div class="top">
+  <a class="logo" href="/"><span class="wordmark">sooth</span></a>
+  <nav>
+    <a href="/tools">Calculators</a>
+    <a href="/trust">Why trust us</a>
+    <a class="pro" href="#pro">Get Pro alerts</a>
+  </nav>
+</div>
 
-  <!-- left: brand + claim -->
-  <div>
-    <a class="logo" href="/">
-      <svg class="glyph" viewBox="0 0 34 34" aria-hidden="true">
-        <path d="M11 9.5c0-3 5.5-4 8-1.6 2.6 2.4 1 6.3-2.4 7.4-3.9 1.2-6 3.4-6 6.2 0 3.4 5.4 4.9 8.4 2"
-              stroke="url(#lg)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-        <circle cx="24.5" cy="10" r="3" fill="#0EA5E9"/>
-      </svg>
-      <span class="wordmark">sooth</span>
-    </a>
+<div class="pitch">
+  <h1>You know the bet.<br><span class="g">We find the best price.</span></h1>
+  <p>Same bet, 11 sportsbooks, different payouts. Sooth strips the bookmaker's margin,
+  shows the <b>fair price</b>, and flags the book paying the most — games, player props,
+  and the gaps between books. <b>No picks, ever.</b> Just the number you deserve.</p>
+</div>
 
-    <h1>Better prices.<span class="g">Every book.</span></h1>
-    <p class="lede">Sooth reads 11 major US sportsbooks and shows the best available
-      number against the fair line, with the bookmaker's margin taken out, so
-      you never take a worse price than you had to.</p>
-
-    <a class="cta" href="#offer">Get started
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
-           stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
-    </a>
-    <p class="fine">No wagers taken. No picks sold. Cancel anytime.</p>
-
-    <div class="pillars">
-      <div class="pillar"><div class="ic">
-        <svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 5-7 4 5"/></svg></div>
-        <p>Ten books<br>compared</p></div>
-      <div class="pillar"><div class="ic">
-        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
-        <p>Refreshed<br>near kickoff</p></div>
-      <div class="pillar"><div class="ic">
-        <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
-        <p>Margin<br>removed</p></div>
-      <div class="pillar"><div class="ic">
-        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20v-11"/></svg></div>
-        <p>Five sports<br>covered</p></div>
+<div class="appgrid">
+  <div class="app" id="board">
+    <div class="bar">
+      <div class="tabs" id="sportTabs" role="tablist" aria-label="Sport"></div>
+      <span class="sep"></span>
+      <div class="tabs" role="tablist" aria-label="View">
+        <button class="tab" data-view="games" aria-selected="true">Games</button>
+        <button class="tab" data-view="props" aria-selected="false">Props<span class="ct" id="ct-props"></span></button>
+        <button class="tab" data-view="edges" aria-selected="false">Edges<span class="ct" id="ct-edges"></span></button>
+      </div>
+      <input type="search" id="q" placeholder="team or player…" aria-label="Search">
     </div>
+    <div class="note" id="closingNote"><b>CLOSING SNAPSHOT</b> — these games have started or
+    finished. Fresh lines land automatically when books post the next slate.</div>
+    <div class="content" id="content"><div class="empty">Loading the board…</div></div>
+    <div class="stamp"><span id="stamp">·</span><span>reads refresh automatically</span></div>
   </div>
 
-  <!-- right: the real product -->
-  <div class="app">
-    <div class="appbar">
-      <a class="logo" href="/" style="gap:9px">
-        <svg class="glyph" style="width:26px;height:26px" viewBox="0 0 34 34" aria-hidden="true">
-          <path d="M11 9.5c0-3 5.5-4 8-1.6 2.6 2.4 1 6.3-2.4 7.4-3.9 1.2-6 3.4-6 6.2 0 3.4 5.4 4.9 8.4 2"
-                stroke="url(#lg)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-          <circle cx="24.5" cy="10" r="3" fill="#0EA5E9"/></svg>
-        <span class="wordmark" style="font-size:20px">sooth</span></a>
-      <nav class="appnav">
-        <a class="on" href="#board">Board</a>
-        <a href="/props">Props</a>
-        <a href="/methodology">Method</a>
-        <a href="/ledger">Ledger</a>
-      </nav>
-      <a class="upg" href="#offer">Upgrade</a>
+  <div class="side">
+    <div class="card pro-card" id="pro">
+      <span class="tag">Sooth Pro — coming soon</span>
+      <h2>Get pinged when a book overpays.</h2>
+      <p>The board shows you the best price when you look. Pro tells you the
+      moment it appears:</p>
+      <ul>
+        <li>Alerts when any book pays above the fair line</li>
+        <li>Every book we read, including the sharpest</li>
+        <li>Price history &amp; closing-line lookups</li>
+        <li>CSV exports of any board</li>
+      </ul>
+      <a class="cta" href="mailto:packhalla@gmail.com?subject=Sooth%20Pro%20waitlist&body=Put%20me%20on%20the%20Sooth%20Pro%20waitlist.">Join the waitlist</a>
+      <p class="fine">Tools and data — never picks. The board stays free.</p>
     </div>
-
-    <div class="grid">
-
-      <div class="card" id="board">
-        <h3>Widest edge today <span class="chip" id="te-chip">·</span></h3>
-        <div class="te-top">
-          <div>
-            <div class="te-side" id="te-side">·</div>
-            <div class="te-match" id="te-match">loading…</div>
-          </div>
-          <div>
-            <div class="te-price" id="te-price">·</div>
-            <div class="te-book" id="te-book"></div>
-          </div>
-        </div>
-        <ul class="te-why" id="te-why"></ul>
-        <div class="meter">
-          <div class="lab"><span>Gain over the worst book</span><b id="te-gain">·</b></div>
-          <div class="track"><i class="fill" id="te-fill"></i></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Today's slate</h3>
-        <div class="tabs" id="tabs" role="tablist"></div>
-        <div class="stats3">
-          <div class="stat"><div class="v" id="s-games">·</div><div class="k">Games</div></div>
-          <div class="stat"><div class="v" id="s-books">·</div><div class="k">Books read</div></div>
-          <div class="stat"><div class="v" id="s-max">·</div><div class="k">Best edge</div></div>
-        </div>
-        <svg class="spark" id="spark" viewBox="0 0 300 74" preserveAspectRatio="none"
-             role="img" aria-label="Gain available on each side across today's board"></svg>
-      </div>
-
-      <div class="card">
-        <h3>Average edge</h3>
-        <div class="gauge">
-          <svg viewBox="0 0 120 120" role="img" aria-label="Average gain from taking the best price">
-            <circle cx="60" cy="60" r="48" stroke="#151B31" stroke-width="11" fill="none"/>
-            <circle id="arc" cx="60" cy="60" r="48" stroke="url(#lg)" stroke-width="11"
-                    fill="none" stroke-linecap="round" transform="rotate(-90 60 60)"
-                    stroke-dasharray="0 999"/>
-            <text class="val" id="g-val" x="60" y="58" text-anchor="middle">·</text>
-            <text class="cap" x="60" y="74" text-anchor="middle">POINTS</text>
-          </svg>
-        </div>
-        <p class="note">Points of implied probability gained by taking the best
-          available price instead of the worst. This is the edge we sell, and it does
-          not depend on predicting anything.</p>
-      </div>
-
-      <div class="card wide">
-        <h3>The board <span class="chip n" id="b-count">·</span></h3>
-        <div class="thead">
-          <span>Side</span><span>Matchup</span><span>Best</span><span>Fair</span><span>Gain</span>
-        </div>
-        <div class="scroller"><div id="rows"><div class="trow"><span class="t-side">Loading…</span></div></div></div>
-        <a class="more" href="/ledger">Full board and history
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.4" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
-      </div>
-
-      <div class="card rec" id="offer">
-        <h3>Our own model</h3>
-        <div class="row"><span>Against the spread</span><b class="neg">49.5%</b></div>
-        <div class="row"><span>Break-even</span><b>52.38%</b></div>
-        <div class="row"><span>Graded picks so far</span><b>0</b></div>
-        <p class="note"><b style="color:var(--ink)">We do not sell picks.</b> Our
-          model loses to the closing market and that number stays published, on
-          <a href="/methodology" style="color:#7DD3FC">its own page</a>. What you
-          pay for is the board.</p>
-        <a class="cta" style="margin-top:15px;width:100%;justify-content:center"
-           href="mailto:hi@sooth.bet?subject=Sooth%20access">Get access · $19/mo</a>
-      </div>
-
+    <div class="card trust-card">
+      <p><b>Why trust these numbers?</b> Because we publish the ones that hurt:
+      our own prediction model hit <span class="num">49.50%</span> against the spread
+      across <span class="num">2,671</span> graded games — the market beat it, and we
+      say so. Every price is timestamped and every record is hash-committed before
+      kickoff. <a href="/trust">See the receipts →</a></p>
     </div>
-    <p class="stamp" id="stamp">·</p>
   </div>
 </div>
 
 <footer>
-  <p><b>Sooth is an odds analysis tool. Not advice. Not a sportsbook.</b> We do not
-    take, place or facilitate wagers, and we hold no customer funds. We are not
-    affiliated with any league, team or sportsbook. Prices are what books showed
-    when last read and move constantly.</p>
-  <p>Past results do not indicate future results. 21+, where lawful. If gambling is
-    causing harm, call <b>1-800-522-4700</b>, 24 hours.</p>
-  <p class="l"><a href="/methodology">Record</a><a href="/verify">Verify</a>
-    <a href="/ledger">Ledger</a><a href="/disclaimers">Disclaimers</a></p>
+  <div class="menu">
+    <a href="/tools">Calculators</a><a href="/trust">Trust</a>
+    <a href="/methodology">Methodology</a><a href="/ledger">Ledger</a>
+    <a href="/verify">Verify us</a><a href="/engine">Engine room</a>
+    <a href="/gamelog">Game log</a><a href="/disclaimers">Disclaimers</a>
+  </div>
+  <p class="rg">Analysis and entertainment only. We do not accept, place, or facilitate
+  wagers, hold no funds, and sell no picks. Past results do not indicate future results.
+  21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24 hours.</p>
 </footer>
 
 </div></div>
 
 <script>
-var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 var sg=function(p){return p==null?'·':(p>0?'+':'')+p;};
-var D=null;
-var tick='<svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>';
+var implied=function(a){return a<0?(-a)/((-a)+100):100/(a+100);};
 
-function draw(i){
-  var b=D.boards[i];
-  [].forEach.call(document.querySelectorAll('.tab'),function(t,k){
-    t.setAttribute('aria-selected',String(k===i));});
+var DATA={board:null,props:null,middles:null,moves:null};
+var state={view:'games',sport:'',q:''};
 
-  /* Only games that have not started; when the whole slate is underway,
-     show it labelled as a closing snapshot rather than as live prices. */
-  var nowMs=Date.now();
-  var evs=b.events.filter(function(e){return new Date(e.starts).getTime()>nowMs;});
-  var closing=false;
-  if(!evs.length&&b.events.length){evs=b.events;closing=true;}
+Promise.allSettled([
+  fetch('/data/board.json').then(function(r){return r.json();}),
+  fetch('/data/props.json').then(function(r){return r.json();}),
+  fetch('/data/middles.json').then(function(r){return r.json();}),
+  fetch('/data/moves.json').then(function(r){return r.json();}),
+]).then(function(rs){
+  DATA.board=rs[0].status==='fulfilled'?rs[0].value:null;
+  DATA.props=rs[1].status==='fulfilled'?rs[1].value:null;
+  DATA.middles=rs[2].status==='fulfilled'?rs[2].value:null;
+  DATA.moves=rs[3].status==='fulfilled'?rs[3].value:null;
+  init();
+});
 
-  var sides=[];
-  evs.forEach(function(e){e.sides.forEach(function(s){
-    sides.push({s:s,e:e});});});
-  sides.sort(function(x,y){return y.s.gain_pts-x.s.gain_pts;});
-  var max=sides.length?sides[0].s.gain_pts:1;
-
-  /* widest edge */
-  var t=sides[0];
-  if(t){
-    document.getElementById('te-side').textContent=t.s.name;
-    document.getElementById('te-match').textContent=t.e.away+' at '+t.e.home;
-    document.getElementById('te-price').textContent=sg(t.s.best_price);
-    document.getElementById('te-book').textContent='at '+t.s.best_book;
-    document.getElementById('te-chip').textContent='+'+t.s.gain_pts.toFixed(2)+' pts';
-    document.getElementById('te-gain').textContent='+'+t.s.gain_pts.toFixed(2)+' pts';
-    document.getElementById('te-why').innerHTML=
-      '<li>'+tick+'Best price '+sg(t.s.best_price)+' at '+esc(t.s.best_book)
-        +', worst '+sg(t.s.worst_price)+' at '+esc(t.s.worst_book)+'</li>'
-     +'<li>'+tick+'Fair line '+sg(t.s.fair_price)+', margin removed across '
-        +t.s.n_books+' books</li>'
-     +'<li>'+tick+'Same bet either way. Only the payout changes</li>';
-    setTimeout(function(){
-      document.getElementById('te-fill').style.transform=
-        'scaleX('+Math.min(1,t.s.gain_pts/Math.max(max,1)).toFixed(3)+')';},60);
-  }
-
-  /* slate */
-  document.getElementById('s-games').textContent=evs.length;
-  document.getElementById('s-books').textContent=b.n_books;
-  document.getElementById('s-max').textContent='+'+b.max_gain_pts.toFixed(2);
-  document.getElementById('b-count').textContent=b.label+' · '+evs.length+' games · '+sides.length+' sides'+(closing?' · CLOSING SNAPSHOT — games underway':'');
-
-  /* sparkline of every side's gain, largest first */
-  var pts=sides.map(function(o,k){
-    var x=(k/(Math.max(sides.length-1,1)))*300;
-    var y=70-(o.s.gain_pts/Math.max(max,1))*58;
-    return x.toFixed(1)+' '+y.toFixed(1);});
-  document.getElementById('spark').innerHTML=
-    '<path d="M'+pts.join(' L')+' L300 74 L0 74 Z" fill="url(#fade)"/>'
-   +'<path d="M'+pts.join(' L')+'" fill="none" stroke="#0EA5E9" stroke-width="2"/>';
-
-  /* gauge */
-  var avg=b.avg_gain_pts, frac=Math.min(1,avg/6);
-  var C=2*Math.PI*48;
-  document.getElementById('g-val').textContent='+'+avg.toFixed(2);
-  document.getElementById('arc').setAttribute('stroke-dasharray',(C*frac).toFixed(1)+' '+C.toFixed(1));
-
-  /* board rows */
-  document.getElementById('rows').innerHTML=sides.map(function(o){
-    var s=o.s,e=o.e;
-    return '<div class="trow">'
-      +'<span><span class="t-side">'+esc(s.name)+'</span>'
-        +'<span class="t-sub">best at '+esc(s.best_book)+'</span></span>'
-      +'<span class="t-dim">'+esc(e.away)+' at '+esc(e.home)+'</span>'
-      +'<span class="t-num">'+sg(s.best_price)+'</span>'
-      +'<span class="t-dim">'+sg(s.fair_price)+'</span>'
-      +'<span class="t-gain"><b>+'+s.gain_pts.toFixed(2)+'</b>'
-        +'<span class="gbar"><i style="width:'+((s.gain_pts/Math.max(max,1))*100).toFixed(0)+'%"></i></span></span>'
-      +'</div>';}).join('');
+function sportsList(){
+  var set=[],seen={};
+  (DATA.board&&DATA.board.boards||[]).forEach(function(b){
+    if(!seen[b.label]){seen[b.label]=1;set.push(b.label);}});
+  (DATA.props&&DATA.props.boards||[]).forEach(function(b){
+    if(!seen[b.label]){seen[b.label]=1;set.push(b.label);}});
+  return set;
 }
 
-fetch('/data/board.json').then(function(r){return r.json();}).then(function(d){
-  D=d;
-  document.getElementById('stamp').textContent=
-    'Read '+d.generated_at.slice(0,16).replace('T',' ')+' UTC · in season: '
-    +(d.sports_live.join(', ')||'none');
-  if(!d.boards.length){
-    document.getElementById('rows').innerHTML=
-      '<div class="trow"><span class="t-side">No games in the window right now</span></div>';
-    document.getElementById('te-match').textContent='The board fills as the next slate approaches';
+function init(){
+  if(!DATA.board&&!DATA.props){
+    document.getElementById('content').innerHTML=
+      '<div class="empty"><b>Board unavailable.</b><p>Could not load live prices — refresh to retry. Raw data at <a href="/data/board.json" style="color:#7DD3FC">board.json</a>.</p></div>';
+    document.getElementById('stamp').textContent='no live read';
     return;
   }
-  document.getElementById('tabs').innerHTML=d.boards.map(function(b,i){
-    return '<button class="tab" role="tab" aria-selected="'+(i===0)+'">'
-      +esc(b.label)+'</button>';}).join('');
-  [].forEach.call(document.querySelectorAll('.tab'),function(t,i){
-    t.addEventListener('click',function(){draw(i);});});
-  draw(0);
-}).catch(function(){
-  document.getElementById('rows').innerHTML=
-    '<div class="trow"><span class="t-side">Board unavailable. Raw data at '
-    +'<a href="/data/board.json">board.json</a></span></div>';
-  document.getElementById('te-side').textContent='Board unavailable';
-  document.getElementById('te-match').textContent='Could not load live prices — refresh to retry';
-  document.getElementById('stamp').textContent='no live read';
-  ['s-games','s-books','s-max','g-val'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.textContent='—';});
-});
+  var tabs=document.getElementById('sportTabs');
+  var sports=sportsList();
+  tabs.innerHTML='<button class="tab" data-sport="" aria-selected="true">All</button>'+
+    sports.map(function(s){return '<button class="tab" data-sport="'+esc(s)+'" aria-selected="false">'+esc(s)+'</button>';}).join('');
+  tabs.addEventListener('click',function(e){
+    var b=e.target.closest('.tab'); if(!b)return;
+    state.sport=b.dataset.sport;
+    tabs.querySelectorAll('.tab').forEach(function(t){t.setAttribute('aria-selected',String(t===b));});
+    render();
+  });
+  document.querySelectorAll('.tab[data-view]').forEach(function(b){
+    b.addEventListener('click',function(){
+      state.view=b.dataset.view;
+      document.querySelectorAll('.tab[data-view]').forEach(function(t){
+        t.setAttribute('aria-selected',String(t===b));});
+      render();
+    });
+  });
+  document.getElementById('q').addEventListener('input',function(e){
+    state.q=e.target.value.trim().toLowerCase();render();});
+  var stamps=[];
+  if(DATA.board)stamps.push(DATA.board.generated_at);
+  if(DATA.props)stamps.push(DATA.props.generated_at);
+  var latest=stamps.sort().slice(-1)[0];
+  if(latest)document.getElementById('stamp').textContent=
+    'read '+latest.slice(0,16).replace('T',' ')+' UTC · prices move constantly';
+  var np=0;(DATA.props&&DATA.props.boards||[]).forEach(function(b){np+=b.n_props||0;});
+  if(np)document.getElementById('ct-props').textContent=np;
+  render();
+}
+
+function match(txt){return !state.q||txt.toLowerCase().indexOf(state.q)>=0;}
+function upcoming(iso){return new Date(iso).getTime()>Date.now();}
+
+function render(){
+  var el=document.getElementById('content');
+  document.getElementById('closingNote').style.display='none';
+  if(state.view==='games')el.innerHTML=renderGames();
+  else if(state.view==='props')el.innerHTML=renderProps();
+  else el.innerHTML=renderEdges();
+}
+
+/* ---------- games ---------- */
+function renderGames(){
+  if(!DATA.board)return '<div class="empty"><b>Game board unavailable.</b><p>Refresh to retry.</p></div>';
+  var rows=[],closing=false,all=[];
+  DATA.board.boards.forEach(function(b){
+    if(state.sport&&b.label!==state.sport)return;
+    b.events.forEach(function(e){all.push({e:e,label:b.label});});
+  });
+  var up=all.filter(function(o){return upcoming(o.e.starts);});
+  if(!up.length&&all.length){up=all;closing=true;}
+  document.getElementById('closingNote').style.display=closing?'block':'none';
+  up.forEach(function(o){
+    o.e.sides.forEach(function(s){
+      if(!match(s.name+' '+o.e.home+' '+o.e.away))return;
+      rows.push({s:s,e:o.e,label:o.label});
+    });
+  });
+  rows.sort(function(a,b){return b.s.gain_pts-a.s.gain_pts;});
+  if(!rows.length)return '<div class="empty"><b>Nothing on the board for that filter.</b><p>The board fills as the next slate approaches — reads refresh automatically.</p></div>';
+  var max=rows[0].s.gain_pts||1;
+  return '<div class="scroller"><div class="thead g-games"><span>Side · best book</span>'+
+    '<span class="col-match">Matchup</span><span>Best</span><span>Fair</span><span>Gain</span></div>'+
+    rows.map(function(o){
+      var s=o.s,e=o.e;
+      return '<div class="trow g-games">'+
+        '<span><span class="t-side">'+esc(s.name)+'</span>'+
+          '<span class="t-sub">best at '+esc(s.best_book)+' · '+esc(o.label)+'</span></span>'+
+        '<span class="t-dim col-match">'+esc(e.away)+' at '+esc(e.home)+'</span>'+
+        '<span class="t-num">'+sg(s.best_price)+'</span>'+
+        '<span class="t-fair">'+sg(s.fair_price)+'</span>'+
+        '<span class="t-gain">+'+s.gain_pts.toFixed(2)+
+          '<span class="gbar"><i style="width:'+((s.gain_pts/max)*100).toFixed(0)+'%"></i></span></span>'+
+      '</div>';}).join('')+'</div>';
+}
+
+/* ---------- props ---------- */
+function renderProps(){
+  if(!DATA.props||!(DATA.props.boards||[]).length)
+    return '<div class="empty"><b>No props posted right now.</b><p>Books post player props closer to game time; they land here automatically, usually by mid-morning.</p></div>';
+  var rows=[],closing=false;
+  DATA.props.boards.forEach(function(b){
+    if(state.sport&&b.label!==state.sport)return;
+    var evs=b.events.filter(function(e){return upcoming(e.starts);});
+    if(!evs.length&&b.events.length){evs=b.events;closing=true;}
+    evs.forEach(function(e){
+      e.props.forEach(function(p){
+        if(!match(p.player+' '+p.market_label+' '+e.home+' '+e.away))return;
+        rows.push({p:p,e:e});
+      });
+    });
+  });
+  document.getElementById('closingNote').style.display=closing?'block':'none';
+  rows.sort(function(a,b){return b.p.gain_pts-a.p.gain_pts;});
+  if(!rows.length)return '<div class="empty"><b>Nothing matches that filter.</b></div>';
+  return '<div class="scroller"><div class="thead g-props"><span>Player · market</span>'+
+    '<span class="col-match">Game</span><span>Line</span><span>Over best</span>'+
+    '<span class="col-under">Under best</span><span>L10</span><span>Gain</span></div>'+
+    rows.map(function(o){
+      var p=o.p,e=o.e;
+      var hit=p.hit?p.hit.l10.over+'/'+p.hit.l10.n:'—';
+      return '<div class="trow g-props">'+
+        '<span><span class="t-side">'+esc(p.player)+'</span>'+
+          '<span class="t-sub">'+esc(p.market_label)+'</span></span>'+
+        '<span class="t-dim col-match">'+esc(e.away)+' @ '+esc(e.home)+'</span>'+
+        '<span class="t-num">'+p.line+'</span>'+
+        '<span class="t-num">'+sg(p.over.best_price)+'<span class="bk">'+esc(p.over.best_book)+'</span></span>'+
+        '<span class="t-num col-under">'+sg(p.under.best_price)+'<span class="bk">'+esc(p.under.best_book)+'</span></span>'+
+        '<span class="t-dim" title="times over this line in last 10 games">'+hit+'</span>'+
+        '<span class="t-gain">+'+p.gain_pts.toFixed(1)+'</span>'+
+      '</div>';}).join('')+'</div>';
+}
+
+/* ---------- edges ---------- */
+function renderEdges(){
+  var out='',count=0;
+  var evs=[];
+  if(DATA.board)DATA.board.boards.forEach(function(b){
+    if(state.sport&&b.label!==state.sport)return;
+    b.events.filter(function(e){return upcoming(e.starts);}).forEach(function(e){
+      e.sides.forEach(function(s){
+        if(s.edge_vs_fair_pts>0&&match(s.name+' '+e.home+' '+e.away))
+          evs.push({t:s.name,sub:e.away+' @ '+e.home+' · '+b.label+' moneyline',
+            bk:s.best_book,pr:s.best_price,fair:s.fair_price,edge:s.edge_vs_fair_pts});
+      });
+    });
+  });
+  if(DATA.props)DATA.props.boards.forEach(function(b){
+    if(state.sport&&b.label!==state.sport)return;
+    b.events.filter(function(e){return upcoming(e.starts);}).forEach(function(e){
+      e.props.forEach(function(p){
+        [['Over',p.over],['Under',p.under]].forEach(function(sd){
+          var d=sd[1];
+          if(d.edge_vs_fair_pts>0&&match(p.player))
+            evs.push({t:p.player+' '+sd[0]+' '+p.line,sub:p.market_label+' · '+e.away+' @ '+e.home,
+              bk:d.best_book,pr:d.best_price,fair:d.fair_price,edge:d.edge_vs_fair_pts});
+        });
+      });
+    });
+  });
+  evs.sort(function(a,b){return b.edge-a.edge;});
+  out+='<div class="esec">Prices beating fair right now</div>';
+  out+=evs.length?evs.slice(0,12).map(function(r){count++;
+    return '<div class="erow"><span class="lead">+'+r.edge.toFixed(1)+'</span>'+
+      '<span class="what"><b>'+esc(r.t)+'</b><p>'+esc(r.sub)+'</p></span>'+
+      '<span class="meta"><span class="bk">'+esc(r.bk)+' '+sg(r.pr)+'</span>fair '+sg(r.fair)+'</span></div>';}).join('')
+    :'<div class="empty" style="padding:18px"><b>Nothing beats fair at this read.</b><p>Normal for an efficient market — edges open when news breaks and books lag.</p></div>';
+  var arbs=[];
+  if(DATA.board)DATA.board.boards.forEach(function(b){
+    if(state.sport&&b.label!==state.sport)return;
+    b.events.filter(function(e){return upcoming(e.starts)&&e.sides.length===2;}).forEach(function(e){
+      var t=implied(e.sides[0].best_price)+implied(e.sides[1].best_price);
+      if(t<1)arbs.push({e:e,l:b.label,lock:(1-t)*100});
+    });
+  });
+  var mids=(DATA.middles&&DATA.middles.middles||[]).filter(function(x){
+    return upcoming(x.starts)&&(!state.sport||x.label===state.sport)&&match(x.home+' '+x.away);});
+  out+='<div class="esec">Arbs &amp; middle windows</div>';
+  var am='';
+  arbs.forEach(function(a){count++;
+    am+='<div class="erow"><span class="lead">+'+a.lock.toFixed(2)+'%</span>'+
+      '<span class="what"><b>'+esc(a.e.away)+' @ '+esc(a.e.home)+'</b>'+
+      '<p><span class="bk">'+esc(a.e.sides[0].best_book)+' '+sg(a.e.sides[0].best_price)+'</span> / '+
+      '<span class="bk">'+esc(a.e.sides[1].best_book)+' '+sg(a.e.sides[1].best_price)+'</span> — both sides beat 100%</p></span>'+
+      '<span class="meta">'+esc(a.l)+' · arb</span></div>';});
+  mids.forEach(function(x){count++;
+    am+='<div class="erow"><span class="lead">'+x.numbers.join(' · ')+'</span>'+
+      '<span class="what"><b>'+esc(x.away)+' @ '+esc(x.home)+'</b>'+
+      '<p><span class="bk">'+esc(x.low_book)+'</span> '+esc(x.low_label)+' ('+sg(x.low_price)+') · '+
+      '<span class="bk">'+esc(x.high_book)+'</span> '+esc(x.high_label)+' ('+sg(x.high_price)+') — land inside, win both</p></span>'+
+      '<span class="meta">'+esc(x.label)+' · '+esc(x.market)+'</span></div>';});
+  out+=am||'<div class="empty" style="padding:18px"><b>No arbs or open middles at this read.</b><p>They open when one book lags a move — most often near game time.</p></div>';
+  if(DATA.moves){
+    var cutoff=Date.now()-48*3600*1000;
+    var div=(DATA.moves.divergence||[]).filter(function(a){
+      return new Date(a.observed_at).getTime()>=cutoff&&(!state.sport||a.sport.toUpperCase()===state.sport)&&match(a.home+' '+a.away+' '+a.selection);})
+      .sort(function(a,b){return Math.abs(b.move_pts)-Math.abs(a.move_pts);}).slice(0,8);
+    out+='<div class="esec">Books off the pack right now</div>';
+    out+=div.length?div.map(function(a){count++;
+      return '<div class="erow"><span class="lead">+'+Math.abs(a.move_pts).toFixed(1)+'</span>'+
+        '<span class="what"><b>'+esc(a.selection)+'</b><p>'+esc(a.detail)+'</p></span>'+
+        '<span class="meta"><span class="bk">'+esc(a.book)+' '+sg(a.to_price)+'</span>'+esc(a.sport.toUpperCase())+'</span></div>';}).join('')
+      :'<div class="empty" style="padding:18px"><b>No book is off consensus right now.</b></div>';
+  }
+  document.getElementById('ct-edges').textContent=count||'';
+  return '<div class="scroller">'+out+'</div>';
+}
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
