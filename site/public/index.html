@@ -162,12 +162,12 @@ a{color:inherit}
   border-top:1px solid rgba(30,37,64,.55);font-size:13.5px}
 .trow:hover{background:rgba(56,189,248,.05)}
 .g-games{grid-template-columns:1.4fr 1.1fr .6fr .6fr .9fr}
-.g-props{grid-template-columns:1.4fr 1fr .5fr .8fr .8fr .55fr .5fr}
+.g-props{grid-template-columns:1.4fr 1fr .5fr .8fr .8fr .7fr .55fr .5fr}
 @media(max-width:760px){
   .g-games{grid-template-columns:1.4fr .7fr .7fr .9fr}
   .g-games .col-match{display:none}
   .g-props{grid-template-columns:1.3fr .5fr .9fr .6fr}
-  .g-props .col-match,.g-props .col-under{display:none}
+  .g-props .col-match,.g-props .col-under,.g-props .col-model{display:none}
 }
 .t-side{font-weight:700}
 .t-sub{display:block;font-size:11px;color:var(--dim);font-weight:500}
@@ -444,7 +444,7 @@ function upcoming(iso){return new Date(iso).getTime()>Date.now();}
 
 var HINTS={
   games:'<b>How to read this:</b> Best is the most generous price on that side right now, Fair is the consensus with the bookmaker margin removed, Gain is how much better Best pays than the worst book.',
-  props:'<b>How to read this:</b> each player prop compared at the same line across books. L10 = how often the player actually cleared this line in his last ten games.',
+  props:'<b>How to read this:</b> each prop compared at the same line across books. L10 = times over this line in the last ten games. Model = our strikeout projection (Poisson, free MLB data) and its lean vs the de-vigged market \u2014 measured MAE 2.04K across 723 unseen starts, barely better than naive. A big lean is a disagreement, not a promise.',
   picks:'<b>Straight talk:</b> these are our model\u2019s sides, sealed before kickoff and graded in public. Our model has NOT beaten the closing market historically \u2014 49.50% ATS vs 52.38% breakeven. Shop the price, not the pick.',
   edges:'<b>How to read this:</b> places where books disagree right now \u2014 prices above fair, both-sides arbs, middle windows, and books off the consensus.'};
 function render(){
@@ -546,7 +546,7 @@ function renderProps(){
   if(!rows.length)return '<div class="empty"><b>Nothing matches that filter.</b></div>';
   return '<div class="scroller"><div class="thead g-props"><span>Player · market</span>'+
     '<span class="col-match">Game</span><span>Line</span><span>Over best</span>'+
-    '<span class="col-under">Under best</span><span>L10</span><span>Gain</span></div>'+
+    '<span class="col-under">Under best</span><span class="col-model">Model</span><span>L10</span><span>Gain</span></div>'+
     rows.map(function(o){
       var p=o.p,e=o.e;
       var hit=p.hit?p.hit.l10.over+'/'+p.hit.l10.n:'—';
@@ -557,6 +557,10 @@ function renderProps(){
         '<span class="t-num">'+p.line+'</span>'+
         '<span class="t-num">'+sg(p.over.best_price)+'<span class="bk">'+esc(p.over.best_book)+'</span></span>'+
         '<span class="t-num col-under">'+sg(p.under.best_price)+'<span class="bk">'+esc(p.under.best_book)+'</span></span>'+
+        '<span class="col-model t-dim" title="our Poisson projection vs the de-vigged market — MAE 2.04K over 723 unseen starts">'+
+          (p.model?('<b style="color:var(--ink)">'+p.model.proj_k.toFixed(1)+'K</b> '+
+            (p.model.delta_pts>0?'<span style="color:var(--pos)">O+'+p.model.delta_pts.toFixed(0)+'</span>'
+             :'<span style="color:#5FA8EC">U+'+Math.abs(p.model.delta_pts).toFixed(0)+'</span>')):'—')+'</span>'+
         '<span class="t-dim" title="times over this line in last 10 games">'+hit+'</span>'+
         '<span class="t-gain">+'+p.gain_pts.toFixed(1)+'</span>'+
       '</div>';}).join('')+'</div>';

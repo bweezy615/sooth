@@ -56,6 +56,8 @@ if [ "$PAGE_H" -ge 2 ]; then
       # A kept closing snapshot is NOT re-annotated — rosters move on.
       "$REPO/.venv/bin/python" -m engine.hitrates >>"$LOG" 2>&1 \
         || echo "$(date -u +%FT%TZ) HITRATES FAILED — props stay unannotated" >>"$LOG"
+      "$REPO/.venv/bin/python" -m engine.props_model >>"$LOG" 2>&1 \
+        || echo "$(date -u +%FT%TZ) PROPS MODEL FAILED — props stay unmodeled" >>"$LOG"
     else
       echo "$(date -u +%FT%TZ) PROPS kept previous snapshot — hitrates skipped" >>"$LOG"
     fi

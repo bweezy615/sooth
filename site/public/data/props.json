@@ -407,6 +407,14 @@
          "n": 18,
          "over": 4
         }
+       },
+       "model": {
+        "proj_k": 5.59,
+        "p_over": 0.4866,
+        "market_over": 0.4329,
+        "delta_pts": 5.4,
+        "n_starts": 19,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -1713,6 +1721,14 @@
          "n": 15,
          "over": 2
         }
+       },
+       "model": {
+        "proj_k": 4.35,
+        "p_over": 0.4386,
+        "market_over": 0.5261,
+        "delta_pts": -8.7,
+        "n_starts": 16,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -1777,6 +1793,14 @@
          "n": 23,
          "over": 10
         }
+       },
+       "model": {
+        "proj_k": 4.07,
+        "p_over": 0.3847,
+        "market_over": 0.4673,
+        "delta_pts": -8.3,
+        "n_starts": 24,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -2381,6 +2405,14 @@
          "n": 22,
          "over": 17
         }
+       },
+       "model": {
+        "proj_k": 7.58,
+        "p_over": 0.767,
+        "market_over": 0.5475,
+        "delta_pts": 21.9,
+        "n_starts": 23,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -3595,6 +3627,14 @@
          "n": 22,
          "over": 13
         }
+       },
+       "model": {
+        "proj_k": 4.74,
+        "p_over": 0.3387,
+        "market_over": 0.5261,
+        "delta_pts": -18.7,
+        "n_starts": 23,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -4617,6 +4657,14 @@
          "n": 20,
          "over": 13
         }
+       },
+       "model": {
+        "proj_k": 9.11,
+        "p_over": 0.689,
+        "market_over": 0.505,
+        "delta_pts": 18.4,
+        "n_starts": 21,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -4923,6 +4971,14 @@
          "n": 13,
          "over": 8
         }
+       },
+       "model": {
+        "proj_k": 4.43,
+        "p_over": 0.2854,
+        "market_over": 0.5,
+        "delta_pts": -21.5,
+        "n_starts": 14,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -5285,6 +5341,14 @@
          "n": 22,
          "over": 11
         }
+       },
+       "model": {
+        "proj_k": 5.14,
+        "p_over": 0.5838,
+        "market_over": 0.5745,
+        "delta_pts": 0.9,
+        "n_starts": 23,
+        "version": "kpoisson-v1"
        }
       },
       {
@@ -6083,5 +6147,12 @@
   "annotated": 147,
   "eligible": 158
  },
- "checked_at": "2026-08-07T02:57:05.221600+00:00"
+ "checked_at": "2026-08-07T02:57:05.221600+00:00",
+ "props_model": {
+  "version": "kpoisson-v1",
+  "season": 2026,
+  "modeled": 8,
+  "eligible": 10,
+  "method": "poisson over expected BF x blended K/BF x opponent K% factor; free MLB StatsAPI"
+ }
 }
