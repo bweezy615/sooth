@@ -47,9 +47,13 @@ MARKET = "pitcher_strikeouts"
 TIMEOUT = 20
 
 # A game is "about to close" only if first pitch is within this window of now.
-# Keep it wide enough that the pre-pitch cron catches every staggered start it
-# is meant to, narrow enough that we never spend a credit on a game hours away.
-WINDOW = timedelta(minutes=60)
+# Sized to equal the cron cadence (30 min): each staggered start is caught by
+# ~one tick, so we spend ~1 credit per game — the whole free-tier budget math.
+# Listing events is free, so idle ticks with no game in-window cost 0 credits.
+# ponytail: 30/30 = ~1 catch/game. A game starting exactly on a tick can be
+# caught twice (both bounds inclusive); append-only + last-before-pitch grading
+# absorb the rare dup. Tighten to strict-less only if credits actually bite.
+WINDOW = timedelta(minutes=30)
 
 
 @dataclass

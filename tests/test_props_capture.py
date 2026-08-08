@@ -53,8 +53,9 @@ def test_parser_keeps_player_line_and_ignores_other_markets():
 def test_closing_window_excludes_games_outside_the_pre_pitch_window():
     now = datetime(2026, 8, 8, 22, 30, tzinfo=UTC)
     events = [
-        {"id": "soon", "commence_time": "2026-08-08T23:05:00Z"},   # +35 min -> in
+        {"id": "soon", "commence_time": "2026-08-08T22:55:00Z"},   # +25 min -> in
         {"id": "later", "commence_time": "2026-08-09T02:00:00Z"},  # hours -> out
+        {"id": "edge", "commence_time": "2026-08-08T23:05:00Z"},   # +35 min -> out
         {"id": "past", "commence_time": "2026-08-08T22:00:00Z"},   # started -> out
     ]
     keep = {e["id"] for e in pc._closing_events(events, now)}
