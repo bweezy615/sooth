@@ -42,9 +42,37 @@
     .lblm{display:inline;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
   }
   @media (min-width:861px){.lblm{display:none}}
+
+  /* plain "how good is the price" cue */
+  .deal{display:inline-flex;align-items:center;font-family:var(--num);font-size:10.5px;
+    font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:999px;margin-top:6px;
+    border:1px solid var(--pos-line);color:var(--pos);background:var(--pos-dim);width:max-content}
+  .deal.some{opacity:.8}
+  .deal.thin{color:var(--muted);border-color:var(--line-2);background:var(--bg-3)}
+  /* best price stands out in the one green accent */
+  .cell-best{font-family:var(--num);font-variant-numeric:tabular-nums;font-size:14px;
+    font-weight:700;color:var(--pos)}
+  /* beginner / pro toggle */
+  .modebar{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r-sm);overflow:hidden}
+  .modebar button{font:700 11.5px/1 var(--sans);color:var(--muted);background:transparent;border:0;
+    padding:9px 13px;cursor:pointer;min-height:34px}
+  .modebar button[aria-pressed="true"]{background:var(--bg-3);color:var(--pos)}
+  /* beginner hides the technical columns and widens the rest */
+  body.mode-beginner .col-bks,body.mode-beginner .col-fair{display:none}
+  @media (min-width:861px){
+    body.mode-beginner .bcols{grid-template-columns:1.7fr 1.5fr .95fr .7fr 1fr}
+  }
+  /* today's-best-value hero */
+  .hero-best{margin:16px 0 2px}
+  .hero-best .in{padding:16px 18px}
+  .hero-best h2{font-size:18px;margin:7px 0 0;letter-spacing:-.01em}
+  .hero-best h2 .g{color:var(--pos)}
+  .hero-best p{color:var(--ink-2);font-size:13px;margin:8px 0 0;line-height:1.55;max-width:74ch}
+  .hero-best p b{color:var(--ink)}
+  .hero-best .learn{font-size:12px;margin-top:11px;display:inline-block;font-weight:700}
 </style>
 </head>
-<body data-page="board">
+<body data-page="board" class="mode-beginner">
 <a class="skip" href="#board">Skip to the board</a>
 
 <main class="wrap">
@@ -71,16 +99,24 @@
     <div class="tabs" id="tabs" role="tablist" aria-label="Sport"></div>
   </div>
 
+  <div id="hero" class="hero-best" aria-live="polite"></div>
+
   <div class="controls">
     <div class="board-stats" id="bstats"></div>
-    <label class="fld" style="flex-direction:row;align-items:center;gap:8px">
-      <span>Sort</span>
-      <select class="field" id="sort">
-        <option value="gain">Gain (high→low)</option>
-        <option value="start">Start time</option>
-        <option value="match">Matchup (A→Z)</option>
-      </select>
-    </label>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="modebar" role="group" aria-label="View mode">
+        <button type="button" id="m-beg" aria-pressed="true">Beginner</button>
+        <button type="button" id="m-pro" aria-pressed="false">Pro</button>
+      </div>
+      <label class="fld" style="flex-direction:row;align-items:center;gap:8px">
+        <span>Sort</span>
+        <select class="field" id="sort">
+          <option value="gain">Gain (high→low)</option>
+          <option value="start">Start time</option>
+          <option value="match">Matchup (A→Z)</option>
+        </select>
+      </label>
+    </div>
   </div>
 
   <div class="panel" id="board">
@@ -90,8 +126,8 @@
         <span class="col-match">Matchup</span>
         <span class="col-start">Start</span>
         <span class="col-bks r">Bks</span>
-        <span class="r">Best</span>
-        <span class="r">Fair</span>
+        <span class="r">Best price</span>
+        <span class="r col-fair">Fair</span>
         <span class="r">Gain</span>
       </div>
       <div id="rows"><div class="empty">Loading the board…</div></div>
@@ -116,6 +152,23 @@
   var SPORT={mlb:"⚾",nfl:"🏈",nba:"🏀",nhl:"🏒",ufc:"🥊",mma:"🥊",
              epl:"⚽",soccer:"⚽",f1:"🏎️",tennis:"🎾",cricket:"🏏"};
   function sball(b){return SPORT[b.sport]||SPORT[(b.label||"").toLowerCase()]||"•";}
+  // plain-language "how good is this price" cue from points gained vs fair
+  function deal(g){
+    if(g>=3)   return {k:"great",t:"Great value"};
+    if(g>=1.5) return {k:"good", t:"Good value"};
+    if(g>=0.5) return {k:"some", t:"Slight value"};
+    return {k:"thin", t:"Small edge"};
+  }
+  // beginner (default) hides technical columns; pro shows the full grid
+  function setMode(m){
+    var beg=(m!=="pro");
+    document.body.classList.toggle("mode-beginner",beg);
+    document.body.classList.toggle("mode-pro",!beg);
+    var mb=$("m-beg"),mp=$("m-pro");
+    if(mb)mb.setAttribute("aria-pressed",String(beg));
+    if(mp)mp.setAttribute("aria-pressed",String(!beg));
+    try{localStorage.setItem("sooth-mode",beg?"beginner":"pro");}catch(e){}
+  }
 
   function startLocal(iso){
     // kickoff shown in the viewer's local time, terminal-terse: "Sat 5:46p"
@@ -143,19 +196,39 @@
   }
 
   function rowHTML(o,maxGain,sp){
-    var s=o.s, e=o.e;
+    var s=o.s, e=o.e, d=deal(s.gain_pts);
     var w=Math.max(0,Math.min(100,(s.gain_pts/Math.max(maxGain,0.01))*100));
     return '<div class="trow bcols">'
       +'<span class="side-cell"><span class="cell-strong">'
         +'<span class="sball" role="img" aria-label="'+esc(sp.l)+'">'+sp.i+'</span>'+esc(s.name)+'</span>'
-        +'<span class="cell-sub">best at '+esc(s.best_book)+'</span></span>'
+        +'<span class="cell-sub">best at '+esc(s.best_book)+'</span>'
+        +'<span class="deal '+d.k+'">'+d.t+'</span></span>'
       +'<span class="cell-dim col-match"><span class="lblm">vs</span>'+esc(e.away)+' at '+esc(e.home)+'</span>'
       +'<span class="cell-dim col-start"><span class="lblm">start</span>'+esc(startLocal(e.starts))+'</span>'
       +'<span class="cell-dim col-bks r"><span class="lblm">bks</span>'+esc(s.n_books)+'</span>'
-      +'<span class="cell-num r"><span class="lblm">best</span>'+sig(s.best_price)+'</span>'
-      +'<span class="cell-dim r"><span class="lblm">fair</span>'+sig(s.fair_price)+'</span>'
+      +'<span class="cell-best r"><span class="lblm">best price</span>'+sig(s.best_price)+'</span>'
+      +'<span class="cell-dim r col-fair"><span class="lblm">fair</span>'+sig(s.fair_price)+'</span>'
       +'<span class="r"><span class="gainbar"><b>'+sig(s.gain_pts,2)+'</b>'
         +'<span class="gtrack" aria-hidden="true"><i style="width:'+w.toFixed(0)+'%"></i></span></span></span>'
+      +'</div>';
+  }
+
+  // one plain-English sentence: the single biggest bargain across every sport
+  function drawHero(){
+    var all=[];
+    D.boards.forEach(function(b){sidesOf(b).forEach(function(o){all.push({o:o,b:b});});});
+    if(!all.length){$("hero").innerHTML="";return;}
+    all.sort(function(x,y){return y.o.s.gain_pts-x.o.s.gain_pts;});
+    var t=all[0], s=t.o.s, e=t.o.e, b=t.b;
+    $("hero").innerHTML='<div class="panel in">'
+      +'<div class="eyebrow" style="color:var(--pos)">Today’s best value</div>'
+      +'<h2><span aria-hidden="true">'+sball(b)+'</span> '+esc(s.name)
+        +' <span class="g">'+sig(s.gain_pts,2)+' points in your favor</span></h2>'
+      +'<p>In <b>'+esc(e.away)+' at '+esc(e.home)+'</b>, the fair price is <b>'+sig(s.fair_price)
+        +'</b>, but <b>'+esc(s.best_book)+'</b> is offering <b>'+sig(s.best_price)+'</b>. '
+        +'That is the biggest bargain on the board right now. It does not mean the bet will win; '
+        +'it means you are paying a better-than-fair price.</p>'
+      +'<a class="learn" href="/learn.html">New to this? Read the 60-second guide →</a>'
       +'</div>';
   }
 
@@ -199,6 +272,10 @@
     esc=window.sooth.esc; sig=window.sooth.sig;
     window.sooth.startClock($("s-clock"));
     $("sort").addEventListener("change",function(){sortBy=this.value;draw();});
+    var m0; try{m0=localStorage.getItem("sooth-mode");}catch(e){}
+    setMode(m0||"beginner");
+    $("m-beg").onclick=function(){setMode("beginner");};
+    $("m-pro").onclick=function(){setMode("pro");};
 
     fetch("/data/board.json").then(function(r){return r.json();}).then(function(d){
       D=d;
@@ -217,6 +294,7 @@
       }
       buildTabs();
       draw();
+      drawHero();
     }).catch(function(){
       $("s-state").textContent="offline";
       $("rows").innerHTML='<div class="empty"><div class="big">Board unavailable</div>'

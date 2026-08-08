@@ -6,6 +6,7 @@
 
   var NAV=[
     {href:"/board.html",  key:"board",  label:"Board"},
+    {href:"/learn.html",  key:"learn",  label:"Guide"},
     {href:"/record.html", key:"record", label:"Record"},
     {href:"/verify.html", key:"verify", label:"Verify"},
     {href:"/methodology.html", key:"method", label:"Method"}
