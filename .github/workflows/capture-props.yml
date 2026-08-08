@@ -46,6 +46,7 @@ jobs:
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
+          mkdir -p data/capture/mlb-props   # empty-slate ticks write nothing; keep add from erroring
           git add data/capture/mlb-props
           if git diff --staged --quiet; then
             echo "no new prop observations"
