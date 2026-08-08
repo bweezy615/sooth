@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-08T18:27:22.558276+00:00",
+ "generated_at": "2026-08-08T18:58:55.979021+00:00",
  "window_hours": 36.0,
  "credits_spent": 4,
  "sports_live": [
@@ -14,7 +14,7 @@
    "sport": "mlb",
    "label": "MLB",
    "n_events": 25,
-   "avg_gain_pts": 1.81,
+   "avg_gain_pts": 1.99,
    "max_gain_pts": 3.57,
    "n_books": 11,
    "events": [
@@ -37,15 +37,19 @@
         },
         {
          "book": "betus",
-         "price": -255
+         "price": -260
         },
         {
          "book": "betonlineag",
-         "price": -260
+         "price": -262
         },
         {
          "book": "lowvig",
-         "price": -260
+         "price": -262
+        },
+        {
+         "book": "betrivers",
+         "price": -265
         },
         {
          "book": "mybookieag",
@@ -61,10 +65,6 @@
         },
         {
          "book": "betmgm",
-         "price": -275
-        },
-        {
-         "book": "betrivers",
          "price": -275
         },
         {
@@ -78,9 +78,9 @@
        "worst_book": "Bovada",
        "n_books": 11,
        "gain_pts": 3.57,
-       "fair_prob": 0.7066,
-       "fair_price": -241,
-       "edge_vs_fair_pts": -0.77
+       "fair_prob": 0.7055,
+       "fair_price": -240,
+       "edge_vs_fair_pts": -0.88
       },
       {
        "name": "Athletics",
@@ -94,16 +94,12 @@
          "price": 235
         },
         {
-         "book": "betrivers",
-         "price": 235
-        },
-        {
          "book": "betonlineag",
-         "price": 231
+         "price": 233
         },
         {
          "book": "lowvig",
-         "price": 231
+         "price": 233
         },
         {
          "book": "fanduel",
@@ -114,7 +110,15 @@
          "price": 230
         },
         {
+         "book": "betrivers",
+         "price": 225
+        },
+        {
          "book": "mybookieag",
+         "price": 222
+        },
+        {
+         "book": "betus",
          "price": 222
         },
         {
@@ -124,21 +128,17 @@
         {
          "book": "betmgm",
          "price": 220
-        },
-        {
-         "book": "betus",
-         "price": 218
         }
        ],
        "best_price": 235,
        "best_book": "Caesars",
-       "worst_price": 218,
-       "worst_book": "BetUS",
+       "worst_price": 220,
+       "worst_book": "BetMGM",
        "n_books": 11,
-       "gain_pts": 1.6,
-       "fair_prob": 0.2934,
-       "fair_price": 241,
-       "edge_vs_fair_pts": -0.51
+       "gain_pts": 1.4,
+       "fair_prob": 0.2945,
+       "fair_price": 240,
+       "edge_vs_fair_pts": -0.4
       }
      ],
      "max_gain_pts": 3.57,
@@ -183,7 +183,7 @@
         },
         {
          "book": "bovada",
-         "price": 118
+         "price": 117
         },
         {
          "book": "betrivers",
@@ -253,21 +253,217 @@
         },
         {
          "book": "bovada",
-         "price": -141
+         "price": -140
         }
        ],
        "best_price": -132,
        "best_book": "FanDuel",
-       "worst_price": -141,
+       "worst_price": -140,
        "worst_book": "Bovada",
        "n_books": 11,
-       "gain_pts": 1.61,
+       "gain_pts": 1.44,
        "fair_prob": 0.5605,
        "fair_price": -128,
        "edge_vs_fair_pts": -0.85
       }
      ],
      "max_gain_pts": 3.17,
+     "n_books": 11
+    },
+    {
+     "id": "9787ffdc39d62ec33a07c7d40b78adee",
+     "home": "Chicago White Sox",
+     "away": "Cleveland Guardians",
+     "starts": "2026-08-09T18:10:00Z",
+     "sides": [
+      {
+       "name": "Cleveland Guardians",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 107
+        },
+        {
+         "book": "lowvig",
+         "price": 107
+        },
+        {
+         "book": "draftkings",
+         "price": 102
+        },
+        {
+         "book": "fanduel",
+         "price": -106
+        }
+       ],
+       "best_price": 107,
+       "best_book": "BetOnline",
+       "worst_price": -106,
+       "worst_book": "FanDuel",
+       "n_books": 4,
+       "gain_pts": 3.15,
+       "fair_prob": 0.4747,
+       "fair_price": 111,
+       "edge_vs_fair_pts": -0.84
+      },
+      {
+       "name": "Chicago White Sox",
+       "quotes": [
+        {
+         "book": "fanduel",
+         "price": -110
+        },
+        {
+         "book": "betonlineag",
+         "price": -118
+        },
+        {
+         "book": "lowvig",
+         "price": -118
+        },
+        {
+         "book": "draftkings",
+         "price": -123
+        }
+       ],
+       "best_price": -110,
+       "best_book": "FanDuel",
+       "worst_price": -123,
+       "worst_book": "DraftKings",
+       "n_books": 4,
+       "gain_pts": 2.78,
+       "fair_prob": 0.5253,
+       "fair_price": -111,
+       "edge_vs_fair_pts": 0.15
+      }
+     ],
+     "max_gain_pts": 3.15,
+     "n_books": 4
+    },
+    {
+     "id": "1832664964f1aa706bdd77989f364361",
+     "home": "Philadelphia Phillies",
+     "away": "Toronto Blue Jays",
+     "starts": "2026-08-08T22:06:00Z",
+     "sides": [
+      {
+       "name": "Philadelphia Phillies",
+       "quotes": [
+        {
+         "book": "williamhill_us",
+         "price": -162
+        },
+        {
+         "book": "draftkings",
+         "price": -163
+        },
+        {
+         "book": "fanduel",
+         "price": -164
+        },
+        {
+         "book": "betonlineag",
+         "price": -166
+        },
+        {
+         "book": "lowvig",
+         "price": -166
+        },
+        {
+         "book": "betus",
+         "price": -166
+        },
+        {
+         "book": "fanatics",
+         "price": -170
+        },
+        {
+         "book": "betmgm",
+         "price": -170
+        },
+        {
+         "book": "mybookieag",
+         "price": -171
+        },
+        {
+         "book": "betrivers",
+         "price": -177
+        },
+        {
+         "book": "bovada",
+         "price": -183
+        }
+       ],
+       "best_price": -162,
+       "best_book": "Caesars",
+       "worst_price": -183,
+       "worst_book": "Bovada",
+       "n_books": 11,
+       "gain_pts": 2.83,
+       "fair_prob": 0.6094,
+       "fair_price": -156,
+       "edge_vs_fair_pts": -0.89
+      },
+      {
+       "name": "Toronto Blue Jays",
+       "quotes": [
+        {
+         "book": "draftkings",
+         "price": 152
+        },
+        {
+         "book": "williamhill_us",
+         "price": 152
+        },
+        {
+         "book": "bovada",
+         "price": 151
+        },
+        {
+         "book": "fanduel",
+         "price": 150
+        },
+        {
+         "book": "betonlineag",
+         "price": 150
+        },
+        {
+         "book": "lowvig",
+         "price": 150
+        },
+        {
+         "book": "betrivers",
+         "price": 148
+        },
+        {
+         "book": "betus",
+         "price": 147
+        },
+        {
+         "book": "mybookieag",
+         "price": 144
+        },
+        {
+         "book": "fanatics",
+         "price": 140
+        },
+        {
+         "book": "betmgm",
+         "price": 140
+        }
+       ],
+       "best_price": 152,
+       "best_book": "DraftKings",
+       "worst_price": 140,
+       "worst_book": "BetMGM",
+       "n_books": 11,
+       "gain_pts": 1.98,
+       "fair_prob": 0.3906,
+       "fair_price": 156,
+       "edge_vs_fair_pts": -0.62
+      }
+     ],
+     "max_gain_pts": 2.83,
      "n_books": 11
     },
     {
@@ -414,11 +610,11 @@
          "price": -156
         },
         {
-         "book": "betus",
-         "price": -156
+         "book": "williamhill_us",
+         "price": -157
         },
         {
-         "book": "williamhill_us",
+         "book": "betus",
          "price": -157
         },
         {
@@ -434,15 +630,15 @@
          "price": -163
         },
         {
-         "book": "bovada",
-         "price": -164
-        },
-        {
          "book": "fanatics",
          "price": -165
         },
         {
          "book": "betmgm",
+         "price": -165
+        },
+        {
+         "book": "bovada",
          "price": -165
         },
         {
@@ -489,14 +685,14 @@
         },
         {
          "book": "betus",
+         "price": 140
+        },
+        {
+         "book": "bovada",
          "price": 139
         },
         {
          "book": "mybookieag",
-         "price": 138
-        },
-        {
-         "book": "bovada",
          "price": 138
         },
         {
@@ -548,12 +744,12 @@
          "price": 179
         },
         {
-         "book": "betus",
-         "price": 171
+         "book": "fanduel",
+         "price": 172
         },
         {
-         "book": "fanduel",
-         "price": 170
+         "book": "betus",
+         "price": 171
         },
         {
          "book": "fanatics",
@@ -582,16 +778,16 @@
        "worst_book": "BetRivers",
        "n_books": 11,
        "gain_pts": 2.69,
-       "fair_prob": 0.3571,
-       "fair_price": 180,
-       "edge_vs_fair_pts": 0.38
+       "fair_prob": 0.3563,
+       "fair_price": 181,
+       "edge_vs_fair_pts": 0.29
       },
       {
        "name": "Los Angeles Dodgers",
        "quotes": [
         {
          "book": "fanduel",
-         "price": -184
+         "price": -186
         },
         {
          "book": "draftkings",
@@ -634,270 +830,18 @@
          "price": -205
         }
        ],
-       "best_price": -184,
+       "best_price": -186,
        "best_book": "FanDuel",
        "worst_price": -205,
        "worst_book": "Fanatics",
        "n_books": 11,
-       "gain_pts": 2.42,
-       "fair_prob": 0.6429,
-       "fair_price": -180,
-       "edge_vs_fair_pts": -0.5
+       "gain_pts": 2.18,
+       "fair_prob": 0.6437,
+       "fair_price": -181,
+       "edge_vs_fair_pts": -0.66
       }
      ],
      "max_gain_pts": 2.69,
-     "n_books": 11
-    },
-    {
-     "id": "79a0c1e324175df9d0c7f93de8d4dc44",
-     "home": "Seattle Mariners",
-     "away": "Tampa Bay Rays",
-     "starts": "2026-08-09T01:50:00Z",
-     "sides": [
-      {
-       "name": "Tampa Bay Rays",
-       "quotes": [
-        {
-         "book": "fanduel",
-         "price": 106
-        },
-        {
-         "book": "draftkings",
-         "price": 105
-        },
-        {
-         "book": "williamhill_us",
-         "price": 105
-        },
-        {
-         "book": "lowvig",
-         "price": 102
-        },
-        {
-         "book": "betonlineag",
-         "price": 102
-        },
-        {
-         "book": "betrivers",
-         "price": 102
-        },
-        {
-         "book": "betus",
-         "price": 102
-        },
-        {
-         "book": "mybookieag",
-         "price": 101
-        },
-        {
-         "book": "bovada",
-         "price": -102
-        },
-        {
-         "book": "betmgm",
-         "price": -102
-        },
-        {
-         "book": "fanatics",
-         "price": -105
-        }
-       ],
-       "best_price": 106,
-       "best_book": "FanDuel",
-       "worst_price": -105,
-       "worst_book": "Fanatics",
-       "n_books": 11,
-       "gain_pts": 2.68,
-       "fair_prob": 0.4807,
-       "fair_price": 108,
-       "edge_vs_fair_pts": -0.48
-      },
-      {
-       "name": "Seattle Mariners",
-       "quotes": [
-        {
-         "book": "lowvig",
-         "price": -112
-        },
-        {
-         "book": "betonlineag",
-         "price": -112
-        },
-        {
-         "book": "draftkings",
-         "price": -112
-        },
-        {
-         "book": "betus",
-         "price": -112
-        },
-        {
-         "book": "williamhill_us",
-         "price": -115
-        },
-        {
-         "book": "fanatics",
-         "price": -115
-        },
-        {
-         "book": "fanduel",
-         "price": -116
-        },
-        {
-         "book": "mybookieag",
-         "price": -118
-        },
-        {
-         "book": "bovada",
-         "price": -118
-        },
-        {
-         "book": "betmgm",
-         "price": -118
-        },
-        {
-         "book": "betrivers",
-         "price": -121
-        }
-       ],
-       "best_price": -112,
-       "best_book": "LowVig",
-       "worst_price": -121,
-       "worst_book": "BetRivers",
-       "n_books": 11,
-       "gain_pts": 1.92,
-       "fair_prob": 0.5193,
-       "fair_price": -108,
-       "edge_vs_fair_pts": -0.9
-      }
-     ],
-     "max_gain_pts": 2.68,
-     "n_books": 11
-    },
-    {
-     "id": "5c292777a98d90d363d05f1ad9eb489d",
-     "home": "New York Yankees",
-     "away": "Atlanta Braves",
-     "starts": "2026-08-08T19:05:00Z",
-     "sides": [
-      {
-       "name": "Atlanta Braves",
-       "quotes": [
-        {
-         "book": "draftkings",
-         "price": -141
-        },
-        {
-         "book": "fanduel",
-         "price": -144
-        },
-        {
-         "book": "williamhill_us",
-         "price": -145
-        },
-        {
-         "book": "mybookieag",
-         "price": -146
-        },
-        {
-         "book": "lowvig",
-         "price": -148
-        },
-        {
-         "book": "betonlineag",
-         "price": -148
-        },
-        {
-         "book": "betrivers",
-         "price": -148
-        },
-        {
-         "book": "betus",
-         "price": -148
-        },
-        {
-         "book": "fanatics",
-         "price": -150
-        },
-        {
-         "book": "betmgm",
-         "price": -150
-        },
-        {
-         "book": "bovada",
-         "price": -157
-        }
-       ],
-       "best_price": -141,
-       "best_book": "DraftKings",
-       "worst_price": -157,
-       "worst_book": "Bovada",
-       "n_books": 11,
-       "gain_pts": 2.58,
-       "fair_prob": 0.5796,
-       "fair_price": -138,
-       "edge_vs_fair_pts": -0.55
-      },
-      {
-       "name": "New York Yankees",
-       "quotes": [
-        {
-         "book": "williamhill_us",
-         "price": 135
-        },
-        {
-         "book": "fanduel",
-         "price": 134
-        },
-        {
-         "book": "lowvig",
-         "price": 134
-        },
-        {
-         "book": "betonlineag",
-         "price": 134
-        },
-        {
-         "book": "betus",
-         "price": 133
-        },
-        {
-         "book": "draftkings",
-         "price": 131
-        },
-        {
-         "book": "bovada",
-         "price": 131
-        },
-        {
-         "book": "betrivers",
-         "price": 128
-        },
-        {
-         "book": "fanatics",
-         "price": 125
-        },
-        {
-         "book": "betmgm",
-         "price": 125
-        },
-        {
-         "book": "mybookieag",
-         "price": 124
-        }
-       ],
-       "best_price": 135,
-       "best_book": "Caesars",
-       "worst_price": 124,
-       "worst_book": "MyBookie",
-       "n_books": 11,
-       "gain_pts": 2.09,
-       "fair_prob": 0.4204,
-       "fair_price": 138,
-       "edge_vs_fair_pts": -0.51
-      }
-     ],
-     "max_gain_pts": 2.58,
      "n_books": 11
     },
     {
@@ -927,7 +871,7 @@
         },
         {
          "book": "betus",
-         "price": -137
+         "price": -138
         },
         {
          "book": "draftkings",
@@ -984,6 +928,10 @@
          "price": 125
         },
         {
+         "book": "betus",
+         "price": 125
+        },
+        {
          "book": "lowvig",
          "price": 124
         },
@@ -993,10 +941,6 @@
         },
         {
          "book": "mybookieag",
-         "price": 124
-        },
-        {
-         "book": "betus",
          "price": 124
         },
         {
@@ -1024,6 +968,132 @@
       }
      ],
      "max_gain_pts": 2.55,
+     "n_books": 11
+    },
+    {
+     "id": "60f49a7e49d759fbf523ceb66bc321c7",
+     "home": "Miami Marlins",
+     "away": "Los Angeles Angels",
+     "starts": "2026-08-08T20:11:00Z",
+     "sides": [
+      {
+       "name": "Los Angeles Angels",
+       "quotes": [
+        {
+         "book": "williamhill_us",
+         "price": 145
+        },
+        {
+         "book": "betrivers",
+         "price": 143
+        },
+        {
+         "book": "fanduel",
+         "price": 142
+        },
+        {
+         "book": "draftkings",
+         "price": 142
+        },
+        {
+         "book": "betonlineag",
+         "price": 139
+        },
+        {
+         "book": "lowvig",
+         "price": 139
+        },
+        {
+         "book": "betus",
+         "price": 138
+        },
+        {
+         "book": "fanatics",
+         "price": 135
+        },
+        {
+         "book": "betmgm",
+         "price": 135
+        },
+        {
+         "book": "bovada",
+         "price": 134
+        },
+        {
+         "book": "mybookieag",
+         "price": 131
+        }
+       ],
+       "best_price": 145,
+       "best_book": "Caesars",
+       "worst_price": 131,
+       "worst_book": "MyBookie",
+       "n_books": 11,
+       "gain_pts": 2.47,
+       "fair_prob": 0.4077,
+       "fair_price": 145,
+       "edge_vs_fair_pts": -0.05
+      },
+      {
+       "name": "Miami Marlins",
+       "quotes": [
+        {
+         "book": "draftkings",
+         "price": -153
+        },
+        {
+         "book": "fanduel",
+         "price": -154
+        },
+        {
+         "book": "betonlineag",
+         "price": -154
+        },
+        {
+         "book": "lowvig",
+         "price": -154
+        },
+        {
+         "book": "mybookieag",
+         "price": -155
+        },
+        {
+         "book": "williamhill_us",
+         "price": -155
+        },
+        {
+         "book": "betus",
+         "price": -155
+        },
+        {
+         "book": "bovada",
+         "price": -160
+        },
+        {
+         "book": "betmgm",
+         "price": -160
+        },
+        {
+         "book": "betrivers",
+         "price": -162
+        },
+        {
+         "book": "fanatics",
+         "price": -165
+        }
+       ],
+       "best_price": -153,
+       "best_book": "DraftKings",
+       "worst_price": -165,
+       "worst_book": "Fanatics",
+       "n_books": 11,
+       "gain_pts": 1.79,
+       "fair_prob": 0.5923,
+       "fair_price": -145,
+       "edge_vs_fair_pts": -1.24
+      }
+     ],
+     "max_gain_pts": 2.47,
      "n_books": 11
     },
     {
@@ -1056,24 +1126,24 @@
          "price": -142
         },
         {
-         "book": "betus",
+         "book": "betrivers",
          "price": -143
+        },
+        {
+         "book": "betus",
+         "price": -145
         },
         {
          "book": "mybookieag",
          "price": -146
         },
         {
-         "book": "bovada",
-         "price": -149
-        },
-        {
          "book": "fanatics",
          "price": -150
         },
         {
-         "book": "betrivers",
-         "price": -152
+         "book": "bovada",
+         "price": -150
         },
         {
          "book": "betmgm",
@@ -1106,7 +1176,7 @@
          "price": 130
         },
         {
-         "book": "betrivers",
+         "book": "betus",
          "price": 130
         },
         {
@@ -1118,15 +1188,11 @@
          "price": 129
         },
         {
-         "book": "betus",
-         "price": 129
+         "book": "bovada",
+         "price": 126
         },
         {
          "book": "fanatics",
-         "price": 125
-        },
-        {
-         "book": "bovada",
          "price": 125
         },
         {
@@ -1136,14 +1202,18 @@
         {
          "book": "mybookieag",
          "price": 124
+        },
+        {
+         "book": "betrivers",
+         "price": 123
         }
        ],
        "best_price": 132,
        "best_book": "Caesars",
-       "worst_price": 124,
-       "worst_book": "MyBookie",
+       "worst_price": 123,
+       "worst_book": "BetRivers",
        "n_books": 11,
-       "gain_pts": 1.54,
+       "gain_pts": 1.74,
        "fair_prob": 0.426,
        "fair_price": 135,
        "edge_vs_fair_pts": -0.51
@@ -1186,6 +1256,10 @@
          "price": 104
         },
         {
+         "book": "betrivers",
+         "price": 102
+        },
+        {
          "book": "bovada",
          "price": 101
         },
@@ -1195,10 +1269,6 @@
         },
         {
          "book": "betmgm",
-         "price": 100
-        },
-        {
-         "book": "betrivers",
          "price": 100
         },
         {
@@ -1212,9 +1282,9 @@
        "worst_book": "MyBookie",
        "n_books": 11,
        "gain_pts": 2.42,
-       "fair_prob": 0.4762,
-       "fair_price": 110,
-       "edge_vs_fair_pts": -0.46
+       "fair_prob": 0.4743,
+       "fair_price": 111,
+       "edge_vs_fair_pts": -0.65
       },
       {
        "name": "Detroit Tigers",
@@ -1240,10 +1310,6 @@
          "price": -115
         },
         {
-         "book": "betrivers",
-         "price": -117
-        },
-        {
          "book": "lowvig",
          "price": -119
         },
@@ -1262,21 +1328,95 @@
         {
          "book": "bovada",
          "price": -121
+        },
+        {
+         "book": "betrivers",
+         "price": -121
         }
        ],
        "best_price": -112,
        "best_book": "FanDuel",
        "worst_price": -121,
-       "worst_book": "Bovada",
+       "worst_book": "BetRivers",
        "n_books": 11,
        "gain_pts": 1.92,
-       "fair_prob": 0.5238,
-       "fair_price": -110,
-       "edge_vs_fair_pts": -0.45
+       "fair_prob": 0.5257,
+       "fair_price": -111,
+       "edge_vs_fair_pts": -0.26
       }
      ],
      "max_gain_pts": 2.42,
      "n_books": 11
+    },
+    {
+     "id": "daa4e04859053509cd5193e35c94fd0f",
+     "home": "New York Yankees",
+     "away": "Atlanta Braves",
+     "starts": "2026-08-09T17:35:00Z",
+     "sides": [
+      {
+       "name": "New York Yankees",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -143
+        },
+        {
+         "book": "lowvig",
+         "price": -143
+        },
+        {
+         "book": "draftkings",
+         "price": -150
+        },
+        {
+         "book": "fanduel",
+         "price": -158
+        }
+       ],
+       "best_price": -143,
+       "best_book": "BetOnline",
+       "worst_price": -158,
+       "worst_book": "FanDuel",
+       "n_books": 4,
+       "gain_pts": 2.39,
+       "fair_prob": 0.5775,
+       "fair_price": -137,
+       "edge_vs_fair_pts": -1.1
+      },
+      {
+       "name": "Atlanta Braves",
+       "quotes": [
+        {
+         "book": "fanduel",
+         "price": 134
+        },
+        {
+         "book": "betonlineag",
+         "price": 130
+        },
+        {
+         "book": "lowvig",
+         "price": 130
+        },
+        {
+         "book": "draftkings",
+         "price": 124
+        }
+       ],
+       "best_price": 134,
+       "best_book": "FanDuel",
+       "worst_price": 124,
+       "worst_book": "DraftKings",
+       "n_books": 4,
+       "gain_pts": 1.91,
+       "fair_prob": 0.4225,
+       "fair_price": 137,
+       "edge_vs_fair_pts": -0.48
+      }
+     ],
+     "max_gain_pts": 2.39,
+     "n_books": 4
     },
     {
      "id": "65088419b2bbe20536ff82ba4b8956c4",
@@ -1418,6 +1558,10 @@
          "price": 143
         },
         {
+         "book": "draftkings",
+         "price": 142
+        },
+        {
          "book": "fanduel",
          "price": 138
         },
@@ -1430,28 +1574,24 @@
          "price": 138
         },
         {
-         "book": "draftkings",
+         "book": "betrivers",
          "price": 138
         },
         {
-         "book": "betrivers",
-         "price": 138
+         "book": "betus",
+         "price": 136
         },
         {
          "book": "betmgm",
          "price": 135
         },
         {
-         "book": "betus",
-         "price": 134
+         "book": "bovada",
+         "price": 132
         },
         {
          "book": "mybookieag",
-         "price": 132
-        },
-        {
-         "book": "bovada",
-         "price": 132
+         "price": 131
         },
         {
          "book": "fanatics",
@@ -1476,20 +1616,20 @@
          "price": -148
         },
         {
-         "book": "draftkings",
-         "price": -148
-        },
-        {
-         "book": "betus",
-         "price": -150
-        },
-        {
          "book": "lowvig",
          "price": -152
         },
         {
          "book": "betonlineag",
          "price": -152
+        },
+        {
+         "book": "betus",
+         "price": -152
+        },
+        {
+         "book": "draftkings",
+         "price": -153
         },
         {
          "book": "williamhill_us",
@@ -1501,7 +1641,7 @@
         },
         {
          "book": "mybookieag",
-         "price": -156
+         "price": -155
         },
         {
          "book": "bovada",
@@ -1531,130 +1671,74 @@
      "n_books": 11
     },
     {
-     "id": "60f49a7e49d759fbf523ceb66bc321c7",
-     "home": "Miami Marlins",
-     "away": "Los Angeles Angels",
-     "starts": "2026-08-08T20:11:00Z",
+     "id": "3081c067af129c2354800a0fde3a3568",
+     "home": "Pittsburgh Pirates",
+     "away": "New York Mets",
+     "starts": "2026-08-09T17:35:00Z",
      "sides": [
       {
-       "name": "Los Angeles Angels",
+       "name": "Pittsburgh Pirates",
        "quotes": [
         {
-         "book": "williamhill_us",
-         "price": 145
-        },
-        {
-         "book": "betrivers",
-         "price": 143
-        },
-        {
-         "book": "fanduel",
-         "price": 142
-        },
-        {
-         "book": "draftkings",
-         "price": 142
-        },
-        {
          "book": "betonlineag",
-         "price": 139
+         "price": -131
         },
         {
          "book": "lowvig",
-         "price": 139
+         "price": -131
         },
         {
-         "book": "betus",
-         "price": 138
+         "book": "draftkings",
+         "price": -137
         },
         {
-         "book": "fanatics",
-         "price": 135
-        },
-        {
-         "book": "betmgm",
-         "price": 135
-        },
-        {
-         "book": "bovada",
-         "price": 133
-        },
-        {
-         "book": "mybookieag",
-         "price": 132
+         "book": "fanduel",
+         "price": -144
         }
        ],
-       "best_price": 145,
-       "best_book": "Caesars",
-       "worst_price": 132,
-       "worst_book": "MyBookie",
-       "n_books": 11,
-       "gain_pts": 2.29,
-       "fair_prob": 0.4077,
-       "fair_price": 145,
-       "edge_vs_fair_pts": -0.05
+       "best_price": -131,
+       "best_book": "BetOnline",
+       "worst_price": -144,
+       "worst_book": "FanDuel",
+       "n_books": 4,
+       "gain_pts": 2.31,
+       "fair_prob": 0.5563,
+       "fair_price": -125,
+       "edge_vs_fair_pts": -1.08
       },
       {
-       "name": "Miami Marlins",
+       "name": "New York Mets",
        "quotes": [
         {
-         "book": "draftkings",
-         "price": -153
-        },
-        {
          "book": "fanduel",
-         "price": -154
+         "price": 122
         },
         {
          "book": "betonlineag",
-         "price": -154
+         "price": 119
         },
         {
          "book": "lowvig",
-         "price": -154
+         "price": 119
         },
         {
-         "book": "betus",
-         "price": -154
-        },
-        {
-         "book": "mybookieag",
-         "price": -155
-        },
-        {
-         "book": "williamhill_us",
-         "price": -155
-        },
-        {
-         "book": "bovada",
-         "price": -159
-        },
-        {
-         "book": "betmgm",
-         "price": -160
-        },
-        {
-         "book": "betrivers",
-         "price": -162
-        },
-        {
-         "book": "fanatics",
-         "price": -165
+         "book": "draftkings",
+         "price": 114
         }
        ],
-       "best_price": -153,
-       "best_book": "DraftKings",
-       "worst_price": -165,
-       "worst_book": "Fanatics",
-       "n_books": 11,
-       "gain_pts": 1.79,
-       "fair_prob": 0.5923,
-       "fair_price": -145,
-       "edge_vs_fair_pts": -1.24
+       "best_price": 122,
+       "best_book": "FanDuel",
+       "worst_price": 114,
+       "worst_book": "DraftKings",
+       "n_books": 4,
+       "gain_pts": 1.68,
+       "fair_prob": 0.4437,
+       "fair_price": 125,
+       "edge_vs_fair_pts": -0.68
       }
      ],
-     "max_gain_pts": 2.29,
-     "n_books": 11
+     "max_gain_pts": 2.31,
+     "n_books": 4
     },
     {
      "id": "c70414f74d2d01667ec47d97408c9f83",
@@ -1752,15 +1836,15 @@
          "price": -124
         },
         {
-         "book": "mybookieag",
-         "price": -124
-        },
-        {
          "book": "fanatics",
          "price": -125
         },
         {
          "book": "betrivers",
+         "price": -125
+        },
+        {
+         "book": "mybookieag",
          "price": -125
         },
         {
@@ -1783,550 +1867,130 @@
      "n_books": 11
     },
     {
-     "id": "1832664964f1aa706bdd77989f364361",
-     "home": "Philadelphia Phillies",
-     "away": "Toronto Blue Jays",
-     "starts": "2026-08-08T22:06:00Z",
-     "sides": [
-      {
-       "name": "Philadelphia Phillies",
-       "quotes": [
-        {
-         "book": "fanduel",
-         "price": -158
-        },
-        {
-         "book": "williamhill_us",
-         "price": -160
-        },
-        {
-         "book": "draftkings",
-         "price": -163
-        },
-        {
-         "book": "betonlineag",
-         "price": -166
-        },
-        {
-         "book": "lowvig",
-         "price": -166
-        },
-        {
-         "book": "betus",
-         "price": -166
-        },
-        {
-         "book": "betrivers",
-         "price": -167
-        },
-        {
-         "book": "mybookieag",
-         "price": -169
-        },
-        {
-         "book": "fanatics",
-         "price": -170
-        },
-        {
-         "book": "betmgm",
-         "price": -170
-        },
-        {
-         "book": "bovada",
-         "price": -172
-        }
-       ],
-       "best_price": -158,
-       "best_book": "FanDuel",
-       "worst_price": -172,
-       "worst_book": "Bovada",
-       "n_books": 11,
-       "gain_pts": 1.99,
-       "fair_prob": 0.6056,
-       "fair_price": -154,
-       "edge_vs_fair_pts": -0.69
-      },
-      {
-       "name": "Toronto Blue Jays",
-       "quotes": [
-        {
-         "book": "draftkings",
-         "price": 152
-        },
-        {
-         "book": "betonlineag",
-         "price": 150
-        },
-        {
-         "book": "lowvig",
-         "price": 150
-        },
-        {
-         "book": "williamhill_us",
-         "price": 150
-        },
-        {
-         "book": "betus",
-         "price": 147
-        },
-        {
-         "book": "fanduel",
-         "price": 146
-        },
-        {
-         "book": "betrivers",
-         "price": 145
-        },
-        {
-         "book": "mybookieag",
-         "price": 142
-        },
-        {
-         "book": "bovada",
-         "price": 142
-        },
-        {
-         "book": "fanatics",
-         "price": 140
-        },
-        {
-         "book": "betmgm",
-         "price": 140
-        }
-       ],
-       "best_price": 152,
-       "best_book": "DraftKings",
-       "worst_price": 140,
-       "worst_book": "BetMGM",
-       "n_books": 11,
-       "gain_pts": 1.98,
-       "fair_prob": 0.3944,
-       "fair_price": 154,
-       "edge_vs_fair_pts": -0.24
-      }
-     ],
-     "max_gain_pts": 1.99,
-     "n_books": 11
-    },
-    {
-     "id": "9e78ca8707c1e5012ccd30c142e37a40",
-     "home": "San Francisco Giants",
-     "away": "Detroit Tigers",
-     "starts": "2026-08-09T20:05:00Z",
-     "sides": [
-      {
-       "name": "San Francisco Giants",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 101
-        },
-        {
-         "book": "lowvig",
-         "price": 101
-        },
-        {
-         "book": "mybookieag",
-         "price": -102
-        },
-        {
-         "book": "draftkings",
-         "price": -104
-        }
-       ],
-       "best_price": 101,
-       "best_book": "BetOnline",
-       "worst_price": -104,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.23,
-       "fair_prob": 0.4858,
-       "fair_price": 106,
-       "edge_vs_fair_pts": -1.17
-      },
-      {
-       "name": "Detroit Tigers",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -111
-        },
-        {
-         "book": "lowvig",
-         "price": -111
-        },
-        {
-         "book": "mybookieag",
-         "price": -115
-        },
-        {
-         "book": "draftkings",
-         "price": -116
-        }
-       ],
-       "best_price": -111,
-       "best_book": "BetOnline",
-       "worst_price": -116,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.1,
-       "fair_prob": 0.5142,
-       "fair_price": -106,
-       "edge_vs_fair_pts": -1.19
-      }
-     ],
-     "max_gain_pts": 1.23,
-     "n_books": 4
-    },
-    {
-     "id": "9787ffdc39d62ec33a07c7d40b78adee",
-     "home": "Chicago White Sox",
-     "away": "Cleveland Guardians",
-     "starts": "2026-08-09T18:10:00Z",
-     "sides": [
-      {
-       "name": "Cleveland Guardians",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 107
-        },
-        {
-         "book": "lowvig",
-         "price": 107
-        },
-        {
-         "book": "mybookieag",
-         "price": 103
-        },
-        {
-         "book": "draftkings",
-         "price": 102
-        }
-       ],
-       "best_price": 107,
-       "best_book": "BetOnline",
-       "worst_price": 102,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.2,
-       "fair_prob": 0.4726,
-       "fair_price": 112,
-       "edge_vs_fair_pts": -1.05
-      },
-      {
-       "name": "Chicago White Sox",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -118
-        },
-        {
-         "book": "lowvig",
-         "price": -118
-        },
-        {
-         "book": "mybookieag",
-         "price": -121
-        },
-        {
-         "book": "draftkings",
-         "price": -123
-        }
-       ],
-       "best_price": -118,
-       "best_book": "BetOnline",
-       "worst_price": -123,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.03,
-       "fair_prob": 0.5274,
-       "fair_price": -112,
-       "edge_vs_fair_pts": -1.39
-      }
-     ],
-     "max_gain_pts": 1.2,
-     "n_books": 4
-    },
-    {
-     "id": "a7521ab1b3d33fa79e27498c47700cb4",
-     "home": "Texas Rangers",
-     "away": "Baltimore Orioles",
-     "starts": "2026-08-09T18:35:00Z",
-     "sides": [
-      {
-       "name": "Baltimore Orioles",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 127
-        },
-        {
-         "book": "lowvig",
-         "price": 127
-        },
-        {
-         "book": "mybookieag",
-         "price": 123
-        },
-        {
-         "book": "draftkings",
-         "price": 121
-        }
-       ],
-       "best_price": 127,
-       "best_book": "BetOnline",
-       "worst_price": 121,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.2,
-       "fair_prob": 0.4307,
-       "fair_price": 132,
-       "edge_vs_fair_pts": -0.99
-      },
-      {
-       "name": "Texas Rangers",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -140
-        },
-        {
-         "book": "lowvig",
-         "price": -140
-        },
-        {
-         "book": "mybookieag",
-         "price": -145
-        },
-        {
-         "book": "draftkings",
-         "price": -146
-        }
-       ],
-       "best_price": -140,
-       "best_book": "BetOnline",
-       "worst_price": -146,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.02,
-       "fair_prob": 0.5693,
-       "fair_price": -132,
-       "edge_vs_fair_pts": -1.4
-      }
-     ],
-     "max_gain_pts": 1.2,
-     "n_books": 4
-    },
-    {
-     "id": "3081c067af129c2354800a0fde3a3568",
-     "home": "Pittsburgh Pirates",
-     "away": "New York Mets",
-     "starts": "2026-08-09T17:35:00Z",
-     "sides": [
-      {
-       "name": "New York Mets",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 109
-        },
-        {
-         "book": "lowvig",
-         "price": 109
-        },
-        {
-         "book": "mybookieag",
-         "price": 105
-        },
-        {
-         "book": "draftkings",
-         "price": 104
-        }
-       ],
-       "best_price": 109,
-       "best_book": "BetOnline",
-       "worst_price": 104,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.17,
-       "fair_prob": 0.4679,
-       "fair_price": 114,
-       "edge_vs_fair_pts": -1.06
-      },
-      {
-       "name": "Pittsburgh Pirates",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -120
-        },
-        {
-         "book": "lowvig",
-         "price": -120
-        },
-        {
-         "book": "mybookieag",
-         "price": -124
-        },
-        {
-         "book": "draftkings",
-         "price": -125
-        }
-       ],
-       "best_price": -120,
-       "best_book": "BetOnline",
-       "worst_price": -125,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.01,
-       "fair_prob": 0.5321,
-       "fair_price": -114,
-       "edge_vs_fair_pts": -1.33
-      }
-     ],
-     "max_gain_pts": 1.17,
-     "n_books": 4
-    },
-    {
-     "id": "daa4e04859053509cd5193e35c94fd0f",
+     "id": "5c292777a98d90d363d05f1ad9eb489d",
      "home": "New York Yankees",
      "away": "Atlanta Braves",
-     "starts": "2026-08-09T17:35:00Z",
+     "starts": "2026-08-08T19:05:00Z",
      "sides": [
       {
        "name": "Atlanta Braves",
        "quotes": [
         {
-         "book": "betonlineag",
-         "price": 130
+         "book": "draftkings",
+         "price": -141
+        },
+        {
+         "book": "fanduel",
+         "price": -142
+        },
+        {
+         "book": "williamhill_us",
+         "price": -145
+        },
+        {
+         "book": "betrivers",
+         "price": -148
+        },
+        {
+         "book": "betus",
+         "price": -148
         },
         {
          "book": "lowvig",
-         "price": 130
+         "price": -149
+        },
+        {
+         "book": "betonlineag",
+         "price": -149
+        },
+        {
+         "book": "fanatics",
+         "price": -150
         },
         {
          "book": "mybookieag",
-         "price": 126
+         "price": -150
         },
         {
-         "book": "draftkings",
-         "price": 124
+         "book": "bovada",
+         "price": -153
+        },
+        {
+         "book": "betmgm",
+         "price": -155
         }
        ],
-       "best_price": 130,
-       "best_book": "BetOnline",
-       "worst_price": 124,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.16,
-       "fair_prob": 0.4253,
-       "fair_price": 135,
-       "edge_vs_fair_pts": -0.94
+       "best_price": -141,
+       "best_book": "DraftKings",
+       "worst_price": -155,
+       "worst_book": "BetMGM",
+       "n_books": 11,
+       "gain_pts": 2.28,
+       "fair_prob": 0.5802,
+       "fair_price": -138,
+       "edge_vs_fair_pts": -0.48
       },
       {
        "name": "New York Yankees",
        "quotes": [
         {
-         "book": "betonlineag",
-         "price": -143
-        },
-        {
          "book": "lowvig",
-         "price": -143
+         "price": 135
         },
         {
-         "book": "mybookieag",
-         "price": -148
+         "book": "betonlineag",
+         "price": 135
+        },
+        {
+         "book": "williamhill_us",
+         "price": 135
+        },
+        {
+         "book": "betus",
+         "price": 133
+        },
+        {
+         "book": "fanduel",
+         "price": 132
         },
         {
          "book": "draftkings",
-         "price": -150
+         "price": 131
+        },
+        {
+         "book": "bovada",
+         "price": 128
+        },
+        {
+         "book": "betrivers",
+         "price": 128
+        },
+        {
+         "book": "mybookieag",
+         "price": 127
+        },
+        {
+         "book": "fanatics",
+         "price": 125
+        },
+        {
+         "book": "betmgm",
+         "price": 125
         }
        ],
-       "best_price": -143,
-       "best_book": "BetOnline",
-       "worst_price": -150,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.15,
-       "fair_prob": 0.5747,
-       "fair_price": -135,
-       "edge_vs_fair_pts": -1.38
+       "best_price": 135,
+       "best_book": "LowVig",
+       "worst_price": 125,
+       "worst_book": "BetMGM",
+       "n_books": 11,
+       "gain_pts": 1.89,
+       "fair_prob": 0.4198,
+       "fair_price": 138,
+       "edge_vs_fair_pts": -0.58
       }
      ],
-     "max_gain_pts": 1.16,
-     "n_books": 4
-    },
-    {
-     "id": "6b6ba5b15bfaaa7ec8e1e6d5c8666468",
-     "home": "St. Louis Cardinals",
-     "away": "Colorado Rockies",
-     "starts": "2026-08-09T18:15:00Z",
-     "sides": [
-      {
-       "name": "Colorado Rockies",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 149
-        },
-        {
-         "book": "lowvig",
-         "price": 149
-        },
-        {
-         "book": "mybookieag",
-         "price": 143
-        },
-        {
-         "book": "draftkings",
-         "price": 142
-        }
-       ],
-       "best_price": 149,
-       "best_book": "BetOnline",
-       "worst_price": 142,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.16,
-       "fair_prob": 0.394,
-       "fair_price": 154,
-       "edge_vs_fair_pts": -0.77
-      },
-      {
-       "name": "St. Louis Cardinals",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -165
-        },
-        {
-         "book": "lowvig",
-         "price": -165
-        },
-        {
-         "book": "mybookieag",
-         "price": -169
-        },
-        {
-         "book": "draftkings",
-         "price": -173
-        }
-       ],
-       "best_price": -165,
-       "best_book": "BetOnline",
-       "worst_price": -173,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.11,
-       "fair_prob": 0.606,
-       "fair_price": -154,
-       "edge_vs_fair_pts": -1.66
-      }
-     ],
-     "max_gain_pts": 1.16,
-     "n_books": 4
+     "max_gain_pts": 2.28,
+     "n_books": 11
     },
     {
      "id": "440c77bba5359e2f5581b4cc8db80c54",
@@ -2334,36 +1998,6 @@
      "away": "Los Angeles Angels",
      "starts": "2026-08-09T17:40:00Z",
      "sides": [
-      {
-       "name": "Los Angeles Angels",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 131
-        },
-        {
-         "book": "lowvig",
-         "price": 131
-        },
-        {
-         "book": "mybookieag",
-         "price": 127
-        },
-        {
-         "book": "draftkings",
-         "price": 125
-        }
-       ],
-       "best_price": 131,
-       "best_book": "BetOnline",
-       "worst_price": 125,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.15,
-       "fair_prob": 0.4232,
-       "fair_price": 136,
-       "edge_vs_fair_pts": -0.97
-      },
       {
        "name": "Miami Marlins",
        "quotes": [
@@ -2376,167 +2010,183 @@
          "price": -145
         },
         {
-         "book": "mybookieag",
-         "price": -149
-        },
-        {
          "book": "draftkings",
          "price": -151
+        },
+        {
+         "book": "fanduel",
+         "price": -158
         }
        ],
        "best_price": -145,
        "best_book": "BetOnline",
-       "worst_price": -151,
+       "worst_price": -158,
+       "worst_book": "FanDuel",
+       "n_books": 4,
+       "gain_pts": 2.06,
+       "fair_prob": 0.5796,
+       "fair_price": -138,
+       "edge_vs_fair_pts": -1.23
+      },
+      {
+       "name": "Los Angeles Angels",
+       "quotes": [
+        {
+         "book": "fanduel",
+         "price": 134
+        },
+        {
+         "book": "betonlineag",
+         "price": 131
+        },
+        {
+         "book": "lowvig",
+         "price": 131
+        },
+        {
+         "book": "draftkings",
+         "price": 125
+        }
+       ],
+       "best_price": 134,
+       "best_book": "FanDuel",
+       "worst_price": 125,
        "worst_book": "DraftKings",
        "n_books": 4,
-       "gain_pts": 0.98,
-       "fair_prob": 0.5768,
-       "fair_price": -136,
-       "edge_vs_fair_pts": -1.51
+       "gain_pts": 1.71,
+       "fair_prob": 0.4204,
+       "fair_price": 138,
+       "edge_vs_fair_pts": -0.69
       }
      ],
-     "max_gain_pts": 1.15,
+     "max_gain_pts": 2.06,
      "n_books": 4
     },
     {
-     "id": "87469e2153fb7260dafc6c43a4ebee53",
-     "home": "Arizona Diamondbacks",
-     "away": "Los Angeles Dodgers",
-     "starts": "2026-08-09T20:10:00Z",
+     "id": "79a0c1e324175df9d0c7f93de8d4dc44",
+     "home": "Seattle Mariners",
+     "away": "Tampa Bay Rays",
+     "starts": "2026-08-09T01:50:00Z",
      "sides": [
       {
-       "name": "Los Angeles Dodgers",
+       "name": "Tampa Bay Rays",
        "quotes": [
         {
-         "book": "betonlineag",
-         "price": -125
-        },
-        {
-         "book": "lowvig",
-         "price": -125
-        },
-        {
-         "book": "mybookieag",
-         "price": -129
+         "book": "fanduel",
+         "price": 106
         },
         {
          "book": "draftkings",
-         "price": -131
+         "price": 105
+        },
+        {
+         "book": "williamhill_us",
+         "price": 105
+        },
+        {
+         "book": "lowvig",
+         "price": 102
+        },
+        {
+         "book": "betonlineag",
+         "price": 102
+        },
+        {
+         "book": "betrivers",
+         "price": 102
+        },
+        {
+         "book": "betus",
+         "price": 102
+        },
+        {
+         "book": "mybookieag",
+         "price": 101
+        },
+        {
+         "book": "fanatics",
+         "price": 100
+        },
+        {
+         "book": "bovada",
+         "price": -102
+        },
+        {
+         "book": "betmgm",
+         "price": -102
         }
        ],
-       "best_price": -125,
-       "best_book": "BetOnline",
-       "worst_price": -131,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.15,
-       "fair_prob": 0.5419,
-       "fair_price": -118,
-       "edge_vs_fair_pts": -1.36
+       "best_price": 106,
+       "best_book": "FanDuel",
+       "worst_price": -102,
+       "worst_book": "BetMGM",
+       "n_books": 11,
+       "gain_pts": 1.95,
+       "fair_prob": 0.4797,
+       "fair_price": 108,
+       "edge_vs_fair_pts": -0.58
       },
       {
-       "name": "Arizona Diamondbacks",
+       "name": "Seattle Mariners",
        "quotes": [
         {
-         "book": "betonlineag",
-         "price": 113
-        },
-        {
          "book": "lowvig",
-         "price": 113
+         "price": -112
         },
         {
-         "book": "mybookieag",
-         "price": 110
+         "book": "betonlineag",
+         "price": -112
         },
         {
          "book": "draftkings",
-         "price": 108
+         "price": -112
+        },
+        {
+         "book": "betus",
+         "price": -112
+        },
+        {
+         "book": "williamhill_us",
+         "price": -115
+        },
+        {
+         "book": "fanduel",
+         "price": -116
+        },
+        {
+         "book": "mybookieag",
+         "price": -118
+        },
+        {
+         "book": "bovada",
+         "price": -118
+        },
+        {
+         "book": "betmgm",
+         "price": -118
+        },
+        {
+         "book": "fanatics",
+         "price": -120
+        },
+        {
+         "book": "betrivers",
+         "price": -121
         }
        ],
-       "best_price": 113,
-       "best_book": "BetOnline",
-       "worst_price": 108,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.13,
-       "fair_prob": 0.4581,
-       "fair_price": 118,
-       "edge_vs_fair_pts": -1.14
+       "best_price": -112,
+       "best_book": "LowVig",
+       "worst_price": -121,
+       "worst_book": "BetRivers",
+       "n_books": 11,
+       "gain_pts": 1.92,
+       "fair_prob": 0.5203,
+       "fair_price": -108,
+       "edge_vs_fair_pts": -0.8
       }
      ],
-     "max_gain_pts": 1.15,
-     "n_books": 4
-    },
-    {
-     "id": "d9bb4855e4ed5d8ae038db62356ed74f",
-     "home": "Kansas City Royals",
-     "away": "Chicago Cubs",
-     "starts": "2026-08-09T18:10:00Z",
-     "sides": [
-      {
-       "name": "Kansas City Royals",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 154
-        },
-        {
-         "book": "lowvig",
-         "price": 154
-        },
-        {
-         "book": "mybookieag",
-         "price": 149
-        },
-        {
-         "book": "draftkings",
-         "price": 147
-        }
-       ],
-       "best_price": 154,
-       "best_book": "BetOnline",
-       "worst_price": 147,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.12,
-       "fair_prob": 0.3856,
-       "fair_price": 159,
-       "edge_vs_fair_pts": -0.81
-      },
-      {
-       "name": "Chicago Cubs",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -170
-        },
-        {
-         "book": "lowvig",
-         "price": -170
-        },
-        {
-         "book": "mybookieag",
-         "price": -176
-        },
-        {
-         "book": "draftkings",
-         "price": -178
-        }
-       ],
-       "best_price": -170,
-       "best_book": "BetOnline",
-       "worst_price": -178,
-       "worst_book": "DraftKings",
-       "n_books": 4,
-       "gain_pts": 1.07,
-       "fair_prob": 0.6144,
-       "fair_price": -159,
-       "edge_vs_fair_pts": -1.52
-      }
-     ],
-     "max_gain_pts": 1.12,
-     "n_books": 4
+     "max_gain_pts": 1.95,
+     "n_books": 11
     },
     {
      "id": "cace409c1c9708d449b8598e55ca9536",
@@ -2560,19 +2210,19 @@
          "price": 200
         },
         {
-         "book": "mybookieag",
-         "price": 200
+         "book": "fanduel",
+         "price": 194
         }
        ],
        "best_price": 210,
        "best_book": "BetOnline",
-       "worst_price": 200,
-       "worst_book": "MyBookie",
+       "worst_price": 194,
+       "worst_book": "FanDuel",
        "n_books": 4,
-       "gain_pts": 1.08,
-       "fair_prob": 0.3176,
-       "fair_price": 215,
-       "edge_vs_fair_pts": -0.49
+       "gain_pts": 1.76,
+       "fair_prob": 0.3186,
+       "fair_price": 214,
+       "edge_vs_fair_pts": -0.4
       },
       {
        "name": "Milwaukee Brewers",
@@ -2586,8 +2236,8 @@
          "price": -235
         },
         {
-         "book": "mybookieag",
-         "price": -242
+         "book": "fanduel",
+         "price": -235
         },
         {
          "book": "draftkings",
@@ -2600,13 +2250,323 @@
        "worst_book": "DraftKings",
        "n_books": 4,
        "gain_pts": 1.03,
-       "fair_prob": 0.6824,
-       "fair_price": -215,
-       "edge_vs_fair_pts": -1.91
+       "fair_prob": 0.6814,
+       "fair_price": -214,
+       "edge_vs_fair_pts": -2.01
       }
      ],
-     "max_gain_pts": 1.08,
+     "max_gain_pts": 1.76,
      "n_books": 4
+    },
+    {
+     "id": "9e78ca8707c1e5012ccd30c142e37a40",
+     "home": "San Francisco Giants",
+     "away": "Detroit Tigers",
+     "starts": "2026-08-09T20:05:00Z",
+     "sides": [
+      {
+       "name": "San Francisco Giants",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 101
+        },
+        {
+         "book": "lowvig",
+         "price": 101
+        },
+        {
+         "book": "draftkings",
+         "price": -104
+        }
+       ],
+       "best_price": 101,
+       "best_book": "BetOnline",
+       "worst_price": -104,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.23,
+       "fair_prob": 0.4861,
+       "fair_price": 106,
+       "edge_vs_fair_pts": -1.15
+      },
+      {
+       "name": "Detroit Tigers",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -111
+        },
+        {
+         "book": "lowvig",
+         "price": -111
+        },
+        {
+         "book": "draftkings",
+         "price": -116
+        }
+       ],
+       "best_price": -111,
+       "best_book": "BetOnline",
+       "worst_price": -116,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.1,
+       "fair_prob": 0.5139,
+       "fair_price": -106,
+       "edge_vs_fair_pts": -1.21
+      }
+     ],
+     "max_gain_pts": 1.23,
+     "n_books": 3
+    },
+    {
+     "id": "a7521ab1b3d33fa79e27498c47700cb4",
+     "home": "Texas Rangers",
+     "away": "Baltimore Orioles",
+     "starts": "2026-08-09T18:35:00Z",
+     "sides": [
+      {
+       "name": "Baltimore Orioles",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 127
+        },
+        {
+         "book": "lowvig",
+         "price": 127
+        },
+        {
+         "book": "draftkings",
+         "price": 121
+        }
+       ],
+       "best_price": 127,
+       "best_book": "BetOnline",
+       "worst_price": 121,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.2,
+       "fair_prob": 0.4303,
+       "fair_price": 132,
+       "edge_vs_fair_pts": -1.03
+      },
+      {
+       "name": "Texas Rangers",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -140
+        },
+        {
+         "book": "lowvig",
+         "price": -140
+        },
+        {
+         "book": "draftkings",
+         "price": -146
+        }
+       ],
+       "best_price": -140,
+       "best_book": "BetOnline",
+       "worst_price": -146,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.02,
+       "fair_prob": 0.5697,
+       "fair_price": -132,
+       "edge_vs_fair_pts": -1.36
+      }
+     ],
+     "max_gain_pts": 1.2,
+     "n_books": 3
+    },
+    {
+     "id": "6b6ba5b15bfaaa7ec8e1e6d5c8666468",
+     "home": "St. Louis Cardinals",
+     "away": "Colorado Rockies",
+     "starts": "2026-08-09T18:15:00Z",
+     "sides": [
+      {
+       "name": "Colorado Rockies",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 149
+        },
+        {
+         "book": "lowvig",
+         "price": 149
+        },
+        {
+         "book": "draftkings",
+         "price": 142
+        }
+       ],
+       "best_price": 149,
+       "best_book": "BetOnline",
+       "worst_price": 142,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.16,
+       "fair_prob": 0.3921,
+       "fair_price": 155,
+       "edge_vs_fair_pts": -0.95
+      },
+      {
+       "name": "St. Louis Cardinals",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -165
+        },
+        {
+         "book": "lowvig",
+         "price": -165
+        },
+        {
+         "book": "draftkings",
+         "price": -173
+        }
+       ],
+       "best_price": -165,
+       "best_book": "BetOnline",
+       "worst_price": -173,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.11,
+       "fair_prob": 0.6079,
+       "fair_price": -155,
+       "edge_vs_fair_pts": -1.47
+      }
+     ],
+     "max_gain_pts": 1.16,
+     "n_books": 3
+    },
+    {
+     "id": "87469e2153fb7260dafc6c43a4ebee53",
+     "home": "Arizona Diamondbacks",
+     "away": "Los Angeles Dodgers",
+     "starts": "2026-08-09T20:10:00Z",
+     "sides": [
+      {
+       "name": "Los Angeles Dodgers",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -125
+        },
+        {
+         "book": "lowvig",
+         "price": -125
+        },
+        {
+         "book": "draftkings",
+         "price": -131
+        }
+       ],
+       "best_price": -125,
+       "best_book": "BetOnline",
+       "worst_price": -131,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.15,
+       "fair_prob": 0.542,
+       "fair_price": -118,
+       "edge_vs_fair_pts": -1.36
+      },
+      {
+       "name": "Arizona Diamondbacks",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 113
+        },
+        {
+         "book": "lowvig",
+         "price": 113
+        },
+        {
+         "book": "draftkings",
+         "price": 108
+        }
+       ],
+       "best_price": 113,
+       "best_book": "BetOnline",
+       "worst_price": 108,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.13,
+       "fair_prob": 0.458,
+       "fair_price": 118,
+       "edge_vs_fair_pts": -1.15
+      }
+     ],
+     "max_gain_pts": 1.15,
+     "n_books": 3
+    },
+    {
+     "id": "d9bb4855e4ed5d8ae038db62356ed74f",
+     "home": "Kansas City Royals",
+     "away": "Chicago Cubs",
+     "starts": "2026-08-09T18:10:00Z",
+     "sides": [
+      {
+       "name": "Kansas City Royals",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": 154
+        },
+        {
+         "book": "lowvig",
+         "price": 154
+        },
+        {
+         "book": "draftkings",
+         "price": 147
+        }
+       ],
+       "best_price": 154,
+       "best_book": "BetOnline",
+       "worst_price": 147,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.12,
+       "fair_prob": 0.3847,
+       "fair_price": 160,
+       "edge_vs_fair_pts": -0.9
+      },
+      {
+       "name": "Chicago Cubs",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -170
+        },
+        {
+         "book": "lowvig",
+         "price": -170
+        },
+        {
+         "book": "draftkings",
+         "price": -178
+        }
+       ],
+       "best_price": -170,
+       "best_book": "BetOnline",
+       "worst_price": -178,
+       "worst_book": "DraftKings",
+       "n_books": 3,
+       "gain_pts": 1.07,
+       "fair_prob": 0.6153,
+       "fair_price": -160,
+       "edge_vs_fair_pts": -1.44
+      }
+     ],
+     "max_gain_pts": 1.12,
+     "n_books": 3
     }
    ]
   },
@@ -2614,10 +2574,112 @@
    "sport": "ufc",
    "label": "UFC",
    "n_events": 12,
-   "avg_gain_pts": 2.01,
-   "max_gain_pts": 3.56,
+   "avg_gain_pts": 2.23,
+   "max_gain_pts": 3.95,
    "n_books": 8,
    "events": [
+    {
+     "id": "ad126b3ecf486d325bb850307bffe242",
+     "home": "Diyar Nurgozhay",
+     "away": "Bruno Lopes",
+     "starts": "2026-08-08T23:15:00Z",
+     "sides": [
+      {
+       "name": "Diyar Nurgozhay",
+       "quotes": [
+        {
+         "book": "betonlineag",
+         "price": -144
+        },
+        {
+         "book": "betus",
+         "price": -160
+        },
+        {
+         "book": "bovada",
+         "price": -160
+        },
+        {
+         "book": "draftkings",
+         "price": -162
+        },
+        {
+         "book": "fanduel",
+         "price": -164
+        },
+        {
+         "book": "williamhill_us",
+         "price": -165
+        },
+        {
+         "book": "betrivers",
+         "price": -167
+        },
+        {
+         "book": "betmgm",
+         "price": -170
+        }
+       ],
+       "best_price": -144,
+       "best_book": "BetOnline",
+       "worst_price": -170,
+       "worst_book": "BetMGM",
+       "n_books": 8,
+       "gain_pts": 3.95,
+       "fair_prob": 0.5934,
+       "fair_price": -146,
+       "edge_vs_fair_pts": 0.33
+      },
+      {
+       "name": "Bruno Lopes",
+       "quotes": [
+        {
+         "book": "williamhill_us",
+         "price": 140
+        },
+        {
+         "book": "betmgm",
+         "price": 140
+        },
+        {
+         "book": "fanduel",
+         "price": 138
+        },
+        {
+         "book": "draftkings",
+         "price": 136
+        },
+        {
+         "book": "bovada",
+         "price": 135
+        },
+        {
+         "book": "betrivers",
+         "price": 135
+        },
+        {
+         "book": "betus",
+         "price": 134
+        },
+        {
+         "book": "betonlineag",
+         "price": 124
+        }
+       ],
+       "best_price": 140,
+       "best_book": "Caesars",
+       "worst_price": 124,
+       "worst_book": "BetOnline",
+       "n_books": 8,
+       "gain_pts": 2.98,
+       "fair_prob": 0.4066,
+       "fair_price": 146,
+       "edge_vs_fair_pts": -1.01
+      }
+     ],
+     "max_gain_pts": 3.95,
+     "n_books": 8
+    },
     {
      "id": "4747134e3e1143e612926bbb7307af05",
      "home": "Miles Johns",
@@ -2726,10 +2788,6 @@
          "price": 185
         },
         {
-         "book": "draftkings",
-         "price": 180
-        },
-        {
          "book": "betmgm",
          "price": 180
         },
@@ -2746,6 +2804,10 @@
          "price": 175
         },
         {
+         "book": "draftkings",
+         "price": 170
+        },
+        {
          "book": "fanduel",
          "price": 166
         },
@@ -2760,9 +2822,9 @@
        "worst_book": "BetRivers",
        "n_books": 8,
        "gain_pts": 2.94,
-       "fair_prob": 0.3468,
-       "fair_price": 188,
-       "edge_vs_fair_pts": -0.41
+       "fair_prob": 0.3489,
+       "fair_price": 187,
+       "edge_vs_fair_pts": -0.2
       },
       {
        "name": "Louie Sutherland",
@@ -2770,6 +2832,10 @@
         {
          "book": "fanduel",
          "price": -198
+        },
+        {
+         "book": "draftkings",
+         "price": -205
         },
         {
          "book": "betrivers",
@@ -2792,10 +2858,6 @@
          "price": -217
         },
         {
-         "book": "draftkings",
-         "price": -218
-        },
-        {
          "book": "betmgm",
          "price": -220
         }
@@ -2806,9 +2868,9 @@
        "worst_book": "BetMGM",
        "n_books": 8,
        "gain_pts": 2.31,
-       "fair_prob": 0.6532,
-       "fair_price": -188,
-       "edge_vs_fair_pts": -1.12
+       "fair_prob": 0.6511,
+       "fair_price": -187,
+       "edge_vs_fair_pts": -1.33
       }
      ],
      "max_gain_pts": 2.94,
@@ -3110,12 +3172,12 @@
          "price": 270
         },
         {
-         "book": "draftkings",
+         "book": "betus",
          "price": 270
         },
         {
-         "book": "betus",
-         "price": 267
+         "book": "draftkings",
+         "price": 270
         },
         {
          "book": "fanduel",
@@ -3177,7 +3239,7 @@
         },
         {
          "book": "betus",
-         "price": -330
+         "price": -335
         },
         {
          "book": "draftkings",
@@ -3212,10 +3274,6 @@
          "price": -389
         },
         {
-         "book": "bovada",
-         "price": -415
-        },
-        {
          "book": "betrivers",
          "price": -420
         },
@@ -3226,6 +3284,10 @@
         {
          "book": "betmgm",
          "price": -425
+        },
+        {
+         "book": "bovada",
+         "price": -430
         },
         {
          "book": "betus",
@@ -3246,9 +3308,9 @@
        "worst_book": "FanDuel",
        "n_books": 8,
        "gain_pts": 2.27,
-       "fair_prob": 0.7758,
-       "fair_price": -346,
-       "edge_vs_fair_pts": -1.97
+       "fair_prob": 0.777,
+       "fair_price": -348,
+       "edge_vs_fair_pts": -1.85
       },
       {
        "name": "Billy Goff",
@@ -3262,16 +3324,16 @@
          "price": 350
         },
         {
+         "book": "bovada",
+         "price": 335
+        },
+        {
          "book": "betus",
          "price": 330
         },
         {
          "book": "draftkings",
          "price": 330
-        },
-        {
-         "book": "bovada",
-         "price": 325
         },
         {
          "book": "betonlineag",
@@ -3292,9 +3354,9 @@
        "worst_book": "BetMGM",
        "n_books": 8,
        "gain_pts": 2.17,
-       "fair_prob": 0.2242,
-       "fair_price": 346,
-       "edge_vs_fair_pts": 0.2
+       "fair_prob": 0.223,
+       "fair_price": 348,
+       "edge_vs_fair_pts": 0.08
       }
      ],
      "max_gain_pts": 2.27,
@@ -3432,24 +3494,24 @@
          "price": -320
         },
         {
-         "book": "draftkings",
-         "price": -325
-        },
-        {
          "book": "betmgm",
          "price": -325
         },
         {
          "book": "betrivers",
          "price": -335
+        },
+        {
+         "book": "draftkings",
+         "price": -340
         }
        ],
        "best_price": -305,
        "best_book": "BetOnline",
-       "worst_price": -335,
-       "worst_book": "BetRivers",
+       "worst_price": -340,
+       "worst_book": "DraftKings",
        "n_books": 8,
-       "gain_pts": 1.7,
+       "gain_pts": 1.96,
        "fair_prob": 0.73,
        "fair_price": -270,
        "edge_vs_fair_pts": -2.3
@@ -3459,7 +3521,7 @@
        "quotes": [
         {
          "book": "draftkings",
-         "price": 260
+         "price": 270
         },
         {
          "book": "betmgm",
@@ -3490,18 +3552,18 @@
          "price": 249
         }
        ],
-       "best_price": 260,
+       "best_price": 270,
        "best_book": "DraftKings",
        "worst_price": 249,
        "worst_book": "BetOnline",
        "n_books": 8,
-       "gain_pts": 0.88,
+       "gain_pts": 1.63,
        "fair_prob": 0.27,
        "fair_price": 270,
-       "edge_vs_fair_pts": -0.78
+       "edge_vs_fair_pts": -0.03
       }
      ],
-     "max_gain_pts": 1.7,
+     "max_gain_pts": 1.96,
      "n_books": 8
     },
     {
@@ -3599,108 +3661,6 @@
      "n_books": 7
     },
     {
-     "id": "ad126b3ecf486d325bb850307bffe242",
-     "home": "Diyar Nurgozhay",
-     "away": "Bruno Lopes",
-     "starts": "2026-08-08T23:15:00Z",
-     "sides": [
-      {
-       "name": "Diyar Nurgozhay",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": -160
-        },
-        {
-         "book": "betus",
-         "price": -160
-        },
-        {
-         "book": "draftkings",
-         "price": -162
-        },
-        {
-         "book": "bovada",
-         "price": -163
-        },
-        {
-         "book": "fanduel",
-         "price": -164
-        },
-        {
-         "book": "williamhill_us",
-         "price": -165
-        },
-        {
-         "book": "betrivers",
-         "price": -167
-        },
-        {
-         "book": "betmgm",
-         "price": -170
-        }
-       ],
-       "best_price": -160,
-       "best_book": "BetOnline",
-       "worst_price": -170,
-       "worst_book": "BetMGM",
-       "n_books": 8,
-       "gain_pts": 1.42,
-       "fair_prob": 0.5962,
-       "fair_price": -148,
-       "edge_vs_fair_pts": -1.91
-      },
-      {
-       "name": "Bruno Lopes",
-       "quotes": [
-        {
-         "book": "betonlineag",
-         "price": 140
-        },
-        {
-         "book": "williamhill_us",
-         "price": 140
-        },
-        {
-         "book": "betmgm",
-         "price": 140
-        },
-        {
-         "book": "fanduel",
-         "price": 138
-        },
-        {
-         "book": "bovada",
-         "price": 138
-        },
-        {
-         "book": "draftkings",
-         "price": 136
-        },
-        {
-         "book": "betrivers",
-         "price": 135
-        },
-        {
-         "book": "betus",
-         "price": 134
-        }
-       ],
-       "best_price": 140,
-       "best_book": "BetOnline",
-       "worst_price": 134,
-       "worst_book": "BetUS",
-       "n_books": 8,
-       "gain_pts": 1.07,
-       "fair_prob": 0.4038,
-       "fair_price": 148,
-       "edge_vs_fair_pts": -1.29
-      }
-     ],
-     "max_gain_pts": 1.42,
-     "n_books": 8
-    },
-    {
      "id": "27a50da0b28edd612974853ba3ca84b4",
      "home": "Steven Asplund",
      "away": "Guilherme Pat",
@@ -3718,16 +3678,16 @@
          "price": -310
         },
         {
-         "book": "draftkings",
-         "price": -310
-        },
-        {
          "book": "williamhill_us",
          "price": -320
         },
         {
          "book": "bovada",
          "price": -320
+        },
+        {
+         "book": "draftkings",
+         "price": -325
         },
         {
          "book": "betmgm",
@@ -3748,9 +3708,9 @@
        "worst_book": "BetRivers",
        "n_books": 8,
        "gain_pts": 1.4,
-       "fair_prob": 0.7298,
-       "fair_price": -270,
-       "edge_vs_fair_pts": -2.63
+       "fair_prob": 0.7318,
+       "fair_price": -273,
+       "edge_vs_fair_pts": -2.43
       },
       {
        "name": "Guilherme Pat",
@@ -3758,6 +3718,10 @@
         {
          "book": "fanduel",
          "price": 265
+        },
+        {
+         "book": "draftkings",
+         "price": 260
         },
         {
          "book": "betmgm",
@@ -3780,10 +3744,6 @@
          "price": 252
         },
         {
-         "book": "draftkings",
-         "price": 250
-        },
-        {
          "book": "williamhill_us",
          "price": 250
         }
@@ -3794,9 +3754,9 @@
        "worst_book": "Caesars",
        "n_books": 8,
        "gain_pts": 1.17,
-       "fair_prob": 0.2702,
-       "fair_price": 270,
-       "edge_vs_fair_pts": -0.38
+       "fair_prob": 0.2682,
+       "fair_price": 273,
+       "edge_vs_fair_pts": -0.58
       }
      ],
      "max_gain_pts": 1.4,
@@ -3807,7 +3767,7 @@
  ],
  "totals": {
   "events": 37,
-  "avg_gain_pts": 1.87,
-  "max_gain_pts": 3.57
+  "avg_gain_pts": 2.07,
+  "max_gain_pts": 3.95
  }
 }
