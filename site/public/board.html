@@ -70,6 +70,24 @@
   .hero-best p{color:var(--ink-2);font-size:13px;margin:8px 0 0;line-height:1.55;max-width:74ch}
   .hero-best p b{color:var(--ink)}
   .hero-best .learn{font-size:12px;margin-top:11px;display:inline-block;font-weight:700}
+
+  /* first-visit coach-marks (one-shot) */
+  .ob-spot{outline:2px solid var(--pos);outline-offset:3px;border-radius:6px;
+    box-shadow:0 0 0 4px var(--pos-dim);position:relative;z-index:150}
+  .ob-card{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:300;
+    width:min(440px,calc(100vw - 32px));background:var(--bg-2);border:1px solid var(--line-2);
+    border-radius:var(--r);padding:16px 18px;box-shadow:0 14px 44px rgba(0,0,0,.55)}
+  .ob-txt{font-size:14px;color:var(--ink-2);line-height:1.55}
+  .ob-txt b{color:var(--ink)}
+  .ob-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+  .ob-dots{display:inline-flex;gap:6px}
+  .ob-dot{width:6px;height:6px;border-radius:50%;background:var(--line-2)}
+  .ob-dot.on{background:var(--pos)}
+  .ob-btns{display:inline-flex;gap:6px;align-items:center}
+  .ob-skip{background:transparent;border:0;color:var(--muted);font:600 12.5px/1 var(--sans);
+    cursor:pointer;padding:8px 10px;min-height:36px}
+  .ob-skip:hover{color:var(--ink)}
+  .ob-next{min-height:36px;padding:9px 16px;font-size:12.5px}
 </style>
 </head>
 <body data-page="board" class="mode-beginner">
@@ -232,6 +250,44 @@
       +'</div>';
   }
 
+  // first-visit coach-marks: 3 dismissible steps highlighting real board elements.
+  // ponytail: one-shot per browser (localStorage). Highlights via a ring + a fixed
+  // bottom card, so no fragile pixel-anchoring and it works on mobile.
+  function onboard(){
+    try{ if(localStorage.getItem("sooth-onboarded")) return; }catch(e){ return; }
+    if(!document.querySelector("#rows .trow")) return; // nothing to point at yet
+    var steps=[
+      {sel:"#hero .in",              t:"<b>Start here.</b> This is today’s best value — the single biggest bargain on the board right now, explained in plain English."},
+      {sel:"#rows .trow .deal",      t:"Every pick gets a plain label for <b>how good the price is</b>: Great, Good, or Slight value. Higher is a better deal."},
+      {sel:"#rows .trow .cell-best", t:"The <b>green number</b> is the best price we found, and the row shows which book has it. That’s all you need to start."}
+    ];
+    var i=0, cur=null, reduce=false;
+    try{ reduce=matchMedia("(prefers-reduced-motion:reduce)").matches; }catch(e){}
+    var card=document.createElement("div");
+    card.className="ob-card"; card.setAttribute("role","dialog");
+    card.setAttribute("aria-label","Quick tour"); card.setAttribute("aria-live","polite");
+    function clearSpot(){ if(cur){cur.classList.remove("ob-spot"); cur=null;} }
+    function done(){ clearSpot(); if(card.parentNode)card.remove();
+      try{localStorage.setItem("sooth-onboarded","1");}catch(e){} }
+    function show(){
+      clearSpot();
+      var s=steps[i], el=document.querySelector(s.sel);
+      if(!el){ if(i<steps.length-1){i++; return show();} return done(); }
+      cur=el; el.classList.add("ob-spot");
+      try{ el.scrollIntoView({block:"center",behavior:reduce?"auto":"smooth"}); }catch(e){}
+      var last=(i===steps.length-1);
+      var dots=steps.map(function(_,k){return '<span class="ob-dot'+(k===i?" on":"")+'"></span>';}).join("");
+      card.innerHTML='<div class="ob-txt">'+s.t+'</div>'
+        +'<div class="ob-row"><span class="ob-dots" aria-hidden="true">'+dots+'</span>'
+        +'<span class="ob-btns"><button type="button" class="ob-skip">Skip</button>'
+        +'<button type="button" class="ob-next btn btn-accent">'+(last?"Got it":"Next")+'</button></span></div>';
+      card.querySelector(".ob-next").onclick=function(){ if(last){done();} else {i++; show();} };
+      card.querySelector(".ob-skip").onclick=done;
+    }
+    document.body.appendChild(card);
+    show();
+  }
+
   function drawStats(b){
     $("bstats").innerHTML=
        '<span><b>'+b.n_events+'</b> games</span>'
@@ -295,6 +351,7 @@
       buildTabs();
       draw();
       drawHero();
+      onboard();
     }).catch(function(){
       $("s-state").textContent="offline";
       $("rows").innerHTML='<div class="empty"><div class="big">Board unavailable</div>'
