@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask AI — sooth</title>
+<meta name="description" content="Run a bet past the numbers: paste it and get an instant read backed by sooth's live board — the de-vigged fair price, the best book, and the line-shopping edge.">
+<link rel="canonical" href="https://sooth.bet/ask.html">
+<meta property="og:title" content="Ask AI — sooth">
+<meta property="og:description" content="Run a bet past the numbers. An instant read backed by sooth's live board.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/ask.html">
+<meta property="og:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* ask-specific layout only; everything else is sooth.css */
+  .ask-head{margin:20px 0 14px}
+  .ask-head h1{font-size:23px}
+  .ask-head p{margin:5px 0 0;color:var(--muted);font-size:13px;max-width:62ch}
+  .ask-form{margin:16px 0}
+  .ask-ta{width:100%;min-height:88px;resize:vertical;background:var(--bg-2);
+    border:1px solid var(--line-2);border-radius:var(--r-sm);color:var(--ink);
+    font:500 15px/1.5 var(--sans);padding:13px 14px}
+  .ask-ta:focus{outline:2px solid var(--pos);outline-offset:1px}
+  .ask-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;flex-wrap:wrap}
+  .ask-hint{color:var(--dim);font-size:11.5px}
+  .ask-count{font-family:var(--num);color:var(--dim);font-size:11.5px}
+  .examples{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+  .ex{font:600 12px/1 var(--sans);color:var(--muted);background:var(--bg-3);
+    border:1px solid var(--line-2);border-radius:999px;padding:8px 12px;cursor:pointer;min-height:34px}
+  .ex:hover{color:var(--ink);border-color:var(--pos-line)}
+  .answer{margin:18px 0 0;white-space:pre-wrap;line-height:1.6;font-size:15px;color:var(--ink-2)}
+  .answer.err{color:var(--muted)}
+  .thinking{color:var(--muted);font-size:13px}
+  .disc{margin:20px 0 0;color:var(--dim);font-size:11.5px;line-height:1.5}
+</style>
+</head>
+<body data-page="ask">
+<a class="skip" href="#ask">Skip to Ask AI</a>
+
+<main class="wrap">
+
+  <div class="ask-head" id="ask">
+    <h1>Ask AI</h1>
+    <p>Run a bet past the numbers. You get an instant read backed by sooth's live
+       board — the de-vigged fair price, which book has the best number, and the
+       line-shopping edge in points. It reads the math; it does not tell you who wins.</p>
+  </div>
+
+  <div class="panel in ask-form">
+    <label class="fld"><span class="lbl">Your bet</span>
+      <textarea id="q" class="ask-ta" maxlength="500"
+        placeholder="e.g. Is Skubal over 6.5 strikeouts at -110 a fair number?"></textarea>
+    </label>
+    <div class="examples" id="examples"></div>
+    <div class="ask-row">
+      <span class="ask-hint">Reads the live board &amp; props. Not advice.</span>
+      <span style="display:flex;align-items:center;gap:12px">
+        <span class="ask-count"><b id="cnt">0</b>/500</span>
+        <button type="button" id="go" class="btn btn-accent">Get the read</button>
+      </span>
+    </div>
+  </div>
+
+  <div id="out" class="answer" aria-live="polite"></div>
+
+  <p class="disc">Sooth reads odds; it is not a sportsbook and gives no betting
+     advice. Our prediction model is measured worse than the closing market — the
+     edge here is price, not a pick. Prices move constantly; always confirm at the book.</p>
+
+</main>
+
+<script src="/assets/shell.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+  var busy=false;
+  var EX=[
+    "Is Skubal over 6.5 Ks at -110 a fair number?",
+    "Who has the best price on the Yankees moneyline tonight?",
+    "How much edge is in the biggest bargain on the board?"
+  ];
+
+  function setCount(){ $("cnt").textContent=$("q").value.length; }
+
+  function render(text,isErr){
+    var out=$("out");
+    out.className="answer"+(isErr?" err":"");
+    out.textContent=text;
+  }
+
+  function ask(){
+    if(busy) return;
+    var q=$("q").value.trim();
+    if(!q){ render("Type a bet first — a player prop, a moneyline, or 'the best bargain on the board'.",true); return; }
+    busy=true; $("go").disabled=true;
+    $("out").className="answer thinking"; $("out").textContent="Reading the board…";
+    fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify({question:q})})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(res){
+        if(res.ok && res.j.answer){ render(res.j.answer,false); }
+        else{ render(res.j.error||"The read is unavailable right now.",true); }
+      })
+      .catch(function(){ render("Could not reach the read service. Try again in a moment.",true); })
+      .finally(function(){ busy=false; $("go").disabled=false; });
+  }
+
+  function boot(){
+    $("examples").innerHTML=EX.map(function(e,i){
+      return '<button type="button" class="ex" data-i="'+i+'">'+window.sooth.esc(e)+'</button>';
+    }).join("");
+    [].forEach.call(document.querySelectorAll(".ex"),function(b){
+      b.addEventListener("click",function(){ $("q").value=EX[+b.getAttribute("data-i")]; setCount(); $("q").focus(); });
+    });
+    $("q").addEventListener("input",setCount);
+    $("go").addEventListener("click",ask);
+    $("q").addEventListener("keydown",function(e){
+      if((e.metaKey||e.ctrlKey)&&e.key==="Enter") ask();
+    });
+    setCount();
+  }
+
+  if(window.sooth){boot();}
+  else{addEventListener("DOMContentLoaded",function(){
+    if(window.sooth)boot(); else setTimeout(boot,50);});}
+})();
+</script>
+</body>
+</html>
