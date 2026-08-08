@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The board — sooth</title>
+<meta name="description" content="Every US sportsbook on one board: the best available price per side against the de-vigged fair line, and the points you gain by taking it. NFL, MLB, NHL, NBA, UFC.">
+<link rel="canonical" href="https://sooth.bet/board.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* board-specific layout only; everything else is sooth.css */
+  .board-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;
+    flex-wrap:wrap;margin:20px 0 14px}
+  .board-head h1{font-size:23px}
+  .board-head p{margin:5px 0 0;color:var(--muted);font-size:13px;max-width:56ch}
+  .controls{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    flex-wrap:wrap;margin:14px 0}
+  .board-stats{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--num);font-size:12px;color:var(--muted)}
+  .board-stats b{color:var(--ink);font-weight:500}
+  /* 7-col dense grid: side | matchup | start | bks | best | fair | gain */
+  .bcols{grid-template-columns:1.5fr 1.35fr .95fr .45fr .62fr .62fr 1fr}
+  @media (max-width:860px){
+    .bcols{grid-template-columns:1fr 1fr}
+    .grid .thead{display:none}
+    .grid .trow{padding:14px 12px;gap:8px 14px}
+    .col-match,.col-start,.col-bks{grid-column:auto}
+    .side-cell{grid-column:1/-1}
+    .lblm{display:inline;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+  }
+  @media (min-width:861px){.lblm{display:none}}
+</style>
+</head>
+<body data-page="board">
+<a class="skip" href="#board">Skip to the board</a>
+
+<main class="wrap">
+
+  <div class="statusbar" id="status" aria-live="polite">
+    <span class="sb"><span class="dot off" id="s-dot"></span> <span id="s-state">loading</span></span>
+    <span class="sep">|</span>
+    <span class="sb"><span id="s-clock">—</span></span>
+    <span class="sep">|</span>
+    <span class="sb"><b id="s-books">–</b> books read</span>
+    <span class="sep">|</span>
+    <span class="sb">updated <b id="s-ago">—</b></span>
+    <span class="sep">|</span>
+    <span class="sb"><b id="s-games">–</b> sides in window</span>
+  </div>
+
+  <div class="board-head">
+    <div>
+      <h1>The board</h1>
+      <p>The best available price on every side, against the de-vigged fair line.
+         Taking the best number is positive expected value on its own arithmetic,
+         no forecast required.</p>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Sport"></div>
+  </div>
+
+  <div class="controls">
+    <div class="board-stats" id="bstats"></div>
+    <label class="fld" style="flex-direction:row;align-items:center;gap:8px">
+      <span>Sort</span>
+      <select class="field" id="sort">
+        <option value="gain">Gain (high→low)</option>
+        <option value="start">Start time</option>
+        <option value="match">Matchup (A→Z)</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="panel" id="board">
+    <div class="grid">
+      <div class="thead bcols">
+        <span>Side</span>
+        <span class="col-match">Matchup</span>
+        <span class="col-start">Start</span>
+        <span class="col-bks r">Bks</span>
+        <span class="r">Best</span>
+        <span class="r">Fair</span>
+        <span class="r">Gain</span>
+      </div>
+      <div id="rows"><div class="empty">Loading the board…</div></div>
+    </div>
+  </div>
+
+  <p class="mutedtext mono" id="stamp" style="font-size:11.5px;margin:14px 0 0"></p>
+  <p class="dimtext" style="font-size:11.5px;margin:8px 0 0">
+     Raw data: <a href="/data/board.json">board.json</a>. Prices move constantly;
+     always read the timestamp above.</p>
+
+</main>
+
+<script src="/assets/shell.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  var esc,sig; // filled once shell.js is ready
+  var D=null, cur=0, sortBy="gain";
+  var $=function(id){return document.getElementById(id);};
+
+  function startLocal(iso){
+    // kickoff shown in the viewer's local time, terminal-terse: "Sat 5:46p"
+    var d=new Date(iso); if(isNaN(d))return "—";
+    var wd=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];
+    var h=d.getHours(), m=d.getMinutes();
+    var ap=h<12?"a":"p"; var h12=h%12; if(h12===0)h12=12;
+    return wd+" "+h12+":"+(m<10?"0":"")+m+ap;
+  }
+
+  function sidesOf(board){
+    var out=[];
+    board.events.forEach(function(e){
+      e.sides.forEach(function(s){out.push({s:s,e:e});});
+    });
+    return out;
+  }
+
+  function sortSides(list){
+    var a=list.slice();
+    if(sortBy==="gain")      a.sort(function(x,y){return y.s.gain_pts-x.s.gain_pts;});
+    else if(sortBy==="start")a.sort(function(x,y){return Date.parse(x.e.starts)-Date.parse(y.e.starts);});
+    else                     a.sort(function(x,y){return (x.e.home+x.s.name).localeCompare(y.e.home+y.s.name);});
+    return a;
+  }
+
+  function rowHTML(o,maxGain){
+    var s=o.s, e=o.e;
+    var w=Math.max(0,Math.min(100,(s.gain_pts/Math.max(maxGain,0.01))*100));
+    return '<div class="trow bcols">'
+      +'<span class="side-cell"><span class="cell-strong">'+esc(s.name)+'</span>'
+        +'<span class="cell-sub">best at '+esc(s.best_book)+'</span></span>'
+      +'<span class="cell-dim col-match"><span class="lblm">vs</span>'+esc(e.away)+' at '+esc(e.home)+'</span>'
+      +'<span class="cell-dim col-start"><span class="lblm">start</span>'+esc(startLocal(e.starts))+'</span>'
+      +'<span class="cell-dim col-bks r"><span class="lblm">bks</span>'+esc(s.n_books)+'</span>'
+      +'<span class="cell-num r"><span class="lblm">best</span>'+sig(s.best_price)+'</span>'
+      +'<span class="cell-dim r"><span class="lblm">fair</span>'+sig(s.fair_price)+'</span>'
+      +'<span class="r"><span class="gainbar"><b>'+sig(s.gain_pts,2)+'</b>'
+        +'<span class="gtrack" aria-hidden="true"><i style="width:'+w.toFixed(0)+'%"></i></span></span></span>'
+      +'</div>';
+  }
+
+  function drawStats(b){
+    $("bstats").innerHTML=
+       '<span><b>'+b.n_events+'</b> games</span>'
+      +'<span>avg gain <b class="pos">'+sig(b.avg_gain_pts,2)+'</b> pts</span>'
+      +'<span>best <b class="pos">'+sig(b.max_gain_pts,2)+'</b> pts</span>'
+      +'<span><b>'+b.n_books+'</b> books</span>';
+  }
+
+  function draw(){
+    var b=D.boards[cur];
+    // tab selected state
+    [].forEach.call(document.querySelectorAll("#tabs .tab"),function(t,k){
+      t.setAttribute("aria-selected",String(k===cur));});
+    drawStats(b);
+    var list=sortSides(sidesOf(b));
+    var maxGain=list.reduce(function(m,o){return Math.max(m,o.s.gain_pts);},0);
+    $("s-books").textContent=b.n_books;
+    if(!list.length){
+      $("rows").innerHTML='<div class="empty"><div class="big">No '+esc(b.label)
+        +' games in the window</div>The board fills as the next slate approaches.</div>';
+      return;
+    }
+    $("rows").innerHTML=list.map(function(o){return rowHTML(o,maxGain);}).join("");
+  }
+
+  function buildTabs(){
+    $("tabs").innerHTML=D.boards.map(function(b,i){
+      return '<button class="tab" role="tab" aria-selected="'+(i===0)+'">'
+        +esc(b.label)+' <span class="c">'+b.n_events+'</span></button>';
+    }).join("");
+    [].forEach.call(document.querySelectorAll("#tabs .tab"),function(t,i){
+      t.addEventListener("click",function(){cur=i;draw();});
+    });
+  }
+
+  function boot(){
+    esc=window.sooth.esc; sig=window.sooth.sig;
+    window.sooth.startClock($("s-clock"));
+    $("sort").addEventListener("change",function(){sortBy=this.value;draw();});
+
+    fetch("/data/board.json").then(function(r){return r.json();}).then(function(d){
+      D=d;
+      $("s-dot").className="dot"; $("s-state").textContent="live";
+      $("s-games").textContent=(d.totals&&d.totals.events)||0;
+      window.sooth.startAgo($("s-ago"), d.generated_at);
+      $("stamp").textContent="Last read "+d.generated_at.slice(0,16).replace("T"," ")
+        +" UTC  ·  in season: "+((d.sports_live||[]).join(", ")||"none")
+        +"  ·  "+(d.credits_spent||0)+" credits spent this read";
+      if(!d.boards||!d.boards.length){
+        $("tabs").innerHTML="";
+        $("rows").innerHTML='<div class="empty"><div class="big">No games in the window right now</div>'
+          +'The board fills as the next slate approaches.</div>';
+        $("bstats").innerHTML="";
+        return;
+      }
+      buildTabs();
+      draw();
+    }).catch(function(){
+      $("s-state").textContent="offline";
+      $("rows").innerHTML='<div class="empty"><div class="big">Board unavailable</div>'
+        +'Raw data is at <a href="/data/board.json">board.json</a>.</div>';
+    });
+  }
+
+  if(window.sooth){boot();}
+  else{addEventListener("DOMContentLoaded",function(){ // shell.js is deferred; wait a tick
+    if(window.sooth)boot(); else setTimeout(boot,50);});}
+})();
+</script>
+</body>
+</html>
