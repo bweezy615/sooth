@@ -33,13 +33,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
-
-from .backfill import load_key
 
 EVENTS = "https://api.the-odds-api.com/v4/sports/baseball_mlb/events"
 ODDS = "https://api.the-odds-api.com/v4/sports/baseball_mlb/events/{eid}/odds"
@@ -76,6 +75,20 @@ class PropObservation:
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), separators=(",", ":"), sort_keys=True)
+
+
+def load_key() -> str:
+    # ponytail: inlined (not imported from backfill) so this module needs only
+    # `requests` — backfill drags pandas, which the cron shouldn't install.
+    key = os.environ.get("ODDS_API_KEY")
+    if key:
+        return key
+    env = Path(__file__).resolve().parents[1] / ".env"
+    if env.exists():
+        for line in env.read_text().splitlines():
+            if line.startswith("ODDS_API_KEY="):
+                return line.split("=", 1)[1].strip()
+    raise SystemExit("ODDS_API_KEY not found in environment or .env")
 
 
 def _rows_from_event(payload: dict, observed_at: str) -> list[PropObservation]:
