@@ -42,12 +42,15 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
+      - name: Build props.json for the site
+        run: python -m engine.props_board --window-hours 36
+
       - name: Commit captured props
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
           mkdir -p data/capture/mlb-props   # empty-slate ticks write nothing; keep add from erroring
-          git add data/capture/mlb-props
+          git add data/capture/mlb-props site/public/data/props.json
           if git diff --staged --quiet; then
             echo "no new prop observations"
           else

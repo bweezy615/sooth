@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Player props — sooth</title>
+<meta name="description" content="Every US sportsbook's MLB pitcher-strikeout props on one grid: the best available price per side against the de-vigged fair line, and the points you gain by taking it.">
+<link rel="canonical" href="https://sooth.bet/props.html">
+<meta property="og:title" content="Player props — sooth">
+<meta property="og:description" content="The same player prop across every book: best available price against the de-vigged fair line.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/props.html">
+<meta property="og:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* props-specific layout only; everything else is sooth.css */
+  .board-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;
+    flex-wrap:wrap;margin:20px 0 14px}
+  .board-head h1{font-size:23px}
+  .board-head p{margin:5px 0 0;color:var(--muted);font-size:13px;max-width:60ch}
+  .controls{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    flex-wrap:wrap;margin:14px 0}
+  .board-stats{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--num);font-size:12px;color:var(--muted)}
+  .board-stats b{color:var(--ink);font-weight:500}
+  /* 6-col dense grid: prop | matchup | start | bks | best | fair | edge */
+  .pcols{grid-template-columns:1.7fr 1.25fr .9fr .45fr .62fr .62fr .8fr}
+  @media (max-width:860px){
+    .pcols{grid-template-columns:1fr 1fr}
+    .grid .thead{display:none}
+    .grid .trow{padding:14px 12px;gap:8px 14px}
+    .col-match,.col-start,.col-bks{grid-column:auto}
+    .prop-cell{grid-column:1/-1}
+    .lblm{display:inline;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+  }
+  @media (min-width:861px){.lblm{display:none}}
+  .cell-best{font-family:var(--num);font-variant-numeric:tabular-nums;font-size:14px;
+    font-weight:700;color:var(--pos)}
+  .deal{display:inline-flex;align-items:center;font-family:var(--num);font-size:10.5px;
+    font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:999px;margin-top:6px;
+    border:1px solid var(--pos-line);color:var(--pos);background:var(--pos-dim);width:max-content}
+  .deal.some{opacity:.8}
+  .deal.thin{color:var(--muted);border-color:var(--line-2);background:var(--bg-3)}
+  .side-tag{font-family:var(--num);font-size:10.5px;font-weight:700;letter-spacing:.04em;
+    padding:1px 6px;border-radius:4px;border:1px solid var(--line-2);color:var(--muted);margin-left:7px;vertical-align:1px}
+</style>
+</head>
+<body data-page="props">
+<a class="skip" href="#props">Skip to the props</a>
+
+<main class="wrap">
+
+  <div class="statusbar" id="status" aria-live="polite">
+    <span class="sb"><span class="dot off" id="s-dot"></span> <span id="s-state">loading</span></span>
+    <span class="sep">|</span>
+    <span class="sb"><span id="s-clock">—</span></span>
+    <span class="sep">|</span>
+    <span class="sb">updated <b id="s-ago">—</b></span>
+    <span class="sep">|</span>
+    <span class="sb"><b id="s-n">–</b> prop sides</span>
+  </div>
+
+  <div class="board-head">
+    <div>
+      <h1>Player props</h1>
+      <p>The same pitcher-strikeout prop across every US book: the best available
+         price on each side, against the de-vigged fair line. Taking the best
+         number is positive expected value on its own arithmetic — no forecast required.</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="board-stats" id="pstats"></div>
+    <label class="fld" style="flex-direction:row;align-items:center;gap:8px">
+      <span>Sort</span>
+      <select class="field" id="sort">
+        <option value="edge">Edge (high→low)</option>
+        <option value="start">Start time</option>
+        <option value="player">Player (A→Z)</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="panel" id="props">
+    <div class="grid">
+      <div class="thead pcols">
+        <span>Prop</span>
+        <span class="col-match">Matchup</span>
+        <span class="col-start">Start</span>
+        <span class="col-bks r">Bks</span>
+        <span class="r">Best price</span>
+        <span class="r col-fair">Fair</span>
+        <span class="r">Edge</span>
+      </div>
+      <div id="rows"><div class="empty">Loading props…</div></div>
+    </div>
+  </div>
+
+  <p class="mutedtext mono" id="stamp" style="font-size:11.5px;margin:14px 0 0"></p>
+  <p class="dimtext" style="font-size:11.5px;margin:8px 0 0">
+     Raw data: <a href="/data/props.json">props.json</a>. Prices move constantly;
+     always read the timestamp above. Props are captured in the pre-first-pitch window.</p>
+
+</main>
+
+<script src="/assets/shell.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  var esc,sig;
+  var D=null, sortBy="edge";
+  var $=function(id){return document.getElementById(id);};
+
+  // prettify the odds-api market key
+  function marketLabel(m){
+    return ({pitcher_strikeouts:"Pitcher Ks"})[m]||m.replace(/_/g," ");
+  }
+  // fair implied probability -> american fair price, to match the board's framing
+  function probToAmerican(p){
+    if(p<=0||p>=1) return null;
+    return p>=0.5 ? -Math.round(p/(1-p)*100) : Math.round((1-p)/p*100);
+  }
+  // plain-language "how good is this price" from edge points vs fair
+  function deal(e){
+    if(e>=1.5) return {k:"good", t:"Good value"};
+    if(e>=0.5) return {k:"some", t:"Slight value"};
+    if(e>=0)   return {k:"some", t:"Fair-ish"};
+    return {k:"thin", t:"Below fair"};
+  }
+
+  function startLocal(iso){
+    var d=new Date(iso); if(isNaN(d))return "—";
+    var wd=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];
+    var h=d.getHours(), m=d.getMinutes();
+    var ap=h<12?"a":"p"; var h12=h%12; if(h12===0)h12=12;
+    return wd+" "+h12+":"+(m<10?"0":"")+m+ap;
+  }
+
+  function matchupOf(p){
+    // props.json carries commence_time and a team hint; keep it terse
+    return p.team ? esc(p.team) : "—";
+  }
+
+  function sortProps(list){
+    var a=list.slice();
+    if(sortBy==="edge")       a.sort(function(x,y){return y.edge_pts-x.edge_pts;});
+    else if(sortBy==="start") a.sort(function(x,y){return Date.parse(x.commence_time)-Date.parse(y.commence_time);});
+    else                      a.sort(function(x,y){return (x.player+x.side).localeCompare(y.player+y.side);});
+    return a;
+  }
+
+  function rowHTML(p,maxEdge){
+    var d=deal(p.edge_pts);
+    var w=Math.max(0,Math.min(100,(p.edge_pts/Math.max(maxEdge,0.01))*100));
+    var fair=probToAmerican(p.fair_prob);
+    return '<div class="trow pcols">'
+      +'<span class="prop-cell"><span class="cell-strong">⚾ '+esc(p.player)
+        +'<span class="side-tag">'+esc(p.side)+' '+esc(p.line)+'</span></span>'
+        +'<span class="cell-sub">'+esc(marketLabel(p.market))+' · best at '+esc(p.best_book)+'</span>'
+        +'<span class="deal '+d.k+'">'+d.t+'</span></span>'
+      +'<span class="cell-dim col-match"><span class="lblm">team</span>'+matchupOf(p)+'</span>'
+      +'<span class="cell-dim col-start"><span class="lblm">start</span>'+esc(startLocal(p.commence_time))+'</span>'
+      +'<span class="cell-dim col-bks r"><span class="lblm">bks</span>'+esc(p.quotes.length)+'</span>'
+      +'<span class="cell-best r"><span class="lblm">best price</span>'+sig(p.best_price)+'</span>'
+      +'<span class="cell-dim r col-fair"><span class="lblm">fair</span>'+(fair==null?"·":sig(fair))+'</span>'
+      +'<span class="r"><span class="gainbar"><b>'+sig(p.edge_pts,2)+'</b>'
+        +'<span class="gtrack" aria-hidden="true"><i style="width:'+w.toFixed(0)+'%"></i></span></span></span>'
+      +'</div>';
+  }
+
+  function drawStats(d){
+    var edges=d.props.map(function(p){return p.edge_pts;});
+    var max=edges.length?Math.max.apply(null,edges):0;
+    var avg=edges.length?edges.reduce(function(a,b){return a+b;},0)/edges.length:0;
+    $("pstats").innerHTML=
+       '<span><b>'+d.props.length+'</b> prop sides</span>'
+      +'<span>avg edge <b class="pos">'+sig(avg,2)+'</b> pts</span>'
+      +'<span>best <b class="pos">'+sig(max,2)+'</b> pts</span>';
+  }
+
+  function draw(){
+    var list=sortProps(D.props);
+    var maxEdge=list.reduce(function(m,p){return Math.max(m,p.edge_pts);},0);
+    $("rows").innerHTML=list.map(function(p){return rowHTML(p,maxEdge);}).join("");
+  }
+
+  function boot(){
+    esc=window.sooth.esc; sig=window.sooth.sig;
+    window.sooth.startClock($("s-clock"));
+    $("sort").addEventListener("change",function(){sortBy=this.value;draw();});
+
+    fetch("/data/props.json").then(function(r){return r.json();}).then(function(d){
+      D=d;
+      $("s-dot").className="dot"; $("s-state").textContent="live";
+      $("s-n").textContent=d.props.length;
+      window.sooth.startAgo($("s-ago"), d.generated_at);
+      $("stamp").textContent="Last read "+d.generated_at.slice(0,16).replace("T"," ")
+        +" UTC  ·  "+marketLabel(d.market)+", MLB";
+      if(!d.props||!d.props.length){
+        $("pstats").innerHTML="";
+        $("rows").innerHTML='<div class="empty"><div class="big">No props in the window right now</div>'
+          +'Props are captured in the pre-first-pitch window; the grid fills as the next slate approaches.</div>';
+        return;
+      }
+      drawStats(d);
+      draw();
+    }).catch(function(){
+      $("s-state").textContent="offline";
+      $("rows").innerHTML='<div class="empty"><div class="big">Props unavailable</div>'
+        +'Raw data is at <a href="/data/props.json">props.json</a>.</div>';
+    });
+  }
+
+  if(window.sooth){boot();}
+  else{addEventListener("DOMContentLoaded",function(){
+    if(window.sooth)boot(); else setTimeout(boot,50);});}
+})();
+</script>
+</body>
+</html>

@@ -6,6 +6,9 @@
 
   var NAV=[
     {href:"/board.html",  key:"board",  label:"Board"},
+    {href:"/props.html",  key:"props",  label:"Props"},
+    {href:"/predictor.html", key:"predictor", label:"Predictor"},
+    {href:"/ask.html",    key:"ask",    label:"Ask AI"},
     {href:"/learn.html",  key:"learn",  label:"Guide"},
     {href:"/record.html", key:"record", label:"Record"},
     {href:"/verify.html", key:"verify", label:"Verify"},
