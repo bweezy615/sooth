@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe — sooth</title>
+<meta name="description" content="Sooth Pro, $19/month. The full board across every book, line-movement history, closing-line-value data where verified, and model probability exports. Tools and data, not picks.">
+<link rel="canonical" href="https://sooth.bet/subscribe.html">
+<meta property="og:title" content="Subscribe — Sooth Pro, $19/month">
+<meta property="og:description" content="Tools and data, not picks. The full line-shopping board, line history, CLV where verified, and probability exports. Our own backtest loses to the closing market — we sell the tools, not a forecast.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/subscribe.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* subscribe-specific layout only; system is sooth.css */
+  .sub-head{padding:36px 0 6px}
+  .sub-head h1{font-size:clamp(28px,4vw,40px);line-height:1.05}
+  .sub-head h1 .price{color:var(--pos);font-family:var(--num);font-size:.7em;font-weight:700}
+  .sub-head p{color:var(--ink-2);font-size:15px;max-width:60ch;margin:14px 0 0;line-height:1.6}
+  .sub-head p b{color:var(--ink)}
+
+  .buy{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin:22px 0 8px;align-items:start}
+  @media (max-width:820px){.buy{grid-template-columns:1fr}}
+
+  .feat h2{font-size:15px;margin:0 0 12px;letter-spacing:-.01em}
+  .feat ul{list-style:none;margin:0;padding:0}
+  .feat li{font-size:13.5px;color:var(--ink-2);line-height:1.5;padding:9px 0 9px 22px;
+    position:relative;border-bottom:1px solid var(--line)}
+  .feat li:last-child{border-bottom:0}
+  .feat li:before{content:"";position:absolute;left:2px;top:15px;width:6px;height:6px;
+    border-radius:50%;background:var(--pos)}
+
+  .card-buy{position:sticky;top:16px}
+  .card-buy .amt{font-family:var(--num);font-size:34px;font-weight:700;line-height:1}
+  .card-buy .per{color:var(--muted);font-size:13px;margin-left:2px;font-family:var(--sans);font-weight:500}
+  .card-buy .sub2{color:var(--muted);font-size:12.5px;margin:8px 0 16px;line-height:1.45}
+  .card-buy .btn-accent{width:100%;justify-content:center;font-size:15px;padding:14px}
+  .renew{font-size:11px;color:var(--dim);margin:12px 0 0;line-height:1.5}
+  .manage{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5;
+    border-top:1px solid var(--line);padding-top:14px}
+  .manage a{color:var(--ink-2)}
+
+  .honest{margin-top:14px}
+  .honest .eyebrow{color:var(--warn)}
+  .honest p{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin:8px 0 0;max-width:68ch}
+  .honest p b{color:var(--ink)}
+
+  .rg{margin-top:8px;font-size:12px;color:var(--dim);line-height:1.6}
+  .rg b{color:var(--muted)}
+  .rg .never{color:var(--muted)}
+</style>
+</head>
+<body data-page="">
+<a class="skip" href="#buy">Skip to subscribe</a>
+
+<main class="wrap-narrow">
+
+  <div class="statusbar" aria-live="polite">
+    <span class="sb"><span class="dot"></span> Sooth Pro</span>
+    <span class="sep">|</span>
+    <span class="sb">$19 / month</span>
+    <span class="sep">|</span>
+    <span class="sb">cancel in one step</span>
+    <span class="sep">|</span>
+    <span class="sb">tools and data, <b>not picks</b></span>
+  </div>
+
+  <div class="sub-head">
+    <div class="eyebrow" style="margin-bottom:12px">Subscribe</div>
+    <h1>Sooth Pro <span class="price">· $19 / mo</span></h1>
+    <p>The full line-shopping board across every book we track, line-movement history,
+      closing-line-value data where we can verify it, and the raw model output to download.
+      <b>Tools and data. Not picks.</b> We make no claim any prediction will win, our own
+      backtest says the model does not beat the closing market.</p>
+  </div>
+
+  <div class="buy" id="buy">
+
+    <!-- what's included -->
+    <div class="panel panel-pad feat">
+      <h2>What's included</h2>
+      <ul>
+        <li>Full board, every book we track, refreshed continuously</li>
+        <li>Line-movement history for any game on the slate</li>
+        <li>Closing-line-value data (NFL; other sports as verified)</li>
+        <li>Probability exports, download the model output as JSON or CSV</li>
+        <li>Every future tool at no extra charge while you're subscribed</li>
+      </ul>
+    </div>
+
+    <!-- the buy card -->
+    <div class="panel panel-pad card-buy">
+      <div><span class="amt">$19</span><span class="per">/ month</span></div>
+      <p class="sub2">Billed monthly. Cancel any time.</p>
+
+      <!--
+        Primary CTA. Before going live, replace STRIPE_PAYMENT_LINK_PLACEHOLDER
+        with the Payment Link URL from Stripe → Payment Links (https://buy.stripe.com/...).
+        This opens Stripe's hosted checkout, no JS required.
+      -->
+      <a class="btn btn-accent"
+         href="STRIPE_PAYMENT_LINK_PLACEHOLDER"
+         role="button"
+         aria-label="Subscribe to Sooth Pro for $19 per month">
+        Subscribe — $19 / month</a>
+
+      <p class="renew">Renews automatically at $19.00/month until you cancel. You get a
+        receipt before every charge. By subscribing you agree to the automatic-renewal terms.</p>
+
+      <p class="manage">Already subscribed? Manage or cancel in one step through the
+        <!-- replace STRIPE_PORTAL_LINK_PLACEHOLDER with your Stripe customer-portal URL -->
+        <a href="STRIPE_PORTAL_LINK_PLACEHOLDER">billing portal</a>.
+        No call, no email, no retention screen. Access lasts through the end of the billing period.</p>
+    </div>
+
+  </div>
+
+  <!-- the honest part -->
+  <div class="panel panel-pad honest">
+    <div class="eyebrow">What you're not buying</div>
+    <p>You are not buying picks, and you are not buying an edge over the market. The value is the
+      <b>best available price on every side against the de-vigged fair line</b>, taking the best
+      number is +EV on its own arithmetic, no forecast required. We also publish a prediction model
+      and grade it in the open: on both of our samples it <b>does not clear break-even and the market
+      is better calibrated than we are</b>. Read the whole thing on the
+      <a href="/record.html">record</a> and the <a href="/methodology.html">methodology</a> before
+      you pay. Every slate we've ever committed is in the <a href="/ledger.html">ledger</a>.</p>
+  </div>
+
+  <!-- required responsible-gambling block -->
+  <aside class="rg" aria-label="Responsible gambling resources">
+    <b>18+ only</b>, for adults where sports wagering is lawful in their jurisdiction. This is an
+    analytical-tools subscription, not a wager and not a pick service, and nothing here is betting
+    advice. If gambling has stopped being entertainment, help is free and confidential:
+    <b>National Problem Gambling Helpline 1-800-522-4700</b>, call or text 24/7, or chat at
+    <a href="https://www.ncpgambling.org/chat" rel="noopener noreferrer" target="_blank">ncpgambling.org/chat</a>.
+    1-800-GAMBLER (1-800-426-2537) is also available 24/7.
+  </aside>
+
+</main>
+
+<!--
+  Stripe config carrier. No executable code, read via:
+    const cfg = document.getElementById('sooth-stripe-config').dataset;
+  Fill these before going live:
+    STRIPE_PUBLISHABLE_KEY_PLACEHOLDER → pk_live_...   (Stripe → Developers → API keys)
+    STRIPE_PRICE_ID_PLACEHOLDER        → price_...      (the $19/mo price)
+    STRIPE_PAYMENT_LINK_PLACEHOLDER    → https://buy.stripe.com/...
+-->
+<script type="application/json" id="sooth-stripe-config"
+  data-publishable-key="STRIPE_PUBLISHABLE_KEY_PLACEHOLDER"
+  data-price-id="STRIPE_PRICE_ID_PLACEHOLDER"
+  data-payment-link="STRIPE_PAYMENT_LINK_PLACEHOLDER">
+</script>
+
+<script src="/assets/shell.js" defer></script>
+</body>
+</html>
