@@ -1,109 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Canonical host sooth.co is substituted at build time; brand and domain are
-  not yet final. Sport pages carry an honest status: nfl is Live (backtestable
-  model, graded against verified closing lines). The remaining eight sports are
-  published as stubs stating their status and are marked low priority until an
-  adapter ships.
+  Lists only pages that actually exist and match each page's canonical URL
+  (the .html form, home as /). Sport stub routes (/nfl, /nba, ...) are not
+  built yet, so they are intentionally absent until an adapter and page ship.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://sooth.co/</loc>
-    <lastmod>2026-08-02</lastmod>
+    <loc>https://sooth.bet/</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/methodology</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://sooth.bet/board.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/verify</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/ledger</loc>
-    <lastmod>2026-08-02</lastmod>
+    <loc>https://sooth.bet/record.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/disclaimers</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/nfl</loc>
-    <lastmod>2026-08-02</lastmod>
+    <loc>https://sooth.bet/ledger.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/nba</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://sooth.bet/methodology.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/mlb</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://sooth.bet/verify.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/nhl</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://sooth.bet/subscribe.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://sooth.co/epl</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/ufc</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/f1</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/tennis</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://sooth.co/cricket</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://sooth.bet/disclaimers.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
 
 </urlset>
