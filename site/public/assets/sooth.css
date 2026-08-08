@@ -179,6 +179,44 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
 .ft .links a{color:var(--muted);font-weight:600;font-size:12px}
 .ft .help{color:var(--ink-2)}
 
+/* ================= prose (generated markdown pages) ================= */
+.prose{padding:34px 0 20px;color:var(--ink-2);font-size:15px;line-height:1.7}
+.prose h1{font-size:clamp(26px,4vw,36px);line-height:1.12;color:var(--ink);margin:0 0 22px}
+.prose h2{font-size:19px;color:var(--ink);margin:38px 0 12px;padding-top:20px;
+  border-top:1px solid var(--line);letter-spacing:-.01em}
+.prose h3{font-size:15.5px;color:var(--ink);margin:24px 0 8px}
+.prose p{margin:0 0 14px}
+.prose ul,.prose ol{margin:0 0 14px;padding-left:22px}
+.prose li{margin:0 0 6px}
+.prose strong{color:var(--ink);font-weight:650}
+.prose a{color:var(--pos)}
+.prose code{font-family:var(--num);font-size:12.5px;background:var(--bg-3);
+  border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink)}
+.prose pre{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 17px;overflow-x:auto;font-size:12.5px;line-height:1.55}
+.prose pre code{background:none;border:0;padding:0}
+.prose table{width:100%;border-collapse:collapse;font-family:var(--num);
+  font-size:12.5px;margin:18px 0;display:block;overflow-x:auto}
+.prose th{text-align:left;font-family:var(--sans);font-weight:700;color:var(--dim);
+  font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:0 14px 9px;
+  border-bottom:1px solid var(--line);white-space:nowrap}
+.prose td{padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.prose blockquote{margin:18px 0;padding:13px 18px;background:var(--bg-2);
+  border-left:3px solid var(--warn);border-radius:0 var(--r-sm) var(--r-sm) 0;color:var(--ink-2)}
+.prose blockquote p{margin:0}
+.prose hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+
+/* ledger cards (generated) */
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;margin:0 0 13px}
+.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:13px;font-family:var(--sans)}
+.card .k{color:var(--dim);min-width:118px;font-family:var(--num);font-size:11.5px}
+.hash{font-family:var(--num);font-size:12px;color:var(--pos);word-break:break-all}
+.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;
+  padding:2px 7px;border-radius:var(--r-sm);border:1px solid var(--line-2);color:var(--muted)}
+.badge.sealed{color:var(--warn);border-color:var(--warn-dim)}
+.badge.revealed{color:var(--pos);border-color:var(--pos-line)}
+
 /* ================= utilities ================= */
 .mono{font-family:var(--num)}
 .dimtext{color:var(--dim)}
