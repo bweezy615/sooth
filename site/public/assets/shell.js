@@ -85,7 +85,18 @@
       +'</div></div></footer>';
   }
 
+  // ponytail: favicon + theme-color injected here so all pages get it from one
+  // file. SVG favicon is browser-fetched, not needed by link-unfurlers (those
+  // read the static og:image); add a .ico only if legacy Safari ever matters.
+  function headTags(){
+    if(document.querySelector('link[rel="icon"]'))return;
+    document.head.insertAdjacentHTML("beforeend",
+      '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">'
+      +'<meta name="theme-color" content="#0A0B0F">');
+  }
+
   function mount(){
+    headTags();
     var page=document.body.getAttribute("data-page")||"";
     // header first, unless a page opts out with data-shell="footer-only"
     var mode=document.body.getAttribute("data-shell")||"full";
