@@ -24,4 +24,16 @@ assert(p.includes("skubal over 6.5"), "prompt must include the visitor question"
 const long = ask.buildPrompt(board, props, "x".repeat(5000));
 assert(long.indexOf("x".repeat(ask.MAX_Q + 1)) === -1, "question must be capped at MAX_Q");
 
+// extractUrl finds a pasted link and strips trailing prose punctuation
+assert(ask.extractUrl("read this dk https://sportsbook.dk.com/slip/abc123.") ===
+  "https://sportsbook.dk.com/slip/abc123", "must extract url without trailing dot");
+assert(ask.extractUrl("no link here") === null, "no url ⇒ null");
+
+// a scraped bet slip gets folded into the prompt; without one it's omitted
+const withSlip = ask.buildPrompt(board, props, "is this fair?", "Tigers ML -120 @ FanDuel");
+assert(withSlip.includes("Tigers ML -120"), "prompt must include the scraped slip");
+assert(withSlip.includes("bet-slip link"), "prompt must frame the scraped slip");
+assert(ask.buildPrompt(board, props, "is this fair?").indexOf("bet-slip link") === -1,
+  "no slip ⇒ no slip framing");
+
 console.log("ask.selfcheck: OK");
