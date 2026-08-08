@@ -66,20 +66,21 @@
   <div class="statusbar" aria-live="polite">
     <span class="sb"><span class="dot"></span> Sooth Pro</span>
     <span class="sep">|</span>
-    <span class="sb">$19 / month</span>
+    <span class="sb">free until Sept 1</span>
     <span class="sep">|</span>
-    <span class="sb">cancel in one step</span>
+    <span class="sb">no card needed</span>
     <span class="sep">|</span>
     <span class="sb">tools and data, <b>not picks</b></span>
   </div>
 
   <div class="sub-head">
-    <div class="eyebrow" style="margin-bottom:12px">Subscribe</div>
-    <h1>Sooth Pro <span class="price">· $19 / mo</span></h1>
-    <p>The full line-shopping board across every book we track, line-movement history,
-      closing-line-value data where we can verify it, and the raw model output to download.
-      <b>Tools and data. Not picks.</b> We make no claim any prediction will win, our own
-      backtest says the model does not beat the closing market.</p>
+    <div class="eyebrow" style="margin-bottom:12px">Free access</div>
+    <h1>Sooth Pro, <span class="price">free until Sept 1</span></h1>
+    <p>Until September 1, every tool is free: the full line-shopping board across every book,
+      line-movement history, closing-line-value data where we can verify it, and the raw model
+      output to download. <b>There's no card and no account to set up, so you can just open the board.</b> After
+      September 1, Sooth Pro is $19/month. <b>Tools and data. Not picks.</b> We make no claim
+      any prediction will win; our own backtest says the model does not beat the closing market.</p>
   </div>
 
   <div class="buy" id="buy">
@@ -98,27 +99,25 @@
 
     <!-- the buy card -->
     <div class="panel panel-pad card-buy">
-      <div><span class="amt">$19</span><span class="per">/ month</span></div>
-      <p class="sub2">Billed monthly. Cancel any time.</p>
+      <div><span class="amt">Free</span><span class="per">until Sept 1</span></div>
+      <p class="sub2">It's $19/month after that, with no card required to start.</p>
 
-      <!--
-        Primary CTA. Before going live, replace STRIPE_PAYMENT_LINK_PLACEHOLDER
-        with the Payment Link URL from Stripe → Payment Links (https://buy.stripe.com/...).
-        This opens Stripe's hosted checkout, no JS required.
-      -->
+      <!-- Free period: CTA goes straight into the product (no paywall yet).
+           After Sept 1, point this back at the Stripe Payment Link:
+           https://buy.stripe.com/... (Stripe -> Payment Links). -->
       <a class="btn btn-accent"
-         href="STRIPE_PAYMENT_LINK_PLACEHOLDER"
+         href="/board.html"
          role="button"
-         aria-label="Subscribe to Sooth Pro for $19 per month">
-        Subscribe — $19 / month</a>
+         aria-label="Open the board, free until September 1">
+        Start free — open the board</a>
 
-      <p class="renew">Renews automatically at $19.00/month until you cancel. You get a
-        receipt before every charge. By subscribing you agree to the automatic-renewal terms.</p>
+      <p class="renew">No charge and no card during the free period. On September 1, Sooth Pro
+        becomes $19/month, and we'll never charge you without asking first.</p>
 
-      <p class="manage">Already subscribed? Manage or cancel in one step through the
+      <p class="manage">When paid plans start, you'll manage or cancel in one step through the
         <!-- replace STRIPE_PORTAL_LINK_PLACEHOLDER with your Stripe customer-portal URL -->
-        <a href="STRIPE_PORTAL_LINK_PLACEHOLDER">billing portal</a>.
-        No call, no email, no retention screen. Access lasts through the end of the billing period.</p>
+        <a href="STRIPE_PORTAL_LINK_PLACEHOLDER">billing portal</a>, with no phone call,
+        no email, and no retention screen to click through.</p>
     </div>
 
   </div>

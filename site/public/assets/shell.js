@@ -8,7 +8,6 @@
     {href:"/board.html",  key:"board",  label:"Board"},
     {href:"/record.html", key:"record", label:"Record"},
     {href:"/verify.html", key:"verify", label:"Verify"},
-    {href:"/ledger.html", key:"ledger", label:"Ledger"},
     {href:"/methodology.html", key:"method", label:"Method"}
   ];
 
@@ -79,7 +78,6 @@
       +'<div class="links">'
       +'<a href="/record.html">Record</a>'
       +'<a href="/verify.html">Verify</a>'
-      +'<a href="/ledger.html">Ledger</a>'
       +'<a href="/methodology.html">Methodology</a>'
       +'<a href="/disclaimers.html">Disclaimers</a>'
       +'</div></div></footer>';
@@ -95,6 +93,12 @@
       +'<meta name="theme-color" content="#0A0B0F">');
   }
 
+  // limited-time promo: everything is free until Sept 1. One line, all pages.
+  function promoBar(){
+    return '<div class="promo" role="note">Everything is <b>free until September 1</b>'
+      +' — every tool, no card needed. <a href="/board.html">Open the board →</a></div>';
+  }
+
   function mount(){
     headTags();
     var page=document.body.getAttribute("data-page")||"";
@@ -102,6 +106,7 @@
     var mode=document.body.getAttribute("data-shell")||"full";
     if(mode!=="footer-only"){
       document.body.insertAdjacentHTML("afterbegin",header(page));
+      document.body.insertAdjacentHTML("afterbegin",promoBar()); // sits above header
     }
     document.body.insertAdjacentHTML("beforeend",footer());
   }

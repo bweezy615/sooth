@@ -62,6 +62,14 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
 .wrap-narrow{max-width:920px;margin:0 auto;padding:0 24px}
 
+/* ================= promo bar (injected by shell.js) ================= */
+.promo{background:var(--pos-dim);border-bottom:1px solid var(--pos-line);
+  font-family:var(--num);font-size:12px;color:var(--pos);text-align:center;
+  padding:8px 16px;letter-spacing:.01em;line-height:1.4}
+.promo b{color:var(--ink);font-weight:700}
+.promo a{color:var(--pos);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.promo a:hover{color:var(--ink)}
+
 /* ================= header (injected by shell.js) ================= */
 .hd{position:sticky;top:0;z-index:100;background:rgba(10,11,15,.86);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}

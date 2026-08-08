@@ -29,6 +29,8 @@
     flex-wrap:wrap;margin:14px 0}
   .board-stats{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--num);font-size:12px;color:var(--muted)}
   .board-stats b{color:var(--ink);font-weight:500}
+  /* sport "ball" next to each pick */
+  .sball{margin-right:8px;font-size:14px;line-height:1;vertical-align:-1px}
   /* 7-col dense grid: side | matchup | start | bks | best | fair | gain */
   .bcols{grid-template-columns:1.5fr 1.35fr .95fr .45fr .62fr .62fr 1fr}
   @media (max-width:860px){
@@ -110,6 +112,10 @@
   var esc,sig; // filled once shell.js is ready
   var D=null, cur=0, sortBy="gain";
   var $=function(id){return document.getElementById(id);};
+  // sport -> emoji "ball" so beginners can eyeball which sport each pick is
+  var SPORT={mlb:"⚾",nfl:"🏈",nba:"🏀",nhl:"🏒",ufc:"🥊",mma:"🥊",
+             epl:"⚽",soccer:"⚽",f1:"🏎️",tennis:"🎾",cricket:"🏏"};
+  function sball(b){return SPORT[b.sport]||SPORT[(b.label||"").toLowerCase()]||"•";}
 
   function startLocal(iso){
     // kickoff shown in the viewer's local time, terminal-terse: "Sat 5:46p"
@@ -136,11 +142,12 @@
     return a;
   }
 
-  function rowHTML(o,maxGain){
+  function rowHTML(o,maxGain,sp){
     var s=o.s, e=o.e;
     var w=Math.max(0,Math.min(100,(s.gain_pts/Math.max(maxGain,0.01))*100));
     return '<div class="trow bcols">'
-      +'<span class="side-cell"><span class="cell-strong">'+esc(s.name)+'</span>'
+      +'<span class="side-cell"><span class="cell-strong">'
+        +'<span class="sball" role="img" aria-label="'+esc(sp.l)+'">'+sp.i+'</span>'+esc(s.name)+'</span>'
         +'<span class="cell-sub">best at '+esc(s.best_book)+'</span></span>'
       +'<span class="cell-dim col-match"><span class="lblm">vs</span>'+esc(e.away)+' at '+esc(e.home)+'</span>'
       +'<span class="cell-dim col-start"><span class="lblm">start</span>'+esc(startLocal(e.starts))+'</span>'
@@ -174,13 +181,14 @@
         +' games in the window</div>The board fills as the next slate approaches.</div>';
       return;
     }
-    $("rows").innerHTML=list.map(function(o){return rowHTML(o,maxGain);}).join("");
+    var sp={i:sball(b),l:b.label||""};
+    $("rows").innerHTML=list.map(function(o){return rowHTML(o,maxGain,sp);}).join("");
   }
 
   function buildTabs(){
     $("tabs").innerHTML=D.boards.map(function(b,i){
       return '<button class="tab" role="tab" aria-selected="'+(i===0)+'">'
-        +esc(b.label)+' <span class="c">'+b.n_events+'</span></button>';
+        +'<span aria-hidden="true">'+sball(b)+'</span> '+esc(b.label)+' <span class="c">'+b.n_events+'</span></button>';
     }).join("");
     [].forEach.call(document.querySelectorAll("#tabs .tab"),function(t,i){
       t.addEventListener("click",function(){cur=i;draw();});
