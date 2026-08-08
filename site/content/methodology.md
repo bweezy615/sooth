@@ -1,8 +1,8 @@
 ---
 title: "Methodology: how our NFL model works, and how it performed against the market"
 description: "The full model specification, walk-forward backtest results including the ones that go against us, the calibration table, the confidence cap, the leakage controls, and how the SHA-256 Merkle commitment works."
-last_updated: 2026-08-02
-model_version: elo-mov-v1+iso
+last_updated: 2026-08-07
+model_version: elo-mov-v1 baseline + walk-forward logistic ensemble
 ---
 
 # Methodology
@@ -21,16 +21,20 @@ it as an error and tell us.
 
 ## Summary in one paragraph
 
-We predict NFL game outcomes with an Elo rating system that uses a damped
-margin-of-victory update, then convert those ratings into probabilities and
-correct those probabilities with isotonic regression refit each season on prior
-seasons only. Across 2,750 out-of-sample games from 2016 through 2025, the
-model recorded a Brier score of 0.22228 against the de-vigged closing market's
-0.21061, straight-up accuracy of 63.96% against the market's 66.58%, and an
-against-the-spread record of 1333-1352-65, or 49.65%, against a breakeven of
-52.38% at standard -110 pricing. **The model does not beat the closing market.**
-Our probabilities are well calibrated, which is a different and smaller claim,
-and it is the only claim we make.
+We publish three NFL models, all built walk-forward so each season is predicted
+using only earlier seasons. The **Elo baseline** (`elo-mov-v1`) is a transparent
+margin-of-victory rating system. The **independent** model adds opponent-aware
+EPA ratings and rest through a logistic fit and never sees the betting line. The
+**consensus** model adds one more feature, the de-vigged market price. We score
+all three against the de-vigged market on two out-of-sample samples: nflverse
+lines from 2016 through 2025 (n=2,671) and real consensus closing lines from 2023
+through 2025 (n=854). On both samples, **no model beats the market and none
+clears the 52.38% against-the-spread break-even.** Our best model, consensus,
+posts a Brier score of 0.21455 against the market's 0.21038 on the larger sample,
+and a calibration error of 0.03343 against the market's 0.01913, which means
+**the market is better calibrated than we are.** The one thing we can promise is
+not an edge; it is that every number here is reproducible from published data and
+our record cannot be edited after the fact.
 
 ---
 
@@ -38,10 +42,13 @@ and it is the only claim we make.
 
 We claim exactly two things:
 
-1. **Our published probabilities are calibrated.** When we publish 70%, events
-   in that band have historically occurred about 70% of the time in our
-   out-of-sample testing. The measured expected calibration error of the
-   calibrated model is 0.02162.
+1. **Every figure on this page is a reproducible measurement.** The whole table
+   regenerates with one command against public data and our own published odds;
+   if a number cannot be reproduced, it is an error and we want to hear about it.
+   Our independent model is calibrated to within about three percentage points
+   (expected calibration error 0.03122 on the larger sample), which is honest but
+   *worse* than the market's 0.01913. We do not claim to match, let alone beat,
+   the market on calibration.
 2. **Our record is tamper-evident.** Every prediction is hashed and committed to
    a public Merkle root before the first kickoff of its slate. We cannot delete
    a loss or add a win after the fact without breaking the root.
@@ -97,19 +104,26 @@ deliberately simple. Its job is not to be clever; its job is to be a fully
 explainable baseline that we can publish, grade in public, and improve on
 in the open.
 
-### Calibration: isotonic regression, refit every season
+### The two model layers above the baseline
 
-Raw Elo probabilities are mildly overconfident in the middle bands. We correct
-them with isotonic regression, which is a monotone step-fit that reshapes the
-probability curve without assuming that curve is logistic.
+The Elo baseline is deliberately weak on its own. Two walk-forward logistic
+models are fitted on top of it, each refit every season on strictly prior
+seasons only. A season with fewer than 500 prior games passes through unfitted
+rather than being trained on thin data. Fitting on the same games you then score
+manufactures a perfect-looking curve that means nothing, so we never do it.
 
-The calibrator is fitted **only on seasons strictly before the season being
-predicted**, and it is refitted every year. Fitting a calibrator on the same
-games you then score with it manufactures a perfect-looking reliability curve
-that means nothing. Seasons before we have 500 prior games available pass
-through uncalibrated rather than being calibrated on thin data.
+- **Independent** (`p_ensemble`). A logistic regression over the Elo
+  win-probability plus opponent-aware EPA ratings, offensive and defensive
+  rating differentials, rest, and division-game and playoff flags. It **never
+  sees the betting line**, so it can disagree with the market informatively. This
+  is the number worth publishing as our own opinion.
+- **Consensus** (`p_anchored`). The same features plus one more: the de-vigged
+  market probability. It is better calibrated and almost entirely uninformative
+  as a bet, because it mostly reproduces the market. We publish it labelled as
+  such; presenting it as our own opinion would look accurate while carrying
+  almost no independent information.
 
-The production model version is `elo-mov-v1+iso`.
+We report both rather than quietly swapping the flattering one for the other.
 
 ---
 
@@ -122,9 +136,10 @@ the ratings. There is no point at which the model sees a future game.
 
 - Rating warm-up period: 1999 through 2015.
 - Out-of-sample scoring period: 2016 through 2025.
-- Games graded: 2,750. This is every regular and post-season game in the window
-  that was not a tie and for which both moneyline prices were available, so the
-  model and the market can be scored on identical games.
+- Games graded: 2,671 on the nflverse sample. This is every regular and
+  post-season game in the window that was not a tie and for which both moneyline
+  prices were available, so the model and the market are scored on identical
+  games. The real-closing-line sample covers 854 of these.
 
 The market comparison uses **de-vigged** closing prices. Both sides' implied
 probabilities are divided by their sum to remove the bookmaker margin. Comparing
@@ -178,15 +193,12 @@ well-formed rather than flattering us.
 
 ### How far apart are the two line sources?
 
-32.9% of spreads differ between nflverse and the real
-consensus close, but the typical difference is small: mean
-0.217 points, median 0.0,
-and only 5.5% differ by a full
-point or more. Graded on the same games, the Elo baseline scores 0.4850
-against nflverse lines and 0.4826 against real closes — a 0.24 percentage
-point gap. The weaker source was precise enough for the conclusion and not
-precise enough to publish closing-line value from, which is why we bought the
-better one.
+32.9% of spreads differ between the nflverse snapshot and the real consensus
+close, but the typical difference is small: the mean absolute gap is 0.217
+points, the median is zero, and only 5.5% of games differ by a full point or
+more. Both samples reach the same verdict, which is the point. The weaker source
+was precise enough to support the conclusion and not precise enough to publish a
+closing-line-value figure from, which is why we bought the better one.
 
 ## Calibration results
 
@@ -198,76 +210,63 @@ unprofitable, which is precisely our situation.
 
 Expected calibration error (ECE) is the sample-weighted mean absolute gap
 between predicted and observed frequency across ten probability bands. Lower is
-better.
+better. The values below are the ECE column from the two backtest tables above.
 
-| model | ECE | Brier |
+| model | ECE (nflverse, n=2671) | ECE (real closes, n=854) |
 |---|---|---|
-| raw Elo | 0.02654 | 0.22228 |
-| isotonic-calibrated Elo (published) | **0.02162** | 0.22323 |
-| de-vigged market | 0.01802 | 0.21061 |
+| Elo baseline | 0.02698 | 0.03265 |
+| Independent (ours) | 0.03122 | 0.03269 |
+| Consensus (+market) | 0.03343 | 0.04231 |
+| Closing market | 0.01913 | 0.02396 |
 
-Two honest notes on that table. First, calibration improves ECE by about 18.5%
-but very slightly **worsens** Brier score, from 0.22228 to 0.22323. Isotonic
-regression buys reliability at a small cost in sharpness. We publish both
-numbers because reporting only the one that improved would be the same
-selective disclosure we are criticising. Second, the market is still better
-calibrated than we are.
+The market is better calibrated than every one of our models on both samples. We
+report this rather than the one framing where we might look good, because a
+calibration number nobody can reproduce is a claim, not a measurement.
 
-### Reliability table, calibrated model, 2,750 games
+### Reliability table, independent model, 2,671 games
+
+This is the independent, market-blind model on the nflverse sample. A positive
+gap means we were overconfident: we predicted the event more often than it
+happened.
 
 | predicted band | n | mean predicted | actual frequency | gap |
 |---|---|---|---|---|
-| 0.0-0.1 | 12 | 1.00% | 33.33% | -32.33 pts |
-| 0.1-0.2 | 18 | 16.66% | 27.78% | -11.12 pts |
-| 0.2-0.3 | 149 | 24.84% | 30.87% | -6.03 pts |
-| 0.3-0.4 | 324 | 36.21% | 34.88% | +1.33 pts |
-| 0.4-0.5 | 593 | 44.80% | 43.00% | +1.80 pts |
-| 0.5-0.6 | 401 | 56.10% | 53.62% | +2.48 pts |
-| 0.6-0.7 | 739 | 64.98% | 63.87% | +1.11 pts |
-| 0.7-0.8 | 244 | 73.66% | 72.54% | +1.12 pts |
-| 0.8-0.9 | 210 | 84.77% | 82.86% | +1.91 pts |
-| 0.9-1.0 | 60 | 94.51% | 86.67% | **+7.84 pts** |
+| 0.1-0.2 | 26 | 16.70% | 26.92% | -10.23 pts |
+| 0.2-0.3 | 152 | 26.16% | 28.95% | -2.79 pts |
+| 0.3-0.4 | 270 | 36.02% | 33.70% | +2.32 pts |
+| 0.4-0.5 | 419 | 45.37% | 41.29% | +4.08 pts |
+| 0.5-0.6 | 569 | 54.99% | 50.26% | +4.72 pts |
+| 0.6-0.7 | 593 | 64.97% | 62.39% | +2.58 pts |
+| 0.7-0.8 | 440 | 74.86% | 72.95% | +1.90 pts |
+| 0.8-0.9 | 190 | 83.93% | 85.26% | -1.34 pts |
+| 0.9-1.0 | 12 | 91.13% | 91.67% | -0.53 pts |
 
-A positive gap means we were overconfident: we predicted the event more often
-than it happened.
-
-Read the extremes with care. The 0.0-0.1 and 0.1-0.2 bands hold 12 and 18 games
-respectively; at those sample sizes a handful of upsets moves the observed
-frequency by tens of points and the gap is mostly noise. The bands that carry
-real weight are 0.3 through 0.9, which hold 2,511 of the 2,750 games, and in
-those bands the model is overconfident by between 1.1 and 2.5 percentage
-points.
-
-For comparison, the de-vigged market over the same games is mildly
-**under**confident in its top bands: it predicted 84.70% and observed 87.57% in
-the 0.8-0.9 band. That is the signature of a market that has priced in the vig
-asymmetry, and it is another reason we treat the market as the benchmark rather
-than the opponent.
+Read the extremes with care. The 0.1-0.2 band holds 26 games and the 0.9-1.0
+band holds only 12; at those sample sizes a handful of results moves the observed
+frequency by several points and the gap is mostly noise. The bands that carry
+real weight are 0.3 through 0.8, which hold 2,291 of the 2,671 games, and there
+the model is overconfident by between 1.9 and 4.7 percentage points.
 
 ---
 
 ## Why we cap published confidence at 85%
 
-**We do not publish any probability above 0.85, regardless of what the model
-outputs.** The cap exists because of one row in the table above.
+**We do not publish any probability above 0.85, regardless of what a model
+outputs.** The cap exists because of the sample sizes at the top of the table
+above.
 
-In the 0.9-1.0 band, across 60 out-of-sample games, the calibrated model
-predicted an average of 94.51% and the events occurred 86.67% of the time. The
-model was overconfident by 7.84 percentage points - four times the error of any
-other well-populated band.
+In the 0.9-1.0 band the independent model produced only 12 of its 2,671
+predictions, and the 0.8-0.9 band holds 190. Whatever gap we measure in those
+bands rests on too few games to stand behind: a single upset swings the observed
+frequency by several points. The largest overconfidence we can actually measure
+in a well-populated band is about 4.7 points, in the 0.5-0.6 range.
 
-This is the single most important finding in our testing, because it inverts
-the industry's usual sales pitch. The standard product in this category is "our
-one highest-confidence pick of the day." That is precisely the band where our
-model is least trustworthy. High-confidence selections are not the safe subset;
-in our data they are the least reliable subset, because extreme probabilities
-are produced by extreme rating gaps, and extreme rating gaps are exactly where a
-simple rating system is most likely to be extrapolating past the evidence.
-
-Capping at 0.85 keeps every published probability inside a band where our
-measured overconfidence is under two percentage points. It costs us the
-headline number that would sell best. We consider explaining why we do not have
-that number to be more valuable than having it.
+Capping at 0.85 keeps every published probability inside a band with enough games
+to be measured honestly. It costs us the headline number that sells best in this
+category, "our one highest-confidence pick of the day," because that number would
+come from exactly the thinly-populated extreme where we cannot back it up. We
+consider explaining why we do not publish it to be more valuable than publishing
+it.
 
 ---
 
@@ -385,9 +384,9 @@ We would rather state these than have them found.
   starting quarterback is not reflected in our probability until the team has
   played and been re-rated, which means our early-season and post-injury numbers
   are systematically worse than the market's.
-- **No play-level information.** The model does not use expected points added,
-  success rate, or any drive-level data. It knows who played whom and by how
-  much.
+- **Limited play-level information.** The independent model uses opponent-adjusted
+  EPA ratings, but no finer detail such as success rate or personnel. The Elo
+  baseline uses only who played whom and by how much.
 - **Small samples at the extremes.** As noted, the outer probability bands hold
   too few games to draw conclusions from.
 - **One sport is Live.** NFL only. The other eight sports on this site are
@@ -406,12 +405,11 @@ We would rather state these than have them found.
 These are the changes we expect to make, published in advance so the record
 shows what changed and when:
 
-- Expected-points-added-based ratings alongside Elo
-- A quarterback availability adjustment
-- Blending model probability with market probability, which usually improves
-  Brier score even when the model alone does not
-- Validating our line history against an independent source so a
+- A quarterback availability adjustment, which our team-level ratings currently miss
+- Validating our line history against a second independent source so a
   closing-line-value figure can be published
+- Additional sports, each added only once we have confirmed free closing-odds
+  history to grade against
 
 Any change to the model produces a new `model_version` string, and every
 prediction in the ledger records the version that produced it. A prediction can
@@ -434,4 +432,6 @@ wagers, hold funds, or pay prizes. We are not affiliated with the NFL, any
 league, team, or sportsbook. Full disclaimers, including responsible-gambling
 resources, are at [/disclaimers](/disclaimers).
 
-*Last updated 2026-08-02. Model version `elo-mov-v1+iso`.*
+*Last updated 2026-08-07. Baseline `elo-mov-v1`; the independent and consensus
+models are walk-forward logistic ensembles, all figures regenerated by
+`python scripts/published_figures.py`.*
