@@ -8,6 +8,8 @@ Three failure modes, each of which would publish a false number:
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from engine.props_board import build_props, implied_prob
 
 
@@ -59,6 +61,24 @@ def test_devig_sides_sum_to_one():
 
 def test_empty_is_empty_not_error():
     assert build_props([]) == []
+
+
+def test_window_drops_finished_games():
+    # a game that started a day ago must not linger on the grid
+    now = datetime(2026, 8, 8, 23, 0, tzinfo=timezone.utc)
+    stale = obs("fanduel", "over", -110, "2026-08-07T20:00:00Z", player="Old Guy")
+    stale["commence_time"] = "2026-08-07T20:00:00Z"  # ~27h before now
+    live = obs("fanduel", "over", -110, "2026-08-08T23:30:00Z", player="Live Guy")
+    live["commence_time"] = "2026-08-08T23:30:00Z"   # 30 min ahead
+    players = {p["player"] for p in build_props([stale, live], now=now)}
+    assert players == {"Live Guy"}
+
+
+def test_no_now_means_no_filter():
+    # default (no now) keeps everything — tests and ad-hoc runs stay simple
+    old = obs("fanduel", "over", -110, "2020-01-01T00:00:00Z")
+    old["commence_time"] = "2020-01-01T00:00:00Z"
+    assert build_props([old]) != []
 
 
 def test_implied_prob_signs():

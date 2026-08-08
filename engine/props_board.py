@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 DEFAULT_IN = "data/capture/mlb-props"
@@ -68,7 +68,28 @@ def _side_summary(quotes: list[dict]) -> dict | None:
     }
 
 
-def build_props(rows: list[dict]) -> list[dict]:
+def _in_window(row: dict, now: datetime, window_hours: float) -> bool:
+    """Keep upcoming/live games; drop ones that finished hours ago.
+
+    props_capture appends forever, so without this the grid would accumulate
+    every game ever captured. Mirror the board's forward-window idea: a game is
+    current from a few hours before we'd stop watching until ``window_hours``
+    ahead. A row with no parseable start is kept (fail open, never hide data).
+    """
+    ct = row.get("commence_time")
+    if not ct:
+        return True
+    try:
+        start = datetime.fromisoformat(str(ct).replace("Z", "+00:00"))
+    except ValueError:
+        return True
+    return now - timedelta(hours=3) <= start <= now + timedelta(hours=window_hours)
+
+
+def build_props(rows: list[dict], now: datetime | None = None,
+                window_hours: float = 36.0) -> list[dict]:
+    if now is not None:
+        rows = [r for r in rows if _in_window(r, now, window_hours)]
     latest = _newest_quotes(rows)
 
     # group latest quotes by prop (event, player, market, line) then by side
@@ -141,10 +162,13 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="in_dir", default=DEFAULT_IN)
     ap.add_argument("--out", dest="out", default=DEFAULT_OUT)
+    ap.add_argument("--window-hours", type=float, default=36.0,
+                    help="forward window; games past this (or finished >3h ago) drop off")
     args = ap.parse_args()
 
     rows = read_rows(Path(args.in_dir))
-    props = build_props(rows)
+    props = build_props(rows, now=datetime.now(timezone.utc),
+                        window_hours=args.window_hours)
     doc = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "sport": "mlb",
