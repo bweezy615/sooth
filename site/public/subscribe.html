@@ -103,9 +103,10 @@
       <div><span class="amt">Free</span><span class="per">until Sept 1</span></div>
       <p class="sub2">It's $9.99/month after that, with no card required to start.</p>
 
-      <!-- Free period: CTA goes straight into the product (no paywall yet).
-           After Sept 1, point this back at the Stripe Payment Link:
-           https://buy.stripe.com/... (Stripe -> Payment Links). -->
+      <!-- Free until Sept 1: this button goes straight into the product (no paywall).
+           TO TURN THE PAYWALL ON (Sept 1): change href="/board.html" below to the
+           Payment Link stored in #sooth-stripe-config (https://buy.stripe.com/14AeVcfxn10r6yU97D4gg00)
+           and change the button text to "Subscribe — $9.99/month". -->
       <a class="btn btn-accent"
          href="/board.html"
          role="button"
@@ -148,17 +149,13 @@
 </main>
 
 <!--
-  Stripe config carrier. No executable code, read via:
-    const cfg = document.getElementById('sooth-stripe-config').dataset;
-  Fill these before going live:
-    STRIPE_PUBLISHABLE_KEY_PLACEHOLDER → pk_live_...   (Stripe → Developers → API keys)
-    STRIPE_PRICE_ID_PLACEHOLDER        → price_...      (the $9.99/mo price)
-    STRIPE_PAYMENT_LINK_PLACEHOLDER    → https://buy.stripe.com/...
+  Stripe Payment Link for Sooth Pro ($9.99/mo, recurring). Hosted checkout —
+  no keys or JS embedded, the link is the whole integration. Stored ready; the
+  subscribe button above stays "Start free" until Sept 1, then point it here.
+  Read via: document.getElementById('sooth-stripe-config').dataset.paymentLink
 -->
 <script type="application/json" id="sooth-stripe-config"
-  data-publishable-key="STRIPE_PUBLISHABLE_KEY_PLACEHOLDER"
-  data-price-id="STRIPE_PRICE_ID_PLACEHOLDER"
-  data-payment-link="STRIPE_PAYMENT_LINK_PLACEHOLDER">
+  data-payment-link="https://buy.stripe.com/14AeVcfxn10r6yU97D4gg00">
 </script>
 
 <script src="/assets/shell.js" defer></script>
