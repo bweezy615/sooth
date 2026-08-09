@@ -56,6 +56,16 @@
   .rg{margin-top:8px;font-size:12px;color:var(--dim);line-height:1.6}
   .rg b{color:var(--muted)}
   .rg .never{color:var(--muted)}
+
+  /* embedded-checkout modal — Stripe's iframe mounts inside .co-box on white */
+  #checkout-overlay{position:fixed;inset:0;background:rgba(8,12,20,.55);z-index:100;
+    display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow:auto}
+  #checkout-overlay[hidden]{display:none}
+  .co-box{background:#fff;border-radius:14px;width:100%;max-width:480px;position:relative;
+    padding:44px 14px 14px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+  .co-close{position:absolute;top:8px;right:10px;background:none;border:0;font-size:24px;
+    line-height:1;color:#64748B;cursor:pointer;padding:6px;border-radius:8px}
+  .co-close:hover{color:#0F172A;background:#F1F5F9}
 </style>
 <link rel="icon" href="/apple-touch-icon.png">
 </head>
@@ -149,13 +159,66 @@
 </main>
 
 <!--
-  Stripe Payment Link for Sooth Pro ($9.99/mo, recurring). Hosted checkout —
-  no keys or JS embedded, the link is the whole integration. Stored ready; the
-  subscribe button above stays "Start free" until Sept 1, then point it here.
-  Read via: document.getElementById('sooth-stripe-config').dataset.paymentLink
+  Stripe config carrier (no executable code). read via:
+    document.getElementById('sooth-stripe-config').dataset
+  data-publishable-key: pk_live_ — SAFE in the browser by design (public key).
+  data-payment-link:     hosted buy.stripe.com URL, kept as a no-JS fallback if
+                         Stripe.js is blocked or /api/checkout errors.
+  The embedded checkout below is the primary POS; the secret key + price live in
+  api/checkout.js (server-side env), never here.
 -->
 <script type="application/json" id="sooth-stripe-config"
+  data-publishable-key="pk_live_51TYeULAUGlXR5yMgNlGL1q9FD7UVgCuDSX3qe7jUL1UPb4EAs3cInvIaMZjzo2cLub0ANRGRxZqqF6L8P6PcQERX00Hv7nGaCf"
   data-payment-link="https://buy.stripe.com/14AeVcfxn10r6yU97D4gg00">
+</script>
+
+<!-- Embedded Stripe Checkout (POS on-domain, no redirect). Free until Sept 1:
+     the "Start free" button above is unchanged, so this mounts only via the
+     ?buy=1 test trigger or the Sept-1 flip (point the button's click at
+     window.soothCheckout). -->
+<div id="checkout-overlay" hidden>
+  <div class="co-box">
+    <button id="checkout-close" class="co-close" aria-label="Close checkout">&times;</button>
+    <div id="checkout"></div>
+  </div>
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+(function () {
+  var cfg = document.getElementById("sooth-stripe-config").dataset;
+  var overlay = document.getElementById("checkout-overlay");
+  var checkout = null; // the mounted embedded-checkout instance
+
+  function fallback() { if (cfg.paymentLink) location.href = cfg.paymentLink; }
+
+  async function openCheckout() {
+    if (!window.Stripe || !cfg.publishableKey) return fallback(); // JS blocked
+    try {
+      overlay.hidden = false;
+      var stripe = Stripe(cfg.publishableKey);
+      var r = await fetch("/api/checkout", { method: "POST" });
+      if (!r.ok) throw new Error("session");
+      var data = await r.json();
+      checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+      checkout.mount("#checkout");
+    } catch (e) {
+      overlay.hidden = true;
+      fallback(); // last-ditch: send them to the hosted link rather than a dead modal
+    }
+  }
+  function closeCheckout() {
+    if (checkout) { checkout.destroy(); checkout = null; }
+    overlay.hidden = true;
+    document.getElementById("checkout").innerHTML = "";
+  }
+  document.getElementById("checkout-close").addEventListener("click", closeCheckout);
+
+  // Sept-1 flip: change the subscribe button to <button onclick> calling this.
+  window.soothCheckout = openCheckout;
+  // Test / early access: /subscribe?buy=1 opens checkout without touching the
+  // visible "Start free" button.
+  if (/[?&]buy=1/.test(location.search)) openCheckout();
+})();
 </script>
 
 <script src="/assets/shell.js" defer></script>
