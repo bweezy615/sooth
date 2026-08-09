@@ -435,7 +435,8 @@ function buildTicker(){
         if(s.gain_pts>=1)bits.push('<span><b>'+esc(s.name)+'</b> '+sg(s.best_price)+
           ' <span class="bk">'+esc(s.best_book)+'</span> <span class="up">+'+
           s.gain_pts.toFixed(1)+' pts vs worst</span></span>');});});});
-  if(DATA.props)DATA.props.boards.forEach(function(b){
+  /* ponytail: props.json may be the flat (no .boards) shape; guard like sportsList does */
+  if(DATA.props)(DATA.props.boards||[]).forEach(function(b){
     b.events.filter(function(e){return upcoming(e.starts);}).forEach(function(e){
       e.props.slice(0,3).forEach(function(p){
         if(p.gain_pts>=2)bits.push('<span><b>'+esc(p.player)+'</b> O/U '+p.line+

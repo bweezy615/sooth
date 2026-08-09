@@ -169,7 +169,9 @@ Promise.allSettled([
           bk:s.best_book,pr:s.best_price,fair:s.fair_price});})));
   }
   if(p.status==='fulfilled'){
-    p.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
+    /* ponytail: props.json is the flat engine.props_board shape (no .boards) until
+       the nested boards[].events[].props[] producer ships; treat missing as no props. */
+    (p.value.boards||[]).forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
       e.props.forEach(pr=>[['Over',pr.over],['Under',pr.under]].forEach(([sd,d])=>{
         if(d.edge_vs_fair_pts>0) evs.push({kind:'prop',edge:d.edge_vs_fair_pts,
           t:`${pr.player} ${sd} ${pr.line}`,sub:`${pr.market_label} · ${e.away} @ ${e.home}`,
