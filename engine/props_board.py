@@ -118,7 +118,8 @@ def build_props(rows: list[dict], now: datetime | None = None,
             if under:
                 fair["under"] = under["raw_implied"]
 
-        any_row = (sides.get("over") or sides.get("under"))[0]
+        _rep = sides.get("over") or sides.get("under") or []
+        any_row = _rep[0] if _rep else None
         for side, s in (("Over", over), ("Under", under)):
             key = side.lower()
             if not s:
