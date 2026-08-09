@@ -183,13 +183,13 @@ def build_markdown_pages() -> list[str]:
             print(f"  SKIP {slug}: {src} missing")
             continue
         md.reset()
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         if text.startswith("---\n"):
             end = text.find("\n---\n", 4)
             if end != -1:
                 text = text[end + 5:]
         html = md.convert(text)
-        (PUBLIC / f"{slug}.html").write_text(render(slug, title, desc, html))
+        (PUBLIC / f"{slug}.html").write_text(render(slug, title, desc, html), encoding="utf-8")
         built.append(slug)
         print(f"  built /{slug}")
     return built
@@ -208,7 +208,7 @@ def build_ledger() -> None:
     for slate_id in slate_ids:
         history = commitment_history(slate_id, LEDGER)
         if not history:
-            history = [json.loads((LEDGER / f"{slate_id}.commitment.json").read_text())]
+            history = [json.loads((LEDGER / f"{slate_id}.commitment.json").read_text(encoding="utf-8"))]
         c = history[-1]
         kickoff = datetime.fromisoformat(c["earliest_kickoff"])
         public_state = "revealed" if kickoff < now else "sealed"
@@ -271,7 +271,8 @@ backtest loses to the closing market.</p>
     (PUBLIC / "ledger.html").write_text(
         render("ledger", "Ledger",
                "Every slate we have committed, sealed before kickoff and "
-               "verifiable afterward. Nothing edited, nothing removed.", body)
+               "verifiable afterward. Nothing edited, nothing removed.", body),
+        encoding="utf-8",
     )
     print(f"  built /ledger ({len(slates)} slate(s))")
 

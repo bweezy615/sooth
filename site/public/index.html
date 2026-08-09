@@ -481,10 +481,10 @@ function match(txt){return !state.q||txt.toLowerCase().indexOf(state.q)>=0;}
 function upcoming(iso){return new Date(iso).getTime()>Date.now();}
 
 var HINTS={
-  games:'<b>How to read this:</b> Best is the most generous price on that side right now, Fair is the consensus with the bookmaker margin removed, Gain is how much better Best pays than the worst book.',
-  props:'<b>How to read this:</b> each prop compared at the same line across books. L10 = times over this line in the last ten games. Model = our strikeout projection (Poisson, free MLB data) and its lean vs the de-vigged market \u2014 measured MAE 2.04K across 723 unseen starts, barely better than naive. A big lean is a disagreement, not a promise.',
-  picks:'<b>Straight talk:</b> these are our model\u2019s sides, sealed before kickoff and graded in public. Our model has NOT beaten the closing market historically \u2014 49.50% ATS vs 52.38% breakeven. Shop the price, not the pick.',
-  edges:'<b>How to read this:</b> places where books disagree right now \u2014 prices above fair, both-sides arbs, middle windows, and books off the consensus.'};
+  games:'<b>How to read this:</b> <b>Best</b> = the book paying the most on this side right now. <b>Fair</b> = the true price once the book\u2019s built-in cut (the \u201cvig\u201d) is removed. <b>Gain</b> = how much more the best book pays than the stingiest one. That gap is your reward for shopping around.',
+  props:'<b>How to read this:</b> a <b>prop</b> is a bet on one player\u2019s stat, like passing yards or strikeouts. We line up the same number across books so you get the best price. <b>L10</b> = how many of the player\u2019s last 10 games went over this line. <b>Model</b> = our own projection and which way it leans vs the market. It\u2019s only a hair better than a simple average, so treat a big lean as a disagreement, not a promise.',
+  picks:'<b>Straight talk:</b> these are our model\u2019s picks, locked in before kickoff and graded in public. Our model has NOT beaten the closing market: it went 49.50% against the spread, under the 52.38% you need just to break even. Shop the price, not the pick.',
+  edges:'<b>How to read this:</b> spots where books disagree right now. A book paying above fair, <b>arbs</b> (both sides priced so you can back both and lock a profit), <b>middles</b> (two books far enough apart that one result can win both bets), and books that have drifted off the pack.'};
 function render(){
   var el=document.getElementById('content');
   document.getElementById('closingNote').style.display='none';

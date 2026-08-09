@@ -19,6 +19,22 @@ it as an error and tell us.
 
 ---
 
+## In plain English
+
+If you're new to betting, here's the short version:
+
+- We built a computer model that predicts who wins NFL games.
+- We test it honestly, only on seasons it never learned from, and we show our work.
+- **It loses to the betting market.** The odds the sportsbooks set are sharper than our model, and we say so out loud instead of hiding it.
+
+So Sooth isn't selling you winning picks. What it does is line up the same bet
+across many sportsbooks and show which one pays the most, with the book's
+built-in cut ("the vig") removed so you can see the true price. The technical
+detail below backs up every claim on this site. You don't need to read it to
+use the tool.
+
+---
+
 ## Summary in one paragraph
 
 We predict NFL game outcomes with an Elo rating system that uses a damped
