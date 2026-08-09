@@ -8,7 +8,7 @@ const ret = "https://sooth.bet/subscribe-complete?session_id={CHECKOUT_SESSION_I
 const form = co.buildSessionForm("price_TEST123", ret);
 const q = new URLSearchParams(form);
 
-assert(q.get("ui_mode") === "embedded", "must request embedded ui_mode (no redirect)");
+assert(q.get("ui_mode") === "embedded_page", "must request embedded_page ui_mode (no redirect)");
 assert(q.get("mode") === "subscription", "must be a subscription, not one-off");
 assert(q.get("line_items[0][price]") === "price_TEST123", "must carry the price id");
 assert(q.get("line_items[0][quantity]") === "1", "quantity must be 1");

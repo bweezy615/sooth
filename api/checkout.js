@@ -18,7 +18,7 @@ const PRICE = process.env.STRIPE_PRICE_ID || "price_1U2dGcAUGlXR5yMgu8YJLXLy";
 // return_url must keep the literal {CHECKOUT_SESSION_ID} — Stripe fills it in.
 function buildSessionForm(priceId, returnUrl) {
   const p = new URLSearchParams();
-  p.set("ui_mode", "embedded");
+  p.set("ui_mode", "embedded_page"); // Stripe renamed the old "embedded" value
   p.set("mode", "subscription");
   p.set("line_items[0][price]", priceId);
   p.set("line_items[0][quantity]", "1");
