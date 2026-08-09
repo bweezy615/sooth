@@ -1,0 +1,63 @@
+name: capture-odds
+
+# Restored 2026-08-09. This workflow was deleted on 2026-08-06 (commit 196f720,
+# "fix: 28 confirmed defects from multi-agent audit"), which silently froze the
+# live board: engine.lines is the only thing that rebuilds site/public/data/
+# board.json, and nothing on main was running it. board.json sat at 8/07 for
+# days as a result.
+#
+# Two steps, mirroring capture-props:
+#   1. engine.capture  - free ESPN game lines, appended to data/capture/*.jsonl.
+#   2. engine.lines    - the multi-sport board build. This one hits the Odds API
+#      and spends ~4 credits/run (see board.json "credits_spent"). At */30 that
+#      is ~192 credits/day (~5.8k/mo). --max-credits 40 is a hard per-run floor
+#      so a bug can never drain the account. Widen the cron if credits are tight.
+#
+# The commit timestamp is itself the evidence: it attests we held a price at a
+# given time.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-odds
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy
+
+      - name: Capture free ESPN game lines
+        run: python -m engine.capture --season 2026 --weeks 3
+
+      - name: Refresh multi-sport line board (Odds API, ~4 credits/run)
+        run: python -m engine.lines --window-hours 36 --max-credits 40
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        continue-on-error: true
+
+      - name: Commit captured odds + board
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/capture site/public/data/board.json
+          if git diff --staged --quiet; then
+            echo "no new observations"
+          else
+            git commit -m "capture: odds snapshot $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
