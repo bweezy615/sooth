@@ -114,9 +114,12 @@
       <p class="sub2">It's $9.99/month after that, with no card required to start.</p>
 
       <!-- Free until Sept 1: this button goes straight into the product (no paywall).
-           TO TURN THE PAYWALL ON (Sept 1): change href="/board.html" below to the
-           Payment Link stored in #sooth-stripe-config (https://buy.stripe.com/14AeVcfxn10r6yU97D4gg00)
-           and change the button text to "Subscribe — $9.99/month". -->
+           TO TURN THE PAYWALL ON (Sept 1): replace this whole <a> with a button that
+           opens the embedded checkout (the POS wired at the bottom of this file):
+             <button class="btn btn-accent" type="button" onclick="soothCheckout()">
+               Subscribe — $9.99/month</button>
+           (If Stripe.js is ever blocked, soothCheckout() falls back to the hosted
+           Payment Link automatically.) -->
       <a class="btn btn-accent"
          href="/board.html"
          role="button"
