@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predictor — sooth</title>
+<meta name="description" content="Our model's projected side and confidence for every game, shown next to the best available price. The model is measured worse than the closing market — shown for transparency, not as a pick.">
+<link rel="canonical" href="https://sooth.bet/predictor.html">
+<meta property="og:title" content="Predictor — sooth">
+<meta property="og:description" content="The model's projected side and confidence next to the best available price. Transparency, not a pick.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/predictor.html">
+<meta property="og:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* predictor-specific layout only; everything else is sooth.css */
+  .board-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;
+    flex-wrap:wrap;margin:20px 0 14px}
+  .board-head h1{font-size:23px}
+  .board-head p{margin:5px 0 0;color:var(--muted);font-size:13px;max-width:62ch}
+  .honest{margin:12px 0 0;padding:11px 14px;border:1px solid var(--line-2);border-radius:var(--r-sm);
+    background:var(--bg-3);color:var(--ink-2);font-size:12.5px;line-height:1.5}
+  .honest b{color:var(--ink)}
+  .controls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:14px 0}
+  .board-stats{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--num);font-size:12px;color:var(--muted)}
+  .board-stats b{color:var(--ink);font-weight:500}
+  /* pick | matchup | kickoff | confidence | best | edge */
+  .rcols{grid-template-columns:1.5fr 1.4fr .95fr .8fr .65fr .9fr}
+  @media (max-width:860px){
+    .rcols{grid-template-columns:1fr 1fr}
+    .grid .thead{display:none}
+    .grid .trow{padding:14px 12px;gap:8px 14px}
+    .col-match,.col-start,.col-conf{grid-column:auto}
+    .pick-cell{grid-column:1/-1}
+    .lblm{display:inline;color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+  }
+  @media (min-width:861px){.lblm{display:none}}
+  .cell-best{font-family:var(--num);font-variant-numeric:tabular-nums;font-size:14px;font-weight:700;color:var(--pos)}
+  .conf{font-family:var(--num);font-weight:700;font-size:13px;color:var(--ink)}
+  .confbar{display:block;height:4px;border-radius:999px;background:var(--bg-2);margin-top:5px;overflow:hidden}
+  .confbar i{display:block;height:100%;background:var(--pos);opacity:.7}
+</style>
+</head>
+<body data-page="predictor">
+<a class="skip" href="#pred">Skip to the predictor</a>
+
+<main class="wrap">
+
+  <div class="statusbar" id="status" aria-live="polite">
+    <span class="sb"><span class="dot off" id="s-dot"></span> <span id="s-state">loading</span></span>
+    <span class="sep">|</span>
+    <span class="sb"><span id="s-clock">—</span></span>
+    <span class="sep">|</span>
+    <span class="sb">updated <b id="s-ago">—</b></span>
+    <span class="sep">|</span>
+    <span class="sb"><b id="s-n">–</b> games</span>
+  </div>
+
+  <div class="board-head" id="pred">
+    <div>
+      <h1>Predictor</h1>
+      <p>Our model's projected side and confidence for every game, next to the best
+         available price on that side.</p>
+    </div>
+  </div>
+
+  <div class="honest">
+    <b>Read this first.</b> Our model is <b>measured worse than the closing market</b>
+    — 49.5% against the spread over 2,608 walk-forward games, where 52.38% breaks even.
+    This page is transparency, <b>not a pick</b>. The durable edge on sooth is price:
+    take the best number and you gain expected value no matter who wins.
+    <a href="/record.html">See the full record →</a>
+  </div>
+
+  <div class="controls">
+    <div class="board-stats" id="rstats"></div>
+    <label class="fld" style="flex-direction:row;align-items:center;gap:8px">
+      <span>Sort</span>
+      <select class="field" id="sort">
+        <option value="conf">Confidence (high→low)</option>
+        <option value="gain">Price edge (high→low)</option>
+        <option value="start">Kickoff</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="panel" id="board">
+    <div class="grid">
+      <div class="thead rcols">
+        <span>Model pick</span>
+        <span class="col-match">Matchup</span>
+        <span class="col-start">Kickoff</span>
+        <span class="r col-conf">Confidence</span>
+        <span class="r">Best price</span>
+        <span class="r">Price edge</span>
+      </div>
+      <div id="rows"><div class="empty">Loading the predictor…</div></div>
+    </div>
+  </div>
+
+  <p class="mutedtext mono" id="stamp" style="font-size:11.5px;margin:14px 0 0"></p>
+  <p class="dimtext" style="font-size:11.5px;margin:8px 0 0">
+     Raw data: <a href="/data/best_lines.json">best_lines.json</a>. Confidence is
+     capped at 85% (our 90%+ band was overconfident). Prices move; read the timestamp.</p>
+
+</main>
+
+<script src="/assets/shell.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  var esc,sig;
+  var D=null, sortBy="conf";
+  var $=function(id){return document.getElementById(id);};
+  var CAP=0.85; // published confidence cap (PRODUCT.md)
+
+  function kickoffLocal(iso){
+    var d=new Date(iso); if(isNaN(d))return "—";
+    var wd=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()];
+    var h=d.getHours(), m=d.getMinutes();
+    var ap=h<12?"a":"p"; var h12=h%12; if(h12===0)h12=12;
+    return wd+" "+h12+":"+(m<10?"0":"")+m+ap;
+  }
+
+  function conf(g){ return Math.min(CAP, g.our_prob||0); }
+
+  function sortGames(list){
+    var a=list.slice();
+    if(sortBy==="conf")      a.sort(function(x,y){return conf(y)-conf(x);});
+    else if(sortBy==="gain") a.sort(function(x,y){return (y.edge_pts||0)-(x.edge_pts||0);});
+    else                     a.sort(function(x,y){return Date.parse(x.kickoff)-Date.parse(y.kickoff);});
+    return a;
+  }
+
+  function rowHTML(g){
+    var c=conf(g), pct=Math.round(c*100);
+    return '<div class="trow rcols">'
+      +'<span class="pick-cell"><span class="cell-strong">🏈 '+esc(g.pick)+'</span>'
+        +'<span class="cell-sub">best at '+esc(g.best_book)+' · '+esc(g.n_books)+' books</span></span>'
+      +'<span class="cell-dim col-match"><span class="lblm">vs</span>'+esc(g.away)+' at '+esc(g.home)+'</span>'
+      +'<span class="cell-dim col-start"><span class="lblm">kickoff</span>'+esc(kickoffLocal(g.kickoff))+'</span>'
+      +'<span class="r col-conf"><span class="lblm">confidence</span><span class="conf">'+pct+'%</span>'
+        +'<span class="confbar" aria-hidden="true"><i style="width:'+pct+'%"></i></span></span>'
+      +'<span class="cell-best r"><span class="lblm">best price</span>'+sig(g.best_price)+'</span>'
+      +'<span class="r"><span class="lblm">price edge</span><b class="pos">'+sig(g.edge_pts,2)+'</b> pts</span>'
+      +'</div>';
+  }
+
+  function drawStats(d){
+    var n=d.games.length;
+    var avg=n?d.games.reduce(function(a,g){return a+conf(g);},0)/n:0;
+    $("rstats").innerHTML=
+       '<span><b>'+n+'</b> games</span>'
+      +'<span>avg confidence <b>'+Math.round(avg*100)+'%</b></span>'
+      +'<span>source <b>'+esc((d.source||"").split(",")[0]||"—")+'</b></span>';
+  }
+
+  function draw(){
+    var list=sortGames(D.games);
+    $("rows").innerHTML=list.map(rowHTML).join("");
+  }
+
+  function boot(){
+    esc=window.sooth.esc; sig=window.sooth.sig;
+    window.sooth.startClock($("s-clock"));
+    $("sort").addEventListener("change",function(){sortBy=this.value;draw();});
+
+    fetch("/data/best_lines.json").then(function(r){return r.json();}).then(function(d){
+      D=d;
+      $("s-dot").className="dot"; $("s-state").textContent="live";
+      $("s-n").textContent=(d.games||[]).length;
+      window.sooth.startAgo($("s-ago"), d.generated_at);
+      $("stamp").textContent="Last read "+d.generated_at.slice(0,16).replace("T"," ")
+        +" UTC  ·  "+esc(d.slate_id||"");
+      if(!d.games||!d.games.length){
+        $("rstats").innerHTML="";
+        $("rows").innerHTML='<div class="empty"><div class="big">No games projected right now</div>'
+          +'The predictor fills as the next slate is priced.</div>';
+        return;
+      }
+      drawStats(d);
+      draw();
+    }).catch(function(){
+      $("s-state").textContent="offline";
+      $("rows").innerHTML='<div class="empty"><div class="big">Predictor unavailable</div>'
+        +'Raw data is at <a href="/data/best_lines.json">best_lines.json</a>.</div>';
+    });
+  }
+
+  if(window.sooth){boot();}
+  else{addEventListener("DOMContentLoaded",function(){
+    if(window.sooth)boot(); else setTimeout(boot,50);});}
+})();
+</script>
+</body>
+</html>

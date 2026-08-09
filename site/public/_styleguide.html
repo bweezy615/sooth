@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sooth — style guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  /* styleguide-only scaffolding */
+  .sg{max-width:var(--wrap);margin:0 auto;padding:26px 24px 80px}
+  .sg h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+    margin:38px 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .sw{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .sw .box{height:56px}
+  .sw .lab{padding:8px 10px;font-family:var(--num);font-size:11px;color:var(--muted)}
+  .sw .lab b{color:var(--ink);display:block;font-weight:500}
+  .row-demo{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body data-page="" data-shell="footer-only">
+<div class="sg">
+  <h1 style="font-size:26px">sooth style guide <span class="chip">the terminal</span></h1>
+  <p class="mutedtext">Design tokens + components shared across every page via <span class="mono">sooth.css</span> + <span class="mono">shell.js</span>.</p>
+
+  <h2>Status bar</h2>
+  <div class="statusbar">
+    <span class="sb"><span class="dot"></span> live</span>
+    <span class="sep">|</span>
+    <span class="sb"><span id="clock">—</span></span>
+    <span class="sep">|</span>
+    <span class="sb"><b>11</b> books read</span>
+    <span class="sep">|</span>
+    <span class="sb">updated <b id="ago">—</b></span>
+    <span class="sep">|</span>
+    <span class="sb"><b>46</b> games in window</span>
+  </div>
+
+  <h2>Color</h2>
+  <div class="swatches">
+    <div class="sw"><div class="box" style="background:var(--bg)"></div><div class="lab"><b>--bg</b>#0A0B0F</div></div>
+    <div class="sw"><div class="box" style="background:var(--bg-2)"></div><div class="lab"><b>--bg-2</b>#0E1014</div></div>
+    <div class="sw"><div class="box" style="background:var(--bg-3)"></div><div class="lab"><b>--bg-3</b>#13161C</div></div>
+    <div class="sw"><div class="box" style="background:var(--line-2)"></div><div class="lab"><b>--line-2</b>#2A2F3A</div></div>
+    <div class="sw"><div class="box" style="background:var(--ink)"></div><div class="lab"><b>--ink</b>#E9EBEF</div></div>
+    <div class="sw"><div class="box" style="background:var(--muted)"></div><div class="lab"><b>--muted</b>#7A808C</div></div>
+    <div class="sw"><div class="box" style="background:var(--pos)"></div><div class="lab"><b>--pos</b>#4ADE80</div></div>
+    <div class="sw"><div class="box" style="background:var(--neg)"></div><div class="lab"><b>--neg</b>#F87171</div></div>
+    <div class="sw"><div class="box" style="background:var(--warn)"></div><div class="lab"><b>--warn</b>#FBBF24</div></div>
+  </div>
+
+  <h2>Type</h2>
+  <div class="panel panel-pad">
+    <div class="eyebrow">Eyebrow / label</div>
+    <h1 style="font-size:34px;margin:6px 0">Better prices. Every book.</h1>
+    <p style="color:var(--ink-2);max-width:60ch">Archivo for prose and labels. Body sits at 14px with a 1.5 rhythm — dense, readable, no hand-holding.</p>
+    <p class="num" style="font-size:22px;margin-top:8px">-155 &nbsp; <span class="pos">+130</span> &nbsp; <span class="neg">-1.5</span> &nbsp; 52.38% &nbsp; 0.21038</p>
+    <p class="mutedtext" style="font-size:12px">JetBrains Mono, tabular — every number right-aligns cleanly in a column.</p>
+  </div>
+
+  <h2>Chips</h2>
+  <div class="row-demo">
+    <span class="chip">neutral</span>
+    <span class="chip pos">+3.34 pts</span>
+    <span class="chip live"><span class="dot" style="width:5px;height:5px"></span> live</span>
+    <span class="chip warn">in calibration</span>
+  </div>
+
+  <h2>Tabs</h2>
+  <div class="tabs">
+    <button class="tab" aria-selected="true">NFL <span class="c">16</span></button>
+    <button class="tab" aria-selected="false">MLB <span class="c">24</span></button>
+    <button class="tab" aria-selected="false">NHL <span class="c">0</span></button>
+    <button class="tab" aria-selected="false">NBA <span class="c">0</span></button>
+    <button class="tab" aria-selected="false">UFC <span class="c">22</span></button>
+  </div>
+
+  <h2>Controls &amp; buttons</h2>
+  <div class="row-demo">
+    <label class="fld"><span>Sort</span>
+      <select class="field"><option>Gain (high→low)</option><option>Matchup</option><option>Start time</option></select></label>
+    <label class="fld"><span>Market</span>
+      <select class="field"><option>Moneyline</option><option>Spread</option><option>Total</option></select></label>
+    <a class="btn" href="#">Secondary</a>
+    <a class="btn btn-accent" href="#">Subscribe · $19/mo</a>
+  </div>
+
+  <h2>Stats</h2>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr);max-width:640px">
+    <div class="stat"><div class="v">46</div><div class="k">Games in window</div></div>
+    <div class="stat"><div class="v pos">+1.85</div><div class="k">Avg gain (pts)</div></div>
+    <div class="stat"><div class="v pos">+5.10</div><div class="k">Best gain (pts)</div></div>
+    <div class="stat"><div class="v">11</div><div class="k">Books read</div></div>
+  </div>
+
+  <h2>Data grid</h2>
+  <div class="panel">
+    <div class="grid" style="--c:1.4fr 1.3fr .7fr .7fr .9fr">
+      <div class="thead" style="grid-template-columns:var(--c)">
+        <span>Side</span><span>Matchup</span><span class="r">Best</span><span class="r">Fair</span><span class="r">Gain</span>
+      </div>
+      <div class="trow" style="grid-template-columns:var(--c)">
+        <span><span class="cell-strong">Cincinnati Reds</span><span class="cell-sub">best at LowVig</span></span>
+        <span class="cell-dim">Reds at Nationals</span>
+        <span class="cell-num r">-135</span>
+        <span class="cell-dim r">-130</span>
+        <span class="r"><span class="gainbar"><b>+3.34</b><span class="gtrack"><i style="width:100%"></i></span></span></span>
+      </div>
+      <div class="trow" style="grid-template-columns:var(--c)">
+        <span><span class="cell-strong">Washington Nationals</span><span class="cell-sub">best at FanDuel</span></span>
+        <span class="cell-dim">Reds at Nationals</span>
+        <span class="cell-num r">+130</span>
+        <span class="cell-dim r">+130</span>
+        <span class="r"><span class="gainbar"><b>+3.03</b><span class="gtrack"><i style="width:90%"></i></span></span></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Empty state</h2>
+  <div class="panel"><div class="empty">
+    <div class="big">No games in the window right now</div>
+    The board fills as the next slate approaches.
+  </div></div>
+</div>
+
+<script src="/assets/shell.js" defer></script>
+<script>
+  addEventListener("DOMContentLoaded",function(){
+    sooth.startClock(document.getElementById("clock"));
+    sooth.startAgo(document.getElementById("ago"), new Date(Date.now()-41000).toISOString());
+  });
+</script>
+</body>
+</html>

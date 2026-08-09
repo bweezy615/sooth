@@ -1,0 +1,60 @@
+name: capture-props
+
+# MLB pitcher-strikeout prop closes.
+#
+# Unlike capture-odds (free ESPN game lines), each per-event prop call costs a
+# real Odds API credit. Listing events is free, so idle ticks cost nothing.
+#
+# Cadence == window (30 min, see engine/props_capture.WINDOW): each staggered
+# first pitch is caught by ~one tick, so we spend ~1 credit/game (~15/day,
+# ~450/mo) and stay inside the free tier. --max-credits is a hard floor so a
+# bug can never drain the account.
+#
+# The commit is the point as much as the data: GitHub's timestamp attests we
+# held a given prop price before first pitch — the beat-close evidence base.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-props
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests
+
+      - name: Capture pitcher-K prop closes
+        run: python -m engine.props_capture --max-credits 20
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+
+      - name: Build props.json for the site
+        run: python -m engine.props_board --window-hours 36
+
+      - name: Commit captured props
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          mkdir -p data/capture/mlb-props   # empty-slate ticks write nothing; keep add from erroring
+          git add data/capture/mlb-props site/public/data/props.json
+          if git diff --staged --quiet; then
+            echo "no new prop observations"
+          else
+            git commit -m "capture: mlb props snapshot $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
