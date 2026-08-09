@@ -40,7 +40,9 @@ module.exports = async function handler(req, res) {
   const host = req.headers["x-forwarded-host"] || req.headers.host;
   const proto = req.headers["x-forwarded-proto"] || "https";
   const base = host ? proto + "://" + host : "https://sooth.bet";
-  const returnUrl = base + "/subscribe-complete?session_id={CHECKOUT_SESSION_ID}";
+  // Return through session-verify: it confirms payment with Stripe, grants the
+  // sooth_pro cookie, then redirects to the /subscribe-complete thank-you page.
+  const returnUrl = base + "/api/session-verify?session_id={CHECKOUT_SESSION_ID}";
 
   try {
     const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {

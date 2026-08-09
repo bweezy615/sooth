@@ -7,8 +7,12 @@
 //
 // Zero deps: Node 18+ on Vercel has global fetch.
 
+const auth = require("./_auth.js");
 const MODEL = "claude-haiku-4-5"; // cheapest; bump here if reads need more depth
 const MAX_Q = 500; // input length cap — the floor against abuse/runaway cost
+const FREE_ASK_LIMIT = 3; // free reads/day once the paywall is live (Pro = unlimited)
+// Free until Sept 1 2026 — the cap only bites after that (matches the site promise).
+const CAP_ACTIVE = Date.now() >= Date.parse("2026-09-01T00:00:00Z");
 
 // The house voice + the legal floor, in one place. Every read passes through it.
 const SYSTEM = [
@@ -100,6 +104,27 @@ module.exports = async function handler(req, res) {
   }
   if (question.length > MAX_Q) question = question.slice(0, MAX_Q);
 
+  // Entitlement + free daily cap. Pro (a valid sooth_pro cookie) is unlimited.
+  // Free users get FREE_ASK_LIMIT reads/day via a signed counter cookie; the cap
+  // is inactive until Sept 1. A read that errors upstream isn't counted — the
+  // counter is only written on a successful answer below.
+  var askCookie = null;
+  if (CAP_ACTIVE && !auth.readPro(req)) {
+    var today = new Date().toISOString().slice(0, 10);
+    var st = auth.verify(auth.parseCookies(req)["sooth_ask"] || "");
+    if (!st || st.date !== today) st = { date: today, n: 0 };
+    if (st.n >= FREE_ASK_LIMIT) {
+      res.statusCode = 429;
+      return res.end(JSON.stringify({
+        error: "That's today's free reads used up. Sooth Pro is unlimited — $9.99/mo.",
+        upgrade: "/subscribe",
+      }));
+    }
+    askCookie = auth.cookie("sooth_ask",
+      auth.sign({ date: today, n: st.n + 1, exp: Date.now() + 2 * 24 * 3600 * 1000 }),
+      2 * 24 * 3600);
+  }
+
   var host = req.headers["x-forwarded-host"] || req.headers.host;
   var proto = req.headers["x-forwarded-proto"] || "https";
   var base = host ? proto + "://" + host : "";
@@ -137,6 +162,7 @@ module.exports = async function handler(req, res) {
     var answer = (data.content || []).map(function (b) { return b.text || ""; }).join("").trim();
     res.statusCode = 200;
     res.setHeader("content-type", "application/json");
+    if (askCookie) res.setHeader("Set-Cookie", askCookie);
     return res.end(JSON.stringify({ answer: answer }));
   } catch (e) {
     res.statusCode = 502;
