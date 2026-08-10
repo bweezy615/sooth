@@ -22,6 +22,11 @@ function buildSessionForm(priceId, returnUrl) {
   p.set("mode", "subscription");
   p.set("line_items[0][price]", priceId);
   p.set("line_items[0][quantity]", "1");
+  // Let the buyer redeem a promo code (launch offers, comps). A 100%-off code
+  // also drives the paid-flow test at $0. A fully-discounted subscription
+  // completes with payment_status "no_payment_required"; session-verify already
+  // accepts status "complete", so Pro is granted with no card collected.
+  p.set("allow_promotion_codes", "true");
   p.set("return_url", returnUrl);
   return p.toString();
 }

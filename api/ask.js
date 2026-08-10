@@ -59,6 +59,25 @@ function buildPrompt(board, props, question, betText) {
   );
 }
 
+// Decide whether this request may run, and what counter cookie to write back.
+// Pure over (req, capActive, today) so the self-check can drive every branch
+// with no live model call. Returns one of:
+//   { allowed:true,  cookie:null }         Pro, or the cap isn't live yet
+//   { allowed:true,  cookie:"sooth_ask…" } free user under the daily limit
+//   { allowed:false }                      free user out of reads today
+function gateAsk(req, capActive, today) {
+  if (!capActive || auth.readPro(req)) return { allowed: true, cookie: null };
+  var st = auth.verify(auth.parseCookies(req)["sooth_ask"] || "");
+  if (!st || st.date !== today) st = { date: today, n: 0 };  // new day resets
+  if (st.n >= FREE_ASK_LIMIT) return { allowed: false };
+  return {
+    allowed: true,
+    cookie: auth.cookie("sooth_ask",
+      auth.sign({ date: today, n: st.n + 1, exp: Date.now() + 2 * 24 * 3600 * 1000 }),
+      2 * 24 * 3600),
+  };
+}
+
 async function fetchJSON(base, path) {
   try {
     var r = await fetch(base + path, { headers: { accept: "application/json" } });
@@ -105,25 +124,19 @@ module.exports = async function handler(req, res) {
   if (question.length > MAX_Q) question = question.slice(0, MAX_Q);
 
   // Entitlement + free daily cap. Pro (a valid sooth_pro cookie) is unlimited.
-  // Free users get FREE_ASK_LIMIT reads/day via a signed counter cookie; the cap
-  // is inactive until Sept 1. A read that errors upstream isn't counted — the
-  // counter is only written on a successful answer below.
-  var askCookie = null;
-  if (CAP_ACTIVE && !auth.readPro(req)) {
-    var today = new Date().toISOString().slice(0, 10);
-    var st = auth.verify(auth.parseCookies(req)["sooth_ask"] || "");
-    if (!st || st.date !== today) st = { date: today, n: 0 };
-    if (st.n >= FREE_ASK_LIMIT) {
-      res.statusCode = 429;
-      return res.end(JSON.stringify({
-        error: "That's today's free reads used up. Sooth Pro is unlimited — $9.99/mo.",
-        upgrade: "/subscribe",
-      }));
-    }
-    askCookie = auth.cookie("sooth_ask",
-      auth.sign({ date: today, n: st.n + 1, exp: Date.now() + 2 * 24 * 3600 * 1000 }),
-      2 * 24 * 3600);
+  // Free users get FREE_ASK_LIMIT reads/day; the cap is inactive until Sept 1.
+  // The counter cookie is held and only written on a successful answer below, so
+  // a read that errors upstream isn't counted against the user.
+  var today = new Date().toISOString().slice(0, 10);
+  var gate = gateAsk(req, CAP_ACTIVE, today);
+  if (!gate.allowed) {
+    res.statusCode = 429;
+    return res.end(JSON.stringify({
+      error: "That's today's free reads used up. Sooth Pro is unlimited — $9.99/mo.",
+      upgrade: "/subscribe",
+    }));
   }
+  var askCookie = gate.cookie;
 
   var host = req.headers["x-forwarded-host"] || req.headers.host;
   var proto = req.headers["x-forwarded-proto"] || "https";
@@ -172,5 +185,7 @@ module.exports = async function handler(req, res) {
 
 module.exports.buildPrompt = buildPrompt;
 module.exports.extractUrl = extractUrl;
+module.exports.gateAsk = gateAsk;
 module.exports.SYSTEM = SYSTEM;
 module.exports.MAX_Q = MAX_Q;
+module.exports.FREE_ASK_LIMIT = FREE_ASK_LIMIT;

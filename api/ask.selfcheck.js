@@ -36,4 +36,37 @@ assert(withSlip.includes("bet-slip link"), "prompt must frame the scraped slip")
 assert(ask.buildPrompt(board, props, "is this fair?").indexOf("bet-slip link") === -1,
   "no slip ⇒ no slip framing");
 
+// --- entitlement gate (the Pro perk). The live site can't show this until the
+// cap turns on Sept 1, so force capActive=true and drive every branch. ---
+process.env.AUTH_SECRET = "test-secret-please-ignore";
+const auth = require("./_auth.js");
+const DAY = "2026-09-02";
+const noCookies = { headers: {} };
+const withCookie = (name, val) =>
+  ({ headers: { cookie: name + "=" + encodeURIComponent(val) } });
+
+// cap OFF (today, pre-Sept-1): everyone allowed, no counter written
+let g = ask.gateAsk(noCookies, false, DAY);
+assert(g.allowed === true && g.cookie === null, "cap off ⇒ unlimited, no counter");
+
+// cap ON + valid Pro cookie ⇒ unlimited, and Pro never gets a free-counter cookie
+const proTok = auth.sign({ email: "a@b.com", exp: Date.now() + 1e6 });
+g = ask.gateAsk(withCookie("sooth_pro", proTok), true, DAY);
+assert(g.allowed === true && g.cookie === null, "Pro ⇒ unlimited");
+
+// cap ON + free first read ⇒ allowed and handed a counter cookie
+g = ask.gateAsk(noCookies, true, DAY);
+assert(g.allowed === true && g.cookie && g.cookie.indexOf("sooth_ask=") === 0,
+  "free under limit ⇒ allowed + counter");
+
+// cap ON + free already at the limit ⇒ blocked (this is the 429)
+const atLimit = auth.sign({ date: DAY, n: ask.FREE_ASK_LIMIT, exp: Date.now() + 1e6 });
+assert(ask.gateAsk(withCookie("sooth_ask", atLimit), true, DAY).allowed === false,
+  "free at limit ⇒ blocked");
+
+// yesterday's maxed counter doesn't carry over — a new day resets
+const yesterday = auth.sign({ date: "2026-09-01", n: 99, exp: Date.now() + 1e6 });
+assert(ask.gateAsk(withCookie("sooth_ask", yesterday), true, DAY).allowed === true,
+  "stale day ⇒ counter resets");
+
 console.log("ask.selfcheck: OK");
