@@ -1,28 +1,30 @@
 /* sooth — the terminal. Shared design system for every page.
-   Near-black ground, mono numbers, one green accent. No gradients. */
+   Warm near-white ground, mono numbers, blue accent + green gain. No gradients.
+   Light palette mirrors the homepage tokens so every page reads as one product. */
 
 :root{
   /* ground + structure */
-  --bg:#0A0B0F;          /* near-black page */
-  --bg-2:#0E1014;        /* panel */
-  --bg-3:#13161C;        /* raised / hover / input */
-  --line:#1B1F27;        /* hairline */
-  --line-2:#2A2F3A;      /* stronger hairline */
+  --bg:#FAFAF7;          /* warm near-white page */
+  --bg-2:#FFFFFF;        /* panel / card */
+  --bg-3:#F0F2ED;        /* raised / hover / input */
+  --line:#E5E7E1;        /* hairline */
+  --line-2:#D3D7CE;      /* stronger hairline */
 
   /* ink */
-  --ink:#E9EBEF;         /* primary off-white */
-  --ink-2:#AEB4BF;       /* secondary */
-  --muted:#7A808C;       /* labels / tertiary */
-  --dim:#565C67;         /* faint / disabled */
+  --ink:#111418;         /* primary near-black */
+  --ink-2:#3A424E;       /* secondary */
+  --muted:#5A6472;       /* labels / tertiary */
+  --dim:#8A929E;         /* faint / disabled */
 
-  /* the one accent + its opposite */
-  --pos:#4ADE80;         /* gain, positive, active, links */
-  --pos-dim:rgba(74,222,128,.12);
-  --pos-line:rgba(74,222,128,.30);
-  --neg:#F87171;         /* negative */
-  --neg-dim:rgba(248,113,113,.12);
-  --warn:#FBBF24;        /* unproven / in-calibration */
-  --warn-dim:rgba(251,191,36,.12);
+  /* accent (blue, for links/active) + gain / loss */
+  --iris:#0284C7;        /* primary accent / links */
+  --pos:#16A34A;         /* gain, positive, active */
+  --pos-dim:rgba(22,163,74,.10);
+  --pos-line:rgba(22,163,74,.28);
+  --neg:#DC2626;         /* negative */
+  --neg-dim:rgba(220,38,38,.10);
+  --warn:#B45309;        /* unproven / in-calibration */
+  --warn-dim:rgba(180,83,9,.10);
 
   /* type */
   --num:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -41,7 +43,7 @@ body{
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   font-feature-settings:"tnum" 1;
 }
-a{color:var(--pos);text-decoration:none}
+a{color:var(--iris);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
 h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 
@@ -71,7 +73,7 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .promo a:hover{color:var(--ink)}
 
 /* ================= header (injected by shell.js) ================= */
-.hd{position:sticky;top:0;z-index:100;background:rgba(10,11,15,.86);
+.hd{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .hd-in{display:flex;align-items:center;gap:22px;height:52px;
   max-width:var(--wrap);margin:0 auto;padding:0 24px}

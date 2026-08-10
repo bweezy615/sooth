@@ -4,15 +4,18 @@
 (function(){
   "use strict";
 
+  // One canonical nav for the whole site — mirror this exact set + order in the
+  // static shellnav pages (edges/props/tools/trust/engine). Board, Props, Edges
+  // are the data views; Predictor + Ask AI the tools; Tools and Trust are hubs
+  // that reach the rest (Record/Method/Verify/Guide/Ledger/Gamelog + calculators).
   var NAV=[
-    {href:"/board.html",  key:"board",  label:"Board"},
-    {href:"/props.html",  key:"props",  label:"Props"},
-    {href:"/predictor.html", key:"predictor", label:"Predictor"},
-    {href:"/ask.html",    key:"ask",    label:"Ask AI"},
-    {href:"/learn.html",  key:"learn",  label:"Guide"},
-    {href:"/record.html", key:"record", label:"Record"},
-    {href:"/verify.html", key:"verify", label:"Verify"},
-    {href:"/methodology.html", key:"method", label:"Method"}
+    {href:"/",          key:"board",     label:"Board"},
+    {href:"/props",     key:"props",     label:"Props"},
+    {href:"/edges",     key:"edges",     label:"Edges"},
+    {href:"/predictor", key:"predictor", label:"Predictor"},
+    {href:"/ask",       key:"ask",       label:"Ask AI"},
+    {href:"/tools",     key:"tools",     label:"Tools"},
+    {href:"/trust",     key:"trust",     label:"Trust"}
   ];
 
   var MARK=
@@ -94,7 +97,7 @@
     if(document.querySelector('link[rel="icon"]'))return;
     document.head.insertAdjacentHTML("beforeend",
       '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">'
-      +'<meta name="theme-color" content="#0A0B0F">');
+      +'<meta name="theme-color" content="#FAFAF7">');
   }
 
   // limited-time promo: everything is free until Sept 1. One line, all pages.
