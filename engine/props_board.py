@@ -37,6 +37,23 @@ def median(xs: list[float]) -> float:
     return s[mid] if n % 2 else (s[mid - 1] + s[mid]) / 2.0
 
 
+# Human labels for the site. Unknown markets prettify from the snake_case id
+# so a new market never renders as a raw token.
+MARKET_LABELS = {"pitcher_strikeouts": "Strikeouts"}
+
+
+def market_label(market: str) -> str:
+    return MARKET_LABELS.get(market, str(market).replace("_", " ").title())
+
+
+def fair_american(prob: float) -> int:
+    """Fair probability -> American odds. The de-vigged price a book would post
+    with no margin; the grid shows it beside the real price so the gap is legible.
+    """
+    prob = min(max(prob, 1e-6), 1 - 1e-6)
+    return -round(100 * prob / (1 - prob)) if prob >= 0.5 else round(100 * (1 - prob) / prob)
+
+
 def _newest_quotes(rows: list[dict]) -> dict:
     """Keep the newest observation per (prop, side, book).
 
@@ -86,65 +103,116 @@ def _in_window(row: dict, now: datetime, window_hours: float) -> bool:
     return now - timedelta(hours=3) <= start <= now + timedelta(hours=window_hours)
 
 
+def _side_out(summary: dict | None, fair_prob: float | None) -> dict | None:
+    """One prop side, ready for the grid: best price + book, the de-vigged fair
+    price, how many points the best number beats fair by, and every book's quote.
+    """
+    if not summary or fair_prob is None:
+        return None
+    return {
+        "quotes": summary["quotes"],
+        "n_books": len(summary["quotes"]),
+        "best_price": summary["best_price"],
+        "best_book": summary["best_book"],
+        "fair_prob": round(fair_prob, 4),
+        "fair_price": fair_american(fair_prob),
+        # points of implied probability the best price saves vs fair.
+        # positive = the best number is cheaper than fair = value.
+        "edge_vs_fair_pts": round((fair_prob - implied_prob(summary["best_price"])) * 100, 2),
+    }
+
+
 def build_props(rows: list[dict], now: datetime | None = None,
                 window_hours: float = 36.0) -> list[dict]:
+    """Pivoted props: one record per (event, player, market, line), carrying
+    BOTH sides. The site renders a prop as one row with Over and Under side by
+    side, so the two sides must travel together — flattening them apart is what
+    left the grid unable to render.
+    """
     if now is not None:
         rows = [r for r in rows if _in_window(r, now, window_hours)]
     latest = _newest_quotes(rows)
 
-    # group latest quotes by prop (event, player, market, line) then by side
+    # group latest quotes by prop (event, player, market, line) then by side,
+    # keeping one representative row per prop for the event fields (home/away).
     props: dict[tuple, dict[str, list[dict]]] = {}
+    rep: dict[tuple, dict] = {}
     for (event_id, player, market, line, selection, _book), r in latest.items():
-        prop = props.setdefault((event_id, player, market, line),
-                                {"over": [], "under": []})
+        pk = (event_id, player, market, line)
+        prop = props.setdefault(pk, {"over": [], "under": []})
         if selection in prop:
             prop[selection].append(r)
+        rep.setdefault(pk, r)
 
     out: list[dict] = []
     for (event_id, player, market, line), sides in props.items():
-        summ = {s: _side_summary(qs) for s, qs in sides.items()}
-        over, under = summ.get("over"), summ.get("under")
+        over, under = _side_summary(sides["over"]), _side_summary(sides["under"])
 
         # de-vig: normalise the two sides' raw implied probs to sum to 1.
         # one-sided props keep their raw implied (nothing to strip against).
-        fair = {}
+        fo = fu = None
         if over and under:
             tot = over["raw_implied"] + under["raw_implied"]
-            fair["over"] = over["raw_implied"] / tot
-            fair["under"] = under["raw_implied"] / tot
-        else:
-            if over:
-                fair["over"] = over["raw_implied"]
-            if under:
-                fair["under"] = under["raw_implied"]
+            fo, fu = over["raw_implied"] / tot, under["raw_implied"] / tot
+        elif over:
+            fo = over["raw_implied"]
+        elif under:
+            fu = under["raw_implied"]
 
-        _rep = sides.get("over") or sides.get("under") or []
-        any_row = _rep[0] if _rep else None
-        for side, s in (("Over", over), ("Under", under)):
-            key = side.lower()
-            if not s:
-                continue
-            fp = fair[key]
-            best_ip = implied_prob(s["best_price"])
-            out.append({
-                "event_id": event_id,
-                "player": player,
-                "team": any_row.get("home") if any_row else "",
-                "market": market,
-                "line": line,
-                "side": side,
-                "commence_time": any_row.get("commence_time", "") if any_row else "",
-                "quotes": s["quotes"],
-                "best_price": s["best_price"],
-                "best_book": s["best_book"],
-                "fair_prob": round(fp, 4),
-                # points of implied probability the best price saves vs fair.
-                # positive = the best number is cheaper than fair = value.
-                "edge_pts": round((fp - best_ip) * 100, 2),
-            })
+        o, u = _side_out(over, fo), _side_out(under, fu)
+        # The grid renders Over AND Under on one row and reads both unconditionally,
+        # so a prop needs both priced to show. This also drops the idle-tick marker
+        # rows (selection/price None) that props_capture writes on empty slates.
+        # ponytail: one-sided props are dropped — books post both sides on pitcher
+        # strikeouts, so in practice this only removes the phantoms.
+        if not (o and u):
+            continue
+        r = rep[(event_id, player, market, line)]
+        gain = max(o["edge_vs_fair_pts"], u["edge_vs_fair_pts"])
+        out.append({
+            "event_id": event_id,
+            "player": player,
+            "market": market,
+            "market_label": market_label(market),
+            "line": line,
+            "home": r.get("home", ""),
+            "away": r.get("away", ""),
+            "starts": r.get("commence_time", ""),
+            "over": o,
+            "under": u,
+            "gain_pts": round(gain, 2),
+        })
 
-    out.sort(key=lambda p: p["edge_pts"], reverse=True)
+    out.sort(key=lambda p: p["gain_pts"], reverse=True)
     return out
+
+
+def build_document(rows: list[dict], now: datetime | None = None,
+                   window_hours: float = 36.0) -> dict:
+    """The full props.json: pivoted props grouped into the boards[] -> events[]
+    -> props[] shape every page reads (same nesting as board.json). One board
+    for now (MLB pitcher strikeouts); the structure holds more without change.
+    """
+    props = build_props(rows, now=now, window_hours=window_hours)
+
+    events: dict[str, dict] = {}
+    for p in props:
+        ev = events.setdefault(p["event_id"], {
+            "id": p["event_id"], "home": p["home"], "away": p["away"],
+            "starts": p["starts"], "props": []})
+        ev["props"].append(p)
+    ev_list = sorted(events.values(), key=lambda e: e["starts"])
+
+    boards = [{"sport": "mlb", "label": "MLB", "n_props": len(props),
+               "events": ev_list}] if props else []
+    return {
+        "sport": "mlb",
+        "market": "pitcher_strikeouts",
+        "note": "Best available price per prop side across books, "
+                "and the de-vigged fair line. Shopping the best number is +EV.",
+        "n_props": len(props),
+        "boards": boards,
+    }
 
 
 def read_rows(in_dir: Path) -> list[dict]:
@@ -168,21 +236,13 @@ def main() -> None:
     args = ap.parse_args()
 
     rows = read_rows(Path(args.in_dir))
-    props = build_props(rows, now=datetime.now(timezone.utc),
-                        window_hours=args.window_hours)
-    doc = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "sport": "mlb",
-        "market": "pitcher_strikeouts",
-        "note": "Best available price per prop side across books, "
-                "and the de-vigged fair line. Shopping the best number is +EV.",
-        "n_props": len(props),
-        "props": props,
-    }
+    doc = build_document(rows, now=datetime.now(timezone.utc),
+                         window_hours=args.window_hours)
+    doc = {"generated_at": datetime.now(timezone.utc).isoformat(), **doc}
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(doc, indent=1))
-    print(f"wrote {out}  ({len(props)} prop sides from {len(rows)} observations)")
+    print(f"wrote {out}  ({doc['n_props']} props from {len(rows)} observations)")
 
 
 if __name__ == "__main__":

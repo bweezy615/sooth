@@ -602,7 +602,7 @@ function renderProps(){
             (p.model.delta_pts>0?'<span style="color:var(--pos)">O+'+p.model.delta_pts.toFixed(0)+'</span>'
              :'<span style="color:#0369A1">U+'+Math.abs(p.model.delta_pts).toFixed(0)+'</span>')):'—')+'</span>'+
         '<span class="t-dim" title="times over this line in last 10 games">'+hit+'</span>'+
-        '<span class="t-gain">+'+p.gain_pts.toFixed(1)+'</span>'+
+        '<span class="t-gain">'+(p.gain_pts>=0?'+':'')+p.gain_pts.toFixed(1)+'</span>'+
       '</div>';}).join('')+'</div>';
 }
 
