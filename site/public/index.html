@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — better prices. Every book.</title>
+<title>sooth.bet — best odds across every sportsbook</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Sooth">
-<meta name="description" content="You already know the bet. Sooth reads 11 major US sportsbooks and shows the fair price with the vig stripped and the best number flagged — games, player props, and the edges between books.">
+<meta name="apple-mobile-web-app-title" content="sooth.bet">
+<meta name="description" content="Sooth reads 11 major US sportsbooks and shows the fair price with the vig stripped and the best number flagged: games, player props, and the gaps between books.">
 <link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="Sooth — 11 sportsbooks' prices on one board">
-<meta property="og:description" content="Live odds from 11+ books with the vig stripped out. Games and player props, timestamped and verifiable — free to look.">
+<meta property="og:title" content="sooth.bet: 11 sportsbooks' prices on one board">
+<meta property="og:description" content="Live odds from 11+ books with the vig stripped out. Games and player props, timestamped and verifiable. Free to use.">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/sooth.css">
 <style>
 :root{
   --bg:#FAFAF7; --bg-2:#FFFFFF; --card:#FFFFFF; --card-2:#F0F2ED;
@@ -252,24 +253,19 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
 </style>
 <link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body>
-<div class="aura"></div>
+<body data-page="board">
+<a class="skip-nav" href="#main-content" style="position:absolute;left:-9999px;top:0;z-index:999;background:var(--bg);color:var(--ink);padding:9px 15px;border:1px solid var(--line-2);border-radius:6px;font-weight:600">Skip to main content</a>
+<div class="aura" aria-hidden="true"></div>
 <div class="stage"><div class="wrap">
 
-<div class="top">
-  <a class="logo" href="/"><span class="wordmark">sooth</span></a>
-  <nav>
-    <a href="/tools">Calculators</a>
-    <a href="/trust">Why trust us</a>
-    <a class="pro" href="#pro">Get Pro alerts</a>
-  </nav>
-</div>
-
+<main id="main-content">
 <div class="pitch">
-  <h1>You know the bet.<br><span class="g">We find the best price.</span></h1>
-  <p>Same bet, 11 sportsbooks, different payouts. Sooth strips the bookmaker's margin,
-  shows the <b>fair price</b>, and flags the book paying the most — games, player props,
-  and the gaps between books. <b>No picks, ever.</b> Just the number you deserve.</p>
+  <h1>Every sportsbook prices the same bet differently.<br><span class="g">We show you the best one.</span></h1>
+  <p>Sooth reads 11 major US sportsbooks and puts all their prices on one board.
+  It strips out each book's built-in cut (the "vig") to show the <b>fair price</b>,
+  then highlights which book is paying the most right now.
+  Works for game lines and player props. <b>No picks, no wagers, no hype.</b>
+  Just the numbers, so you can shop the best line before you bet.</p>
 </div>
 
 <div class="ticker" aria-hidden="true"><div class="tk" id="tk"></div></div>
@@ -281,14 +277,14 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
       <span class="sep"></span>
       <div class="tabs" role="tablist" aria-label="View">
         <button class="tab" data-view="games" aria-selected="true">Games</button>
-        <button class="tab" data-view="props" aria-selected="false">Props<span class="ct" id="ct-props"></span></button>
-        <button class="tab" data-view="picks" aria-selected="false">Picks<span class="ct" id="ct-picks"></span></button>
-        <button class="tab" data-view="edges" aria-selected="false">Edges<span class="ct" id="ct-edges"></span></button>
+        <button class="tab" data-view="props" aria-selected="false">Props<span class="ct" id="ct-props" aria-hidden="true"></span></button>
+        <button class="tab" data-view="picks" aria-selected="false">Picks<span class="ct" id="ct-picks" aria-hidden="true"></span></button>
+        <button class="tab" data-view="edges" aria-selected="false">Edges<span class="ct" id="ct-edges" aria-hidden="true"></span></button>
       </div>
       <input type="search" id="q" placeholder="team or player…" aria-label="Search">
     </div>
     <div class="hint" id="hint"></div>
-    <div class="note" id="closingNote"><b>CLOSING SNAPSHOT</b> — these games have started or
+    <div class="note" id="closingNote"><b>Closing snapshot:</b> these games have started or
     finished. Fresh lines land automatically when books post the next slate.</div>
     <div class="content" id="content"><div class="empty">Loading the board…</div></div>
     <div class="stamp"><span id="stamp">·</span><span>reads refresh automatically</span></div>
@@ -296,49 +292,52 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
 
   <div class="side">
     <div class="offer" id="pro">
-      <a class="go" href="/subscribe">→</a>
-      <span class="k">SOOTH PRO</span>
+      <a class="go" href="/subscribe.html" aria-label="Get sooth.bet Pro">→</a>
+      <span class="k">sooth.bet Pro</span>
       <h2>Unlock every<br>edge.</h2>
       <ul>
-        <li>The read on any bet — unlimited Ask AI</li>
+        <li>Unlimited Ask AI reads on any bet</li>
         <li>Alerts the moment any book overpays</li>
         <li>Best line across 11 sportsbooks, live</li>
       </ul>
       <span class="price">
-        <a class="pill" href="/subscribe">FOUNDING · $9.99/MO AT LAUNCH</a>
+        <a class="pill" href="/subscribe.html">Founding price: $9.99/mo at launch</a>
         <span class="cancel">Cancel anytime</span>
       </span>
     </div>
     <div class="pro2"><div class="in">
-      <div class="livehead"><i></i>Sooth Pro · alert feed preview</div>
+      <div class="livehead"><i aria-hidden="true"></i>sooth.bet Pro: alert feed preview</div>
       <h2>These fired today. Pro got pinged.</h2>
       <p class="sub2">The board shows the best price when you look. Pro watches
       every book, every read, and pings you the moment one overpays.</p>
       <div id="alertfeed"></div>
       <div class="prostats" id="prostats"></div>
-      <a class="cta" href="/subscribe">Get the alerts first →</a>
+      <a class="cta" href="/subscribe.html">Get the alerts first →</a>
       <p class="fine">Founding-member pricing at launch · tools and data, never picks · the board stays free</p>
     </div></div>
     <div class="card trust-card">
       <p><b>Why trust these numbers?</b> Because we publish the ones that hurt:
       our own prediction model hit <span class="num">49.50%</span> against the spread
-      across <span class="num">2,671</span> graded games — the market beat it, and we
+      across <span class="num">2,671</span> graded games. The market beat it, and we
       say so. Every price is timestamped and every record is hash-committed before
-      kickoff. <a href="/trust">See the receipts →</a></p>
+      kickoff. <a href="/trust.html">See the receipts →</a></p>
     </div>
   </div>
 </div>
+</main>
 
 <footer>
+  <nav aria-label="Footer navigation">
   <div class="menu">
-    <a href="/tools">Calculators</a><a href="/trust">Trust</a>
-    <a href="/methodology">Methodology</a><a href="/ledger">Ledger</a>
-    <a href="/verify">Verify us</a><a href="/engine">Engine room</a>
-    <a href="/gamelog">Game log</a><a href="/disclaimers">Disclaimers</a>
+    <a href="/tools.html">Calculators</a><a href="/trust.html">Trust</a>
+    <a href="/methodology.html">Methodology</a><a href="/ledger.html">Ledger</a>
+    <a href="/verify.html">Verify us</a><a href="/engine.html">Engine room</a>
+    <a href="/gamelog.html">Game log</a><a href="/disclaimers.html">Disclaimers</a>
   </div>
+  </nav>
   <p class="rg">Analysis and entertainment only. We do not accept, place, or facilitate
   wagers, hold no funds, and sell no picks. Past results do not indicate future results.
-  21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24 hours.</p>
+  Must be 21 or older where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, available 24 hours.</p>
 </footer>
 
 </div></div>
@@ -684,5 +683,6 @@ function renderEdges(){
 }
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="/assets/shell.js" defer></script>
 </body>
 </html>
