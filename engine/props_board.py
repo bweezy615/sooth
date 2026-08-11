@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -266,7 +267,12 @@ def main() -> None:
     doc = {"generated_at": datetime.now(timezone.utc).isoformat(), **doc}
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(doc, indent=1))
+    # Atomic, like lines.py/props.py/middles.py/best_lines.py. A bare
+    # write_text can leave a half-written props.json if the process dies
+    # mid-write, and a reader that hits truncated JSON has no good options.
+    tmp = out.with_suffix(".tmp")
+    tmp.write_text(json.dumps(doc, indent=1))
+    os.replace(tmp, out)
     print(f"wrote {out}  ({doc['n_props']} props from {len(rows)} observations)")
 
 
