@@ -90,10 +90,11 @@ jobs:
               age = 1e9
 
           # An empty board counts as stale no matter how recent its timestamp.
-          # capture-props rewrites props.json every 30 min even when it has
-          # nothing to publish, so age alone reads a permanently empty page as
-          # permanently fresh — the gate would never open and the tab would
-          # stay blank forever. Freshness is about the DATA, not the clock.
+          # This job now owns props.json outright, but the rule stays: it was
+          # written because capture-props used to rewrite the file every 30 min
+          # even with nothing to publish, so age alone read a permanently empty
+          # page as permanently fresh and the gate never opened. Freshness is a
+          # fact about the DATA, not about the clock.
           print(f"age_h={age:.1f}")
           print(f"n_props={n}")
           print(f"refresh={'true' if (forced or n == 0 or age >= max_age) else 'false'}")

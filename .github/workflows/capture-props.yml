@@ -42,37 +42,27 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
-      - name: Build props.json for the site
-        run: python -m engine.props_board --window-hours 36
-
-      # props_board publishes whatever games are in window, and for ~22h a day
-      # that is nothing: props_capture only fires near first pitch, so by
-      # mid-afternoon last night's closes have aged out and the rebuild is
-      # empty. Committing that empties the Props tab. publish.sh kept the
-      # previous snapshot in exactly this case ("PROPS kept previous
-      # snapshot") and the guard was lost when publishing moved to Actions.
-      # Never trade data for no-data: an empty rebuild is discarded, not shipped.
-      - name: Never publish an empty board over a populated one
-        run: |
-          # Sum boards[].n_props, the same way index.html does. props-live
-          # writes a different shape via engine.props with no top-level
-          # n_props, so reading that key alone would report a restored
-          # 122-prop board as "0 props" in the log.
-          count() { python -c "import json;d=json.load(open('site/public/data/props.json'));print(sum(int(b.get('n_props') or 0) for b in (d.get('boards') or [])))"; }
-          n=$(count)
-          if [ "$n" -eq 0 ]; then
-            git checkout -- site/public/data/props.json 2>/dev/null || true
-            echo "empty rebuild discarded - kept committed snapshot ($(count) props)"
-          else
-            echo "board rebuilt with $n props"
-          fi
-
+      # This job no longer publishes props.json. It captures, and that is all.
+      #
+      # props.json had two writers with incompatible shapes: props_board here
+      # (MLB-only, rebuilt from captured closes, top-level n_props) every 30
+      # min, and engine.props in props-live.yml (multi-sport, live, annotated
+      # with hit rates and the strikeout model, no top-level n_props) every 2h.
+      # Each overwrote the other wholesale. Run 31528564882 caught it live: the
+      # 122-prop board from props-live was one non-empty MLB tick away from
+      # being replaced by a thinner closes-derived one, and both jobs report
+      # green either way, so the board would have flip-flopped in silence.
+      #
+      # props-live owns the file now. Closes still reach the page, because the
+      # last live board captured before first pitch IS the closing snapshot,
+      # and index.html already labels a board whose games have all started.
+      # engine.props_board stays in the tree for manual rebuilds and backfills.
       - name: Commit captured props
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
           mkdir -p data/capture/mlb-props   # empty-slate ticks write nothing; keep add from erroring
-          git add data/capture/mlb-props site/public/data/props.json
+          git add data/capture/mlb-props
           if git diff --staged --quiet; then
             echo "no new prop observations"
           else

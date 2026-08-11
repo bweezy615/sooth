@@ -153,9 +153,15 @@ def test_props_collect_fresh_write_is_atomic_and_captures(tmp_path,
     on_disk = json.loads((out_dir / "props.json").read_text())
     assert on_disk["totals"] == {"events": 1, "props": 1, "max_gain_pts": 4.5}
     assert _no_tmp_left(out_dir)
-    # capture: one jsonl line per prop, replayable json
-    caps = list((tmp_path / "data" / "capture" / "mlb-props").glob("*.jsonl"))
+    # capture: one jsonl line per prop, replayable json.
+    # -live, because data/capture/mlb-props belongs to engine.props_capture and
+    # holds a different row shape. One directory for two schemas is what let a
+    # nested row win the representative slot in props_board and blank out a
+    # prop's start time, which silently removed it from every rendered view.
+    caps = list((tmp_path / "data" / "capture" / "mlb-props-live").glob("*.jsonl"))
     assert len(caps) == 1
+    assert not (tmp_path / "data" / "capture" / "mlb-props").exists(), \
+        "engine.props must not write into props_capture's directory"
     lines = caps[0].read_text().splitlines()
     assert len(lines) == 1
     row = json.loads(lines[0])

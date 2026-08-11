@@ -93,7 +93,10 @@ def _in_window(row: dict, now: datetime, window_hours: float) -> bool:
     current from a few hours before we'd stop watching until ``window_hours``
     ahead. A row with no parseable start is kept (fail open, never hide data).
     """
-    ct = row.get("commence_time")
+    # props_capture names this commence_time; every other capture path in the
+    # repo names it kickoff. Read either rather than silently failing open on
+    # a row that does carry a start time under the other name.
+    ct = row.get("commence_time") or row.get("kickoff")
     if not ct:
         return True
     try:
@@ -129,6 +132,18 @@ def build_props(rows: list[dict], now: datetime | None = None,
     side, so the two sides must travel together — flattening them apart is what
     left the grid unable to render.
     """
+    # Only rows this module actually understands. engine.props used to append
+    # its own nested shape ({"over": {...}, "under": {...}}, start time under
+    # "kickoff") into the same data/capture/mlb-props directory props_capture
+    # owns. Those rows have no top-level selection/price, so they never became
+    # quotes — but they DID reach `rep` below and could win the representative
+    # slot for a prop, handing it starts="". The page filters on
+    # `new Date(starts) > Date.now()`, and Invalid Date is never greater, so a
+    # correctly priced prop silently vanished from every view. Capture is
+    # append-only evidence and is never rewritten, so the historical rows stay
+    # on disk; we simply stop reading what was never ours.
+    rows = [r for r in rows
+            if r.get("selection") is not None and r.get("price") is not None]
     if now is not None:
         rows = [r for r in rows if _in_window(r, now, window_hours)]
     latest = _newest_quotes(rows)

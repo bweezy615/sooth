@@ -261,7 +261,13 @@ def collect(window_hours: float = 30, max_credits: int = 20,
         # as the game-line capture so future backtests can replay both.
         stamp = now.strftime("%Y-%m-%d")
         for board in boards:
-            cap = Path("data/capture") / f"{board['sport']}-props"
+            # NOT {sport}-props — that directory belongs to engine.props_capture,
+            # which writes a flat one-quote-per-row shape keyed on
+            # commence_time. This writes a nested both-sides row keyed on
+            # kickoff. Sharing one directory put two schemas in one file and
+            # cost props_board a representative row per prop (see its
+            # build_props comment). Different shape, different directory.
+            cap = Path("data/capture") / f"{board['sport']}-props-live"
             cap.mkdir(parents=True, exist_ok=True)
             with (cap / f"{stamp}.jsonl").open("a") as fh:
                 for e in board["events"]:
