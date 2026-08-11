@@ -27,9 +27,16 @@ name: refresh-edges
 # every mtime to now — mtime would report "fresh" forever. publish.sh learned
 # this on props and the lesson is copied here deliberately.
 
+# DEPLOY BUDGET, not just credits. Every commit here triggers a Vercel build,
+# and the account is on the free tier: >100 deployments/day is a hard 24h
+# lockout. It happened on 2026-08-11 — 79 deploys by mid-afternoon because two
+# Vercel projects were both auto-deploying this repo, and production froze on a
+# stale build with the fixes stranded on main. moves.json changes on virtually
+# every tick, so this workflow commits nearly every time it runs: at */30 it
+# alone would spend ~48 of the ~100. Hourly keeps the total near ~65/day.
 on:
   schedule:
-    - cron: "15,45 * * * *"
+    - cron: "15 * * * *"
   workflow_dispatch:
     inputs:
       force_middles:
