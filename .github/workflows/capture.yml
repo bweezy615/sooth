@@ -49,11 +49,14 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         continue-on-error: true
 
+      - name: Generate best lines (zero credits, joins slate + board)
+        run: python -m engine.best_lines
+
       - name: Commit captured odds + board
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add data/capture site/public/data/board.json
+          git add data/capture site/public/data/board.json site/public/data/best_lines.json
           if git diff --staged --quiet; then
             echo "no new observations"
           else
