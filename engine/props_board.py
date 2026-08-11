@@ -20,6 +20,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from .schema import canonical_book
+
 DEFAULT_IN = "data/capture/mlb-props"
 DEFAULT_OUT = "site/public/data/props.json"
 
@@ -144,6 +146,14 @@ def build_props(rows: list[dict], now: datetime | None = None,
     # on disk; we simply stop reading what was never ours.
     rows = [r for r in rows
             if r.get("selection") is not None and r.get("price") is not None]
+
+    # Normalise book identity on READ as well as on write, the same way
+    # alerts.py does and for the same reason: data/capture is append-only
+    # evidence and is never rewritten, so every row captured before
+    # props_capture started canonicalising still carries the raw API slug
+    # (betonlineag, williamhill_us). Two spellings of one operator would both
+    # count toward n_books and toward the median that becomes the fair line.
+    rows = [dict(r, book=canonical_book(r.get("book", ""))) for r in rows]
     if now is not None:
         rows = [r for r in rows if _in_window(r, now, window_hours)]
     latest = _newest_quotes(rows)

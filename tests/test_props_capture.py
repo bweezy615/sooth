@@ -45,7 +45,8 @@ def test_parser_keeps_player_line_and_ignores_other_markets():
     assert len(rows) == 4  # 2 pitchers x over/under; h2h dropped
     cole_over = next(r for r in rows if r.player == "Gerrit Cole" and r.selection == "over")
     assert cole_over.line == 6.5 and cole_over.price == -115
-    assert cole_over.book == "draftkings"
+    # Canonical, not the raw API key — same rule as every other capture path.
+    assert cole_over.book == "DraftKings"
     assert cole_over.provenance == "own_capture"
     assert all(r.market == "pitcher_strikeouts" for r in rows)
 

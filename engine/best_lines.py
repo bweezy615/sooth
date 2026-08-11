@@ -120,6 +120,28 @@ def generate(data_dir: Path = DATA) -> dict:
 
     # Atomic write (mirrors lines.py pattern)
     out = data_dir / "best_lines.json"
+
+    # No-clobber, the same rule lines.py/props.py/middles.py already follow:
+    # never trade data for no-data. The distinction matters here, because an
+    # empty result is usually LEGITIMATE — no NFL events in the board window
+    # means the slate is still weeks out, and the predictor page says so.
+    # It is a failure when the board DOES carry NFL events and not one of them
+    # matched a slate game: that is the join breaking (an abbreviation drift is
+    # enough), and it would silently blank a page that had real data a moment
+    # ago. Keep the previous file, stamp it honestly, and say so.
+    if not games and nfl_events and out.exists():
+        try:
+            prev = json.loads(out.read_text())
+        except (OSError, json.JSONDecodeError):
+            prev = None
+        if prev and prev.get("games"):
+            prev["checked_at"] = now
+            tmp = out.with_suffix(".tmp")
+            tmp.write_text(json.dumps(prev, indent=1))
+            os.replace(tmp, out)
+            doc["join_failed"] = True
+            return doc
+
     tmp = out.with_suffix(".tmp")
     tmp.write_text(json.dumps(doc, indent=1))
     os.replace(tmp, out)

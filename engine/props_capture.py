@@ -40,6 +40,8 @@ from pathlib import Path
 
 import requests
 
+from .schema import canonical_book
+
 EVENTS = "https://api.the-odds-api.com/v4/sports/baseball_mlb/events"
 ODDS = "https://api.the-odds-api.com/v4/sports/baseball_mlb/events/{eid}/odds"
 MARKET = "pitcher_strikeouts"
@@ -98,7 +100,13 @@ def _rows_from_event(payload: dict, observed_at: str) -> list[PropObservation]:
     commence = payload.get("commence_time", "")
     event_id = str(payload.get("id", ""))
     for bk in payload.get("bookmakers", []):
-        book = bk.get("key", "unknown")
+        # Canonical, like every other capture path (lines, props, middles,
+        # capture). The raw API key spells one operator several ways
+        # (williamhill_us/caesars, barstool/espnbet), and schema.py spells out
+        # the cost: "one operator counted as two books can manufacture a
+        # consensus that does not exist" — which is exactly what a prop's
+        # de-vigged fair line is built from.
+        book = canonical_book(bk.get("key", "unknown"))
         for mk in bk.get("markets", []):
             if mk.get("key") != MARKET:
                 continue

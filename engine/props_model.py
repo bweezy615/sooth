@@ -43,6 +43,17 @@ OPP_CAP = 0.20                               # opponent factor clamp
 LEAGUE_KPCT_FALLBACK = 0.222
 
 
+def over_threshold(line: float) -> int:
+    """Smallest strikeout count that WINS an over at this line.
+
+    A half line cannot push, so 5.5 needs 6. A whole line can: at 6.0 a
+    6-strikeout start returns the stake, it does not win, so the over needs 7.
+    Using ceil() for both counted that push as a win and inflated p_over on
+    every whole-number line.
+    """
+    return math.ceil(line) if line != int(line) else int(line) + 1
+
+
 def poisson_sf(k: int, lam: float) -> float:
     """P(X >= k) for Poisson(lam)."""
     if lam <= 0:
@@ -192,10 +203,19 @@ def annotate(props_path: str = "site/public/data/props.json",
                 if not proj:
                     continue
                 line = float(p["line"])
-                need = math.ceil(line)          # x.5 line: over needs >= ceil
+                need = over_threshold(line)
                 p_over = poisson_sf(need, proj["lam"])
-                fp = p["over"]["fair_price"]
-                fair_over = ((-fp) / ((-fp) + 100.0)) if fp < 0 else (100.0 / (fp + 100.0))
+
+                # Prefer the precise de-vigged probability when the board
+                # carries it. fair_price is an already-rounded integer American
+                # price, so recomputing from it feeds avoidable rounding noise
+                # straight into delta_pts — the number the page shows as our
+                # model against the market. engine.props publishes only
+                # fair_price today, so keep the round-trip as the fallback.
+                fair_over = p["over"].get("fair_prob")
+                if fair_over is None:
+                    fp = p["over"]["fair_price"]
+                    fair_over = ((-fp) / ((-fp) + 100.0)) if fp < 0 else (100.0 / (fp + 100.0))
                 p["model"] = {
                     "proj_k": round(proj["lam"], 2),
                     "p_over": round(p_over, 4),

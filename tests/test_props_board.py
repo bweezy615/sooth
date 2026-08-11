@@ -50,7 +50,9 @@ def test_best_price_is_best_payout():
     ]
     over = _one(build_props(rows))["over"]
     assert over["best_price"] == -105
-    assert over["best_book"] == "draftkings"
+    # props_board canonicalises on read, so historical rows captured before
+    # props_capture did the same still resolve to one spelling per operator.
+    assert over["best_book"] == "DraftKings"
     assert over["n_books"] == 3  # all three over quotes counted
 
 
@@ -132,3 +134,20 @@ def test_fair_american_and_label_helpers():
     assert fair_american(0.8) == -400      # heavy favourite prices negative
     assert fair_american(0.2) == 400       # longshot prices positive
     assert market_label("batter_hits") == "Batter Hits"  # unknown market prettifies
+
+
+# ------------------------------------------------------- props_model thresholds
+
+def test_over_threshold_treats_a_whole_line_as_pushable():
+    """ceil() is right for half lines and wrong for whole ones.
+
+    At 6.0 a six-strikeout start is a push — stake back, not a win — so the
+    over needs 7. Counting it as a win inflated p_over, and p_over is half of
+    the delta the page prints as our model against the market.
+    """
+    from engine.props_model import over_threshold
+
+    assert over_threshold(5.5) == 6
+    assert over_threshold(6.5) == 7
+    assert over_threshold(6.0) == 7      # was 6: a push scored as an over
+    assert over_threshold(4.0) == 5

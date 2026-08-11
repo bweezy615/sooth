@@ -99,7 +99,14 @@
 <div class="card">
   <div class="pipe">
     <div class="stage"><span class="num">STAGE 1</span>
-      <h3>Archive</h3><p>7,548 games since '99 + 68,120 per-book closing prices.</p>
+      <!-- "68,120 per-book closing prices" was removed on 2026-08-11: no file
+           under site/public/data or data/ contains that number or anything it
+           could be derived from, which breaks this project's own rule that a
+           published figure must regenerate from a script or a data file. The
+           games count is backed (gamelog.html carries all 7,548); the per-book
+           archive is real but uncounted here, so it is stated without a made-up
+           figure rather than restated with one. -->
+      <h3>Archive</h3><p>7,548 games since '99, plus our own per-book price capture.</p>
       <code>backfill/ · raw/</code></div>
     <div class="stage"><span class="num">STAGE 2</span>
       <h3>Calibrate</h3><p>Elo + independent models fit walk-forward, never on future games.</p>

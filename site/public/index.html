@@ -298,7 +298,7 @@ footer .rg{font-size:11px;color:var(--dim);max-width:88ch}
       <ul>
         <li>Unlimited Ask AI reads on any bet</li>
         <li>Alerts the moment any book overpays</li>
-        <li>Best line across 11 sportsbooks, live</li>
+        <li>Best line across up to 11 sportsbooks, live</li>
       </ul>
       <span class="price">
         <a class="pill" href="/subscribe.html">Founding price: $9.99/mo at launch</a>
@@ -368,6 +368,18 @@ Promise.allSettled([
   DATA.slate=rs[4].status==='fulfilled'?rs[4].value:null;
   init();
 });
+
+// A feed that failed to load is NOT an empty market. Every fetch above
+// resolves to null on failure, and the render guards used to treat null and
+// "loaded, nothing in it" the same way — so an outage produced calm copy like
+// "Nothing beats fair at this read. Normal for an efficient market", which
+// asserts a fact about the market we did not have. Empty is a finding; null is
+// our problem, and they must not read alike.
+function unavailable(what){
+  return '<div class="empty"><b>'+what+' unavailable.</b><p>We could not load this '+
+    'feed just now — that is a problem on our end, not a quiet market. '+
+    'Reload in a moment.</p></div>';
+}
 
 function sportsList(){
   var set=[],seen={};
@@ -479,7 +491,11 @@ function buildProFeed(){
   stats.innerHTML=
     '<div class="prostat"><b>'+n48+'</b><span>alerts · 48h</span></div>'+
     '<div class="prostat"><b>+'+(big?big.toFixed(1):'0')+'</b><span>biggest, pts</span></div>'+
-    '<div class="prostat"><b>+2.71%</b><span>measured edge</span></div>';
+    // The two stats above are computed from moves.json at render time. This
+    // one is not: it is the 2023-25 NFL moneyline replay, and priceedge.json
+    // labels itself "REPLAY - NOT A LIVE RECORD". Sitting unqualified in a row
+    // of live numbers, it read as one. Say which it is.
+    '<div class="prostat"><b>+2.71%</b><span>price edge · 23-25 replay</span></div>';
   window.__alertCount=n48;
 }
 
@@ -503,7 +519,8 @@ function render(){
 
 /* ---------- picks ---------- */
 function renderPicks(){
-  if(!DATA.slate||!(DATA.slate.games||[]).length)
+  if(DATA.slate===null)return unavailable('The sealed slate');
+  if(!(DATA.slate.games||[]).length)
     return '<div class="empty"><b>No sealed slate right now.</b><p>Picks are committed before each NFL week and appear here the moment they are sealed.</p></div>';
   var d=DATA.slate;
   var games=d.games.filter(function(g){
@@ -571,7 +588,8 @@ function renderGames(){
 
 /* ---------- props ---------- */
 function renderProps(){
-  if(!DATA.props||!(DATA.props.boards||[]).length)
+  if(DATA.props===null)return unavailable('Props');
+  if(!(DATA.props.boards||[]).length)
     return '<div class="empty"><b>No props posted right now.</b><p>Books post player props closer to game time; they land here automatically, usually by mid-morning.</p></div>';
   var rows=[],closing=false;
   DATA.props.boards.forEach(function(b){
@@ -612,6 +630,10 @@ function renderProps(){
 
 /* ---------- edges ---------- */
 function renderEdges(){
+  // Every panel below is built from board.json and moves.json. With both
+  // missing there is nothing to reason from, and the empty states underneath
+  // would otherwise report a calm, efficient market we never observed.
+  if(DATA.board===null&&DATA.moves===null)return unavailable('Edges');
   var out='',count=0;
   var evs=[];
   if(DATA.board)DATA.board.boards.forEach(function(b){
@@ -643,7 +665,9 @@ function renderEdges(){
     return '<div class="erow"><span class="lead">+'+r.edge.toFixed(1)+'</span>'+
       '<span class="what"><b>'+esc(r.t)+'</b><p>'+esc(r.sub)+'</p></span>'+
       '<span class="meta"><span class="bk">'+esc(r.bk)+' '+sg(r.pr)+'</span>fair '+sg(r.fair)+'</span></div>';}).join('')
-    :'<div class="empty" style="padding:18px"><b>Nothing beats fair at this read.</b><p>Normal for an efficient market — edges open when news breaks and books lag.</p></div>';
+    :(DATA.board===null
+      ? '<div class="empty" style="padding:18px"><b>Board unavailable.</b><p>We could not load the price board, so there is nothing to compare against fair yet.</p></div>'
+      : '<div class="empty" style="padding:18px"><b>Nothing beats fair at this read.</b><p>Normal for an efficient market — edges open when news breaks and books lag.</p></div>');
   var arbs=[];
   if(DATA.board)DATA.board.boards.forEach(function(b){
     if(state.sport&&b.label!==state.sport)return;
@@ -670,7 +694,9 @@ function renderEdges(){
       '<p><span class="bk">'+esc(x.low_book)+'</span> '+esc(x.low_label)+' ('+sg(x.low_price)+') · '+
       '<span class="bk">'+esc(x.high_book)+'</span> '+esc(x.high_label)+' ('+sg(x.high_price)+') — land inside, win both</p></span>'+
       '<span class="meta">'+esc(x.label)+' · '+esc(x.market)+'</span></div>';});
-  out+=am||'<div class="empty" style="padding:18px"><b>No arbs or open middles at this read.</b><p>They open when one book lags a move — most often near game time.</p></div>';
+  out+=am||(DATA.middles===null
+    ? '<div class="empty" style="padding:18px"><b>Middles feed unavailable.</b><p>We could not load it, so we cannot say whether any are open right now.</p></div>'
+    : '<div class="empty" style="padding:18px"><b>No arbs or open middles at this read.</b><p>They open when one book lags a move — most often near game time.</p></div>');
   if(DATA.moves){
     var cutoff=Date.now()-48*3600*1000;
     var div=(DATA.moves.divergence||[]).filter(function(a){

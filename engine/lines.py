@@ -254,7 +254,14 @@ def collect(window_hours: float = 36, max_credits: int = 60,
         "generated_at": now.isoformat(),
         "window_hours": window_hours,
         "credits_spent": spent,
-        "sports_live": sorted(SPORTS[s]["label"] for s in live if s in SPORTS),
+        # What we actually published a board for, not what the API lists as
+        # active. The API counts a sport as active whenever any market exists
+        # (NBA and NHL futures trade all summer), so this read
+        # "MLB, NBA, NFL, NHL, UFC" on 2026-08-11 while the file carried
+        # boards for MLB and UFC alone — and engine.html renders it verbatim
+        # as "sports live", board.html as "in season". Derive the claim from
+        # the evidence and it cannot drift from it.
+        "sports_live": sorted(b["label"] for b in boards),
         "note": ("Best available price per side, and the de-vigged consensus "
                  "across books. Shopping the best number is +EV on its own."),
         "boards": boards,

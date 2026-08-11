@@ -73,6 +73,11 @@ def game_log(pid: int, group: str, season: int,
 
 
 def rate(values: list[float], line: float) -> dict:
+    # n is the number of GAMES LOOKED AT, not decided bets. The site renders
+    # this as "L10", so the denominator has to stay the sample size or the
+    # label lies — dropping pushes would print "6 of 9" for ten games played.
+    # A push is correctly excluded from `over` (strictly greater), which is
+    # the only place it would overstate anything.
     overs = sum(1 for v in values if v > line)
     return {"n": len(values), "over": overs}
 
