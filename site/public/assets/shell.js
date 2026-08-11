@@ -79,7 +79,7 @@
       +'We do not take, place or facilitate wagers, and we hold no customer funds. '
       +'We are not affiliated with any league, team or sportsbook. Prices are what '
       +'books showed when last read and move constantly.</p>'
-      +'<p>Past results do not indicate future results. 18+, where lawful. '
+      +'<p>Past results do not indicate future results. 21+, where lawful. '
       +'If gambling is causing harm, call the National Problem Gambling Helpline '
       +'<b class="help">1-800-522-4700</b>, available 24 hours.</p>'
       +'<div class="links">'

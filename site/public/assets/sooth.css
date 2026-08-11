@@ -17,8 +17,9 @@
   --dim:#8A929E;         /* faint / disabled */
 
   /* accent (blue, for links/active) + gain / loss */
-  --iris:#0284C7;        /* primary accent / links */
-  --pos:#16A34A;         /* gain, positive, active */
+  --iris:#0369A1;        /* primary accent / links — WCAG AA 5.67:1 on --bg */
+  --pos:#16A34A;         /* gain backgrounds, dots, badges — 3.15:1 (bg use only) */
+  --pos-text:#15803D;    /* green as text on white — WCAG AA 4.80:1 on --bg */
   --pos-dim:rgba(22,163,74,.10);
   --pos-line:rgba(22,163,74,.28);
   --neg:#DC2626;         /* negative */
@@ -49,7 +50,7 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 
 /* ---- numbers: mono, tabular ---- */
 .num{font-family:var(--num);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
-.pos{color:var(--pos)}
+.pos{color:var(--pos-text)}
 .neg{color:var(--neg)}
 .warnc{color:var(--warn)}
 
@@ -66,10 +67,10 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 
 /* ================= promo bar (injected by shell.js) ================= */
 .promo{background:var(--pos-dim);border-bottom:1px solid var(--pos-line);
-  font-family:var(--num);font-size:12px;color:var(--pos);text-align:center;
+  font-family:var(--num);font-size:12px;color:var(--ink);text-align:center;
   padding:8px 16px;letter-spacing:.01em;line-height:1.4}
 .promo b{color:var(--ink);font-weight:700}
-.promo a{color:var(--pos);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.promo a{color:var(--pos-text);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 .promo a:hover{color:var(--ink)}
 
 /* ================= header (injected by shell.js) ================= */
@@ -81,14 +82,16 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .brand:hover{text-decoration:none}
 .brand svg{width:20px;height:20px;flex:none}
 .brand b{font-size:17px;font-weight:700;letter-spacing:-.03em}
-.brand .tld{color:var(--pos);font-weight:700}
+.brand .tld{color:var(--pos-text);font-weight:700}
 .hd-nav{display:flex;gap:2px;margin-left:6px;flex:1;flex-wrap:wrap}
 .hd-nav a{font-size:12.5px;font-weight:600;color:var(--muted);padding:6px 10px;
-  border-radius:var(--r-sm);letter-spacing:.01em}
+  border-radius:var(--r-sm);letter-spacing:.01em;
+  display:inline-flex;align-items:center;min-height:44px}
 .hd-nav a:hover{color:var(--ink);background:var(--bg-3);text-decoration:none}
-.hd-nav a[aria-current="page"]{color:var(--pos)}
+.hd-nav a[aria-current="page"]{color:var(--pos-text)}
 .hd-cta{font-size:12.5px;font-weight:700;color:#06210F;background:var(--pos);
-  padding:8px 15px;border-radius:var(--r-sm);white-space:nowrap}
+  padding:8px 15px;border-radius:var(--r-sm);white-space:nowrap;
+  display:inline-flex;align-items:center;min-height:44px}
 .hd-cta:hover{filter:brightness(1.08);text-decoration:none}
 
 /* ================= status bar ================= */
@@ -116,9 +119,9 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
   font-size:10.5px;font-weight:500;letter-spacing:.02em;padding:3px 8px;
   border-radius:999px;border:1px solid var(--line-2);color:var(--muted);
   background:var(--bg-3);white-space:nowrap}
-.chip.pos{color:var(--pos);border-color:var(--pos-line);background:var(--pos-dim)}
+.chip.pos{color:var(--pos-text);border-color:var(--pos-line);background:var(--pos-dim)}
 .chip.warn{color:var(--warn);border-color:var(--warn-dim);background:var(--warn-dim)}
-.chip.live{color:var(--pos);border-color:var(--pos-line);background:var(--pos-dim)}
+.chip.live{color:var(--pos-text);border-color:var(--pos-line);background:var(--pos-dim)}
 
 /* ================= tabs ================= */
 .tabs{display:flex;gap:4px;flex-wrap:wrap}
@@ -129,7 +132,7 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .tab[aria-selected="true"]{color:var(--ink);background:var(--bg-3);
   box-shadow:inset 0 -2px 0 var(--pos)}
 .tab .c{font-family:var(--num);font-size:11px;color:var(--dim)}
-.tab[aria-selected="true"] .c{color:var(--pos)}
+.tab[aria-selected="true"] .c{color:var(--pos-text)}
 
 /* ================= controls ================= */
 .field{font:600 12.5px/1 var(--sans);color:var(--ink-2);background:var(--bg-3);
@@ -142,7 +145,7 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
 /* ================= buttons ================= */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   font:700 13px/1 var(--sans);cursor:pointer;border-radius:var(--r-sm);
-  padding:11px 18px;min-height:42px;border:1px solid var(--line-2);
+  padding:11px 18px;min-height:44px;border:1px solid var(--line-2);
   background:var(--bg-3);color:var(--ink)}
 .btn:hover{border-color:var(--muted);text-decoration:none}
 .btn-accent{background:var(--pos);color:#06210F;border-color:transparent}
@@ -165,7 +168,7 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
 
 /* inline gain bar */
 .gainbar{display:inline-flex;align-items:center;gap:9px;justify-content:flex-end}
-.gainbar b{font-family:var(--num);font-size:13px;font-weight:700;color:var(--pos);min-width:46px;text-align:right}
+.gainbar b{font-family:var(--num);font-size:13px;font-weight:700;color:var(--pos-text);min-width:46px;text-align:right}
 .gtrack{width:52px;height:5px;border-radius:99px;background:var(--bg-3);overflow:hidden;flex:none}
 .gtrack i{display:block;height:100%;border-radius:99px;background:var(--pos)}
 
@@ -199,7 +202,7 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
 .prose ul,.prose ol{margin:0 0 14px;padding-left:22px}
 .prose li{margin:0 0 6px}
 .prose strong{color:var(--ink);font-weight:650}
-.prose a{color:var(--pos)}
+.prose a{color:var(--pos-text)}
 .prose code{font-family:var(--num);font-size:12.5px;background:var(--bg-3);
   border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--ink)}
 .prose pre{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);
@@ -212,7 +215,7 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
   border-bottom:1px solid var(--line);white-space:nowrap}
 .prose td{padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
 .prose blockquote{margin:18px 0;padding:13px 18px;background:var(--bg-2);
-  border-left:3px solid var(--warn);border-radius:0 var(--r-sm) var(--r-sm) 0;color:var(--ink-2)}
+  border:1px solid var(--line-2);border-radius:var(--r-sm);color:var(--ink-2)}
 .prose blockquote p{margin:0}
 .prose hr{border:0;border-top:1px solid var(--line);margin:32px 0}
 
@@ -221,11 +224,11 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
   padding:16px 18px;margin:0 0 13px}
 .card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:13px;font-family:var(--sans)}
 .card .k{color:var(--dim);min-width:118px;font-family:var(--num);font-size:11.5px}
-.hash{font-family:var(--num);font-size:12px;color:var(--pos);word-break:break-all}
+.hash{font-family:var(--num);font-size:12px;color:var(--pos-text);word-break:break-all}
 .badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;
   padding:2px 7px;border-radius:var(--r-sm);border:1px solid var(--line-2);color:var(--muted)}
 .badge.sealed{color:var(--warn);border-color:var(--warn-dim)}
-.badge.revealed{color:var(--pos);border-color:var(--pos-line)}
+.badge.revealed{color:var(--pos-text);border-color:var(--pos-line)}
 
 /* ================= utilities ================= */
 .mono{font-family:var(--num)}
