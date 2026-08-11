@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Engine Room</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -15,36 +14,26 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/engine">
+<link rel="stylesheet" href="/assets/sooth.css">
 <style>
   :root{
-    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
-    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
-    --teal:#10A372; --amber:#BC862B; --pos:#16A34A;
-    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
-    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --teal:#10A372; --amber:#BC862B;
   }
-  html{background:var(--bg)}
   body{background:
       radial-gradient(900px 400px at 70% -90px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
-    color:var(--ink); font-family:var(--sans); line-height:1.55; margin:0; padding:0 20px 64px}
-  .wrap{max-width:980px; margin:0 auto}
-  header{padding:44px 0 10px}
-  .mark{display:flex; align-items:baseline; gap:14px; margin-bottom:20px}
-  .logo{font-weight:800; font-size:20px; letter-spacing:.04em;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
-  .eyebrow{font-family:var(--num); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+    padding:0 20px 64px}
+  .wrap-page{max-width:980px; margin:0 auto}
+  .page-head{padding:44px 0 10px}
   h1{font-size:clamp(26px,4.5vw,38px); font-weight:770; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance}
   .sub{color:var(--muted); max-width:66ch; margin:0 0 8px; font-size:15px}
   .live{display:inline-flex; align-items:center; gap:7px; font-family:var(--num); font-size:11px;
     letter-spacing:.1em; color:var(--pos); border:1px solid rgba(22,163,74,.25);
     border-radius:999px; padding:3px 11px; margin-top:10px}
-  .live i{width:7px;height:7px;border-radius:50%;background:var(--pos)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--pos);display:inline-block;flex:none}
   h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
     color:var(--muted); font-weight:600; margin:44px 0 14px}
-  h2 .n{color:var(--dim); margin-right:10px}
-  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
     border-radius:16px; padding:22px}
   .panel-sub{margin:0 0 16px; font-size:13.5px; color:var(--muted); max-width:68ch}
 
@@ -66,12 +55,11 @@
   .tile b{display:block; font-family:var(--num); font-size:24px; font-weight:600;
     font-variant-numeric:tabular-nums}
   .tile span{font-size:11.5px; color:var(--muted)}
-  .tile .c-ours b{color:var(--iris)}
   .tile.ours b{color:#0284C7}.tile.mkt b{color:#15803D}.tile.brk b{color:var(--muted)}
 
   #chartbox{position:relative}
   #btchart{width:100%; height:auto; display:block}
-  .tip{position:absolute; pointer-events:none; background:#F6F7F3; border:1px solid var(--line);
+  .tip{position:absolute; pointer-events:none; background:var(--bg-3); border:1px solid var(--line);
     border-radius:10px; padding:9px 12px; font-size:12px; color:var(--muted); display:none;
     box-shadow:0 8px 30px rgba(16,20,24,.10); white-space:nowrap; z-index:2; line-height:1.7}
   .tip b{color:var(--ink); font-family:var(--num); font-weight:600}
@@ -82,7 +70,7 @@
   .legend i{display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:7px; vertical-align:3px}
   .legend .dash i{background:repeating-linear-gradient(90deg,var(--dim) 0 4px,transparent 4px 7px)}
 
-  .verdict{border-left:3px solid var(--violet); padding:4px 0 4px 16px; margin-top:18px}
+  .verdict{border-left:3px solid var(--iris); padding:4px 0 4px 16px; margin-top:18px}
   .verdict p{margin:0; font-size:13.5px; color:var(--muted); max-width:66ch}
   .verdict b{color:var(--ink)}
 
@@ -93,40 +81,21 @@
   .gain em{font-style:normal; display:block; font-family:var(--num); font-size:10px; color:var(--dim); margin-top:2px}
   .stamp{font-family:var(--num); font-size:11px; color:var(--dim); margin-top:14px}
   .err{color:#DC2626; font-size:12.5px; font-family:var(--num)}
-  footer{margin-top:52px; padding-top:16px; border-top:1px solid var(--line);
-    font-size:12px; color:var(--dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
-  footer a{color:#0369A1; text-decoration:none}
-  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
-
-  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .shellnav::-webkit-scrollbar{display:none}
-  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;
-    color:transparent;text-decoration:none}
-  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
-    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
-  .shellnav a.sn:hover{color:var(--ink)}
-  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/predictor">Predictor</a><a class="sn" href="/ask">Ask AI</a><a class="sn" href="/tools">Tools</a><a class="sn on" href="/trust">Trust</a></nav>
-<div class="wrap">
-<header>
+<body data-page="trust">
+<a class="skip" href="#main">Skip to main content</a>
+<main id="main" class="wrap-page">
+<header class="page-head">
   <h1>What 27 seasons of data actually buys us.</h1>
-  <p class="sub">The archive doesn't exist to make hero picks. It exists to measure everything:
+  <p class="sub">The archive does not exist to make hero picks. It exists to measure everything:
   it trained the model, then proved the market prices games better than the model does. That
-  measurement is the product — honest calibration, a de-vigged consensus, and the one edge that
-  survives scrutiny: never paying a worse price than you have to.</p>
-  <span class="live"><i></i>READING LIVE ENGINE OUTPUT</span>
+  measurement is the product — honest calibration, a no-vig (margin-removed) consensus, and
+  the one edge that survives scrutiny: never paying a worse price than you have to.</p>
+  <span class="live" role="status"><i aria-hidden="true"></i>READING LIVE ENGINE OUTPUT</span>
 </header>
 
-<h2><span class="n">01</span>The pipeline this data runs</h2>
+<h2>The pipeline this data runs</h2>
 <div class="card">
   <div class="pipe">
     <div class="stage"><span class="num">STAGE 1</span>
@@ -139,7 +108,7 @@
       <h3>Backtest</h3><p>2,671 graded ATS calls (2,608 decided), 2016–25 — model vs market, no cherry-picks.</p>
       <code>backtest.py</code></div>
     <div class="stage"><span class="num">STAGE 4</span>
-      <h3>De-vig &amp; shop</h3><p>Strip the juice from every book, surface the best price per side.</p>
+      <h3>De-vig &amp; shop</h3><p>Strip the juice (margin) from every book, surface the best price per side.</p>
       <code>lines.py · closing.py</code></div>
     <div class="stage"><span class="num">STAGE 5</span>
       <h3>Commit &amp; grade</h3><p>Hash-committed before kickoff, graded and revealed after.</p>
@@ -147,14 +116,14 @@
   </div>
 </div>
 
-<h2><span class="n">02</span>The honesty proof — model vs market, walk-forward</h2>
+<h2>The honesty proof — model vs market, walk-forward</h2>
 <div class="card">
   <p class="panel-sub">Cumulative against-the-spread rate across every graded backtest game.
   If a line stays under the 52.4% breakeven, betting it at −110 loses money. Ours does. So does
   a naive read of the market — which is the point: <b style="color:var(--ink)">nobody on this
   chart clears breakeven, and we publish that instead of hiding it.</b></p>
   <div class="tiles" id="bt-tiles"></div>
-  <div class="legend">
+  <div class="legend" aria-hidden="true">
     <span><i style="background:#0C9BDB"></i>Sooth model</span>
     <span><i style="background:var(--teal)"></i>Market (closing line)</span>
     <span class="dash"><i></i>Breakeven at −110 (52.4%)</span>
@@ -162,13 +131,13 @@
   <div id="chartbox">
     <svg id="btchart" viewBox="0 0 900 320" role="img"
       aria-label="Line chart of cumulative against-the-spread rate for the Sooth model versus the closing market, 2016 to 2025, both below the 52.4 percent breakeven line"></svg>
-    <div class="tip" id="tip"></div>
+    <div class="tip" id="tip" aria-hidden="true"></div>
   </div>
   <div class="verdict"><p id="verdict"></p></div>
   <p class="stamp" id="bt-stamp"></p>
 </div>
 
-<h2><span class="n">03</span>Where the edge actually is — live from the board</h2>
+<h2>Where the edge actually is — live from the board</h2>
 <div class="card">
   <p class="panel-sub">Because the archive holds every book's price on every game, the engine
   knows the spread <i>between</i> books. Taking the best number instead of the worst is pure,
@@ -179,11 +148,11 @@
   <p class="stamp" id="board-stamp"></p>
 </div>
 
-<h2><span class="n">04</span>The edge in dollars — same bets, better price</h2>
+<h2>The edge in dollars — same bets, better price</h2>
 <div class="card">
   <p class="panel-sub" id="pe-method"></p>
   <div class="tiles" id="pe-tiles"></div>
-  <div class="legend">
+  <div class="legend" aria-hidden="true">
     <span><i style="background:#0C9BDB"></i>Settled at best price</span>
     <span><i style="background:var(--dim)"></i>Settled at median price</span>
     <span><i style="background:rgba(22,163,74,.35)"></i>The price edge (gap)</span>
@@ -191,18 +160,12 @@
   <div id="pebox" style="position:relative">
     <svg id="pechart" viewBox="0 0 900 300" role="img"
       aria-label="Cumulative profit and loss of identical moneyline bets settled at the best available price versus the median price, 2023 to 2025; the widening gap between the lines is the value of line shopping"></svg>
-    <div class="tip" id="petip"></div>
+    <div class="tip" id="petip" aria-hidden="true"></div>
   </div>
   <div class="verdict"><p id="pe-verdict"></p></div>
   <p class="stamp" id="pe-stamp"></p>
 </div>
-
-<footer>
-  <div>Sooth · engine room — <a href="index.html">live board</a> · <a href="methodology.html">methodology</a> · <a href="ledger.html">ledger</a></div>
-  <div style="font-family:var(--num)">walk-forward · no future data · no cherry-picks</div>
-</footer>
-<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
-</div>
+</main>
 
 <script>
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -219,7 +182,7 @@ fetch('data/backtest_curve.json').then(r=>r.json()).then(bt=>{
     `<b>Verdict:</b> across ${bt.n.toLocaleString()} walk-forward games the model lands at `+
     `<b>${pct(bt.final_ours)}</b> vs the market's <b>${pct(bt.final_market)}</b> — the market wins, `+
     `and neither clears breakeven. That measurement is why Sooth sells price transparency `+
-    `instead of picks: the edge below survives; picks don't.`;
+    `instead of picks: the edge below survives; picks do not.`;
   document.getElementById('bt-stamp').textContent=(bt.warning||'')+' · source: data/backtest_curve.json';
   drawCurve(bt);
 }).catch(()=>{
@@ -356,6 +319,7 @@ fetch('data/board.json').then(r=>r.json()).then(b=>{
   e.textContent='Could not load data/board.json';
 });
 </script>
+<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

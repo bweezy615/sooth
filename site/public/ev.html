@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — +EV Board</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,39 +15,26 @@
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/ev">
 <meta name="description" content="Sides where the best available price currently beats the de-vigged consensus — games and player props, ranked by edge.">
+<link rel="stylesheet" href="/assets/sooth.css">
 <style>
-  :root{
-    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
-    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
-    --pos:#16A34A; --neg:#DC2626;
-    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
-    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  }
-  html{background:var(--bg)}
   body{background:
       radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
-    color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
-  .wrap{max-width:940px; margin:0 auto}
-  header{padding:40px 0 20px}
-  .mark{display:flex; align-items:baseline; gap:14px; margin-bottom:18px}
-  .logo{font-weight:800; font-size:20px; letter-spacing:.04em;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
-  .logo a{text-decoration:none; color:inherit}
-  .eyebrow{font-family:var(--num); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
+    padding:0 20px 60px}
+  .wrap-page{max-width:940px; margin:0 auto}
+  .page-head{padding:40px 0 20px}
+  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance}
   .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
   .sub b{color:var(--ink)}
 
   .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:22px 0 14px}
-  select{background:var(--card); color:var(--ink); border:1px solid var(--line);
+  select{background:var(--bg-2); color:var(--ink); border:1px solid var(--line);
     border-radius:10px; padding:8px 12px; font-family:var(--num); font-size:13px; cursor:pointer}
   select:hover{border-color:var(--dim)}
   .count{font-family:var(--num); font-size:12px; color:var(--dim); margin-left:auto}
   .count b{color:var(--muted); font-weight:600}
 
-  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
     border-radius:16px; overflow:hidden}
   .row{display:flex; align-items:center; gap:16px; padding:13px 18px;
     border-bottom:1px solid rgba(229,231,225,.55); flex-wrap:wrap}
@@ -66,66 +52,42 @@
   .empty b{color:var(--ink)}
   .empty p{max-width:56ch; margin:8px auto 0; font-size:12.5px; color:var(--dim)}
   .note{font-size:12px; color:var(--dim); margin-top:14px; max-width:74ch}
-
-  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
-    font-size:11.5px; color:var(--dim); display:flex;
-    justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
-  footer a{color:#0369A1; text-decoration:none}
-  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
-
-  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .shellnav::-webkit-scrollbar{display:none}
-  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;
-    color:transparent;text-decoration:none}
-  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
-    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
-  .shellnav a.sn:hover{color:var(--ink)}
-  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn on" href="/edges">Edges</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
-<div class="wrap">
-<header>
+<body data-page="edges">
+<a class="skip" href="#main">Skip to main content</a>
+<main id="main" class="wrap-page">
+<header class="page-head">
   <h1>Prices currently beating the fair line.</h1>
-  <p class="sub">A side lands here when its <b>best available price pays more than the de-vigged
-  consensus</b> of every book says it's worth. That's not a prediction — it's one book lagging
-  the market, and it usually closes fast. Games and props, one list, ranked by edge.</p>
+  <p class="sub">A side lands here when its <b>best available price pays more than the no-vig
+  (margin-removed) consensus</b> of every book says it is worth. That is not a prediction — it
+  is one book lagging the market, and it usually closes fast. Games and props, one list,
+  ranked by <b>edge</b> (how many implied-probability points the best price beats fair).</p>
 </header>
 
 <div class="controls">
-  <select id="kind" aria-label="Type">
+  <select id="kind" aria-label="Filter by type">
     <option value="">Games + props</option>
     <option value="game">Games only</option>
     <option value="prop">Props only</option>
   </select>
   <select id="minedge" aria-label="Minimum edge">
     <option value="0">Any positive edge</option>
-    <option value="0.5">≥ 0.5 pts</option>
-    <option value="1" selected>≥ 1.0 pts</option>
-    <option value="2">≥ 2.0 pts</option>
+    <option value="0.5">0.5 pts or more</option>
+    <option value="1" selected>1.0 pts or more</option>
+    <option value="2">2.0 pts or more</option>
   </select>
-  <span class="count" id="count"></span>
+  <span class="count" id="count" aria-live="polite"></span>
 </div>
 
-<div class="card" id="list"></div>
+<div class="card" id="list" aria-live="polite"></div>
 <p class="note">Edge is measured in points of implied probability: best price versus the
-de-vigged median across books at the same line. Positive edge here means the quote is
+no-vig median across books at the same line. Positive edge means the quote is
 generous relative to consensus <i>right now</i> — prices move constantly, and the snapshot
 timestamp below is the only moment this board describes.</p>
 
-<footer>
-  <div><a href="index.html">board</a> · <a href="props.html">props</a> · <a href="moves.html">moves</a> · <a href="methodology.html">methodology</a></div>
-  <div id="stamp"></div>
-</footer>
-<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
-</div>
+<p id="stamp" style="font-family:var(--num);font-size:11px;color:var(--dim);margin:14px 0 0"></p>
+</main>
 
 <script>
 const am=v=>v>0?'+'+v:String(v);
@@ -181,16 +143,17 @@ function render(){
     const when=t.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+
                t.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
     return `<div class="row">
-      <span class="edge">+${r.edge.toFixed(1)}</span>
+      <span class="edge" aria-label="Edge: +${r.edge.toFixed(1)} points">+${r.edge.toFixed(1)}</span>
       <span class="what"><b>${r.title}</b><span class="tag">${r.kind==='prop'?'prop':'game'}</span>
         <p>${r.sub} · ${when} · ${r.books} books</p></span>
       <span class="meta"><span class="bk">${r.book} ${am(r.price)}</span>fair ${am(r.fair)}</span>
     </div>`;
   }).join('')
-  :'<div class="empty"><b>Nothing beats fair at this threshold right now.</b><p>That is the honest state of an efficient market most of the day. Edges appear when news breaks and books lag — near lineup releases and close to game time.</p></div>';
+  :'<div class="empty"><b>Nothing beats fair at this threshold right now.</b><p>That is the honest state of an efficient market most of the day. Edges appear when news breaks and books lag, near lineup releases and close to game time.</p></div>';
   document.getElementById('count').innerHTML=`<b>${out.length}</b> live edges`;
 }
 </script>
+<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
