@@ -20,10 +20,14 @@ name: props-live
 # capture-odds alone burned ~192/day. So this is gated twice:
 #   PROPS_MAX_AGE_H  - skip entirely unless the published board is this stale.
 #   PROPS_MAX_CREDITS- hard per-run ceiling the engine will not exceed.
-# At 3h/12 that is at most ~8 refreshes and ~96 credits a day, and far less in
-# practice because engine.props bails after two empty events. Lower the age for
-# a fresher board, raise it if quota gets tight — those two numbers are the
-# whole cost model.
+# The cron is the third bound, and it is the one that matters when books have
+# nothing posted: an empty board always opens the gate (see below), so a */30
+# schedule would pay to re-ask every half hour all night. Every 2h caps this at
+# 12 attempts/day — worst case ~144 credits, and closer to ~70 in practice
+# because engine.props bails after two empty events. With a populated board the
+# 3h age gate skips a third of those outright.
+#
+# Those three numbers — cron, age, max-credits — are the whole cost model.
 #
 # Age is read from the CONTENT timestamp, never file mtime: a checkout stamps
 # every file to now, so mtime would report "fresh" forever and this would never
@@ -31,7 +35,7 @@ name: props-live
 
 on:
   schedule:
-    - cron: "10,40 * * * *"
+    - cron: "10 */2 * * *"
   workflow_dispatch:
     inputs:
       force:
@@ -70,15 +74,24 @@ jobs:
 
           max_age = float(os.environ["PROPS_MAX_AGE_H"])
           forced = os.environ.get("FORCED") == "true"
+          n = 0
           try:
               d = json.load(open("site/public/data/props.json"))
+              n = int(d.get("n_props") or 0)
               ts = max(d.get("generated_at") or "", d.get("checked_at") or "")
               dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
               age = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600
           except Exception:
               age = 1e9
+
+          # An empty board counts as stale no matter how recent its timestamp.
+          # capture-props rewrites props.json every 30 min even when it has
+          # nothing to publish, so age alone reads a permanently empty page as
+          # permanently fresh — the gate would never open and the tab would
+          # stay blank forever. Freshness is about the DATA, not the clock.
           print(f"age_h={age:.1f}")
-          print(f"refresh={'true' if (forced or age >= max_age) else 'false'}")
+          print(f"n_props={n}")
+          print(f"refresh={'true' if (forced or n == 0 or age >= max_age) else 'false'}")
           PY
         env:
           FORCED: ${{ inputs.force }}
@@ -120,7 +133,7 @@ jobs:
 
       - name: Report skip
         if: steps.gate.outputs.refresh != 'true'
-        run: echo "board fresh (${{ steps.gate.outputs.age_h }}h < ${PROPS_MAX_AGE_H}h) - no credits spent"
+        run: echo "board fresh (${{ steps.gate.outputs.n_props }} props, ${{ steps.gate.outputs.age_h }}h < ${PROPS_MAX_AGE_H}h) - no credits spent"
 
       - name: Commit the refreshed board
         if: steps.gate.outputs.refresh == 'true'
