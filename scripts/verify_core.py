@@ -1,5 +1,5 @@
 """Prove the two core claims: commitments detect tampering, calibration helps."""
-import json, sys
+import json, sys, tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 import numpy as np
@@ -21,22 +21,36 @@ preds = [
                reference_price=-150)
     for i in range(16)
 ]
-c = commit_slate("2026-W01-nfl", "nfl", preds, out_dir="data/ledger")
-print(f"slate committed   : {c.n_predictions} predictions")
-print(f"merkle root       : {c.root}")
-print(f"verify_slate()    : {verify_slate('2026-W01-nfl', 'data/ledger')}")
+# This demo SEALS a slate and then deliberately TAMPERS with the reveal to
+# prove verification catches it. Both of those are writes, so they happen in a
+# throwaway directory under a throwaway slate id — never data/ledger.
+#
+# It used to run against the real ledger with the real slate id. Running it
+# re-sealed 2026-W01-nfl (minting a commitment that "supersedes" the published
+# one, which is indistinguishable from an operator quietly re-sealing picks)
+# and left predictions[3].probability rewritten to 0.99 on disk. One `git add`
+# after a demo run would have published a ledger that fails its own verifier.
+DEMO_SLATE = "demo-commitment-check"
+with tempfile.TemporaryDirectory() as ledger:
+    c = commit_slate(DEMO_SLATE, "nfl", preds, out_dir=ledger)
+    print(f"slate committed   : {c.n_predictions} predictions")
+    print(f"merkle root       : {c.root}")
+    print(f"verify_slate()    : {verify_slate(DEMO_SLATE, ledger)}")
 
-# single-pick inclusion proof
-leaves = [leaf_hash(p) for p in preds]
-proof = merkle_proof(leaves, 7)
-print(f"inclusion proof #7: {verify_proof(leaves[7], proof, c.root)} ({len(proof)} steps)")
+    # single-pick inclusion proof
+    leaves = [leaf_hash(p) for p in preds]
+    proof = merkle_proof(leaves, 7)
+    print(f"inclusion proof #7: {verify_proof(leaves[7], proof, c.root)} ({len(proof)} steps)")
 
-# tamper test: silently change a losing pick after the fact
-p = Path("data/ledger/2026-W01-nfl.reveal.json")
-d = json.loads(p.read_text())
-d["predictions"][3]["probability"] = 0.99
-p.write_bytes(json.dumps(d, sort_keys=True, separators=(",", ":")).encode())
-print(f"after tampering   : {verify_slate('2026-W01-nfl', 'data/ledger')}  <- must be False")
+    # tamper test: silently change a losing pick after the fact
+    # commit_slate only writes versioned files; the unversioned reveal.json the
+    # old code opened existed solely because the REAL slate had been published
+    # there — which is how this demo ended up tampering with production data.
+    p = Path(ledger) / f"{DEMO_SLATE}.reveal.v1.json"
+    d = json.loads(p.read_text())
+    d["predictions"][3]["probability"] = 0.99
+    p.write_bytes(json.dumps(d, sort_keys=True, separators=(",", ":")).encode())
+    print(f"after tampering   : {verify_slate(DEMO_SLATE, ledger)}  <- must be False")
 
 print()
 print("=" * 62)

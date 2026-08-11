@@ -411,7 +411,12 @@ function init(){
   var stamps=[];
   if(DATA.board)stamps.push(DATA.board.generated_at);
   if(DATA.props)stamps.push(DATA.props.generated_at);
-  var latest=stamps.sort().slice(-1)[0];
+  if(DATA.middles)stamps.push(DATA.middles.generated_at);
+  if(DATA.moves)stamps.push(DATA.moves.generated_at);
+  // OLDEST, not newest. This stamp has to be true of everything on the page:
+  // the feeds refresh on different schedules, so taking the newest claimed
+  // "read 20:11" while the props grid below it was 114 minutes old.
+  var latest=stamps.filter(Boolean).sort()[0];
   if(latest)document.getElementById('stamp').textContent=
     'read '+latest.slice(0,16).replace('T',' ')+' UTC · prices move constantly';
   var np=0;(DATA.props&&DATA.props.boards||[]).forEach(function(b){np+=b.n_props||0;});

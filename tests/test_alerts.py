@@ -16,17 +16,67 @@ from engine.alerts import (DEFAULT_MIN_MOVE, find_divergence, find_drift,
                            implied, load_observations, scan)
 
 
+# Far enough out that these rows always read as "not started". Real game-line
+# capture carries kickoff on every row (all 116k of them in data/capture at the
+# time of writing), so a fixture without one was never representative — and it
+# hid the fact that a row we cannot date used to be published as a live edge.
+FUTURE = "2099-01-01T00:00:00+00:00"
+
+
 def obs(book, price, at, sel="side_a", event="E1", market="moneyline",
-        provenance="own_capture"):
+        provenance="own_capture", kickoff=FUTURE):
     return {"event_id": event, "sport": "nfl", "market": market,
             "selection": sel, "book": book, "price": price,
             "observed_at": at, "home": "SEA", "away": "NE",
-            "provenance": provenance}
+            "kickoff": kickoff, "provenance": provenance}
 
 
 # --------------------------------------------------------------------------
 # arithmetic: the mistake that would break every alert silently
 # --------------------------------------------------------------------------
+
+def test_started_and_undateable_games_are_never_published_as_edges():
+    """An alert we cannot date must not be published under the word "now".
+
+    The guard used to run `if kickoff:` and fell through when the field was
+    empty, so rows captured without a start time were advertised as live
+    opportunities indefinitely. On 2026-08-11 the Edges tab was showing eight
+    of them, every one for an MLB game finished 19-45 hours earlier.
+    """
+    started = [obs("DraftKings", -110, "2026-01-01T00:00:00+00:00", kickoff="2000-01-01T00:00:00+00:00"),
+               obs("FanDuel", +200, "2026-01-01T00:00:00+00:00", kickoff="2000-01-01T00:00:00+00:00"),
+               obs("BetMGM", -105, "2026-01-01T00:00:00+00:00", kickoff="2000-01-01T00:00:00+00:00")]
+    assert find_divergence(started) == [], "a finished game is not an edge"
+
+    undateable = [dict(r, kickoff="") for r in started]
+    assert find_divergence(undateable) == [], "an undateable row must fail closed"
+
+    # Drift needs two observations on the SAME series to fire at all, so give
+    # it a real move — otherwise the assertion passes for the wrong reason.
+    def moved(kick):
+        return [obs("DraftKings", -110, "2026-01-01T00:00:00+00:00", kickoff=kick),
+                obs("DraftKings", +150, "2026-01-01T01:00:00+00:00", kickoff=kick)]
+
+    assert find_drift(moved(FUTURE)), "a real move on an upcoming game must still fire"
+    assert find_drift(moved("2000-01-01T00:00:00+00:00")) == [], "finished game is history"
+    assert find_drift(moved("")) == [], "drift must fail closed on an undateable row"
+
+
+def test_player_props_never_enter_the_game_line_scan(tmp_path):
+    """Prop quotes are a different market and belong on a different page.
+
+    The default glob data/capture/*/*.jsonl also matches data/capture/
+    mlb-props, so strikeout quotes were folded into the game-line consensus
+    and published as "books off the pack".
+    """
+    (tmp_path / "mlb").mkdir()
+    (tmp_path / "mlb-props").mkdir()
+    row = obs("DraftKings", -110, "2026-01-01T00:00:00+00:00")
+    (tmp_path / "mlb" / "d.jsonl").write_text(json.dumps(row) + "\n")
+    (tmp_path / "mlb-props" / "d.jsonl").write_text(json.dumps(row) + "\n")
+    rows = load_observations(str(tmp_path / "*" / "*.jsonl"))
+    assert len(rows) == 1, "prop captures must not reach the game-line scan"
+
 
 def test_move_is_measured_in_probability_not_raw_odds():
     """American odds are non-linear and discontinuous across +/-100.

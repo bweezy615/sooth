@@ -31,6 +31,7 @@ import os
 import statistics
 from collections import defaultdict
 from dataclasses import dataclass, asdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -75,6 +76,14 @@ def load_observations(pattern: str = "data/capture/*/*.jsonl") -> list[dict]:
     """Every price we watched ourselves, oldest first."""
     rows: list[dict] = []
     for path in sorted(glob.glob(pattern)):
+        # Player props are a different market and a different page. The default
+        # glob is data/capture/*/*.jsonl, which also matches data/capture/
+        # mlb-props — so pitcher-strikeout quotes were being folded into the
+        # game-line consensus and published under "Books off the pack right
+        # now". They also carry no kickoff, so they slipped past the
+        # started-game guard below and surfaced games finished a day earlier.
+        if Path(path).parent.name.endswith("-props"):
+            continue
         with open(path) as fh:
             for line in fh:
                 if not line.strip():
@@ -121,6 +130,13 @@ def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Ale
     slow walk across many small steps raises an alert on the step that crosses
     the threshold rather than never raising one at all.
     """
+    # Same rule as divergence: a move on a game that has already started is
+    # history, not an opportunity, and it inflates the "alerts fired in 48h"
+    # count the Pro card sells against. Measured 2026-08-11: 1,798 of 1,971
+    # drift alerts were for games already played.
+    now = datetime.now(timezone.utc)
+    rows = [r for r in rows if not_started(r, now)]
+
     alerts: list[Alert] = []
     for (event_id, market, selection, line, book), obs in _series(rows).items():
         for prev, cur in zip(obs, obs[1:]):
@@ -157,13 +173,8 @@ def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> lis
     latest: dict[tuple, dict] = {}
     for r in rows:
         # A price on a game that has started is not an opportunity.
-        kick = str(r.get("kickoff", ""))
-        if kick:
-            try:
-                if datetime.fromisoformat(kick.replace("Z", "+00:00")) <= now:
-                    continue
-            except ValueError:
-                pass
+        if not not_started(r, now):
+            continue
         key = (str(r.get("event_id")), str(r.get("market")),
                str(r.get("selection")), str(r.get("line")), str(r.get("book")))
         cur = latest.get(key)
@@ -212,12 +223,34 @@ def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> lis
     return sorted(alerts, key=lambda a: -a.move_pts)
 
 
+def not_started(row: dict, now: "datetime | None" = None) -> bool:
+    """True only when we can PROVE this row's game has not started yet.
+
+    Fails closed on purpose. The old inline check ran `if kickoff:` and let a
+    row through when the field was empty, so anything captured without a start
+    time was advertised as a live opportunity forever. An alert we cannot date
+    is not an alert we can publish under the word "now".
+    """
+    now = now or datetime.now(timezone.utc)
+    kick = str(row.get("kickoff", "") or "")
+    if not kick:
+        return False
+    try:
+        return datetime.fromisoformat(kick.replace("Z", "+00:00")) > now
+    except ValueError:
+        return False
+
+
 def scan(pattern: str = "data/capture/*/*.jsonl",
          min_move: float = DEFAULT_MIN_MOVE) -> dict[str, Any]:
     rows = load_observations(pattern)
     drift = find_drift(rows, min_move)
     div = find_divergence(rows, min_move)
     return {
+        # Every other published feed carries generated_at and the page stamps
+        # itself from them; moves.json was the one exception, so 2,000+ drift
+        # alerts rendered with no way to tell how old the scan was.
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "observations": len(rows),
         "min_move_pts": min_move,
         "drift": [a.to_dict() for a in drift],

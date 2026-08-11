@@ -225,7 +225,7 @@ function hd(){
   out.innerHTML=`Hold: <b class="${cls}">${h.toFixed(2)}%</b><br>`+
     `<span class="hint">${h<=0?'Negative hold — the pair is an arbitrage at these prices.'
       :h<3?'Low for a two-way market — a sharp price.'
-      :h<5?'Standard juice (−110/−110 is 4.54%). Shopping books usually beats it.'
+      :h<5?'Standard juice (−110/−110 is 4.76%). Shopping books usually beats it.'
       :'Steep. This market charges above the standard cut — shop it.'}</span>`;
 }
 ['hd-a','hd-b'].forEach(id=>$(id).addEventListener('input',hd));
