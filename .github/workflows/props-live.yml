@@ -77,7 +77,12 @@ jobs:
           n = 0
           try:
               d = json.load(open("site/public/data/props.json"))
-              n = int(d.get("n_props") or 0)
+              # Count what the PAGE counts. props_board and engine.props write
+              # different shapes — only props_board emits a top-level n_props,
+              # so reading that key alone scores a healthy 122-prop engine.props
+              # board as empty and pays to rebuild it every single cycle.
+              # index.html sums boards[].n_props; both shapes carry it. Match it.
+              n = sum(int(b.get("n_props") or 0) for b in (d.get("boards") or []))
               ts = max(d.get("generated_at") or "", d.get("checked_at") or "")
               dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
               age = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600

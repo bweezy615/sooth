@@ -54,11 +54,15 @@ jobs:
       # Never trade data for no-data: an empty rebuild is discarded, not shipped.
       - name: Never publish an empty board over a populated one
         run: |
-          n=$(python -c "import json;print(json.load(open('site/public/data/props.json')).get('n_props',0))")
+          # Sum boards[].n_props, the same way index.html does. props-live
+          # writes a different shape via engine.props with no top-level
+          # n_props, so reading that key alone would report a restored
+          # 122-prop board as "0 props" in the log.
+          count() { python -c "import json;d=json.load(open('site/public/data/props.json'));print(sum(int(b.get('n_props') or 0) for b in (d.get('boards') or [])))"; }
+          n=$(count)
           if [ "$n" -eq 0 ]; then
             git checkout -- site/public/data/props.json 2>/dev/null || true
-            kept=$(python -c "import json;print(json.load(open('site/public/data/props.json')).get('n_props',0))")
-            echo "empty rebuild discarded - kept committed snapshot ($kept props)"
+            echo "empty rebuild discarded - kept committed snapshot ($(count) props)"
           else
             echo "board rebuilt with $n props"
           fi
