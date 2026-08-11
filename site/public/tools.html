@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Betting Calculators</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,32 +15,19 @@
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/tools">
 <meta name="description" content="No-vig fair price calculator, odds converter, and hold calculator. The same arithmetic the Sooth board runs, by hand.">
+<link rel="stylesheet" href="/assets/sooth.css">
 <style>
-  :root{
-    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
-    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
-    --pos:#16A34A; --neg:#DC2626;
-    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
-    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  }
-  html{background:var(--bg)}
   body{background:
       radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
-    color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
-  .wrap{max-width:940px; margin:0 auto}
-  header{padding:40px 0 24px}
-  .mark{display:flex; align-items:baseline; gap:14px; margin-bottom:18px}
-  .logo{font-weight:800; font-size:20px; letter-spacing:.04em;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
-  .logo a{text-decoration:none; color:inherit}
-  .eyebrow{font-family:var(--num); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
+    padding:0 20px 60px}
+  .wrap-page{max-width:940px; margin:0 auto}
+  .page-head{padding:40px 0 24px}
+  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance}
   .sub{color:var(--muted); font-size:14px; margin:0; max-width:66ch}
 
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px}
-  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
     border-radius:16px; padding:20px}
   .card h2{margin:0 0 4px; font-size:16px; font-weight:700; letter-spacing:-.01em}
   .card .how{font-size:12px; color:var(--dim); margin:0 0 16px; line-height:1.45}
@@ -58,99 +44,76 @@
   .out b{color:var(--ink); font-size:15px}
   .out .g{color:var(--pos)} .out .r{color:var(--neg)}
   .out .hint{color:var(--dim); font-size:11.5px; font-family:var(--sans)}
-
-  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
-    font-size:11.5px; color:var(--dim); display:flex;
-    justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
-  footer a{color:#0369A1; text-decoration:none}
-  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
-
-  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .shellnav::-webkit-scrollbar{display:none}
-  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;
-    color:transparent;text-decoration:none}
-  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
-    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
-  .shellnav a.sn:hover{color:var(--ink)}
-  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn" href="/edges">Edges</a><a class="sn" href="/predictor">Predictor</a><a class="sn" href="/ask">Ask AI</a><a class="sn on" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
-<div class="wrap">
-<header>
+<body data-page="tools">
+<a class="skip" href="#main">Skip to main content</a>
+<main id="main" class="wrap-page">
+<header class="page-head">
   <h1>The board's arithmetic, by hand.</h1>
   <p class="sub">The same math Sooth runs on every price, as calculators. Nothing here predicts
-  anything — it converts, strips margin, and shows what the numbers already say.</p>
+  anything — it converts, strips margin (the book's cut, also called <b>vig</b> or <b>hold</b>),
+  and shows what the numbers already say.</p>
 </header>
 
 <div class="grid">
 
 <div class="card">
   <h2>No-vig fair price</h2>
-  <p class="how">Enter both sides of a two-way market from one book. The margin is removed by
-  normalising the implied probabilities, giving the price the book thinks is fair.</p>
+  <p class="how">Enter both sides of a two-way market from one book. The vig (the book's built-in
+  margin) is removed by normalising the implied probabilities, giving you the price the book
+  thinks is actually fair.</p>
   <div class="duo">
-    <div><label for="nv-a">Side A (american)</label><input id="nv-a" inputmode="numeric" placeholder="-235"></div>
-    <div><label for="nv-b">Side B (american)</label><input id="nv-b" inputmode="numeric" placeholder="+195"></div>
+    <div><label for="nv-a">Side A (american odds)</label><input id="nv-a" inputmode="numeric" placeholder="-235" aria-describedby="nv-out"></div>
+    <div><label for="nv-b">Side B (american odds)</label><input id="nv-b" inputmode="numeric" placeholder="+195" aria-describedby="nv-out"></div>
   </div>
-  <div class="out" id="nv-out"><span class="hint">Enter both prices…</span></div>
+  <div class="out" id="nv-out" aria-live="polite"><span class="hint">Enter both prices…</span></div>
 </div>
 
 <div class="card">
   <h2>Odds converter</h2>
-  <p class="how">Type any one of the three; the others fill in. Implied probability includes the
-  vig — it's what the price charges, not the true chance.</p>
-  <label for="cv-am">American</label><input id="cv-am" inputmode="numeric" placeholder="-110">
+  <p class="how">Type any one of the three formats; the others fill in automatically. Implied
+  probability includes the vig — it is what the price charges, not the true chance of winning.</p>
+  <label for="cv-am">American odds (e.g. -110 or +130)</label><input id="cv-am" inputmode="numeric" placeholder="-110" aria-describedby="cv-out">
   <div class="duo">
-    <div><label for="cv-dec">Decimal</label><input id="cv-dec" inputmode="decimal" placeholder="1.909"></div>
-    <div><label for="cv-ip">Implied %</label><input id="cv-ip" inputmode="decimal" placeholder="52.4"></div>
+    <div><label for="cv-dec">Decimal (e.g. 1.909)</label><input id="cv-dec" inputmode="decimal" placeholder="1.909" aria-describedby="cv-out"></div>
+    <div><label for="cv-ip">Implied % (e.g. 52.4)</label><input id="cv-ip" inputmode="decimal" placeholder="52.4" aria-describedby="cv-out"></div>
   </div>
-  <div class="out" id="cv-out"><span class="hint">Enter any one value…</span></div>
+  <div class="out" id="cv-out" aria-live="polite"><span class="hint">Enter any one value…</span></div>
 </div>
 
 <div class="card">
   <h2>CLV checker — NFL moneylines</h2>
-  <p class="how">Did your bet beat the close? Pick any 2023–25 NFL game, enter the price you
+  <p class="how">Did your bet beat the <b>closing line</b> (the final price just before kickoff,
+  the sharpest read of the market)? Pick any 2023–25 NFL game, enter the price you
   got, and compare it against the consensus close across 10–16 books.</p>
   <div class="duo">
-    <div><label for="clv-season">Season</label><select id="clv-season" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px"></select></div>
-    <div><label for="clv-week">Week</label><select id="clv-week" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px"></select></div>
+    <div><label for="clv-season">Season</label><select id="clv-season" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-week">Week</label><select id="clv-week" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
   </div>
   <label for="clv-game">Game</label>
-  <select id="clv-game" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px"></select>
+  <select id="clv-game" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select>
   <div class="duo">
-    <div><label for="clv-side">Your side</label><select id="clv-side" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px"></select></div>
-    <div><label for="clv-price">Your price</label><input id="clv-price" inputmode="numeric" placeholder="+150"></div>
+    <div><label for="clv-side">Your side</label><select id="clv-side" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-price">Your price</label><input id="clv-price" inputmode="numeric" placeholder="+150" aria-describedby="clv-out"></div>
   </div>
-  <div class="out" id="clv-out"><span class="hint">Pick a game and enter your price…</span></div>
+  <div class="out" id="clv-out" aria-live="polite"><span class="hint">Pick a game and enter your price…</span></div>
 </div>
 
 <div class="card">
   <h2>Hold (the book's cut)</h2>
-  <p class="how">Both sides of a market at one book. Hold is the margin baked into the pair —
-  what the book keeps if it balances its risk. Compare books before you bet.</p>
+  <p class="how">Enter both sides of a market at one book. <b>Hold</b> is the margin baked into
+  the pair — what the book keeps on average if it balances its action. Lower hold is better for
+  you. Compare books before you bet.</p>
   <div class="duo">
-    <div><label for="hd-a">Side A (american)</label><input id="hd-a" inputmode="numeric" placeholder="-110"></div>
-    <div><label for="hd-b">Side B (american)</label><input id="hd-b" inputmode="numeric" placeholder="-110"></div>
+    <div><label for="hd-a">Side A (american odds)</label><input id="hd-a" inputmode="numeric" placeholder="-110" aria-describedby="hd-out"></div>
+    <div><label for="hd-b">Side B (american odds)</label><input id="hd-b" inputmode="numeric" placeholder="-110" aria-describedby="hd-out"></div>
   </div>
-  <div class="out" id="hd-out"><span class="hint">Enter both prices…</span></div>
+  <div class="out" id="hd-out" aria-live="polite"><span class="hint">Enter both prices…</span></div>
 </div>
 
 </div>
-
-<footer>
-  <div><a href="index.html">board</a> · <a href="ev.html">+EV</a> · <a href="props.html">props</a> · <a href="methodology.html">methodology</a></div>
-  <div>arithmetic only — no predictions</div>
-</footer>
-<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
-</div>
+</main>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -244,7 +207,7 @@ function clv(){
     `Consensus close: <b>${amStr(closePrice)}</b> · fair ${(fair*100).toFixed(1)}%<br>`+
     `Your ${amStr(mine)} vs close: <b class="${beat?'g':'r'}">${beat?'+':''}${clvPts.toFixed(2)} pts</b> — `+
     `you ${beat?'beat':'lost to'} the close.<br>`+
-    `<span class="hint">CLV is the sharpest public test of a bet: beating the close consistently is the skill books limit you for.</span>`;
+    `<span class="hint">Beating the closing line consistently is the skill sportsbooks limit you for.</span>`;
 }
 $('clv-season').addEventListener('change',clvWeeks);
 $('clv-week').addEventListener('change',clvGames);
@@ -267,6 +230,7 @@ function hd(){
 }
 ['hd-a','hd-b'].forEach(id=>$(id).addEventListener('input',hd));
 </script>
+<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

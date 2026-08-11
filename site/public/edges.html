@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Edges</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#FAFAF7">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Sooth">
@@ -16,43 +15,21 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/edges">
+<link rel="stylesheet" href="/assets/sooth.css">
 <style>
-  :root{
-    --bg:#FAFAF7; --card:#FFFFFF; --card2:#F6F7F3; --line:#E5E7E1; --ink:#111418;
-    --muted:#5A6472; --dim:#8A929E; --iris:#0284C7; --violet:#0EA5E9;
-    --pos:#16A34A; --neg:#DC2626;
-    --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
-    --num:ui-monospace,Menlo,'JetBrains Mono',monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  }
-  html{background:var(--bg)}
   body{background:
       radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
       var(--bg);
-    color:var(--ink); font-family:var(--sans); line-height:1.5; margin:0; padding:0 20px 60px}
-  .wrap{max-width:940px; margin:0 auto}
-  .shellnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
-    padding:13px 22px;margin:0 -20px;background:rgba(250,250,247,.88);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .shellnav::-webkit-scrollbar{display:none}
-  .shellnav .sn-logo{font-weight:800;font-size:15px;letter-spacing:.05em;flex:none;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;
-    color:transparent;text-decoration:none}
-  .shellnav a.sn{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
-    flex:none;padding:3px 1px;border-bottom:2px solid transparent}
-  .shellnav a.sn:hover{color:var(--ink)}
-  .shellnav a.sn.on{color:var(--ink);border-bottom-color:var(--iris)}
-
-  header{padding:36px 0 16px}
+    padding:0 20px 60px}
+  .wrap-page{max-width:940px; margin:0 auto}
+  .page-head{padding:36px 0 16px}
   h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
   .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
   .sub b{color:var(--ink)}
 
   .views{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 18px}
   .view{font-family:var(--num);font-size:12.5px;font-weight:600;padding:9px 18px;
-    border-radius:999px;border:1px solid var(--line);background:var(--card);
+    border-radius:999px;border:1px solid var(--line);background:var(--bg-2);
     color:var(--muted);cursor:pointer}
   .view.on{background:var(--ink);color:#FFFFFF;border-color:transparent}
   .view .ct{opacity:.65;margin-left:6px}
@@ -60,7 +37,7 @@
   h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
     color:var(--muted); font-weight:600; margin:26px 0 6px}
   .h2sub{font-size:12.5px; color:var(--dim); margin:0 0 12px; max-width:66ch}
-  .card{background:linear-gradient(180deg,var(--card),var(--card2)); border:1px solid var(--line);
+  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
     border-radius:16px; overflow:hidden}
   .row{display:flex; align-items:center; gap:16px; padding:13px 18px;
     border-bottom:1px solid rgba(229,231,225,.55); flex-wrap:wrap}
@@ -79,62 +56,54 @@
   .empty{padding:34px 24px; text-align:center; color:var(--muted); font-size:13.5px}
   .empty b{color:var(--ink)}
   .empty p{max-width:56ch; margin:8px auto 0; font-size:12.5px; color:var(--dim)}
-
-  footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
-    font-size:11.5px; color:var(--dim); display:flex;
-    justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--num)}
-  footer a{color:#0369A1; text-decoration:none}
-  :focus-visible{outline:2px solid var(--iris); outline-offset:2px; border-radius:4px}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body>
-<nav class="shellnav" aria-label="Site"><a class="sn-logo" href="/">SOOTH</a><a class="sn" href="/">Board</a><a class="sn" href="/props">Props</a><a class="sn on" href="/edges">Edges</a><a class="sn" href="/predictor">Predictor</a><a class="sn" href="/ask">Ask AI</a><a class="sn" href="/tools">Tools</a><a class="sn" href="/trust">Trust</a></nav>
-<div class="wrap">
-<header>
+<body data-page="edges">
+<a class="skip" href="#main">Skip to main content</a>
+<div class="wrap-page" id="main">
+<header class="page-head">
   <h1>Everywhere the books disagree.</h1>
-  <p class="sub">One page, three kinds of disagreement. <b>+EV</b>: a best price currently
-  beating the de-vigged consensus. <b>Arbs &amp; middles</b>: two books far enough apart to
-  play both sides. <b>Moves</b>: books drifting from their own numbers or from the pack.
+  <p class="sub">One page, three kinds of disagreement.
+  <b>+EV</b> (positive expected value): a best price currently
+  beating the no-vig fair line. The book is paying more than the math says the side is worth.
+  <b>Arbs &amp; middles</b>: two books far enough apart to
+  play both sides profitably. <b>Moves</b>: books drifting from their own numbers or from the pack.
   All observation, no prediction.</p>
 </header>
 
-<div class="views" id="views">
-  <button class="view on" data-v="ev">+EV<span class="ct" id="ct-ev"></span></button>
-  <button class="view" data-v="arb">Arbs &amp; middles<span class="ct" id="ct-arb"></span></button>
-  <button class="view" data-v="mov">Moves<span class="ct" id="ct-mov"></span></button>
+<div class="views" id="views" role="tablist" aria-label="View selector">
+  <button class="view on" data-v="ev" role="tab" aria-selected="true" aria-controls="v-ev">+EV<span class="ct" id="ct-ev"></span></button>
+  <button class="view" data-v="arb" role="tab" aria-selected="false" aria-controls="v-arb">Arbs &amp; middles<span class="ct" id="ct-arb"></span></button>
+  <button class="view" data-v="mov" role="tab" aria-selected="false" aria-controls="v-mov">Moves<span class="ct" id="ct-mov"></span></button>
 </div>
 
-<div id="v-ev">
+<div id="v-ev" role="tabpanel">
   <h2>Prices beating fair right now</h2>
-  <p class="h2sub">Best available price vs the de-vigged median across books — games and props,
+  <p class="h2sub">Best available price vs the no-vig (margin-removed) median across books, for games and props,
   ranked by edge. These close fast; the timestamp is part of the data.</p>
-  <div class="card" id="evCard"><div class="empty">Loading…</div></div>
+  <div class="card" id="evCard"><div class="empty" aria-live="polite">Loading…</div></div>
 </div>
 
-<div id="v-arb" style="display:none">
-  <h2>Live arbitrage — moneylines</h2>
-  <p class="h2sub">Best price per side across all books, implied probabilities summing under 100%.</p>
-  <div class="card" id="arbCard"><div class="empty">Loading…</div></div>
+<div id="v-arb" style="display:none" role="tabpanel">
+  <h2>Live arbitrage: moneylines</h2>
+  <p class="h2sub">Best price per side across all books, where implied probabilities sum under 100%.
+  An arb lets you bet both sides and lock in a small guaranteed profit regardless of outcome.</p>
+  <div class="card" id="arbCard"><div class="empty" aria-live="polite">Loading…</div></div>
   <h2>Middle windows — spreads &amp; totals</h2>
-  <p class="h2sub">One book's line below another's, with landing numbers that win both bets.</p>
-  <div class="card" id="midCard"><div class="empty">Loading…</div></div>
+  <p class="h2sub">One book's line sits below another's, leaving a gap where both bets win if the result lands inside it.</p>
+  <div class="card" id="midCard"><div class="empty" aria-live="polite">Loading…</div></div>
 </div>
 
-<div id="v-mov" style="display:none">
+<div id="v-mov" style="display:none" role="tabpanel">
   <h2>Diverging from consensus now</h2>
-  <p class="h2sub">Books currently paying more than the cross-book consensus says the side is worth.</p>
-  <div class="card" id="divCard"><div class="empty">Loading…</div></div>
+  <p class="h2sub">Books currently paying more than the cross-book consensus says the side is worth — line-shopping opportunity, live.</p>
+  <div class="card" id="divCard"><div class="empty" aria-live="polite">Loading…</div></div>
   <h2>Largest recent moves</h2>
-  <p class="h2sub">Single-book price changes between our observations, last two days.</p>
-  <div class="card" id="driftCard"><div class="empty">Loading…</div></div>
+  <p class="h2sub">Single-book price changes between our observations, last two days. A move signals that new information — injury news, sharp money — hit the market.</p>
+  <div class="card" id="driftCard"><div class="empty" aria-live="polite">Loading…</div></div>
 </div>
 
-<footer>
-  <div><a href="/">board</a> · <a href="/props">props</a> · <a href="/tools">tools</a> · <a href="/trust">why trust these numbers</a></div>
-  <div id="stamp"></div>
-</footer>
-<p style="font-size:11px;color:var(--dim);max-width:72ch;margin:14px 0 0">Analysis only — no wagers taken, no picks sold. 21+, where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, 24/7.</p>
+<p id="stamp" style="font-family:var(--num);font-size:11px;color:var(--dim);margin:18px 0 0"></p>
 </div>
 
 <script>
@@ -145,7 +114,10 @@ const upcoming=iso=>new Date(iso).getTime()>Date.now();
 /* tab switching */
 document.getElementById('views').addEventListener('click',e=>{
   const b=e.target.closest('.view'); if(!b) return;
-  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.view').forEach(x=>{
+    x.classList.toggle('on',x===b);
+    x.setAttribute('aria-selected', x===b ? 'true' : 'false');
+  });
   ['ev','arb','mov'].forEach(v=>
     document.getElementById('v-'+v).style.display=b.dataset.v===v?'':'none');
 });
@@ -180,11 +152,11 @@ Promise.allSettled([
   evs.sort((a,b2)=>b2.edge-a.edge);
   document.getElementById('ct-ev').textContent=evs.length?`· ${evs.length}`:'';
   document.getElementById('evCard').innerHTML=evs.length?evs.slice(0,20).map(r=>
-    `<div class="row"><span class="lead">+${r.edge.toFixed(1)}</span>
+    `<div class="row"><span class="lead" aria-label="Edge: +${r.edge.toFixed(1)} points">+${r.edge.toFixed(1)}</span>
       <span class="what"><b>${r.t}</b><span class="tag">${r.kind}</span><p>${r.sub}</p></span>
       <span class="meta"><span class="bk">${r.bk} ${am(r.pr)}</span>fair ${am(r.fair)}</span></div>`).join('')
   :(b.status!=='fulfilled'&&p.status!=='fulfilled')?ERR
-  :'<div class="empty"><b>Nothing beats fair right now.</b><p>The honest state of an efficient market most of the day. Edges appear when news breaks and books lag — closest to game time.</p></div>';
+  :'<div class="empty"><b>Nothing beats fair right now.</b><p>That is the honest state of an efficient market most of the day. Edges appear when news breaks and books lag — closest to game time.</p></div>';
 
   /* ---- arbs ---- */
   const arbs=[];
@@ -196,7 +168,7 @@ Promise.allSettled([
   }
   arbs.sort((a,b2)=>b2.lock-a.lock);
   document.getElementById('arbCard').innerHTML=arbs.length?arbs.map(a=>
-    `<div class="row"><span class="lead">+${a.lock.toFixed(2)}%</span>
+    `<div class="row"><span class="lead" aria-label="Locked profit: +${a.lock.toFixed(2)} percent">+${a.lock.toFixed(2)}%</span>
       <span class="what"><b>${a.e.away} @ ${a.e.home}</b>
         <p><span class="bk">${a.s1.best_book} ${am(a.s1.best_price)}</span> on ${a.s1.name} ·
            <span class="bk">${a.s2.best_book} ${am(a.s2.best_price)}</span> on ${a.s2.name}</p></span>
@@ -248,6 +220,7 @@ Promise.allSettled([
   }
 });
 </script>
+<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
