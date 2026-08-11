@@ -1,0 +1,113 @@
+name: refresh-edges
+
+# The Edges tab reads two files that nothing on main was rebuilding:
+# site/public/data/middles.json and site/public/data/moves.json. Both were
+# only ever written by the local publish.sh, which deploys a side branch from
+# one laptop — so when that laptop stopped, the tab froze. middles.json sat at
+# 2026-08-07 for four days while the page kept presenting it as "right now".
+#
+# This is the exact failure capture.yml was restored to fix on 2026-08-09, one
+# file over: if a published artifact is not rebuilt by a workflow on main, it
+# is not live, it is a screenshot.
+#
+# Two jobs of very different cost, which is why the gate exists:
+#   moves.json   - engine.alerts recomputes from committed capture history.
+#                  Zero credits. Runs every tick, unconditionally.
+#   middles.json - engine.middles hits the Odds API, 2 credits per live sport
+#                  (bulk per sport, not per event), so ~10 credits a run with
+#                  five sports up.
+#
+# MIDDLES_MAX_AGE_H is the credit knob. At 6h it is ~4 refreshes/day, ~40
+# credits/day. Lower it for fresher middles, raise it if quota is tight — the
+# account was at 6,577 remaining on 2026-08-11 with capture-odds already
+# burning ~192/day. Nothing here can drain the account faster than the knob.
+#
+# Freshness is judged by the CONTENT timestamp, never file mtime. A rebuild
+# that returns no middles still rewrites the file, and a git checkout stamps
+# every mtime to now — mtime would report "fresh" forever. publish.sh learned
+# this on props and the lesson is copied here deliberately.
+
+on:
+  schedule:
+    - cron: "15,45 * * * *"
+  workflow_dispatch:
+    inputs:
+      force_middles:
+        description: "Refresh middles regardless of age (spends credits)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-edges
+  cancel-in-progress: false
+
+env:
+  MIDDLES_MAX_AGE_H: "6"
+
+jobs:
+  edges:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy
+
+      # Free: reads data/capture/*.jsonl, which capture-odds refreshes every
+      # 30 min. No API call, so there is no reason to gate this one.
+      - name: Rebuild line-movement scan (zero credits)
+        run: python -m engine.alerts --out site/public/data/moves.json
+        continue-on-error: true
+
+      - name: Decide whether middles is stale enough to pay for
+        id: gate
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime, json, os
+
+          max_age = float(os.environ["MIDDLES_MAX_AGE_H"])
+          forced = os.environ.get("FORCED") == "true"
+          try:
+              d = json.load(open("site/public/data/middles.json"))
+              ts = d.get("generated_at") or ""
+              dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+              age = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600
+          except Exception:
+              age = 1e9
+          print(f"age_h={age:.1f}")
+          print(f"refresh={'true' if (forced or age >= max_age) else 'false'}")
+          PY
+        env:
+          FORCED: ${{ inputs.force_middles }}
+
+      - name: Refresh middles/arbs (Odds API, ~2 credits per live sport)
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          echo "middles content age: ${{ steps.gate.outputs.age_h }}h"
+          python -m engine.middles --window-hours 36
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        continue-on-error: true
+
+      - name: Report skip
+        if: steps.gate.outputs.refresh != 'true'
+        run: echo "middles fresh (${{ steps.gate.outputs.age_h }}h < ${MIDDLES_MAX_AGE_H}h) - no credits spent"
+
+      - name: Commit refreshed edges data
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add site/public/data/middles.json site/public/data/moves.json
+          if git diff --staged --quiet; then
+            echo "no change in edges data"
+          else
+            git commit -m "edges: middles/moves refresh $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
