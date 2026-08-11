@@ -28,15 +28,24 @@ name: refresh-edges
 # this on props and the lesson is copied here deliberately.
 
 # DEPLOY BUDGET, not just credits. Every commit here triggers a Vercel build,
-# and the account is on the free tier: >100 deployments/day is a hard 24h
-# lockout. It happened on 2026-08-11 — 79 deploys by mid-afternoon because two
-# Vercel projects were both auto-deploying this repo, and production froze on a
-# stale build with the fixes stranded on main. moves.json changes on virtually
-# every tick, so this workflow commits nearly every time it runs: at */30 it
-# alone would spend ~48 of the ~100. Hourly keeps the total near ~65/day.
+# and the free tier's 100 deployments/day is enforced with a hard 24h lockout.
+# That fired on 2026-08-11 and froze production on a stale build.
+#
+# Measured that day: ~4 deployments/hour, i.e. ~96/day — the account had been
+# riding the cap every single day, which means deploys were silently failing
+# for part of most days. Half of it was a duplicate Vercel project
+# auto-deploying this same repo; its git integration is now disconnected,
+# leaving ~2/hour (~48/day) from capture-odds and capture-props.
+#
+# That is the budget this workflow has to fit inside. moves.json changes on
+# virtually every tick, so this commits nearly every run — at */30 it would add
+# ~48/day and blow the cap on its own, hourly ~24. Every 2h adds ~12, landing
+# the total near ~68/day with real headroom. Middles is gated at 6h regardless,
+# so the only thing a tighter cron buys is fresher moves, which is not worth
+# risking a 24h production freeze.
 on:
   schedule:
-    - cron: "15 * * * *"
+    - cron: "15 */2 * * *"
   workflow_dispatch:
     inputs:
       force_middles:
