@@ -1,0 +1,137 @@
+name: props-live
+
+# Restores the live upcoming-props board.
+#
+# There are two prop pipelines and only one of them was still running:
+#   engine.props_capture -> closing prices, fires near first pitch. On Actions.
+#   engine.props         -> the board of props you can actually shop right now.
+#                           Only ever run by the local publish.sh.
+#
+# When publishing moved to Actions, engine.props stopped running anywhere, so
+# props.json was left to props_board — which only republishes captured closes.
+# Those age out of the window a few hours after first pitch, so from roughly
+# 04:00Z until the next night's games the Props tab was empty. Every run on
+# 2026-08-11 reported "observations : 0"; the live page showed n_props: 0 while
+# telling visitors props "land here automatically, usually by mid-morning".
+# That sentence is the contract this workflow exists to keep.
+#
+# CREDITS. This is the only paid step here and props share one monthly budget
+# with the board. On 2026-08-11 the account had 6,567 of 20,000 left while
+# capture-odds alone burned ~192/day. So this is gated twice:
+#   PROPS_MAX_AGE_H  - skip entirely unless the published board is this stale.
+#   PROPS_MAX_CREDITS- hard per-run ceiling the engine will not exceed.
+# At 3h/12 that is at most ~8 refreshes and ~96 credits a day, and far less in
+# practice because engine.props bails after two empty events. Lower the age for
+# a fresher board, raise it if quota gets tight — those two numbers are the
+# whole cost model.
+#
+# Age is read from the CONTENT timestamp, never file mtime: a checkout stamps
+# every file to now, so mtime would report "fresh" forever and this would never
+# spend a credit. Same trap publish.sh documented on this exact file.
+
+on:
+  schedule:
+    - cron: "10,40 * * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Refresh regardless of age (spends credits)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: props-live
+  cancel-in-progress: false
+
+env:
+  PROPS_MAX_AGE_H: "3"
+  PROPS_MAX_CREDITS: "12"
+
+jobs:
+  props:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests
+
+      - name: Decide whether the board is stale enough to pay for
+        id: gate
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime, json, os
+
+          max_age = float(os.environ["PROPS_MAX_AGE_H"])
+          forced = os.environ.get("FORCED") == "true"
+          try:
+              d = json.load(open("site/public/data/props.json"))
+              ts = max(d.get("generated_at") or "", d.get("checked_at") or "")
+              dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+              age = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600
+          except Exception:
+              age = 1e9
+          print(f"age_h={age:.1f}")
+          print(f"refresh={'true' if (forced or age >= max_age) else 'false'}")
+          PY
+        env:
+          FORCED: ${{ inputs.force }}
+
+      - name: Snapshot the published board timestamp
+        if: steps.gate.outputs.refresh == 'true'
+        id: before
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          try:
+              print("gen=" + str(json.load(open("site/public/data/props.json")).get("generated_at")))
+          except Exception:
+              print("gen=none")
+          PY
+
+      - name: Refresh the live props board (Odds API)
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          echo "published board age: ${{ steps.gate.outputs.age_h }}h"
+          python -m engine.props --window-hours 30 --max-credits "$PROPS_MAX_CREDITS"
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        continue-on-error: true
+
+      # Annotation only makes sense on a genuinely new capture. If the engine
+      # kept the previous snapshot, re-annotating it would restate old rosters
+      # as current — publish.sh drew this line and it is worth keeping.
+      - name: Annotate with hit rates and the strikeout model
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          gen_after=$(python -c "import json;print(json.load(open('site/public/data/props.json')).get('generated_at'))" 2>/dev/null || echo none)
+          if [ "$gen_after" = "${{ steps.before.outputs.gen }}" ]; then
+            echo "board unchanged (kept previous snapshot) - skipping annotation"
+            exit 0
+          fi
+          python -m engine.hitrates || echo "HITRATES failed - props stay unannotated"
+          python -m engine.props_model || echo "PROPS MODEL failed - props stay unmodeled"
+
+      - name: Report skip
+        if: steps.gate.outputs.refresh != 'true'
+        run: echo "board fresh (${{ steps.gate.outputs.age_h }}h < ${PROPS_MAX_AGE_H}h) - no credits spent"
+
+      - name: Commit the refreshed board
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add site/public/data/props.json
+          if git diff --staged --quiet; then
+            echo "no change in props board"
+          else
+            git commit -m "props: live board refresh $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
