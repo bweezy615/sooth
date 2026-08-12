@@ -20,9 +20,9 @@
 
   var MARK=
     '<svg viewBox="0 0 32 32" aria-hidden="true">'
-    +'<circle cx="16" cy="16" r="13" fill="none" stroke="#2A2F3A" stroke-width="2.5"/>'
-    +'<path d="M16 6 A10 10 0 0 1 26 16" fill="none" stroke="#4ADE80" stroke-width="2.5" stroke-linecap="round"/>'
-    +'<circle cx="16" cy="16" r="2.6" fill="#4ADE80"/></svg>';
+    +'<circle cx="16" cy="16" r="13" fill="none" stroke="#333B4D" stroke-width="2.5"/>'
+    +'<path d="M16 6 A10 10 0 0 1 26 16" fill="none" stroke="#22E5A0" stroke-width="2.5" stroke-linecap="round"/>'
+    +'<circle cx="16" cy="16" r="2.6" fill="#22E5A0"/></svg>';
 
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -97,7 +97,7 @@
     if(document.querySelector('link[rel="icon"]'))return;
     document.head.insertAdjacentHTML("beforeend",
       '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">'
-      +'<meta name="theme-color" content="#FAFAF7">');
+      +'<meta name="theme-color" content="#08090D">');
   }
 
   // limited-time promo: everything is free until Sept 1. One line, all pages.

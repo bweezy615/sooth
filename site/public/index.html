@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>sooth.bet — best odds across every sportsbook</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#FAFAF7">
+<meta name="theme-color" content="#08090D">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -23,15 +23,18 @@
 <meta property="og:url" content="https://sooth.bet/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/sooth.css">
 <style>
 :root{
-  --bg:#FAFAF7; --bg-2:#FFFFFF; --card:#FFFFFF; --card-2:#F0F2ED;
-  --line:#E5E7E1; --line-2:#D3D7CE; --ink:#111418; --muted:#5A6472; --dim:#8A929E;
-  --iris:#0284C7; --violet:#0EA5E9; --pos:#16A34A; --neg:#DC2626;
-  --grad:linear-gradient(96deg,#0284C7 0%,#0EA5E9 100%);
+  --bg:#08090D; --bg-2:#101219; --card:#101219; --card-2:#171A23;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --ink:#EDEFF5; --ink-2:#AEB4C2; --muted:#7A8194; --dim:#565E70;
+  --iris:#22D3EE; --violet:#22D3EE; --brand:#F0338D;
+  --pos:#22E5A0; --pos-text:#22E5A0; --neg:#FF5470; --warn:#FFB020;
+  --grad:linear-gradient(96deg,#22D3EE 0%,#F0338D 100%);
   --num:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --display:Sora,Archivo,system-ui,sans-serif;
   --r:14px;
 }
 *{box-sizing:border-box}
@@ -42,8 +45,8 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--iris);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1280px;margin:0 auto;padding:0 22px}
 .aura{position:fixed;inset:0;z-index:0;pointer-events:none;background:
-  radial-gradient(760px 520px at 12% 6%, rgba(2,132,199,.15), transparent 62%),
-  radial-gradient(680px 520px at 88% 24%, rgba(2,132,199,.12), transparent 60%)}
+  radial-gradient(820px 560px at 8% 0%, rgba(34,211,238,.16), transparent 60%),
+  radial-gradient(760px 560px at 94% 22%, rgba(240,51,141,.14), transparent 60%)}
 .stage{position:relative;z-index:1}
 
 /* ---------- top bar ---------- */
@@ -67,7 +70,7 @@ a{color:inherit}
 .ticker:hover .tk{animation-play-state:paused}
 @keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.ticker .tk{animation:none}}
-.ticker b{color:var(--ink)} .ticker .up{color:var(--pos)} .ticker .bk{color:#0369A1}
+.ticker b{color:var(--ink)} .ticker .up{color:var(--pos)} .ticker .bk{color:var(--iris)}
 
 /* ---------- offer card (loud block) ---------- */
 .offer{background:linear-gradient(160deg,#16A34A,#2EBE66);border-radius:var(--r);
@@ -95,7 +98,7 @@ a{color:inherit}
 
 /* ---------- pro v2 ---------- */
 .pro2{position:relative;border-radius:var(--r);padding:1.5px;
-  background:linear-gradient(140deg,rgba(22,163,74,.7),rgba(2,132,199,.35) 40%,rgba(229,231,225,.8) 70%,rgba(22,163,74,.5))}
+  background:linear-gradient(140deg,rgba(34,211,238,.7),rgba(240,51,141,.5) 55%,rgba(34,229,160,.5))}
 .pro2 .in{background:var(--card);border-radius:12.5px;padding:18px}
 .pro2 .livehead{display:flex;align-items:center;gap:8px;font-family:var(--num);
   font-size:10px;letter-spacing:.16em;color:var(--pos);text-transform:uppercase;margin-bottom:10px}
@@ -130,9 +133,10 @@ a{color:inherit}
 
 /* ---------- pitch ---------- */
 .pitch{padding:22px 0 18px;max-width:760px}
-.pitch h1{font-size:clamp(28px,4vw,42px);line-height:1.05;letter-spacing:-.035em;
-  font-weight:800;margin:0 0 10px}
-.pitch h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pitch h1{font-family:var(--display);font-size:clamp(34px,5.2vw,60px);line-height:1.02;
+  letter-spacing:-.03em;font-weight:800;margin:0 0 14px}
+.pitch h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent;filter:drop-shadow(0 0 24px rgba(240,51,141,.35))}
 .pitch p{color:var(--muted);font-size:15.5px;margin:0;max-width:64ch}
 .pitch p b{color:var(--ink)}
 
@@ -160,7 +164,7 @@ a{color:inherit}
 .hint{padding:9px 18px 0;font-size:12px;color:var(--dim)}
 .hint b{color:var(--muted)}
 .sealed{display:inline-block;font-family:var(--num);font-size:9px;letter-spacing:.1em;
-  border:1px solid rgba(180,83,9,.5);color:#B45309;border-radius:5px;
+  border:1px solid rgba(180,83,9,.5);color:var(--warn);border-radius:5px;
   padding:1px 7px;vertical-align:2px;margin-left:8px}
 .g-picks{grid-template-columns:1.5fr .9fr .7fr .8fr .8fr}
 @media(max-width:760px){
@@ -169,11 +173,11 @@ a{color:inherit}
 }
 .pickbar{display:block;height:3px;border-radius:99px;background:var(--card-2);
   overflow:hidden;margin-top:4px;max-width:64px}
-.pickbar i{display:block;height:100%;background:#B45309}
+.pickbar i{display:block;height:100%;background:var(--warn)}
 .note{margin:12px 16px 0;padding:10px 14px;border:1px solid rgba(180,83,9,.35);
   border-radius:11px;background:rgba(180,83,9,.06);font-size:12px;color:var(--muted);
   display:none}
-.note b{color:#B45309}
+.note b{color:var(--warn)}
 
 .content{min-height:420px}
 .scroller{max-height:60vh;overflow-y:auto;overscroll-behavior:contain;padding:6px 0 10px}
@@ -184,8 +188,8 @@ a{color:inherit}
   font-family:var(--num);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dim);position:sticky;top:0;background:var(--bg-2);z-index:2}
 .trow{display:grid;gap:12px;align-items:center;padding:9px 18px;
-  border-top:1px solid rgba(229,231,225,.55);font-size:13.5px}
-.trow:hover{background:rgba(2,132,199,.05)}
+  border-top:1px solid rgba(255,255,255,.07);font-size:13.5px}
+.trow:hover{background:rgba(34,211,238,.06)}
 .g-games{grid-template-columns:1.4fr 1.1fr .6fr .6fr .9fr}
 .g-props{grid-template-columns:1.4fr 1fr .5fr .8fr .8fr .7fr .55fr .5fr}
 @media(max-width:760px){
@@ -210,11 +214,11 @@ a{color:inherit}
 
 /* edges view rows */
 .erow{display:flex;align-items:center;gap:14px;padding:11px 18px;
-  border-top:1px solid rgba(229,231,225,.55);flex-wrap:wrap}
+  border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
 .erow .lead{font-family:var(--num);font-size:15px;font-weight:700;color:var(--pos);min-width:66px}
 .erow .what{flex:1;min-width:220px;font-size:13.5px}
 .erow .what p{margin:2px 0 0;font-size:12px;color:var(--muted)}
-.erow .what .bk{color:#0369A1;font-family:var(--num);font-size:11px}
+.erow .what .bk{color:var(--iris);font-family:var(--num);font-size:11px}
 .erow .meta{text-align:right;font-family:var(--num);font-size:10.5px;color:var(--dim)}
 .erow .meta .bk{display:block;font-size:12px;color:var(--ink);font-weight:600}
 .esec{font-family:var(--num);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
@@ -242,7 +246,7 @@ a{color:inherit}
 .trust-card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
 .trust-card b{color:var(--ink)}
 .trust-card .num{font-family:var(--num)}
-.trust-card a{color:#0369A1;text-decoration:none;font-size:12px}
+.trust-card a{color:var(--iris);text-decoration:none;font-size:12px}
 
 /* ---------- footer ---------- */
 footer{margin-top:26px;padding:20px 0 40px;border-top:1px solid var(--line)}
@@ -393,7 +397,7 @@ function sportsList(){
 function init(){
   if(!DATA.board&&!DATA.props){
     document.getElementById('content').innerHTML=
-      '<div class="empty"><b>Board unavailable.</b><p>Could not load live prices — refresh to retry. Raw data at <a href="/data/board.json" style="color:#0369A1">board.json</a>.</p></div>';
+      '<div class="empty"><b>Board unavailable.</b><p>Could not load live prices — refresh to retry. Raw data at <a href="/data/board.json" style="color:var(--iris)">board.json</a>.</p></div>';
     document.getElementById('stamp').textContent='no live read';
     return;
   }
@@ -529,7 +533,7 @@ function renderPicks(){
   var head='<div class="esec">'+esc(d.slate_id)+' \u00b7 '+d.n_predictions+
     ' predictions sealed '+esc(String(d.committed_at).slice(0,10))+
     '<span class="sealed">SEALED \u00b7 root '+esc(String(d.merkle_root).slice(0,8))+'\u2026</span>'+
-    '<a href="/verify" style="color:#0369A1;margin-left:10px;text-decoration:none">check it \u2192</a></div>';
+    '<a href="/verify" style="color:var(--iris);margin-left:10px;text-decoration:none">check it \u2192</a></div>';
   return '<div class="scroller">'+head+
     '<div class="thead g-picks"><span>Matchup</span><span>Our side</span>'+
     '<span class="col-conf">Confidence</span><span>Fair odds</span><span class="col-when">Kickoff</span></div>'+
@@ -547,7 +551,7 @@ function renderPicks(){
         '<span class="t-num">'+sg(ind.fair_odds)+'</span>'+
         '<span class="t-dim col-when">'+when+'</span>'+
       '</div>';}).join('')+
-    '<div class="esec" style="padding-top:14px">Record: graded in public after games settle \u00b7 <a href="/ledger" style="color:#0369A1;text-decoration:none">the ledger \u2192</a></div>'+
+    '<div class="esec" style="padding-top:14px">Record: graded in public after games settle \u00b7 <a href="/ledger" style="color:var(--iris);text-decoration:none">the ledger \u2192</a></div>'+
     '</div>';
 }
 
@@ -622,7 +626,7 @@ function renderProps(){
         '<span class="col-model t-dim" title="our Poisson projection vs the de-vigged market — MAE 2.04K over 723 unseen starts">'+
           (p.model?('<b style="color:var(--ink)">'+p.model.proj_k.toFixed(1)+'K</b> '+
             (p.model.delta_pts>0?'<span style="color:var(--pos)">O+'+p.model.delta_pts.toFixed(0)+'</span>'
-             :'<span style="color:#0369A1">U+'+Math.abs(p.model.delta_pts).toFixed(0)+'</span>')):'—')+'</span>'+
+             :'<span style="color:var(--iris)">U+'+Math.abs(p.model.delta_pts).toFixed(0)+'</span>')):'—')+'</span>'+
         '<span class="t-dim" title="times over this line in last 10 games">'+hit+'</span>'+
         '<span class="t-gain">'+(p.gain_pts>=0?'+':'')+p.gain_pts.toFixed(1)+'</span>'+
       '</div>';}).join('')+'</div>';
