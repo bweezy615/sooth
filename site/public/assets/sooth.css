@@ -1,52 +1,67 @@
 /* sooth — the terminal. Shared design system for every page.
-   Warm near-white ground, mono numbers, blue accent + green gain. No gradients.
-   Light palette mirrors the homepage tokens so every page reads as one product. */
+   Dark-neon ground, mono numbers, cyan UI accent + volt-green gain + magenta brand.
+   Near-black palette mirrors the homepage tokens so every page reads as one product.
+   Data semantics preserved: green still means gain, not decoration. */
 
 :root{
-  /* ground + structure */
-  --bg:#FAFAF7;          /* warm near-white page */
-  --bg-2:#FFFFFF;        /* panel / card */
-  --bg-3:#F0F2ED;        /* raised / hover / input */
-  --line:#E5E7E1;        /* hairline */
-  --line-2:#D3D7CE;      /* stronger hairline */
+  /* ground + structure — near-black, cool */
+  --bg:#08090D;          /* Void — page */
+  --bg-2:#101219;        /* Carbon — panel / card */
+  --bg-3:#171A23;        /* Slate — raised / hover / input */
+  --line:rgba(255,255,255,.08);    /* hairline */
+  --line-2:rgba(255,255,255,.15);  /* stronger hairline */
 
   /* ink */
-  --ink:#111418;         /* primary near-black */
-  --ink-2:#3A424E;       /* secondary */
-  --muted:#5A6472;       /* labels / tertiary */
-  --dim:#8A929E;         /* faint / disabled */
+  --ink:#EDEFF5;         /* primary near-white — 16:1 on --bg */
+  --ink-2:#AEB4C2;       /* secondary */
+  --muted:#7A8194;       /* labels / tertiary — 5.2:1 on --bg */
+  --dim:#565E70;         /* faint / disabled */
 
-  /* accent (blue, for links/active) + gain / loss */
-  --iris:#0369A1;        /* primary accent / links — WCAG AA 5.67:1 on --bg */
-  --pos:#16A34A;         /* gain backgrounds, dots, badges — 3.15:1 (bg use only) */
-  --pos-text:#15803D;    /* green as text on white — WCAG AA 4.80:1 on --bg */
-  --pos-dim:rgba(22,163,74,.10);
-  --pos-line:rgba(22,163,74,.28);
-  --neg:#DC2626;         /* negative */
-  --neg-dim:rgba(220,38,38,.10);
-  --warn:#B45309;        /* unproven / in-calibration */
-  --warn-dim:rgba(180,83,9,.10);
+  /* neon accents — cyan (UI/links), volt (gain), magenta (brand/CTA) */
+  --iris:#22D3EE;        /* cyan — links / active / UI accent — 11:1 on --bg */
+  --brand:#F0338D;       /* magenta — CTA + gradient partner */
+  --beam:linear-gradient(90deg,#22D3EE,#F0338D); /* signature edge beam */
+  --cta:linear-gradient(96deg,#E01E7B,#F0338D);  /* CTA fill (white text passes AA) */
+  --pos:#22E5A0;         /* volt — gain backgrounds, dots, badges */
+  --pos-text:#22E5A0;    /* volt as text — 13:1 on --bg */
+  --pos-dim:rgba(34,229,160,.12);
+  --pos-line:rgba(34,229,160,.30);
+  --neg:#FF5470;         /* negative / loss */
+  --neg-dim:rgba(255,84,112,.12);
+  --warn:#FFB020;        /* unproven / in-calibration */
+  --warn-dim:rgba(255,176,32,.14);
+
+  /* glow */
+  --glow-cyan:0 0 24px rgba(34,211,238,.35);
+  --glow-brand:0 0 24px rgba(240,51,141,.40);
 
   /* type */
   --num:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:Archivo,system-ui,-apple-system,Segoe UI,sans-serif;
+  --display:Sora,Archivo,system-ui,sans-serif;
 
-  --r:8px;               /* card radius */
-  --r-sm:5px;
+  --r:10px;              /* card radius */
+  --r-sm:6px;
   --wrap:1360px;
 }
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--bg);color:var(--ink);
+  margin:0;color:var(--ink);
+  /* ambient neon: cyan top-left, magenta bottom-right — fixed, behind all content */
+  background:
+    radial-gradient(680px 480px at 6% -6%, rgba(34,211,238,.10), transparent 60%),
+    radial-gradient(760px 540px at 104% 106%, rgba(240,51,141,.10), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
   font:14px/1.5 var(--sans);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   font-feature-settings:"tnum" 1;
 }
 a{color:var(--iris);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
-h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em;font-family:var(--display)}
 
 /* ---- numbers: mono, tabular ---- */
 .num{font-family:var(--num);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
@@ -55,7 +70,7 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .warnc{color:var(--warn)}
 
 /* ---- accessibility ---- */
-:focus-visible{outline:2px solid var(--pos);outline-offset:2px;border-radius:3px}
+:focus-visible{outline:2px solid var(--iris);outline-offset:2px;border-radius:3px}
 .skip{position:absolute;left:-9999px;top:0}
 .skip:focus{left:12px;top:12px;z-index:200;background:var(--bg-3);color:var(--ink);
   padding:9px 15px;border:1px solid var(--line-2);border-radius:var(--r-sm);font-weight:600}
@@ -74,8 +89,8 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
 .promo a:hover{color:var(--ink)}
 
 /* ================= header (injected by shell.js) ================= */
-.hd{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);
-  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{position:sticky;top:0;z-index:100;background:rgba(8,9,13,.72);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .hd-in{display:flex;align-items:center;gap:22px;height:52px;
   max-width:var(--wrap);margin:0 auto;padding:0 24px}
 .brand{display:inline-flex;align-items:center;gap:8px;color:var(--ink)}
@@ -88,11 +103,11 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
   border-radius:var(--r-sm);letter-spacing:.01em;
   display:inline-flex;align-items:center;min-height:44px}
 .hd-nav a:hover{color:var(--ink);background:var(--bg-3);text-decoration:none}
-.hd-nav a[aria-current="page"]{color:var(--pos-text)}
-.hd-cta{font-size:12.5px;font-weight:700;color:#06210F;background:var(--pos);
+.hd-nav a[aria-current="page"]{color:var(--iris)}
+.hd-cta{font-size:12.5px;font-weight:700;color:#fff;background:var(--cta);
   padding:8px 15px;border-radius:var(--r-sm);white-space:nowrap;
-  display:inline-flex;align-items:center;min-height:44px}
-.hd-cta:hover{filter:brightness(1.08);text-decoration:none}
+  display:inline-flex;align-items:center;min-height:44px;box-shadow:var(--glow-brand)}
+.hd-cta:hover{filter:brightness(1.1);text-decoration:none}
 
 /* ================= status bar ================= */
 .statusbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
@@ -130,9 +145,9 @@ h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.02em}
   cursor:pointer;min-height:34px;display:inline-flex;align-items:center;gap:7px}
 .tab:hover{color:var(--ink);background:var(--bg-3)}
 .tab[aria-selected="true"]{color:var(--ink);background:var(--bg-3);
-  box-shadow:inset 0 -2px 0 var(--pos)}
+  box-shadow:inset 0 -2px 0 var(--iris)}
 .tab .c{font-family:var(--num);font-size:11px;color:var(--dim)}
-.tab[aria-selected="true"] .c{color:var(--pos-text)}
+.tab[aria-selected="true"] .c{color:var(--iris)}
 
 /* ================= controls ================= */
 .field{font:600 12.5px/1 var(--sans);color:var(--ink-2);background:var(--bg-3);
@@ -148,8 +163,8 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
   padding:11px 18px;min-height:44px;border:1px solid var(--line-2);
   background:var(--bg-3);color:var(--ink)}
 .btn:hover{border-color:var(--muted);text-decoration:none}
-.btn-accent{background:var(--pos);color:#06210F;border-color:transparent}
-.btn-accent:hover{filter:brightness(1.08)}
+.btn-accent{background:var(--cta);color:#fff;border-color:transparent;box-shadow:var(--glow-brand)}
+.btn-accent:hover{filter:brightness(1.1)}
 .btn svg{width:16px;height:16px}
 
 /* ================= data grid (the board) ================= */
@@ -166,11 +181,15 @@ label.fld > span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;col
 .cell-sub{display:block;font-size:11px;color:var(--dim);margin-top:2px}
 .cell-dim{font-family:var(--num);font-size:12.5px;color:var(--muted)}
 
-/* inline gain bar */
+/* inline gain bar — the "edge beam": cyan→magenta gradient shows the price gap,
+   the edge number glows. Sooth's signature (books price the same bet differently). */
 .gainbar{display:inline-flex;align-items:center;gap:9px;justify-content:flex-end}
-.gainbar b{font-family:var(--num);font-size:13px;font-weight:700;color:var(--pos-text);min-width:46px;text-align:right}
-.gtrack{width:52px;height:5px;border-radius:99px;background:var(--bg-3);overflow:hidden;flex:none}
-.gtrack i{display:block;height:100%;border-radius:99px;background:var(--pos)}
+.gainbar b{font-family:var(--num);font-size:13px;font-weight:700;color:var(--iris);
+  min-width:46px;text-align:right;text-shadow:0 0 12px rgba(34,211,238,.45)}
+.gtrack{width:52px;height:6px;border-radius:99px;background:var(--bg-3);
+  overflow:hidden;flex:none;border:1px solid var(--line)}
+.gtrack i{display:block;height:100%;border-radius:99px;background:var(--beam);
+  box-shadow:0 0 10px rgba(240,51,141,.5)}
 
 /* ================= stats row ================= */
 .stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
