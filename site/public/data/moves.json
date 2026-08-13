@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-08-13T07:49:48.263835+00:00",
- "observations": 107524,
+ "generated_at": "2026-08-13T09:23:12.608444+00:00",
+ "observations": 108006,
  "min_move_pts": 1.5,
  "drift": [
   {
@@ -209,6 +209,23 @@
   },
   {
    "kind": "drift",
+   "sport": "mlb",
+   "event_id": "3ed772c2f7f038e1b8d40c6a678ecc88",
+   "home": "Toronto Blue Jays",
+   "away": "Boston Red Sox",
+   "market": "moneyline",
+   "selection": "Boston Red Sox",
+   "line": null,
+   "kickoff": "2026-08-13T19:08:00Z",
+   "book": "DraftKings",
+   "from_price": -168,
+   "to_price": -155,
+   "move_pts": -1.9,
+   "observed_at": "2026-08-13T08:39:41.597853+00:00",
+   "detail": "DraftKings drifted out 1.90 pts on Boston Red Sox (-168 to -155)"
+  },
+  {
+   "kind": "drift",
    "sport": "nfl",
    "event_id": "401872933",
    "home": "Atlanta Falcons",
@@ -223,6 +240,40 @@
    "move_pts": -1.89,
    "observed_at": "2026-08-07T00:16:04.221821+00:00",
    "detail": "DraftKings drifted out 1.89 pts on under at 43.5 (-110 to -102)"
+  },
+  {
+   "kind": "drift",
+   "sport": "mlb",
+   "event_id": "41d927261a15c8d84075af83997d53c1",
+   "home": "Washington Nationals",
+   "away": "Chicago Cubs",
+   "market": "moneyline",
+   "selection": "Chicago Cubs",
+   "line": null,
+   "kickoff": "2026-08-13T20:06:00Z",
+   "book": "Bovada",
+   "from_price": -136,
+   "to_price": -147,
+   "move_pts": 1.89,
+   "observed_at": "2026-08-13T08:39:41.597853+00:00",
+   "detail": "Bovada shortened 1.89 pts on Chicago Cubs (-136 to -147)"
+  },
+  {
+   "kind": "drift",
+   "sport": "mlb",
+   "event_id": "41d927261a15c8d84075af83997d53c1",
+   "home": "Washington Nationals",
+   "away": "Chicago Cubs",
+   "market": "moneyline",
+   "selection": "Washington Nationals",
+   "line": null,
+   "kickoff": "2026-08-13T20:06:00Z",
+   "book": "Bovada",
+   "from_price": 114,
+   "to_price": 123,
+   "move_pts": -1.89,
+   "observed_at": "2026-08-13T08:39:41.597853+00:00",
+   "detail": "Bovada drifted out 1.89 pts on Washington Nationals (+114 to +123)"
   },
   {
    "kind": "drift",
@@ -463,5 +514,40 @@
    "detail": "BetRivers drifted out 1.51 pts on Texas Rangers (-162 to -152)"
   }
  ],
- "divergence": []
+ "divergence": [
+  {
+   "kind": "divergence",
+   "sport": "mlb",
+   "event_id": "f9b96108d4bae8b60bcda1e87549bedc",
+   "home": "Los Angeles Angels",
+   "away": "Texas Rangers",
+   "market": "moneyline",
+   "selection": "Los Angeles Angels",
+   "line": null,
+   "kickoff": "2026-08-14T02:08:00Z",
+   "book": "Caesars",
+   "from_price": null,
+   "to_price": 143,
+   "move_pts": 1.58,
+   "observed_at": "2026-08-13T08:39:41.597853+00:00",
+   "detail": "Caesars pays 1.58 pts more than the 11-book consensus on Los Angeles Angels (+143)"
+  },
+  {
+   "kind": "divergence",
+   "sport": "mlb",
+   "event_id": "32dd5e1c6b71a610636cc0fb2087b9a4",
+   "home": "Detroit Tigers",
+   "away": "Cleveland Guardians",
+   "market": "moneyline",
+   "selection": "Cleveland Guardians",
+   "line": null,
+   "kickoff": "2026-08-13T17:11:00Z",
+   "book": "FanDuel",
+   "from_price": null,
+   "to_price": -116,
+   "move_pts": 1.55,
+   "observed_at": "2026-08-13T08:39:41.597853+00:00",
+   "detail": "FanDuel pays 1.55 pts more than the 10-book consensus on Cleveland Guardians (-116)"
+  }
+ ]
 }
