@@ -20,4 +20,9 @@ docs/*.local.md
 
 # Replay slates are pipeline tests, not real commitments
 data/replay/
+
+# Local agent worktrees checked out inside the repo folder - not part of the tree
+sooth-wt-*/
+# Stray local QA screenshots
+/.props-real.png
 .vercel
