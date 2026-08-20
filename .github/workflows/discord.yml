@@ -1,0 +1,75 @@
+name: post-discord
+
+# The community arm of the alert pipeline. engine.alert_discord posts player
+# props ranked by our own model edge (model.delta_pts) — never by price gap —
+# to the free Discord channel, and props + game-line divergence to the Pro one.
+#
+# Runs after props-live so the freshest model annotations are already in.
+# Three ticks a day rather than every two hours: the watermark stops repeats,
+# but a channel that fires five embeds every couple of hours reads as a pick
+# service, which is the exact register sooth is built against.
+#
+# Needs one repo secret per tier. With neither set the job prints "not
+# configured" and exits clean, so this stays green until the server exists.
+
+on:
+  schedule:
+    - cron: "45 13 * * *"   # ~8:45am CT — morning slate
+    - cron: "45 17 * * *"   # ~12:45pm CT — afternoon
+    - cron: "45 21 * * *"   # ~4:45pm CT  — primetime
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "free | pro"
+        default: "free"
+      min_delta:
+        description: "minimum model edge in points of implied probability"
+        default: "3"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: post-discord
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests
+
+      - name: Post model edges to the free channel
+        run: >-
+          python -m engine.alert_discord
+          --tier free
+          --min-delta ${{ github.event.inputs.min_delta || '3' }}
+        env:
+          SOOTH_DISCORD_WEBHOOK_FREE: ${{ secrets.SOOTH_DISCORD_WEBHOOK_FREE }}
+
+      - name: Post model edges + game lines to the Pro channel
+        run: >-
+          python -m engine.alert_discord
+          --tier pro
+          --min-delta ${{ github.event.inputs.min_delta || '3' }}
+        env:
+          SOOTH_DISCORD_WEBHOOK_PRO: ${{ secrets.SOOTH_DISCORD_WEBHOOK_PRO }}
+
+      - name: Commit the posted-watermark
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/discord_sent.json
+          if git diff --staged --quiet; then
+            echo "nothing new posted"
+          else
+            git commit -m "discord: posted-watermark $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
