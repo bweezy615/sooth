@@ -1,0 +1,1220 @@
+{
+ "generated_at": "2026-08-20T22:24:44.298729+00:00",
+ "sport": "nfl",
+ "season": 2026,
+ "week": 1,
+ "last_n": 5,
+ "source": "nflverse stats_team_week",
+ "note": "Ratings are walk-forward and contain no game they are used to describe. Season and last-5 columns are a record of games already played, not a forecast.",
+ "metrics": [
+  {
+   "key": "off_epa_pp",
+   "label": "Off EPA/play",
+   "better": "high",
+   "dp": 3
+  },
+  {
+   "key": "def_epa_pp",
+   "label": "Def EPA/play",
+   "better": "low",
+   "dp": 3
+  },
+  {
+   "key": "net_epa_pp",
+   "label": "Net EPA/play",
+   "better": "high",
+   "dp": 3
+  },
+  {
+   "key": "yards_pp",
+   "label": "Yards/play",
+   "better": "high",
+   "dp": 2
+  },
+  {
+   "key": "pass_rate",
+   "label": "Pass rate",
+   "better": null,
+   "dp": 3
+  },
+  {
+   "key": "cpoe",
+   "label": "CPOE",
+   "better": "high",
+   "dp": 2
+  },
+  {
+   "key": "first_down_rate",
+   "label": "1st downs/play",
+   "better": "high",
+   "dp": 3
+  },
+  {
+   "key": "explosive_rate",
+   "label": "Explosive/play",
+   "better": "high",
+   "dp": 3
+  },
+  {
+   "key": "turnover_rate",
+   "label": "Giveaways/play",
+   "better": "low",
+   "dp": 4
+  }
+ ],
+ "n_teams": 32,
+ "teams": {
+  "ARI": {
+   "abbr": "ARI",
+   "name": "Arizona Cardinals",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.011,
+    "def_epa_pp": 0.079,
+    "net_epa_pp": -0.091,
+    "yards_pp": 5.91,
+    "pass_rate": 0.657,
+    "cpoe": 0.99,
+    "first_down_rate": 0.286,
+    "explosive_rate": 0.054,
+    "turnover_rate": 0.0169,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.013,
+    "def_epa_pp": 0.251,
+    "net_epa_pp": -0.264,
+    "yards_pp": 5.86,
+    "pass_rate": 0.701,
+    "cpoe": -2.48,
+    "first_down_rate": 0.281,
+    "explosive_rate": 0.07,
+    "turnover_rate": 0.0176,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0023,
+    "def": 0.0688,
+    "net": -0.0712,
+    "games_seen": 446
+   }
+  },
+  "ATL": {
+   "abbr": "ATL",
+   "name": "Atlanta Falcons",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.02,
+    "def_epa_pp": -0.007,
+    "net_epa_pp": -0.013,
+    "yards_pp": 5.73,
+    "pass_rate": 0.545,
+    "cpoe": -3.06,
+    "first_down_rate": 0.282,
+    "explosive_rate": 0.054,
+    "turnover_rate": 0.0132,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.03,
+    "def_epa_pp": 0.014,
+    "net_epa_pp": -0.045,
+    "yards_pp": 5.52,
+    "pass_rate": 0.528,
+    "cpoe": -3.61,
+    "first_down_rate": 0.267,
+    "explosive_rate": 0.052,
+    "turnover_rate": 0.0184,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0065,
+    "def": 0.0075,
+    "net": -0.001,
+    "games_seen": 450
+   }
+  },
+  "BAL": {
+   "abbr": "BAL",
+   "name": "Baltimore Ravens",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.048,
+    "def_epa_pp": 0.013,
+    "net_epa_pp": 0.035,
+    "yards_pp": 6.55,
+    "pass_rate": 0.483,
+    "cpoe": 3.8,
+    "first_down_rate": 0.296,
+    "explosive_rate": 0.075,
+    "turnover_rate": 0.0201,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.16,
+    "def_epa_pp": 0.048,
+    "net_epa_pp": 0.111,
+    "yards_pp": 7.0,
+    "pass_rate": 0.398,
+    "cpoe": 6.21,
+    "first_down_rate": 0.309,
+    "explosive_rate": 0.095,
+    "turnover_rate": 0.0155,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0677,
+    "def": -0.0179,
+    "net": 0.0856,
+    "games_seen": 467
+   }
+  },
+  "BUF": {
+   "abbr": "BUF",
+   "name": "Buffalo Bills",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.13,
+    "def_epa_pp": -0.013,
+    "net_epa_pp": 0.143,
+    "yards_pp": 6.46,
+    "pass_rate": 0.502,
+    "cpoe": 3.72,
+    "first_down_rate": 0.318,
+    "explosive_rate": 0.071,
+    "turnover_rate": 0.017,
+    "games": 19
+   },
+   "last5": {
+    "off_epa_pp": 0.098,
+    "def_epa_pp": -0.09,
+    "net_epa_pp": 0.188,
+    "yards_pp": 6.22,
+    "pass_rate": 0.498,
+    "cpoe": 5.01,
+    "first_down_rate": 0.328,
+    "explosive_rate": 0.058,
+    "turnover_rate": 0.0156,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.1009,
+    "def": -0.0147,
+    "net": 0.1156,
+    "games_seen": 451
+   }
+  },
+  "CAR": {
+   "abbr": "CAR",
+   "name": "Carolina Panthers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.06,
+    "def_epa_pp": 0.066,
+    "net_epa_pp": -0.126,
+    "yards_pp": 5.43,
+    "pass_rate": 0.549,
+    "cpoe": 1.32,
+    "first_down_rate": 0.274,
+    "explosive_rate": 0.049,
+    "turnover_rate": 0.0207,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": -0.087,
+    "def_epa_pp": 0.038,
+    "net_epa_pp": -0.125,
+    "yards_pp": 5.15,
+    "pass_rate": 0.589,
+    "cpoe": 2.4,
+    "first_down_rate": 0.254,
+    "explosive_rate": 0.047,
+    "turnover_rate": 0.019,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0461,
+    "def": 0.0552,
+    "net": -0.1013,
+    "games_seen": 452
+   }
+  },
+  "CHI": {
+   "abbr": "CHI",
+   "name": "Chicago Bears",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.067,
+    "def_epa_pp": 0.019,
+    "net_epa_pp": 0.048,
+    "yards_pp": 5.96,
+    "pass_rate": 0.55,
+    "cpoe": -3.69,
+    "first_down_rate": 0.298,
+    "explosive_rate": 0.067,
+    "turnover_rate": 0.0115,
+    "games": 19
+   },
+   "last5": {
+    "off_epa_pp": 0.101,
+    "def_epa_pp": 0.149,
+    "net_epa_pp": -0.048,
+    "yards_pp": 6.03,
+    "pass_rate": 0.606,
+    "cpoe": -3.21,
+    "first_down_rate": 0.3,
+    "explosive_rate": 0.079,
+    "turnover_rate": 0.0164,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0405,
+    "def": 0.0297,
+    "net": 0.0108,
+    "games_seen": 447
+   }
+  },
+  "CIN": {
+   "abbr": "CIN",
+   "name": "Cincinnati Bengals",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.006,
+    "def_epa_pp": 0.126,
+    "net_epa_pp": -0.12,
+    "yards_pp": 5.69,
+    "pass_rate": 0.64,
+    "cpoe": 1.18,
+    "first_down_rate": 0.294,
+    "explosive_rate": 0.051,
+    "turnover_rate": 0.0191,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.106,
+    "def_epa_pp": 0.041,
+    "net_epa_pp": 0.064,
+    "yards_pp": 6.12,
+    "pass_rate": 0.595,
+    "cpoe": 8.88,
+    "first_down_rate": 0.341,
+    "explosive_rate": 0.059,
+    "turnover_rate": 0.0158,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.038,
+    "def": 0.0723,
+    "net": -0.0343,
+    "games_seen": 449
+   }
+  },
+  "CLE": {
+   "abbr": "CLE",
+   "name": "Cleveland Browns",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.186,
+    "def_epa_pp": -0.092,
+    "net_epa_pp": -0.094,
+    "yards_pp": 5.0,
+    "pass_rate": 0.584,
+    "cpoe": -5.51,
+    "first_down_rate": 0.224,
+    "explosive_rate": 0.04,
+    "turnover_rate": 0.022,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.175,
+    "def_epa_pp": -0.039,
+    "net_epa_pp": -0.137,
+    "yards_pp": 5.42,
+    "pass_rate": 0.591,
+    "cpoe": -2.35,
+    "first_down_rate": 0.229,
+    "explosive_rate": 0.041,
+    "turnover_rate": 0.0319,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.1451,
+    "def": -0.0609,
+    "net": -0.0842,
+    "games_seen": 440
+   }
+  },
+  "DAL": {
+   "abbr": "DAL",
+   "name": "Dallas Cowboys",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.09,
+    "def_epa_pp": 0.166,
+    "net_epa_pp": -0.076,
+    "yards_pp": 6.3,
+    "pass_rate": 0.583,
+    "cpoe": 1.85,
+    "first_down_rate": 0.311,
+    "explosive_rate": 0.062,
+    "turnover_rate": 0.0162,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.05,
+    "def_epa_pp": 0.26,
+    "net_epa_pp": -0.21,
+    "yards_pp": 6.23,
+    "pass_rate": 0.558,
+    "cpoe": -2.83,
+    "first_down_rate": 0.309,
+    "explosive_rate": 0.067,
+    "turnover_rate": 0.0162,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0463,
+    "def": 0.1066,
+    "net": -0.0603,
+    "games_seen": 451
+   }
+  },
+  "DEN": {
+   "abbr": "DEN",
+   "name": "Denver Broncos",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.019,
+    "def_epa_pp": -0.096,
+    "net_epa_pp": 0.115,
+    "yards_pp": 5.46,
+    "pass_rate": 0.585,
+    "cpoe": -1.66,
+    "first_down_rate": 0.273,
+    "explosive_rate": 0.053,
+    "turnover_rate": 0.014,
+    "games": 19
+   },
+   "last5": {
+    "off_epa_pp": -0.085,
+    "def_epa_pp": -0.118,
+    "net_epa_pp": 0.033,
+    "yards_pp": 5.12,
+    "pass_rate": 0.603,
+    "cpoe": -4.54,
+    "first_down_rate": 0.256,
+    "explosive_rate": 0.046,
+    "turnover_rate": 0.0188,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0209,
+    "def": -0.0607,
+    "net": 0.0816,
+    "games_seen": 454
+   }
+  },
+  "DET": {
+   "abbr": "DET",
+   "name": "Detroit Lions",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.072,
+    "def_epa_pp": -0.005,
+    "net_epa_pp": 0.077,
+    "yards_pp": 6.46,
+    "pass_rate": 0.582,
+    "cpoe": 2.59,
+    "first_down_rate": 0.309,
+    "explosive_rate": 0.076,
+    "turnover_rate": 0.0139,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.052,
+    "def_epa_pp": 0.04,
+    "net_epa_pp": 0.012,
+    "yards_pp": 6.26,
+    "pass_rate": 0.655,
+    "cpoe": -0.36,
+    "first_down_rate": 0.305,
+    "explosive_rate": 0.078,
+    "turnover_rate": 0.0215,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0505,
+    "def": 0.0125,
+    "net": 0.038,
+    "games_seen": 444
+   }
+  },
+  "GB": {
+   "abbr": "GB",
+   "name": "Green Bay Packers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.107,
+    "def_epa_pp": 0.025,
+    "net_epa_pp": 0.082,
+    "yards_pp": 6.08,
+    "pass_rate": 0.521,
+    "cpoe": 4.9,
+    "first_down_rate": 0.301,
+    "explosive_rate": 0.067,
+    "turnover_rate": 0.0121,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": 0.017,
+    "def_epa_pp": 0.129,
+    "net_epa_pp": -0.112,
+    "yards_pp": 6.24,
+    "pass_rate": 0.528,
+    "cpoe": 2.61,
+    "first_down_rate": 0.291,
+    "explosive_rate": 0.082,
+    "turnover_rate": 0.0183,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0551,
+    "def": 0.0153,
+    "net": 0.0398,
+    "games_seen": 469
+   }
+  },
+  "HOU": {
+   "abbr": "HOU",
+   "name": "Houston Texans",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.032,
+    "def_epa_pp": -0.152,
+    "net_epa_pp": 0.121,
+    "yards_pp": 5.53,
+    "pass_rate": 0.568,
+    "cpoe": -2.26,
+    "first_down_rate": 0.257,
+    "explosive_rate": 0.052,
+    "turnover_rate": 0.0134,
+    "games": 19
+   },
+   "last5": {
+    "off_epa_pp": -0.146,
+    "def_epa_pp": -0.212,
+    "net_epa_pp": 0.065,
+    "yards_pp": 5.16,
+    "pass_rate": 0.55,
+    "cpoe": -8.33,
+    "first_down_rate": 0.244,
+    "explosive_rate": 0.05,
+    "turnover_rate": 0.0294,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0167,
+    "def": -0.1067,
+    "net": 0.09,
+    "games_seen": 404
+   }
+  },
+  "IND": {
+   "abbr": "IND",
+   "name": "Indianapolis Colts",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.081,
+    "def_epa_pp": 0.002,
+    "net_epa_pp": 0.079,
+    "yards_pp": 6.16,
+    "pass_rate": 0.567,
+    "cpoe": 0.58,
+    "first_down_rate": 0.314,
+    "explosive_rate": 0.052,
+    "turnover_rate": 0.0175,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.098,
+    "def_epa_pp": 0.09,
+    "net_epa_pp": -0.188,
+    "yards_pp": 4.95,
+    "pass_rate": 0.578,
+    "cpoe": -2.33,
+    "first_down_rate": 0.265,
+    "explosive_rate": 0.026,
+    "turnover_rate": 0.0299,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0056,
+    "def": 0.0201,
+    "net": -0.0144,
+    "games_seen": 464
+   }
+  },
+  "JAX": {
+   "abbr": "JAX",
+   "name": "Jacksonville Jaguars",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.029,
+    "def_epa_pp": -0.091,
+    "net_epa_pp": 0.12,
+    "yards_pp": 5.78,
+    "pass_rate": 0.552,
+    "cpoe": -1.35,
+    "first_down_rate": 0.297,
+    "explosive_rate": 0.062,
+    "turnover_rate": 0.0173,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": 0.144,
+    "def_epa_pp": -0.106,
+    "net_epa_pp": 0.25,
+    "yards_pp": 6.31,
+    "pass_rate": 0.576,
+    "cpoe": 5.13,
+    "first_down_rate": 0.335,
+    "explosive_rate": 0.085,
+    "turnover_rate": 0.0137,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0255,
+    "def": -0.0688,
+    "net": 0.0942,
+    "games_seen": 415
+   }
+  },
+  "KC": {
+   "abbr": "KC",
+   "name": "Kansas City Chiefs",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.016,
+    "def_epa_pp": -0.05,
+    "net_epa_pp": 0.067,
+    "yards_pp": 5.67,
+    "pass_rate": 0.599,
+    "cpoe": -1.35,
+    "first_down_rate": 0.288,
+    "explosive_rate": 0.052,
+    "turnover_rate": 0.0136,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.275,
+    "def_epa_pp": -0.098,
+    "net_epa_pp": -0.177,
+    "yards_pp": 4.6,
+    "pass_rate": 0.604,
+    "cpoe": -9.0,
+    "first_down_rate": 0.207,
+    "explosive_rate": 0.032,
+    "turnover_rate": 0.0226,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0003,
+    "def": -0.0019,
+    "net": 0.0022,
+    "games_seen": 464
+   }
+  },
+  "LA": {
+   "abbr": "LA",
+   "name": "Los Angeles Rams",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.127,
+    "def_epa_pp": -0.022,
+    "net_epa_pp": 0.149,
+    "yards_pp": 6.46,
+    "pass_rate": 0.579,
+    "cpoe": 1.01,
+    "first_down_rate": 0.33,
+    "explosive_rate": 0.077,
+    "turnover_rate": 0.0117,
+    "games": 20
+   },
+   "last5": {
+    "off_epa_pp": 0.111,
+    "def_epa_pp": 0.048,
+    "net_epa_pp": 0.063,
+    "yards_pp": 6.4,
+    "pass_rate": 0.611,
+    "cpoe": -2.82,
+    "first_down_rate": 0.309,
+    "explosive_rate": 0.081,
+    "turnover_rate": 0.0126,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0764,
+    "def": -0.0097,
+    "net": 0.086,
+    "games_seen": 391
+   }
+  },
+  "LAC": {
+   "abbr": "LAC",
+   "name": "Los Angeles Chargers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.048,
+    "def_epa_pp": -0.089,
+    "net_epa_pp": 0.041,
+    "yards_pp": 5.75,
+    "pass_rate": 0.578,
+    "cpoe": 0.59,
+    "first_down_rate": 0.271,
+    "explosive_rate": 0.053,
+    "turnover_rate": 0.0157,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": -0.106,
+    "def_epa_pp": -0.093,
+    "net_epa_pp": -0.013,
+    "yards_pp": 5.42,
+    "pass_rate": 0.59,
+    "cpoe": 2.4,
+    "first_down_rate": 0.255,
+    "explosive_rate": 0.049,
+    "turnover_rate": 0.0158,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0432,
+    "def": -0.0741,
+    "net": 0.0309,
+    "games_seen": 387
+   }
+  },
+  "LV": {
+   "abbr": "LV",
+   "name": "Las Vegas Raiders",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.229,
+    "def_epa_pp": 0.001,
+    "net_epa_pp": -0.229,
+    "yards_pp": 5.3,
+    "pass_rate": 0.61,
+    "cpoe": -0.79,
+    "first_down_rate": 0.234,
+    "explosive_rate": 0.042,
+    "turnover_rate": 0.0237,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.243,
+    "def_epa_pp": -0.011,
+    "net_epa_pp": -0.232,
+    "yards_pp": 5.09,
+    "pass_rate": 0.607,
+    "cpoe": -3.03,
+    "first_down_rate": 0.209,
+    "explosive_rate": 0.034,
+    "turnover_rate": 0.0192,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.1453,
+    "def": 0.0196,
+    "net": -0.1649,
+    "games_seen": 374
+   }
+  },
+  "MIA": {
+   "abbr": "MIA",
+   "name": "Miami Dolphins",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.011,
+    "def_epa_pp": 0.081,
+    "net_epa_pp": -0.092,
+    "yards_pp": 5.94,
+    "pass_rate": 0.55,
+    "cpoe": 1.49,
+    "first_down_rate": 0.293,
+    "explosive_rate": 0.062,
+    "turnover_rate": 0.0228,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.022,
+    "def_epa_pp": 0.091,
+    "net_epa_pp": -0.113,
+    "yards_pp": 6.03,
+    "pass_rate": 0.503,
+    "cpoe": 1.85,
+    "first_down_rate": 0.295,
+    "explosive_rate": 0.072,
+    "turnover_rate": 0.0185,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0088,
+    "def": 0.0223,
+    "net": -0.0135,
+    "games_seen": 444
+   }
+  },
+  "MIN": {
+   "abbr": "MIN",
+   "name": "Minnesota Vikings",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.14,
+    "def_epa_pp": -0.1,
+    "net_epa_pp": -0.04,
+    "yards_pp": 5.63,
+    "pass_rate": 0.568,
+    "cpoe": -3.2,
+    "first_down_rate": 0.267,
+    "explosive_rate": 0.047,
+    "turnover_rate": 0.0282,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.003,
+    "def_epa_pp": -0.297,
+    "net_epa_pp": 0.3,
+    "yards_pp": 5.65,
+    "pass_rate": 0.467,
+    "cpoe": -0.75,
+    "first_down_rate": 0.296,
+    "explosive_rate": 0.042,
+    "turnover_rate": 0.0139,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.087,
+    "def": -0.0809,
+    "net": -0.006,
+    "games_seen": 453
+   }
+  },
+  "NE": {
+   "abbr": "NE",
+   "name": "New England Patriots",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.087,
+    "def_epa_pp": -0.082,
+    "net_epa_pp": 0.169,
+    "yards_pp": 6.4,
+    "pass_rate": 0.526,
+    "cpoe": 8.33,
+    "first_down_rate": 0.303,
+    "explosive_rate": 0.079,
+    "turnover_rate": 0.0166,
+    "games": 21
+   },
+   "last5": {
+    "off_epa_pp": -0.103,
+    "def_epa_pp": -0.274,
+    "net_epa_pp": 0.171,
+    "yards_pp": 6.05,
+    "pass_rate": 0.515,
+    "cpoe": -0.09,
+    "first_down_rate": 0.254,
+    "explosive_rate": 0.077,
+    "turnover_rate": 0.0246,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0374,
+    "def": -0.0799,
+    "net": 0.1174,
+    "games_seen": 482
+   }
+  },
+  "NO": {
+   "abbr": "NO",
+   "name": "New Orleans Saints",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.066,
+    "def_epa_pp": -0.068,
+    "net_epa_pp": 0.003,
+    "yards_pp": 5.59,
+    "pass_rate": 0.592,
+    "cpoe": 2.19,
+    "first_down_rate": 0.264,
+    "explosive_rate": 0.039,
+    "turnover_rate": 0.0176,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.084,
+    "def_epa_pp": -0.173,
+    "net_epa_pp": 0.257,
+    "yards_pp": 6.37,
+    "pass_rate": 0.572,
+    "cpoe": 3.94,
+    "first_down_rate": 0.292,
+    "explosive_rate": 0.057,
+    "turnover_rate": 0.0093,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0338,
+    "def": -0.0458,
+    "net": 0.012,
+    "games_seen": 455
+   }
+  },
+  "NYG": {
+   "abbr": "NYG",
+   "name": "New York Giants",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.012,
+    "def_epa_pp": 0.073,
+    "net_epa_pp": -0.061,
+    "yards_pp": 5.59,
+    "pass_rate": 0.529,
+    "cpoe": -1.36,
+    "first_down_rate": 0.275,
+    "explosive_rate": 0.055,
+    "turnover_rate": 0.0125,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.004,
+    "def_epa_pp": -0.053,
+    "net_epa_pp": 0.048,
+    "yards_pp": 5.31,
+    "pass_rate": 0.495,
+    "cpoe": -1.72,
+    "first_down_rate": 0.266,
+    "explosive_rate": 0.041,
+    "turnover_rate": 0.0072,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0183,
+    "def": 0.0482,
+    "net": -0.0665,
+    "games_seen": 454
+   }
+  },
+  "NYJ": {
+   "abbr": "NYJ",
+   "name": "New York Jets",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.144,
+    "def_epa_pp": 0.139,
+    "net_epa_pp": -0.282,
+    "yards_pp": 5.14,
+    "pass_rate": 0.543,
+    "cpoe": -5.18,
+    "first_down_rate": 0.245,
+    "explosive_rate": 0.038,
+    "turnover_rate": 0.0208,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.285,
+    "def_epa_pp": 0.254,
+    "net_epa_pp": -0.54,
+    "yards_pp": 4.5,
+    "pass_rate": 0.594,
+    "cpoe": -10.98,
+    "first_down_rate": 0.2,
+    "explosive_rate": 0.025,
+    "turnover_rate": 0.0289,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.1015,
+    "def": 0.0852,
+    "net": -0.1867,
+    "games_seen": 448
+   }
+  },
+  "PHI": {
+   "abbr": "PHI",
+   "name": "Philadelphia Eagles",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.02,
+    "def_epa_pp": -0.081,
+    "net_epa_pp": 0.101,
+    "yards_pp": 5.58,
+    "pass_rate": 0.53,
+    "cpoe": 3.41,
+    "first_down_rate": 0.275,
+    "explosive_rate": 0.05,
+    "turnover_rate": 0.0092,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": 0.045,
+    "def_epa_pp": -0.122,
+    "net_epa_pp": 0.167,
+    "yards_pp": 5.06,
+    "pass_rate": 0.497,
+    "cpoe": 2.74,
+    "first_down_rate": 0.288,
+    "explosive_rate": 0.034,
+    "turnover_rate": 0.0032,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0262,
+    "def": -0.0809,
+    "net": 0.1071,
+    "games_seen": 472
+   }
+  },
+  "PIT": {
+   "abbr": "PIT",
+   "name": "Pittsburgh Steelers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.007,
+    "def_epa_pp": 0.023,
+    "net_epa_pp": -0.031,
+    "yards_pp": 5.55,
+    "pass_rate": 0.593,
+    "cpoe": 0.14,
+    "first_down_rate": 0.267,
+    "explosive_rate": 0.051,
+    "turnover_rate": 0.0135,
+    "games": 18
+   },
+   "last5": {
+    "off_epa_pp": -0.035,
+    "def_epa_pp": 0.012,
+    "net_epa_pp": -0.047,
+    "yards_pp": 5.61,
+    "pass_rate": 0.616,
+    "cpoe": -1.02,
+    "first_down_rate": 0.27,
+    "explosive_rate": 0.057,
+    "turnover_rate": 0.0071,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0075,
+    "def": 0.0105,
+    "net": -0.003,
+    "games_seen": 466
+   }
+  },
+  "SEA": {
+   "abbr": "SEA",
+   "name": "Seattle Seahawks",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.057,
+    "def_epa_pp": -0.133,
+    "net_epa_pp": 0.19,
+    "yards_pp": 6.28,
+    "pass_rate": 0.501,
+    "cpoe": 5.48,
+    "first_down_rate": 0.305,
+    "explosive_rate": 0.071,
+    "turnover_rate": 0.0185,
+    "games": 20
+   },
+   "last5": {
+    "off_epa_pp": 0.057,
+    "def_epa_pp": -0.254,
+    "net_epa_pp": 0.311,
+    "yards_pp": 5.77,
+    "pass_rate": 0.477,
+    "cpoe": 3.92,
+    "first_down_rate": 0.307,
+    "explosive_rate": 0.043,
+    "turnover_rate": 0.0061,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.041,
+    "def": -0.0878,
+    "net": 0.1289,
+    "games_seen": 468
+   }
+  },
+  "SF": {
+   "abbr": "SF",
+   "name": "San Francisco 49ers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": 0.048,
+    "def_epa_pp": 0.066,
+    "net_epa_pp": -0.017,
+    "yards_pp": 5.77,
+    "pass_rate": 0.563,
+    "cpoe": 5.01,
+    "first_down_rate": 0.322,
+    "explosive_rate": 0.049,
+    "turnover_rate": 0.0202,
+    "games": 19
+   },
+   "last5": {
+    "off_epa_pp": -0.0,
+    "def_epa_pp": 0.104,
+    "net_epa_pp": -0.104,
+    "yards_pp": 5.9,
+    "pass_rate": 0.573,
+    "cpoe": 2.98,
+    "first_down_rate": 0.328,
+    "explosive_rate": 0.054,
+    "turnover_rate": 0.0243,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0574,
+    "def": 0.0449,
+    "net": 0.0125,
+    "games_seen": 461
+   }
+  },
+  "TB": {
+   "abbr": "TB",
+   "name": "Tampa Bay Buccaneers",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.003,
+    "def_epa_pp": 0.027,
+    "net_epa_pp": -0.029,
+    "yards_pp": 5.61,
+    "pass_rate": 0.557,
+    "cpoe": -2.36,
+    "first_down_rate": 0.273,
+    "explosive_rate": 0.061,
+    "turnover_rate": 0.0136,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": 0.005,
+    "def_epa_pp": 0.087,
+    "net_epa_pp": -0.082,
+    "yards_pp": 5.63,
+    "pass_rate": 0.529,
+    "cpoe": -0.29,
+    "first_down_rate": 0.286,
+    "explosive_rate": 0.06,
+    "turnover_rate": 0.022,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0122,
+    "def": 0.0286,
+    "net": -0.0164,
+    "games_seen": 455
+   }
+  },
+  "TEN": {
+   "abbr": "TEN",
+   "name": "Tennessee Titans",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.165,
+    "def_epa_pp": 0.096,
+    "net_epa_pp": -0.261,
+    "yards_pp": 5.22,
+    "pass_rate": 0.627,
+    "cpoe": -4.16,
+    "first_down_rate": 0.238,
+    "explosive_rate": 0.051,
+    "turnover_rate": 0.0171,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.073,
+    "def_epa_pp": 0.111,
+    "net_epa_pp": -0.184,
+    "yards_pp": 5.23,
+    "pass_rate": 0.545,
+    "cpoe": -2.47,
+    "first_down_rate": 0.252,
+    "explosive_rate": 0.063,
+    "turnover_rate": 0.0097,
+    "games": 5
+   },
+   "rating": {
+    "off": -0.0849,
+    "def": 0.0577,
+    "net": -0.1426,
+    "games_seen": 454
+   }
+  },
+  "WAS": {
+   "abbr": "WAS",
+   "name": "Washington Commanders",
+   "record": null,
+   "basis_season": 2025,
+   "season": {
+    "off_epa_pp": -0.001,
+    "def_epa_pp": 0.135,
+    "net_epa_pp": -0.136,
+    "yards_pp": 5.94,
+    "pass_rate": 0.51,
+    "cpoe": 1.26,
+    "first_down_rate": 0.284,
+    "explosive_rate": 0.054,
+    "turnover_rate": 0.0216,
+    "games": 17
+   },
+   "last5": {
+    "off_epa_pp": -0.088,
+    "def_epa_pp": 0.12,
+    "net_epa_pp": -0.208,
+    "yards_pp": 5.67,
+    "pass_rate": 0.468,
+    "cpoe": -2.25,
+    "first_down_rate": 0.286,
+    "explosive_rate": 0.053,
+    "turnover_rate": 0.0294,
+    "games": 5
+   },
+   "rating": {
+    "off": 0.0079,
+    "def": 0.1057,
+    "net": -0.0978,
+    "games_seen": 447
+   }
+  }
+ }
+}
