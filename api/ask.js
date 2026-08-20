@@ -29,6 +29,10 @@ const SYSTEM = [
   "- Our own prediction model is measured WORSE than the closing market; never",
   "  present it as an edge. The edge is price, not prediction.",
   "- Be terse. The audience is sharp bettors who know what vig is.",
+  "- EVERY NUMBER YOU STATE MUST APPEAR VERBATIM IN THE JSON YOU WERE GIVEN.",
+  "  Do not compute, estimate, average, or recall a statistic. If a number is",
+  "  not in the data, say it is not available. The arithmetic was done before",
+  "  you were called; your job is to say what it found, not to add to it.",
   "- End with one line: \"Not advice. Prices move; check the book.\"",
 ].join("\n");
 
@@ -57,6 +61,35 @@ function buildPrompt(board, props, question, betText) {
     "\n\nAnswer using only the numbers above. If the bet is not in the data, say so" +
     " and explain what to check (fair price vs the book's price, and who has the best number)."
   );
+}
+
+// Fold one matchup report into a user message. The report already contains
+// every figure the answer may use, including a pre-computed `facts` list built
+// in engine/research.py — so this asks for phrasing, not analysis. That split
+// is the whole reason the injury panel and the price gap can be trusted: a
+// model asked to "analyse the matchup" writes four confident bullets of
+// statistics that do not exist.
+function buildMatchupPrompt(report, question) {
+  return (
+    "Matchup report for " + String(report.away) + " at " + String(report.home) +
+    " (kickoff " + String(report.kickoff) + "). Everything you may cite is here:\n" +
+    JSON.stringify(report).slice(0, 24000) +
+    "\n\nThe `facts` array was computed from this data, not written by a model." +
+    " Lead with it. `odds.*.shoppable` false means only one book has posted, so" +
+    " there is no best price to shop yet and no edge to describe — say that" +
+    " plainly rather than reaching for one. `stats.basis_season` is the season" +
+    " the form numbers come from; name it if you quote them." +
+    "\n\nThe visitor asks:\n" + String(question).slice(0, MAX_Q)
+  );
+}
+
+// Pull one report out of research.json by event id.
+function findReport(research, eventId) {
+  var reports = (research && research.reports) || [];
+  for (var i = 0; i < reports.length; i++) {
+    if (String(reports[i].event_id) === String(eventId)) return reports[i];
+  }
+  return null;
 }
 
 // Decide whether this request may run, and what counter cookie to write back.
@@ -141,16 +174,33 @@ module.exports = async function handler(req, res) {
   var host = req.headers["x-forwarded-host"] || req.headers.host;
   var proto = req.headers["x-forwarded-proto"] || "https";
   var base = host ? proto + "://" + host : "";
-  var board = await fetchJSON(base, "/data/board.json");
-  var props = await fetchJSON(base, "/data/props.json");
+  var mode = body && body.mode ? String(body.mode) : "board";
+  var eventId = body && body.event_id ? String(body.event_id) : "";
+
+  var prompt;
+  if (mode === "matchup") {
+    var research = await fetchJSON(base, "/data/research.json");
+    var report = findReport(research, eventId);
+    if (!report) {
+      res.statusCode = 404;
+      return res.end(JSON.stringify({
+        error: "No research report for that game. Reports cover upcoming games only.",
+      }));
+    }
+    prompt = buildMatchupPrompt(report, question);
+  } else {
+    var board = await fetchJSON(base, "/data/board.json");
+    var props = await fetchJSON(base, "/data/props.json");
 
   // If the visitor pasted a bet-slip link and Firecrawl is configured, scrape
   // it and let Claude read the actual wager. Missing key or failed scrape just
   // falls through to reading the raw text.
-  var url = extractUrl(question);
-  var betText = (url && process.env.FIRECRAWL_API_KEY)
-    ? await scrapeBet(url, process.env.FIRECRAWL_API_KEY)
-    : null;
+    var url = extractUrl(question);
+    var betText = (url && process.env.FIRECRAWL_API_KEY)
+      ? await scrapeBet(url, process.env.FIRECRAWL_API_KEY)
+      : null;
+    prompt = buildPrompt(board, props, question, betText);
+  }
 
   try {
     var r = await fetch("https://api.anthropic.com/v1/messages", {
@@ -164,7 +214,7 @@ module.exports = async function handler(req, res) {
         model: MODEL,
         max_tokens: 600,
         system: SYSTEM,
-        messages: [{ role: "user", content: buildPrompt(board, props, question, betText) }],
+        messages: [{ role: "user", content: prompt }],
       }),
     });
     if (!r.ok) {
@@ -184,6 +234,8 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.buildPrompt = buildPrompt;
+module.exports.buildMatchupPrompt = buildMatchupPrompt;
+module.exports.findReport = findReport;
 module.exports.extractUrl = extractUrl;
 module.exports.gateAsk = gateAsk;
 module.exports.SYSTEM = SYSTEM;

@@ -4,14 +4,16 @@
 (function(){
   "use strict";
 
-  // One canonical nav for the whole site — mirror this exact set + order in the
-  // static shellnav pages (edges/props/tools/trust/engine). Board, Props, Edges
-  // are the data views; Predictor + Ask AI the tools; Tools and Trust are hubs
-  // that reach the rest (Record/Method/Verify/Guide/Ledger/Gamelog + calculators).
+  // One canonical nav for the whole site, and the only copy of it — every page
+  // now mounts this file rather than carrying its own header, so this list is
+  // the single place the nav changes. Board, Props, Edges and Research are the
+  // data views; Predictor + Ask AI the tools; Tools and Trust are hubs that
+  // reach the rest (Record/Method/Verify/Guide/Ledger/Gamelog + calculators).
   var NAV=[
     {href:"/",          key:"board",     label:"Board"},
     {href:"/props",     key:"props",     label:"Props"},
     {href:"/edges",     key:"edges",     label:"Edges"},
+    {href:"/research",  key:"research",  label:"Research"},
     {href:"/predictor", key:"predictor", label:"Predictor"},
     {href:"/ask",       key:"ask",       label:"Ask AI"},
     {href:"/tools",     key:"tools",     label:"Tools"},

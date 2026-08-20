@@ -1,0 +1,130 @@
+name: research
+
+# Rebuilds the matchup reports at /research: injuries, team form, and the
+# composed report per upcoming game.
+#
+# EVERY SOURCE HERE IS FREE. ESPN's injuries endpoint, nflverse's team-week
+# CSVs and our own capture archive cost nothing, so there is no Odds API gate
+# in this file and none is needed. The budget that binds is deployments.
+#
+# THE DEPLOY BUDGET. Vercel's free tier hard-caps 100 deployments/day and
+# enforces it with a 24h lockout. Every commit to main triggers a build, and
+# the capture workflows already commit ~40x/day; on 2026-08-11 a duplicate
+# Vercel project doubled that to 79 by mid-afternoon and production froze on a
+# stale build. So this job commits ONCE per run with all three files staged
+# together, four times a day: +4 deploys, not +12.
+#
+# FRESHNESS IS A FACT ABOUT THE DATA, NOT THE CLOCK. The gate reads the
+# content timestamp inside research.json, never file mtime — a git checkout
+# stamps every file to now, so an mtime gate would report "fresh" forever and
+# this would never run. And an empty payload counts as stale no matter how
+# recent: zero reports with a five-minute-old timestamp is a broken build
+# wearing a fresh face. Both traps are documented in props-live.yml because
+# both have already cost this repo a day of silently stale pages.
+#
+# ORDER MATTERS. research.py reads injuries.json and teamstats-nfl.json off
+# disk, so both must be rebuilt before it runs. Each is allowed to fail on its
+# own: research still composes from whatever is current, and the modules that
+# have no data say so rather than rendering blank.
+
+on:
+  schedule:
+    - cron: "40 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild regardless of age"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research
+  cancel-in-progress: false
+
+env:
+  RESEARCH_MAX_AGE_H: "5"
+  SPORT: "nfl"
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy
+
+      - name: Decide whether the reports are stale
+        id: gate
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime, json, os
+
+          max_age = float(os.environ["RESEARCH_MAX_AGE_H"])
+          forced = os.environ.get("FORCED") == "true"
+          n = 0
+          try:
+              d = json.load(open("site/public/data/research.json"))
+              n = int(d.get("n_reports") or 0)
+              ts = max(d.get("generated_at") or "", d.get("checked_at") or "")
+              dt = datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+              age = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600
+          except Exception:
+              age = 1e9
+          print(f"age_h={age:.1f}")
+          print(f"n_reports={n}")
+          print(f"refresh={'true' if (forced or n == 0 or age >= max_age) else 'false'}")
+          PY
+        env:
+          FORCED: ${{ inputs.force }}
+
+      # ESPN is the only feed that moves between weekly reports, and it keeps no
+      # history: every run appends to data/capture/injuries/, which is the only
+      # record that a player was listed OUT on a given day. Unrecoverable if
+      # this stops running.
+      - name: Refresh injuries (ESPN + official report)
+        if: steps.gate.outputs.refresh == 'true'
+        run: python -m engine.injuries --sport "$SPORT"
+        continue-on-error: true
+
+      - name: Refresh team form (nflverse)
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          python -m engine.teamstats --sport "$SPORT" \
+            --season "$(date -u +%Y)" --week 1
+        continue-on-error: true
+
+      - name: Compose the matchup reports
+        if: steps.gate.outputs.refresh == 'true'
+        run: python -m engine.research --sport "$SPORT"
+
+      - name: Report skip
+        if: steps.gate.outputs.refresh != 'true'
+        run: |
+          echo "reports fresh (${{ steps.gate.outputs.n_reports }} reports, \
+          ${{ steps.gate.outputs.age_h }}h < ${RESEARCH_MAX_AGE_H}h) - nothing to do"
+
+      # ONE commit for all three files. Staging them separately would cost three
+      # deployments per run against a 100/day cap shared with every other job.
+      - name: Commit the refreshed reports
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add site/public/data/research.json \
+                  site/public/data/injuries.json \
+                  site/public/data/teamstats-nfl.json \
+                  data/capture/injuries || true
+          if git diff --staged --quiet; then
+            echo "no change in reports"
+          else
+            git commit -m "research: matchup reports $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi

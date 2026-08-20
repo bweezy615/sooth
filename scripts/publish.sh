@@ -96,6 +96,17 @@ if ! command -v vercel >/dev/null 2>&1; then
   exit 1
 fi
 
+# A deploy from here replaces ALL of production, functions included. Any branch
+# without api/ therefore takes Pro checkout, /api/ask and /api/me offline until
+# GitHub Actions redeploys main. That happened on 2026-08-10T19:12 (deployment
+# 4D5xucGdCscYCWQCT1N4n16Nw2LH: zero lambdas, still aliased to sooth.bet), which
+# is why the launchd jobs are now in ~/Library/LaunchAgents/disabled/.
+# main deploys itself from GitHub Actions. This path is manual recovery only.
+if [ ! -d "$REPO/api" ]; then
+  echo "$(date -u +%FT%TZ) DEPLOY REFUSED — no api/ on $(git -C "$REPO" rev-parse --abbrev-ref HEAD); deploying would drop the Pro endpoints from production" >>"$LOG"
+  exit 1
+fi
+
 echo "$(date -u +%FT%TZ) DEPLOY start" >>"$LOG"
 if vercel --prod --yes >>"$LOG" 2>&1; then
   echo "$(date -u +%FT%TZ) DEPLOY OK" >>"$LOG"
