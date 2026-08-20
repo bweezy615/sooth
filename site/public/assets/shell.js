@@ -103,7 +103,7 @@
   // limited-time promo: everything is free until Sept 1. One line, all pages.
   function promoBar(){
     return '<div class="promo" role="note">Everything is <b>free until September 1</b>'
-      +' — every tool, no card needed. <a href="/board.html">Open the board →</a></div>';
+      +' — every tool, no card needed. <a href="/">Open the board →</a></div>';
   }
 
   function mount(){
