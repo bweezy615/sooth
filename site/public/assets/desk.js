@@ -321,7 +321,10 @@ function answer(text){
   t=t.replace(/\*\*([^*\n]+)\*\*/g,"<b>$1</b>");
   /* signed 2-4 digit figures are prices; "x.xx pts" is a gain */
   t=t.replace(/([+\u2212-]\d{2,4})(?![\d.])/g,'<span class="od">$1</span>');
-  t=t.replace(/((?:[+\u2212-])?\d+(?:\.\d+)?\s?(?:pts|points))/gi,'<span class="gn">$1</span>');
+  /* color follows the sign — a negative edge painted green would be the
+     renderer editorializing */
+  t=t.replace(/((?:[+\u2212-])?\d+(?:\.\d+)?\s?(?:pts|points))/gi,function(_,g){
+    return '<span class="'+(/^[\u2212-]/.test(g)?"gnd":"gn")+'">'+g+"</span>";});
   var out=[],ul=false;
   t.split(/\n/).forEach(function(ln){
     var m=ln.match(/^\s*[-\u2022]\s+(.*)$/);
