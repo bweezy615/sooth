@@ -4,10 +4,15 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <!-- Source for /assets/og.png. Rendered at 1200x630 and screenshotted; it reuses
-     the real sooth.css tokens/type so the share card IS the brand, not new art.
+     the real desk.css tokens/type so the share card IS the brand, not new art.
      Regenerate: open at viewport 1200x630, screenshot to assets/og.png. -->
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/sooth.css">
+<link rel="stylesheet" href="/assets/desk.css">
+<style>
+  /* legacy token aliases — this template predates the desk system */
+  :root{--bg:var(--g0);--pos:var(--up);--ink-2:var(--ink2);--muted:var(--mut);
+    --line:var(--hair);--num:var(--mono)}
+</style>
 <style>
   html,body{margin:0}
   .og{width:1200px;height:630px;background:var(--bg);position:relative;

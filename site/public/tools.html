@@ -15,35 +15,38 @@
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/tools">
 <meta name="description" content="No-vig fair price calculator, odds converter, and hold calculator. The same arithmetic the Sooth board runs, by hand.">
-<link rel="stylesheet" href="/assets/desk-legacy.css">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
-  body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(45,212,167,.05), transparent 65%),
-      var(--bg);
-    padding:0 20px 60px}
-  .wrap-page{max-width:940px; margin:0 auto}
-  .page-head{padding:40px 0 24px}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance}
-  .sub{color:var(--muted); font-size:14px; margin:0; max-width:66ch}
-
-  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px}
-  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
-    border-radius:16px; padding:20px}
-  .card h2{margin:0 0 4px; font-size:16px; font-weight:700; letter-spacing:-.01em}
-  .card .how{font-size:12px; color:var(--dim); margin:0 0 16px; line-height:1.45}
-  label{display:block; font-family:var(--num); font-size:10.5px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--dim); margin:12px 0 5px}
-  input{background:var(--bg); color:var(--ink); border:1px solid var(--line); border-radius:9px;
-    padding:9px 12px; font-family:var(--num); font-size:15px; width:100%; box-sizing:border-box}
-  input:focus{border-color:var(--iris); outline:none}
-  input.bad{border-color:var(--neg)}
-  .duo{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  .out{margin-top:16px; background:var(--bg); border:1px solid var(--line); border-radius:11px;
-    padding:13px 15px; font-family:var(--num); font-size:13px; color:var(--muted); line-height:1.9;
-    min-height:52px}
-  .out b{color:var(--ink); font-size:15px}
-  .out .g{color:var(--pos)} .out .r{color:var(--neg)}
-  .out .hint{color:var(--dim); font-size:11.5px; font-family:var(--sans)}
+  .wrap-page{max-width:1000px;margin:0 auto;padding:0 24px 60px}
+  .page-head{padding:38px 0 24px}
+  .page-head h1{font:700 clamp(23px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 8px}
+  .sub{color:var(--mut);font-size:13.5px;margin:0;max-width:70ch;line-height:1.6}
+  .sub b{color:var(--ink2)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .card{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
+    border:1px solid var(--hair);border-radius:var(--r);padding:18px 20px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
+      0 18px 40px -22px rgba(0,0,0,.85)}
+  .card h2{margin:0 0 4px;font:600 10px var(--mono);letter-spacing:.14em;
+    text-transform:uppercase;color:var(--mut)}
+  .card .how{font-size:12px;color:var(--dim);margin:0 0 14px;line-height:1.5}
+  .card .how b{color:var(--mut)}
+  label{display:block;font:600 9.5px var(--mono);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--dim);margin:12px 0 5px}
+  input,select{background:var(--g2);color:var(--ink);border:1px solid var(--hair2);
+    border-radius:var(--r);padding:9px 12px;font-family:var(--mono);font-size:14px;
+    width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums}
+  input:focus,select:focus{border-color:var(--brand);outline:none}
+  input.bad{border-color:var(--dn)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .out{margin-top:14px;background:rgba(0,0,0,.3);border:1px solid var(--hair);
+    border-radius:var(--r);padding:12px 15px;font-family:var(--mono);font-size:12.5px;
+    color:var(--mut);line-height:1.9;min-height:52px;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.4)}
+  .out b{color:var(--ink);font-size:14px}
+  .out .g{color:var(--up)} .out .r{color:var(--dn)}
+  .out .hint{color:var(--dim);font-size:11.5px;font-family:var(--sans)}
 </style>
 </head>
 <body data-page="tools">
@@ -88,13 +91,13 @@
   the sharpest read of the market)? Pick any 2023–25 NFL game, enter the price you
   got, and compare it against the consensus close across 10–16 books.</p>
   <div class="duo">
-    <div><label for="clv-season">Season</label><select id="clv-season" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
-    <div><label for="clv-week">Week</label><select id="clv-week" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-season">Season</label><select id="clv-season" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-week">Week</label><select id="clv-week" aria-describedby="clv-out"></select></div>
   </div>
   <label for="clv-game">Game</label>
-  <select id="clv-game" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select>
+  <select id="clv-game" aria-describedby="clv-out"></select>
   <div class="duo">
-    <div><label for="clv-side">Your side</label><select id="clv-side" style="width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-family:var(--num);font-size:13px" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-side">Your side</label><select id="clv-side" aria-describedby="clv-out"></select></div>
     <div><label for="clv-price">Your price</label><input id="clv-price" inputmode="numeric" placeholder="+150" aria-describedby="clv-out"></div>
   </div>
   <div class="out" id="clv-out" aria-live="polite"><span class="hint">Pick a game and enter your price…</span></div>
@@ -230,7 +233,8 @@ function hd(){
 }
 ['hd-a','hd-b'].forEach(id=>$(id).addEventListener('input',hd));
 </script>
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>Desk.mount("");</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

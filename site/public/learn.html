@@ -3,120 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How it works — sooth.bet</title>
-<meta name="description" content="A 60-second, plain-English guide to Sooth: what a fair price is, why line shopping puts points in your favor, and how to read the board. No jargon, no picks.">
-<link rel="canonical" href="https://sooth.bet/learn.html">
+<title>How it works — Sooth</title>
+<meta name="description" content="A 60-second, plain-English guide to Sooth: what a fair price is, why line shopping puts points in your favor, and how to read the market. No jargon, no picks.">
+<link rel="canonical" href="https://sooth.bet/learn">
 <meta property="og:title" content="How Sooth works — in 60 seconds">
-<meta property="og:description" content="Plain-English: every bet has a fair price. When a book beats it, you're getting a better-than-fair price. Here's how to spot it on the board.">
+<meta property="og:description" content="Plain-English: every bet has a fair price. When a book beats it, you're getting a better-than-fair price. Here's how to spot it on the market.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://sooth.bet/learn.html">
-<meta property="og:image" content="https://sooth.bet/assets/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:url" content="https://sooth.bet/learn">
+<meta property="og:image" content="https://sooth.bet/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/desk-legacy.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
-  /* learn-specific only; system is sooth.css */
-  .lead{padding:34px 0 6px}
-  .lead h1{font-size:clamp(26px,4vw,36px);line-height:1.08}
-  .lead h1 .g{color:var(--pos)}
-  .lead p{color:var(--ink-2);font-size:16px;margin:14px 0 0;line-height:1.6;max-width:60ch}
-  .steps{display:grid;gap:14px;margin:26px 0}
-  .step{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
-  .step .n{font-family:var(--num);font-size:11px;font-weight:700;color:var(--pos);letter-spacing:.08em}
-  .step h2{font-size:17px;margin:8px 0 0;letter-spacing:-.01em}
-  .step p{color:var(--ink-2);font-size:14px;line-height:1.6;margin:9px 0 0;max-width:66ch}
-  .step p b{color:var(--ink)}
-  .ex{font-family:var(--num);font-size:13px;color:var(--ink-2);background:var(--bg-3);
-    border:1px solid var(--line);border-radius:var(--r-sm);padding:13px 15px;margin:12px 0 0;line-height:1.7}
-  .ex .g{color:var(--pos);font-weight:700}
-  .key{display:flex;gap:10px;align-items:flex-start;margin:10px 0 0;font-size:14px;color:var(--ink-2)}
-  .key .chip{margin-top:1px}
-  .cta{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 4px}
-  .fine{color:var(--muted);font-size:13px;line-height:1.6;margin:22px 0 0;max-width:66ch}
+  .lead{padding:38px 0 8px;max-width:70ch}
+  .lead h1{font:700 clamp(25px,3.8vw,34px)/1.12 var(--sans);letter-spacing:-.022em;margin:12px 0 0}
+  .lead h1 .g{color:var(--brand)}
+  .lead p{color:var(--ink2);font-size:15px;margin:14px 0 0;line-height:1.65;max-width:60ch}
+  .ex{font-family:var(--mono);font-size:12.5px;color:var(--ink2);
+    background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
+    border-radius:var(--r);padding:13px 16px;margin:12px 0 0;line-height:1.8;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  .ex .g{color:var(--up);font-weight:700}
+  .step-body{max-width:66ch}
+  .step-body p{color:var(--ink2);font-size:13.5px;line-height:1.65;margin:8px 0 0}
+  .step-body p b{color:var(--ink)}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 4px}
+  .cta a{font:600 11px var(--mono);letter-spacing:.08em;padding:10px 16px;
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut)}
+  .cta a:hover{color:var(--brand);border-color:var(--brand)}
+  .cta a.pri{background:linear-gradient(180deg,#3BE3B6,#22BE93);color:var(--g0);border:0;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)}
+  .fine{color:var(--mut);font-size:12.5px;line-height:1.65;margin:26px 0 0;max-width:66ch}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body data-page="learn">
+<body>
 <a class="skip" href="#main">Skip to content</a>
-
-<main class="wrap-narrow" id="main">
-
-  <div class="statusbar" aria-live="polite">
-    <span class="sb"><span class="dot"></span> Start here</span>
-    <span class="sep">|</span>
-    <span class="sb">60-second guide</span>
-    <span class="sep">|</span>
-    <span class="sb">no jargon</span>
-  </div>
+<main class="wrap" id="main">
 
   <div class="lead">
-    <div class="eyebrow" style="margin-bottom:12px">How it works</div>
+    <span class="tl">HOW IT WORKS · 60-SECOND GUIDE · NO JARGON</span>
     <h1>Same bet, different prices. <span class="g">We show you the best one.</span></h1>
-    <p>Every sportsbook prices the same game a little differently. Sooth reads them all and shows
-      you the best price on each side, plus how good that price really is. That's the whole idea.
+    <p>Every sportsbook prices the same game a little differently. Sooth reads them all,
+      shows you the best price on each side, and analyzes what the numbers already say.
       You don't need any math to use it.</p>
   </div>
 
-  <div class="steps">
-
-    <div class="step">
-      <div class="n">THE ONE IDEA</div>
-      <h2>Every bet has a "fair price."</h2>
-      <p>The <b>fair price</b> is what the odds should be if the sportsbook took no cut. When a book
-        offers you a <b>better number than fair</b>, you're getting a deal — you win a little more when
-        it hits, and risk a little less. Sooth finds the book with the best number so you're not
-        leaving money on the table.</p>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">01 · THE ONE IDEA</span></div>
+    <div class="step-body">
+      <p><b>Every bet has a "fair price."</b> The fair price is what the odds should be if
+        the sportsbook took no cut. When a book offers you a <b>better number than fair</b>,
+        you're getting a deal — you win a little more when it hits, and risk a little less.
+        Sooth finds the book with the best number so you're not leaving money on the table.</p>
     </div>
+  </section>
 
-    <div class="step">
-      <div class="n">THE BOOK'S CUT</div>
-      <h2>The book always keeps a little. We show you how much.</h2>
-      <p>Two even sides at -110 each look like a coin flip, but they're not: -110 is really about
-        52.4% to hit, and 52.4% + 52.4% = 104.8%. That extra <b>~4.8%</b> is the book's cut. We strip
-        it out to show the true, fair price, then find the book beating it by the most.</p>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">02 · THE BOOK'S CUT</span></div>
+    <div class="step-body">
+      <p><b>The book always keeps a little. We show you how much.</b> Two even sides at
+        -110 each look like a coin flip, but they're not: -110 is really about 52.4% to hit,
+        and 52.4% + 52.4% = 104.8%. That extra <b>~4.8%</b> is the book's cut. We strip it
+        out to show the true, fair price, then find the book beating it by the most.</p>
       <div class="ex">-110 &amp; -110 &nbsp;→&nbsp; 52.4% + 52.4% = 104.8%<br>
         the book's cut = <span class="g">~4.8%</span> &nbsp;·&nbsp; we remove it to find the fair price</div>
     </div>
+  </section>
 
-    <div class="step">
-      <div class="n">WHAT YOU'RE LOOKING FOR</div>
-      <h2>"Points you gain" — the size of the deal.</h2>
-      <p>For each pick we show the <b>points you gain</b> by taking the best price instead of the fair
-        one. Bigger is a better deal. To keep it simple, every pick also gets a plain label:</p>
-      <div class="key"><span class="chip pos">Great value</span> a clearly better-than-fair price</div>
-      <div class="key"><span class="chip pos" style="opacity:.8">Slight value</span> a small edge over fair</div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">03 · WHAT YOU'RE LOOKING FOR</span></div>
+    <div class="step-body">
+      <p><b>"Gap points" — the size of the deal.</b> For each side, the market shows the
+        points of implied probability you gain by taking the best price instead of the
+        worst one on the board. Bigger is a better deal. The green number in the BEST
+        column is the price, and the small tag next to it names the book offering it.</p>
     </div>
+  </section>
 
-    <div class="step">
-      <div class="n">READING THE BOARD</div>
-      <h2>Green is the price to take.</h2>
-      <p>On the board, the <b>sport ball</b> (⚾ 🏈 🏒 🥊) tells you the sport at a glance, the
-        <b>green number</b> is the best available price and where to get it, and the label tells you how
-        good the deal is. Start in <b>Beginner</b> view for just the essentials, or switch to
-        <b>Pro</b> for every column.</p>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">04 · READING THE MARKET</span></div>
+    <div class="step-body">
+      <p><b>Green is the price to take.</b> Each row on the market is one game: the
+        <b>FAIR</b> column is the price with the book's cut removed, the <b>BEST</b> column
+        is the strongest number posted and which book has it, and <b>GAP PTS</b> is how far
+        the books disagree. Tap any game for the full analysis — form, availability, every
+        book's price on one scale, and how the number has moved. Or just ask the analyzer
+        on the front page, in plain English.</p>
     </div>
-
-  </div>
+  </section>
 
   <div class="cta">
-    <a class="btn btn-accent" href="/board.html">Open the board</a>
-    <a class="btn" href="/record.html">See our honest record</a>
+    <a class="pri" href="/">OPEN THE MARKET</a>
+    <a href="/record">SEE OUR HONEST RECORD</a>
   </div>
 
-  <p class="fine">One important thing: sooth.bet is tools and data, not picks. A better-than-fair price is
-    good value, but no bet is ever certain and nothing here predicts a winner. We also grade our own
-    model in the open, and it does not beat the closing market (the final odds before a game starts).
-    That is the honest part, and it is why we provide the tools, not a forecast.</p>
-  <p class="fine" style="margin-top:10px">Analysis and entertainment only. Not a sportsbook. We do not accept wagers, hold funds, or sell picks.
-    Must be 21 or older where lawful. If gambling is causing harm, call <b>1-800-522-4700</b>, available 24 hours.</p>
+  <p class="fine">One important thing: sooth.bet is research and analysis, not picks. A
+    better-than-fair price is good value, but no bet is ever certain and nothing here
+    predicts a winner. We also grade our own model in the open, and it does not beat the
+    closing market (the final odds before a game starts). That is the honest part, and it
+    is why we provide the analysis, not a forecast.</p>
+  <p class="fine" style="margin-top:10px">Analysis and entertainment only. Not a sportsbook.
+    We do not accept wagers, hold funds, or sell picks. Must be 21 or older where lawful.
+    If gambling is causing harm, call <b>1-800-522-4700</b>, available 24 hours.</p>
 
 </main>
-
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>Desk.mount("");</script>
 </body>
 </html>

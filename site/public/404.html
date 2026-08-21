@@ -3,49 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Not found — sooth</title>
-<meta name="description" content="That page does not exist. The board, the record, and the ledger are one click away.">
+<title>Not found — Sooth</title>
+<meta name="description" content="That page does not exist. The market, the record, and the ledger are one click away.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/desk-legacy.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
-  /* 404-specific only; system is sooth.css */
-  .nf{padding:70px 0 40px;max-width:60ch}
-  .nf .code{font-family:var(--num);font-size:13px;color:var(--dim);letter-spacing:.08em}
-  .nf h1{font-size:clamp(30px,5vw,46px);line-height:1.04;margin:16px 0 0}
-  .nf h1 .g{color:var(--pos)}
-  .nf p{color:var(--ink-2);font-size:15px;line-height:1.6;margin:16px 0 0;max-width:52ch}
-  .nf .go{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 0}
+  .nf{padding:84px 0 50px;max-width:62ch}
+  .nf h1{font:700 clamp(28px,4.6vw,42px)/1.08 var(--sans);letter-spacing:-.025em;margin:16px 0 0}
+  .nf h1 .g{color:var(--brand)}
+  .nf p{color:var(--ink2);font-size:14.5px;line-height:1.65;margin:16px 0 0;max-width:52ch}
+  .nf .go{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 0}
+  .nf .go a{font:600 11px var(--mono);letter-spacing:.08em;padding:10px 16px;
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut)}
+  .nf .go a:hover{color:var(--brand);border-color:var(--brand)}
+  .nf .go a.pri{background:linear-gradient(180deg,#3BE3B6,#22BE93);color:var(--g0);
+    border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body data-page="">
+<body>
 <a class="skip" href="#nf">Skip to content</a>
-
-<main class="wrap-narrow">
-
-  <div class="statusbar" aria-live="polite">
-    <span class="sb"><span class="dot off"></span> 404</span>
-    <span class="sep">|</span>
-    <span class="sb">page not found</span>
-  </div>
-
+<main class="wrap">
   <section class="nf" id="nf">
-    <div class="code">HTTP 404 · NO SUCH ROUTE</div>
+    <span class="tl">HTTP 404 · NO SUCH ROUTE</span>
     <h1>This page doesn't exist. <span class="g">The data still does.</span></h1>
     <p>Whatever you were after moved or was never here. Everything we publish is one
-      click away, and every number on it is regenerable from data you can download.</p>
+      click away, and every number on it regenerates from data you can download.</p>
     <div class="go">
-      <a class="btn btn-accent" href="/board.html">The board</a>
-      <a class="btn" href="/record.html">The record</a>
-      <a class="btn" href="/">Home</a>
+      <a class="pri" href="/">THE MARKET</a>
+      <a href="/research">RESEARCH</a>
+      <a href="/record">THE RECORD</a>
     </div>
   </section>
-
 </main>
-
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>Desk.mount("");</script>
 </body>
 </html>

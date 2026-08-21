@@ -3,104 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The record — sooth.bet</title>
+<title>The record — Sooth</title>
 <meta name="description" content="Our NFL model, scored against the market on two independent samples. It does not beat the closing line, and the market is better calibrated than we are. Every number regenerates from published data.">
-<link rel="canonical" href="https://sooth.bet/record.html">
-<meta property="og:title" content="The record — sooth">
-<meta property="og:description" content="Our NFL model scored against the market on two independent samples. It does not beat the closing line, and the market is better calibrated than we are. Every number regenerates from published data.">
+<link rel="canonical" href="https://sooth.bet/record">
+<meta property="og:title" content="The record — Sooth">
+<meta property="og:description" content="Our NFL model scored against the market on two independent samples. It does not beat the closing line. Every number regenerates from published data.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sooth.bet/record.html">
-<meta property="og:image" content="https://sooth.bet/assets/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:url" content="https://sooth.bet/record">
+<meta property="og:image" content="https://sooth.bet/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/desk-legacy.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
-  /* record-specific tables + callout only; system is sooth.css */
-  .rec-head{padding:34px 0 8px}
-  .rec-head h1{font-size:clamp(26px,4vw,36px)}
-  .rec-head p{color:var(--ink-2);font-size:15px;max-width:64ch;margin:14px 0 0;line-height:1.6}
+  .wrap-n{max-width:1000px;margin:0 auto;padding:0 24px 60px}
+  .rec-head{padding:36px 0 8px}
+  .rec-head h1{font:700 clamp(25px,3.8vw,34px)/1.12 var(--sans);letter-spacing:-.022em;margin:12px 0 0}
+  .rec-head p{color:var(--ink2);font-size:14px;max-width:66ch;margin:14px 0 0;line-height:1.65}
   .rec-head p b{color:var(--ink)}
-  .tbl-wrap{margin:12px 0 8px;overflow-x:auto}
-  table.rec{width:100%;border-collapse:collapse;font-family:var(--num);font-size:12.5px}
-  table.rec th{text-align:right;font-family:var(--sans);font-weight:700;color:var(--dim);
-    font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:0 14px 10px;
-    border-bottom:1px solid var(--line);white-space:nowrap}
+  .strip{display:flex;gap:22px;flex-wrap:wrap;padding:14px 0 0}
+  .strip .tl b{color:var(--ink2)}
+  .tblh{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
+    border:1px solid var(--hair);border-radius:var(--r);margin:12px 0 8px;overflow-x:auto;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 34px -20px rgba(0,0,0,.85)}
+  table.rec{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;
+    font-variant-numeric:tabular-nums;min-width:680px}
+  table.rec th{text-align:right;font:600 9.5px var(--mono);color:var(--dim);
+    text-transform:uppercase;letter-spacing:.12em;padding:11px 14px 9px;
+    border-bottom:1px solid var(--hair2);white-space:nowrap}
   table.rec th:first-child,table.rec td:first-child{text-align:left}
-  table.rec td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  table.rec td{padding:11px 14px;border-bottom:1px solid var(--hair);text-align:right;
+    white-space:nowrap;color:var(--ink2)}
   table.rec tr:last-child td{border-bottom:0}
   table.rec .mdl{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink)}
-  table.rec .mdl small{display:block;font-family:var(--num);font-size:10.5px;color:var(--dim);font-weight:400;margin-top:2px}
-  table.rec tr.market td{background:var(--bg-3)}
-  table.rec tr.market .mdl{color:var(--pos)}
-  .no{color:var(--neg)}
-  .cap-note{font-size:11.5px;color:var(--muted);margin:6px 0 0}
-  .callout{border:1px solid var(--warn-dim);background:var(--warn-dim);
-    border-radius:var(--r);padding:18px 20px;margin:8px 0}
-  .callout .eyebrow{color:var(--warn)}
-  .callout h3{font-size:16px;margin:8px 0 10px}
-  .callout p{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin:0;max-width:70ch}
-  .cmp{display:flex;gap:26px;flex-wrap:wrap;margin:14px 0 2px;font-family:var(--num)}
-  .cmp .b{font-size:11px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--sans);font-weight:700}
-  .cmp .v{font-size:20px;font-weight:700;margin-top:4px}
+  table.rec .mdl small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);
+    font-weight:400;margin-top:2px}
+  table.rec tr.market td{background:rgba(52,211,153,.05)}
+  table.rec tr.market .mdl{color:var(--up)}
+  .pos{color:var(--up)} .no{color:var(--dn)} .warnc{color:var(--amber)}
+  .cap-note{font-size:11.5px;color:var(--dim);margin:6px 0 0;max-width:76ch}
+  .callout{border-left:2px solid var(--amber);background:var(--amber-dim);
+    border-radius:0 var(--r) var(--r) 0;padding:18px 20px;margin:26px 0 8px}
+  .callout h3{font:600 15px var(--sans);margin:8px 0 10px;color:var(--ink)}
+  .callout p{color:var(--ink2);font-size:13px;line-height:1.65;margin:0;max-width:70ch}
+  .cmp{display:flex;gap:26px;flex-wrap:wrap;margin:12px 0 2px;font-family:var(--mono)}
+  .cmp .b{font:600 9.5px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+  .cmp .v{font-size:19px;font-weight:700;margin-top:4px;color:var(--ink);
+    font-variant-numeric:tabular-nums}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .stats .stat{background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
+    border-radius:var(--r);padding:14px 16px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+  .stats .v{font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  .stats .k{font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.45}
   .glo{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
-  .glo .g{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px}
-  .glo .g b{font-size:13px}
-  .glo .g p{font-size:12.5px;color:var(--muted);margin:6px 0 0;line-height:1.5}
-  @media (max-width:720px){.glo{grid-template-columns:1fr}}
+  .glo .g{background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
+    border-radius:var(--r);padding:15px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+  .glo .g b{font-size:13px;color:var(--ink)}
+  .glo .g p{font-size:12.5px;color:var(--mut);margin:6px 0 0;line-height:1.55}
+  .fine{color:var(--dim);font-size:11.5px;margin:8px 0 0;line-height:1.6}
+  .fine a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
+  .fine b{color:var(--mut)}
+  .empty{padding:20px 0;color:var(--mut);font-size:13px}
+  @media (max-width:720px){.glo,.stats{grid-template-columns:1fr}}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body data-page="record">
+<body>
 <a class="skip" href="#record">Skip to the record</a>
-
-<main class="wrap-narrow">
-
-  <div class="statusbar" aria-live="polite">
-    <span class="sb"><span class="dot" id="s-dot"></span> <span id="s-state">the honest part</span></span>
-    <span class="sep">|</span>
-    <span class="sb">break-even <b id="s-be">52.38%</b></span>
-    <span class="sep">|</span>
-    <span class="sb">confidence cap <b id="s-cap">85%</b></span>
-    <span class="sep">|</span>
-    <span class="sb">regenerated <b id="s-gen">—</b></span>
-  </div>
+<main class="wrap-n">
 
   <div class="rec-head" id="record">
-    <div class="eyebrow" style="margin-bottom:12px">The record</div>
+    <span class="tl">THE RECORD · <b id="s-state">THE HONEST PART</b> · BREAK-EVEN
+      <b id="s-be">52.38%</b> · CONFIDENCE CAP <b id="s-cap">85%</b> · REGENERATED
+      <b id="s-gen">—</b></span>
     <h1>Our model does not beat the market.</h1>
     <p>We run a prediction model and we grade it in public against the market's closing price
       with the books' built-in cut stripped out (called "de-vigging": removing the house margin to find the true fair odds).
       ATS means "against the spread" — did the pick cover the point spread?
       On both samples below, <b>no version wins often enough to beat the 52.38% ATS you need just to break even</b>
       at standard -110 odds, and the market's stated chances match real results more closely than ours do.
-      That is the whole point: what you pay for is the board (the best price across books), not a forecast we can't honestly deliver.
+      That is the whole point: what you pay for is the analysis and the board, not a forecast we can't honestly deliver.
       Every figure here is regenerated by one command and lives in a file you can download.</p>
   </div>
 
-  <!-- Evaluation A -->
-  <div class="section-h" style="margin-top:34px">
-    <div class="eyebrow">A · nflverse lines, 2016–2025</div>
-    <span class="chip" id="a-n">·</span>
-  </div>
-  <p class="cap-note" id="a-prov">Larger sample, weaker provenance.</p>
-  <div class="tbl-wrap"><table class="rec" id="tbl-a"><tbody></tbody></table></div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">A · NFLVERSE LINES, 2016–2025</span>
+      <span class="sub" id="a-prov">Larger sample, weaker provenance.</span>
+      <span class="more tl" id="a-n">·</span></div>
+    <div class="tblh"><table class="rec" id="tbl-a"><tbody></tbody></table></div>
+  </section>
 
-  <!-- Evaluation B -->
-  <div class="section-h" style="margin-top:34px">
-    <div class="eyebrow">B · real consensus closes, 2023–2025</div>
-    <span class="chip" id="b-n">·</span>
-  </div>
-  <p class="cap-note" id="b-prov">Smaller sample, far better provenance.</p>
-  <div class="tbl-wrap"><table class="rec" id="tbl-b"><tbody></tbody></table></div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">B · REAL CONSENSUS CLOSES, 2023–2025</span>
+      <span class="sub" id="b-prov">Smaller sample, far better provenance.</span>
+      <span class="more tl" id="b-n">·</span></div>
+    <div class="tblh"><table class="rec" id="tbl-b"><tbody></tbody></table></div>
+  </section>
 
-  <!-- honest calibration callout -->
-  <div class="callout" style="margin-top:32px">
-    <div class="eyebrow">On calibration</div>
+  <div class="callout">
+    <span class="tl" style="color:var(--amber)">ON CALIBRATION</span>
     <h3>The market is better calibrated than our model.</h3>
     <div class="cmp">
       <div><div class="b">Consensus ECE (A / B)</div><div class="v" id="cal-us">·</div></div>
@@ -112,44 +114,42 @@
       nobody can check is a claim, not a measurement.</p>
   </div>
 
-  <!-- reliability -->
-  <div class="section-h" style="margin-top:34px">
-    <div class="eyebrow">Reliability · independent model</div>
-  </div>
-  <p class="cap-note">Per probability band: what we predicted vs how often it happened. A positive
-    gap means we were overconfident.</p>
-  <div class="tbl-wrap"><table class="rec" id="tbl-rel"><tbody></tbody></table></div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">RELIABILITY · INDEPENDENT MODEL</span></div>
+    <p class="cap-note">Per probability band: what we predicted vs how often it happened. A positive
+      gap means we were overconfident.</p>
+    <div class="tblh"><table class="rec" id="tbl-rel"><tbody></tbody></table></div>
+  </section>
 
-  <!-- line provenance -->
-  <div class="section-h" style="margin-top:34px">
-    <div class="eyebrow">Line provenance</div>
-  </div>
-  <p class="cap-note">How far the weaker line source (nflverse) sits from the real consensus close.</p>
-  <div class="stats" id="prov" style="grid-template-columns:repeat(3,1fr);margin-top:12px"></div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">LINE PROVENANCE</span></div>
+    <p class="cap-note">How far the weaker line source (nflverse) sits from the real consensus close.</p>
+    <div class="stats" id="prov"></div>
+  </section>
 
-  <!-- model glossary -->
-  <div class="section-h" style="margin-top:34px">
-    <div class="eyebrow">The three models</div>
-  </div>
-  <div class="glo" id="glo"></div>
+  <section class="sec">
+    <div class="sec-h"><span class="tl">THE THREE MODELS</span></div>
+    <div class="glo" id="glo"></div>
+  </section>
 
-  <p class="mutedtext mono" id="stamp" style="font-size:11.5px;margin:22px 0 0"></p>
-  <p class="dimtext" style="font-size:11.5px;margin:8px 0 0">
-    Regenerate every figure: <code class="mono">python scripts/published_figures.py</code>.
+  <p class="fine" id="stamp" style="font-family:var(--mono)"></p>
+  <p class="fine">
+    Regenerate every figure: <code style="font-family:var(--mono)">python scripts/published_figures.py</code>.
     Raw data: <a href="/data/figures.json">figures.json</a>. Full spec on the
-    <a href="/methodology.html">methodology page</a>; every graded slate is in the
-    <a href="/ledger.html">ledger</a>.</p>
-  <p class="dimtext" style="font-size:11.5px;margin:8px 0 0">
+    <a href="/methodology">methodology page</a>; every graded slate is in the
+    <a href="/ledger">ledger</a>.</p>
+  <p class="fine">
     Analysis and entertainment only. Not a sportsbook. We do not accept wagers, hold funds, or sell picks.
     Past results do not indicate future results. Must be 21 or older where lawful.
     Problem gambling help: <b>1-800-522-4700</b>, available 24 hours.</p>
 
 </main>
 
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
 <script>
 (function(){
   "use strict";
+  Desk.mount("ledger");
   var $=function(id){return document.getElementById(id);};
   var MDL={
     elo:["Elo baseline","the transparent baseline"],
@@ -192,7 +192,7 @@
     var body=rows.map(function(r){
       var cls=r.gap>0.03?"no":(r.gap< -0.03?"warnc":"");
       var g=(r.gap>0?"+":"")+(r.gap*100).toFixed(1)+" pts";
-      return '<tr><td class="mdl" style="font-family:var(--num);font-weight:500">'+r.bucket+'</td>'
+      return '<tr><td class="mdl" style="font-family:var(--mono);font-weight:500">'+r.bucket+'</td>'
         +'<td>'+r.n+'</td><td>'+pct(r.predicted)+'</td><td>'+pct(r.actual)+'</td>'
         +'<td class="'+cls+'">'+g+'</td></tr>';
     }).join("");
@@ -205,7 +205,6 @@
       $("s-be").textContent=(f.breakeven_ats*100).toFixed(2)+"%";
       $("s-cap").textContent=Math.round(f.confidence_cap*100)+"%";
       $("s-gen").textContent=f.generated_at.slice(0,10);
-      $("s-state").textContent="the honest part";
 
       $("a-n").textContent="n = "+a.results.market.n;
       $("b-n").textContent="n = "+b.results.market.n;
@@ -235,9 +234,9 @@
       $("stamp").textContent="Figures regenerated "+f.generated_at.slice(0,16).replace("T"," ")
         +" UTC via "+f.command+".";
     }).catch(function(){
-      $("s-dot").className="dot off"; $("s-state").textContent="figures unavailable";
+      $("s-state").textContent="FIGURES UNAVAILABLE";
       $("record").insertAdjacentHTML("beforeend",
-        '<p class="empty" style="text-align:left;padding:20px 0">The published figures could not be '
+        '<p class="empty">The published figures could not be '
         +'loaded. Raw data is at <a href="/data/figures.json">figures.json</a>.</p>');
     });
   }

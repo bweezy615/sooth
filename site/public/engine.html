@@ -14,7 +14,19 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/engine">
-<link rel="stylesheet" href="/assets/desk-legacy.css">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<style>
+  /* legacy token names, resolved onto the desk system — this page's own CSS
+     was written against the old palette; the aliases retire the old file
+     without rewriting every rule */
+  :root{--bg:var(--g0);--bg-2:var(--g1);--bg-3:var(--g2);--line:var(--hair);
+    --line-2:var(--hair2);--ink-2:var(--ink2);--muted:var(--mut);
+    --pos:var(--up);--neg:var(--dn);--warn:var(--amber);--warn-dim:var(--amber-dim);
+    --pos-dim:var(--up-dim);--num:var(--mono);--r-sm:var(--r);--iris:var(--brand)}
+  .l{text-align:left}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
 <style>
   :root{
     --teal:#10A372; --amber:#BC862B;
@@ -326,7 +338,8 @@ fetch('data/board.json').then(r=>r.json()).then(b=>{
   e.textContent='Could not load data/board.json';
 });
 </script>
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>Desk.mount("ledger");</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
