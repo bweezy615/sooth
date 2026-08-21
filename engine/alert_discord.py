@@ -176,6 +176,16 @@ MAX_PER_POST = 5
 BANNED = ("lock", "guaranteed", "guarantee", "risk-free", "riskfree",
           "insider", "sure thing", "can't lose", "cant lose")
 
+# Picks carry their own footer. The edges footer talks about model
+# probabilities, and a pick is explicitly not a model output — saying so is the
+# entire reason a pick may be published when the model may not.
+PICKS_FOOTER = (
+    "Selected on price against the de-vigged consensus of the books pricing "
+    "it — not a prediction, and NOT GUARANTEED. A better number is not a "
+    "promised outcome. Prices move; check the book before you bet. Sooth is an "
+    "odds analysis tool, not a sportsbook, and not betting advice. 21+. "
+    "Problem gambling? Call 1-800-522-4700.")
+
 FOOTER = ("Sooth is an odds analysis tool — not a sportsbook, not betting "
           "advice. Model probabilities are estimates and are graded publicly, "
           "win or lose. 21+. Problem gambling? Call 1-800-522-4700.")
@@ -267,6 +277,100 @@ def analysed_props(path: str = PROPS, min_delta: float | None = None,
                 })
     out.sort(key=lambda p: p["delta_pts"], reverse=True)
     return out, skipped
+
+
+# ---- 1b. daily picks: selected on PRICE, not on the model -------------------
+
+def daily_picks(path: str = PROPS, min_obs: int = 10) -> list[dict]:
+    """Every priced side, best price against the de-vigged consensus first.
+
+    This is a different claim from the edges path and must not be confused with
+    it. It ranks on ``edge_vs_fair_pts`` — how good the best available number is
+    against the consensus of the books pricing that prop. That figure does not
+    depend on any model being right about anything; getting a better number on
+    the same wager is arithmetic.
+
+    It is NOT ``gain_pts``, which is best-book-vs-worst-book and only measures
+    how much the books disagree with each other. A wide disagreement with a bad
+    best price is not an opportunity.
+
+    The sign is kept and never suppressed. A negative price edge means the best
+    number on the board is still worse than consensus fair, which is the vig —
+    normal, and the honest thing to show. Ranking still holds: least-negative is
+    genuinely the best available number.
+    """
+    try:
+        data = json.loads(Path(path).read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+    out: list[dict] = []
+    for board in data.get("boards", []):
+        for event in board.get("events", []):
+            for prop in event.get("props", []):
+                for side in ("over", "under"):
+                    s = prop.get(side) or {}
+                    if s.get("best_price") is None or s.get("edge_vs_fair_pts") is None:
+                        continue
+                    hit = prop.get("hit") or {}
+                    # A price edge on a player with four games of history is
+                    # still a real price edge — but the history line printed
+                    # next to it would be noise, and the history is what makes
+                    # the post readable. Withhold the line, keep the pick.
+                    season_n = (hit.get("season") or {}).get("n") or 0
+                    out.append({
+                        "sport": board.get("label", board.get("sport", "")),
+                        "event": f"{event.get('away')} @ {event.get('home')}",
+                        "player": prop.get("player", ""),
+                        "market": prop.get("market", ""),
+                        "market_label": prop.get("market_label", prop.get("market", "")),
+                        "line": prop.get("line"),
+                        "side": side,
+                        "best_price": s["best_price"],
+                        "best_book": s.get("best_book"),
+                        "fair_price": s.get("fair_price"),
+                        "n_books": s.get("n_books"),
+                        "price_edge_pts": s["edge_vs_fair_pts"],
+                        "book_spread_pts": s.get("gain_pts"),
+                        "hit": hit if season_n >= min_obs else {},
+                    })
+    out.sort(key=lambda r: -r["price_edge_pts"])
+    return out
+
+
+def pick_key(p: dict) -> str:
+    return f"{p['event']}|{p['player']}|{p['market_label']}|{p['line']}|{p['side']}"
+
+
+def render_pick(p: dict) -> dict:
+    """One pick. The price is the claim; the model is not mentioned."""
+    title = (f"{p['player']} — {p['market_label']} "
+             f"{'o' if p['side'] == 'over' else 'u'}{p['line']}")
+    edge = p["price_edge_pts"]
+    # Never let a negative edge read as a positive one. The sentence changes,
+    # not just the sign, because "edge" is the wrong word for being below fair.
+    if edge >= 0:
+        price_line = (f"**{edge:.2f} pts better than consensus fair** "
+                      f"({_odds(p['fair_price'])}, {p['n_books']} books)")
+    else:
+        price_line = (f"{abs(edge):.2f} pts **below** consensus fair "
+                      f"({_odds(p['fair_price'])}, {p['n_books']} books) — that "
+                      f"gap is the vig, not an edge")
+    parts = [
+        f"**{_odds(p['best_price'])} at {p['best_book'] or 'n/a'}** — "
+        f"best number on the board",
+        price_line,
+    ]
+    if p.get("book_spread_pts") is not None:
+        parts.append(f"Books disagree by {p['book_spread_pts']:.2f} pts "
+                     f"(best vs worst)")
+    if p["hit"]:
+        parts.append(f"Recent {p['side']}: {_hit_line(p['hit'], p['side'])}")
+    parts.append(f"{p['event']} · selected on price, not on a model")
+    desc = "\n".join(parts)
+    check_language(title + desc)
+    return {"title": title, "description": desc, "color": 0x3B88C3,
+            "footer": {"text": PICKS_FOOTER}}
 
 
 def prop_key(p: dict) -> str:
@@ -362,6 +466,12 @@ def save_sent(sent: set) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
+    ap.add_argument("--mode", choices=("picks", "edges"), default="picks",
+                    help="picks: rank by price against consensus fair (the "
+                         "live product). edges: rank by model delta — retained, "
+                         "but POSTABLE is empty so it posts nothing.")
+    ap.add_argument("--picks", type=int, default=3,
+                    help="how many picks to post in picks mode")
     ap.add_argument("--min-delta", type=float, default=None,
                     help="override every market's delta floor (also forces "
                          "unlisted markets postable — testing only)")
@@ -375,6 +485,46 @@ def main() -> int:
     a = ap.parse_args()
 
     sent = load_sent()
+
+    if a.mode == "picks":
+        found = daily_picks(a.props, a.min_obs if a.min_obs is not None else 10)
+        picks = [p for p in found if a.dry_run or pick_key(p) not in sent]
+        picks = picks[:a.picks]
+        if not picks:
+            print("no priced sides on the board — posting nothing.")
+            return 0
+        embeds = [render_pick(p) for p in picks]
+        # If nothing on the board beats consensus fair, say so at the top. The
+        # post is still the best available numbers, but "best available" and
+        # "better than fair" are different claims and the reader is owed which
+        # one this is before reading a single pick.
+        best = picks[0]["price_edge_pts"]
+        if best < 0:
+            header = ("**Today's board — best available numbers.** Selected on "
+                      "price against the de-vigged consensus, not on a model. "
+                      "Nothing on the board beats consensus fair today, so "
+                      "these are where you give up least to the vig — not "
+                      "positive-value plays. Graded here either way.")
+        else:
+            header = ("**Today's board — best available numbers.** Selected on "
+                      "price against the de-vigged consensus, not on a model. "
+                      "Graded here either way, win or lose.")
+        print(f"picks: {len(picks)}  best price edge: {best:+.2f} pts")
+        if a.dry_run:
+            print(json.dumps({"content": header, "embeds": embeds}, indent=1))
+            return 0
+        env = ("SOOTH_DISCORD_WEBHOOK_PRO" if a.tier == "pro"
+               else "SOOTH_DISCORD_WEBHOOK_FREE")
+        webhook = os.environ.get(env, "")
+        if not webhook:
+            print(f"{env} not set — Discord not configured yet, nothing posted.")
+            return 0
+        if post(webhook, header, embeds):
+            save_sent(sent | {pick_key(p) for p in picks})
+            print(f"posted {len(embeds)} picks to {a.tier}")
+            return 0
+        return 1
+
     found, skipped = analysed_props(a.props, a.min_delta, a.min_obs)
     props = [p for p in found if a.dry_run or prop_key(p) not in sent]
     props = props[:a.max]
