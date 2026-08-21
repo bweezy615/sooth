@@ -55,32 +55,52 @@ PROPS = "site/public/data/props.json"
 WATERMARK = "data/discord_sent.json"
 UA = "sooth-discord/1.0"
 
-# Points of implied probability between our projection and the de-vigged
-# market. Below this the "edge" is inside the noise of our own model.
-DEFAULT_MIN_DELTA = 3.0
-
-# Minimum games behind a projection before it may be PUSHED to a channel.
-# engine.props_model already refuses to project on fewer than 3 games, which is
-# the right floor for publishing to the site — a page the reader chose to open.
-# A Discord post is a different act: it arrives unrequested with our confidence
-# attached to it, so it carries a higher bar. Held here rather than upstream so
-# that loosening one can never silently loosen the other.
+# Posting is OPT-IN PER MARKET, and each entry carries its own thresholds.
 #
-# The floor is PER MARKET, because "a game" is not a constant unit of evidence.
-# A pitcher's start is ~22 batters faced; a hitter's game is ~4 plate
-# appearances. Five starts is roughly a month and ~110 opportunities, while
-# five hitter games is under a week and ~20. A single flat number would hold
-# the two to standards differing by a factor of five while looking even-handed.
-# Each floor below targets roughly 100 underlying opportunities.
-MIN_OBS = {
-    "pitcher_strikeouts": 5,     # ~5 starts x ~22 batters faced
-    "batter_total_bases": 25,    # ~25 games x ~4 plate appearances
+# delta_pts is not a comparable unit across models, even though every model
+# emits the same key. What it means depends on the per-unit error of the model
+# that produced it. Four points from a model whose per-player error is ~+-1
+# point is a signal; the same four points from a model erring ~+-3.5 is the
+# error term wearing an edge's clothes. Worse, when a market is efficient
+# enough to track realised rates, ranking by delta selects the players OUR
+# MODEL FITS WORST rather than the ones the market prices worst — sorting by
+# delta becomes sorting by model error.
+#
+# That was measured, not theorised: tbconv-v1 backtested well in aggregate
+# (predicted 43.3% vs actual 44.4% at the 1.5 line) while carrying ~+-3.5
+# points of per-player error, with the two tails cancelling so the aggregate
+# looked clean. Its three largest deltas on a live board all belonged to
+# players the model over-stated against their own realised rate, while the
+# market sat within a point of it.
+#
+# So a market cannot post until somebody has looked at that model's error and
+# written a floor that clears it. An unlisted market posts NOTHING — no flag,
+# no default, no exception. Adding a key here is a review-able claim that the
+# error has been measured.
+#
+# min_obs targets roughly 100 underlying opportunities, because "a game" is not
+# a constant unit of evidence: a pitcher's start is ~22 batters faced, a
+# hitter's game is ~4 plate appearances.
+POSTABLE = {
+    "pitcher_strikeouts": {
+        # Market is loose here and the per-start count is genuinely Poisson-ish,
+        # so delta carries signal at a low threshold.
+        "min_delta": 3.0,
+        "min_obs": 5,            # ~5 starts x ~22 batters faced
+    },
+    # batter_total_bases is DELIBERATELY ABSENT. tbconv-v1 is well calibrated in
+    # aggregate but its per-player error (~+-3.5 pts) swamps any delta we would
+    # rank on, so its edges select model misfit. It goes in when the model
+    # carries a per-player over-dispersion term — not when someone raises the
+    # threshold until the noise stops showing, which hides the fault instead of
+    # fixing it.
 }
 
-# A market nobody has reasoned about gets the STRICTER of the known floors,
-# never the looser. An unmapped market is precisely the one whose evidence we
-# have not thought about, so it is the wrong place to be generous.
-DEFAULT_MIN_OBS = max(MIN_OBS.values())
+# Fallbacks for an explicit override only. There is intentionally no default
+# entry for an unlisted market: absence means "do not post", not "post at the
+# default threshold".
+DEFAULT_MIN_DELTA = 3.0
+DEFAULT_MIN_OBS = 25
 
 # Never post more than this per tick. A wall of plays reads as a pick service
 # and buries the one that mattered.
@@ -106,15 +126,25 @@ def check_language(text: str) -> None:
 
 # ---- 1. rank by analysis, not by price gap ---------------------------------
 
-def min_obs_for(market: str, override: int | None = None) -> int:
-    """Evidence floor for a market. An explicit override applies everywhere."""
-    if override is not None:
-        return override
-    return MIN_OBS.get(market, DEFAULT_MIN_OBS)
+def thresholds_for(market: str, min_delta: float | None = None,
+                   min_obs: int | None = None) -> dict | None:
+    """Thresholds for a market, or None if it may not post at all.
+
+    An explicit override forces the market postable — that exists for testing
+    a new model head against real data, never for a scheduled run.
+    """
+    entry = POSTABLE.get(market)
+    if entry is None and min_delta is None and min_obs is None:
+        return None
+    entry = entry or {}
+    return {"min_delta": min_delta if min_delta is not None
+                         else entry.get("min_delta", DEFAULT_MIN_DELTA),
+            "min_obs": min_obs if min_obs is not None
+                       else entry.get("min_obs", DEFAULT_MIN_OBS)}
 
 
-def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
-                   min_obs: int | None = None) -> list[dict]:
+def analysed_props(path: str = PROPS, min_delta: float | None = None,
+                   min_obs: int | None = None) -> tuple[list[dict], dict]:
     """Every prop carrying our own model read, strongest edge first.
 
     A prop without a ``model`` block is skipped entirely. We have not analysed
@@ -126,21 +156,28 @@ def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
         return []
 
     out: list[dict] = []
+    skipped: dict = {}
     for board in data.get("boards", []):
         for event in board.get("events", []):
             for prop in event.get("props", []):
                 model = prop.get("model")
                 if not model:
                     continue                      # not analysed -> not an edge
+                market = prop.get("market", "")
+                gate = thresholds_for(market, min_delta, min_obs)
+                if gate is None:
+                    # Modelled, but this market is not cleared to post. Counted
+                    # so the silence is reported rather than merely happening.
+                    skipped[market] = skipped.get(market, 0) + 1
+                    continue
                 delta = model.get("delta_pts")
-                if delta is None or abs(delta) < min_delta:
+                if delta is None or abs(delta) < gate["min_delta"]:
                     continue
                 # A thin sample can throw a huge delta that is mostly noise.
                 # Missing sample size is treated as failing, never as passing:
                 # an unknown denominator is not evidence.
                 n_obs = model.get("n_starts") or model.get("n_games")
-                if not isinstance(n_obs, int) or n_obs < min_obs_for(
-                        prop.get("market", ""), min_obs):
+                if not isinstance(n_obs, int) or n_obs < gate["min_obs"]:
                     continue
                 side = "over" if delta > 0 else "under"
                 out.append({
@@ -164,7 +201,7 @@ def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
                     "version": model.get("version", ""),
                 })
     out.sort(key=lambda p: p["delta_pts"], reverse=True)
-    return out
+    return out, skipped
 
 
 def prop_key(p: dict) -> str:
@@ -260,9 +297,12 @@ def save_sent(sent: set) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
-    ap.add_argument("--min-delta", type=float, default=DEFAULT_MIN_DELTA)
+    ap.add_argument("--min-delta", type=float, default=None,
+                    help="override every market's delta floor (also forces "
+                         "unlisted markets postable — testing only)")
     ap.add_argument("--min-obs", type=int, default=None,
-                    help="override the per-market evidence floor for every market")
+                    help="override every market's evidence floor (also forces "
+                         "unlisted markets postable — testing only)")
     ap.add_argument("--max", type=int, default=MAX_PER_POST)
     ap.add_argument("--props", default=PROPS)
     ap.add_argument("--dry-run", action="store_true",
@@ -270,8 +310,8 @@ def main() -> int:
     a = ap.parse_args()
 
     sent = load_sent()
-    props = [p for p in analysed_props(a.props, a.min_delta, a.min_obs)
-             if a.dry_run or prop_key(p) not in sent]
+    found, skipped = analysed_props(a.props, a.min_delta, a.min_obs)
+    props = [p for p in found if a.dry_run or prop_key(p) not in sent]
     props = props[:a.max]
 
     embeds = [render_prop(p) for p in props]
@@ -286,6 +326,12 @@ def main() -> int:
         print(f"props: {len(props)}  divergence: {len(div)}")
     else:
         print(f"props: {len(props)}")
+
+    # Never let a cap be silent: a market held back is a decision, and it
+    # should read as one rather than looking like an empty slate.
+    for market, n in sorted(skipped.items()):
+        print(f"  held back: {n} modelled {market} prop(s) — market not cleared "
+              f"to post (see POSTABLE)")
 
     if not embeds:
         print("nothing above threshold — posting nothing.")
