@@ -355,6 +355,32 @@ def daily_picks(path: str = PROPS, min_obs: int = 10) -> list[dict]:
     return out
 
 
+# PRODUCT.md sets the audience as sharp and serious bettors — "density over
+# persuasion, no hand-holding, no explainer tone" — and the same paragraph adds
+# that "a newcomer should not be actively excluded, but nothing slows down the
+# person who already knows". That is the seam this embed sits in.
+#
+# It goes LAST, after the prices, and only when there are prices to explain. A
+# reader who knows what de-vigging is has already got what they came for and
+# scrolls past; a reader who does not is not sent elsewhere to find out. No
+# gloss is repeated on individual entries, because a term explained five times
+# in one post is explainer tone arriving by another route.
+GLOSS = {
+    "title": "What these numbers mean",
+    "color": 0x4F545C,
+    "description": (
+        "**Consensus fair** — every book builds a margin into its prices (the "
+        "vig), so the prices you see add up to more than 100%. Strip that "
+        "margin out across the books pricing a wager and what is left is the "
+        "market's honest estimate. That is the fair number.\n"
+        "**Points below/above fair** — the gap between the best price you can "
+        "actually get and that fair number, in percentage points. Below fair "
+        "is normal: the gap is the house's cut.\n"
+        "**Books disagree by** — how far apart the best and worst prices are "
+        "for the same wager. It is why the book you use matters."),
+}
+
+
 def pick_key(p: dict) -> str:
     return f"{p['event']}|{p['player']}|{p['market_label']}|{p['line']}|{p['side']}"
 
@@ -487,6 +513,8 @@ def main() -> int:
                     help="picks: rank by price against consensus fair (the "
                          "live product). edges: rank by model delta — retained, "
                          "but POSTABLE is empty so it posts nothing.")
+    ap.add_argument("--no-gloss", action="store_true",
+                    help="omit the trailing plain-English explainer embed")
     ap.add_argument("--picks", type=int, default=3,
                     help="how many picks to post in picks mode")
     ap.add_argument("--min-delta", type=float, default=None,
@@ -511,6 +539,8 @@ def main() -> int:
             print("no priced sides on the board — posting nothing.")
             return 0
         embeds = [render_pick(p) for p in picks]
+        if not a.no_gloss:
+            embeds.append(GLOSS)
         # If nothing on the board beats consensus fair, say so at the top. The
         # post is still the best available numbers, but "best available" and
         # "better than fair" are different claims and the reader is owed which
