@@ -3,100 +3,78 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Why trust these numbers</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Sooth">
-<meta name="description" content="Everything that makes Sooth's numbers checkable: the methodology, the hash-committed ledger, the engine, the archive, and the losing backtest we publish on purpose.">
-<link rel="canonical" href="https://sooth.bet/trust">
-<meta property="og:title" content="Sooth — why trust these numbers">
-<meta property="og:description" content="Methodology, hash-committed ledger, open verification, and the losing backtest we publish on purpose.">
+<title>Sooth — Ledger</title>
+<meta name="description" content="Every figure on this site can be recomputed from published data — including the ones that argue against us. The index of the receipts.">
+<meta property="og:title" content="Sooth — Ledger">
+<meta property="og:description" content="We publish our own model losing. The index of the receipts.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/trust">
-<link rel="stylesheet" href="/assets/sooth.css">
+<link rel="canonical" href="https://sooth.bet/trust">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
 <style>
-  body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
-      var(--bg);
-    padding:0 20px 60px}
-  .wrap-page{max-width:940px; margin:0 auto}
-  .page-head{padding:36px 0 10px}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 8px; text-wrap:balance}
-  .sub{color:var(--muted); font-size:14.5px; margin:0 0 6px; max-width:68ch}
-  .sub b{color:var(--ink)}
-
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
-  @media(max-width:680px){.grid{grid-template-columns:1fr}}
-  a.card{display:block;background:linear-gradient(180deg,var(--bg-2),var(--bg-3));
-    border:1px solid var(--line);border-radius:16px;padding:20px 22px;
-    text-decoration:none;color:inherit;transition:border-color .2s ease, transform .2s ease}
-  a.card:hover{border-color:var(--dim);transform:translateY(-2px)}
-  a.card .k{font-family:var(--num);font-size:10.5px;letter-spacing:.14em;color:var(--iris);
-    text-transform:uppercase;display:block;margin-bottom:8px}
-  a.card b{font-size:16px;display:block;margin-bottom:6px}
-  a.card p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
-  a.card .go{display:inline-block;margin-top:12px;font-family:var(--num);font-size:12px;color:#0369A1}
-
-  .stance{margin-top:26px;background:linear-gradient(180deg,var(--bg-2),var(--bg-3));
-    border:1px solid var(--line);border-radius:16px;padding:22px}
-  .stance b{color:var(--pos)}
-  .stance p{margin:0;font-size:14px;color:var(--muted);max-width:74ch;line-height:1.65}
+  .stance{border-left:2px solid var(--brand);background:var(--g1);
+    padding:18px 22px;margin:22px 0 6px;max-width:86ch;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+  .stance p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.7}
+  .stance b{color:var(--brand)}
+  .stance .n{font-family:var(--mono)}
 </style>
 </head>
-<body data-page="trust">
-<a class="skip" href="#main">Skip to main content</a>
-<main id="main" class="wrap-page">
-<header class="page-head">
-  <h1>Why trust these numbers.</h1>
-  <p class="sub">Every figure on this site can be recomputed from published data, including
-  the ones that argue against us. This page is the index of the receipts.</p>
-</header>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap">
 
-<div class="stance">
-  <p><b>We publish our own model losing.</b> Across 2,671 graded walk-forward NFL games (2,608 decided, 63 pushes) our
-  prediction model hit 49.5% of decided games against the spread; the market hit 50.9%; breakeven is 52.4%.
-  Nobody clears it. That measurement is why Sooth sells price transparency instead of picks —
-  and why you can trust the rest of this site: numbers that flatter us and numbers that
-  do not get published the same way.</p>
-</div>
+  <div class="page-head" style="padding:30px 0 0">
+    <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 6px">
+      The ledger, and why you can audit it.</h1>
+    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:78ch;line-height:1.6;margin:0">
+      Every figure on this site can be recomputed from published data — including the
+      ones that argue against us. This page is the index of the receipts.</p>
+  </div>
 
-<div class="grid">
-  <a class="card" href="/methodology">
-    <span class="k">The method</span><b>Methodology</b>
-    <p>The full model spec, the walk-forward backtest, the calibration table, the leakage
-    controls — the file we would hand a regulator or a journalist.</p>
-    <span class="go">Read it →</span></a>
-  <a class="card" href="/ledger">
-    <span class="k">The receipts</span><b>Public ledger</b>
-    <p>Board snapshots hash-committed before kickoff, revealed and graded after. Nothing
-    can be quietly edited later.</p>
-    <span class="go">See the ledger →</span></a>
-  <a class="card" href="/verify">
-    <span class="k">Check us</span><b>Verify independently</b>
-    <p>Recompute our Merkle root yourself with a standard-library script. If a number cannot
-    be regenerated from published data, treat it as an error and tell us.</p>
-    <span class="go">Run the check →</span></a>
-  <a class="card" href="/engine">
-    <span class="k">The machine</span><b>Engine room</b>
-    <p>27 seasons of data, the honest backtest curve, and the measured +2.71% price edge —
-    what the archive actually buys us.</p>
-    <span class="go">Open the engine →</span></a>
-  <a class="card" href="/gamelog">
-    <span class="k">The archive</span><b>Game log</b>
-    <p>Every NFL game since 1999 with its closing spread, total, and moneylines — the raw
-    history behind every claim.</p>
-    <span class="go">Browse 7,548 games →</span></a>
-  <a class="card" href="/disclaimers">
-    <span class="k">The fine print</span><b>Disclaimers</b>
-    <p>No wagers, no funds held, no performance claims, no affiliation with any league or
-    book. Written plainly.</p>
-    <span class="go">Read them →</span></a>
-</div>
+  <div class="stance">
+    <p><b>We publish our own model losing.</b> Across <span class="n">2,671</span> graded
+    walk-forward NFL games (<span class="n">2,608</span> decided, <span class="n">63</span>
+    pushes) our prediction model hit <span class="n">49.5%</span> of decided games against
+    the spread; the market hit <span class="n">50.9%</span>; breakeven is
+    <span class="n">52.4%</span>. Nobody clears it. That measurement is why Sooth sells
+    price transparency instead of picks — and why you can trust the rest of this site:
+    numbers that flatter us and numbers that do not get published the same way.</p>
+  </div>
+
+  <section class="sec" style="border-top:0" aria-labelledby="rcH">
+    <div class="sec-h"><span class="tl" id="rcH">THE RECEIPTS</span></div>
+    <div class="feed" id="receipts"></div>
+  </section>
+
 </main>
 
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>
+(function(){
+var D=window.Desk;
+D.mount("ledger");
+D.load("/data/board.json").then(function(r){
+  D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
+var R=[
+  ["PUBLIC LEDGER","Board snapshots hash-committed before kickoff, revealed and graded after. Nothing can be quietly edited later.","THE RECEIPTS →","/ledger"],
+  ["VERIFY INDEPENDENTLY","Recompute our Merkle root yourself with a standard-library script. If a number cannot be regenerated from published data, treat it as an error and tell us.","RUN THE CHECK →","/verify"],
+  ["THE RECORD","Every graded sample, ours and the market's, on one page — the file we would hand a regulator or a journalist.","READ IT →","/record"],
+  ["METHODOLOGY","The full model spec, the walk-forward backtest, the calibration table, the leakage controls.","THE METHOD →","/methodology"],
+  ["ENGINE ROOM","27 seasons of data, the honest backtest curve, and the measured +2.71% price edge — what the archive actually buys us.","OPEN →","/engine"],
+  ["GAME LOG","Every NFL game since 1999 with its closing spread, total and moneylines — the raw history behind every claim.","7,548 GAMES →","/gamelog"],
+  ["DISCLAIMERS","No wagers, no funds held, no performance claims, no affiliation with any league or book. Written plainly.","THE FINE PRINT →","/disclaimers"]
+];
+document.getElementById("receipts").innerHTML=R.map(function(r,i){
+  return D.feedRow(i,r[0],r[1],r[2],r[3]);}).join("");
+})();
+</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

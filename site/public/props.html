@@ -3,204 +3,188 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Player Props</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Sooth">
-<meta property="og:title" content="Sooth — Player Props">
-<meta property="og:description" content="Player props with the best available price across books and the de-vigged fair line.">
+<title>Sooth — Props</title>
+<meta name="description" content="Player props compared at the same line across books: best available price per side against the de-vigged fair line, with real hit rates. Research only.">
+<meta property="og:title" content="Sooth — Props">
+<meta property="og:description" content="Best price per side against the de-vigged fair line, same-line comparison only.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/props">
-<meta name="description" content="Player props with the best available price across books and the de-vigged fair line. Same-line comparison only.">
-<link rel="stylesheet" href="/assets/sooth.css">
+<link rel="canonical" href="https://sooth.bet/props">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
 <style>
-  body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
-      var(--bg);
-    padding:0 20px 60px}
-  .wrap-page{max-width:1060px; margin:0 auto}
-  .page-head{padding:40px 0 20px}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px; text-wrap:balance}
-  .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
-  .sub b{color:var(--ink)}
-
-  .controls{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:22px 0 14px}
-  select,input[type=search]{background:var(--bg-2); color:var(--ink); border:1px solid var(--line);
-    border-radius:10px; padding:8px 12px; font-family:var(--num); font-size:13px}
-  select{cursor:pointer}
-  select:hover,input[type=search]:hover{border-color:var(--dim)}
-  input[type=search]{width:190px}
-  input[type=search]::placeholder{color:var(--dim)}
-  .count{font-family:var(--num); font-size:12px; color:var(--dim); margin-left:auto}
-  .count b{color:var(--muted); font-weight:600}
-
-  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
-    border-radius:16px; padding:0; overflow:hidden}
-  .scroll{overflow-x:auto; max-height:72vh; overflow-y:auto}
-  table{border-collapse:collapse; width:100%; font-size:12.5px; min-width:900px}
-  thead th{position:sticky; top:0; background:#F3F4F0; z-index:1;
-    font-family:var(--num); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--dim); font-weight:600; text-align:right; padding:10px 12px;
-    border-bottom:1px solid var(--line)}
-  th.l,td.l{text-align:left}
-  td{padding:8px 12px; border-bottom:1px solid rgba(229,231,225,.55); text-align:right;
-    font-variant-numeric:tabular-nums; font-family:var(--num); color:var(--muted); white-space:nowrap}
-  tr:hover td{background:rgba(2,132,199,.06)}
-  td.pl{font-family:var(--sans); font-size:13px; color:var(--ink); font-weight:600}
-  td.pl .mk{display:block; font-size:11px; color:var(--dim); font-weight:500}
-  td .bk{display:block; font-size:10px; color:var(--pos); font-weight:600}
-  td .fair{color:var(--dim)}
-  td.gain{color:var(--pos); font-weight:700}
-  .match{font-family:var(--num); font-size:10.5px; color:var(--dim)}
-  .empty{padding:44px 24px; text-align:center; color:var(--muted); font-size:14px}
-  .empty b{color:var(--ink)}
-  .empty p{max-width:52ch; margin:8px auto 0; font-size:13px; color:var(--dim)}
+  .field{background:var(--g2);border:1px solid var(--hair2);border-radius:var(--r);
+    color:var(--ink);padding:8px 12px;font:12.5px var(--sans)}
+  select.field{font:600 12px var(--mono);cursor:pointer}
+  .itab .pl{font:600 13px var(--sans);color:var(--ink);letter-spacing:-.01em}
+  .itab .pl .mk2{display:block;font:500 10px var(--mono);color:var(--dim);
+    letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
+  .itab .match{font:500 10.5px var(--mono);color:var(--dim)}
+  .itab .bk2{display:block;font:500 10px var(--mono);color:var(--dim)}
+  .itab td .up .bk2{color:rgba(52,211,153,.7)}
+  .hit-hot{color:var(--ink);font-weight:700}
 </style>
 </head>
-<body data-page="props">
-<a class="skip" href="#main">Skip to main content</a>
-<main id="main" class="wrap-page">
-<header class="page-head">
-  <h1>Props, shopped and de-vigged.</h1>
-  <p class="sub">Every prop below is compared <b>at the same line</b> across books: the best
-  available price per side next to the <b>fair price</b> (the consensus with the book's margin,
-  called the <b>vig</b> or <b>hold</b>, stripped out). A prop needs three
-  or more books on both sides to appear — fewer than that is a price list, not a market.
-  <b>L10 over</b> is how often the player actually cleared this line in his last ten games.</p>
-</header>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap">
 
-<div class="controls">
-  <label for="sport" class="visually-hidden">Sport</label>
-  <select id="sport" aria-label="Select sport"></select>
-  <label for="market" class="visually-hidden">Market</label>
-  <select id="market" aria-label="Select market"><option value="">All markets</option></select>
-  <label for="q" class="visually-hidden">Search player</label>
-  <input type="search" id="q" placeholder="Search player…" aria-label="Search player">
-  <span class="count" id="count" aria-live="polite"></span>
-</div>
-
-<div id="snapnote" style="display:none;margin:0 0 12px;padding:11px 16px;
-  border:1px solid rgba(180,83,9,.35);border-radius:12px;background:rgba(180,83,9,.06);
-  font-size:12.5px;color:var(--muted)" role="note"><b style="color:#B45309">CLOSING SNAPSHOT</b> —
-  these games have started or finished. Books have not posted the next slate yet;
-  these are the last lines they offered, kept for reference. Fresh props land here
-  automatically, usually by mid-morning.</div>
-
-<div class="card">
-  <div class="scroll" id="scrollbox">
-  <table aria-label="Player props">
-    <thead><tr>
-      <th class="l" scope="col">Player / Market</th>
-      <th class="l" scope="col">Game</th>
-      <th scope="col">Line</th>
-      <th scope="col">Over best</th>
-      <th scope="col">Over fair</th>
-      <th scope="col">Under best</th>
-      <th scope="col">Under fair</th>
-      <th scope="col" title="How often the player cleared this line in his last 10 games">L10 over</th>
-      <th scope="col">Books</th>
-      <th scope="col">Gain</th>
-    </tr></thead>
-    <tbody id="tbody"></tbody>
-  </table>
-  <div class="empty" id="empty" style="display:none" aria-live="polite"></div>
+  <div class="status">
+    <span class="stat"><span class="v n" id="stN">·</span><span class="tl">PROPS PRICED</span></span>
+    <span class="stat"><span class="v n" id="stB">·</span><span class="tl">BOOKS BOTH SIDES</span></span>
+    <span class="live"><span class="pulse on" id="pulse"></span><span class="tl">CAPTURED </span>
+      <span class="tl" id="stT">—</span></span>
   </div>
-</div>
 
-<p id="stamp" style="font-family:var(--num);font-size:11px;color:var(--dim);margin:14px 0 0"></p>
+  <p class="notice" id="snapnote" style="display:none"><span><b>Closing snapshot.</b>
+  These games have started or finished — books have not posted the next slate, so these
+  are the last lines offered, kept for reference. Fresh props land automatically,
+  usually by mid-morning.</span></p>
+
+  <div class="bar">
+    <select id="sport" class="field" aria-label="Sport"></select>
+    <select id="market" class="field" aria-label="Market"><option value="">ALL MARKETS</option></select>
+    <input type="search" id="q" class="field" placeholder="Search player" aria-label="Search player">
+    <span class="count tl" id="count" style="margin-left:auto" aria-live="polite"></span>
+  </div>
+
+  <div class="sec" style="border-top:0;padding-top:4px">
+    <div class="sec-h"><span class="tl">PROPS BOARD</span>
+      <span class="sub">compared at the same line only — three or more books on both sides,
+      or it is a price list, not a market. L10 is how often the player actually cleared
+      this line in his last ten games.</span></div>
+    <div class="itab" id="card">
+      <div class="scr">
+      <table aria-label="Player props">
+        <thead><tr>
+          <th class="l">PLAYER / MARKET</th>
+          <th class="l">GAME</th>
+          <th>LINE</th>
+          <th>OVER BEST</th>
+          <th>FAIR</th>
+          <th>UNDER BEST</th>
+          <th>FAIR</th>
+          <th title="Times cleared this line, last 10 games">L10</th>
+          <th>BKS</th>
+          <th>GAIN</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="state" id="empty" style="display:none" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="ft" style="border:0;margin:8px 0 0;padding:0">A hit rate is a record, not a
+  prediction. Research only — never a pick, and prices move; check the book.</p>
+
 </main>
 
+<script src="/assets/desk.js"></script>
 <script>
-const $=id=>document.getElementById(id);
-const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const am=v=>v>0?'+'+v:String(v);
-let DOC=null;
+(function(){
+var D=window.Desk, DOC=null;
+D.mount("props");
+function $(id){return document.getElementById(id);}
 
-fetch('data/props.json').then(r=>{
-  if(!r.ok) throw new Error(r.status);
-  return r.json();
-}).then(doc=>{ DOC=doc; init(); }).catch(()=>{
-  $('empty').style.display='block';
-  $('empty').innerHTML='<b>No props board yet.</b><p>The props engine has not published a snapshot. Books post player props closer to game time; check back near the next slate.</p>';
+D.load("/data/props.json").then(function(res){
+  if(!res.ok){ fail("<b>NO PROPS BOARD</b>The props engine has not published a snapshot. "
+    +"Books post player props closer to game time."); return; }
+  DOC=res.data; init(res);
 });
-
-function init(){
-  const selS=$('sport');
-  DOC.boards.forEach(b=>{
-    const o=document.createElement('option');
-    o.value=b.sport; o.textContent=b.label+' ('+b.n_props+')';
-    selS.appendChild(o);
-  });
+function fail(html){
+  $("empty").style.display="block"; $("empty").innerHTML=html;
+  $("pulse").className="pulse dead";
+}
+function init(res){
+  var selS=$("sport");
+  (DOC.boards||[]).forEach(function(b){
+    var o=document.createElement("option");
+    o.value=b.sport; o.textContent=b.label.toUpperCase()+" ("+b.n_props+")";
+    selS.appendChild(o);});
+  D.sportRail({boards:(DOC.boards||[]).map(function(b){
+    return {sport:b.sport,n_events:b.n_props};})},
+    (DOC.boards[0]||{}).sport||"", function(sp){
+      if([].some.call(selS.options,function(o){return o.value===sp;})){
+        selS.value=sp; fillMarkets(); render();
+      }});
+  $("stT").textContent=D.ago(DOC.generated_at);
+  $("stT").setAttribute("data-ago",DOC.generated_at);
+  if(res.ageH>4) $("pulse").className="pulse stale";
   if(!DOC.boards.length){
-    $('empty').style.display='block';
-    $('empty').innerHTML='<b>No props published in this window.</b><p>Books post player props closer to game time. The board refreshes automatically; check back near the next slate.</p>';
-    $('stamp').textContent='captured '+new Date(DOC.generated_at).toLocaleString();
+    fail("<b>NO PROPS IN THIS WINDOW</b>Books post player props closer to game time. "
+      +"The board refreshes automatically — check back near the next slate.");
     return;
   }
-  selS.addEventListener('change',()=>{fillMarkets();render();});
-  $('market').addEventListener('change',render);
-  $('q').addEventListener('input',render);
+  selS.addEventListener("change",function(){fillMarkets();render();});
+  $("market").addEventListener("change",render);
+  $("q").addEventListener("input",render);
   fillMarkets(); render();
-  $('stamp').textContent='captured '+new Date(DOC.generated_at).toLocaleString();
 }
-
-function board(){ return DOC.boards.find(b=>b.sport===$('sport').value)||DOC.boards[0]; }
-
+function board(){
+  var v=$("sport").value;
+  return DOC.boards.filter(function(b){return b.sport===v;})[0]||DOC.boards[0];
+}
 function fillMarkets(){
-  const sel=$('market'); sel.innerHTML='<option value="">All markets</option>';
-  const seen=new Set();
-  board().events.forEach(e=>e.props.forEach(p=>{
-    if(seen.has(p.market)) return; seen.add(p.market);
-    const o=document.createElement('option');
-    o.value=p.market; o.textContent=p.market_label; sel.appendChild(o);
-  }));
+  var sel=$("market"); sel.innerHTML='<option value="">ALL MARKETS</option>';
+  var seen={};
+  board().events.forEach(function(e){e.props.forEach(function(p){
+    if(seen[p.market]) return; seen[p.market]=1;
+    var o=document.createElement("option");
+    o.value=p.market; o.textContent=String(p.market_label).toUpperCase();
+    sel.appendChild(o);});});
 }
-
 function render(){
-  const b=board(), mk=$('market').value, q=$('q').value.trim().toLowerCase();
-  const rows=[];
-  const nowMs=Date.now();
-  const hasUpcoming=b.events.some(e=>new Date(e.starts).getTime()>nowMs);
-  document.getElementById('snapnote').style.display=hasUpcoming?'none':'block';
-  b.events.forEach(e=>{
-    if(hasUpcoming&&new Date(e.starts).getTime()<=nowMs) return;
-    const t=new Date(e.starts);
-    const when=t.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+
-               t.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
-    e.props.forEach(p=>{
+  var b=board(), mk=$("market").value, q=$("q").value.trim().toLowerCase();
+  var rows=[], nowMs=Date.now();
+  var hasUpcoming=b.events.some(function(e){return Date.parse(e.starts)>nowMs;});
+  $("snapnote").style.display=hasUpcoming?"none":"flex";
+  b.events.forEach(function(e){
+    if(hasUpcoming&&Date.parse(e.starts)<=nowMs) return;
+    e.props.forEach(function(p){
       if(mk&&p.market!==mk) return;
-      if(q&&!p.player.toLowerCase().includes(q)) return;
-      rows.push({e,p,when});
-    });
+      if(q&&p.player.toLowerCase().indexOf(q)<0) return;
+      rows.push({e:e,p:p});});
   });
-  rows.sort((a,b2)=>b2.p.gain_pts-a.p.gain_pts);
-  const tb=$('tbody'); tb.innerHTML='';
-  const frag=document.createDocumentFragment();
-  rows.forEach(({e,p,when})=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=
-      `<td class="l pl">${esc(p.player)}<span class="mk">${esc(p.market_label)}</span></td>`+
-      `<td class="l"><span class="match">${esc(e.away)} @ ${esc(e.home)}<br>${when}</span></td>`+
-      `<td>${p.line}</td>`+
-      `<td>${am(p.over.best_price)}<span class="bk">${esc(p.over.best_book)}</span></td>`+
-      `<td class="fair">${am(p.over.fair_price)}</td>`+
-      `<td>${am(p.under.best_price)}<span class="bk">${esc(p.under.best_book)}</span></td>`+
-      `<td class="fair">${am(p.under.fair_price)}</td>`+
-      `<td>${p.hit?`<span title="last 5: ${p.hit.l5.over}/${p.hit.l5.n} · season: ${p.hit.season.over}/${p.hit.season.n}"${(p.hit.l10.over>=8||p.hit.l10.over<=2)?' style="color:var(--ink);font-weight:700"':''}>${p.hit.l10.over}/${p.hit.l10.n}</span>`:'—'}</td>`+
-      `<td>${Math.min(p.over.n_books,p.under.n_books)}</td>`+
-      `<td class="gain">${(p.gain_pts>=0?'+':'')+p.gain_pts.toFixed(1)}</td>`;
-    frag.appendChild(tr);
+  rows.sort(function(a,b2){return b2.p.gain_pts-a.p.gain_pts;});
+  var html="";
+  rows.forEach(function(r){
+    var e=r.e,p=r.p;
+    var hit=p.hit?('<span'+((p.hit.l10.over>=8||p.hit.l10.over<=2)?' class="hit-hot"':'')
+      +' title="last 5: '+p.hit.l5.over+'/'+p.hit.l5.n+' · season: '
+      +p.hit.season.over+'/'+p.hit.season.n+'">'+p.hit.l10.over+'/'+p.hit.l10.n+'</span>'):"·";
+    html+='<tr>'
+      +'<td class="l"><span class="pl">'+D.esc(p.player)
+        +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></td>'
+      +'<td class="l"><span class="match">'+D.esc(e.away)+' AT '+D.esc(e.home)
+        +'<br>'+D.when(e.starts)+'</span></td>'
+      +'<td>'+p.line+'</td>'
+      +'<td class="up">'+D.am(p.over.best_price)
+        +'<span class="bk2">'+D.bk(p.over.best_book)+'</span></td>'
+      +'<td class="dim">'+D.am(p.over.fair_price)+'</td>'
+      +'<td class="up">'+D.am(p.under.best_price)
+        +'<span class="bk2">'+D.bk(p.under.best_book)+'</span></td>'
+      +'<td class="dim">'+D.am(p.under.fair_price)+'</td>'
+      +'<td>'+hit+'</td>'
+      +'<td class="dim">'+Math.min(p.over.n_books,p.under.n_books)+'</td>'
+      +'<td class="up" style="font-weight:700">'+D.pts(p.gain_pts,1)+'</td></tr>';
   });
-  tb.appendChild(frag);
-  $('empty').style.display=rows.length?'none':'block';
-  if(!rows.length) $('empty').innerHTML='<b>Nothing matches that filter.</b>';
-  $('count').innerHTML=`<b>${rows.length}</b> props · ${b.label}`;
+  $("tbody").innerHTML=html;
+  $("empty").style.display=rows.length?"none":"block";
+  if(!rows.length) $("empty").innerHTML="<b>NOTHING MATCHES THAT FILTER</b>";
+  $("count").textContent=rows.length+" SHOWN · "+b.label.toUpperCase();
+  $("stN").textContent=rows.length;
+  var mx=0; rows.forEach(function(r){
+    mx=Math.max(mx,Math.min(r.p.over.n_books,r.p.under.n_books));});
+  $("stB").textContent=mx||"·";
 }
+})();
 </script>
-<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

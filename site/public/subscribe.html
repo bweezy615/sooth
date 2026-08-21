@@ -3,182 +3,145 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Subscribe — sooth</title>
-<meta name="description" content="Sooth Pro, $9.99/month. The full board across every book, line-movement history, closing-line-value data where verified, and model probability exports. Tools and data, not picks.">
-<link rel="canonical" href="https://sooth.bet/subscribe.html">
-<meta property="og:title" content="Subscribe — Sooth Pro, $9.99/month">
-<meta property="og:description" content="Tools and data, not picks. The full line-shopping board, line history, CLV where verified, and probability exports. Our own backtest loses to the closing market — we sell the tools, not a forecast.">
+<title>Sooth Pro — free until Sept 1</title>
+<meta name="description" content="Sooth Pro: the full board, movement history, CLV data and exports. Tools and data — not picks. Free until September 1, then $9.99/month.">
+<meta property="og:title" content="Sooth Pro — free until Sept 1">
+<meta property="og:description" content="Tools and data, not picks. $9.99/month after September 1.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sooth.bet/subscribe.html">
-<meta property="og:image" content="https://sooth.bet/assets/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://sooth.bet/assets/og.png">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/subscribe">
+<link rel="canonical" href="https://sooth.bet/subscribe">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/sooth.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
 <style>
-  /* subscribe-specific layout only; system is sooth.css */
-  .sub-head{padding:36px 0 6px}
-  .sub-head h1{font-size:clamp(28px,4vw,40px);line-height:1.05}
-  .sub-head h1 .price{color:var(--pos);font-family:var(--num);font-size:.7em;font-weight:700}
-  .sub-head p{color:var(--ink-2);font-size:15px;max-width:60ch;margin:14px 0 0;line-height:1.6}
-  .sub-head p b{color:var(--ink)}
-
-  .buy{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin:22px 0 8px;align-items:start}
+  .buy{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin:24px 0 8px;align-items:start}
   @media (max-width:820px){.buy{grid-template-columns:1fr}}
-
-  .feat h2{font-size:15px;margin:0 0 12px;letter-spacing:-.01em}
+  .pane{padding:20px 22px}
   .feat ul{list-style:none;margin:0;padding:0}
-  .feat li{font-size:13.5px;color:var(--ink-2);line-height:1.5;padding:9px 0 9px 22px;
-    position:relative;border-bottom:1px solid var(--line)}
+  .feat li{font-size:13px;color:var(--ink2);line-height:1.55;padding:10px 0 10px 20px;
+    position:relative;border-bottom:1px solid var(--hair)}
   .feat li:last-child{border-bottom:0}
-  .feat li:before{content:"";position:absolute;left:2px;top:15px;width:6px;height:6px;
-    border-radius:50%;background:var(--pos)}
-
-  .card-buy{position:sticky;top:16px}
-  .card-buy .amt{font-family:var(--num);font-size:34px;font-weight:700;line-height:1}
-  .card-buy .per{color:var(--muted);font-size:13px;margin-left:2px;font-family:var(--sans);font-weight:500}
-  .card-buy .sub2{color:var(--muted);font-size:12.5px;margin:8px 0 16px;line-height:1.45}
-  .card-buy .btn-accent{width:100%;justify-content:center;font-size:15px;padding:14px}
-  .renew{font-size:11px;color:var(--dim);margin:12px 0 0;line-height:1.5}
-  .manage{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.5;
-    border-top:1px solid var(--line);padding-top:14px}
-  .manage a{color:var(--ink-2)}
-
-  .honest{margin-top:14px}
-  .honest .eyebrow{color:var(--warn)}
-  .honest p{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin:8px 0 0;max-width:68ch}
+  .feat li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:5px;
+    border-radius:1px;background:var(--brand)}
+  .card-buy{position:sticky;top:110px}
+  .amt{font:700 34px/1 var(--mono);letter-spacing:-.02em;
+    background:linear-gradient(180deg,#FFFFFF 0%,#D9DDE4 55%,#9AA1AC 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .per{color:var(--mut);font-size:12.5px;margin-left:4px}
+  .sub2{color:var(--mut);font-size:12.5px;margin:8px 0 16px;line-height:1.5}
+  .go{display:flex;width:100%;justify-content:center;font:700 14px var(--sans);
+    color:var(--g0);background:linear-gradient(180deg,#3BE3B6,#22BE93);padding:14px;
+    border-radius:var(--r);border:0;cursor:pointer;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.25),
+      0 3px 8px -2px rgba(0,0,0,.6)}
+  .go:hover{filter:brightness(1.07);color:var(--g0)}
+  .fine{font-size:11px;color:var(--dim);margin:12px 0 0;line-height:1.55}
+  .manage{font-size:11.5px;color:var(--mut);margin:14px 0 0;line-height:1.55;
+    border-top:1px solid var(--hair);padding-top:13px}
+  .manage a{color:var(--ink2)}
+  .honest{border-left:2px solid var(--amber);background:var(--g1);
+    padding:16px 20px;margin-top:16px;max-width:86ch}
+  .honest p{color:var(--ink2);font-size:13px;line-height:1.65;margin:8px 0 0}
   .honest p b{color:var(--ink)}
-
-  .rg{margin-top:8px;font-size:12px;color:var(--dim);line-height:1.6}
-  .rg b{color:var(--muted)}
-  .rg .never{color:var(--muted)}
-
+  .honest a{color:var(--brand)}
+  .rg{margin-top:14px;font-size:11.5px;color:var(--dim);line-height:1.65;max-width:86ch}
+  .rg b{color:var(--mut)}
   /* embedded-checkout modal — Stripe's iframe mounts inside .co-box on white */
-  #checkout-overlay{position:fixed;inset:0;background:rgba(8,12,20,.55);z-index:100;
+  #checkout-overlay{position:fixed;inset:0;background:rgba(8,12,20,.6);z-index:200;
     display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow:auto}
   #checkout-overlay[hidden]{display:none}
-  .co-box{background:#fff;border-radius:14px;width:100%;max-width:480px;position:relative;
-    padding:44px 14px 14px;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+  .co-box{background:#fff;border-radius:10px;width:100%;max-width:480px;position:relative;
+    padding:44px 14px 14px;box-shadow:0 24px 70px rgba(0,0,0,.5)}
   .co-close{position:absolute;top:8px;right:10px;background:none;border:0;font-size:24px;
     line-height:1;color:#64748B;cursor:pointer;padding:6px;border-radius:8px}
   .co-close:hover{color:#0F172A;background:#F1F5F9}
 </style>
-<link rel="icon" href="/apple-touch-icon.png">
 </head>
-<body data-page="">
+<body>
 <a class="skip" href="#buy">Skip to subscribe</a>
+<main class="wrap" style="max-width:980px">
 
-<main class="wrap-narrow">
-
-  <div class="statusbar" aria-live="polite">
-    <span class="sb"><span class="dot"></span> Sooth Pro</span>
-    <span class="sep">|</span>
-    <span class="sb">free until Sept 1</span>
-    <span class="sep">|</span>
-    <span class="sb">no card needed</span>
-    <span class="sep">|</span>
-    <span class="sb">tools and data, <b>not picks</b></span>
+  <div class="status" style="padding-bottom:12px">
+    <span class="live" style="margin:0"><span class="pulse on"></span>
+      <span class="tl">SOOTH PRO · FREE UNTIL SEPT 1 · NO CARD NEEDED · TOOLS AND DATA, <b>NOT PICKS</b></span></span>
   </div>
 
-  <div class="sub-head">
-    <div class="eyebrow" style="margin-bottom:12px">Free access</div>
-    <h1>Sooth Pro, <span class="price">free until Sept 1</span></h1>
-    <p>Until September 1, every tool is free: the full line-shopping board across every book,
-      line-movement history, closing-line-value data where we can verify it, and the raw model
-      output to download. <b>There's no card and no account to set up, so you can just open the board.</b> After
-      September 1, Sooth Pro is $9.99/month. <b>Tools and data. Not picks.</b> We make no claim
-      any prediction will win; our own backtest says the model does not beat the closing market.</p>
+  <div class="page-head" style="padding:8px 0 0">
+    <h1 style="font:760 clamp(24px,3.6vw,34px)/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 10px">
+      Deeper instrumentation.<br>Free until September 1.</h1>
+    <p style="color:var(--mut);font-size:14px;max-width:66ch;line-height:1.65;margin:0">
+      Until September 1, every instrument is free: the full line-shopping board across every
+      book, movement history, closing-line-value data where we can verify it, and the raw
+      model output to download. <b style="color:var(--ink2)">No card, no account — open the
+      board.</b> After September 1, Sooth Pro is $9.99/month.
+      <b style="color:var(--ink2)">Tools and data. Not picks.</b> We make no claim any
+      prediction will win; our own backtest says the model does not beat the closing market.</p>
   </div>
 
   <div class="buy" id="buy">
-
-    <!-- what's included -->
-    <div class="panel panel-pad feat">
-      <h2>What's included</h2>
+    <div class="feed pane feat">
+      <div class="tl" style="margin-bottom:10px">WHAT UNLOCKS</div>
       <ul>
         <li>Full board, every book we track, refreshed continuously</li>
-        <li>Line-movement history for any game on the slate</li>
+        <li>Market timeline — per-book price history for any game on the slate</li>
         <li>Closing-line-value data (NFL; other sports as verified)</li>
-        <li>Probability exports, download the model output as JSON or CSV</li>
-        <li>Every future tool at no extra charge while you're subscribed</li>
+        <li>Probability exports — download the model output as JSON or CSV</li>
+        <li>Every future instrument at no extra charge while subscribed</li>
       </ul>
     </div>
 
-    <!-- the buy card -->
-    <div class="panel panel-pad card-buy">
-      <div><span class="amt">Free</span><span class="per">until Sept 1</span></div>
-      <p class="sub2">It's $9.99/month after that, with no card required to start.</p>
-
+    <div class="feed pane card-buy">
+      <div><span class="amt">FREE</span><span class="per n">until Sept 1</span></div>
+      <p class="sub2">$9.99/month after that — no card required to start.</p>
       <!-- Free until Sept 1: this button goes straight into the product (no paywall).
            TO TURN THE PAYWALL ON (Sept 1): replace this whole <a> with a button that
            opens the embedded checkout (the POS wired at the bottom of this file):
-             <button class="btn btn-accent" type="button" onclick="soothCheckout()">
+             <button class="go" type="button" onclick="soothCheckout()">
                Subscribe — $9.99/month</button>
            (If Stripe.js is ever blocked, soothCheckout() falls back to the hosted
            Payment Link automatically.) -->
-      <a class="btn btn-accent"
-         href="/board.html"
-         role="button"
-         aria-label="Open the board, free until September 1">
-        Start free — open the board</a>
-
-      <p class="renew">No charge and no card during the free period. On September 1, Sooth Pro
+      <a class="go" href="/" role="button" aria-label="Open the market, free until September 1">
+        START FREE — OPEN THE MARKET</a>
+      <p class="fine">No charge and no card during the free period. On September 1, Sooth Pro
         becomes $9.99/month, and we'll never charge you without asking first.</p>
-
       <p class="manage">When paid plans start, you'll manage or cancel in one step through the
         <!-- when the Stripe customer-portal URL exists, wrap "billing portal" in <a href="..."> -->
-        billing portal, with no phone call,
-        no email, and no retention screen to click through.</p>
+        billing portal — no phone call, no email, no retention screen.</p>
     </div>
-
   </div>
 
-  <!-- the honest part -->
-  <div class="panel panel-pad honest">
-    <div class="eyebrow">What you're not buying</div>
-    <p>You are not buying picks, and you are not buying an edge over the market. The value is the
-      <b>best available price on every side against the de-vigged fair line</b>, taking the best
-      number is +EV on its own arithmetic, no forecast required. We also publish a prediction model
-      and grade it in the open: on both of our samples it <b>does not clear break-even and the market
-      is better calibrated than we are</b>. Read the whole thing on the
-      <a href="/record.html">record</a> and the <a href="/methodology.html">methodology</a> before
-      you pay. Every slate we've ever committed is in the <a href="/ledger.html">ledger</a>.</p>
+  <div class="honest">
+    <div class="tl" style="color:var(--amber)">WHAT YOU'RE NOT BUYING</div>
+    <p>You are not buying picks, and you are not buying an edge over the market. The value is
+      the <b>best available price on every side against the de-vigged fair line</b> — taking
+      the best number is +EV on its own arithmetic, no forecast required. We also publish a
+      prediction model and grade it in the open: on both of our samples it <b>does not clear
+      break-even and the market is better calibrated than we are</b>. Read the whole thing on
+      the <a href="/record">record</a> and the <a href="/methodology">methodology</a> before
+      you pay. Every slate we've ever committed is in the <a href="/ledger">ledger</a>.</p>
   </div>
 
-  <!-- required responsible-gambling block -->
   <aside class="rg" aria-label="Responsible gambling resources">
-    <b>21+ only</b>, for adults where sports wagering is lawful in their jurisdiction. This is an
-    analytical-tools subscription, not a wager and not a pick service, and nothing here is betting
-    advice. If gambling has stopped being entertainment, help is free and confidential:
+    <b>21+ only</b>, for adults where sports wagering is lawful in their jurisdiction. This is
+    an analytical-tools subscription, not a wager and not a pick service, and nothing here is
+    betting advice. If gambling has stopped being entertainment, help is free and confidential:
     <b>National Problem Gambling Helpline 1-800-522-4700</b>, call or text 24/7, or chat at
-    <a href="https://www.ncpgambling.org/chat" rel="noopener noreferrer" target="_blank">ncpgambling.org/chat</a>.
-    1-800-GAMBLER (1-800-426-2537) is also available 24/7.
+    <a href="https://www.ncpgambling.org/chat" rel="noopener noreferrer" target="_blank"
+      style="color:var(--mut)">ncpgambling.org/chat</a>.
   </aside>
 
 </main>
 
-<!--
-  Stripe config carrier (no executable code). read via:
-    document.getElementById('sooth-stripe-config').dataset
-  data-publishable-key: pk_live_ — SAFE in the browser by design (public key).
-  data-payment-link:     hosted buy.stripe.com URL, kept as a no-JS fallback if
-                         Stripe.js is blocked or /api/checkout errors.
-  The embedded checkout below is the primary POS; the secret key + price live in
-  api/checkout.js (server-side env), never here.
--->
+<!-- Stripe POS. The publishable key is public by design; the secret key + price
+     live in api/checkout.js (server-side env), never here. -->
 <script type="application/json" id="sooth-stripe-config"
   data-publishable-key="pk_live_51TYeULAUGlXR5yMgNlGL1q9FD7UVgCuDSX3qe7jUL1UPb4EAs3cInvIaMZjzo2cLub0ANRGRxZqqF6L8P6PcQERX00Hv7nGaCf"
   data-payment-link="https://buy.stripe.com/14AeVcfxn10r6yU97D4gg00">
 </script>
-
-<!-- Embedded Stripe Checkout (POS on-domain, no redirect). Free until Sept 1:
-     the "Start free" button above is unchanged, so this mounts only via the
-     ?buy=1 test trigger or the Sept-1 flip (point the button's click at
-     window.soothCheckout). -->
 <div id="checkout-overlay" hidden>
   <div class="co-box">
     <button id="checkout-close" class="co-close" aria-label="Close checkout">&times;</button>
@@ -190,12 +153,12 @@
 (function () {
   var cfg = document.getElementById("sooth-stripe-config").dataset;
   var overlay = document.getElementById("checkout-overlay");
-  var checkout = null; // the mounted embedded-checkout instance
+  var checkout = null;
 
   function fallback() { if (cfg.paymentLink) location.href = cfg.paymentLink; }
 
   async function openCheckout() {
-    if (!window.Stripe || !cfg.publishableKey) return fallback(); // JS blocked
+    if (!window.Stripe || !cfg.publishableKey) return fallback();
     try {
       overlay.hidden = false;
       var stripe = Stripe(cfg.publishableKey);
@@ -206,7 +169,7 @@
       checkout.mount("#checkout");
     } catch (e) {
       overlay.hidden = true;
-      fallback(); // last-ditch: send them to the hosted link rather than a dead modal
+      fallback();
     }
   }
   function closeCheckout() {
@@ -215,15 +178,12 @@
     document.getElementById("checkout").innerHTML = "";
   }
   document.getElementById("checkout-close").addEventListener("click", closeCheckout);
-
-  // Sept-1 flip: change the subscribe button to <button onclick> calling this.
   window.soothCheckout = openCheckout;
-  // Test / early access: /subscribe?buy=1 opens checkout without touching the
-  // visible "Start free" button.
   if (/[?&]buy=1/.test(location.search)) openCheckout();
 })();
 </script>
-
-<script src="/assets/shell.js" defer></script>
+<script src="/assets/desk.js"></script>
+<script>window.Desk.mount("");</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

@@ -3,225 +3,172 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Edges</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Sooth">
-<meta name="description" content="Everywhere the books disagree, on one page: prices beating fair, live arbs, middle windows, and line moves.">
-<link rel="canonical" href="https://sooth.bet/edges">
-<meta property="og:title" content="Sooth — Edges">
-<meta property="og:description" content="Everywhere the books disagree: +EV prices, arbs, middles, and line moves.">
+<title>Sooth — Movement</title>
+<meta name="description" content="Everywhere the books disagree: prices beating fair, live arbs and middle windows, and detected movement — all observation, no prediction.">
+<meta property="og:title" content="Sooth — Movement">
+<meta property="og:description" content="Prices beating fair, arbs and middles, and detected market movement.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/edges">
-<link rel="stylesheet" href="/assets/sooth.css">
-<style>
-  body{background:
-      radial-gradient(900px 380px at 80% -100px, rgba(2,132,199,.13), transparent 65%),
-      var(--bg);
-    padding:0 20px 60px}
-  .wrap-page{max-width:940px; margin:0 auto}
-  .page-head{padding:36px 0 16px}
-  h1{font-size:clamp(24px,4vw,34px); font-weight:760; letter-spacing:-.018em; margin:0 0 6px}
-  .sub{color:var(--muted); font-size:14px; margin:0; max-width:70ch}
-  .sub b{color:var(--ink)}
-
-  .views{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 18px}
-  .view{font-family:var(--num);font-size:12.5px;font-weight:600;padding:9px 18px;
-    border-radius:999px;border:1px solid var(--line);background:var(--bg-2);
-    color:var(--muted);cursor:pointer}
-  .view.on{background:rgba(34,211,238,.12);color:var(--iris);
-    border-color:var(--iris);box-shadow:0 0 16px rgba(34,211,238,.25)}
-  .view .ct{opacity:.65;margin-left:6px}
-
-  h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
-    color:var(--muted); font-weight:600; margin:26px 0 6px}
-  .h2sub{font-size:12.5px; color:var(--dim); margin:0 0 12px; max-width:66ch}
-  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
-    border-radius:16px; overflow:hidden}
-  .row{display:flex; align-items:center; gap:16px; padding:13px 18px;
-    border-bottom:1px solid rgba(229,231,225,.55); flex-wrap:wrap}
-  .row:last-child{border-bottom:none}
-  .lead{font-family:var(--num); font-size:16px; font-weight:700; color:var(--pos); min-width:76px}
-  .lead.dn{color:var(--neg)}
-  .what{flex:1; min-width:240px}
-  .what b{font-size:13.5px}
-  .what p{margin:2px 0 0; font-size:12.5px; color:var(--muted); line-height:1.55}
-  .what .bk{color:#0369A1; font-family:var(--num); font-size:11.5px}
-  .what .tag{display:inline-block;font-family:var(--num);font-size:9.5px;letter-spacing:.08em;
-    border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#0369A1;
-    margin-left:8px;vertical-align:2px;text-transform:uppercase}
-  .meta{text-align:right; font-family:var(--num); font-size:11px; color:var(--dim)}
-  .meta .bk{display:block; font-size:12.5px; color:var(--ink); font-weight:600}
-  .empty{padding:34px 24px; text-align:center; color:var(--muted); font-size:13.5px}
-  .empty b{color:var(--ink)}
-  .empty p{max-width:56ch; margin:8px auto 0; font-size:12.5px; color:var(--dim)}
-</style>
+<link rel="canonical" href="https://sooth.bet/edges">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
 </head>
-<body data-page="edges">
-<a class="skip" href="#main">Skip to main content</a>
-<div class="wrap-page" id="main">
-<header class="page-head">
-  <h1>Everywhere the books disagree.</h1>
-  <p class="sub">One page, three kinds of disagreement.
-  <b>+EV</b> (positive expected value): a best price currently
-  beating the no-vig fair line. The book is paying more than the math says the side is worth.
-  <b>Arbs &amp; middles</b>: two books far enough apart to
-  play both sides profitably. <b>Moves</b>: books drifting from their own numbers or from the pack.
-  All observation, no prediction.</p>
-</header>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap">
 
-<div class="views" id="views" role="tablist" aria-label="View selector">
-  <button class="view on" data-v="ev" role="tab" aria-selected="true" aria-controls="v-ev">+EV<span class="ct" id="ct-ev"></span></button>
-  <button class="view" data-v="arb" role="tab" aria-selected="false" aria-controls="v-arb">Arbs &amp; middles<span class="ct" id="ct-arb"></span></button>
-  <button class="view" data-v="mov" role="tab" aria-selected="false" aria-controls="v-mov">Moves<span class="ct" id="ct-mov"></span></button>
-</div>
+  <div class="status">
+    <span class="stat"><span class="v n" id="stEv">·</span><span class="tl">BEATING FAIR</span></span>
+    <span class="stat"><span class="v n" id="stArb">·</span><span class="tl">ARBS + MIDDLES</span></span>
+    <span class="stat"><span class="v n" id="stMv">·</span><span class="tl">MOVES · 48H</span></span>
+    <span class="live"><span class="pulse on" id="pulse"></span><span class="tl">SNAPSHOT </span>
+      <span class="tl" id="stT">—</span></span>
+  </div>
 
-<div id="v-ev" role="tabpanel">
-  <h2>Prices beating fair right now</h2>
-  <p class="h2sub">Best available price vs the no-vig (margin-removed) median across books, for games and props,
-  ranked by edge. These close fast; the timestamp is part of the data.</p>
-  <div class="card" id="evCard"><div class="empty" aria-live="polite">Loading…</div></div>
-</div>
+  <section class="sec" style="border-top:0" aria-labelledby="evH">
+    <div class="sec-h"><span class="tl" id="evH">BEATING FAIR</span>
+      <span class="sub">best available price above the de-vigged consensus, games and props,
+      ranked by edge — these close fast, the timestamp is part of the data</span></div>
+    <div class="feed" id="ev"></div>
+  </section>
 
-<div id="v-arb" style="display:none" role="tabpanel">
-  <h2>Live arbitrage: moneylines</h2>
-  <p class="h2sub">Best price per side across all books, where implied probabilities sum under 100%.
-  An arb lets you bet both sides and lock in a small guaranteed profit regardless of outcome.</p>
-  <div class="card" id="arbCard"><div class="empty" aria-live="polite">Loading…</div></div>
-  <h2>Middle windows — spreads &amp; totals</h2>
-  <p class="h2sub">One book's line sits below another's, leaving a gap where both bets win if the result lands inside it.</p>
-  <div class="card" id="midCard"><div class="empty" aria-live="polite">Loading…</div></div>
-</div>
+  <section class="sec" aria-labelledby="arbH">
+    <div class="sec-h"><span class="tl" id="arbH">ARBS &amp; MIDDLE WINDOWS</span>
+      <span class="sub">two books far enough apart that both sides pay — implied under 100%,
+      or a gap in the numbers where both bets land</span></div>
+    <div class="feed" id="arb"></div>
+  </section>
 
-<div id="v-mov" style="display:none" role="tabpanel">
-  <h2>Diverging from consensus now</h2>
-  <p class="h2sub">Books currently paying more than the cross-book consensus says the side is worth — line-shopping opportunity, live.</p>
-  <div class="card" id="divCard"><div class="empty" aria-live="polite">Loading…</div></div>
-  <h2>Largest recent moves</h2>
-  <p class="h2sub">Single-book price changes between our observations, last two days. A move signals that new information — injury news, sharp money — hit the market.</p>
-  <div class="card" id="driftCard"><div class="empty" aria-live="polite">Loading…</div></div>
-</div>
+  <section class="sec" aria-labelledby="mvH">
+    <div class="sec-h"><span class="tl" id="mvH">DETECTED MOVEMENT</span>
+      <span class="sub">divergence from the pack, then the largest single-book drifts,
+      last 48 hours, points of implied probability</span></div>
+    <div class="feed" id="mv"></div>
+  </section>
 
-<p id="stamp" style="font-family:var(--num);font-size:11px;color:var(--dim);margin:18px 0 0"></p>
-</div>
+  <p class="ft" style="border:0;margin:4px 0 0;padding:0">All observation, no prediction.
+  Research only — never a pick. Prices move; confirm at the book.</p>
 
+</main>
+
+<script src="/assets/desk.js"></script>
 <script>
-const am=v=>v>0?'+'+v:String(v);
-const implied=a=>a<0?(-a)/((-a)+100):100/(a+100);
-const upcoming=iso=>new Date(iso).getTime()>Date.now();
+(function(){
+var D=window.Desk;
+D.mount("movement");
+function $(id){return document.getElementById(id);}
+function upcoming(iso){return Date.parse(iso)>Date.now();}
+function state(el,tl,body){$(el).innerHTML='<div class="state"><span class="tl">'+tl
+  +'</span>'+(body||"")+'</div>';}
+["ev","arb","mv"].forEach(function(id){D.connecting($(id),"MARKET FEED");});
 
-/* tab switching */
-document.getElementById('views').addEventListener('click',e=>{
-  const b=e.target.closest('.view'); if(!b) return;
-  document.querySelectorAll('.view').forEach(x=>{
-    x.classList.toggle('on',x===b);
-    x.setAttribute('aria-selected', x===b ? 'true' : 'false');
-  });
-  ['ev','arb','mov'].forEach(v=>
-    document.getElementById('v-'+v).style.display=b.dataset.v===v?'':'none');
-});
+Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
+             D.load("/data/middles.json"),D.load("/data/moves.json")]).then(function(rs){
+  var b=rs[0],p=rs[1],m=rs[2],mv=rs[3];
+  if(b.ok){
+    $("stT").textContent=D.ago(b.data.generated_at);
+    $("stT").setAttribute("data-ago",b.data.generated_at);
+    if(b.ageH>3) $("pulse").className="pulse stale";
+    D.sportRail(b.data,"",function(){location.href="/";});
+  } else $("pulse").className="pulse dead";
 
-Promise.allSettled([
-  fetch('data/board.json').then(r=>r.json()),
-  fetch('data/props.json').then(r=>r.json()),
-  fetch('data/middles.json').then(r=>r.json()),
-  fetch('data/moves.json').then(r=>r.json()),
-]).then(([b,p,m,mv])=>{
-  const ERR='<div class="empty"><b>Live data unavailable.</b><p>Could not load the board feed — check your connection and refresh. Prices shown elsewhere may be stale.</p></div>';
-  /* ---- +EV ---- */
-  const evs=[];
-  if(b.status==='fulfilled'){
-    document.getElementById('stamp').textContent=
-      'snapshot '+new Date(b.value.generated_at).toLocaleString();
-    b.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
-      e.sides.forEach(s=>{
-        if(s.edge_vs_fair_pts>0) evs.push({kind:'game',edge:s.edge_vs_fair_pts,
-          t:s.name,sub:`${e.away} @ ${e.home} · ${bd.label} moneyline`,
-          bk:s.best_book,pr:s.best_price,fair:s.fair_price});})));
+  /* ---- beating fair ---- */
+  var evs=[];
+  if(b.ok) b.data.boards.forEach(function(bd){
+    bd.events.filter(function(e){return upcoming(e.starts);}).forEach(function(e){
+      e.sides.forEach(function(s){
+        if(s.edge_vs_fair_pts>0) evs.push({kind:"GAME",edge:s.edge_vs_fair_pts,
+          t:s.name,sub:e.away+" at "+e.home+" · "+bd.label+" moneyline",
+          bk:s.best_book,pr:s.best_price,fair:s.fair_price});});});});
+  if(p.ok) (p.data.boards||[]).forEach(function(bd){
+    bd.events.filter(function(e){return upcoming(e.starts);}).forEach(function(e){
+      e.props.forEach(function(pr){
+        [["Over",pr.over],["Under",pr.under]].forEach(function(sd){
+          var d=sd[1];
+          if(d.edge_vs_fair_pts>0) evs.push({kind:"PROP",edge:d.edge_vs_fair_pts,
+            t:pr.player+" "+sd[0]+" "+pr.line,sub:pr.market_label+" · "+e.away+" at "+e.home,
+            bk:d.best_book,pr:d.best_price,fair:d.fair_price});});});});});
+  evs.sort(function(a,c){return c.edge-a.edge;});
+  $("stEv").textContent=evs.length;
+  if(evs.length){
+    $("ev").innerHTML=evs.slice(0,20).map(function(r,i){
+      return D.feedRow(i,D.esc(r.t)+'<span class="pts n up">'+D.pts(r.edge,1)+' PTS</span>'
+        +' <span class="bkk" style="font:600 9.5px var(--mono);color:var(--dim)">'+r.kind+'</span>',
+        D.esc(r.sub),
+        D.bk(r.bk)+" "+D.am(r.pr)+"<br>FAIR "+D.am(r.fair));}).join("");
+  }else if(!b.ok&&!p.ok){
+    state("ev","FEED UNAVAILABLE","Could not load the board — prices elsewhere may be stale.");
+  }else{
+    state("ev","NOTHING BEATS FAIR RIGHT NOW",
+      "The honest state of an efficient market most of the day. Edges appear when news "
+      +"breaks and books lag — closest to game time.");
   }
-  if(p.status==='fulfilled'){
-    /* ponytail: props.json is the flat engine.props_board shape (no .boards) until
-       the nested boards[].events[].props[] producer ships; treat missing as no props. */
-    (p.value.boards||[]).forEach(bd=>bd.events.filter(e=>upcoming(e.starts)).forEach(e=>
-      e.props.forEach(pr=>[['Over',pr.over],['Under',pr.under]].forEach(([sd,d])=>{
-        if(d.edge_vs_fair_pts>0) evs.push({kind:'prop',edge:d.edge_vs_fair_pts,
-          t:`${pr.player} ${sd} ${pr.line}`,sub:`${pr.market_label} · ${e.away} @ ${e.home}`,
-          bk:d.best_book,pr:d.best_price,fair:d.fair_price});}))));
-  }
-  evs.sort((a,b2)=>b2.edge-a.edge);
-  document.getElementById('ct-ev').textContent=evs.length?`· ${evs.length}`:'';
-  document.getElementById('evCard').innerHTML=evs.length?evs.slice(0,20).map(r=>
-    `<div class="row"><span class="lead" aria-label="Edge: +${r.edge.toFixed(1)} points">+${r.edge.toFixed(1)}</span>
-      <span class="what"><b>${r.t}</b><span class="tag">${r.kind}</span><p>${r.sub}</p></span>
-      <span class="meta"><span class="bk">${r.bk} ${am(r.pr)}</span>fair ${am(r.fair)}</span></div>`).join('')
-  :(b.status!=='fulfilled'&&p.status!=='fulfilled')?ERR
-  :'<div class="empty"><b>Nothing beats fair right now.</b><p>That is the honest state of an efficient market most of the day. Edges appear when news breaks and books lag — closest to game time.</p></div>';
 
-  /* ---- arbs ---- */
-  const arbs=[];
-  if(b.status==='fulfilled'){
-    b.value.boards.forEach(bd=>bd.events.filter(e=>upcoming(e.starts)&&e.sides.length===2)
-      .forEach(e=>{const [s1,s2]=e.sides;
-        const tot=implied(s1.best_price)+implied(s2.best_price);
-        if(tot<1) arbs.push({e,s1,s2,label:bd.label,lock:(1-tot)*100});}));
+  /* ---- arbs + middles ---- */
+  var rows=[];
+  if(b.ok) b.data.boards.forEach(function(bd){
+    bd.events.filter(function(e){return upcoming(e.starts)&&e.sides.length===2;})
+      .forEach(function(e){
+        var s1=e.sides[0],s2=e.sides[1];
+        var tot=D.implied(s1.best_price)+D.implied(s2.best_price);
+        if(tot<1) rows.push({hl:D.esc(e.away)+" at "+D.esc(e.home)
+          +'<span class="pts n up">+'+((1-tot)*100).toFixed(2)+'% LOCK</span>',
+          sub:D.bk(s1.best_book)+" "+D.am(s1.best_price)+" on "+D.esc(s1.name)
+          +" · "+D.bk(s2.best_book)+" "+D.am(s2.best_price)+" on "+D.esc(s2.name),
+          meta:bd.label+" · MONEYLINE",sort:(1-tot)*100});});});
+  if(m.ok) (m.data.middles||[]).filter(function(x){return upcoming(x.starts);})
+    .forEach(function(x){
+      rows.push({hl:D.esc(x.away)+" at "+D.esc(x.home)
+        +'<span class="pts n am" style="color:var(--amber)">WINDOW '+D.esc(String(x.width))+'</span>',
+        sub:D.bk(x.low_book)+" "+D.esc(x.low_label)+" ("+D.am(x.low_price)+") · "
+        +D.bk(x.high_book)+" "+D.esc(x.high_label)+" ("+D.am(x.high_price)
+        +") — lands inside "+x.numbers.join(" · "),
+        meta:x.label+" · "+String(x.market).toUpperCase(),sort:0});});
+  $("stArb").textContent=rows.length;
+  if(rows.length){
+    rows.sort(function(a,c){return c.sort-a.sort;});
+    $("arb").innerHTML=rows.map(function(r,i){return D.feedRow(i,r.hl,r.sub,r.meta);}).join("");
+  }else if(!b.ok){
+    state("arb","FEED UNAVAILABLE","");
+  }else{
+    state("arb","NO LIVE ARB OR MIDDLE AT THIS SNAPSHOT",
+      "Arbs open when one book lags a move and close within minutes — our 2023–25 replay "
+      +"found one in roughly every 39 NFL games. Windows open when books lag each other.");
   }
-  arbs.sort((a,b2)=>b2.lock-a.lock);
-  document.getElementById('arbCard').innerHTML=arbs.length?arbs.map(a=>
-    `<div class="row"><span class="lead" aria-label="Locked profit: +${a.lock.toFixed(2)} percent">+${a.lock.toFixed(2)}%</span>
-      <span class="what"><b>${a.e.away} @ ${a.e.home}</b>
-        <p><span class="bk">${a.s1.best_book} ${am(a.s1.best_price)}</span> on ${a.s1.name} ·
-           <span class="bk">${a.s2.best_book} ${am(a.s2.best_price)}</span> on ${a.s2.name}</p></span>
-      <span class="meta">${a.label} · moneyline</span></div>`).join('')
-  :(b.status!=='fulfilled')?ERR
-  :'<div class="empty"><b>No live arb at this snapshot.</b><p>Arbs open when one book lags a move and close within minutes. Our 2023–25 replay found one in roughly every 39 NFL games.</p></div>';
 
-  /* ---- middles ---- */
-  let mids=[];
-  if(m.status==='fulfilled') mids=m.value.middles.filter(x=>upcoming(x.starts));
-  document.getElementById('ct-arb').textContent=(arbs.length+mids.length)?`· ${arbs.length+mids.length}`:'';
-  document.getElementById('midCard').innerHTML=mids.length?mids.map(x=>
-    `<div class="row"><span class="lead">${x.numbers.join(' · ')}</span>
-      <span class="what"><b>${x.away} @ ${x.home}</b>
-        <p><span class="bk">${x.low_book}</span> ${x.low_label} (${am(x.low_price)}) ·
-           <span class="bk">${x.high_book}</span> ${x.high_label} (${am(x.high_price)}) — window ${x.width}</p></span>
-      <span class="meta">${x.label} · ${x.market}</span></div>`).join('')
-  :'<div class="empty"><b>No middle windows open.</b><p>Windows open when lines move and books lag each other.</p></div>';
-
-  /* ---- moves ---- */
-  if(mv.status!=='fulfilled'){
-    document.getElementById('divCard').innerHTML=ERR;
-    document.getElementById('driftCard').innerHTML=ERR;
-  }
-  if(mv.status==='fulfilled'){
-    const cutoff=Date.now()-48*3600*1000;
-    const recent=a=>new Date(a.observed_at).getTime()>=cutoff;
-    const matchup=a=>{
-      const wrap=t=>t===a.selection?`<b>${t}</b>`:t;
-      return (a.selection===a.home||a.selection===a.away)
-        ?`${wrap(a.away)} @ ${wrap(a.home)}`
-        :`<b>${a.selection}</b> · ${a.away} @ ${a.home}`;};
-    const div=(mv.value.divergence||[]).filter(recent)
-      .sort((a,b2)=>Math.abs(b2.move_pts)-Math.abs(a.move_pts));
-    const dr=(mv.value.drift||[]).filter(recent)
-      .sort((a,b2)=>Math.abs(b2.move_pts)-Math.abs(a.move_pts)).slice(0,15);
-    document.getElementById('ct-mov').textContent=(div.length+dr.length)?`· ${div.length+dr.length}`:'';
-    document.getElementById('divCard').innerHTML=div.length?div.map(a=>
-      `<div class="row"><span class="lead">+${Math.abs(a.move_pts).toFixed(1)}</span>
-        <span class="what">${matchup(a)}<p>${a.detail}</p></span>
-        <span class="meta"><span class="bk">${a.book} ${am(a.to_price)}</span>${a.sport.toUpperCase()} · ${a.market}</span></div>`).join('')
-    :'<div class="empty">No book is more than 1.5 pts from consensus right now.</div>';
-    document.getElementById('driftCard').innerHTML=dr.length?dr.map(a=>{
-      const up=a.move_pts>0;
-      return `<div class="row"><span class="lead ${up?'':'dn'}">${up?'+':'−'}${Math.abs(a.move_pts).toFixed(1)}</span>
-        <span class="what">${matchup(a)}<p>${a.detail}</p></span>
-        <span class="meta"><span class="bk">${a.book} ${am(a.from_price)} → ${am(a.to_price)}</span>${a.sport.toUpperCase()} · ${a.market}</span></div>`}).join('')
-    :'<div class="empty">No single-book moves above threshold in the last two days.</div>';
+  /* ---- movement ---- */
+  if(!mv.ok){ state("mv","MOVEMENT FEED UNAVAILABLE",""); $("stMv").textContent="·"; return; }
+  var cutoff=Date.now()-48*36e5;
+  function recent(a){return Date.parse(a.observed_at)>=cutoff;}
+  function name(a,txt){return String(txt).replace(/side_a/g,a.home).replace(/side_b/g,a.away);}
+  var div=(mv.data.divergence||[]).filter(recent)
+    .sort(function(a,c){return Math.abs(c.move_pts)-Math.abs(a.move_pts);});
+  var dr=(mv.data.drift||[]).filter(recent)
+    .sort(function(a,c){return Math.abs(c.move_pts)-Math.abs(a.move_pts);}).slice(0,15);
+  $("stMv").textContent=div.length+dr.length;
+  var all=div.concat(dr);
+  if(all.length){
+    $("mv").innerHTML=all.map(function(a,i){
+      var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
+      return D.feedRow(i,
+        D.esc(a.away)+' <span style="color:var(--dim)">/</span> '+D.esc(a.home)
+        +'<span class="pts n '+cls+'">'+D.pts(a.move_pts,2)+' PTS</span>',
+        D.esc(name(a,a.detail)),
+        '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span><br>'
+        +String(a.sport).toUpperCase()+" · "+String(a.market).toUpperCase(),
+        "/game?e="+encodeURIComponent(a.event_id)+"&s="+a.sport);}).join("");
+  }else{
+    state("mv","QUIET MARKET","Nothing above "+(mv.data.min_move_pts||1.5)
+      +" pts in the last two days.");
   }
 });
+})();
 </script>
-<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
