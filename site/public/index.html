@@ -71,6 +71,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk, SP="mlb", BOARD=null;
@@ -142,8 +143,8 @@ function renderRadar(){
     '<div class="radar-main">'
     +'<span class="tl">'+D.esc(SPORT_LABEL[sp]||sp)+' · MONEYLINE · '
       +D.esc(side.name).toUpperCase()+' SIDE</span>'
-    +'<div class="radar-mu"><span class="tm">'+D.esc(ev.away)+'</span>'
-    +'<span class="at">AT</span><span class="tm">'+D.esc(ev.home)+'</span>'
+    +'<div class="radar-mu"><span class="tm">'+window.Crest.team(ev.away,{size:15})+'</span>'
+    +'<span class="at">AT</span><span class="tm">'+window.Crest.team(ev.home,{size:15})+'</span>'
     +'<span class="ko">'+D.esc(D.when(ev.starts))+'</span></div>'
     +D.spectrum({quotes:side.quotes,fairProb:side.fair_prob,fairPrice:side.fair_price,
       label:"Sportsbook prices for "+side.name,
@@ -180,8 +181,8 @@ function renderGames(){
     return '<tr data-href="/game?e='+D.esc(e.id)+'&s='+SP+'" tabindex="0">'
       +'<td class="l dim">'+(isOn?'<span class="tl" style="color:var(--amber)">CLOSING SNAPSHOT</span>'
         :D.esc(D.when(e.starts)))+'</td>'
-      +'<td class="l"><span class="mu">'+D.esc(e.away)+'<span class="at">AT</span>'
-        +D.esc(e.home)+'</span></td>'
+      +'<td class="l"><span class="mu">'+window.Crest.team(e.away,{size:14})
+        +'<span class="at">AT</span>'+window.Crest.team(e.home,{size:14})+'</span></td>'
       +'<td>'+D.esc(fav.name.split(" ").pop())+' '+D.am(fav.fair_price)+'</td>'
       +'<td>'+(single?'<span class="dim">·</span>'
         :'<span class="up">'+D.am(best.best_price)+'</span><span class="bkk">'

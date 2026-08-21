@@ -132,13 +132,15 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk, DOC=null;
 D.mount("props");
 function $(id){return document.getElementById(id);}
 
-D.load("/data/props.json").then(function(res){
+Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
+  var res=a[0];
   if(!res.ok){ fail("<b>NO PROPS BOARD</b>The props engine has not published a snapshot. "
     +"Books post player props closer to game time."); return; }
   DOC=res.data; init(res);
@@ -146,8 +148,8 @@ D.load("/data/props.json").then(function(res){
 
 // Best prices. Same file the alerts read, so the page and the channel cannot
 // drift into describing one selection two ways.
-D.load("/data/props_picks.json").then(function(res){
-  var el=$("bp");
+Promise.all([D.load("/data/props_picks.json"),window.Crest.load()]).then(function(a){
+  var res=a[0], el=$("bp");
   if(!res.ok||!res.data||!(res.data.picks||[]).length){
     el.innerHTML='<div class="bp-state">No prop has three or more books on both '
       +'sides right now, so there is nothing to compare. Books post player props '
@@ -188,7 +190,11 @@ function bestPrices(d){
   ps.forEach(function(p,i){
     var meta=[edgeCell(p.price_edge_pts)];
     var f=formLine(p); if(f) meta.push(f);
-    meta.push('<span>'+D.esc(p.matchup)+'</span>');
+    var mt=String(p.matchup||"").split(" @ ");
+    meta.push(mt.length===2
+      ? '<span>'+window.Crest.team(mt[0],{size:14})+' <span class="sep">@</span> '
+        +window.Crest.team(mt[1],{size:14})+'</span>'
+      : '<span>'+D.esc(p.matchup)+'</span>');
     if(p.starts) meta.push('<span class="tm">'+D.when(p.starts)+'</span>');
     html+='<div class="bp-r">'
       +'<span class="bp-n">'+(i+1)+'</span>'
@@ -266,7 +272,9 @@ function render(){
     html+='<tr>'
       +'<td class="l"><span class="pl">'+D.esc(p.player)
         +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></td>'
-      +'<td class="l"><span class="match">'+D.esc(e.away)+' AT '+D.esc(e.home)
+      +'<td class="l"><span class="match">'
+        +window.Crest.team(e.away,{abbr:true,size:14})+' AT '
+        +window.Crest.team(e.home,{abbr:true,size:14})
         +'<br>'+D.when(e.starts)+'</span></td>'
       +'<td>'+p.line+'</td>'
       +'<td class="up">'+D.am(p.over.best_price)
