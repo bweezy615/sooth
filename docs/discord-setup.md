@@ -96,14 +96,21 @@ and `.github/workflows/discord.yml`.
 
 Before merging, one decision that is not the bot's to make:
 
-**`POSTABLE` is deliberately empty**, so the bot currently posts nothing at
-all. That was correct while the only candidate was the strikeout model, which
-measured no edge — see `/props-model`. The best-prices post ranks on price
-rather than on model edge, so it is not blocked by that finding, but a market
-still has to be listed in `POSTABLE` before anything goes out.
+**The best-prices post does not consult `POSTABLE` and will post as soon as the
+secrets exist.** No key needs adding to make the channel work. It ranks every
+priced side on `edge_vs_fair_pts` and publishes the top few — price arithmetic,
+no model involved, nothing gated.
 
-Whoever adds a key is making a claim that someone measured that market's
-behaviour. Do not add one to make the channel look alive.
+**`POSTABLE` gates a different path entirely** — `--mode edges`, which ranks by
+model edge. It is deliberately empty because the strikeout model measured no
+edge on the population books actually post (see `/props-model`), and that mode
+is now diagnostic-only and cannot publish under any flag. PRODUCT.md carries
+"never rank or select anything by model edge" as a hard constraint.
+
+So: if the channel is quiet after setup, the cause is the secrets, the schedule,
+or an empty board — never `POSTABLE`. Adding a key there will not make a post
+appear, and whoever adds one is claiming someone measured that market. Do not
+add one to make the channel look alive.
 
 ---
 
