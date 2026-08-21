@@ -116,7 +116,12 @@ board populated year-round.
 - Never rank or select anything by model edge. See "What we do NOT claim".
 - Published confidence caps at 85% — our 90%+ band measured 94.5% predicted
   against 86.7% actual.
-- 18+, where lawful. Responsible-gambling helpline on every page.
+- **21+, where lawful.** Responsible-gambling helpline on every page.
+  This document said 18+ until 2026-08-21 while every shipped surface said
+  21+ — eight pages, the shell footer, `scripts/build_site.py` and the email
+  alerts — and the Open Graph card said 18+, which meant the artwork on every
+  shared link contradicted the page it linked to. One figure, everywhere, and
+  grep for it before adding a new surface.
 - Prices are what books showed when last read and move constantly; always
   timestamp the board.
 
