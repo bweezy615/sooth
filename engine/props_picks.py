@@ -45,6 +45,33 @@ DISCLAIMER = ("Best available price at time of posting, not a prediction. "
 
 MIN_BOOKS = 3
 
+# Games of history required before the form line is published beside a pick.
+# A price edge on four games is a real price edge; the form line next to it
+# would be noise, so the pick still posts and the history is withheld. Per
+# market, because a game is not a constant unit of evidence — a hitter reaches
+# 25 games in under a month, a starter needs most of a season. An unmapped
+# market takes the STRICTEST floor rather than the loosest, so a new market
+# cannot arrive publishing thin history because nobody remembered to tune it.
+MIN_FORM_GAMES = {
+    "pitcher_strikeouts": 5,
+    "batter_total_bases": 25,
+}
+DEFAULT_MIN_FORM = max(MIN_FORM_GAMES.values())
+
+
+def price_sentence(edge_pts: float) -> str:
+    """The sign changes the claim, so it changes the sentence.
+
+    A price below consensus fair is not a small edge, it is the vig. Letting a
+    minus sign be the only thing separating "you are getting a good number" from
+    "you are paying the house" invites exactly the misreading this whole product
+    is supposed to avoid.
+    """
+    if edge_pts > 0:
+        return f"{edge_pts:.2f} pts better than consensus fair"
+    return (f"{abs(edge_pts):.2f} pts below consensus fair "
+            f"— that gap is the vig, not an edge")
+
 
 def american(p: float) -> str:
     return f"+{int(p)}" if p > 0 else f"{int(p)}"
@@ -88,8 +115,17 @@ def side_rows(doc: dict) -> list[dict]:
     return rows
 
 
-def hit_str(row: dict) -> str:
-    """Realised over-rate. Reported for the side being picked, not always over."""
+def hit_str(row: dict) -> str | None:
+    """Realised rate for the side being picked. None when the sample is too thin.
+
+    Returns None rather than a short line: the pick is still worth posting on
+    price alone, but a form line built on a handful of games reads as evidence
+    and is not.
+    """
+    season = row.get("hit_season") or {}
+    floor = MIN_FORM_GAMES.get(row["market"], DEFAULT_MIN_FORM)
+    if season.get("n", 0) < floor:
+        return None
     parts = []
     for label, key in (("L5", "hit_l5"), ("L10", "hit_l10"), ("SZN", "hit_season")):
         h = row.get(key)
@@ -98,7 +134,7 @@ def hit_str(row: dict) -> str:
         over = h.get("over", 0)
         made = over if row["side"] == "over" else h["n"] - over
         parts.append(f"{label} {made}/{h['n']}")
-    return "  ".join(parts) if parts else "no history"
+    return "  ".join(parts) if parts else None
 
 
 def pick(doc: dict, top: int = 5) -> list[dict]:
@@ -127,16 +163,32 @@ def render(picks: list[dict], generated_at: str | None) -> str:
     lines = ["BEST PRICES ON THE BOARD"]
     if generated_at:
         lines.append(f"board as of {generated_at[:16].replace('T', ' ')} UTC")
+
+    # State the day's situation before the first pick is read. Whether these are
+    # value plays or damage control is the most important thing on the page, and
+    # a reader should not have to infer it from a minus sign three lines down.
+    beat = sum(1 for r in picks if r["price_edge_pts"] > 0)
+    if beat == 0:
+        lines.append("Nothing on the board beats consensus fair today. "
+                     "These are where you give up least to the vig, "
+                     "not positive-value plays.")
+    elif beat < len(picks):
+        lines.append(f"{beat} of {len(picks)} beat consensus fair today. "
+                     "The rest are where you give up least.")
+    else:
+        lines.append("All of today's picks are priced better than consensus fair.")
     lines.append("")
+
     for i, r in enumerate(picks, 1):
         lines.append(f"{i}. {r['player']} {r['side'].upper()} {r['line']} "
                      f"{(r['market_label'] or r['market']).lower()}")
         lines.append(f"   {american(r['best_price'])} at {r['best_book']}"
                      f"   (consensus fair {american(r['fair_price'])}, "
                      f"{r['n_books']} books)")
-        lines.append(f"   price vs consensus {r['price_edge_pts']:+.2f} pts"
-                     f"   |   best-vs-worst book {r['book_spread_pts']:.2f} pts")
-        lines.append(f"   history: {hit_str(r)}")
+        lines.append(f"   {price_sentence(r['price_edge_pts'])}")
+        form = hit_str(r)
+        if form:
+            lines.append(f"   history: {form}")
         if r.get("model_p_over") is not None:
             side_p = (r["model_p_over"] if r["side"] == "over"
                       else 1 - r["model_p_over"])
