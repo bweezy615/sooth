@@ -11,8 +11,10 @@ const auth = require("./_auth.js");
 const MODEL = "claude-haiku-4-5"; // cheapest; bump here if reads need more depth
 const MAX_Q = 500; // input length cap — the floor against abuse/runaway cost
 const FREE_ASK_LIMIT = 3; // free reads/day once the paywall is live (Pro = unlimited)
-// Free until Sept 1 2026 — the cap only bites after that (matches the site promise).
-const CAP_ACTIVE = Date.now() >= Date.parse("2026-09-01T00:00:00Z");
+// Everything is free for now (user call, 2026-08-21): a working system comes
+// before a paywall. The gate machinery below stays tested and ready — re-arm
+// by restoring the date check when Pro has something real behind it.
+const CAP_ACTIVE = false; // was: Date.now() >= Date.parse("2026-09-01T00:00:00Z")
 
 // The house voice + the legal floor, in one place. Every read passes through it.
 const SYSTEM = [
@@ -157,7 +159,7 @@ module.exports = async function handler(req, res) {
   if (question.length > MAX_Q) question = question.slice(0, MAX_Q);
 
   // Entitlement + free daily cap. Pro (a valid sooth_pro cookie) is unlimited.
-  // Free users get FREE_ASK_LIMIT reads/day; the cap is inactive until Sept 1.
+  // Free users get FREE_ASK_LIMIT reads/day when the cap is armed; it is OFF for now.
   // The counter cookie is held and only written on a successful answer below, so
   // a read that errors upstream isn't counted against the user.
   var today = new Date().toISOString().slice(0, 10);

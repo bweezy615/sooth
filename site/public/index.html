@@ -233,15 +233,9 @@ function matchGame(q){
   });});
   return hit;
 }
-/* the ask quota, stated up front — the same dates the API enforces, so the
-   page never promises what /api/ask won't honor */
-(function(){
-  var el=document.getElementById("anterms");
-  var live=Date.now()>=Date.parse("2026-09-01T00:00:00Z");
-  el.textContent=live
-    ? "3 FREE ANALYSES A DAY \u00b7 PRO IS UNLIMITED"
-    : "FREE THROUGH AUG 31 \u00b7 THEN 3 FREE A DAY \u00b7 PRO IS UNLIMITED";
-})();
+/* everything is free right now — say so plainly. The capped-state code below
+   stays wired so a future paywall needs an API change, not a UI rebuild. */
+document.getElementById("anterms").textContent="FREE \u00b7 NO LIMITS \u00b7 NO SIGNUP";
 function cappedCard(){
   return '<div class="ans-card" style="max-width:720px">'
     +'<span class="tl" style="display:block;margin-bottom:8px">TODAY\'S FREE ANALYSES ARE USED</span>'
