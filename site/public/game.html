@@ -212,7 +212,7 @@ function render(hit,moves,research,timeline){
     fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
       body:JSON.stringify(body)})
       .then(function(r){return r.json();})
-      .then(function(j){out.textContent=j.answer||j.error||"No answer.";})
+      .then(function(j){out.innerHTML=D.answer(j.answer||j.error||"No answer.");})
       .catch(function(){out.textContent="The analyst is unavailable right now.";});
   }
   document.addEventListener("click",function(e){

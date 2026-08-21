@@ -86,7 +86,7 @@ function setCount(){ $("cnt").textContent=$("q").value.length; }
 function render(text,isErr){
   var out=$("out");
   out.style.borderLeftColor=isErr?"var(--amber)":"var(--brand)";
-  out.textContent=text;
+  out.innerHTML=D.answer(text);
 }
 function ask(){
   if(busy) return;

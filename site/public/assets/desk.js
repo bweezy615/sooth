@@ -310,6 +310,56 @@ function timeline(mkt,opts){
     +'<span class="tl">'+lab(t1)+'</span></div></div>';
 }
 
+
+/* ---------- analyst answer renderer ----------
+   The model writes markdown-ish text; raw asterisks are not an instrument.
+   Escape FIRST, then transform — the model's output is data, never markup.
+   Odds and point-gains get the desk's numeric treatment so the numbers read
+   the way they do everywhere else on the site. */
+function answer(text){
+  var t=esc(String(text||""));
+  t=t.replace(/\*\*([^*\n]+)\*\*/g,"<b>$1</b>");
+  /* signed 2-4 digit figures are prices; "x.xx pts" is a gain */
+  t=t.replace(/([+\u2212-]\d{2,4})(?![\d.])/g,'<span class="od">$1</span>');
+  t=t.replace(/((?:[+\u2212-])?\d+(?:\.\d+)?\s?(?:pts|points))/gi,'<span class="gn">$1</span>');
+  var out=[],ul=false;
+  t.split(/\n/).forEach(function(ln){
+    var m=ln.match(/^\s*[-\u2022]\s+(.*)$/);
+    if(m){ if(!ul){out.push("<ul>");ul=true;} out.push("<li>"+m[1]+"</li>"); return; }
+    if(ul){out.push("</ul>");ul=false;}
+    if(ln.trim()==="") out.push('<span class="brk"></span>');
+    else out.push("<p>"+ln+"</p>");
+  });
+  if(ul) out.push("</ul>");
+  return out.join("");
+}
+
+/* An instrument readout for one board event: per-side price rows and the
+   deck spectrum for the side with the widest gap. Deterministic — built from
+   board.json, so the visual half of an answer can never be hallucinated. */
+function eventCard(ev,label){
+  var best=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+  var single=(ev.n_books||0)<2;
+  var rows=ev.sides.map(function(sd){
+    return '<div class="kv"><span class="k">'+esc(sd.name)+'</span>'
+      +'<span class="v n">'+(single?"":'<span class="up">')+am(sd.best_price)
+      +(single?"":"</span>")+' <span style="color:var(--dim);font-size:10.5px">'
+      +bk(sd.best_book)+'</span>'
+      +' <span style="color:var(--dim)">· FAIR '+am(sd.fair_price)+'</span>'
+      +(sd.gain_pts!=null&&!single?' <span class="up">'+pts(sd.gain_pts)+' PTS</span>':"")
+      +'</span></div>';
+  }).join("");
+  return '<div class="ans-card">'
+    +'<div class="sec-h" style="margin-bottom:6px"><span class="tl">'
+    +esc(label||"THE NUMBERS")+' · '+esc(ev.away).toUpperCase()+' AT '
+    +esc(ev.home).toUpperCase()+'</span>'
+    +'<a class="more tl" href="/game?e='+encodeURIComponent(ev.id)+'">FULL ANALYSIS →</a></div>'
+    +rows
+    +spectrum({quotes:best.quotes,fairProb:best.fair_prob,fairPrice:best.fair_price,
+      label:"Prices for "+best.name})
+    +'</div>';
+}
+
 /* ---------- ranked feed row ---------- */
 function feedRow(i,hl,sub,meta,href){
   var tag=href?'a href="'+esc(href)+'"':'div';
@@ -327,7 +377,7 @@ function tick(){
 }
 setInterval(tick,15000);
 
-window.Desk={esc:esc,timeline:timeline,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

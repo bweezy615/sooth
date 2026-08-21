@@ -302,8 +302,22 @@ a.mv-row:hover{background:var(--g2)}
 .an-chip:hover{color:var(--brand);border-color:var(--brand)}
 .an-out{border-left:2px solid var(--brand);background:var(--g1);
   padding:14px 18px;margin-top:14px;font-size:13px;line-height:1.65;
-  color:var(--ink2);white-space:pre-wrap;max-width:88ch}
+  color:var(--ink2);max-width:88ch}
 .an-out:empty{display:none}
+.an-out p{margin:0 0 4px}
+.an-out .brk{display:block;height:8px}
+.an-out b{color:var(--ink);font-weight:650}
+.an-out ul{margin:2px 0 8px;padding-left:18px}
+.an-out li{margin:0 0 4px}
+.an-out .od{font-family:var(--mono);color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.an-out .gn{font-family:var(--mono);color:var(--up);
+  font-variant-numeric:tabular-nums}
+.ans-card{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
+  border:1px solid var(--hair);border-radius:var(--r);padding:16px 20px 12px;
+  margin-top:14px;max-width:880px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 34px -20px rgba(0,0,0,.85)}
+.ans-card .kv .v{font-size:12.5px}
 .an-in{display:flex;gap:8px;margin-top:12px}
 .an-in input{flex:1;background:var(--g2);border:1px solid var(--hair2);
   border-radius:var(--r);color:var(--ink);padding:9px 12px;font:13px var(--sans)}

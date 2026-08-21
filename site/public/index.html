@@ -217,15 +217,37 @@ function mountAnalyzer(){
   document.getElementById("anchips").innerHTML=chips.map(function(c){
     return '<button class="an-chip" data-q="'+D.esc(c)+'">'+D.esc(c)+'</button>';}).join("");
 }
+/* if the question names a game on the board, the readout leads the answer —
+   built from the data, so the visual half can never be wrong */
+function matchGame(q){
+  var ql=q.toLowerCase(), hit=null;
+  (BOARD.boards||[]).forEach(function(b){ b.events.forEach(function(e){
+    if(hit||started(e)) return;
+    var names=[e.home,e.away];
+    var n=names.filter(function(nm){
+      var last=nm.split(" ").pop().toLowerCase();
+      return ql.indexOf(last)>=0;}).length;
+    if(n>=1) hit=e;
+  });});
+  return hit;
+}
 function runAnalyze(q){
   var out=document.getElementById("anout");
-  if(!q){out.textContent="";return;}
-  out.textContent="ANALYZING THE BOARD…";
+  if(!q){out.innerHTML="";return;}
+  /* the readout is data — it renders NOW. The analyst note follows when the
+     model answers, and if the model never does, the numbers still stand. */
+  var ev=matchGame(q);
+  out.innerHTML=(ev?D.eventCard(ev,"THE NUMBERS"):"")
+    +'<div id="annote" style="margin-top:'+(ev?'12px':'0')+'">'
+    +'<span class="tl">ANALYZING THE BOARD…</span></div>';
+  function note(html){document.getElementById("annote").innerHTML=
+    (ev?'<span class="tl" style="display:block;margin-bottom:6px">ANALYST NOTE</span>':"")+html;}
   fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({question:q})})
     .then(function(r){return r.json();})
-    .then(function(j){out.textContent=j.answer||j.error||"No answer.";})
-    .catch(function(){out.textContent="The analyzer is unavailable right now.";});
+    .then(function(j){note(D.answer(j.answer||j.error||"No answer."));})
+    .catch(function(){note('<span class="tl">THE ANALYST NOTE IS UNAVAILABLE RIGHT NOW'
+      +(ev?" — THE NUMBERS ABOVE ARE LIVE.":".")+'</span>');});
 }
 document.addEventListener("click",function(e){
   var c=e.target.closest("#anchips .an-chip");

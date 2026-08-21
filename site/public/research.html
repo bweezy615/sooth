@@ -281,7 +281,7 @@ function ask(id){
   fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({mode:"matchup",event_id:id,question:q})})
     .then(function(r){return r.json();})
-    .then(function(j){box.textContent=j.answer||j.error||"No answer.";})
+    .then(function(j){box.innerHTML=D.answer(j.answer||j.error||"No answer.");})
     .catch(function(){box.textContent="The analyst is unavailable right now.";});
 }
 
