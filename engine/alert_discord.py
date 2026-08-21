@@ -84,38 +84,53 @@ UA = "sooth-discord/1.0"
 POSTABLE: dict = {
     # EMPTY, DELIBERATELY. No market is currently cleared to post.
     #
-    # Both model heads were walk-forward bucketed by assigned probability and
-    # both are miscalibrated by 6-13 points INSIDE the buckets while looking
-    # calibrated in aggregate, because the errors cancel:
+    # Both model heads are wrong by 6-13 points INSIDE their probability
+    # buckets while looking calibrated in aggregate, because the errors cancel:
     #
     #   kpoisson-v1   p~0.1 predicted 15.8% actual 24.5%   (-8.7, n=347)
     #                 p~0.4 predicted 43.7% actual 36.7%   (+7.0, n=120)
-    #                 overall gap -0.9
     #   tbconv-v1     p~0.2 predicted 27.3% actual 40.4%  (-13.1, n=151)
     #                 p~0.5 predicted 52.2% actual 41.3%  (+10.9, n=361)
-    #                 overall gap -0.5
     #
-    # One cause, implemented twice: both models are plug-in rather than
-    # predictive. Each estimates a player's rate from a finite sample, then
-    # computes tail probabilities as if that estimate were the true parameter.
-    # Ignoring parameter uncertainty pushes probabilities away from the middle,
-    # so every probability published is too extreme and the truth sits nearer
-    # the base rate than claimed.
+    # THE CAUSE IS MEAN SCALING, NOT VARIANCE. An earlier explanation on this
+    # line — plug-in vs predictive probabilities, to be fixed with a negative
+    # binomial — was tested and WITHDRAWN: the fitted r is 180.7, so strikeouts
+    # are almost exactly Poisson, residual variance 5.49 against a Poisson 5.32,
+    # and the correction moved the worst bucket only 16.9 -> 15.8. It is
+    # recorded here rather than deleted because a retracted diagnosis that
+    # vanishes silently is indistinguishable from one that was never made.
     #
-    # That defect lands directly on this module. The market prices close to the
-    # base rate, so our overconfidence is what moves us away from it, which
-    # means delta_pts is LARGEST EXACTLY WHERE WE ARE MOST WRONG. The tbconv
-    # p~0.5 bucket is the worked example: model 52.2%, market ~41%, truth
-    # 41.3% — an eleven-point edge, entirely ours.
+    # Regressing actual on projected, held out:
+    #     kpoisson-v1 lam (last-5 weighted)   slope 0.631   MAE 1.9264
+    #     same but season K/BF                slope 0.718   MAE 1.9054
+    #     last-5 mean K                       slope 0.510   MAE 1.9804
+    # Slope 0.631 means a pitcher the model puts one K above average is really
+    # 0.63 above: the projection moves further than reality does. The recency
+    # weighting is actively harmful — season K/BF beats it on slope AND MAE,
+    # and last-5 alone is worst. The model chases streaks that do not persist.
     #
-    # A floor above the miscalibration (12+) was considered and rejected. It
-    # posts nothing on current boards, but for a reason that expires quietly
-    # the moment a large delta appears — and a large delta is precisely the
-    # case now known to be contaminated.
+    # This lands on this module specifically. The market prices near the base
+    # rate, so our over-extension is what moves us away from it, which means
+    # delta_pts is LARGEST EXACTLY WHERE WE ARE MOST WRONG.
     #
-    # A market returns here when its model publishes PREDICTIVE probabilities
-    # (negative-binomial for strikeouts, Dirichlet-multinomial for total bases)
-    # and has been re-bucketed after the change. Not before.
+    # A slope correction (kshrunk-v2) takes the worst strikeout bucket to 2.6
+    # and total bases to 4.5 — but it is validated only at lines near each
+    # player's distribution centre, and real boards hang lines out in the tail
+    # where probabilities are far more sensitive to a mean shift. On a live
+    # board it produced BIGGER deltas, with two elite strikeout pitchers both
+    # showing large unders: the signature of over-shrinking a selected tail,
+    # not of edge appearing. It is not ready.
+    #
+    # The total-bases slope came out 0.214. Only a fifth of that model's spread
+    # between batters is real, which is close to saying it cannot tell batters
+    # apart once noise is removed.
+    #
+    # A market returns here when its model is calibrated AT THE LINES BOOKS
+    # ACTUALLY POST, on the population that actually reaches a board, and the
+    # surviving delta distribution is large enough to be worth publishing.
+    # Calibration alone is not sufficient: a model can be perfectly honest and
+    # still have nothing to say, and that outcome must be reported as a result
+    # rather than treated as a threshold to be lowered.
 }
 
 # Fallbacks for an explicit override only. There is intentionally no default
@@ -351,8 +366,9 @@ def main() -> int:
 
     if not POSTABLE:
         print("  NO MARKET IS CLEARED TO POST — POSTABLE is empty by decision, "
-              "not by accident. Both model heads are miscalibrated inside their "
-              "probability buckets; see the note on POSTABLE.")
+              "not by accident. Both model heads over-extend their projections "
+              "(strikeout slope 0.63, total-bases slope 0.21) and are "
+              "miscalibrated inside their probability buckets; see POSTABLE.")
 
     # Never let a cap be silent: a market held back is a decision, and it
     # should read as one rather than looking like an empty slate.
