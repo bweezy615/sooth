@@ -143,32 +143,82 @@ function spectrum(opts){
   /* hold a floor on the axis so a tight market LOOKS tight */
   var span=Math.max(hi-lo,0.03), mid=(hi+lo)/2;
   lo=mid-span*0.62; hi=mid+span*0.62;
-  var W=opts.width||860, H=88, PAD=44, TR=52;
-  function X(p){return PAD+((p-lo)/(hi-lo))*(W-2*PAD);}
+
+  /* THE DECK — a shallow perspective plane the books stand on. The geometry
+     is real (one vanishing direction, converging lanes, elliptical ground
+     shadows), the palette is not decorated: depth carries the hierarchy,
+     color still only marks the best number and the fair anchor. */
+  var W=opts.width||860, H=130, PAD=44;
+  var bY=58, fY=98;                       /* deck back / front edge */
+  var bIn=26, fIn=-2;                     /* horizontal inset at each edge */
+  var laneY=84, t=(laneY-bY)/(fY-bY);     /* the lane the pins stand on */
+  var inn=bIn*(1-t)+fIn*t;
+  function X(p){return (PAD+inn+8)+((p-lo)/(hi-lo))*(W-2*(PAD+inn+8));}
+  function edge(y){var i=bIn*(1-(y-bY)/(fY-bY))+fIn*((y-bY)/(fY-bY));
+    return [PAD+i,W-PAD-i];}
+
   var out='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'
-    +esc(opts.label||"Sportsbook prices on one scale")+'">';
-  out+='<line class="track" x1="'+PAD+'" y1="'+TR+'" x2="'+(W-PAD)+'" y2="'+TR+'"/>';
-  /* fair anchor */
+    +esc(opts.label||"Sportsbook prices on one scale")+'">'
+  +'<defs>'
+  +'<linearGradient id="mkN" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="#C7CDD8"/><stop offset=".45" stop-color="#8A919D"/>'
+    +'<stop offset="1" stop-color="#565C68"/></linearGradient>'
+  +'<linearGradient id="mkB" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="#7FF2CB"/><stop offset=".45" stop-color="#34D399"/>'
+    +'<stop offset="1" stop-color="#1B8A66"/></linearGradient>'
+  +'<linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="rgba(255,255,255,.015)"/>'
+    +'<stop offset=".55" stop-color="rgba(255,255,255,.05)"/>'
+    +'<stop offset="1" stop-color="rgba(255,255,255,.085)"/></linearGradient>'
+  +'<linearGradient id="rfl" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0" stop-color="white" stop-opacity=".35"/>'
+    +'<stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>'
+  +'<filter id="mkS" x="-60%" y="-60%" width="220%" height="260%">'
+    +'<feDropShadow dx="0" dy="1.5" stdDeviation="1.4" flood-color="#000" flood-opacity=".6"/></filter>'
+  +'<filter id="mkG" x="-120%" y="-120%" width="340%" height="340%">'
+    +'<feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#34D399" flood-opacity=".5"/></filter>'
+  +'</defs>';
+
+  /* the deck itself: surface, back highlight, converging lane lines */
+  var b=edge(bY), f=edge(fY);
+  out+='<polygon points="'+b[0]+','+bY+' '+b[1]+','+bY+' '+f[1]+','+fY+' '+f[0]+','+fY
+    +'" fill="url(#deck)"/>'
+    +'<line x1="'+b[0]+'" y1="'+bY+'" x2="'+b[1]+'" y2="'+bY
+      +'" stroke="rgba(255,255,255,.14)" stroke-width="1"/>'
+    +'<line x1="'+f[0]+'" y1="'+fY+'" x2="'+f[1]+'" y2="'+fY
+      +'" stroke="rgba(0,0,0,.55)" stroke-width="1.5"/>';
+  [0.33,0.66].forEach(function(k){
+    var y=bY+(fY-bY)*k, e=edge(y);
+    out+='<line x1="'+e[0]+'" y1="'+y+'" x2="'+e[1]+'" y2="'+y
+      +'" stroke="rgba(255,255,255,.035)"/>';});
+
+  /* fair anchor: the tallest post on the deck */
   if(opts.fairProb!=null){
     var fx=X(opts.fairProb);
-    out+='<line class="fair" x1="'+fx+'" y1="'+(TR-30)+'" x2="'+fx+'" y2="'+(TR+22)+'"/>'
-      +'<text class="fair-lb" x="'+fx+'" y="'+(TR-36)+'" text-anchor="middle">FAIR</text>'
-      +(opts.fairPrice!=null?'<text class="fair-pr" x="'+fx+'" y="'+(TR+38)
-        +'" text-anchor="middle">'+esc(am(opts.fairPrice))+'</text>':'');
+    out+='<ellipse cx="'+fx+'" cy="'+laneY+'" rx="9" ry="2.6" fill="rgba(0,0,0,.5)"/>'
+      +'<line x1="'+fx+'" y1="'+laneY+'" x2="'+fx+'" y2="20" stroke="#B4BAC4"'
+        +' stroke-width="1" stroke-dasharray="2 3"/>'
+      +'<text class="fair-lb" x="'+fx+'" y="12" text-anchor="middle">FAIR'
+      +(opts.fairPrice!=null?" "+esc(am(opts.fairPrice)):"")+'</text>';
   }
-  /* markers — lowest implied = biggest payout = the best number */
+
+  /* pins — each book stands on the deck; the head is the raised indicator */
   var bestIp=cl[0].ip, lastX=-999, lvl=0;
   cl.forEach(function(c){
     var x=X(c.ip), best=c.ip===bestIp && cl.length>1;
-    lvl=(x-lastX<46)?(1-lvl):0; lastX=x;           /* stagger tight labels */
-    var yPr=lvl? TR-30 : TR-16, yBk=lvl? TR+30 : TR+18;
+    lvl=(x-lastX<52)?(1-lvl):0; lastX=x;
+    var headY=lvl?26:34, yPr=headY-6, yBk=lvl?fY+22:fY+12;
     var books=c.books.slice(0,2).join("·")+(c.books.length>2?" +"+(c.books.length-2):"");
     out+='<g'+(best?' class="g-best"':'')+'>'
-      +'<rect class="bk'+(best?" best":"")+'" x="'+(x-2.5)+'" y="'+(TR-5)
-        +'" width="5" height="10" rx="1"/>'
+      +'<ellipse cx="'+x+'" cy="'+laneY+'" rx="7" ry="2.2" fill="rgba(0,0,0,.55)"/>'
+      +'<line x1="'+x+'" y1="'+laneY+'" x2="'+x+'" y2="'+(headY+14)
+        +'" stroke="'+(best?"rgba(52,211,153,.55)":"rgba(138,145,157,.45)")+'" stroke-width="1.2"/>'
+      +'<rect x="'+(x-3.5)+'" y="'+headY+'" width="7" height="15" rx="1.8" '
+        +'fill="url(#'+(best?"mkB":"mkN")+')" filter="url(#'+(best?"mkG":"mkS")+')"/>'
+      +'<rect x="'+(x-3.5)+'" y="'+headY+'" width="7" height="3.5" rx="1.6" fill="url(#rfl)"/>'
       +'<text class="bk-pr" x="'+x+'" y="'+yPr+'" text-anchor="middle">'
         +esc(am(c.price))+'</text>'
-      +'<text class="bk-lb" x="'+x+'" y="'+yBk+'" text-anchor="middle">'
+      +'<text class="bk-lb" x="'+x+'" y="'+(fY+12)+'" text-anchor="middle">'
         +esc(books)+'</text></g>';
   });
   out+='</svg>';

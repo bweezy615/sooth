@@ -38,8 +38,12 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--g0);color:var(--ink);font:14px/1.5 var(--sans);
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{color:var(--ink);font:14px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(1100px 480px at 50% -180px, rgba(45,212,167,.05), transparent 70%),
+    radial-gradient(900px 600px at 85% 8%, rgba(255,255,255,.015), transparent 60%),
+    var(--g0)}
 a{color:inherit;text-decoration:none}
 a:hover{color:var(--ink)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -109,8 +113,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ============ status strip ============ */
 .status{display:flex;align-items:baseline;gap:34px;flex-wrap:wrap;
   padding:26px 0 22px}
-.stat .v{font:600 26px/1 var(--mono);letter-spacing:-.02em;color:var(--ink);
-  font-variant-numeric:tabular-nums}
+.stat .v{font:600 26px/1 var(--mono);letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#FFFFFF 0%,#D9DDE4 55%,#9AA1AC 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.55))}
 .stat .v small{font-size:14px;color:var(--mut);font-weight:500}
 .stat .tl{margin-top:7px;display:block}
 .status .live{margin-left:auto;display:flex;align-items:center;gap:8px}
@@ -128,6 +135,42 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sec-h .more{margin-left:auto;font:600 11px/1 var(--mono);letter-spacing:.08em;
   color:var(--dim)}
 .sec-h .more:hover{color:var(--brand)}
+
+/* ---- depth: every instrument surface is lit from above and sits on an
+        ambient shadow. One recipe, shared, so the light source is coherent. */
+.radar,.feed,.itab,.mkt,.ws-grid{
+  background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),
+             inset 0 -1px 0 rgba(0,0,0,.5),
+             0 18px 40px -22px rgba(0,0,0,.85),
+             0 2px 8px -2px rgba(0,0,0,.5)}
+.radar-side{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05));}
+
+/* raised keys — controls you can press read as physically raised */
+.hd-cta,.an-in button{
+  background:linear-gradient(180deg,#3BE3B6,#22BE93);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
+             inset 0 -1px 0 rgba(0,0,0,.25),
+             0 3px 8px -2px rgba(0,0,0,.6)}
+.hd-cta:active,.an-in button:active{transform:translateY(1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 3px -1px rgba(0,0,0,.6)}
+.sp[aria-selected="true"]{
+  background:linear-gradient(180deg,#232730,#1A1D24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),
+             0 3px 10px -4px rgba(0,0,0,.7),
+             inset 0 -2px 0 var(--brand)}
+.an-chip{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.12));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 6px -3px rgba(0,0,0,.5)}
+.mv-row{transition:transform .12s ease,background .12s ease}
+a.mv-row:hover{transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 8px 18px -12px rgba(0,0,0,.9)}
+
+/* inset grooves — measurement rails are carved into the surface */
+.gaptrk{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(255,255,255,.04));
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.04);
+  height:4px}
+.gaptrk i{background:linear-gradient(180deg,#4BE3AE,#27A87D);
+  box-shadow:0 0 6px rgba(52,211,153,.35);height:4px}
 
 /* ============ THE MARKET — price spectrum ============ */
 .spec{width:100%}
@@ -152,7 +195,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ============ market radar ============ */
 .radar{display:grid;grid-template-columns:1fr 340px;gap:0;
   border:1px solid var(--hair);border-radius:var(--r);background:var(--g1)}
-.radar-main{padding:22px 26px 24px;min-width:0}
+.radar-main{padding:22px 26px 24px;min-width:0;
+  background:radial-gradient(620px 190px at 42% 66%,rgba(255,255,255,.035),transparent 70%)}
 .radar-side{border-left:1px solid var(--hair);padding:22px 24px;
   display:flex;flex-direction:column;gap:0}
 .radar-mu{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:10px 0 4px}
@@ -229,7 +273,10 @@ a.mv-row:hover{background:var(--g2)}
 .ws-head .nm{font:700 clamp(17px,2.4vw,24px)/1.2 var(--sans);letter-spacing:-.02em}
 .ws-head .rl{font:500 10px var(--mono);letter-spacing:.14em;color:var(--dim);
   text-transform:uppercase;margin-top:4px;display:block}
-.ws-mid .fair-big{font:700 30px/1 var(--mono);letter-spacing:-.02em}
+.ws-mid .fair-big{font:700 30px/1 var(--mono);letter-spacing:-.02em;
+  background:linear-gradient(180deg,#FFFFFF 0%,#D9DDE4 55%,#9AA1AC 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
 .ws-mid .tl{display:block;text-align:center;margin-top:7px}
 @media (max-width:640px){.ws-head{grid-template-columns:1fr;gap:8px}
   .ws-head .side.a,.ws-head .side.h{text-align:center}}
