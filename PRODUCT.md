@@ -126,3 +126,13 @@ Static files, no framework, no build step, no backend. Data arrives as JSON
 written by a Python engine and refreshed by GitHub Actions. The site is a
 reader. This keeps the published numbers independently checkable and the
 hosting free.
+
+## Amendment — the pick engine (2026-08-21)
+
+**We sell access and instrumentation, never outcomes.** The pick engine sells
+the sealed weekly slate at seal time (it unlocks free for everyone at first
+kickoff), per-pick desk instrumentation, and divergence alerts. It never sells
+winning picks: the model's published record loses to the closing market, that
+figure appears on the paid page itself, and every claim stronger than "sealed,
+graded, published" is banned. Time decay is the mechanism that keeps the
+paywall off the trust surface — the proof is always free.

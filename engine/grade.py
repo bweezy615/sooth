@@ -25,6 +25,7 @@ Two rules make this honest rather than decorative:
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
 from dataclasses import dataclass, asdict, field
 from pathlib import Path
@@ -279,14 +280,73 @@ def grade_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
     return grade
 
 
+def publish(grade: SlateGrade, site_dir: Path | str = "site/public/data",
+            names_from: Path | str | None = None,
+            names: dict[str, dict] | None = None) -> Path:
+    """Write the public graded artifact (pick-engine plan, Step 4).
+
+    Per-pick rows carry matchup names so the site never has to join files.
+    Names come from the pro payload (or the public slate file — redaction
+    keeps home/away visible), and a missing name degrades to the event id,
+    never to a crash. Missing closes stay null with their reason verbatim.
+    """
+    slate_id = grade.slate_id
+    names = dict(names or {})
+    candidates = ([Path(names_from)] if names_from else []) + [
+        Path("data/pro") / f"{slate_id}.pro.json",
+        Path("site/public/data") / f"{slate_id}.json",
+    ]
+    if not names:
+        for c in candidates:
+            try:
+                for g in json.loads(c.read_text()).get("games", []):
+                    names[str(g["game_id"])] = g
+                break
+            except (OSError, json.JSONDecodeError, KeyError):
+                continue
+
+    rows = []
+    for g in grade.predictions:
+        meta = names.get(g.event_id, {})
+        home, away = meta.get("home", "home"), meta.get("away", "away")
+        rows.append({
+            "event_id": g.event_id,
+            "model": g.model_version,
+            "matchup": f"{away} at {home}",
+            "pick": home if g.selection == "side_a" else away,
+            "prob": g.probability,
+            "won": g.won,
+            "brier": g.brier,
+            "reference_price": g.reference_price,
+            "closing_price": g.closing_price,
+            "clv": g.clv,
+            "clv_blocked_reason": g.clv_blocked_reason,
+            "kickoff": meta.get("kickoff"),
+        })
+
+    doc = grade.to_dict()
+    doc["picks"] = rows
+    doc["published_at"] = datetime.now(timezone.utc).isoformat()
+    out = Path(site_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / f"{slate_id}.graded.json"
+    path.write_text(json.dumps(doc, indent=2, default=str))
+    return path
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--slate", required=True)
     ap.add_argument("--ledger", default="data/ledger")
     ap.add_argument("--version", type=int, default=None)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--publish", action="store_true",
+                    help="also write site/public/data/{slate}.graded.json")
     args = ap.parse_args()
-    print(grade_slate(args.slate, args.ledger, args.version, args.out).summary())
+    grade = grade_slate(args.slate, args.ledger, args.version, args.out)
+    print(grade.summary())
+    if args.publish:
+        print(f"published      : {publish(grade)}")
 
 
 if __name__ == "__main__":

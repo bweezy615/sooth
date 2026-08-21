@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth Pick Engine</title>
+<meta name="description" content="Our full model slate, sealed before kickoff under a public Merkle commitment and graded in public against the closing line — losses included. Never sold as winning.">
+<link rel="canonical" href="https://sooth.bet/picks">
+<meta property="og:title" content="Sooth Pick Engine — sealed weekly, graded in public">
+<meta property="og:description" content="Every pick sealed before kickoff, graded against the close after, losses styled like wins. Pro buys timing, not wins.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/picks">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<style>
+  .ph{padding:34px 0 4px;max-width:88ch}
+  .ph h1{font:700 clamp(22px,3.2vw,29px)/1.15 var(--sans);letter-spacing:-.02em;margin:10px 0 0}
+  .creed{color:var(--mut);font-size:13px;line-height:1.7;margin:12px 0 0;max-width:86ch}
+  .creed b{color:var(--ink2)}
+  .creed a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
+  .creed a:hover{color:var(--ink)}
+  .strip{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 12px}
+  .strip .tl b{color:var(--ink2)}
+  .count{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-left:auto}
+  .confbar{display:inline-block;width:46px;height:4px;border-radius:2px;vertical-align:2px;
+    margin-left:7px;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(255,255,255,.04));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.7);position:relative;overflow:hidden}
+  .confbar i{position:absolute;left:0;top:0;height:100%;display:block;
+    background:linear-gradient(180deg,#C7CDD8,#8A919D)}
+  .pick{font:600 13px var(--sans);color:var(--ink)}
+  .pick .m{font:500 10px var(--mono);color:var(--dim);margin-left:6px}
+  tr.dt>td{padding:0;background:var(--g0);border-bottom:1px solid var(--hair2)}
+  .dtin{padding:16px 18px 18px}
+  .dtin .kv .k{font:500 11px var(--mono);letter-spacing:.06em;color:var(--mut)}
+  .dt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .lockcta{display:inline-block;font:700 12px var(--sans);color:var(--g0);
+    background:linear-gradient(180deg,#3BE3B6,#22BE93);padding:11px 18px;
+    border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
+    0 3px 8px -2px rgba(0,0,0,.6)}
+  .gradedh{margin-top:8px}
+  .rowline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .rehearsal{border-left:2px solid var(--amber);background:var(--amber-dim);
+    padding:9px 13px;border-radius:0 var(--r) var(--r) 0;font-size:12px;
+    color:var(--mut);margin:0 0 12px;max-width:86ch}
+  .rehearsal b{color:var(--amber)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the slate</a>
+<main class="wrap" id="main">
+
+  <div class="ph">
+    <span class="tl">SOOTH PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC · NEVER SOLD AS WINNING</span>
+    <h1>Every pick sealed before kickoff. Every result published after.</h1>
+    <p class="creed">Our model measurably <b>loses to the closing market</b> — 49.5% ATS over
+      2,608 graded games, below the 52.4% break-even, published in full at
+      <a href="/record">/record</a>. We do not claim an edge and you should not bet these
+      picks expecting profit. What this is: a transparent research instrument. Every week,
+      before the first kickoff, we seal our full slate — every game, both models, no
+      cherry-picking — under a Merkle commitment anchored to a public GitHub timestamp you
+      can verify at <a href="/verify">/verify</a>. After the games close, we grade ourselves
+      against the closing line, from price sources we captured ourselves, and publish every
+      result — losses styled exactly like wins. <b>Pro buys you the slate at seal time
+      instead of after kickoff</b>, the full desk instrumentation, and alerts. It does not
+      buy you wins; nothing here does. A season is ~285 games — not enough to statistically
+      separate a 52% picker from a coin. We say that out loud because the ledger would out
+      us if we didn't. If someone sells you certainty, ask for their merkle root.</p>
+  </div>
+
+  <div class="strip" id="strip"></div>
+  <div id="noplay"></div>
+  <div class="itab" id="board"></div>
+  <div id="cta"></div>
+
+  <section class="sec gradedh" id="gradedSec" style="display:none">
+    <div class="sec-h"><span class="tl">LAST SLATE, GRADED</span>
+      <span class="sub">against the closing line, from our own capture — losses styled exactly like wins</span>
+      <a class="more tl" href="/record">FULL RECORD →</a></div>
+    <div id="rehearsal"></div>
+    <div class="itab" id="graded"></div>
+    <p class="note" id="recline"></p>
+  </section>
+
+  <p class="note" style="margin-top:18px">Research and entertainment only. Not betting
+  advice, not a claim any pick will win. We do not accept wagers and hold no funds.
+  21+ where lawful. If gambling is causing harm: <b>1-800-522-4700</b>, 24/7.</p>
+
+</main>
+
+<script src="/assets/desk.js"></script>
+<script>
+(function(){
+"use strict";
+var D=window.Desk;
+D.mount("picks");
+var OPEN=null;
+
+/* Below this bar the model barely disagrees with the market anywhere, and an
+   honest engine says so instead of manufacturing conviction. */
+var NOPLAY_DIVERGENCE=0.05;
+
+function $(id){return document.getElementById(id);}
+function pcts(x){return x==null?"·":(x*100).toFixed(1)+"%";}
+function countdown(iso){
+  var ms=Date.parse(iso)-Date.now();
+  if(isNaN(ms)) return "—";
+  if(ms<=0) return "OPEN TO EVERYONE";
+  var d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
+  return (d?d+"D ":"")+h+"H "+m+"M TO FIRST KICKOFF";
+}
+
+function strip(s,locked){
+  $("strip").innerHTML=
+    '<span class="tl">SLATE <b>'+D.esc(s.slate_id||"—")+'</b></span>'
+    +'<a class="seal-badge" href="/verify" title="Verify this commitment">⛓ SEALED '
+      +D.esc(String(s.merkle_root||"").slice(0,10))+'…</a>'
+    +'<span class="tl">AT <b><span data-ago="'+D.esc(s.sealed_at||s.committed_at||"")+'">'
+      +D.ago(s.sealed_at||s.committed_at||"")+'</span></b></span>'
+    +'<span class="tl" style="color:'+(locked?"var(--amber)":"var(--up)")+'">'
+      +countdown(s.unlocks_at||s.earliest_kickoff)+'</span>'
+    +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
+      +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>';
+}
+
+/* ---------- locked: the shape of the slate, none of the opinion ---------- */
+function lockedView(t){
+  strip(t,true);
+  $("board").innerHTML='<div class="scr"><table><thead><tr>'
+    +'<th class="l">MATCHUP</th><th class="l">KICKOFF</th><th>INDEPENDENT</th>'
+    +'<th>MARKET</th><th>DIVERGENCE</th><th>BEST PRICE</th><th>FAIR</th></tr></thead><tbody>'
+    +'<tr class="locked"><td class="l" colspan="2"><span class="pick">'
+      +D.esc(t.top_divergence_matchup||"The slate")
+      +'</span> <span class="lock">— our #1 divergence this week</span></td>'
+    +'<td><span class="mask">▓▓▓ ▓▓%</span></td><td><span class="mask">▓▓%</span></td>'
+    +'<td><span class="mask">▓.▓▓</span></td><td><span class="mask">▓▓▓ ▓▓</span></td>'
+    +'<td><span class="mask">▓▓▓</span></td></tr>'
+    +Array.from({length:Math.max(0,(t.game_count||1)-1)},function(){
+      return '<tr class="locked"><td class="l" colspan="2"><span class="mask">▓▓▓▓▓▓▓ at ▓▓▓▓▓▓▓</span></td>'
+        +'<td><span class="mask">▓▓▓ ▓▓%</span></td><td><span class="mask">▓▓%</span></td>'
+        +'<td><span class="mask">▓.▓▓</span></td><td><span class="mask">▓▓▓ ▓▓</span></td>'
+        +'<td><span class="mask">▓▓▓</span></td></tr>';}).join("")
+    +'</tbody></table></div>';
+  $("cta").innerHTML='<div style="padding:18px 0 4px">'
+    +'<a class="lockcta" href="'+D.esc(t.upgrade||"/subscribe")+'">SEE THE SLATE AT SEAL TIME — GO PRO</a>'
+    +'<p class="note" style="margin-top:10px">The picks above already exist and are '
+    +'already sealed — the root is public and timestamped. You are buying the look '
+    +'before kickoff, not a different set of picks after the fact. At first kickoff '
+    +'the whole slate unlocks for everyone, free.</p></div>';
+}
+
+/* ---------- open/pro: the full instrument ---------- */
+function row(g){
+  var ind=g.independent||{}, con=g.consensus||{};
+  var confPct=Math.round((ind.prob||0)*100);
+  return '<tr class="g" data-id="'+D.esc(g.game_id)+'" tabindex="0">'
+    +'<td class="l"><span class="pick">'+D.esc(ind.pick||"·")
+      +'<span class="m">'+D.esc(g.away)+' AT '+D.esc(g.home)+'</span></span></td>'
+    +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
+    +'<td>'+pcts(ind.prob)+'<span class="confbar"><i style="width:'+confPct+'%"></i></span></td>'
+    +'<td class="dim">'+pcts(g.market_prob)+'</td>'
+    +'<td>'+(g.divergence==null?'<span class="dim">·</span>'
+      :'<b>'+g.divergence.toFixed(3)+'</b>')+'</td>'
+    +'<td>'+(g.best_price==null?'<span class="dim">·</span>'
+      :'<span class="up">'+D.am(g.best_price)+'</span> <span class="bkk">'
+        +D.bk(g.best_book||"")+'</span>')+'</td>'
+    +'<td class="dim">'+(ind.fair_odds==null?"·":D.am(ind.fair_odds))+'</td>'
+    +'<td>'+(g.edge_pts==null?'<span class="dim">·</span>'
+      :'<span class="up">'+D.pts(g.edge_pts)+'</span>')+'</td>'
+    +'</tr>';
+}
+function detail(g){
+  var ind=g.independent||{}, con=g.consensus||{};
+  var kv=function(k,v){return '<div class="kv"><span class="k">'+k
+    +'</span><span class="v n">'+v+'</span></div>';};
+  var spec="";
+  if(g.quotes&&g.quotes.length){
+    var side=(ind.pick===g.home)?g.home:g.away;
+    spec='<div><span class="tl" style="display:block;margin-bottom:8px">OUR FAIR VS THE MARKET · '
+      +D.esc(ind.pick||"")+' SIDE</span>'
+      +D.spectrum({quotes:g.quotes,fairProb:ind.prob,fairPrice:ind.fair_odds,
+        label:"Every book against our fair price for "+side})+'</div>';
+  }
+  return '<tr class="dt"><td colspan="8"><div class="dtin"><div class="dt-grid">'
+    +'<div>'
+    +kv("INDEPENDENT — OUR OPINION",D.esc(ind.pick||"·")+" · "+pcts(ind.prob)
+      +" · FAIR "+D.am(ind.fair_odds))
+    +kv("CONSENSUS — MARKET-AWARE",D.esc(con.pick||"·")+" · "+pcts(con.prob)
+      +" · FAIR "+D.am(con.fair_odds))
+    +kv("MARKET, DE-VIGGED",pcts(g.market_prob))
+    +kv("DIVERGENCE",g.divergence==null?"·":g.divergence.toFixed(3)
+      +(g.models_disagree?' · <span style="color:var(--amber)">MODELS DISAGREE</span>':""))
+    +kv("SPREAD",g.spread_line==null?"·":(g.spread_line>0?"+":"")+g.spread_line)
+    +'</div>'+spec+'</div>'
+    +'<p class="note" style="margin-top:10px">The independent model never sees the '
+    +'betting line — it is our actual opinion, and it is measurably worse than the '
+    +'market. The consensus model sees the market and mostly reproduces it. Both are '
+    +'sealed; neither is advice.</p>'
+    +'</div></td></tr>';
+}
+function openView(s){
+  strip(s,false);
+  var games=s.games||[];
+  var maxDiv=games.reduce(function(m,g){return Math.max(m,g.divergence||0);},0);
+  if(maxDiv<NOPLAY_DIVERGENCE&&games.length){
+    $("noplay").innerHTML='<p class="noplay"><b>Nothing on this slate clears our '
+      +'disagreement bar</b> (max divergence '+maxDiv.toFixed(3)+' &lt; '+NOPLAY_DIVERGENCE
+      +'). The model and the market see this week the same way. That is a finding, '
+      +'not a gap — an engine that always has a hot pick is selling you noise.</p>';
+  }
+  var html='<div class="scr"><table><thead><tr>'
+    +'<th class="l">PICK · MATCHUP</th><th class="l">KICKOFF</th>'
+    +'<th>INDEPENDENT</th><th>MARKET</th><th>DIVERGENCE</th>'
+    +'<th>BEST PRICE</th><th>OUR FAIR</th><th>EDGE PTS</th></tr></thead><tbody>';
+  games.forEach(function(g){
+    html+=row(g);
+    if(OPEN===g.game_id) html+=detail(g);
+  });
+  $("board").innerHTML=html+'</tbody></table></div>';
+}
+
+document.addEventListener("click",function(e){
+  var tr=e.target.closest("tr.g"); if(!tr) return;
+  OPEN=OPEN===tr.dataset.id?null:tr.dataset.id;
+  if(window.__slate) openView(window.__slate);
+});
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Enter") return;
+  var tr=e.target.closest("tr.g"); if(!tr) return;
+  OPEN=OPEN===tr.dataset.id?null:tr.dataset.id;
+  if(window.__slate) openView(window.__slate);
+});
+
+/* ---------- graded section: reads what publish_record.py emits ---------- */
+function graded(){
+  fetch("/data/pickengine-record.json",{cache:"no-store"})
+    .then(function(r){if(!r.ok)throw 0;return r.json();})
+    .then(function(rec){
+      var last=(rec.weeks&&rec.weeks[rec.weeks.length-1])||null;
+      if(!last) return;
+      $("gradedSec").style.display="";
+      if(rec.rehearsal) $("rehearsal").innerHTML=
+        '<p class="rehearsal"><b>REHEARSAL</b> — these rows replay settled '
+        +D.esc(String(rec.rehearsal))+' weeks through the live grading pipeline to '
+        +'prove it end-to-end. They are not live picks and will be replaced by the '
+        +'first real graded slate automatically.</p>';
+      var rows=(last.picks||[]).map(function(p){
+        return '<tr><td class="l"><span class="pick">'+D.esc(p.pick)
+          +'<span class="m">'+D.esc(p.matchup)+'</span></span></td>'
+          +'<td class="dim">'+pcts(p.prob)+'</td>'
+          +'<td>'+(p.won===null?'<span class="dim">push</span>'
+            :p.won?'<span class="up">WON</span>':'<span class="dn">LOST</span>')+'</td>'
+          +'<td>'+D.clvChip(p.clv,p.clv_blocked_reason)+'</td></tr>';
+      }).join("");
+      $("graded").innerHTML='<div class="scr"><table><thead><tr>'
+        +'<th class="l">PICK · MATCHUP</th><th>STATED CHANCE</th><th>RESULT</th>'
+        +'<th>VS CLOSE</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+      $("recline").innerHTML='SEASON TO DATE — INDEPENDENT: <b>'
+        +D.esc(rec.independent_record||"—")+'</b> · MEAN CLV '
+        +(rec.mean_clv==null?"·":D.pts(rec.mean_clv))+' PTS · CLV COVERAGE '
+        +(rec.clv_coverage==null?"·":Math.round(rec.clv_coverage*100)+"%")
+        +' · every number regenerates from <a href="/data/pickengine-record.json" '
+        +'style="color:var(--mut)">pickengine-record.json</a>';
+    }).catch(function(){ /* no graded slate yet — the section stays hidden */ });
+}
+
+/* ---------- boot ---------- */
+D.me().then(function(m){ D.proBadge(m.pro); });
+var SRC=new URLSearchParams(location.search).get("mock")||"/api/picks";
+fetch(SRC,{cache:"no-store"})
+  .then(function(r){return r.json();})
+  .then(function(s){
+    if(s.error){
+      $("board").innerHTML='<div class="state"><span class="tl">NO SEALED SLATE YET</span>'
+        +D.esc(s.error)+'</div>';
+      return;
+    }
+    if(s.locked){ lockedView(s); }
+    else { window.__slate=s; openView(s); }
+    graded();
+  })
+  .catch(function(){
+    $("board").innerHTML='<div class="state"><span class="tl">THE ENGINE IS UNREACHABLE'
+      +'</span>Try again shortly — slates seal Wednesdays in season.</div>';
+  });
+})();
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

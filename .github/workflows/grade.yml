@@ -1,0 +1,69 @@
+name: grade
+
+# Grades the latest sealed slate in public (docs/pick-engine-plan.md, Step 5).
+#
+# Tuesday morning after Monday Night Football: grade the latest slate against
+# settled results and our own captured closes, publish the graded artifact and
+# refold the running record, one commit. Losses ship identically to wins —
+# the whole point of the pick engine is that this step is automatic and
+# unskippable, not a choice we make when the week went well.
+#
+# CLV stays provenance-gated inside grade.py: a game with no qualifying close
+# publishes clv:null with its reason verbatim, never an estimate.
+
+on:
+  schedule:
+    # Tue 13:00 UTC = 09:00 ET during the season months (Sep-Jan, spill Feb).
+    - cron: "0 13 * 9-12 2"
+    - cron: "0 13 * 1-2 2"
+  workflow_dispatch:
+    inputs:
+      slate:
+        description: "Slate id (defaults to slates.json latest)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: grade
+  cancel-in-progress: false
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy
+
+      - name: Grade and publish
+        id: g
+        run: |
+          set -e
+          SLATE="${{ inputs.slate }}"
+          if [ -z "$SLATE" ]; then
+            SLATE="$(python -c "import json;print(json.load(open('site/public/data/slates.json'))['latest'])")"
+          fi
+          echo "slate=$SLATE" >> "$GITHUB_OUTPUT"
+          python -m engine.grade --slate "$SLATE" --publish
+          python scripts/publish_record.py
+
+      - name: Commit once
+        run: |
+          git config user.name "sooth-grade"
+          git config user.email "actions@users.noreply.github.com"
+          git add site/public/data data/ledger
+          if git diff --cached --quiet; then
+            echo "nothing newly settled - no commit"; exit 0
+          fi
+          git commit -m "grade: ${{ steps.g.outputs.slate }} $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase && sleep 5
+          done
+          exit 1

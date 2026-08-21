@@ -74,6 +74,57 @@ def alert_key(a: dict) -> str:
                     ("event_id", "market", "selection", "line", "book"))
 
 
+def slate_divergence(pro_path: str, min_div: float) -> list[dict]:
+    """Model-vs-market divergence rows from the sealed pro slate.
+
+    Shaped like capture divergence alerts so dedup, rendering and the sent
+    watermark treat both kinds identically. The 'book' slot carries the model
+    name — that is what diverged. Only future kickoffs alert; a sealed slate
+    is immutable, so once-per-game dedup is exactly right here.
+    """
+    import datetime as _dt
+    try:
+        doc = json.loads(Path(pro_path).read_text())
+    except (OSError, json.JSONDecodeError):
+        return []
+    now = _dt.datetime.now(_dt.timezone.utc)
+    out = []
+    for g in doc.get("games", []):
+        div = g.get("divergence")
+        if div is None or div < min_div:
+            continue
+        try:
+            kick = _dt.datetime.fromisoformat(str(g.get("kickoff", "")))
+            if kick <= now:
+                continue
+        except ValueError:
+            continue
+        ind = g.get("independent") or {}
+        mkt = g.get("market_prob")
+        # market_prob is home-basis; show it on the PICK's side or the
+        # comparison reads as nonsense ("61% vs 64%" with divergence 0.24).
+        mkt_side = (None if mkt is None
+                    else (mkt if ind.get("pick") == g.get("home") else 1 - mkt))
+        out.append({
+            "kind": "model_divergence",
+            "event_id": g.get("game_id"),
+            "market": "moneyline",
+            "selection": ind.get("pick"),
+            "line": None,
+            "book": "independent-model",
+            "home": g.get("home"), "away": g.get("away"),
+            "move_pts": round(div * 100, 2),
+            "detail": (f"Pick engine: the independent model has "
+                       f"{ind.get('pick')} at {ind.get('prob', 0):.0%} vs the "
+                       f"market's {(mkt_side or 0):.0%} — divergence "
+                       f"{div:.3f} on {g.get('away')} at {g.get('home')}. "
+                       f"Research, not advice: the model's published record "
+                       f"loses to the close."),
+            "observed_at": doc.get("committed_at", ""),
+        })
+    return sorted(out, key=lambda a: -a["move_pts"])
+
+
 def select_new(scan: dict, sent: set, min_send: float) -> list[dict]:
     """Divergence alerts above threshold that we haven't emailed yet.
 
@@ -207,6 +258,9 @@ def save_sent(sent: set) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--min-send", type=float, default=DEFAULT_MIN_SEND)
+    ap.add_argument("--pro-slate", default="data/pro/latest.pro.json")
+    ap.add_argument("--pick-divergence", type=float, default=0.10,
+                    help="model-vs-market divergence floor for slate alerts")
     ap.add_argument("--pattern", default="data/capture/*/*.jsonl")
     ap.add_argument("--force", action="store_true",
                     help="send the top current alert even if already recorded (test)")
@@ -219,6 +273,9 @@ def main() -> int:
     scan = alerts_mod.scan(a.pattern, min_move=a.min_send)
     sent = set() if a.force else load_sent()
     new = select_new(scan, sent, a.min_send)
+    slate_new = [x for x in slate_divergence(a.pro_slate, a.pick_divergence)
+                 if alert_key(x) not in sent]
+    new = slate_new + new   # the sealed slate leads; it is the product
     if a.force and not new and scan.get("divergence"):
         new = scan["divergence"][:1]   # nothing new? send the strongest for a test
     print(f"divergence found: {len(scan.get('divergence', []))}  new to send: {len(new)}")

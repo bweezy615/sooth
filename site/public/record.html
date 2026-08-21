@@ -127,6 +127,14 @@
     <div class="stats" id="prov"></div>
   </section>
 
+  <section class="sec" id="peSec" style="display:none">
+    <div class="sec-h"><span class="tl">PICK ENGINE · LIVE SLATES</span>
+      <span class="sub">sealed before kickoff, graded here after — the running record, rehearsals excluded</span>
+      <a class="more tl" href="/picks">THE ENGINE →</a></div>
+    <p class="cap-note" id="peLine"></p>
+    <div class="tblh"><table class="rec" id="peTbl"><tbody></tbody></table></div>
+  </section>
+
   <section class="sec">
     <div class="sec-h"><span class="tl">THE THREE MODELS</span></div>
     <div class="glo" id="glo"></div>
@@ -139,7 +147,7 @@
     <a href="/methodology">methodology page</a>; every graded slate is in the
     <a href="/ledger">ledger</a>.</p>
   <p class="fine">
-    Analysis and entertainment only. Not a sportsbook. We do not accept wagers, hold funds, or sell picks.
+    Analysis and entertainment only. Not a sportsbook. We do not accept wagers or hold funds, and we never sell winning picks — the pick engine sells timing and instrumentation on a slate this page shows losing.
     Past results do not indicate future results. Must be 21 or older where lawful.
     Problem gambling help: <b>1-800-522-4700</b>, available 24 hours.</p>
 
@@ -241,7 +249,37 @@
     });
   }
 
-  addEventListener("DOMContentLoaded",boot);
+  function pickEngine(){
+    fetch("/data/pickengine-record.json",{cache:"no-store"})
+      .then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(rec){
+        if(!rec.weeks||!rec.weeks.length) return;
+        document.getElementById("peSec").style.display="";
+        document.getElementById("peLine").textContent=
+          (rec.independent_record
+            ? "Season to date (independent model): "+rec.independent_record
+              +(rec.mean_clv!=null?" · mean CLV "+rec.mean_clv+" pts":"")
+              +(rec.clv_coverage!=null?" · CLV coverage "+Math.round(rec.clv_coverage*100)+"%":"")
+            : "No live slate has been graded yet.")
+          +(rec.rehearsal?" Rehearsal weeks below replay settled games through the live pipeline and are excluded from the record.":"");
+        var head='<tr><th>Slate</th><th>Settled</th><th>Record (ind.)</th>'
+          +'<th>Brier</th><th>Mean CLV</th><th>CLV cover</th></tr>';
+        var rows=rec.weeks.slice().reverse().map(function(w){
+          var m=null;
+          Object.keys(w.by_model||{}).forEach(function(k){
+            if(k.indexOf("elo+epa-v1")===0&&k.indexOf("market")<0) m=w.by_model[k];});
+          return '<tr><td class="mdl" style="font-family:var(--mono);font-weight:500">'
+            +w.slate_id+(w.rehearsal?' <small>REHEARSAL</small>':"")+'</td>'
+            +'<td>'+w.n_settled+'</td>'
+            +'<td>'+(m?m.record:"·")+'</td>'
+            +'<td>'+(m?m.brier:"·")+'</td>'
+            +'<td>'+(m&&m.mean_clv!=null?m.mean_clv:"·")+'</td>'
+            +'<td>'+(w.clv_coverage!=null?Math.round(w.clv_coverage*100)+"%":"·")+'</td></tr>';
+        }).join("");
+        document.getElementById("peTbl").querySelector("tbody").innerHTML=head+rows;
+      }).catch(function(){});
+  }
+  addEventListener("DOMContentLoaded",function(){boot();pickEngine();});
 })();
 </script>
 </body>

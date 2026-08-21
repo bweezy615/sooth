@@ -42,6 +42,7 @@ function bk(name){return BOOK[name]||String(name).slice(0,4).toUpperCase();}
    addressable from anywhere on the site. */
 var NAV=[
   {href:"/",            key:"market",  label:"MARKET"},
+  {href:"/picks",       key:"picks",   label:"PICKS"},
   {href:"/props",       key:"props",   label:"PROPS"},
   {href:"/edges",       key:"movement",label:"MOVEMENT"},
   {href:"/research",    key:"research",label:"RESEARCH"},
@@ -382,6 +383,29 @@ function feedRow(i,hl,sub,meta,href){
     +'<span class="mv-meta">'+meta+'</span></'+(href?'a':'div')+'>';
 }
 
+
+/* ---------- pick-engine helpers ---------- */
+/* entitlement probe; resolves {pro:bool}. Never throws, fails to not-pro. */
+function me(){
+  return fetch("/api/me",{cache:"no-store"}).then(function(r){return r.json();})
+    .catch(function(){return {pro:false};});
+}
+/* flip the static PRO cta to a state chip once we know the answer */
+function proBadge(isPro){
+  var el=document.querySelector(".hd-cta"); if(!el||!isPro) return;
+  el.textContent="PRO ACTIVE"; el.setAttribute("aria-label","Sooth Pro active");
+  el.style.background="linear-gradient(180deg,#1E2A26,#15201C)";
+  el.style.color="var(--up)";
+  el.style.boxShadow="inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(52,211,153,.35)";
+}
+/* a CLV chip: green beat the close, red lost to it, dim n/a with a reason */
+function clvChip(v,reason){
+  if(v==null) return '<span class="clv na" title="'+esc(reason||"no verified close")
+    +'">CLV ·</span>';
+  var cls=v>0?"pos":v<0?"neg":"na";
+  return '<span class="clv '+cls+'">CLV '+pts(v)+'</span>';
+}
+
 /* ---------- ago ticker ---------- */
 function tick(){
   [].forEach.call(document.querySelectorAll("[data-ago]"),function(el){
@@ -389,7 +413,7 @@ function tick(){
 }
 setInterval(tick,15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

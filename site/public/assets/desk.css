@@ -392,3 +392,25 @@ a.mv-row:hover{background:var(--g2)}
   width:13px;height:13px;line-height:13px;text-align:center;border-radius:50%;
   border:1px solid currentColor;font-size:9px;font-weight:700;vertical-align:1px}
 .hd-links a.hd-new:hover{color:var(--brand)}
+
+/* ============ pick engine ============ */
+/* locked rows: the shape of the data, none of the opinion. Redaction is
+   server-side; the blur is theater on ▓▓ placeholders, not on secrets. */
+tr.locked td{filter:blur(0)}
+tr.locked .mask{color:var(--dim);letter-spacing:1px;filter:blur(2.5px);
+  user-select:none}
+tr.locked .lock{color:var(--dim);font-size:10px}
+.seal-badge{display:inline-flex;align-items:center;gap:6px;
+  font:600 10px var(--mono);letter-spacing:.1em;color:var(--up);
+  border:1px solid rgba(52,211,153,.35);background:var(--up-dim);
+  padding:4px 9px;border-radius:var(--r)}
+.seal-badge:hover{filter:brightness(1.15)}
+.clv{font:600 10px var(--mono);letter-spacing:.05em;padding:2px 6px;
+  border-radius:var(--r);border:1px solid var(--hair2);
+  font-variant-numeric:tabular-nums}
+.clv.pos{color:var(--up);border-color:rgba(52,211,153,.35);background:var(--up-dim)}
+.clv.neg{color:var(--dn);border-color:rgba(240,113,108,.35);background:var(--dn-dim)}
+.clv.na{color:var(--dim)}
+.noplay{border-left:2px solid var(--brand);background:rgba(45,212,167,.06);
+  padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:13px;
+  color:var(--ink2);margin:0 0 16px;max-width:80ch;line-height:1.6}

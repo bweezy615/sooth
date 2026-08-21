@@ -97,6 +97,94 @@ def _elo_through(adapter: NFLAdapter, season: int, week: int) -> EloModel:
     return model
 
 
+# --------------------------------------------------------------------------
+# Pick-engine payloads (docs/pick-engine-plan.md, Step 1).
+#
+# One slate becomes two files:
+#   data/pro/{slate_id}.pro.json      the full slate, served only by /api/picks
+#   site/public/data/{slate_id}.json  the public file, with picks REDACTED
+#                                     until first kickoff
+#
+# Redaction happens HERE, in Python, at write time. A JS-side redaction would
+# ship every pick to every client and hide them with CSS — that is not a
+# paywall, it is a view-source Easter egg. After first kickoff /api/picks
+# serves the full payload to everyone (time decay), so the public file only
+# ever needs the teaser: the paywall never touches the proof.
+# --------------------------------------------------------------------------
+
+def _pickengine_payloads(root: Path, payload: dict) -> dict:
+    """Write the pro payload and return the redacted public games list."""
+    now = datetime.now(timezone.utc)
+    slate_id = payload["slate_id"]
+
+    # Best prices join by game_id when the board window has NFL priced;
+    # earlier than that the fields are honest nulls, never invented.
+    try:
+        bl = json.loads(
+            (root / "site/public/data/best_lines.json").read_text())
+        best = {g["game_id"]: g for g in bl.get("games", [])}
+    except (OSError, json.JSONDecodeError):
+        best = {}
+
+    pro_games, ranked = [], []
+    for g in payload["games"]:
+        ind, mkt = g["independent"], g["market_prob"]
+        home_basis = ind["prob"] if ind["pick"] == g["home"] else 1 - ind["prob"]
+        divergence = (None if mkt is None
+                      else round(abs(home_basis - mkt), 4))
+        b = best.get(g["game_id"], {})
+        pro_games.append({
+            **g,
+            "divergence": divergence,
+            "best_price": b.get("best_price"),
+            "best_book": b.get("best_book"),
+            "n_books": b.get("n_books"),
+            "edge_pts": b.get("edge_pts"),
+            "quotes": b.get("quotes"),
+        })
+        ranked.append((divergence if divergence is not None else -1.0,
+                       g["game_id"]))
+
+    ranked.sort(reverse=True)
+    rank_of = {gid: i + 1 for i, (_, gid) in enumerate(ranked)}
+
+    pro_doc = {
+        k: payload[k] for k in
+        ("slate_id", "sport", "season", "week", "status", "models",
+         "confidence_cap", "merkle_root", "committed_at",
+         "earliest_kickoff", "n_predictions", "disclaimer")
+    }
+    pro_doc["games"] = sorted(
+        pro_games, key=lambda g: rank_of[g["game_id"]])
+    pro_doc["reveal"] = f"/data/{slate_id}.reveal.json"
+
+    pro_dir = root / "data/pro"
+    pro_dir.mkdir(parents=True, exist_ok=True)
+    body = json.dumps(pro_doc, indent=2)
+    (pro_dir / f"{slate_id}.pro.json").write_text(body)
+    (pro_dir / "latest.pro.json").write_text(body)   # /api/picks reads this
+
+    # Public teaser: every field present, the model's opinion absent.
+    redact = now < datetime.fromisoformat(payload["earliest_kickoff"])
+    public_games = []
+    for g in pro_doc["games"]:
+        if not redact:
+            public_games.append(g)
+            continue
+        public_games.append({
+            "game_id": g["game_id"], "kickoff": g["kickoff"],
+            "home": g["home"], "away": g["away"],
+            "spread_line": g["spread_line"],
+            "market_prob": g["market_prob"],
+            "divergence_rank": rank_of[g["game_id"]],
+            "independent": None, "consensus": None,
+            "models_disagree": None, "independent_vs_market": None,
+            "divergence": None,
+        })
+    return {"locked": redact, "unlocks_at": payload["earliest_kickoff"],
+            "games": public_games}
+
+
 def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     root = Path(out_root)
     adapter = NFLAdapter(cache_dir=root / "data/raw")
@@ -235,9 +323,16 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
             "backtest does not beat the closing market - see /methodology."),
     }
 
+    # Pro payload written first; the public file carries the redacted games.
+    public = _pickengine_payloads(root, payload)
+    site_payload = dict(payload)
+    site_payload["games"] = public["games"]
+    site_payload["locked"] = public["locked"]
+    site_payload["unlocks_at"] = public["unlocks_at"]
+
     site_dir = root / "site/public/data"
     site_dir.mkdir(parents=True, exist_ok=True)
-    (site_dir / f"{slate_id}.json").write_text(json.dumps(payload, indent=2))
+    (site_dir / f"{slate_id}.json").write_text(json.dumps(site_payload, indent=2))
 
     # The /verify walkthrough curls the un-versioned commitment and reveal.
     # Re-sealing MUST refresh both, or the published pair stops matching and

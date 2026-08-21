@@ -1,0 +1,77 @@
+name: seal
+
+# Seals the weekly pick-engine slate (docs/pick-engine-plan.md, Step 5).
+#
+# Wednesday morning, in season: run the weekly pipeline for the next sealable
+# week, commit the ledger + pro payload + redacted public payload in ONE
+# commit. The push itself is the GitHub timestamp anchor for the Merkle root —
+# that commit is the whole trust story, which is why everything ships in it
+# together (and why it stays within the one-deploy-per-run budget; see
+# research.yml for the Vercel 100/day history).
+#
+# Safe to re-run: commit.py refuses to seal past the first kickoff and no-ops
+# on an identical root, so a duplicate cron fire cannot damage the ledger.
+# A MISSED Wednesday past kickoff correctly means NO SLATE THAT WEEK — the
+# runbook (docs/pick-engine-runbook.md) makes the manual fallback a 5-minute
+# job, run BEFORE kickoff or not at all.
+
+on:
+  schedule:
+    # Wed 13:00 UTC = 09:00 ET during the season months (Sep-Jan).
+    - cron: "0 13 * 9-12 3"
+    - cron: "0 13 * 1 3"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seal
+  cancel-in-progress: false
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests pandas numpy scikit-learn
+
+      - name: Find the next sealable week
+        id: wk
+        run: |
+          OUT="$(python scripts/next_slate_week.py)"
+          echo "target=$OUT" >> "$GITHUB_OUTPUT"
+          if [ -z "$OUT" ]; then
+            echo "nothing to seal (offseason or schedule fully played)"
+          else
+            echo "sealing: $OUT"
+          fi
+
+      - name: Seal the slate
+        if: steps.wk.outputs.target != ''
+        run: |
+          set -e
+          read -r SEASON WEEK <<< "${{ steps.wk.outputs.target }}"
+          python -m engine.pipeline.weekly --season "$SEASON" --week "$WEEK"
+
+      - name: Commit once (the timestamp anchor)
+        if: steps.wk.outputs.target != ''
+        run: |
+          git config user.name "sooth-seal"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ledger data/pro site/public/data
+          if git diff --cached --quiet; then
+            echo "identical root - nothing new to anchor"; exit 0
+          fi
+          read -r SEASON WEEK <<< "${{ steps.wk.outputs.target }}"
+          git commit -m "seal: ${SEASON}-W$(printf '%02d' "$WEEK")-nfl $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase && sleep 5
+          done
+          exit 1

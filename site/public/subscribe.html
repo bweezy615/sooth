@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth Pro — everything is free right now</title>
-<meta name="description" content="Everything on Sooth is free right now while we build. Tools and data — not picks. Paid plans return when Pro has something real behind it.">
-<meta property="og:title" content="Sooth — everything is free right now">
-<meta property="og:description" content="Tools and data, not picks. Free while we build.">
+<title>Sooth Pro — the pick engine, at seal time</title>
+<meta name="description" content="Sooth Pro: the sealed weekly slate at seal time, full desk instrumentation, and divergence alerts. $9.99/month. Research access — never winning picks; our model's losing record is published.">
+<meta property="og:title" content="Sooth Pro — the pick engine, at seal time">
+<meta property="og:description" content="Pro buys timing, not wins. Sealed weekly, graded in public, losses included.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/subscribe">
@@ -67,18 +67,21 @@
 
   <div class="status" style="padding-bottom:12px">
     <span class="live" style="margin:0"><span class="pulse on"></span>
-      <span class="tl">SOOTH · EVERYTHING IS FREE RIGHT NOW · NO CARD, NO ACCOUNT · TOOLS AND DATA, <b>NOT PICKS</b></span></span>
+      <span class="tl">SOOTH PRO · $9.99/MO · RESEARCH ACCESS, <b>NEVER WINNING PICKS</b> · THE REST OF SOOTH STAYS FREE</span></span>
   </div>
 
   <div class="page-head" style="padding:8px 0 0">
     <h1 style="font:760 clamp(24px,3.6vw,34px)/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 10px">
-      Deeper instrumentation.<br>Free while we build.</h1>
+      The pick engine, at seal time.<br>Everything else stays free.</h1>
     <p style="color:var(--mut);font-size:14px;max-width:66ch;line-height:1.65;margin:0">
-      Every instrument is free right now: the full line-shopping board across every
-      book, movement history, closing-line-value data where we can verify it, and the raw
-      model output to download. <b style="color:var(--ink2)">No card, no account — open the
-      market.</b> Paid plans return when Pro has something real behind it, and we will say
-      so here first.
+      Every week, before the first kickoff, we seal our full model slate under a public
+      Merkle commitment and grade it in the open after — losses included. At first kickoff
+      the whole slate unlocks for everyone, free, forever.
+      <b style="color:var(--ink2)">Pro buys the look before kickoff</b> — the slate at seal
+      time, per-pick desk instrumentation, and divergence alerts. It does not buy wins:
+      our model measurably loses to the closing market (49.5% ATS over 2,608 games,
+      published at <a href="/record" style="color:var(--ink2)">/record</a>), and nothing
+      here is betting advice. The market, the analyzer, research and the record stay free.
       <b style="color:var(--ink2)">Tools and data. Not picks.</b> We make no claim any
       prediction will win; our own backtest says the model does not beat the closing market.</p>
   </div>
@@ -87,17 +90,18 @@
     <div class="feed pane feat">
       <div class="tl" style="margin-bottom:10px">WHAT UNLOCKS</div>
       <ul>
-        <li>Full board, every book we track, refreshed continuously</li>
-        <li>Market timeline — per-book price history for any game on the slate</li>
-        <li>Closing-line-value data (NFL; other sports as verified)</li>
-        <li>Probability exports — download the model output as JSON or CSV</li>
-        <li>Every future instrument at no extra charge while subscribed</li>
+        <li><b>The sealed slate, Wednesday</b> — every game, both models, divergence-ranked,
+            before the market digests it. Free users see the identical slate after kickoff.</li>
+        <li><b>Per-pick desk instrumentation</b> — our fair price against every book on one
+            spectrum, confidence, divergence, best available number.</li>
+        <li><b>Divergence alerts</b> — when the independent model disagrees with the market
+            beyond threshold, straight to your inbox.</li>
       </ul>
     </div>
 
     <div class="feed pane card-buy">
-      <div><span class="amt">FREE</span><span class="per n">right now</span></div>
-      <p class="sub2">No card, no account, no time limit.</p>
+      <div><span class="amt">$9.99</span><span class="per n">/month</span></div>
+      <p class="sub2">Cancel anytime. The slate you bought stays sealed either way.</p>
       <!-- Everything is free for now: this button goes straight into the product.
            TO TURN THE PAYWALL ON: replace this whole <a> with a button that
            opens the embedded checkout (the POS wired at the bottom of this file):
@@ -105,11 +109,12 @@
                Subscribe — $9.99/month</button>
            (If Stripe.js is ever blocked, soothCheckout() falls back to the hosted
            Payment Link automatically.) -->
-      <a class="go" href="/" role="button" aria-label="Open the market — free">
-        START FREE — OPEN THE MARKET</a>
-      <p class="fine">No charge and no card. If Sooth ever introduces a paid plan, it will be
-        announced here first — and we'll never charge you without asking.</p>
-      <p class="manage">When paid plans start, you'll manage or cancel in one step through the
+      <button class="go" type="button" onclick="soothCheckout()">
+        Subscribe — $9.99/month</button>
+      <p class="fine">Payments run through Stripe's embedded checkout — card details never
+        touch our servers. At first kickoff every slate unlocks free for everyone, so what
+        you are paying for is timing and instrumentation, never a secret.</p>
+      <p class="manage">Manage or cancel in one step through the
         <!-- when the Stripe customer-portal URL exists, wrap "billing portal" in <a href="..."> -->
         billing portal — no phone call, no email, no retention screen.</p>
     </div>
@@ -117,7 +122,7 @@
 
   <div class="honest">
     <div class="tl" style="color:var(--amber)">WHAT YOU'RE NOT BUYING</div>
-    <p>You are not buying picks, and you are not buying an edge over the market. The value is
+    <p>You are not buying winning picks, and you are not buying an edge over the market. The value is
       the <b>best available price on every side against the de-vigged fair line</b> — taking
       the best number is +EV on its own arithmetic, no forecast required. We also publish a
       prediction model and grade it in the open: on both of our samples it <b>does not clear
@@ -128,7 +133,7 @@
 
   <aside class="rg" aria-label="Responsible gambling resources">
     <b>21+ only</b>, for adults where sports wagering is lawful in their jurisdiction. This is
-    an analytical-tools subscription, not a wager and not a pick service, and nothing here is
+    a research-access subscription, not a wager and not a winning-pick service, and nothing here is
     betting advice. If gambling has stopped being entertainment, help is free and confidential:
     <b>National Problem Gambling Helpline 1-800-522-4700</b>, call or text 24/7, or chat at
     <a href="https://www.ncpgambling.org/chat" rel="noopener noreferrer" target="_blank"

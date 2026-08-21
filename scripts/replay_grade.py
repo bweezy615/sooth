@@ -31,6 +31,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--season", type=int, default=2025)
     ap.add_argument("--week", type=int, default=5)
+    ap.add_argument("--publish", action="store_true",
+                    help="also write the public graded artifact (rehearsal)")
     args = ap.parse_args()
 
     frame = ensemble_run().frame
@@ -62,7 +64,15 @@ def main() -> None:
     print(f"replayed slate : {slate_id}")
     print(f"predictions    : {c.n_predictions}  root {c.root[:16]}...")
     print()
-    print(grade_slate(slate_id, ledger_dir=out, out_dir=out).summary())
+    grade = grade_slate(slate_id, ledger_dir=out, out_dir=out)
+    print(grade.summary())
+    if args.publish:
+        from engine.grade import publish
+        names = {str(r["game_id"]): {"home": str(r["home_team"]),
+                                     "away": str(r["away_team"]),
+                                     "kickoff": str(r.get("gameday", ""))}
+                 for _, r in wk.iterrows()}
+        print(f"published      : {publish(grade, names=names)}")
 
 
 if __name__ == "__main__":
