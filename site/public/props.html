@@ -52,6 +52,21 @@
   .bp-meta .fair-dn{color:var(--mut)}
   .bp-meta .sep{color:var(--dim)}
   .bp-meta .tm{color:var(--dim)}
+  /* Explanation is available, not administered: closed by default so the
+     board reads exactly as dense as it did, one click for anyone who wants it. */
+  .gloss{margin-top:8px}
+  .gloss summary{cursor:pointer;color:var(--brand);font:600 11.5px var(--sans);
+    list-style:none;display:inline-flex;align-items:center;gap:5px;
+    padding:3px 0;user-select:none}
+  .gloss summary::-webkit-details-marker{display:none}
+  .gloss summary::before{content:"?";display:inline-block;width:13px;height:13px;
+    line-height:13px;text-align:center;border-radius:50%;border:1px solid currentColor;
+    font-size:9px;font-weight:700}
+  .gloss[open] summary{margin-bottom:6px}
+  .gloss p{margin:0 0 7px;max-width:70ch;font-size:12.5px;line-height:1.65;
+    color:var(--ink2)}
+  .gloss p b{color:var(--ink);font-weight:600}
+  .gloss p:last-child{margin-bottom:0}
   .bp-state{padding:16px 14px;font:500 12px var(--sans);color:var(--mut);line-height:1.6}
   @media (max-width:560px){
     .bp-r{grid-template-columns:18px minmax(0,1fr);row-gap:4px}
@@ -86,6 +101,17 @@
       the de-vigged consensus. Selected on price, never on a forecast — our own prop
       model measured no edge on the props books post, and we
       <a href="/props-model">published that</a>.</span></div>
+    <details class="gloss"><summary>New to this?</summary>
+      <p><b>The fair price</b> is what the odds would be if the books took no cut. We
+      work it out by comparing every book pricing the same line and stripping the
+      margin out.</p>
+      <p><b>Below fair is normal.</b> That gap is the house's cut — it is on almost
+      every price you will ever see. The number worth having is the smallest one.</p>
+      <p><b>Taking the best price is worth money on its own</b>, whether or not the
+      bet wins. Two books offering the same bet at different numbers pay differently,
+      and that difference is the only thing on this page that does not depend on
+      predicting anything. <a href="/learn">The 60-second guide</a> covers the
+      rest.</p></details>
     <div class="bp" id="bp" aria-live="polite"></div>
   </div>
 
