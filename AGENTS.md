@@ -54,6 +54,16 @@ and never otherwise:
 Also: `git stash` stashes the *other* session's uncommitted work too. Do not
 stash, rebase or reset in a tree you do not own.
 
+A worktree branches from `origin/main`, and then `main` keeps moving — the
+capture bots alone push every ~20 minutes. A branch that lives for an afternoon
+is tens of commits behind by the time it merges, and it merges cleanly only
+because nobody else happened to touch its files. That is luck, not isolation:
+worktrees stop you corrupting another session's index, they do nothing about
+divergence. Rebase onto `origin/main` before you open a PR or merge, not only
+before you push, and re-run whatever check proves your change still works —
+on 2026-08-21 a merge was rebased twice inside ten minutes and was still racing
+a capture commit on the second attempt.
+
 ## `main` is live. There is no staging.
 
 A push to `main` is in front of users in about a minute, and the capture bots
