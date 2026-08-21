@@ -100,6 +100,30 @@ POSTABLE: dict = {
     #
     # The friendly-sample validation does not transfer at all.
     #
+    # THE ONE-LINE STATEMENT OF ALL OF IT. Bootstrapped information content —
+    # Platt slope of outcome on the model's own log-odds, where 1.0 means
+    # already calibrated and 0.0 means the output carries no information:
+    #
+    #   general population (all starts)  n=1482   B =  0.483
+    #   board population (real props)    n= 194   B = -0.070  95% CI [-0.50, 0.35]
+    #
+    # The model carries real information about pitchers in general and
+    # effectively none about the pitchers books choose to post. The selection
+    # effect is not a caveat on the result, it IS the result.
+    #
+    # This also closes the "publish it as a research number rather than a bet
+    # signal" option. Platt recalibration on board props does fix calibration
+    # (worst bucket 22.4 -> 2.7, brier 0.2800 -> 0.2480, against the market's
+    # own 4.1 / 0.2439) — but it works by DISCARDING THE MODEL: the fitted map
+    # compresses every input to a near-constant 42%, with all 94 held-out props
+    # landing in one bucket. A calibrated kpoisson-v1 on real board props is a
+    # constant wearing a model's clothes. There is nothing to present.
+    #
+    # Scope caveat, stated because it is not symmetric: batter_total_bases was
+    # never tested on a board population — only 160 captured quotes against
+    # 3207 for strikeouts. Its exclusion rests on a slope of 0.214 measured on
+    # the general population, which is weaker evidence than the strikeout case.
+    #
     # THE RESULT THAT ENDS THE EDGE QUESTION:
     #
     #   predicted 46.4%   actual 43.3%   market 48.6%
