@@ -179,6 +179,15 @@ def annotate(props_path: str = "site/public/data/props.json",
         for ev in board["events"]:
             for p in ev["props"]:
                 if p["market"] == "batter_total_bases":
+                    # Off unless explicitly asked for. tbconv-v1 is not cleared
+                    # to publish: held-out regression slope 0.214, never graded
+                    # on a board population, and the strikeout model it shares a
+                    # contract with measured no edge at all. props.json is a
+                    # public file, so writing model blocks into it IS
+                    # publishing, and doing that silently would contradict the
+                    # record in docs/reports/props-model-negative-result.md.
+                    if not os.environ.get("PROPS_MODEL_TB"):
+                        continue
                     tb_looked += 1
                     if _annotate_tb(p, tb, bat_league, bat_cache, pid_cache,
                                     session, season):
