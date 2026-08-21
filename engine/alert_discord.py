@@ -46,6 +46,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -167,14 +168,30 @@ POSTABLE: dict = {
 DEFAULT_MIN_DELTA = 3.0
 DEFAULT_MIN_OBS = 25
 
-# Never post more than this per tick. A wall of plays reads as a pick service
+# Never post more than this per tick. A wall of entries reads as a tout service
 # and buries the one that mattered.
 MAX_PER_POST = 5
 
 # LAUNCH.md bans these outright. Enforced here so a future template edit can't
 # quietly reintroduce the register sooth was built to differentiate from.
-BANNED = ("lock", "guaranteed", "guarantee", "risk-free", "riskfree",
+BANNED = ("lock", "locks", "guaranteed", "guarantee", "risk-free", "riskfree",
           "insider", "sure thing", "can't lose", "cant lose")
+
+# PRODUCT.md: the paid product is "tools and data — explicitly not picks", and
+# calls that load-bearing rather than cosmetic — selling tools carries no
+# performance claim and therefore no FTC substantiation burden. "never a pick"
+# already ships in the footer of /props, /edges and /research. What this module
+# posts is selected on price against consensus, so it is not a pick in the
+# forbidden sense; the words still have to match the claim.
+PRODUCT_BANNED = ("pick", "picks", "play", "plays")
+
+# Matched on WORD BOUNDARIES, not as substrings. "lock" as a substring blocks
+# Tyler Lockett, and a receiver's surname taking down an entire post is a real
+# outage rather than a hypothetical one. "play" as a substring would block every
+# "player". The boundary is what makes the guard safe enough to leave on.
+_BANNED_RE = re.compile(
+    r"\b(" + "|".join(re.escape(w) for w in BANNED + PRODUCT_BANNED) + r")\b",
+    re.IGNORECASE)
 
 # Picks carry their own footer. The edges footer talks about model
 # probabilities, and a pick is explicitly not a model output — saying so is the
@@ -193,10 +210,10 @@ FOOTER = ("Sooth is an odds analysis tool — not a sportsbook, not betting "
 
 def check_language(text: str) -> None:
     """Refuse to post anything carrying the banned register. Fails loud."""
-    low = text.lower()
-    for word in BANNED:
-        if word in low:
-            raise ValueError(f"banned word {word!r} in outgoing post: {text[:120]}")
+    hit = _BANNED_RE.search(text)
+    if hit:
+        raise ValueError(
+            f"banned word {hit.group(0)!r} in outgoing post: {text[:120]}")
 
 
 # ---- 1. rank by analysis, not by price gap ---------------------------------
@@ -500,15 +517,15 @@ def main() -> int:
         # one this is before reading a single pick.
         best = picks[0]["price_edge_pts"]
         if best < 0:
-            header = ("**Today's board — best available numbers.** Selected on "
-                      "price against the de-vigged consensus, not on a model. "
-                      "Nothing on the board beats consensus fair today, so "
-                      "these are where you give up least to the vig — not "
-                      "positive-value plays. Graded here either way.")
+            header = ("**Best prices on the board.** Selected on price against "
+                      "the de-vigged consensus, not on a model. Nothing on the "
+                      "board beats consensus fair today, so these are where you "
+                      "give up least to the vig — research, not a "
+                      "recommendation. Graded here either way.")
         else:
-            header = ("**Today's board — best available numbers.** Selected on "
-                      "price against the de-vigged consensus, not on a model. "
-                      "Graded here either way, win or lose.")
+            header = ("**Best prices on the board.** Selected on price against "
+                      "the de-vigged consensus, not on a model. Research, not a "
+                      "recommendation. Graded here either way, win or lose.")
         print(f"picks: {len(picks)}  best price edge: {best:+.2f} pts")
         if a.dry_run:
             print(json.dumps({"content": header, "embeds": embeds}, indent=1))
