@@ -16,6 +16,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
+<style>
+  /* The page is the instrument, not a stack of cards. The games table sits
+     directly on the page plane — hairlines, no housing — so the one boxed,
+     machined surface left on the homepage is the radar, which earns it: it
+     is the physical instrument. */
+  #games.itab{background:transparent;border:0;border-radius:0;box-shadow:none}
+  #games thead th{background:var(--g0);border-bottom:1px solid var(--hair2)}
+  #games tbody td{border-bottom:1px solid var(--hair)}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -47,20 +56,12 @@
     <div class="radar" id="radar"></div>
   </section>
 
-  <!-- MARKET MOVERS -->
-  <section class="sec" aria-labelledby="mvH">
-    <div class="sec-h"><span class="tl" id="mvH">WHAT MOVED</span>
-      <span class="sub">prices we watched change, most recent two days</span>
-      <a class="more" href="/edges">ALL MOVEMENT →</a></div>
-    <div class="feed" id="movers"></div>
-  </section>
-
 </main>
 
 <script src="/assets/desk.js"></script>
 <script>
 (function(){
-var D=window.Desk, SP="mlb", BOARD=null, MOVES=null;
+var D=window.Desk, SP="mlb", BOARD=null;
 D.mount("market");
 
 function sideName(a,txt){
@@ -148,39 +149,6 @@ function renderRadar(){
     +'</span><span class="v n '+cls+'">'+v+'</span></div>';}
 }
 
-/* ---- movers: ranked, divergence first, then the largest drifts ---- */
-function renderMovers(){
-  var el=document.getElementById("movers");
-  if(!MOVES){ el.innerHTML='<div class="state"><span class="tl">MOVEMENT FEED UNAVAILABLE'
-    +'</span>Detection runs on our capture archive and rebuilds hourly.</div>'; return; }
-  var rows=[];
-  (MOVES.divergence||[]).forEach(function(a){a._p=1;rows.push(a);});
-  (MOVES.drift||[]).forEach(function(a){a._p=0;rows.push(a);});
-  rows=rows.filter(function(a){return !a.kickoff||Date.parse(a.kickoff)>Date.now();});
-  rows=rows.filter(function(a){return Date.now()-Date.parse(a.observed_at)<48*36e5;});
-  rows.sort(function(a,b){return (b._p-a._p)||(Math.abs(b.move_pts)-Math.abs(a.move_pts));});
-  /* editorial rule, not data: one row per event, three per sport, so a single
-     book drifting a whole fight card cannot monopolise the feed */
-  var seen={}, perSport={}, kept=[];
-  rows.forEach(function(a){
-    if(kept.length>=6||seen[a.event_id]) return;
-    if((perSport[a.sport]||0)>=3) return;
-    seen[a.event_id]=1; perSport[a.sport]=(perSport[a.sport]||0)+1; kept.push(a);
-  });
-  rows=kept.slice(0,4);
-  if(!rows.length){ el.innerHTML='<div class="state"><span class="tl">QUIET MARKET</span>'
-    +'No movement above '+(MOVES.min_move_pts||1.5)+' pts detected on upcoming games.</div>'; return; }
-  el.innerHTML=rows.map(function(a,i){
-    var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
-    var hl=D.esc(a.away)+' <span style="color:var(--dim)">/</span> '+D.esc(a.home)
-      +'<span class="pts n '+cls+'">'+D.pts(a.move_pts)+' PTS</span>';
-    return D.feedRow(i,hl,D.esc(sideName(a,a.detail)),
-      '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span>'
-      +'<br>'+D.esc((SPORT_LABEL[a.sport]||a.sport))+' · '+D.esc(a.market).toUpperCase(),
-      '/game?e='+encodeURIComponent(a.event_id)+'&s='+a.sport);
-  }).join("");
-}
-
 /* ---- the market table ---- */
 function renderGames(){
   var b=boardFor(SP), el=document.getElementById("games");
@@ -225,25 +193,23 @@ document.getElementById("games").addEventListener("keydown",function(e){
 
 /* boot */
 D.connecting(document.getElementById("radar"));
-D.connecting(document.getElementById("movers"),"MOVEMENT FEED");
 D.connecting(document.getElementById("games"),"PRICE FEED");
-Promise.all([D.load("/data/board.json"),D.load("/data/moves.json")]).then(function(rs){
-  var bd=rs[0], mv=rs[1];
+D.load("/data/board.json").then(function(bd){
   if(!bd.ok){
     document.getElementById("status").innerHTML=
       '<span class="live"><span class="pulse dead"></span><span class="tl">FEED UNAVAILABLE</span></span>';
-    ["radar","movers","games"].forEach(function(id){
+    ["radar","games"].forEach(function(id){
       document.getElementById(id).innerHTML=
         '<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
         +'The board could not be loaded. It rebuilds automatically — try again shortly.</div>';});
     return;
   }
-  BOARD=bd.data; MOVES=mv.ok?mv.data:null;
+  BOARD=bd.data;
   SP=defaultSport();
   renderStatus(D.feedState(bd,3));
   function pick(sp){ SP=sp; D.sportRail(BOARD,SP,pick); renderRadar(); renderGames(); }
   D.sportRail(BOARD,SP,pick);
-  renderRadar(); renderMovers(); renderGames();
+  renderRadar(); renderGames();
 });
 })();
 </script>
