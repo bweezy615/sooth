@@ -159,18 +159,31 @@ def annotate(props_path: str = "site/public/data/props.json",
     session = requests.Session()
     session.headers["User-Agent"] = "sooth-props-model/1.0 (+https://sooth.bet)"
 
+    # Imported here rather than at module scope: props_model_tb imports
+    # over_threshold from this module, so a top-level import would be circular.
+    from . import props_model_tb as tb
+
     teams = team_k_rates(season, session)
     league = (teams.get("_league") or LEAGUE_KPCT_FALLBACK)
+    bat_league = tb.league_batting_rates(season, session)
 
     pid_cache: dict = {}
     log_cache: dict = {}
+    bat_cache: dict = {}
     looked = modeled = 0
+    tb_looked = tb_modeled = 0
 
     for board in doc.get("boards", []):
         if board["sport"] != "mlb":
             continue
         for ev in board["events"]:
             for p in ev["props"]:
+                if p["market"] == "batter_total_bases":
+                    tb_looked += 1
+                    if _annotate_tb(p, tb, bat_league, bat_cache, pid_cache,
+                                    session, season):
+                        tb_modeled += 1
+                    continue
                 if p["market"] != "pitcher_strikeouts":
                     continue
                 looked += 1
@@ -230,10 +243,70 @@ def annotate(props_path: str = "site/public/data/props.json",
                           "modeled": modeled, "eligible": looked,
                           "method": "poisson over expected BF x blended K/BF "
                                     "x opponent K% factor; free MLB StatsAPI"}
+    # Separate key rather than folding into props_model above: that block is
+    # the strikeout model's scorecard and its version string is graded against
+    # the strikeout ledger. Two models, two scorecards.
+    doc["props_model_tb"] = {"version": tb.VERSION, "season": season,
+                             "modeled": tb_modeled, "eligible": tb_looked,
+                             "method": "exact convolution of per-PA base "
+                                       "outcomes over the plate-appearance "
+                                       "distribution; free MLB StatsAPI",
+                             "aggregate_bias_pts": -1.2,
+                             "bucket_miscalibration_pts": 13.1,
+                             "bias_note": "aggregate calibration is good "
+                                          "(-1.2pts) but that is cancellation. "
+                                          "Bucketed by predicted probability "
+                                          "both this and kpoisson-v1 are wrong "
+                                          "by 7-17pts. Cause is mean scaling, "
+                                          "not variance: held-out regression "
+                                          "slope 0.63 for K and 0.21 for TB, "
+                                          "so projections over-spread. Slope "
+                                          "correction fixes the centre but is "
+                                          "unvalidated at tail lines. Neither "
+                                          "market is cleared to post."}
     tmp = path.with_suffix(".tmp")
     tmp.write_text(json.dumps(doc, indent=1))
     os.replace(tmp, path)
     return doc["props_model"]
+
+
+def _annotate_tb(p: dict, tb, bat_league: dict, bat_cache: dict,
+                 pid_cache: dict, session: requests.Session,
+                 season: int) -> bool:
+    """Attach a total-bases model block. Returns True if one was written.
+
+    Emits n_games rather than n_starts on purpose: total bases accumulate per
+    appearance, not per start, so n_starts would misdescribe what was counted.
+    """
+    name = p["player"]
+    if name not in pid_cache:
+        pid_cache[name] = find_player(name, session)
+        time.sleep(0.15)
+    pid = pid_cache[name]
+    if not pid:
+        return False
+    if pid not in bat_cache:
+        bat_cache[pid] = tb.batting_log(pid, season, session)
+        time.sleep(0.15)
+    log = bat_cache[pid]
+    proj = tb.project(log, bat_league)
+    if not proj:
+        return False
+    need = over_threshold(float(p["line"]))
+    p_over = tb.sf(proj["pmf"], need)
+    fair_over = p["over"].get("fair_prob")
+    if fair_over is None:
+        fp = p["over"]["fair_price"]
+        fair_over = ((-fp) / ((-fp) + 100.0)) if fp < 0 else (100.0 / (fp + 100.0))
+    p["model"] = {
+        "proj_tb": round(proj["exp_tb"], 2),
+        "p_over": round(p_over, 4),
+        "market_over": round(fair_over, 4),
+        "delta_pts": round((p_over - fair_over) * 100, 1),
+        "n_games": len(log),
+        "version": tb.VERSION,
+    }
+    return True
 
 
 def backtest(season: int = 2026, min_starts: int = 4,
