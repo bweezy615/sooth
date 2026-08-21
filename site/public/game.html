@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Research Workspace</title>
+<meta name="description" content="One game as an instrument: fair price, every book's number, market width, movement, and analysis. Research only.">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap">
+  <div class="ws-crumb"><a class="tl" href="/desk">← MARKET</a></div>
+  <div id="ws"></div>
+</main>
+
+<script src="/assets/desk.js"></script>
+<script>
+(function(){
+var D=window.Desk;
+D.mount("market");
+var Q=new URLSearchParams(location.search);
+var ID=Q.get("e"), SPQ=Q.get("s")||"";
+function sideName(a,txt){
+  return String(txt).replace(/side_a/g,a.home).replace(/side_b/g,a.away);
+}
+var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+var ws=document.getElementById("ws");
+D.connecting(ws,"WORKSPACE");
+
+function findEvent(board){
+  var hit=null;
+  (board.boards||[]).forEach(function(b){ b.events.forEach(function(e){
+    if(String(e.id)===String(ID)) hit={sp:b.sport,e:e};});});
+  return hit;
+}
+function kv(k,v,cls){return '<div class="kv"><span class="k">'+k
+  +'</span><span class="v n '+(cls||"")+'">'+v+'</span></div>';}
+function cell(k,v,cls){return '<div class="ws-cell"><span class="tl">'+k
+  +'</span><div class="v n '+(cls||"")+'">'+v+'</div></div>';}
+
+function render(hit,moves,research){
+  var sp=hit.sp, ev=hit.e;
+  var isOn=Date.parse(ev.starts)<=Date.now();
+  var sides=ev.sides.slice().sort(function(a,b){return (b.fair_prob||0)-(a.fair_prob||0);});
+  var fav=sides[0];
+  var best=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+  var single=(ev.n_books||0)<2;
+  var rep=(research&&(research.reports||[]).filter(function(r){
+    return String(r.event_id)===String(ID);})[0])||null;
+
+  /* header + instrument grid */
+  var html='<div class="ws-head">'
+    +'<div class="side a"><div class="nm">'+D.esc(ev.away)+'</div>'
+      +'<span class="rl">AWAY'+(rep&&rep.records[ev.away]?' · '+D.esc(rep.records[ev.away]):'')+'</span></div>'
+    +'<div class="ws-mid"><div class="fair-big n">'+D.esc(fav.name.split(" ").pop())
+      +' '+D.am(fav.fair_price)+'</div>'
+      +'<span class="tl">CONSENSUS FAIR · MONEYLINE</span></div>'
+    +'<div class="side h"><div class="nm">'+D.esc(ev.home)+'</div>'
+      +'<span class="rl">HOME'+(rep&&rep.records[ev.home]?' · '+D.esc(rep.records[ev.home]):'')+'</span></div>'
+    +'</div>'
+    +'<p class="tl" style="text-align:center">'+D.esc(SPORT_LABEL[sp]||sp)+' · '
+    +(isOn?'<b style="color:var(--amber)">CLOSING SNAPSHOT — GAME STARTED</b>'
+          :D.esc(D.when(ev.starts)).toUpperCase())+'</p>'
+    +'<div class="ws-grid">'
+    +cell("FAIR "+D.esc(fav.name.split(" ").pop()),D.am(fav.fair_price))
+    +cell("IMPLIED",D.pct(fav.fair_prob))
+    +cell("BEST AVAILABLE",single?"·":D.am(best.best_price)
+      +' <small>'+D.bk(best.best_book)+'</small>',single?"":"up")
+    +cell("MARKET WIDTH",single?"—":(function(){
+        var w=0; ev.sides.forEach(function(s){ if((s.quotes||[]).length>1){
+          var ips=s.quotes.map(function(q){return D.implied(q.price);});
+          w=Math.max(w,(Math.max.apply(null,ips)-Math.min.apply(null,ips))*100);}});
+        return w.toFixed(2)+" <small>PTS</small>";})())
+    +cell("SHOPPING GAIN",single?"—":D.pts(best.gain_pts)+" <small>PTS</small>",single?"":"up")
+    +cell("BOOKS",String(ev.n_books))
+    +'</div>';
+
+  /* one spectrum per side */
+  html+=ev.sides.map(function(s){
+    return '<div class="mkt">'
+      +'<div class="sec-h"><span class="tl">MONEYLINE · '+D.esc(s.name).toUpperCase()
+      +'</span><span class="more tl">FAIR '+D.am(s.fair_price)+'</span></div>'
+      +D.spectrum({quotes:s.quotes,fairProb:s.fair_prob,fairPrice:s.fair_price,
+        label:"Prices for "+s.name})
+      +'</div>';
+  }).join("");
+
+  /* sportsbook comparison — both sides, one ladder */
+  var books={};
+  ev.sides.forEach(function(s,si){ (s.quotes||[]).forEach(function(q){
+    (books[q.book]=books[q.book]||{})[si]={price:q.price,
+      /* every vigged price sits below fair — that is what vig is. The
+         information is WHERE a book ranks in the market, so color follows
+         rank (best/worst per side), not the sign, which is always negative. */
+      best:q.price===s.best_price, worst:q.price===s.worst_price,
+      vs:(s.fair_prob!=null?(s.fair_prob-D.implied(q.price))*100:null)};});});
+  var names=Object.keys(books);
+  if(names.length>1){
+    html+='<div class="sec"><div class="sec-h"><span class="tl">SPORTSBOOK COMPARISON</span>'
+      +'<span class="sub">implied probability per book, against the de-vigged fair price</span></div>'
+      +'<div class="itab"><div class="scr"><table><thead><tr><th class="l">BOOK</th>'
+      +'<th>'+D.esc(sides[0].name.split(" ").pop())+'</th><th>IMPLIED</th><th>VS FAIR</th>'
+      +'<th>'+D.esc(sides[1].name.split(" ").pop())+'</th><th>IMPLIED</th><th>VS FAIR</th>'
+      +'</tr></thead><tbody>'
+      +names.map(function(b){
+        function c(x){ if(!x) return '<td class="dim">·</td><td class="dim">·</td><td class="dim">·</td>';
+          var cls=x.best?"up":x.worst?"dn":"dim";
+          return '<td class="'+(x.best?"up":"")+'">'+D.am(x.price)+'</td><td class="dim">'
+            +D.pct(D.implied(x.price))+'</td><td class="'+cls+'">'+D.pts(x.vs)+'</td>';}
+        var s0=books[b][0],s1=books[b][1];
+        return '<tr><td class="l">'+D.bk(b)+'</td>'+c(s0)+c(s1)+'</tr>';
+      }).join("")
+      +'</tbody></table></div></div></div>';
+  }
+
+  /* movement — our own capture only */
+  var mvRows=[];
+  if(moves){ ["divergence","drift"].forEach(function(k){ (moves[k]||[]).forEach(function(a){
+    if(String(a.event_id)===String(ID)) mvRows.push(a);});});}
+  mvRows.sort(function(a,b){return String(b.observed_at).localeCompare(String(a.observed_at));});
+  html+='<div class="sec"><div class="sec-h"><span class="tl">MOVEMENT</span>'
+    +'<span class="sub">detected on our capture, points of implied probability</span></div>';
+  if(mvRows.length){
+    html+='<div class="feed">'+mvRows.slice(0,6).map(function(a,i){
+      var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
+      return D.feedRow(i,D.esc(a.market).toUpperCase()
+        +'<span class="pts n '+cls+'">'+D.pts(a.move_pts)+' PTS</span>',
+        D.esc(sideName(a,a.detail)),
+        '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span>');
+    }).join("")+'</div>';
+  }else{
+    html+='<div class="feed"><div class="state"><span class="tl">NO MOVEMENT ABOVE THRESHOLD</span>'
+      +'Nothing above '+((moves&&moves.min_move_pts)||1.5)
+      +' pts detected for this game on our capture.</div></div>';
+  }
+  html+='</div>';
+
+  /* NFL research report facts, when the researcher covers this game */
+  if(rep){
+    html+='<div class="sec"><div class="sec-h"><span class="tl">RESEARCH</span>'
+      +'<span class="sub">computed from the matchup report — nothing generated</span>'
+      +'<a class="more" href="/research">FULL REPORT →</a></div>'
+      +'<div class="feed">'+rep.facts.map(function(f,i){
+        return D.feedRow(i,D.esc(f.kind).replace(/_/g," ").toUpperCase(),D.esc(f.text),"");
+      }).join("")+'</div></div>';
+  }
+
+  /* analyst */
+  html+='<div class="sec"><div class="sec-h"><span class="tl">SOOTH ANALYST</span>'
+    +'<span class="sub">answers may only use the numbers on this page — it will not pick a side</span></div>'
+    +'<div class="an-chips">'
+    +['WHAT IS THE FAIR PRICE?','WHERE DO BOOKS DISAGREE?','WHAT MOVED?','SUMMARIZE THIS GAME']
+      .map(function(q){return '<button class="an-chip" data-q="'+D.esc(q)+'">'+q+'</button>';}).join("")
+    +'</div>'
+    +'<div class="an-in"><input id="anq" placeholder="Ask about this game…" maxlength="500">'
+    +'<button id="ango">ASK</button></div>'
+    +'<div class="an-out" id="anout"></div></div>';
+
+  ws.innerHTML=html;
+  document.title="Sooth — "+ev.away+" at "+ev.home;
+
+  function ask(q){
+    var out=document.getElementById("anout");
+    out.textContent="READING THE BOARD…";
+    var body=rep?{mode:"matchup",event_id:String(ID),question:q}
+      :{question:q+" — the game is "+ev.away+" at "+ev.home+" ("+(SPORT_LABEL[sp]||sp)+")."};
+    fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
+      body:JSON.stringify(body)})
+      .then(function(r){return r.json();})
+      .then(function(j){out.textContent=j.answer||j.error||"No answer.";})
+      .catch(function(){out.textContent="The analyst is unavailable right now.";});
+  }
+  document.addEventListener("click",function(e){
+    var c=e.target.closest(".an-chip[data-q]"); if(c) return ask(c.dataset.q);
+    if(e.target.id==="ango"){var v=document.getElementById("anq").value.trim(); if(v) ask(v);}
+  });
+  document.getElementById("anq").addEventListener("keydown",function(e){
+    if(e.key==="Enter"&&e.target.value.trim()) ask(e.target.value.trim());});
+}
+
+Promise.all([D.load("/data/board.json"),D.load("/data/moves.json"),
+             D.load("/data/research.json")]).then(function(rs){
+  var bd=rs[0];
+  if(!bd.ok){ ws.innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
+    +'The board could not be loaded — try again shortly.</div>'; return; }
+  var hit=findEvent(bd.data);
+  if(!hit){
+    ws.innerHTML='<div class="state"><span class="tl">OUT OF PRICING WINDOW</span>'
+      +'This game is not on the live board — prices publish as kickoff approaches.'
+      +(SPQ==="nfl"?' NFL matchup research may still cover it on <a href="/research" style="color:var(--brand)">the research desk</a>.':'')
+      +'</div>';
+    var srail=bd.ok?bd.data:null; D.sportRail(srail,SPQ,function(s){location.href="/desk";});
+    return;
+  }
+  D.sportRail(bd.data,hit.sp,function(s){location.href="/desk";});
+  render(hit,rs[1].ok?rs[1].data:null,rs[2].ok?rs[2].data:null);
+});
+})();
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>
