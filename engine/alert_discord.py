@@ -81,19 +81,41 @@ UA = "sooth-discord/1.0"
 # min_obs targets roughly 100 underlying opportunities, because "a game" is not
 # a constant unit of evidence: a pitcher's start is ~22 batters faced, a
 # hitter's game is ~4 plate appearances.
-POSTABLE = {
-    "pitcher_strikeouts": {
-        # Market is loose here and the per-start count is genuinely Poisson-ish,
-        # so delta carries signal at a low threshold.
-        "min_delta": 3.0,
-        "min_obs": 5,            # ~5 starts x ~22 batters faced
-    },
-    # batter_total_bases is DELIBERATELY ABSENT. tbconv-v1 is well calibrated in
-    # aggregate but its per-player error (~+-3.5 pts) swamps any delta we would
-    # rank on, so its edges select model misfit. It goes in when the model
-    # carries a per-player over-dispersion term — not when someone raises the
-    # threshold until the noise stops showing, which hides the fault instead of
-    # fixing it.
+POSTABLE: dict = {
+    # EMPTY, DELIBERATELY. No market is currently cleared to post.
+    #
+    # Both model heads were walk-forward bucketed by assigned probability and
+    # both are miscalibrated by 6-13 points INSIDE the buckets while looking
+    # calibrated in aggregate, because the errors cancel:
+    #
+    #   kpoisson-v1   p~0.1 predicted 15.8% actual 24.5%   (-8.7, n=347)
+    #                 p~0.4 predicted 43.7% actual 36.7%   (+7.0, n=120)
+    #                 overall gap -0.9
+    #   tbconv-v1     p~0.2 predicted 27.3% actual 40.4%  (-13.1, n=151)
+    #                 p~0.5 predicted 52.2% actual 41.3%  (+10.9, n=361)
+    #                 overall gap -0.5
+    #
+    # One cause, implemented twice: both models are plug-in rather than
+    # predictive. Each estimates a player's rate from a finite sample, then
+    # computes tail probabilities as if that estimate were the true parameter.
+    # Ignoring parameter uncertainty pushes probabilities away from the middle,
+    # so every probability published is too extreme and the truth sits nearer
+    # the base rate than claimed.
+    #
+    # That defect lands directly on this module. The market prices close to the
+    # base rate, so our overconfidence is what moves us away from it, which
+    # means delta_pts is LARGEST EXACTLY WHERE WE ARE MOST WRONG. The tbconv
+    # p~0.5 bucket is the worked example: model 52.2%, market ~41%, truth
+    # 41.3% — an eleven-point edge, entirely ours.
+    #
+    # A floor above the miscalibration (12+) was considered and rejected. It
+    # posts nothing on current boards, but for a reason that expires quietly
+    # the moment a large delta appears — and a large delta is precisely the
+    # case now known to be contaminated.
+    #
+    # A market returns here when its model publishes PREDICTIVE probabilities
+    # (negative-binomial for strikeouts, Dirichlet-multinomial for total bases)
+    # and has been re-bucketed after the change. Not before.
 }
 
 # Fallbacks for an explicit override only. There is intentionally no default
@@ -326,6 +348,11 @@ def main() -> int:
         print(f"props: {len(props)}  divergence: {len(div)}")
     else:
         print(f"props: {len(props)}")
+
+    if not POSTABLE:
+        print("  NO MARKET IS CLEARED TO POST — POSTABLE is empty by decision, "
+              "not by accident. Both model heads are miscalibrated inside their "
+              "probability buckets; see the note on POSTABLE.")
 
     # Never let a cap be silent: a market held back is a decision, and it
     # should read as one rather than looking like an empty slate.
