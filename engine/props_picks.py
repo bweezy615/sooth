@@ -1,4 +1,11 @@
-"""Daily prop picks, selected on price rather than on model edge.
+"""The daily best-price prop post, selected on price rather than on model edge.
+
+PRODUCT.md is explicit that this product sells tools and data and NOT picks, and
+that the distinction is load-bearing rather than cosmetic: selling tools carries
+no performance claim, so no substantiation burden. "never a pick" already ships
+in the footers of props.html, edges.html and research.html. Nothing this module
+renders may call these picks or plays. The module and file names predate that
+reading and are the remaining loose thread.
 
 Which props to publish is a selection question, and the selection mechanism is
 the whole product. Two candidates were available and they are not equally good:
@@ -134,7 +141,9 @@ def hit_str(row: dict) -> str | None:
         over = h.get("over", 0)
         made = over if row["side"] == "over" else h["n"] - over
         parts.append(f"{label} {made}/{h['n']}")
-    return "  ".join(parts) if parts else None
+    # Name the side. These counts are for the side being picked, so on an under
+    # a bare "4/5" reads as four overs to anyone scanning quickly.
+    return f"{row['side']}: " + "  ".join(parts) if parts else None
 
 
 def pick(doc: dict, top: int = 5) -> list[dict]:
@@ -176,7 +185,7 @@ def render(picks: list[dict], generated_at: str | None) -> str:
         lines.append(f"{beat} of {len(picks)} beat consensus fair today. "
                      "The rest are where you give up least.")
     else:
-        lines.append("All of today's picks are priced better than consensus fair.")
+        lines.append("Every one of these is priced better than consensus fair.")
     lines.append("")
 
     for i, r in enumerate(picks, 1):
@@ -188,7 +197,7 @@ def render(picks: list[dict], generated_at: str | None) -> str:
         lines.append(f"   {price_sentence(r['price_edge_pts'])}")
         form = hit_str(r)
         if form:
-            lines.append(f"   history: {form}")
+            lines.append(f"   {form}")
         if r.get("model_p_over") is not None:
             side_p = (r["model_p_over"] if r["side"] == "over"
                       else 1 - r["model_p_over"])
@@ -209,6 +218,16 @@ def main() -> None:
 
     doc = json.loads(Path(a.props).read_text())
     picks = pick(doc, a.top)
+
+    # Apply the form floor to the published record, not just to the rendered
+    # post. Anything reading this file — the site, the alerts, anything later —
+    # should get the same answer about whether a player's history is publishable.
+    # Leaving raw counts in the JSON while withholding them from the text would
+    # make the floor a formatting choice rather than an editorial one.
+    for p in picks:
+        if hit_str(p) is None:
+            for k in ("hit_l5", "hit_l10", "hit_season"):
+                p[k] = None
     payload = {
         "generated_at": doc.get("generated_at"),
         "selection": "edge_vs_fair_pts",
