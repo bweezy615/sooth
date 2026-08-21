@@ -1,156 +1,156 @@
 {
- "generated_at": "2026-08-21T01:52:18.366166+00:00",
+ "generated_at": "2026-08-21T05:17:31.878778+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 18,
+ "n_considered": 60,
  "picks": [
   {
    "sport": "mlb",
    "matchup": "Atlanta Braves @ Milwaukee Brewers",
    "starts": "2026-08-21T20:11:00Z",
-   "player": "Jacob Misiorowski",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 8.5,
-   "side": "over",
-   "best_price": -116,
-   "best_book": "DraftKings",
+   "player": "Cooper Pratt",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "under",
+   "best_price": -106,
+   "best_book": "BetOnline",
    "n_books": 3,
-   "fair_price": -113,
-   "price_edge_pts": -0.64,
-   "book_spread_pts": 2.82,
+   "fair_price": -108,
+   "price_edge_pts": 0.46,
+   "book_spread_pts": 5.07,
    "hit_l5": {
     "n": 5,
-    "over": 3
+    "over": 1
    },
    "hit_l10": {
     "n": 10,
-    "over": 6
+    "over": 5
+   },
+   "hit_season": {
+    "n": 45,
+    "over": 25
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Francisco Giants @ Boston Red Sox",
+   "starts": "2026-08-21T23:11:00Z",
+   "player": "Sonny Gray",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 5.5,
+   "side": "under",
+   "best_price": -112,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": -113,
+   "price_edge_pts": 0.23,
+   "book_spread_pts": 3.69,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 5
    },
    "hit_season": {
     "n": 23,
-    "over": 13
+    "over": 9
    },
-   "model_p_over": 0.5183,
+   "model_p_over": 0.4296,
    "model_version": "kpoisson-v1"
   },
   {
    "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-21T20:11:00Z",
-   "player": "Jackson Chourio",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 145,
-   "best_book": "Bovada",
-   "n_books": 3,
-   "fair_price": 158,
-   "price_edge_pts": -2.0,
-   "book_spread_pts": 2.47,
+   "matchup": "Tampa Bay Rays @ Baltimore Orioles",
+   "starts": "2026-08-21T23:16:00Z",
+   "player": "Trevor Rogers",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "under",
+   "best_price": -101,
+   "best_book": "DraftKings",
+   "n_books": 5,
+   "fair_price": 100,
+   "price_edge_pts": -0.25,
+   "book_spread_pts": 4.3,
    "hit_l5": {
     "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 94,
-    "over": 37
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ Boston Red Sox",
-   "starts": "2026-08-21T23:11:00Z",
-   "player": "Wilyer Abreu",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 115,
-   "best_book": "Bovada",
-   "n_books": 3,
-   "fair_price": 127,
-   "price_edge_pts": -2.5,
-   "book_spread_pts": 0.66,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 124,
-    "over": 49
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ Boston Red Sox",
-   "starts": "2026-08-21T23:11:00Z",
-   "player": "Willson Contreras",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 125,
-   "best_book": "Bovada",
-   "n_books": 3,
-   "fair_price": 139,
-   "price_edge_pts": -2.52,
-   "book_spread_pts": 0.6,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 116,
-    "over": 51
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ Boston Red Sox",
-   "starts": "2026-08-21T23:11:00Z",
-   "player": "Nick Sogard",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 136,
-   "best_book": "Caesars",
-   "n_books": 3,
-   "fair_price": 151,
-   "price_edge_pts": -2.54,
-   "book_spread_pts": 0.18,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
     "over": 4
    },
+   "hit_l10": {
+    "n": 10,
+    "over": 7
+   },
    "hit_season": {
-    "n": 32,
+    "n": 23,
     "over": 11
+   },
+   "model_p_over": 0.5099,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Baltimore Orioles",
+   "starts": "2026-08-21T23:16:00Z",
+   "player": "Jackson Holliday",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 158,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 160,
+   "price_edge_pts": -0.37,
+   "book_spread_pts": 2.91,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 76,
+    "over": 20
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Baltimore Orioles",
+   "starts": "2026-08-21T23:16:00Z",
+   "player": "Jonny Deluca",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 158,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 161,
+   "price_edge_pts": -0.49,
+   "book_spread_pts": 2.39,
+   "hit_l5": {
+    "n": 5,
+    "over": 0
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 80,
+    "over": 28
    },
    "model_p_over": null,
    "model_version": null
