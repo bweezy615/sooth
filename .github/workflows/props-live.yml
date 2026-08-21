@@ -126,7 +126,7 @@ jobs:
       # Annotation only makes sense on a genuinely new capture. If the engine
       # kept the previous snapshot, re-annotating it would restate old rosters
       # as current — publish.sh drew this line and it is worth keeping.
-      - name: Annotate with hit rates and the strikeout model
+      - name: Annotate with hit rates and the strikeout model, then pick on price
         if: steps.gate.outputs.refresh == 'true'
         run: |
           gen_after=$(python -c "import json;print(json.load(open('site/public/data/props.json')).get('generated_at'))" 2>/dev/null || echo none)
@@ -136,6 +136,17 @@ jobs:
           fi
           python -m engine.hitrates || echo "HITRATES failed - props stay unannotated"
           python -m engine.props_model || echo "PROPS MODEL failed - props stay unmodeled"
+          # Picks live inside this step on purpose: the early exit above is the
+          # rule that a stale board must not be restated as current, and picks
+          # are a claim about tonight. They are selected on price
+          # (edge_vs_fair_pts), never on model edge - see
+          # docs/reports/props-model-negative-result.md for the 48.1% that ruled
+          # the model out as a selector. The rendered post is echoed into the
+          # job log so it can be read and posted without running anything
+          # locally.
+          echo "--- daily picks post ---"
+          python -m engine.props_picks --top 5 \
+            || echo "PICKS failed - props_picks.json left at its previous state"
 
       - name: Report skip
         if: steps.gate.outputs.refresh != 'true'
@@ -146,7 +157,7 @@ jobs:
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add site/public/data/props.json
+          git add site/public/data/props.json site/public/data/props_picks.json
           if git diff --staged --quiet; then
             echo "no change in props board"
           else
