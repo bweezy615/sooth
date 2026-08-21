@@ -65,7 +65,22 @@ DEFAULT_MIN_DELTA = 3.0
 # A Discord post is a different act: it arrives unrequested with our confidence
 # attached to it, so it carries a higher bar. Held here rather than upstream so
 # that loosening one can never silently loosen the other.
-DEFAULT_MIN_OBS = 5
+#
+# The floor is PER MARKET, because "a game" is not a constant unit of evidence.
+# A pitcher's start is ~22 batters faced; a hitter's game is ~4 plate
+# appearances. Five starts is roughly a month and ~110 opportunities, while
+# five hitter games is under a week and ~20. A single flat number would hold
+# the two to standards differing by a factor of five while looking even-handed.
+# Each floor below targets roughly 100 underlying opportunities.
+MIN_OBS = {
+    "pitcher_strikeouts": 5,     # ~5 starts x ~22 batters faced
+    "batter_total_bases": 25,    # ~25 games x ~4 plate appearances
+}
+
+# A market nobody has reasoned about gets the STRICTER of the known floors,
+# never the looser. An unmapped market is precisely the one whose evidence we
+# have not thought about, so it is the wrong place to be generous.
+DEFAULT_MIN_OBS = max(MIN_OBS.values())
 
 # Never post more than this per tick. A wall of plays reads as a pick service
 # and buries the one that mattered.
@@ -91,8 +106,15 @@ def check_language(text: str) -> None:
 
 # ---- 1. rank by analysis, not by price gap ---------------------------------
 
+def min_obs_for(market: str, override: int | None = None) -> int:
+    """Evidence floor for a market. An explicit override applies everywhere."""
+    if override is not None:
+        return override
+    return MIN_OBS.get(market, DEFAULT_MIN_OBS)
+
+
 def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
-                   min_obs: int = DEFAULT_MIN_OBS) -> list[dict]:
+                   min_obs: int | None = None) -> list[dict]:
     """Every prop carrying our own model read, strongest edge first.
 
     A prop without a ``model`` block is skipped entirely. We have not analysed
@@ -117,7 +139,8 @@ def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
                 # Missing sample size is treated as failing, never as passing:
                 # an unknown denominator is not evidence.
                 n_obs = model.get("n_starts") or model.get("n_games")
-                if not isinstance(n_obs, int) or n_obs < min_obs:
+                if not isinstance(n_obs, int) or n_obs < min_obs_for(
+                        prop.get("market", ""), min_obs):
                     continue
                 side = "over" if delta > 0 else "under"
                 out.append({
@@ -238,8 +261,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
     ap.add_argument("--min-delta", type=float, default=DEFAULT_MIN_DELTA)
-    ap.add_argument("--min-obs", type=int, default=DEFAULT_MIN_OBS,
-                    help="minimum games behind a projection before it may post")
+    ap.add_argument("--min-obs", type=int, default=None,
+                    help="override the per-market evidence floor for every market")
     ap.add_argument("--max", type=int, default=MAX_PER_POST)
     ap.add_argument("--props", default=PROPS)
     ap.add_argument("--dry-run", action="store_true",
