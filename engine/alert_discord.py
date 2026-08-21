@@ -535,14 +535,23 @@ def save_sent(sent: set) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
-    ap.add_argument("--mode", choices=("picks", "edges"), default="picks",
-                    help="picks: rank by price against consensus fair (the "
-                         "live product). edges: DIAGNOSTIC ONLY — ranks by "
-                         "model delta and prints, and can never post.")
+    # "prices" is the name; "picks" is kept as a hidden synonym so any existing
+    # invocation keeps working. PRODUCT.md's vocabulary rule is about surfaces a
+    # reader sees, and a flag is not one — but a workflow file ends up
+    # containing the literal string, and that string appears in job logs and in
+    # any runbook quoting the command. Cheap to close the last place the word
+    # survives on a path somebody reads.
+    ap.add_argument("--mode", choices=("prices", "picks", "edges"),
+                    default="prices",
+                    help="prices: rank by best available price against "
+                         "consensus fair (the live product). edges: DIAGNOSTIC "
+                         "ONLY — ranks by model delta and can never post.")
+    ap.add_argument("--top", type=int, default=None,
+                    help="how many best prices to post")
     ap.add_argument("--no-gloss", action="store_true",
                     help="omit the trailing plain-English explainer embed")
     ap.add_argument("--picks", type=int, default=3,
-                    help="how many picks to post in picks mode")
+                    help=argparse.SUPPRESS)   # hidden synonym for --top
     ap.add_argument("--min-delta", type=float, default=None,
                     help="tighten the delta floor of markets already in "
                          "POSTABLE; cannot make an unlisted market postable")
@@ -557,10 +566,10 @@ def main() -> int:
 
     sent = load_sent()
 
-    if a.mode == "picks":
+    if a.mode in ("prices", "picks"):
         found = daily_picks(a.props, a.min_obs if a.min_obs is not None else 10)
         picks = [p for p in found if a.dry_run or pick_key(p) not in sent]
-        picks = picks[:a.picks]
+        picks = picks[:(a.top if a.top is not None else a.picks)]
         if not picks:
             print("no priced sides on the board — posting nothing.")
             return 0
@@ -582,7 +591,7 @@ def main() -> int:
             header = ("**Best prices on the board.** Selected on price against "
                       "the de-vigged consensus, not on a model. Research, not a "
                       "recommendation. Graded here either way, win or lose.")
-        print(f"picks: {len(picks)}  best price edge: {best:+.2f} pts")
+        print(f"best prices: {len(picks)}  best edge vs fair: {best:+.2f} pts")
         if a.dry_run:
             print(json.dumps({"content": header, "embeds": embeds}, indent=1))
             return 0
@@ -594,7 +603,7 @@ def main() -> int:
             return 0
         if post(webhook, header, embeds):
             save_sent(sent | {pick_key(p) for p in picks})
-            print(f"posted {len(embeds)} picks to {a.tier}")
+            print(f"posted {len(embeds)} best prices to {a.tier}")
             return 0
         return 1
 
