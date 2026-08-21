@@ -43,13 +43,19 @@
   .mod h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
     font-weight:600;margin:0 0 12px}
   .mod.wide{grid-column:1/-1}
+  .mvgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
 
   table{border-collapse:collapse;width:100%;font-size:12.5px}
   th{font-family:var(--num);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--dim);font-weight:600;text-align:right;padding:0 0 6px}
+    color:var(--dim);font-weight:600;text-align:right;padding:0 0 6px 10px}
   th.l,td.l{text-align:left}
-  td{padding:5px 0;text-align:right;font-family:var(--num);font-variant-numeric:tabular-nums;
+  td{padding:5px 0 5px 10px;text-align:right;font-family:var(--num);font-variant-numeric:tabular-nums;
     color:var(--ink-2);white-space:nowrap;border-top:1px solid rgba(255,255,255,.045)}
+  th:first-child,td:first-child{padding-left:0}
+  /* The book sits under its price rather than in its own column: four columns
+     fit a 315px module, five do not, and the fifth was being clipped. */
+  td .bk{display:block;font-family:var(--num);font-size:10px;color:var(--dim);
+    font-weight:500;letter-spacing:.02em}
   td.lab{font-family:var(--sans);color:var(--muted);text-align:left}
   td.win{color:var(--ink);font-weight:700}
 
@@ -139,6 +145,12 @@ var DATA=null, FILTER="", WEEK="";
 function $(id){return document.getElementById(id);}
 function esc(s){return (window.sooth&&sooth.esc)?sooth.esc(s):String(s==null?"":s);}
 function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
+// A spread is written from a side's point of view and carries its sign; a total
+// is a single number both sides share. Signing it produced "over +47.5".
+function fmtLine(market, v){
+  if(v==null) return "";
+  return market==="spread" ? (v>0?"+"+v:String(v)) : String(v);
+}
 
 function when(iso){
   var t=Date.parse(iso); if(isNaN(t))return "—";
@@ -192,18 +204,17 @@ function oddsTable(r){
     var sides=Object.keys(b.sides).map(function(k){
       var s=b.sides[k];
       var name=s.label==="home"?r.home:s.label==="away"?r.away:s.label;
-      var ln=s.line==null?"":" "+(s.line>0?"+":"")+s.line;
+      var ln=s.line==null?"":" "+fmtLine(mk, s.line);
       return '<tr><td class="l lab">'+esc(name)+ln+'</td>'
-        +'<td>'+am(s.best_price)+'</td>'
-        +'<td style="color:var(--dim)">'+esc(s.best_book)+'</td>'
+        +'<td>'+am(s.best_price)+'<span class="bk">'+esc(s.best_book)+'</span></td>'
         +'<td>'+(s.fair_prob==null?"·":(s.fair_prob*100).toFixed(1)+"%")+'</td>'
         +'<td class="'+(s.gain_pts?"pos":"")+'">'
         +(s.gain_pts==null?"·":(s.gain_pts>0?"+":"")+s.gain_pts.toFixed(2))+'</td></tr>';
     }).join("");
     out.push('<div style="margin-bottom:14px">'
       +'<div class="eyebrow" style="margin-bottom:6px">'+esc(mk)
-      +(b.line==null?"":" "+(b.line>0?"+":"")+b.line)+'</div>'
-      +'<table><thead><tr><th class="l"></th><th>Best</th><th class="l">Book</th>'
+      +(b.line==null?"":" "+fmtLine(mk, b.line))+'</div>'
+      +'<table><thead><tr><th class="l"></th><th>Best</th>'
       +'<th>Fair</th><th>Gain</th></tr></thead><tbody>'+sides+'</tbody></table>'
       +'<p class="note" style="margin-top:6px">'+esc(b.fair_basis)
       +' · '+b.vig_pts.toFixed(2)+' pts margin'
@@ -222,6 +233,12 @@ function spark(mv){
   var vals=[]; mv.points.forEach(function(p){keys.forEach(function(k){
     if(p[k]!=null) vals.push(p[k]);});});
   var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+  // Every observation identical: the book has not repriced. A flat line is a
+  // chart of nothing, and drawing one implies we measured a trend we did not.
+  if(hi-lo < 0.005){
+    return '<p class="none">Price unchanged across '+mv.points.length
+      +' observations since '+when(mv.points[0].t)+'.</p>';
+  }
   var pad=(hi-lo)*0.15||1; lo-=pad; hi+=pad;
   var W=280,H=56;
   var paths=keys.map(function(k,i){
@@ -245,7 +262,7 @@ function movementBlock(r){
     var mv=r.movement[mk], lh=r.movement[mk+"_line"];
     if(!mv&&!lh) return;
     var head='<div class="eyebrow" style="margin-bottom:4px">'+esc(mk)
-      +(mv&&mv.line!=null?" "+(mv.line>0?"+":"")+mv.line:"")+'</div>';
+      +(mv&&mv.line!=null?" "+fmtLine(mk, mv.line):"")+'</div>';
     var moved=lh&&lh.moved?'<p class="note" style="margin:0 0 4px">Opened '
       +lh.opened+', now '+lh.current+' ('+(lh.moved>0?"+":"")+lh.moved+').</p>':"";
     out.push('<div style="margin-bottom:12px">'+head+moved+(mv?spark(mv):"")+'</div>');
@@ -285,7 +302,8 @@ function card(r){
       +'<p class="note" style="margin-top:10px">ESPN report'
       +(r.injuries.espn_timestamp?", "+when(r.injuries.espn_timestamp):"")+'.</p></div>'
     +'<div class="mod"><h3>Odds</h3>'+oddsTable(r)+'</div>'
-    +'<div class="mod"><h3>Movement</h3>'+movementBlock(r)+'</div>'
+    +'<div class="mod wide"><h3>Movement</h3>'
+      +'<div class="mvgrid">'+movementBlock(r)+'</div></div>'
     +'<div class="mod wide askbox">'
       +'<h3>Read this matchup</h3>'
       +'<input type="text" placeholder="Ask about this game — e.g. what is the total doing?" '
