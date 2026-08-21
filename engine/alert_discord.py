@@ -82,55 +82,59 @@ UA = "sooth-discord/1.0"
 # a constant unit of evidence: a pitcher's start is ~22 batters faced, a
 # hitter's game is ~4 plate appearances.
 POSTABLE: dict = {
-    # EMPTY, DELIBERATELY. No market is currently cleared to post.
+    # EMPTY, AND ON CURRENT EVIDENCE PERMANENTLY SO.
     #
-    # Both model heads are wrong by 6-13 points INSIDE their probability
-    # buckets while looking calibrated in aggregate, because the errors cancel:
+    # This is not a threshold that needs tuning or a model that needs another
+    # pass. Measured on the population it would actually deploy on, the signal
+    # is not there.
     #
-    #   kpoisson-v1   p~0.1 predicted 15.8% actual 24.5%   (-8.7, n=347)
-    #                 p~0.4 predicted 43.7% actual 36.7%   (+7.0, n=120)
-    #   tbconv-v1     p~0.2 predicted 27.3% actual 40.4%  (-13.1, n=151)
-    #                 p~0.5 predicted 52.2% actual 41.3%  (+10.9, n=361)
+    # THE DEPLOYMENT POPULATION IS THE WHOLE POINT. Books do not hang props
+    # uniformly and engine.props requires 3+ two-sided books, so the props that
+    # reach a board are the ones the market has thought hardest about — not a
+    # random draw of player-games. Reconstructed from data/capture/mlb-props:
+    # 3207 raw strikeout quotes -> 267 pitcher-games that actually reached a
+    # board -> 194 with a known outcome.
     #
-    # THE CAUSE IS MEAN SCALING, NOT VARIANCE. An earlier explanation on this
-    # line — plug-in vs predictive probabilities, to be fixed with a negative
-    # binomial — was tested and WITHDRAWN: the fitted r is 180.7, so strikeouts
-    # are almost exactly Poisson, residual variance 5.49 against a Poisson 5.32,
-    # and the correction moved the worst bucket only 16.9 -> 15.8. It is
-    # recorded here rather than deleted because a retracted diagnosis that
-    # vanishes silently is indistinguishable from one that was never made.
+    #   kpoisson-v1 worst bucket, general population, after slope fix:  2.6 pts
+    #   kpoisson-v1 worst bucket, deployment population:               18.5 pts
     #
-    # Regressing actual on projected, held out:
-    #     kpoisson-v1 lam (last-5 weighted)   slope 0.631   MAE 1.9264
-    #     same but season K/BF                slope 0.718   MAE 1.9054
-    #     last-5 mean K                       slope 0.510   MAE 1.9804
-    # Slope 0.631 means a pitcher the model puts one K above average is really
-    # 0.63 above: the projection moves further than reality does. The recency
-    # weighting is actively harmful — season K/BF beats it on slope AND MAE,
-    # and last-5 alone is worst. The model chases streaks that do not persist.
+    # The friendly-sample validation does not transfer at all.
     #
-    # This lands on this module specifically. The market prices near the base
-    # rate, so our over-extension is what moves us away from it, which means
-    # delta_pts is LARGEST EXACTLY WHERE WE ARE MOST WRONG.
+    # THE RESULT THAT ENDS THE EDGE QUESTION:
     #
-    # A slope correction (kshrunk-v2) takes the worst strikeout bucket to 2.6
-    # and total bases to 4.5 — but it is validated only at lines near each
-    # player's distribution centre, and real boards hang lines out in the tail
-    # where probabilities are far more sensitive to a mean shift. On a live
-    # board it produced BIGGER deltas, with two elite strikeout pitchers both
-    # showing large unders: the signature of over-shrinking a selected tail,
-    # not of edge appearing. It is not ready.
+    #   predicted 46.4%   actual 43.3%   market 48.6%
+    #   mean |delta| vs market            11.5 pts
+    #   |delta| >= 3                      156 of 194 props
+    #   our side wins those disagreements  75/156 = 48.1%
     #
-    # The total-bases slope came out 0.214. Only a fifth of that model's spread
-    # between batters is real, which is close to saying it cannot tell batters
-    # apart once noise is removed.
+    # The model disagrees with the market by 11.5 points on average and wins
+    # 48.1% of those disagreements. An edge of that claimed size would show a
+    # win rate far north of 50%. What falsifies it is the MAGNITUDE: this is
+    # not an edge too small to measure, it is a large claimed edge that does
+    # not appear. Honestly on power: n=156, SE ~4 pts, so 48.1% is within noise
+    # of 50% and negative skill is NOT demonstrated — what this sample excludes
+    # is the large edge an 11.5-point delta implies.
     #
-    # A market returns here when its model is calibrated AT THE LINES BOOKS
-    # ACTUALLY POST, on the population that actually reaches a board, and the
-    # surviving delta distribution is large enough to be worth publishing.
-    # Calibration alone is not sufficient: a model can be perfectly honest and
-    # still have nothing to say, and that outcome must be reported as a result
-    # rather than treated as a threshold to be lowered.
+    # Two dead ends recorded so nobody walks them again:
+    #   - Plug-in vs predictive probabilities. Withdrawn: fitted r = 180.7, so
+    #     strikeouts are near-exactly Poisson. No over-dispersion to correct.
+    #   - Empirical-Bayes shrinkage of K/BF toward league, weighted by batters
+    #     faced. Worse: worst bucket 28.2, win rate 40.5%. Driving tau to the
+    #     search ceiling (4000 BF) still only reached slope 0.689, so shrinking
+    #     the RATE cannot fix the slope at any strength. The deficiency is
+    #     elsewhere in the chain, most likely expected batters faced — built
+    #     from a recency-weighted last five starts, the noisiest input there is.
+    #
+    # Not a finding: the market itself ran 48.6% predicted against 43.3% actual
+    # on this sample (+5.3, n=194, ~1.5 sigma). That is noise. It is written
+    # down so that nobody later finds it in the data and reads it as a
+    # discovered market bias.
+    #
+    # A market returns here only if a model is calibrated ON THE DEPLOYMENT
+    # POPULATION and then beats the price on it. Calibration alone is not
+    # sufficient and never was: a model can be perfectly honest and still have
+    # nothing to say. That outcome is a result to publish, not a threshold to
+    # lower.
 }
 
 # Fallbacks for an explicit override only. There is intentionally no default
@@ -366,9 +370,10 @@ def main() -> int:
 
     if not POSTABLE:
         print("  NO MARKET IS CLEARED TO POST — POSTABLE is empty by decision, "
-              "not by accident. Both model heads over-extend their projections "
-              "(strikeout slope 0.63, total-bases slope 0.21) and are "
-              "miscalibrated inside their probability buckets; see POSTABLE.")
+              "not by accident. On the deployment population the strikeout "
+              "model disagrees with the market by 11.5 pts on average and wins "
+              "48.1% of those disagreements; the edge is not there. See "
+              "POSTABLE.")
 
     # Never let a cap be silent: a market held back is a decision, and it
     # should read as one rather than looking like an empty slate.
