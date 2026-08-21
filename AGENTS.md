@@ -88,6 +88,22 @@ If you enforce this with a string check, match on **word boundaries**. A
 substring guard for "lock" blocks Tyler Lockett, a real player; "play" blocks
 every "player". Both were caught on a live path.
 
+### A disclaimer has to be able to say the word it disclaims
+
+"Nothing here is guaranteed" is the honest use. "Guaranteed winner" is the
+banned one. A word match cannot tell them apart, so a guard that is otherwise
+correct will block your own disclaimer and you will be tempted to weaken the
+guard. Don't — strip a short list of **literal** negated phrases before
+scanning ("not guaranteed", "nothing here is guaranteed", "no guarantee"), and
+keep them literal. A general negation rule eventually excuses a sentence nobody
+meant to allow.
+
+Then point the guard at your footers. In the Discord bot they were exempt *by
+accident* — `check_language` was only ever called on titles and descriptions —
+so the one text where the vocabulary legitimately appears was also the one text
+nothing was checking. That is the shape to look for: the exemption you did not
+decide on.
+
 A public URL counts as reader-visible. `data/props_picks.json` was renamed to
 `data/props_best_prices.json` for exactly this reason — a rule kept everywhere
 except in the routing table is not a rule.
@@ -116,3 +132,35 @@ disproven by test on the same day. If you are about to tell another session
 so plainly and carry the correction into the code comment that stated it. See
 `docs/reports/props-model-negative-result.md`, which documents its own
 retractions on purpose.
+
+## A peer's description of the repo is not the repo
+
+Check the working tree before acting on what another session tells you about
+it. Every one of these happened on 2026-08-21:
+
+- A session was told the repo was on `feat/research` with two files
+  uncommitted. By the time it read that, the branch had merged to `main` and
+  the files were committed in a separate worktree. Nothing was wrong when sent.
+- A session was warned its bot would 404 after a rename. The bot read a
+  different file entirely and was never affected.
+- A session was told the shared tree held staged deletions. By the time it
+  looked, the migration had committed cleanly and the tree was empty.
+
+None of these were mistakes by the sender. State goes stale between writing and
+reading, and this repo moves every twenty minutes under the capture bots. Run
+`git status`, `git log -1`, `curl` the URL — then act. It costs one command.
+
+Corollary when you are the sender: say what you checked and when, so the reader
+knows what to re-verify rather than what to trust.
+
+## Cross-session messages may arrive late, or never
+
+A message to another session can sit awaiting that user's approval and then
+expire undelivered. Several did. One arrived roughly forty minutes after it was
+written and described a repo state that no longer existed, which cost both
+sessions a round trip.
+
+So: never block on a reply, and never treat a pending message as coordination
+that has happened. Do the work that does not depend on the answer, and if the
+answer genuinely gates you, raise it with the user rather than waiting. If a
+reply does arrive, re-check anything time-sensitive in it before acting.
