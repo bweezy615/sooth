@@ -224,9 +224,9 @@ function spectrum(opts){
   var range=(cl.length>1)?((cl[cl.length-1].ip-cl[0].ip)*100):0;
   var capL=opts.caption!=null?opts.caption:
     (cl.length>1
-      ?'<span class="tl">RANGE <b>'+range.toFixed(2)+' PTS IMPLIED</b> ACROSS <b>'
-        +quotes.length+' BOOKS</b></span>'
-      :'<span class="tl">SINGLE BOOK — NO MARKET WIDTH TO SHOW</span>');
+      ?'<span class="tl">SAME BET · <b>'+quotes.length+' PRICES</b> · <b>'
+        +range.toFixed(2)+' PTS</b> BETWEEN BEST AND WORST</span>'
+      :'<span class="tl">ONLY ONE BOOK HAS POSTED THIS — NOTHING TO COMPARE YET</span>');
   return '<div class="spec"><div class="spec-scroll">'+out+'</div>'
     +'<div class="spec-cap">'+capL
     +'<span class="tl">'+esc(opts.right||"")+'</span></div></div>';

@@ -21,36 +21,38 @@
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
 
-  <!-- live market status -->
-  <div class="status" id="status" aria-live="polite"></div>
+  <!-- what this is, in one line — then the market -->
+  <div class="page-head" style="padding:26px 0 0">
+    <h1 style="font:760 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
+      Every book's price on one board.</h1>
+    <p style="color:var(--mut);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:62ch">
+      The best available number on every side, next to the fair price with the
+      book's cut removed. Taking the better price pays on its own —
+      <b style="color:var(--ink2)">no picks, no predictions to trust.</b></p>
+  </div>
+  <div class="status" id="status" aria-live="polite" style="padding:18px 0 16px"></div>
   <div id="notice"></div>
+
+  <!-- TODAY'S MARKET -->
+  <section class="sec" aria-labelledby="gmH">
+    <div class="sec-h"><span class="tl" id="gmH">TODAY'S GAMES</span>
+      <span class="sub" id="gmSub"></span></div>
+    <div class="itab" id="games"></div>
+  </section>
 
   <!-- MARKET RADAR -->
   <section class="sec" aria-labelledby="radarH">
-    <div class="sec-h"><span class="tl" id="radarH">MARKET RADAR</span>
-      <span class="sub">the widest book disagreement on the board right now</span></div>
+    <div class="sec-h"><span class="tl" id="radarH">WIDEST GAP RIGHT NOW</span>
+      <span class="sub">the same bet, priced by every book — this is the one they disagree on most</span></div>
     <div class="radar" id="radar"></div>
   </section>
 
   <!-- MARKET MOVERS -->
   <section class="sec" aria-labelledby="mvH">
-    <div class="sec-h"><span class="tl" id="mvH">MARKET MOVERS</span>
-      <span class="sub">detected on our own capture, in points of implied probability</span>
+    <div class="sec-h"><span class="tl" id="mvH">WHAT MOVED</span>
+      <span class="sub">prices we watched change, most recent two days</span>
       <a class="more" href="/edges">ALL MOVEMENT →</a></div>
     <div class="feed" id="movers"></div>
-  </section>
-
-  <!-- TODAY'S MARKET -->
-  <section class="sec" aria-labelledby="gmH">
-    <div class="sec-h"><span class="tl" id="gmH">THE MARKET</span>
-      <span class="sub" id="gmSub"></span></div>
-    <div class="itab" id="games"></div>
-  </section>
-
-  <!-- research entries -->
-  <section class="sec">
-    <div class="sec-h"><span class="tl">RESEARCH DESK</span></div>
-    <div class="feed" id="deskLinks"></div>
   </section>
 
 </main>
@@ -92,9 +94,8 @@ function renderStatus(state){
   var today=new Date().toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"}).toUpperCase();
   document.getElementById("status").innerHTML=
     '<span class="tl" style="align-self:center">'+today+'</span>'
-    +'<span class="stat"><span class="v n">'+games+'</span><span class="tl">GAMES</span></span>'
-    +'<span class="stat"><span class="v n">'+books+'</span><span class="tl">BOOKS</span></span>'
-    +'<span class="stat"><span class="v n">'+prices.toLocaleString()+'</span><span class="tl">LIVE PRICES</span></span>'
+    +'<span class="stat"><span class="v n">'+games+'</span><span class="tl">GAMES ON THE BOARD</span></span>'
+    +'<span class="stat"><span class="v n">'+books+'</span><span class="tl">BOOKS COMPARED</span></span>'
     +'<span class="live"><span class="pulse '+(state==="live"?"on":state)+'"></span>'
     +'<span class="tl">'+(state==="dead"?"FEED UNAVAILABLE":state==="stale"?"DELAYED — UPDATED ":"UPDATED ")
     +'</span><span class="tl" data-ago="'+D.esc(BOARD.generated_at)+'">'
@@ -136,14 +137,12 @@ function renderRadar(){
       right:single?"":"BEST "+D.am(side.best_price)+" "+D.bk(side.best_book)})
     +'</div>'
     +'<div class="radar-side">'
-    +kv("CONSENSUS FAIR",D.am(side.fair_price),"")
-    +kv("BEST AVAILABLE",D.am(side.best_price)+" · "+D.bk(side.best_book),single?"":"up")
-    +kv("WORST",D.am(side.worst_price)+" · "+D.bk(side.worst_book),"")
-    +kv("SHOPPING GAIN",single?"—":D.pts(side.gain_pts)+" PTS",single?"dim":"up")
-    +kv("BOOKS POSTING",String(side.n_books),"")
-    +kv("KICKOFF",D.when(ev.starts),"")
+    +kv("FAIR PRICE",D.am(side.fair_price),"")
+    +kv("BEST PRICE",D.am(side.best_price)+" · "+D.bk(side.best_book),single?"":"up")
+    +kv("WORST PRICE",D.am(side.worst_price)+" · "+D.bk(side.worst_book),"")
+    +kv("YOU GAIN",single?"—":D.pts(side.gain_pts)+" PTS",single?"dim":"up")
     +'<a class="an-chip" style="margin-top:14px;text-align:center" href="/game?e='
-      +encodeURIComponent(ev.id)+'&s='+sp+'">OPEN RESEARCH WORKSPACE →</a>'
+      +encodeURIComponent(ev.id)+'&s='+sp+'">SEE THE FULL READ →</a>'
     +'</div>';
   function kv(k,v,cls){return '<div class="kv"><span class="k">'+k
     +'</span><span class="v n '+cls+'">'+v+'</span></div>';}
@@ -168,7 +167,7 @@ function renderMovers(){
     if((perSport[a.sport]||0)>=3) return;
     seen[a.event_id]=1; perSport[a.sport]=(perSport[a.sport]||0)+1; kept.push(a);
   });
-  rows=kept;
+  rows=kept.slice(0,4);
   if(!rows.length){ el.innerHTML='<div class="state"><span class="tl">QUIET MARKET</span>'
     +'No movement above '+(MOVES.min_move_pts||1.5)+' pts detected on upcoming games.</div>'; return; }
   el.innerHTML=rows.map(function(a,i){
@@ -186,7 +185,7 @@ function renderMovers(){
 function renderGames(){
   var b=boardFor(SP), el=document.getElementById("games");
   document.getElementById("gmSub").textContent = b
-    ? (SPORT_LABEL[SP]+" · best price per side against the de-vigged consensus of "+b.n_books+" book"+(b.n_books>1?"s":""))
+    ? (SPORT_LABEL[SP]+" · "+b.n_books+" book"+(b.n_books>1?"s":"")+" compared · tap a game for the full read")
     : "";
   if(!b){ el.innerHTML='<div class="state"><span class="tl">'+D.esc(SPORT_LABEL[SP]||SP)
     +' — NO OPEN BOARD</span>Out of season or outside the pricing window. '
@@ -213,15 +212,10 @@ function renderGames(){
       +'<td class="dim">'+e.n_books+'</td></tr>';
   }).join("");
   el.innerHTML='<div class="scr"><table>'
-    +'<thead><tr><th class="l">TIME</th><th class="l">MATCHUP</th>'
-    +'<th>FAIR</th><th>BEST</th><th>GAP PTS</th><th>BKS</th></tr></thead>'
+    +'<thead><tr><th class="l">TIME</th><th class="l">GAME</th>'
+    +'<th>FAIR PRICE</th><th>BEST PRICE</th><th>YOU GAIN</th><th>BOOKS</th></tr></thead>'
     +'<tbody>'+rows+'</tbody></table></div>';
 }
-
-document.getElementById("deskLinks").innerHTML=
-  D.feedRow(0,"MATCHUP RESEARCH","Form, availability, prices and movement composed per game — every figure computed, none generated.","NFL →","/research")
- +D.feedRow(1,"EDGES","+EV board, middle windows, and detected movement across the capture archive.","ALL SPORTS →","/edges")
- +D.feedRow(2,"THE LEDGER","Predictions sealed before kickoff, graded in public after — losses included. Audit us.","VERIFY →","/trust");
 
 document.getElementById("games").addEventListener("click",function(e){
   var tr=e.target.closest("tr[data-href]"); if(tr) location.href=tr.dataset.href;});

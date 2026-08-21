@@ -72,12 +72,12 @@ function render(hit,moves,research,timeline){
     +cell("IMPLIED",D.pct(fav.fair_prob))
     +cell("BEST AVAILABLE",single?"·":D.am(best.best_price)
       +' <small>'+D.bk(best.best_book)+'</small>',single?"":"up")
-    +cell("MARKET WIDTH",single?"—":(function(){
+    +cell("PRICE SPREAD",single?"—":(function(){
         var w=0; ev.sides.forEach(function(s){ if((s.quotes||[]).length>1){
           var ips=s.quotes.map(function(q){return D.implied(q.price);});
           w=Math.max(w,(Math.max.apply(null,ips)-Math.min.apply(null,ips))*100);}});
         return w.toFixed(2)+" <small>PTS</small>";})())
-    +cell("SHOPPING GAIN",single?"—":D.pts(best.gain_pts)+" <small>PTS</small>",single?"":"up")
+    +cell("YOU GAIN",single?"—":D.pts(best.gain_pts)+" <small>PTS</small>",single?"":"up")
     +cell("BOOKS",String(ev.n_books))
     +'</div>';
 
