@@ -211,8 +211,12 @@ function render(hit,moves,research,timeline){
       :{question:q+" — the game is "+ev.away+" at "+ev.home+" ("+(SPORT_LABEL[sp]||sp)+")."};
     fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
       body:JSON.stringify(body)})
-      .then(function(r){return r.json();})
-      .then(function(j){out.innerHTML=D.answer(j.answer||j.error||"No answer.");})
+      .then(function(r){return r.json().then(function(j){j._capped=(r.status===429);return j;});})
+      .then(function(j){
+        out.innerHTML=D.answer(j.answer||j.error||"No answer.")
+          +(j._capped&&j.upgrade?'<p style="margin-top:8px"><a href="'+D.esc(j.upgrade)
+            +'" style="color:var(--brand);font:600 11px var(--mono);letter-spacing:.08em">GO PRO \u2192 UNLIMITED ANALYSES</a></p>':"");
+      })
       .catch(function(){out.textContent="The analyst is unavailable right now.";});
   }
   document.addEventListener("click",function(e){

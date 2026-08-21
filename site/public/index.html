@@ -45,7 +45,8 @@
   <!-- ANALYZE — the product, on landing -->
   <section class="sec" style="border-top:0;padding-top:6px" aria-labelledby="anH">
     <div class="sec-h"><span class="tl" id="anH">ANALYZE A GAME</span>
-      <span class="sub">ask anything on tonight's slate — answers use only the live numbers, and it will not pick a side</span></div>
+      <span class="sub">ask anything on tonight's slate — answers use only the live numbers, and it will not pick a side</span>
+      <span class="more tl" id="anterms"></span></div>
     <div class="an-in" style="max-width:720px">
       <input id="anq" maxlength="500" placeholder="e.g. Analyze tonight's Mets game — what's the number doing?">
       <button id="ango">ANALYZE</button>
@@ -232,6 +233,27 @@ function matchGame(q){
   });});
   return hit;
 }
+/* the ask quota, stated up front — the same dates the API enforces, so the
+   page never promises what /api/ask won't honor */
+(function(){
+  var el=document.getElementById("anterms");
+  var live=Date.now()>=Date.parse("2026-09-01T00:00:00Z");
+  el.textContent=live
+    ? "3 FREE ANALYSES A DAY \u00b7 PRO IS UNLIMITED"
+    : "FREE THROUGH AUG 31 \u00b7 THEN 3 FREE A DAY \u00b7 PRO IS UNLIMITED";
+})();
+function cappedCard(){
+  return '<div class="ans-card" style="max-width:720px">'
+    +'<span class="tl" style="display:block;margin-bottom:8px">TODAY\'S FREE ANALYSES ARE USED</span>'
+    +'<p style="color:var(--ink2);font-size:13px;line-height:1.6;margin:0 0 12px;max-width:56ch">'
+    +'Three free reads a day keeps the analyzer open to everyone. Sooth Pro is '
+    +'unlimited — every analysis, every instrument, $9.99/mo, cancel anytime.</p>'
+    +'<a href="/subscribe" style="display:inline-block;font:700 12px var(--sans);'
+    +'color:var(--g0);background:linear-gradient(180deg,#3BE3B6,#22BE93);'
+    +'padding:10px 16px;border-radius:var(--r);box-shadow:inset 0 1px 0 '
+    +'rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)">GO PRO \u2192</a>'
+    +'<span class="tl" style="margin-left:12px">OR COME BACK TOMORROW</span></div>';
+}
 function runAnalyze(q){
   var out=document.getElementById("anout");
   if(!q){out.innerHTML="";return;}
@@ -245,8 +267,10 @@ function runAnalyze(q){
     (ev?'<span class="tl" style="display:block;margin-bottom:6px">ANALYST NOTE</span>':"")+html;}
   fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({question:q})})
-    .then(function(r){return r.json();})
-    .then(function(j){note(D.answer(j.answer||j.error||"No answer."));})
+    .then(function(r){return r.json().then(function(j){j._capped=(r.status===429);return j;});})
+    .then(function(j){
+      if(j._capped){document.getElementById("annote").innerHTML=cappedCard();return;}
+      note(D.answer(j.answer||j.error||"No answer."));})
     .catch(function(){note('<span class="tl">THE ANALYST NOTE IS UNAVAILABLE RIGHT NOW'
       +(ev?" — THE NUMBERS ABOVE ARE LIVE.":".")+'</span>');});
 }
