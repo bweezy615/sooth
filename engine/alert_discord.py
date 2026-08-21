@@ -208,9 +208,30 @@ FOOTER = ("Sooth is an odds analysis tool — not a sportsbook, not betting "
           "win or lose. 21+. Problem gambling? Call 1-800-522-4700.")
 
 
+# A disclaimer has to be able to say the word it disclaims. "Nothing here is
+# guaranteed" is the honest use; "guaranteed winner" is the banned one, and a
+# plain word match cannot tell them apart. These exact negated phrases are
+# removed before scanning, so the guard can be pointed at footers — which are
+# the one place the vocabulary legitimately appears — instead of being kept
+# away from them and leaving that text unchecked.
+#
+# Deliberately literal phrases rather than a general negation rule: a clever
+# rule would eventually excuse a sentence nobody intended to allow.
+ALLOWED_PHRASES = (
+    "not guaranteed",
+    "never guaranteed",
+    "nothing here is guaranteed",
+    "no guarantee",
+    "not a guarantee",
+)
+
+
 def check_language(text: str) -> None:
     """Refuse to post anything carrying the banned register. Fails loud."""
-    hit = _BANNED_RE.search(text)
+    scan = text
+    for phrase in ALLOWED_PHRASES:
+        scan = re.sub(re.escape(phrase), " ", scan, flags=re.IGNORECASE)
+    hit = _BANNED_RE.search(scan)
     if hit:
         raise ValueError(
             f"banned word {hit.group(0)!r} in outgoing post: {text[:120]}")
@@ -411,7 +432,7 @@ def render_pick(p: dict) -> dict:
         parts.append(f"Recent {p['side']}: {_hit_line(p['hit'], p['side'])}")
     parts.append(f"{p['event']} · selected on price, not on a model")
     desc = "\n".join(parts)
-    check_language(title + desc)
+    check_language(title + desc + PICKS_FOOTER)
     return {"title": title, "description": desc, "color": 0x3B88C3,
             "footer": {"text": PICKS_FOOTER}}
 
@@ -462,7 +483,7 @@ def render_prop(p: dict) -> dict:
         f"Recent {p['side']}: {_hit_line(p['hit'], p['side'])}\n"
         f"{p['event']} · model `{p['version']}` on {p['n_obs']} games"
     )
-    check_language(title + desc)
+    check_language(title + desc + FOOTER)
     return {"title": title, "description": desc, "color": 0x1F8B4C,
             "footer": {"text": FOOTER}}
 
