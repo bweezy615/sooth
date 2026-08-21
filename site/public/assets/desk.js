@@ -270,13 +270,21 @@ function timeline(mkt,opts){
       +'" stroke="rgba(255,255,255,.05)"/>'
       +'<text x="'+(L-6)+'" y="'+(y+3)+'" text-anchor="end" class="bk-lb">'
       +v.toFixed(1)+'</text>';});
-  /* book traces first, dim, so the baseline reads on top */
+  /* book traces first, dim, so the baseline reads on top. End labels are
+     placed greedily by vertical distance — books that converge to the same
+     price would otherwise print an unreadable stack at the right edge. */
+  var labelYs=[];
   traces.forEach(function(tr){
     var pts=cutpts(tr.pts); if(pts.length<2) return;
     out+='<path d="'+path(pts)+'" fill="none" stroke="rgba(138,145,157,'
-      +(multi?".35":".9")+')" stroke-width="1"/>'
-      +'<text x="'+(X(pts[pts.length-1][0])+4)+'" y="'
-      +(Y(pts[pts.length-1][1])+3)+'" class="bk-lb">'+esc(bk(tr.book))+'</text>';
+      +(multi?".35":".9")+')" stroke-width="1"/>';
+    var y=Y(pts[pts.length-1][1]);
+    var clash=labelYs.some(function(py){return Math.abs(py-y)<9;});
+    if(!clash){
+      labelYs.push(y);
+      out+='<text x="'+Math.min(X(pts[pts.length-1][0])+4,W-2)+'" y="'+(y+3)
+        +'" class="bk-lb">'+esc(bk(tr.book))+'</text>';
+    }
   });
   if(cons.length>1){
     out+='<path d="'+path(cons)+'" fill="none" stroke="#2DD4A7" stroke-width="1.6"/>'
