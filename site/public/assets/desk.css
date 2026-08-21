@@ -73,9 +73,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
 .hd-r1{display:flex;align-items:center;gap:20px;height:52px}
 @media (max-width:860px){
-  .hd-r1{gap:10px}
+  /* The nav shared one row with the brand and the CTA, which left it about
+     190px and pushed everything after MOVEMENT behind a horizontal scroll.
+     GUIDE is last, so the one link written for a newcomer was the one they
+     had to know to swipe for. Given its own full-width row it wraps instead,
+     and every section is visible without discovering a gesture. */
+  .hd-r1{gap:10px;flex-wrap:wrap;height:auto;padding:7px 0}
   .brand .sb{display:none}
-  .hd-links{overflow-x:auto;scrollbar-width:none;flex:1;justify-content:flex-start}
+  .hd-spacer{flex:1}
+  .hd-links{order:3;flex:0 0 100%;width:100%;flex-wrap:wrap;
+    overflow:visible;justify-content:flex-start;gap:1px}
+  .hd-links a{padding:7px 9px}
   .hd-links::-webkit-scrollbar{display:none}
   .hd-spacer{display:none}
 }
@@ -375,3 +383,12 @@ a.mv-row:hover{background:var(--g2)}
 .ft b{color:var(--mut)}
 .ft a{color:var(--mut)} .ft a:hover{color:var(--ink)}
 .ft .links{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+
+/* The guide is an entry point, not a peer of the board sections. It reads
+   quieter than a section until hovered, so it is findable by someone looking
+   for help without competing for the attention of someone who is not. */
+.hd-links a.hd-new{color:var(--mut)}
+.hd-links a.hd-new::before{content:"?";display:inline-block;margin-right:5px;
+  width:13px;height:13px;line-height:13px;text-align:center;border-radius:50%;
+  border:1px solid currentColor;font-size:9px;font-weight:700;vertical-align:1px}
+.hd-links a.hd-new:hover{color:var(--brand)}
