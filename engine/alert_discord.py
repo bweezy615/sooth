@@ -243,13 +243,18 @@ def thresholds_for(market: str, min_delta: float | None = None,
                    min_obs: int | None = None) -> dict | None:
     """Thresholds for a market, or None if it may not post at all.
 
-    An explicit override forces the market postable — that exists for testing
-    a new model head against real data, never for a scheduled run.
+    An override can only TIGHTEN a market that is already listed. It cannot
+    make an unlisted market postable.
+
+    That used to be the other way round — an override forced postability, with
+    a comment saying it was for testing and never for a scheduled run. PRODUCT.md
+    now carries "never rank or select anything by model edge" as a hard
+    constraint, and a hard constraint enforced by a comment is a convention. One
+    `--min-delta 3` in a workflow file would have reopened the whole path.
     """
     entry = POSTABLE.get(market)
-    if entry is None and min_delta is None and min_obs is None:
+    if entry is None:
         return None
-    entry = entry or {}
     return {"min_delta": min_delta if min_delta is not None
                          else entry.get("min_delta", DEFAULT_MIN_DELTA),
             "min_obs": min_obs if min_obs is not None
@@ -532,18 +537,18 @@ def main() -> int:
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
     ap.add_argument("--mode", choices=("picks", "edges"), default="picks",
                     help="picks: rank by price against consensus fair (the "
-                         "live product). edges: rank by model delta — retained, "
-                         "but POSTABLE is empty so it posts nothing.")
+                         "live product). edges: DIAGNOSTIC ONLY — ranks by "
+                         "model delta and prints, and can never post.")
     ap.add_argument("--no-gloss", action="store_true",
                     help="omit the trailing plain-English explainer embed")
     ap.add_argument("--picks", type=int, default=3,
                     help="how many picks to post in picks mode")
     ap.add_argument("--min-delta", type=float, default=None,
-                    help="override every market's delta floor (also forces "
-                         "unlisted markets postable — testing only)")
+                    help="tighten the delta floor of markets already in "
+                         "POSTABLE; cannot make an unlisted market postable")
     ap.add_argument("--min-obs", type=int, default=None,
-                    help="override every market's evidence floor (also forces "
-                         "unlisted markets postable — testing only)")
+                    help="tighten the evidence floor of markets already in "
+                         "POSTABLE; cannot make an unlisted market postable")
     ap.add_argument("--max", type=int, default=MAX_PER_POST)
     ap.add_argument("--props", default=PROPS)
     ap.add_argument("--dry-run", action="store_true",
@@ -592,6 +597,14 @@ def main() -> int:
             print(f"posted {len(embeds)} picks to {a.tier}")
             return 0
         return 1
+
+    # PRODUCT.md hard constraint: never rank or select anything by model edge.
+    # This path still ranks, because being able to re-measure is worth keeping
+    # and the POSTABLE note is the record of why the answer was no. It simply
+    # cannot publish the result, whatever the flags say. Enforced here rather
+    # than left to POSTABLE being empty, so that adding a key back by mistake
+    # does not silently reopen a route to a channel.
+    a.dry_run = True
 
     found, skipped = analysed_props(a.props, a.min_delta, a.min_obs)
     props = [p for p in found if a.dry_run or prop_key(p) not in sent]
