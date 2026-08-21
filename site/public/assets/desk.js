@@ -35,12 +35,19 @@ var BOOK={draftkings:"DK",fanduel:"FD",betmgm:"MGM",williamhill_us:"CZR",
 function bk(name){return BOOK[name]||String(name).slice(0,4).toUpperCase();}
 
 /* ---------- shell ---------- */
+/* Two of these were reachable only from body copy: /ask, which answers a
+   question about a specific game, and /learn, the plain-English explainer.
+   A newcomer was landing on a dense board with no visible route to the guide
+   written for them, and the analyst was effectively hidden. Both are now
+   addressable from anywhere on the site. */
 var NAV=[
   {href:"/",            key:"market",  label:"MARKET"},
   {href:"/props",       key:"props",   label:"PROPS"},
   {href:"/edges",       key:"movement",label:"MOVEMENT"},
   {href:"/research",    key:"research",label:"RESEARCH"},
-  {href:"/trust",       key:"ledger",  label:"LEDGER"}
+  {href:"/ask",         key:"ask",     label:"ANALYST"},
+  {href:"/trust",       key:"ledger",  label:"LEDGER"},
+  {href:"/learn",       key:"learn",   label:"GUIDE", newcomer:true}
 ];
 function header(page){
   return '<header class="hd"><div class="wrap">'
@@ -50,6 +57,7 @@ function header(page){
     +'<span class="hd-spacer"></span>'
     +'<nav class="hd-links" aria-label="Sections">'
     +NAV.map(function(n){return '<a href="'+n.href+'"'
+      +(n.newcomer?' class="hd-new" title="New to betting? Start here"':'')
       +(n.key===page?' aria-current="page"':'')+'>'+n.label+'</a>';}).join("")
     +'</nav>'
     +'<a class="hd-cta" href="/subscribe">PRO</a>'
@@ -67,7 +75,8 @@ function footer(){
     +'Nothing here is a recommendation to bet. 21+, where lawful.</p>'
     +'<p>If gambling is causing harm, the National Problem Gambling Helpline is '
     +'<b>1-800-522-4700</b>, available 24/7.</p>'
-    +'<div class="links"><a href="/methodology">Methodology</a>'
+    +'<div class="links"><a href="/learn">How it works</a>'
+    +'<a href="/methodology">Methodology</a>'
     +'<a href="/verify">Verify</a><a href="/record">Record</a>'
     +'<a href="/ledger">Ledger</a><a href="/disclaimers">Disclaimers</a></div>'
     +'</div></footer>';

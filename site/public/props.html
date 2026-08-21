@@ -52,6 +52,21 @@
   .bp-meta .fair-dn{color:var(--mut)}
   .bp-meta .sep{color:var(--dim)}
   .bp-meta .tm{color:var(--dim)}
+  /* Explanation is available, not administered: closed by default so the
+     board reads exactly as dense as it did, one click for anyone who wants it. */
+  .gloss{margin-top:8px}
+  .gloss summary{cursor:pointer;color:var(--brand);font:600 11.5px var(--sans);
+    list-style:none;display:inline-flex;align-items:center;gap:5px;
+    padding:3px 0;user-select:none}
+  .gloss summary::-webkit-details-marker{display:none}
+  .gloss summary::before{content:"?";display:inline-block;width:13px;height:13px;
+    line-height:13px;text-align:center;border-radius:50%;border:1px solid currentColor;
+    font-size:9px;font-weight:700}
+  .gloss[open] summary{margin-bottom:6px}
+  .gloss p{margin:0 0 7px;max-width:70ch;font-size:12.5px;line-height:1.65;
+    color:var(--ink2)}
+  .gloss p b{color:var(--ink);font-weight:600}
+  .gloss p:last-child{margin-bottom:0}
   .bp-state{padding:16px 14px;font:500 12px var(--sans);color:var(--mut);line-height:1.6}
   @media (max-width:560px){
     .bp-r{grid-template-columns:18px minmax(0,1fr);row-gap:4px}
@@ -86,6 +101,17 @@
       the de-vigged consensus. Selected on price, never on a forecast — our own prop
       model measured no edge on the props books post, and we
       <a href="/props-model">published that</a>.</span></div>
+    <details class="gloss"><summary>New to this?</summary>
+      <p><b>The fair price</b> is what the odds would be if the books took no cut. We
+      work it out by comparing every book pricing the same line and stripping the
+      margin out.</p>
+      <p><b>Below fair is normal.</b> That gap is the house's cut — it is on almost
+      every price you will ever see. The number worth having is the smallest one.</p>
+      <p><b>Taking the best price is worth money on its own</b>, whether or not the
+      bet wins. Two books offering the same bet at different numbers pay differently,
+      and that difference is the only thing on this page that does not depend on
+      predicting anything. <a href="/learn">The 60-second guide</a> covers the
+      rest.</p></details>
     <div class="bp" id="bp" aria-live="polite"></div>
   </div>
 
@@ -132,13 +158,15 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk, DOC=null;
 D.mount("props");
 function $(id){return document.getElementById(id);}
 
-D.load("/data/props.json").then(function(res){
+Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
+  var res=a[0];
   if(!res.ok){ fail("<b>NO PROPS BOARD</b>The props engine has not published a snapshot. "
     +"Books post player props closer to game time."); return; }
   DOC=res.data; init(res);
@@ -146,8 +174,8 @@ D.load("/data/props.json").then(function(res){
 
 // Best prices. Same file the alerts read, so the page and the channel cannot
 // drift into describing one selection two ways.
-D.load("/data/props_picks.json").then(function(res){
-  var el=$("bp");
+Promise.all([D.load("/data/props_picks.json"),window.Crest.load()]).then(function(a){
+  var res=a[0], el=$("bp");
   if(!res.ok||!res.data||!(res.data.picks||[]).length){
     el.innerHTML='<div class="bp-state">No prop has three or more books on both '
       +'sides right now, so there is nothing to compare. Books post player props '
@@ -188,7 +216,11 @@ function bestPrices(d){
   ps.forEach(function(p,i){
     var meta=[edgeCell(p.price_edge_pts)];
     var f=formLine(p); if(f) meta.push(f);
-    meta.push('<span>'+D.esc(p.matchup)+'</span>');
+    var mt=String(p.matchup||"").split(" @ ");
+    meta.push(mt.length===2
+      ? '<span>'+window.Crest.team(mt[0],{size:14})+' <span class="sep">@</span> '
+        +window.Crest.team(mt[1],{size:14})+'</span>'
+      : '<span>'+D.esc(p.matchup)+'</span>');
     if(p.starts) meta.push('<span class="tm">'+D.when(p.starts)+'</span>');
     html+='<div class="bp-r">'
       +'<span class="bp-n">'+(i+1)+'</span>'
@@ -266,7 +298,9 @@ function render(){
     html+='<tr>'
       +'<td class="l"><span class="pl">'+D.esc(p.player)
         +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></td>'
-      +'<td class="l"><span class="match">'+D.esc(e.away)+' AT '+D.esc(e.home)
+      +'<td class="l"><span class="match">'
+        +window.Crest.team(e.away,{abbr:true,size:14})+' AT '
+        +window.Crest.team(e.home,{abbr:true,size:14})
         +'<br>'+D.when(e.starts)+'</span></td>'
       +'<td>'+p.line+'</td>'
       +'<td class="up">'+D.am(p.over.best_price)

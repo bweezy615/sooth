@@ -58,6 +58,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk, DATA=null, TL=null, FILTER="", WEEK="", SORT="kick", DIR=1, OPEN=null;
@@ -102,9 +103,9 @@ function mvChip(v){
 function boardRow(r,d){
   var hr=r.records[r.home], ar=r.records[r.away];
   return '<tr class="g'+(OPEN===r.event_id?" open":"")+'" data-id="'+D.esc(r.event_id)+'" tabindex="0">'
-    +'<td class="l"><span class="mu">'+D.esc(r.away)
+    +'<td class="l"><span class="mu">'+window.Crest.team(r.away,{size:14})
       +(ar?'<span class="bkk">'+D.esc(ar)+'</span>':"")
-      +'<span class="at">AT</span>'+D.esc(r.home)
+      +'<span class="at">AT</span>'+window.Crest.team(r.home,{size:14})
       +(hr?'<span class="bkk">'+D.esc(hr)+'</span>':"")+'</span></td>'
     +'<td class="l dim">'+D.when(r.kickoff)+'</td>'
     +formCell(d)
