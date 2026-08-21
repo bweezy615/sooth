@@ -59,6 +59,14 @@ UA = "sooth-discord/1.0"
 # market. Below this the "edge" is inside the noise of our own model.
 DEFAULT_MIN_DELTA = 3.0
 
+# Minimum games behind a projection before it may be PUSHED to a channel.
+# engine.props_model already refuses to project on fewer than 3 games, which is
+# the right floor for publishing to the site — a page the reader chose to open.
+# A Discord post is a different act: it arrives unrequested with our confidence
+# attached to it, so it carries a higher bar. Held here rather than upstream so
+# that loosening one can never silently loosen the other.
+DEFAULT_MIN_OBS = 5
+
 # Never post more than this per tick. A wall of plays reads as a pick service
 # and buries the one that mattered.
 MAX_PER_POST = 5
@@ -83,7 +91,8 @@ def check_language(text: str) -> None:
 
 # ---- 1. rank by analysis, not by price gap ---------------------------------
 
-def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA) -> list[dict]:
+def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA,
+                   min_obs: int = DEFAULT_MIN_OBS) -> list[dict]:
     """Every prop carrying our own model read, strongest edge first.
 
     A prop without a ``model`` block is skipped entirely. We have not analysed
@@ -103,6 +112,12 @@ def analysed_props(path: str = PROPS, min_delta: float = DEFAULT_MIN_DELTA) -> l
                     continue                      # not analysed -> not an edge
                 delta = model.get("delta_pts")
                 if delta is None or abs(delta) < min_delta:
+                    continue
+                # A thin sample can throw a huge delta that is mostly noise.
+                # Missing sample size is treated as failing, never as passing:
+                # an unknown denominator is not evidence.
+                n_obs = model.get("n_starts") or model.get("n_games")
+                if not isinstance(n_obs, int) or n_obs < min_obs:
                     continue
                 side = "over" if delta > 0 else "under"
                 out.append({
@@ -223,6 +238,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tier", choices=("free", "pro"), default="free")
     ap.add_argument("--min-delta", type=float, default=DEFAULT_MIN_DELTA)
+    ap.add_argument("--min-obs", type=int, default=DEFAULT_MIN_OBS,
+                    help="minimum games behind a projection before it may post")
     ap.add_argument("--max", type=int, default=MAX_PER_POST)
     ap.add_argument("--props", default=PROPS)
     ap.add_argument("--dry-run", action="store_true",
@@ -230,7 +247,7 @@ def main() -> int:
     a = ap.parse_args()
 
     sent = load_sent()
-    props = [p for p in analysed_props(a.props, a.min_delta)
+    props = [p for p in analysed_props(a.props, a.min_delta, a.min_obs)
              if a.dry_run or prop_key(p) not in sent]
     props = props[:a.max]
 
