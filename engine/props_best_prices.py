@@ -3,9 +3,13 @@
 PRODUCT.md is explicit that this product sells tools and data and NOT picks, and
 that the distinction is load-bearing rather than cosmetic: selling tools carries
 no performance claim, so no substantiation burden. "never a pick" already ships
-in the footers of props.html, edges.html and research.html. Nothing this module
-renders may call these picks or plays. The module and file names predate that
-reading and are the remaining loose thread.
+in the footers of props.html, edges.html and research.html.
+
+The module, the published file and the JSON key were all called "picks" until
+2026-08-21. That was a public path — sooth.bet/data/props_picks.json — carrying
+the one word three pages promise never to use, and a rule kept everywhere except
+in the URL is not a rule. Renamed while one page and one bot read it, which was
+cheap; after a channel launches pointing at it, it would not have been.
 
 Which props to publish is a selection question, and the selection mechanism is
 the whole product. Two candidates were available and they are not equally good:
@@ -34,8 +38,8 @@ are counts of things that happened. The model's probability is carried when
 present and clearly marked as non-predictive, because on this population it
 measurably is.
 
-    python -m engine.props_picks              # write json + print the post
-    python -m engine.props_picks --top 3
+    python -m engine.props_best_prices              # write json + print
+    python -m engine.props_best_prices --top 3
 """
 
 from __future__ import annotations
@@ -85,7 +89,7 @@ def american(p: float) -> str:
 
 
 def side_rows(doc: dict) -> list[dict]:
-    """One row per (prop, side) with everything a pick needs."""
+    """One row per (prop, side) with everything a published row needs."""
     rows = []
     for board in doc.get("boards", []):
         for ev in board.get("events", []):
@@ -146,7 +150,7 @@ def hit_str(row: dict) -> str | None:
     return f"{row['side']}: " + "  ".join(parts) if parts else None
 
 
-def pick(doc: dict, top: int = 5) -> list[dict]:
+def select(doc: dict, top: int = 5) -> list[dict]:
     rows = side_rows(doc)
     # Best price first. One side per player-line: publishing both sides of the
     # same prop is not two picks, it is a hedge with extra steps.
@@ -164,8 +168,8 @@ def pick(doc: dict, top: int = 5) -> list[dict]:
     return out
 
 
-def render(picks: list[dict], generated_at: str | None) -> str:
-    if not picks:
+def render(rows: list[dict], generated_at: str | None) -> str:
+    if not rows:
         return ("No props cleared the board today — fewer than "
                 f"{MIN_BOOKS} books on both sides. Nothing to post.\n\n"
                 + DISCLAIMER)
@@ -173,22 +177,23 @@ def render(picks: list[dict], generated_at: str | None) -> str:
     if generated_at:
         lines.append(f"board as of {generated_at[:16].replace('T', ' ')} UTC")
 
-    # State the day's situation before the first pick is read. Whether these are
-    # value plays or damage control is the most important thing on the page, and
-    # a reader should not have to infer it from a minus sign three lines down.
-    beat = sum(1 for r in picks if r["price_edge_pts"] > 0)
+    # State the day's situation before the first row is read. Whether these
+    # beat fair or merely lose least is the most important thing on the page,
+    # and a reader should not have to infer it from a minus sign three lines
+    # down.
+    beat = sum(1 for r in rows if r["price_edge_pts"] > 0)
     if beat == 0:
         lines.append("Nothing on the board beats consensus fair today. "
-                     "These are where you give up least to the vig, "
-                     "not positive-value plays.")
-    elif beat < len(picks):
-        lines.append(f"{beat} of {len(picks)} beat consensus fair today. "
+                     "These are where you give up least to the vig — the gap "
+                     "is the house's cut, not value.")
+    elif beat < len(rows):
+        lines.append(f"{beat} of {len(rows)} beat consensus fair today. "
                      "The rest are where you give up least.")
     else:
         lines.append("Every one of these is priced better than consensus fair.")
     lines.append("")
 
-    for i, r in enumerate(picks, 1):
+    for i, r in enumerate(rows, 1):
         lines.append(f"{i}. {r['player']} {r['side'].upper()} {r['line']} "
                      f"{(r['market_label'] or r['market']).lower()}")
         lines.append(f"   {american(r['best_price'])} at {r['best_book']}"
@@ -212,19 +217,19 @@ def render(picks: list[dict], generated_at: str | None) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--props", default="site/public/data/props.json")
-    ap.add_argument("--out", default="site/public/data/props_picks.json")
+    ap.add_argument("--out", default="site/public/data/props_best_prices.json")
     ap.add_argument("--top", type=int, default=5)
     a = ap.parse_args()
 
     doc = json.loads(Path(a.props).read_text())
-    picks = pick(doc, a.top)
+    rows = select(doc, a.top)
 
     # Apply the form floor to the published record, not just to the rendered
     # post. Anything reading this file — the site, the alerts, anything later —
     # should get the same answer about whether a player's history is publishable.
     # Leaving raw counts in the JSON while withholding them from the text would
     # make the floor a formatting choice rather than an editorial one.
-    for p in picks:
+    for p in rows:
         if hit_str(p) is None:
             for k in ("hit_l5", "hit_l10", "hit_season"):
                 p[k] = None
@@ -236,13 +241,13 @@ def main() -> None:
                            "no edge on props books post"),
         "disclaimer": DISCLAIMER,
         "n_considered": len(side_rows(doc)),
-        "picks": picks,
+        "best_prices": rows,
     }
     out = Path(a.out)
     tmp = out.with_suffix(".tmp")
     tmp.write_text(json.dumps(payload, indent=1))
     os.replace(tmp, out)
-    print(render(picks, doc.get("generated_at")))
+    print(render(rows, doc.get("generated_at")))
 
 
 if __name__ == "__main__":

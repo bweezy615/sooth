@@ -174,9 +174,9 @@ Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
 
 // Best prices. Same file the alerts read, so the page and the channel cannot
 // drift into describing one selection two ways.
-Promise.all([D.load("/data/props_picks.json"),window.Crest.load()]).then(function(a){
+Promise.all([D.load("/data/props_best_prices.json"),window.Crest.load()]).then(function(a){
   var res=a[0], el=$("bp");
-  if(!res.ok||!res.data||!(res.data.picks||[]).length){
+  if(!res.ok||!res.data||!(res.data.best_prices||[]).length){
     el.innerHTML='<div class="bp-state">No prop has three or more books on both '
       +'sides right now, so there is nothing to compare. Books post player props '
       +'closer to game time.</div>';
@@ -203,7 +203,7 @@ function formLine(p){
   return '<span>'+D.esc(p.side)+' in '+made+' of last '+p.hit_l10.n+'</span>';
 }
 function bestPrices(d){
-  var ps=d.picks, beat=ps.filter(function(p){return p.price_edge_pts>0;}).length;
+  var ps=d.best_prices, beat=ps.filter(function(p){return p.price_edge_pts>0;}).length;
   var sit = beat===0
     ? "Nothing on the board beats consensus fair right now — these are where you "
       +"give up least to the vig, not value plays."
