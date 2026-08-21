@@ -317,6 +317,42 @@ a.mv-row:hover{background:var(--g2)}
 .tml .ln2{fill:none;stroke:var(--dim);stroke-width:1;stroke-dasharray:3 3}
 .tml .ax{display:flex;justify-content:space-between;margin-top:4px}
 
+/* research: computed facts + opposed form bars */
+.facts{margin:0;padding:0;list-style:none;max-width:86ch}
+.facts li{position:relative;padding:7px 0 7px 16px;font-size:13px;color:var(--ink2);
+  line-height:1.5;border-bottom:1px solid var(--hair)}
+.facts li:last-child{border-bottom:0}
+.facts li::before{content:"";position:absolute;left:0;top:14px;width:4px;height:4px;
+  border-radius:50%;background:var(--dim)}
+.facts li.k-price_gap::before,.facts li.k-line_move::before{background:var(--up)}
+.cmp{display:flex;flex-direction:column;gap:8px}
+.cmp .rw{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center}
+.cmp .lb{grid-column:1/-1;font:600 9.5px var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:-4px}
+.cmp .n{font:500 11.5px var(--mono);color:var(--mut)}
+.cmp .n.r{text-align:right}
+.cmp .n.win{color:var(--ink);font-weight:700}
+.cmp .tw{display:flex;height:5px;gap:2px}
+.cmp .h{flex:1;position:relative;border-radius:2px;
+  background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(255,255,255,.04));
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.cmp .h i{position:absolute;top:0;height:5px;border-radius:2px;display:block;
+  background:linear-gradient(180deg,#6B7280,#4B5563)}
+.cmp .h.b i{left:0;background:linear-gradient(180deg,#4BE3AE,#27A87D);
+  box-shadow:0 0 5px rgba(52,211,153,.3)}
+.cmp .h.a i{right:0}
+/* diverging form cell on the board */
+.fm{display:inline-flex;align-items:center;gap:8px}
+.fm .who{font:700 10.5px var(--mono);color:var(--ink2);min-width:28px;text-align:right}
+.fm .tr{position:relative;width:64px;height:5px;border-radius:2px;flex:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(255,255,255,.04));
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+.fm .tr::after{content:"";position:absolute;left:50%;top:-2px;width:1px;height:9px;
+  background:var(--hair2)}
+.fm .fl{position:absolute;top:0;height:5px;border-radius:2px;
+  background:linear-gradient(180deg,#4BE3AE,#27A87D)}
+.fm .fl.away{background:linear-gradient(180deg,#8A919D,#5A6170)}
+
 /* footer */
 .ft{border-top:1px solid var(--hair);margin-top:44px;padding:26px 0 40px;
   color:var(--dim);font-size:11.5px;line-height:1.7}

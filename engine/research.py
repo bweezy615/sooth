@@ -353,22 +353,13 @@ def build_facts(ev: dict, stats: dict, inj: dict, odds: dict,
                         "gain_pts": s["gain_pts"], "market": market,
                         "line": blk["line"], "selection": label},
         })
-    else:
-        # No gap to report is itself the finding, and saying so is the whole
-        # difference between this and a panel that invents one. Books post NFL
-        # sides across the market only as kickoff approaches; until then our
-        # free capture watches a single book and the shoppable board is empty.
-        thin = odds.get("spread") or odds.get("total") or odds.get("moneyline")
-        if thin:
-            facts.append({
-                "kind": "single_book",
-                "text": (f"Only {', '.join(thin['books'])} posts this game in our "
-                         f"capture so far, holding {thin['vig_pts']:.2f} points of "
-                         f"margin on the {thin['market']}. There is no best price "
-                         f"to shop until the rest of the market posts."),
-                "numbers": {"books": thin["books"], "n_books": thin["n_books"],
-                            "vig_pts": thin["vig_pts"], "market": thin["market"]},
-            })
+    # No gap to report is not a finding worth a bullet on every single card.
+    # It was one: 48 reports all opened with the same sentence naming the same
+    # book, which reads as advertising and pushes the facts that actually
+    # differ per game below the fold. The state still has to be visible, or a
+    # fair price computed from one book's own margin looks like a market
+    # consensus — so it lives in `market` below and in the odds panel, once,
+    # unbranded, instead of leading the research every time.
 
     # 2. Where the number itself has gone since we first watched it.
     for market in ("spread", "total"):
@@ -526,6 +517,13 @@ def build(sport: str, data_dir: Path, root: Path, limit: int | None = None,
                 "home": injuries[home], "away": injuries[away],
             },
             "odds": odds,
+            # How thin the market is, in one place the page can read without
+            # parsing a sentence. shoppable is false until a second book posts.
+            "market": {
+                "shoppable": any(b.get("shoppable") for b in odds.values()),
+                "n_books": max((b["n_books"] for b in odds.values()), default=0),
+                "books": sorted({bk for b in odds.values() for bk in b["books"]}),
+            },
             "movement": moves,
             # The board's own view when this game is inside its window: eleven
             # books read at once, which capture cannot match.
@@ -546,6 +544,7 @@ def build(sport: str, data_dir: Path, root: Path, limit: int | None = None,
         "checked_at": now.isoformat(),
         "sport": sport,
         "n_reports": len(reports),
+        "n_shoppable": sum(1 for r in reports if r["market"]["shoppable"]),
         "sources": {
             "prices": "own_capture observations (ESPN game lines)",
             "board": board.get("generated_at"),

@@ -36,17 +36,16 @@ function bk(name){return BOOK[name]||String(name).slice(0,4).toUpperCase();}
 
 /* ---------- shell ---------- */
 var NAV=[
-  {href:"/desk",        key:"market",  label:"MARKET"},
+  {href:"/",            key:"market",  label:"MARKET"},
   {href:"/props",       key:"props",   label:"PROPS"},
   {href:"/edges",       key:"movement",label:"MOVEMENT"},
   {href:"/research",    key:"research",label:"RESEARCH"},
-  {href:"/trust",       key:"ledger",  label:"LEDGER"},
-  {href:"/methodology", key:"method",  label:"METHODOLOGY"}
+  {href:"/trust",       key:"ledger",  label:"LEDGER"}
 ];
 function header(page){
   return '<header class="hd"><div class="wrap">'
     +'<div class="hd-r1">'
-    +'<a class="brand" href="/desk"><span class="mk"></span><b>SOOTH</b>'
+    +'<a class="brand" href="/"><span class="mk"></span><b>SOOTH</b>'
     +'<span class="sb">Sports Intelligence</span></a>'
     +'<span class="hd-spacer"></span>'
     +'<nav class="hd-links" aria-label="Sections">'
@@ -233,6 +232,76 @@ function spectrum(opts){
     +'<span class="tl">'+esc(opts.right||"")+'</span></div></div>';
 }
 
+
+/* ---------- MARKET TIMELINE ----------
+   Where the price has been: per-book traces over a consensus baseline, in
+   points of implied probability — the one unit every instrument shares.
+   The axis holds a floor so a quiet market LOOKS quiet, and each detected
+   move can be pinned on the baseline as an annotation. Pure SVG. */
+function timeline(mkt,opts){
+  opts=opts||{};
+  var traces=(mkt.books||[]).slice(0,12);
+  if(!traces.length) return "";
+  var winH=opts.hours||72, cut=(Date.now()/1000)-winH*3600;
+  function cutpts(pts){return pts.filter(function(p){return p[0]>=cut;});}
+  var cons=cutpts(mkt.consensus||[]);
+  var multi=traces.length>1;
+  var all=[];
+  traces.forEach(function(tr){all=all.concat(cutpts(tr.pts));});
+  if(cons.length) all=all.concat(cons);
+  if(all.length<2) return '<div class="state tl">NOT ENOUGH HISTORY IN THIS WINDOW</div>';
+  var ts=all.map(function(p){return p[0];}), vs=all.map(function(p){return p[1];});
+  var t0=Math.min.apply(null,ts), t1=Math.max.apply(null,ts);
+  var lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
+  /* floor the y-span at 4 pts so a 1-pt wiggle cannot look like a crash */
+  var MIN=4, midV=(hi+lo)/2, spanV=Math.max(hi-lo,MIN)*1.25;
+  lo=midV-spanV/2; hi=midV+spanV/2;
+  var W=860,H=170,L=46,R=14,T=12,B=26;
+  function X(t){return L+((t-t0)/Math.max(t1-t0,1))*(W-L-R);}
+  function Y(v){return T+(1-(v-lo)/(hi-lo))*(H-T-B);}
+  function path(pts){return pts.map(function(p,i){
+    return (i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1);}).join("");}
+  var out='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'
+    +esc(opts.label||"Price history")+'">';
+  /* frame: three horizontal gridlines with pts labels */
+  [0,.5,1].forEach(function(k){
+    var v=lo+(hi-lo)*k, y=Y(v);
+    out+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y
+      +'" stroke="rgba(255,255,255,.05)"/>'
+      +'<text x="'+(L-6)+'" y="'+(y+3)+'" text-anchor="end" class="bk-lb">'
+      +v.toFixed(1)+'</text>';});
+  /* book traces first, dim, so the baseline reads on top */
+  traces.forEach(function(tr){
+    var pts=cutpts(tr.pts); if(pts.length<2) return;
+    out+='<path d="'+path(pts)+'" fill="none" stroke="rgba(138,145,157,'
+      +(multi?".35":".9")+')" stroke-width="1"/>'
+      +'<text x="'+(X(pts[pts.length-1][0])+4)+'" y="'
+      +(Y(pts[pts.length-1][1])+3)+'" class="bk-lb">'+esc(bk(tr.book))+'</text>';
+  });
+  if(cons.length>1){
+    out+='<path d="'+path(cons)+'" fill="none" stroke="#2DD4A7" stroke-width="1.6"/>'
+      +'<text x="'+(X(cons[cons.length-1][0])+4)+'" y="'
+      +(Y(cons[cons.length-1][1])-6)+'" class="fair-lb" fill="#2DD4A7">CONS</text>';
+  }
+  /* detected moves pinned where they happened */
+  (opts.marks||[]).forEach(function(m){
+    var t=Date.parse(m.observed_at)/1000; if(t<t0||t>t1) return;
+    var ref=cons.length>1?cons:cutpts(traces[0].pts);
+    var near=ref.reduce(function(a,p){
+      return Math.abs(p[0]-t)<Math.abs(a[0]-t)?p:a;},ref[0]);
+    out+='<g><circle cx="'+X(t)+'" cy="'+Y(near[1])+'" r="3.2" fill="#E8B04B">'
+      +'<title>'+esc(m.detail||"detected move")+'</title></circle></g>';
+  });
+  out+='</svg>';
+  function lab(t){return new Date(t*1000).toLocaleString([],
+    {weekday:"short",hour:"numeric"});}
+  return '<div class="tml">'+out
+    +'<div class="ax"><span class="tl">'+lab(t0)+'</span>'
+    +'<span class="tl">'+(mkt.unit||"implied probability, pts").toUpperCase()
+    +(multi?' · <b>'+traces.length+' BOOKS</b> + CONSENSUS':' · SINGLE BOOK')+'</span>'
+    +'<span class="tl">'+lab(t1)+'</span></div></div>';
+}
+
 /* ---------- ranked feed row ---------- */
 function feedRow(i,hl,sub,meta,href){
   var tag=href?'a href="'+esc(href)+'"':'div';
@@ -250,7 +319,7 @@ function tick(){
 }
 setInterval(tick,15000);
 
-window.Desk={esc:esc,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

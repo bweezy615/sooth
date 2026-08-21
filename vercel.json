@@ -7,25 +7,56 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/board", "destination": "/", "permanent": false },
-    { "source": "/ev", "destination": "/edges", "permanent": false },
-    { "source": "/middles", "destination": "/edges", "permanent": false },
-    { "source": "/moves", "destination": "/edges", "permanent": false }
+    {
+      "source": "/ev",
+      "destination": "/edges",
+      "permanent": false
+    },
+    {
+      "source": "/middles",
+      "destination": "/edges",
+      "permanent": false
+    },
+    {
+      "source": "/moves",
+      "destination": "/edges",
+      "permanent": false
+    },
+    {
+      "source": "/desk",
+      "destination": "/",
+      "permanent": false
+    }
   ],
   "headers": [
     {
       "source": "/data/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Cache-Control", "value": "public, max-age=300" }
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=63072000; includeSubDomains; preload"

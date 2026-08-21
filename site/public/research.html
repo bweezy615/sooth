@@ -4,379 +4,319 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Matchup Research</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta name="description" content="Every upcoming matchup on one board — team form, players out, the current number and how it has moved. Research only, never a pick.">
 <meta property="og:title" content="Sooth — Matchup Research">
-<meta property="og:description" content="Games, form, injuries, prices and line movement for every upcoming matchup. Research only.">
+<meta property="og:description" content="Form, availability, prices and movement for every upcoming matchup. Every figure computed, none generated.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <meta property="og:url" content="https://sooth.bet/research">
-<meta name="description" content="Every upcoming matchup: team form, the injury report, the current number, and how it has moved since we started watching. Research only, never a pick.">
-<link rel="stylesheet" href="/assets/sooth.css">
-<style>
-  .wrap-page{max-width:1060px;margin:0 auto;padding:0 24px 60px}
-  .page-head{padding:34px 0 8px}
-  h1{font-size:clamp(24px,4vw,32px);font-weight:760;letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
-  .sub{color:var(--muted);font-size:14px;margin:0;max-width:74ch}
-  .sub b{color:var(--ink-2)}
-
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0 16px}
-  .count{font-family:var(--num);font-size:12px;color:var(--dim);margin-left:auto}
-  .count b{color:var(--muted);font-weight:600}
-
-  .game{margin-bottom:14px}
-  .game > summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;
-    align-items:center;gap:14px;flex-wrap:wrap}
-  .game > summary::-webkit-details-marker{display:none}
-  .game > summary:hover{background:var(--bg-3)}
-  .teams{font-size:15px;font-weight:680;color:var(--ink);letter-spacing:-.01em}
-  .teams .at{color:var(--dim);font-weight:500;margin:0 6px}
-  .rec{font-family:var(--num);font-size:11px;color:var(--dim);margin-left:4px}
-  .when{font-family:var(--num);font-size:11.5px;color:var(--muted)}
-  .sumline{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-
-  .body{padding:0 18px 18px;border-top:1px solid var(--line)}
-  .mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(288px,1fr));gap:14px;margin-top:16px}
-  .mod{background:var(--bg-3);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .mod h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
-    font-weight:600;margin:0 0 12px}
-  .mod.wide{grid-column:1/-1}
-  .mvgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-
-  table{border-collapse:collapse;width:100%;font-size:12.5px}
-  th{font-family:var(--num);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--dim);font-weight:600;text-align:right;padding:0 0 6px 10px}
-  th.l,td.l{text-align:left}
-  td{padding:5px 0 5px 10px;text-align:right;font-family:var(--num);font-variant-numeric:tabular-nums;
-    color:var(--ink-2);white-space:nowrap;border-top:1px solid rgba(255,255,255,.045)}
-  th:first-child,td:first-child{padding-left:0}
-  /* The book sits under its price rather than in its own column: four columns
-     fit a 315px module, five do not, and the fifth was being clipped. */
-  td .bk{display:block;font-family:var(--num);font-size:10px;color:var(--dim);
-    font-weight:500;letter-spacing:.02em}
-  td.lab{font-family:var(--sans);color:var(--muted);text-align:left}
-  td.win{color:var(--ink);font-weight:700}
-
-  .st{display:inline-block;font-family:var(--num);font-size:9.5px;font-weight:700;
-    letter-spacing:.06em;padding:2px 6px;border-radius:5px;border:1px solid var(--line-2);
-    color:var(--muted)}
-  .st.out{color:var(--neg);border-color:var(--neg);background:rgba(255,90,110,.10)}
-  .st.q{color:var(--warn);border-color:var(--warn-dim);background:var(--warn-dim)}
-  .inj{display:flex;gap:9px;align-items:baseline;padding:5px 0;
-    border-top:1px solid rgba(255,255,255,.045);font-size:12.5px}
-  .inj:first-of-type{border-top:0}
-  .inj .nm{color:var(--ink-2);font-weight:600}
-  .inj .po{font-family:var(--num);font-size:10.5px;color:var(--dim);min-width:26px}
-  .inj .bp{font-family:var(--num);font-size:11px;color:var(--muted);margin-left:auto;text-align:right}
-  .none{color:var(--dim);font-size:12.5px;padding:4px 0}
-  .teamhd{font-size:11px;font-weight:700;color:var(--muted);margin:12px 0 4px;
-    letter-spacing:.02em}
-  .teamhd:first-child{margin-top:0}
-
-  .facts{margin:0;padding:0;list-style:none}
-  .facts li{position:relative;padding:8px 0 8px 16px;font-size:13px;color:var(--ink-2);
-    line-height:1.5;border-top:1px solid rgba(255,255,255,.045)}
-  .facts li:first-child{border-top:0}
-  .facts li::before{content:"";position:absolute;left:0;top:15px;width:5px;height:5px;
-    border-radius:50%;background:var(--dim)}
-  .facts li.k-price_gap::before,.facts li.k-line_move::before{background:var(--pos)}
-
-  .spark{width:100%;height:56px;display:block;margin-top:4px}
-  .spark .ln{fill:none;stroke:var(--iris);stroke-width:1.6}
-  .spark .ln2{fill:none;stroke:var(--dim);stroke-width:1.2;stroke-dasharray:3 3}
-  .axis{display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;
-    color:var(--dim);margin-top:2px}
-
-  .askbox{margin-top:14px}
-  .askbox input{width:100%;background:var(--bg-2);color:var(--ink);border:1px solid var(--line);
-    border-radius:10px;padding:9px 12px;font-family:var(--sans);font-size:13px}
-  .askbox input::placeholder{color:var(--dim)}
-  .askrow{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
-  .answer{margin-top:10px;font-size:13px;line-height:1.6;color:var(--ink-2);white-space:pre-wrap}
-  .answer:empty{display:none}
-
-  .note{font-size:11.5px;color:var(--dim);margin:16px 0 0;max-width:76ch;line-height:1.55}
-  .empty{padding:44px 24px;text-align:center;color:var(--muted);font-size:14px}
-  .empty b{color:var(--ink);display:block;margin-bottom:6px}
-  @media (max-width:640px){
-    .wrap-page{padding:0 14px 48px}
-    .sumline{margin-left:0;width:100%}
-    .mods{grid-template-columns:1fr}
-  }
-</style>
+<link rel="canonical" href="https://sooth.bet/research">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
 </head>
-<body data-page="research">
+<body>
 <a class="skip" href="#main">Skip to content</a>
-<main id="main" class="wrap-page">
+<main id="main" class="wrap">
 
-  <div class="page-head">
-    <h1>Matchup research</h1>
-    <p class="sub">Every upcoming game: team form, who is unavailable, the number
-    on the board, and how it has moved since we started watching. <b>Every figure
-    below is computed from the data on this page</b> — nothing here is written by
-    a model, and nothing here is a pick.</p>
+  <div class="status">
+    <span class="stat"><span class="v n" id="stN">·</span><span class="tl">MATCHUPS</span></span>
+    <span class="stat"><span class="v n" id="stW">·</span><span class="tl">WEEKS COVERED</span></span>
+    <span class="live"><span class="pulse on"></span><span class="tl">BUILT </span>
+      <span class="tl" id="stT">—</span></span>
   </div>
 
-  <div class="controls">
-    <input type="search" id="q" class="field" placeholder="Filter by team" aria-label="Filter by team">
-    <select id="wk" class="field" aria-label="Week"></select>
-    <span class="count" id="count"></span>
+  <p class="notice" id="thin" style="display:none"></p>
+
+  <div class="bar">
+    <input type="search" id="q" class="field" placeholder="Filter by team"
+      aria-label="Filter by team"
+      style="background:var(--g2);border:1px solid var(--hair2);border-radius:var(--r);
+      color:var(--ink);padding:8px 12px;font:12.5px var(--sans)">
+    <select id="wk" aria-label="Week"
+      style="background:var(--g2);border:1px solid var(--hair2);border-radius:var(--r);
+      color:var(--ink);padding:8px 10px;font:600 12px var(--mono)"></select>
+    <span class="count tl" id="count" style="margin-left:auto"></span>
   </div>
 
-  <div id="list"></div>
-  <div class="empty panel" id="empty" style="display:none"></div>
+  <div class="sec" style="border-top:0;padding-top:6px">
+    <div class="sec-h"><span class="tl">RESEARCH BOARD</span>
+      <span class="sub">every figure computed from published data — nothing written by a model, nothing here is a pick</span></div>
+    <div class="itab" id="board"></div>
+  </div>
 
-  <p class="note" id="prov"></p>
-  <p class="note">Research only. Not advice, not a pick, and not a claim that any
-  bet will win. Prices move — check the book before acting on anything here.
-  Injury designations change; the team's own report is the authority.</p>
-
-  <p class="note">Nothing on this page is graded, because nothing on it is a
-  forecast. The numbers are timestamped by the public commit that published
-  them. Our model's actual predictions are sealed before kickoff and graded
-  afterwards, win or lose — <a href="/verify.html">check the ledger</a>.</p>
+  <p class="note tl" id="prov" style="letter-spacing:.06em"></p>
+  <p class="ft" style="border:0;margin:6px 0 0;padding:0">Research only. Not advice,
+  not a pick, and not a claim that any bet will win. Prices move — check the book.
+  Injury designations change; the team's own report is the authority. Nothing here is
+  graded because nothing here is a forecast; model predictions are sealed before
+  kickoff and graded afterwards, win or lose — <a href="/verify">check the ledger</a>.</p>
 
 </main>
 
+<script src="/assets/desk.js"></script>
 <script>
-var DATA=null, FILTER="", WEEK="";
+(function(){
+var D=window.Desk, DATA=null, TL=null, FILTER="", WEEK="", SORT="kick", DIR=1, OPEN=null;
+D.mount("research");
 function $(id){return document.getElementById(id);}
-function esc(s){return (window.sooth&&sooth.esc)?sooth.esc(s):String(s==null?"":s);}
-function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
-// A spread is written from a side's point of view and carries its sign; a total
-// is a single number both sides share. Signing it produced "over +47.5".
-function fmtLine(market, v){
-  if(v==null) return "";
-  return market==="spread" ? (v>0?"+"+v:String(v)) : String(v);
+function fmtLine(mk,v){return v==null?"":mk==="spread"?(v>0?"+"+v:String(v)):String(v);}
+
+function derive(r){
+  var hs=r.stats.home, as=r.stats.away;
+  var hn=hs&&hs.season?hs.season.net_epa_pp:null;
+  var an=as&&as.season?as.season.net_epa_pp:null;
+  var edge=(hn==null||an==null)?null:hn-an;
+  var sp=r.odds.spread, tt=r.odds.total, gap=null;
+  Object.keys(r.odds).forEach(function(m){
+    var b=r.odds[m]; if(!b||!b.shoppable) return;
+    Object.keys(b.sides).forEach(function(k){
+      var g=b.sides[k].gain_pts; if(g!=null&&(gap==null||g>gap)) gap=g;});});
+  return {edge:edge,
+    edgeTeam:edge==null?null:(edge>0?(hs&&hs.abbr):(as&&as.abbr)),
+    out:(r.injuries.home.n_out||0)+(r.injuries.away.n_out||0),
+    outH:r.injuries.home.n_out||0, outA:r.injuries.away.n_out||0,
+    spread:sp?sp.line:null, spreadMv:(r.movement.spread_line||{}).moved||0,
+    total:tt?tt.line:null, totalMv:(r.movement.total_line||{}).moved||0,
+    gap:gap, kick:Date.parse(r.kickoff)||0};
 }
 
-function when(iso){
-  var t=Date.parse(iso); if(isNaN(t))return "—";
-  return new Date(t).toLocaleString([], {weekday:"short", month:"short", day:"numeric",
-    hour:"numeric", minute:"2-digit"});
+function formCell(d){
+  if(d.edge==null) return '<td class="dim">·</td>';
+  var mag=Math.min(Math.abs(d.edge)/0.30,1)*50, home=d.edge>0;
+  return '<td><span class="fm"><span class="who">'+D.esc(d.edgeTeam||"")+'</span>'
+    +'<span class="tr"><span class="fl'+(home?"":" away")+'" style="'
+    +(home?"left:50%":"right:50%")+';width:'+mag.toFixed(1)+'%"></span></span>'
+    +'<span class="n" style="font-size:11px;color:var(--mut)">'
+    +Math.abs(d.edge).toFixed(3)+'</span></span></td>';
+}
+function mvChip(v){
+  if(!v) return "";
+  return ' <span class="'+(v<0?"dn":"up")+'" style="font-size:10px">'
+    +(v>0?"+":"")+v+'</span>';
 }
 
-// ---- STATS ---------------------------------------------------------------
-// Two columns, one row per metric, with the better side marked. `better` comes
-// from the data so the page never has to know which way is good.
-function statsTable(r){
+function boardRow(r,d){
+  var hr=r.records[r.home], ar=r.records[r.away];
+  return '<tr class="g'+(OPEN===r.event_id?" open":"")+'" data-id="'+D.esc(r.event_id)+'" tabindex="0">'
+    +'<td class="l"><span class="mu">'+D.esc(r.away)
+      +(ar?'<span class="bkk">'+D.esc(ar)+'</span>':"")
+      +'<span class="at">AT</span>'+D.esc(r.home)
+      +(hr?'<span class="bkk">'+D.esc(hr)+'</span>':"")+'</span></td>'
+    +'<td class="l dim">'+D.when(r.kickoff)+'</td>'
+    +formCell(d)
+    +'<td class="'+(d.out>=6?"":"dim")+'"'
+      +(d.out>=6?' style="color:var(--amber)"':'')+'>'+d.outA+'/'+d.outH+'</td>'
+    +'<td>'+(d.spread==null?'<span class="dim">·</span>':fmtLine("spread",d.spread))
+      +mvChip(d.spreadMv)+'</td>'
+    +'<td>'+(d.total==null?'<span class="dim">·</span>':d.total)+mvChip(d.totalMv)+'</td>'
+    +'<td>'+(d.gap==null?'<span class="dim">·</span>'
+      :'<span class="up">'+D.pts(d.gap)+'</span>')+'</td></tr>';
+}
+
+/* ---- expanded report ---- */
+function compare(r){
   var s=r.stats, h=s.home, a=s.away, mets=s.metrics||[];
-  if(!h||!a) return '<p class="none">No form data for this matchup yet.</p>';
+  if(!h||!a) return '<p class="state tl">NO FORM DATA YET</p>';
   var rows=mets.map(function(m){
     var hv=(h.season||{})[m.key], av=(a.season||{})[m.key];
     if(hv==null||av==null) return "";
-    var hw="", aw="";
-    if(m.better==="high"){ hv>av?hw="win":aw="win"; }
-    else if(m.better==="low"){ hv<av?hw="win":aw="win"; }
-    return '<tr><td class="'+aw+'">'+av.toFixed(m.dp)+'</td>'
-      +'<td class="lab">'+esc(m.label)+'</td>'
-      +'<td class="'+hw+'">'+hv.toFixed(m.dp)+'</td></tr>';
+    /* encode goodness, not magnitude: flip where low is better, so the
+       longer bar is always the better team. Raw values stay printed. */
+    var flip=m.better==="low"?-1:1, gh=hv*flip, ga=av*flip;
+    var span=Math.max(Math.abs(gh),Math.abs(ga))||1;
+    var lh=m.better?((gh+span)/(2*span))*100:(Math.abs(hv)/span)*100;
+    var la=m.better?((ga+span)/(2*span))*100:(Math.abs(av)/span)*100;
+    var hw=m.better?gh>ga:false, aw=m.better?ga>gh:false;
+    return '<div class="rw"><span class="lb">'+D.esc(m.label)+'</span></div>'
+      +'<div class="rw"><span class="n'+(aw?" win":"")+'">'+av.toFixed(m.dp)+'</span>'
+      +'<span class="tw"><span class="h a"><i style="width:'+la.toFixed(0)+'%"></i></span>'
+      +'<span class="h b"><i style="width:'+lh.toFixed(0)+'%"></i></span></span>'
+      +'<span class="n r'+(hw?" win":"")+'">'+hv.toFixed(m.dp)+'</span></div>';
   }).join("");
-  return '<table><thead><tr>'
-    +'<th>'+esc(a.abbr)+'</th><th class="l"></th><th>'+esc(h.abbr)+'</th>'
-    +'</tr></thead><tbody>'+rows+'</tbody></table>'
-    +'<p class="note" style="margin-top:10px">Season averages, '
-    +esc(s.basis_season)+' basis. A record of games played, not a forecast.</p>';
+  return '<div class="cmp"><div class="rw"><span class="n">'+D.esc(a.abbr)
+    +'</span><span></span><span class="n r">'+D.esc(h.abbr)+'</span></div>'+rows+'</div>'
+    +'<p class="ft" style="border:0;margin:10px 0 0;padding:0">Season averages, '
+    +D.esc(s.basis_season)+' basis. A record of games played, not a forecast.</p>';
 }
-
-// ---- INJURIES ------------------------------------------------------------
-function injList(side, team){
-  if(!side||!side.n) return '<p class="none">Nobody listed.</p>';
-  var rows=side.shown.map(function(p){
-    var st=(p.status||"").toLowerCase();
-    var cls=(st==="out"||st==="injured reserve")?"out":(st==="questionable"||st==="doubtful")?"q":"";
-    return '<div class="inj"><span class="po">'+esc(p.position||"")+'</span>'
-      +'<span class="nm">'+esc(p.player)+'</span>'
-      +'<span class="st '+cls+'">'+esc(p.status)+'</span>'
-      +'<span class="bp">'+esc(p.body_part||"")+'</span></div>';
-  }).join("");
-  var more=side.not_shown?'<p class="none">+'+side.not_shown+' more on the report.</p>':"";
-  return rows+more;
+function injuries(r){
+  function side(team,sd){
+    if(!sd||!sd.n) return '<p class="state tl" style="padding:6px 0;text-align:left">NOBODY LISTED</p>';
+    return sd.shown.map(function(p){
+      var st=(p.status||"").toLowerCase();
+      var c=(st==="out"||st==="injured reserve")?"out":(st==="questionable"||st==="doubtful")?"q":"";
+      return '<div class="ij"><span class="po">'+D.esc(p.position||"")+'</span>'
+        +'<span class="nm">'+D.esc(p.player)+' <span class="st '+c+'">'+D.esc(p.status)
+        +'</span></span><span class="bp">'+D.esc(p.body_part||"")+'</span></div>';
+    }).join("")+(sd.not_shown?'<p class="ft" style="border:0;margin:4px 0 0;padding:0">+'
+      +sd.not_shown+' more on the report.</p>':"");
+  }
+  return '<div class="tmh">'+D.esc(r.away)+'</div>'+side(r.away,r.injuries.away)
+    +'<div class="tmh">'+D.esc(r.home)+'</div>'+side(r.home,r.injuries.home)
+    +'<p class="ft" style="border:0;margin:10px 0 0;padding:0">ESPN report'
+    +(r.injuries.espn_timestamp?", "+D.when(r.injuries.espn_timestamp):"")+'.</p>';
 }
-
-// ---- ODDS ----------------------------------------------------------------
-function oddsTable(r){
+function odds(r){
   var out=[];
   ["spread","total","moneyline"].forEach(function(mk){
     var b=r.odds[mk]; if(!b) return;
-    var sides=Object.keys(b.sides).map(function(k){
+    var lh=r.movement[mk+"_line"];
+    var rows=Object.keys(b.sides).map(function(k){
       var s=b.sides[k];
-      var name=s.label==="home"?r.home:s.label==="away"?r.away:s.label;
-      var ln=s.line==null?"":" "+fmtLine(mk, s.line);
-      return '<tr><td class="l lab">'+esc(name)+ln+'</td>'
-        +'<td>'+am(s.best_price)+'<span class="bk">'+esc(s.best_book)+'</span></td>'
-        +'<td>'+(s.fair_prob==null?"·":(s.fair_prob*100).toFixed(1)+"%")+'</td>'
-        +'<td class="'+(s.gain_pts?"pos":"")+'">'
-        +(s.gain_pts==null?"·":(s.gain_pts>0?"+":"")+s.gain_pts.toFixed(2))+'</td></tr>';
+      var nm=s.label==="home"?r.home:s.label==="away"?r.away:s.label;
+      var ln=s.line==null?"":" "+fmtLine(mk,s.line);
+      return '<div class="kv"><span class="k">'+D.esc(nm)+ln+'</span>'
+        +'<span class="v n">'+D.am(s.best_price)
+        +' <span class="bkk" style="color:var(--dim)">'
+        +(s.fair_prob==null?"":(s.fair_prob*100).toFixed(1)+"% FAIR")+'</span>'
+        +(s.gain_pts!=null?' <span class="up">'+D.pts(s.gain_pts)+'</span>':"")
+        +'</span></div>';
     }).join("");
-    out.push('<div style="margin-bottom:14px">'
-      +'<div class="eyebrow" style="margin-bottom:6px">'+esc(mk)
-      +(b.line==null?"":" "+fmtLine(mk, b.line))+'</div>'
-      +'<table><thead><tr><th class="l"></th><th>Best</th>'
-      +'<th>Fair</th><th>Gain</th></tr></thead><tbody>'+sides+'</tbody></table>'
-      +'<p class="note" style="margin-top:6px">'+esc(b.fair_basis)
-      +' · '+b.vig_pts.toFixed(2)+' pts margin'
-      +(b.shoppable?"":" · one book, no price to shop yet")+'</p></div>');
+    out.push('<div style="margin-bottom:12px"><div class="tl" style="margin-bottom:4px">'
+      +mk.toUpperCase()+(b.line==null?"":" "+fmtLine(mk,b.line))
+      +' · '+D.esc(b.fair_basis).toUpperCase()+' · '+b.vig_pts.toFixed(2)+' PTS MARGIN</div>'
+      +rows
+      +(lh&&lh.moved?'<p class="ft" style="border:0;margin:4px 0 0;padding:0">Opened '
+        +lh.opened+', now '+lh.current+' ('+(lh.moved>0?"+":"")+lh.moved+').</p>':"")
+      +'</div>');
   });
-  return out.join("")||'<p class="none">No prices posted yet.</p>';
+  return out.join("")||'<p class="state tl">NO PRICES POSTED YET</p>';
 }
-
-// ---- MOVEMENT ------------------------------------------------------------
-// One polyline per side of the dominant line. Drawn from the same series the
-// alert engine uses, so a line change starts a new series rather than showing
-// up here as a price move that never happened.
-function spark(mv){
-  if(!mv||!mv.points||mv.points.length<2) return "";
-  var keys=Object.keys(mv.points[0]).filter(function(k){return k!=="t";});
-  var vals=[]; mv.points.forEach(function(p){keys.forEach(function(k){
-    if(p[k]!=null) vals.push(p[k]);});});
-  var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
-  // Every observation identical: the book has not repriced. A flat line is a
-  // chart of nothing, and drawing one implies we measured a trend we did not.
-  if(hi-lo < 0.005){
-    return '<p class="none">Price unchanged across '+mv.points.length
-      +' observations since '+when(mv.points[0].t)+'.</p>';
+function report(r){
+  var tlEv=(TL&&(TL.events||[]).filter(function(t){
+    return String(t.event_id)===String(r.event_id);})[0])||null;
+  var charts="";
+  if(tlEv){
+    ["spread","total","moneyline"].forEach(function(mk){
+      var m=tlEv.markets[mk]; if(!m) return;
+      charts+='<div style="margin-bottom:10px"><div class="tl" style="margin-bottom:4px">'
+        +mk.toUpperCase()+(m.line!=null?" "+fmtLine(mk,m.line):"")+'</div>'
+        +D.timeline(m,{hours:72,label:mk+" history"})+'</div>';
+    });
   }
-  var pad=(hi-lo)*0.15||1; lo-=pad; hi+=pad;
-  var W=280,H=56;
-  var paths=keys.map(function(k,i){
-    var pts=mv.points.map(function(p,ix){
-      if(p[k]==null) return null;
-      var x=(ix/(mv.points.length-1))*W;
-      var y=H-((p[k]-lo)/(hi-lo))*H;
-      return x.toFixed(1)+","+y.toFixed(1);
-    }).filter(Boolean).join(" ");
-    return '<polyline class="'+(i?"ln2":"ln")+'" points="'+pts+'"/>';
-  }).join("");
-  var first=mv.points[0], last=mv.points[mv.points.length-1];
-  return '<svg class="spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" '
-    +'role="img" aria-label="Implied probability over time">'+paths+'</svg>'
-    +'<div class="axis"><span>'+when(first.t)+'</span><span>'+when(last.t)+'</span></div>';
-}
-
-function movementBlock(r){
-  var out=[];
-  ["spread","total","moneyline"].forEach(function(mk){
-    var mv=r.movement[mk], lh=r.movement[mk+"_line"];
-    if(!mv&&!lh) return;
-    var head='<div class="eyebrow" style="margin-bottom:4px">'+esc(mk)
-      +(mv&&mv.line!=null?" "+fmtLine(mk, mv.line):"")+'</div>';
-    var moved=lh&&lh.moved?'<p class="note" style="margin:0 0 4px">Opened '
-      +lh.opened+', now '+lh.current+' ('+(lh.moved>0?"+":"")+lh.moved+').</p>':"";
-    out.push('<div style="margin-bottom:12px">'+head+moved+(mv?spark(mv):"")+'</div>');
-  });
-  return out.join("")||'<p class="none">Not enough history yet.</p>';
-}
-
-// ---- one game ------------------------------------------------------------
-function card(r){
-  var d=document.createElement("details");
-  d.className="game panel";
-  var hr=r.records[r.home], ar=r.records[r.away];
-  var chips=[];
-  var gap=r.facts.filter(function(f){return f.kind==="price_gap";})[0];
-  if(gap) chips.push('<span class="chip pos">+'+Math.abs(gap.numbers.gain_pts).toFixed(2)+' pts</span>');
-  var lm=r.facts.filter(function(f){return f.kind==="line_move";})[0];
-  if(lm) chips.push('<span class="chip">'+esc(lm.numbers.market)+' '
-    +(lm.numbers.moved>0?"+":"")+lm.numbers.moved+'</span>');
-  var nOut=(r.injuries.home.n_out||0)+(r.injuries.away.n_out||0);
-  if(nOut) chips.push('<span class="chip warn">'+nOut+' out</span>');
-
-  d.innerHTML=
-    '<summary>'
-    +'<span class="teams">'+esc(r.away)+(ar?'<span class="rec">'+esc(ar)+'</span>':"")
-    +'<span class="at">at</span>'+esc(r.home)+(hr?'<span class="rec">'+esc(hr)+'</span>':"")+'</span>'
-    +'<span class="when">'+when(r.kickoff)+'</span>'
-    +'<span class="sumline">'+chips.join("")+'</span>'
-    +'</summary>'
-    +'<div class="body"><div class="mods">'
-    +'<div class="mod wide"><h3>Research</h3><ul class="facts">'
-      +r.facts.map(function(f){return '<li class="k-'+esc(f.kind)+'">'+esc(f.text)+'</li>';}).join("")
-    +'</ul></div>'
-    +'<div class="mod"><h3>Stats</h3>'+statsTable(r)+'</div>'
-    +'<div class="mod"><h3>Injuries</h3>'
-      +'<div class="teamhd">'+esc(r.away)+'</div>'+injList(r.injuries.away, r.away)
-      +'<div class="teamhd">'+esc(r.home)+'</div>'+injList(r.injuries.home, r.home)
-      +'<p class="note" style="margin-top:10px">ESPN report'
-      +(r.injuries.espn_timestamp?", "+when(r.injuries.espn_timestamp):"")+'.</p></div>'
-    +'<div class="mod"><h3>Odds</h3>'+oddsTable(r)+'</div>'
-    +'<div class="mod wide"><h3>Movement</h3>'
-      +'<div class="mvgrid">'+movementBlock(r)+'</div></div>'
-    +'<div class="mod wide askbox">'
-      +'<h3>Read this matchup</h3>'
-      +'<input type="text" placeholder="Ask about this game — e.g. what is the total doing?" '
-      +'data-ask="'+esc(r.event_id)+'" aria-label="Ask about this matchup">'
-      +'<div class="askrow"><button class="btn" data-go="'+esc(r.event_id)+'">Ask</button>'
-      +'<span class="note" style="margin:0">Answers may only use the numbers above.</span></div>'
-      +'<div class="answer" id="ans-'+esc(r.event_id)+'"></div>'
+  return '<tr class="rp"><td colspan="7" style="padding:0;text-align:left;'
+    +'white-space:normal;font-family:var(--sans)"><div class="rpin" style="padding:20px 22px 24px">'
+    +'<div class="sec-h"><span class="tl">RESEARCH · '+D.esc(r.away).toUpperCase()
+    +' AT '+D.esc(r.home).toUpperCase()+'</span>'
+    +'<a class="more" href="/game?e='+encodeURIComponent(r.event_id)
+    +'&s=nfl">OPEN WORKSPACE →</a></div>'
+    +'<ul class="facts" style="margin-bottom:18px">'
+    +r.facts.map(function(f){return '<li class="k-'+D.esc(f.kind)+'">'+D.esc(f.text)+'</li>';}).join("")
+    +'</ul>'
+    +'<div class="grid">'
+    +'<div class="blk"><h3>FORM</h3>'+compare(r)+'</div>'
+    +'<div class="blk"><h3>AVAILABILITY</h3>'+injuries(r)+'</div>'
+    +'<div class="blk"><h3>PRICE'+(charts?' &amp; HISTORY':'')+'</h3>'+odds(r)+charts+'</div>'
     +'</div>'
-    +'</div></div>';
-  return d;
+    +'<div class="an-in" style="max-width:640px"><input data-ask="'+D.esc(r.event_id)
+    +'" placeholder="Ask about this game — answers may only use these numbers" maxlength="500">'
+    +'<button data-go="'+D.esc(r.event_id)+'">ASK</button></div>'
+    +'<div class="an-out" id="ans-'+D.esc(r.event_id)+'"></div>'
+    +'</div></td></tr>';
 }
 
+var SORTS={
+  game:function(x){return (x.r.away+x.r.home).toLowerCase();},
+  kick:function(x){return x.d.kick;},
+  form:function(x){return x.d.edge==null?-1:Math.abs(x.d.edge);},
+  out:function(x){return x.d.out;},
+  spread:function(x){return x.d.spread==null?999:Math.abs(x.d.spread);},
+  total:function(x){return x.d.total==null?0:x.d.total;},
+  gap:function(x){return x.d.gap==null?-1:x.d.gap;}
+};
 function render(){
-  var list=$("list"); list.innerHTML="";
-  var rows=(DATA.reports||[]).filter(function(r){
-    if(WEEK && String(r.week)!==WEEK) return false;
-    if(!FILTER) return true;
-    return (r.home+" "+r.away).toLowerCase().indexOf(FILTER)>=0;
-  });
-  var frag=document.createDocumentFragment();
-  rows.forEach(function(r){frag.appendChild(card(r));});
-  list.appendChild(frag);
-  $("count").innerHTML="<b>"+rows.length+"</b> matchups";
-  $("empty").style.display=rows.length?"none":"block";
-  if(!rows.length) $("empty").innerHTML="<b>Nothing matches that filter.</b>"
-    +"Reports cover upcoming games only.";
-}
-
-function ask(eventId, input){
-  var box=$("ans-"+eventId);
-  var q=(input.value||"").trim();
-  if(!q){ box.textContent=""; return; }
-  box.textContent="Reading…";
-  fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
-    body:JSON.stringify({mode:"matchup", event_id:eventId, question:q})})
-    .then(function(r){return r.json();})
-    .then(function(j){ box.textContent=j.answer||j.error||"No answer."; })
-    .catch(function(){ box.textContent="The read is unavailable right now."; });
+  var rows=(DATA.reports||[]).map(function(r){return {r:r,d:derive(r)};})
+    .filter(function(x){
+      if(WEEK && String(x.r.week)!==WEEK) return false;
+      if(!FILTER) return true;
+      return (x.r.home+" "+x.r.away).toLowerCase().indexOf(FILTER)>=0;});
+  var key=SORTS[SORT]||SORTS.kick;
+  rows.sort(function(a,b){var av=key(a),bv=key(b);
+    return (av<bv?-1:av>bv?1:0)*DIR;});
+  var html='<div class="scr"><table><thead><tr>'
+    +'<th class="l s" data-k="game">MATCHUP</th>'
+    +'<th class="l s" data-k="kick">KICKOFF'+(SORT==="kick"?" "+(DIR>0?"▲":"▼"):"")+'</th>'
+    +'<th class="s" data-k="form">FORM EDGE'+(SORT==="form"?" "+(DIR>0?"▲":"▼"):"")+'</th>'
+    +'<th class="s" data-k="out">OUT'+(SORT==="out"?" "+(DIR>0?"▲":"▼"):"")+'</th>'
+    +'<th class="s" data-k="spread">SPREAD</th>'
+    +'<th class="s" data-k="total">TOTAL</th>'
+    +'<th class="s" data-k="gap">BEST GAP'+(SORT==="gap"?" "+(DIR>0?"▲":"▼"):"")+'</th>'
+    +'</tr></thead><tbody>';
+  rows.forEach(function(x){
+    html+=boardRow(x.r,x.d);
+    if(OPEN===x.r.event_id) html+=report(x.r);});
+  html+='</tbody></table></div>';
+  if(!rows.length) html='<div class="state"><span class="tl">NOTHING MATCHES THAT FILTER'
+    +'</span>The board covers upcoming games only.</div>';
+  $("board").innerHTML=html;
+  $("count").textContent=rows.length+" SHOWN";
 }
 
 document.addEventListener("click",function(e){
-  var b=e.target.closest("[data-go]"); if(!b) return;
-  var id=b.getAttribute("data-go");
-  ask(id, document.querySelector('[data-ask="'+id+'"]'));
+  var th=e.target.closest("th.s");
+  if(th){var k=th.dataset.k;
+    if(SORT===k){DIR=-DIR;}else{SORT=k;DIR=(k==="game"||k==="kick")?1:-1;}
+    return render();}
+  var go=e.target.closest("[data-go]");
+  if(go) return ask(go.getAttribute("data-go"));
+  if(e.target.closest(".rp")) return;
+  var row=e.target.closest("tr.g");
+  if(row){OPEN=OPEN===row.dataset.id?null:row.dataset.id; render();}
 });
 document.addEventListener("keydown",function(e){
   if(e.key!=="Enter") return;
-  var i=e.target.closest("[data-ask]"); if(!i) return;
-  ask(i.getAttribute("data-ask"), i);
+  var i=e.target.closest("[data-ask]");
+  if(i) return ask(i.getAttribute("data-ask"));
+  var row=e.target.closest("tr.g");
+  if(row){OPEN=OPEN===row.dataset.id?null:row.dataset.id; render();}
 });
+function ask(id){
+  var input=document.querySelector('[data-ask="'+id+'"]'), box=$("ans-"+id);
+  var q=(input&&input.value||"").trim();
+  if(!q){if(box)box.textContent="";return;}
+  box.textContent="READING THE BOARD…";
+  fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({mode:"matchup",event_id:id,question:q})})
+    .then(function(r){return r.json();})
+    .then(function(j){box.textContent=j.answer||j.error||"No answer.";})
+    .catch(function(){box.textContent="The analyst is unavailable right now.";});
+}
 
-fetch("/data/research.json",{cache:"no-store"}).then(function(r){return r.json();})
-  .then(function(j){
-    DATA=j;
-    var weeks=[]; (j.reports||[]).forEach(function(r){
-      if(weeks.indexOf(r.week)<0) weeks.push(r.week);});
-    weeks.sort(function(a,b){return a-b;});
-    $("wk").innerHTML='<option value="">All weeks</option>'
-      +weeks.map(function(w){return '<option value="'+w+'">Week '+w+'</option>';}).join("");
-    $("prov").textContent="Prices from our own capture. Form from nflverse. "
-      +"Injuries from ESPN. Built "+when(j.generated_at)+".";
-    render();
-  })
-  .catch(function(){
-    $("empty").style.display="block";
-    $("empty").innerHTML="<b>Reports are not available right now.</b>"
-      +"They rebuild through the day.";
-  });
-
+D.connecting($("board"),"RESEARCH FEED");
+Promise.all([D.load("/data/research.json"),D.load("/data/timeline.json")]).then(function(rs){
+  if(!rs[0].ok){
+    $("board").innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
+      +'Reports rebuild through the day — try again shortly.</div>';
+    return;
+  }
+  DATA=rs[0].data; TL=rs[1].ok?rs[1].data:null;
+  D.sportRail(null,"nfl",function(){location.href="/";});
+  var weeks=[]; (DATA.reports||[]).forEach(function(r){
+    if(weeks.indexOf(r.week)<0) weeks.push(r.week);});
+  weeks.sort(function(a,b){return a-b;});
+  $("wk").innerHTML='<option value="">ALL WEEKS</option>'
+    +weeks.map(function(w){return '<option value="'+w+'">WEEK '+w+'</option>';}).join("");
+  $("stN").textContent=DATA.n_reports; $("stW").textContent=weeks.length;
+  $("stT").textContent=D.ago(DATA.generated_at);
+  $("stT").setAttribute("data-ago",DATA.generated_at);
+  if(DATA.n_shoppable===0&&(DATA.reports||[]).length){
+    $("thin").style.display="flex";
+    $("thin").innerHTML="<span><b>Thin market.</b> One book posts these games in our "
+      +"capture so far — there is no best price to shop and the gap column stays "
+      +"empty. Fair prices have that book's margin removed. Gaps appear as the "
+      +"market posts.</span>";
+  }
+  $("prov").textContent="PRICES: OWN CAPTURE · FORM: NFLVERSE · INJURIES: ESPN · "
+    +"EVERY FIGURE IN FACTS IS COMPUTED, NEVER GENERATED";
+  render();
+});
 $("q").addEventListener("input",function(e){FILTER=e.target.value.toLowerCase();render();});
 $("wk").addEventListener("change",function(e){WEEK=e.target.value;render();});
+})();
 </script>
-<script src="/assets/shell.js" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

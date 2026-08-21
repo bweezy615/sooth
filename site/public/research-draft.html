@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Matchup Research</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sooth">
+<meta property="og:title" content="Sooth — Matchup Research">
+<meta property="og:description" content="Every upcoming game on one board: form, availability, the number, and how it has moved. Research only.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/research">
+<meta name="description" content="Every upcoming matchup on one board — team form, players out, the current number and how it has moved since we started watching. Research only, never a pick.">
+<link rel="stylesheet" href="/assets/sooth.css">
+<style>
+  .wrap-page{max-width:1240px;margin:0 auto;padding:0 24px 60px}
+  .page-head{padding:32px 0 4px}
+  h1{font-size:clamp(23px,3.4vw,30px);font-weight:760;letter-spacing:-.02em;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0;max-width:76ch;line-height:1.55}
+  .sub b{color:var(--ink-2)}
+
+  .bar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:18px 0 10px}
+  .count{font-family:var(--num);font-size:11.5px;color:var(--dim);margin-left:auto}
+  .count b{color:var(--ink-2);font-weight:600}
+  .thin{font-size:12px;color:var(--muted);background:var(--bg-2);border:1px solid var(--line);
+    border-left:2px solid var(--warn);border-radius:0 8px 8px 0;padding:9px 13px;margin:0 0 14px;
+    line-height:1.5;max-width:96ch}
+  .thin b{color:var(--ink-2)}
+
+  /* ---- the board ---- */
+  .board{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .scroll{overflow-x:auto}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:940px}
+  thead th{position:sticky;top:0;z-index:2;background:var(--bg-3);
+    font-family:var(--num);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--dim);font-weight:600;text-align:right;padding:9px 12px;white-space:nowrap;
+    border-bottom:1px solid var(--line-2);user-select:none}
+  thead th.l{text-align:left}
+  thead th.s{cursor:pointer}
+  thead th.s:hover{color:var(--ink-2)}
+  thead th.s[aria-sort]{color:var(--iris)}
+  thead th .ar{opacity:.55;font-size:8px;margin-left:3px}
+
+  tbody td{padding:0 12px;height:42px;text-align:right;font-family:var(--num);
+    font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap;
+    border-bottom:1px solid rgba(255,255,255,.05)}
+  tbody td.l{text-align:left}
+  tr.g{cursor:pointer}
+  tr.g:hover td{background:rgba(34,211,238,.055)}
+  tr.g.open td{background:rgba(34,211,238,.075)}
+  tr.g.open td:first-child{box-shadow:inset 2px 0 0 var(--iris)}
+
+  .gm{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+  .gm .aw{color:var(--ink-2);font-weight:500}
+  .gm .at{color:var(--dim);font-weight:400;margin:0 5px;font-size:11.5px}
+  .rc{font-family:var(--num);font-size:10px;color:var(--dim);margin-left:5px}
+  .tm{font-size:11px;color:var(--muted)}
+  .tm .dy{color:var(--ink-2)}
+
+  /* diverging form bar: who is better on net EPA/play, and by how much */
+  .fm{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .fm .who{font-size:11px;font-weight:700;color:var(--ink-2);min-width:30px;text-align:right}
+  .fm .tr{position:relative;width:74px;height:6px;background:rgba(255,255,255,.06);
+    border-radius:3px;flex:none}
+  .fm .tr::after{content:"";position:absolute;left:50%;top:-2px;width:1px;height:10px;
+    background:var(--line-2)}
+  .fm .fl{position:absolute;top:0;height:6px;border-radius:3px;background:var(--iris)}
+  .fm .fl.away{background:var(--muted)}
+  .fm .vl{font-size:11.5px;color:var(--muted);min-width:38px;text-align:right}
+
+  .out{font-family:var(--num);font-size:11.5px}
+  .out b{color:var(--ink-2);font-weight:600}
+  .out .sl{color:var(--dim);margin:0 2px}
+  .out.hot b{color:var(--warn)}
+
+  .mv{display:inline-block;font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;
+    margin-left:6px;background:var(--pos-dim);color:var(--pos-text);border:1px solid var(--pos-line)}
+  .mv.dn{background:rgba(255,90,110,.10);color:var(--neg);border-color:rgba(255,90,110,.3)}
+  .nogap{color:var(--dim)}
+  .gap{color:var(--pos-text);font-weight:700}
+
+  /* ---- the expanded report ---- */
+  tr.rp>td{padding:0;background:var(--bg);border-bottom:1px solid var(--line-2);
+    text-align:left;white-space:normal;font-family:var(--sans);height:auto}
+  .rpin{padding:20px 22px 24px}
+  .lede{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;
+    padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+  .lede h2{font-size:17px;font-weight:700;color:var(--ink);margin:0 0 10px;letter-spacing:-.015em}
+  .facts{margin:0;padding:0;list-style:none;max-width:82ch}
+  .facts li{position:relative;padding:6px 0 6px 15px;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .facts li::before{content:"";position:absolute;left:0;top:13px;width:4px;height:4px;
+    border-radius:50%;background:var(--dim)}
+  .facts li.k-price_gap::before,.facts li.k-line_move::before{background:var(--pos)}
+  .facts li b{color:var(--ink);font-weight:650}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .blk h3{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+    font-weight:600;margin:0 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+
+  /* form comparison as opposed bars, not a number dump */
+  .cmp{display:flex;flex-direction:column;gap:9px}
+  .cmp .rw{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center}
+  .cmp .lb{grid-column:1/-1;font-size:10.5px;color:var(--dim);font-family:var(--num);
+    letter-spacing:.04em;margin-bottom:-5px}
+  .cmp .n{font-family:var(--num);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .cmp .n.r{text-align:right}
+  .cmp .n{text-align:left}
+  .cmp .n.win{color:var(--ink);font-weight:700}
+  .cmp .tw{display:flex;height:7px;gap:2px}
+  .cmp .h{flex:1;position:relative;background:rgba(255,255,255,.05);border-radius:3px}
+  .cmp .h i{position:absolute;top:0;height:7px;border-radius:3px;background:var(--muted);display:block}
+  .cmp .h.a i{right:0;background:var(--dim)}
+  .cmp .h.b i{left:0;background:var(--iris)}
+
+  .ij{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;
+    padding:6px 0;border-top:1px solid rgba(255,255,255,.045);font-size:12.5px}
+  .ij:first-of-type{border-top:0}
+  .ij .po{font-family:var(--num);font-size:10px;color:var(--dim)}
+  .ij .nm{color:var(--ink-2);font-weight:600}
+  .ij .bp{font-family:var(--num);font-size:10.5px;color:var(--dim)}
+  .st{font-family:var(--num);font-size:9px;font-weight:700;letter-spacing:.05em;
+    padding:2px 5px;border-radius:4px;border:1px solid var(--line-2);color:var(--muted)}
+  .st.out{color:var(--neg);border-color:rgba(255,90,110,.35);background:rgba(255,90,110,.10)}
+  .st.q{color:var(--warn);border-color:var(--warn-dim);background:var(--warn-dim)}
+  .tmh{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.05em;
+    margin:14px 0 5px;font-family:var(--num)}
+  .tmh:first-child{margin-top:0}
+
+  .mk{margin-bottom:14px}
+  .mk .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+  .mk .nm{font-family:var(--num);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted)}
+  .mk .bs{font-family:var(--num);font-size:10px;color:var(--dim)}
+  .mk .rw{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;
+    padding:4px 0;font-family:var(--num);font-size:12.5px}
+  .mk .sd{color:var(--ink-2);font-family:var(--sans);font-size:12.5px}
+  .mk .pr{color:var(--ink);font-weight:600}
+  .mk .fr{color:var(--dim);min-width:46px;text-align:right}
+  .spark{width:100%;height:44px;display:block;margin-top:6px}
+  .spark .ln{fill:none;stroke:var(--iris);stroke-width:1.5}
+  .spark .ln2{fill:none;stroke:var(--dim);stroke-width:1.2;stroke-dasharray:3 3}
+  .ax{display:flex;justify-content:space-between;font-family:var(--num);font-size:9.5px;
+    color:var(--dim);margin-top:1px}
+  .none{color:var(--dim);font-size:12px;padding:3px 0}
+
+  .askw{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+  .askw input{width:100%;background:var(--bg-2);color:var(--ink);border:1px solid var(--line);
+    border-radius:9px;padding:9px 12px;font-family:var(--sans);font-size:13px}
+  .askw input::placeholder{color:var(--dim)}
+  .askr{display:flex;gap:9px;margin-top:8px;align-items:center;flex-wrap:wrap}
+  .ans{margin-top:11px;font-size:13px;line-height:1.6;color:var(--ink-2);white-space:pre-wrap;
+    max-width:88ch}
+  .ans:empty{display:none}
+
+  .note{font-size:11.5px;color:var(--dim);margin:14px 0 0;max-width:82ch;line-height:1.55}
+  .empty{padding:44px 24px;text-align:center;color:var(--muted);font-size:14px}
+  .empty b{color:var(--ink);display:block;margin-bottom:5px}
+  @media (max-width:720px){
+    .wrap-page{padding:0 12px 44px}
+    .lede{grid-template-columns:1fr}
+    .rpin{padding:16px 14px 20px}
+  }
+</style>
+</head>
+<body data-page="research">
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap-page">
+
+  <div class="page-head">
+    <h1>Matchup research</h1>
+    <p class="sub">Every upcoming game on one board — form, who is unavailable, the
+    number, and how it has moved since we started watching. <b>Every figure is
+    computed from the data behind this page</b>; nothing is written by a model,
+    and nothing here is a pick.</p>
+  </div>
+
+  <p class="thin" id="thin" style="display:none"></p>
+
+  <div class="bar">
+    <input type="search" id="q" class="field" placeholder="Filter by team" aria-label="Filter by team">
+    <select id="wk" class="field" aria-label="Week"></select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="board">
+    <div class="scroll">
+      <table id="tb">
+        <thead><tr>
+          <th class="l s" data-k="game">Game</th>
+          <th class="l s" data-k="kick">Kickoff</th>
+          <th class="s" data-k="form">Form edge</th>
+          <th class="s" data-k="out">Out</th>
+          <th class="s" data-k="spread">Spread</th>
+          <th class="s" data-k="total">Total</th>
+          <th class="s" data-k="books">Bks</th>
+          <th class="s" data-k="gap">Best gap</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="empty" style="display:none"></div>
+  </div>
+
+  <p class="note" id="prov"></p>
+  <p class="note">Research only. Not advice, not a pick, and not a claim that any
+  bet will win. Prices move — check the book before acting on anything here.
+  Injury designations change; the team's own report is the authority.</p>
+  <p class="note">Nothing on this board is graded, because nothing on it is a
+  forecast. The numbers are timestamped by the public commit that published them.
+  Our model's actual predictions are sealed before kickoff and graded afterwards,
+  win or lose — <a href="/verify.html">check the ledger</a>.</p>
+
+</main>
+
+<script>
+var DATA=null, FILTER="", WEEK="", SORT="kick", DIR=1, OPEN=null;
+function $(id){return document.getElementById(id);}
+function esc(s){return (window.sooth&&sooth.esc)?sooth.esc(s):String(s==null?"":s);}
+function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
+function sig(n,dp){return n==null?"·":(n>0?"+":"")+Number(n).toFixed(dp);}
+// A spread carries a sign because it is written from one side's view; a total
+// is one number both sides share.
+function fmtLine(mk,v){return v==null?"":mk==="spread"?(v>0?"+"+v:String(v)):String(v);}
+function when(iso,short){
+  var t=Date.parse(iso); if(isNaN(t))return "—";
+  var o=short?{weekday:"short",hour:"numeric",minute:"2-digit"}
+             :{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"};
+  return new Date(t).toLocaleString([],o);
+}
+
+// ---- derived row values, computed once per report --------------------------
+function derive(r){
+  var hs=r.stats.home, as=r.stats.away;
+  var hn=hs&&hs.season?hs.season.net_epa_pp:null;
+  var an=as&&as.season?as.season.net_epa_pp:null;
+  var edge=(hn==null||an==null)?null:hn-an;
+  var sp=r.odds.spread, tt=r.odds.total;
+  var gap=null;
+  Object.keys(r.odds).forEach(function(m){
+    var b=r.odds[m]; if(!b||!b.shoppable) return;
+    Object.keys(b.sides).forEach(function(k){
+      var g=b.sides[k].gain_pts;
+      if(g!=null && (gap==null||g>gap)) gap=g;
+    });
+  });
+  return {
+    edge:edge,
+    edgeTeam:edge==null?null:(edge>0?(hs&&hs.abbr):(as&&as.abbr)),
+    out:(r.injuries.home.n_out||0)+(r.injuries.away.n_out||0),
+    outH:r.injuries.home.n_out||0, outA:r.injuries.away.n_out||0,
+    spread:sp?sp.line:null,
+    spreadMv:(r.movement.spread_line||{}).moved||0,
+    total:tt?tt.line:null,
+    totalMv:(r.movement.total_line||{}).moved||0,
+    books:r.market?r.market.n_books:0,
+    gap:gap,
+    kick:Date.parse(r.kickoff)||0
+  };
+}
+
+// ---- the board row ---------------------------------------------------------
+// The form bar is diverging from a centre line: which side is better on net
+// EPA/play, and by how much, without making the reader subtract two decimals.
+function formCell(d){
+  if(d.edge==null) return '<td class="nogap">·</td>';
+  var mag=Math.min(Math.abs(d.edge)/0.30,1)*50;   // .30 EPA/play = full bar
+  var home=d.edge>0;
+  var fill='<i style="'+(home?'left:50%;':'right:50%;')+'width:'+mag.toFixed(1)+'%"></i>';
+  return '<td><span class="fm">'
+    +'<span class="who">'+esc(d.edgeTeam||"")+'</span>'
+    +'<span class="tr"><span class="fl'+(home?"":" away")+'" style="'
+    +(home?"left:50%":"right:50%")+';width:'+mag.toFixed(1)+'%"></span></span>'
+    +'<span class="vl">'+Math.abs(d.edge).toFixed(3)+'</span></span></td>';
+}
+
+function mvChip(v){
+  if(!v) return "";
+  return '<span class="mv'+(v<0?" dn":"")+'">'+(v>0?"+":"")+v+'</span>';
+}
+
+function boardRow(r,d){
+  var hr=r.records[r.home], ar=r.records[r.away];
+  return '<tr class="g'+(OPEN===r.event_id?" open":"")+'" data-id="'+esc(r.event_id)+'">'
+    +'<td class="l"><span class="gm"><span class="aw">'+esc(r.away)+'</span>'
+      +(ar?'<span class="rc">'+esc(ar)+'</span>':"")
+      +'<span class="at">at</span>'+esc(r.home)
+      +(hr?'<span class="rc">'+esc(hr)+'</span>':"")+'</span></td>'
+    +'<td class="l"><span class="tm">'+when(r.kickoff)+'</span></td>'
+    +formCell(d)
+    +'<td><span class="out'+(d.out>=6?" hot":"")+'"><b>'+d.outA+'</b>'
+      +'<span class="sl">/</span><b>'+d.outH+'</b></span></td>'
+    +'<td>'+(d.spread==null?'<span class="nogap">·</span>':fmtLine("spread",d.spread))
+      +mvChip(d.spreadMv)+'</td>'
+    +'<td>'+(d.total==null?'<span class="nogap">·</span>':d.total)+mvChip(d.totalMv)+'</td>'
+    +'<td>'+(d.books||'<span class="nogap">·</span>')+'</td>'
+    +'<td>'+(d.gap==null?'<span class="nogap">·</span>'
+      :'<span class="gap">'+sig(d.gap,2)+'</span>')+'</td>'
+    +'</tr>';
+}
+
+// ---- the expanded report ---------------------------------------------------
+// Opposed bars off a shared centre. Reading two columns of decimals and
+// subtracting them in your head is what the old panel asked for.
+function compare(r){
+  var s=r.stats, h=s.home, a=s.away, mets=s.metrics||[];
+  if(!h||!a) return '<p class="none">No form data for this matchup yet.</p>';
+  var rows=mets.map(function(m){
+    var hv=(h.season||{})[m.key], av=(a.season||{})[m.key];
+    if(hv==null||av==null) return "";
+    var flip=m.better==="low"?-1:1;
+    var gh=hv*flip, ga=av*flip;
+    var span=Math.max(Math.abs(gh),Math.abs(ga))||1;
+    // Map [-span, span] onto 0-100%, so 50% is neutral and better reads longer.
+    // A tendency metric (better === null) has no good direction; show it as a
+    // plain share of the larger value and mark no winner.
+    var lh=m.better?((gh+span)/(2*span))*100:(Math.abs(hv)/span)*100;
+    var la=m.better?((ga+span)/(2*span))*100:(Math.abs(av)/span)*100;
+    var hw=m.better?gh>ga:false;
+    var aw=m.better?ga>gh:false;
+    return '<div class="rw"><span class="lb">'+esc(m.label)+'</span></div>'
+      +'<div class="rw">'
+      +'<span class="n'+(aw?" win":"")+'">'+av.toFixed(m.dp)+'</span>'
+      +'<span class="tw"><span class="h a"><i style="width:'
+        +la.toFixed(0)+'%"></i></span>'
+      +'<span class="h b"><i style="width:'+lh.toFixed(0)+'%"></i></span></span>'
+      +'<span class="n r'+(hw?" win":"")+'">'+hv.toFixed(m.dp)+'</span></div>';
+  }).join("");
+  return '<div class="cmp">'
+    +'<div class="rw"><span class="n">'+esc(a.abbr)+'</span><span></span>'
+    +'<span class="n r">'+esc(h.abbr)+'</span></div>'+rows+'</div>'
+    +'<p class="note">Season averages, '+esc(s.basis_season)
+    +' basis. A record of games played, not a forecast.</p>';
+}
+
+function injuries(r){
+  function side(team,sd){
+    if(!sd||!sd.n) return '<p class="none">Nobody listed.</p>';
+    return sd.shown.map(function(p){
+      var st=(p.status||"").toLowerCase();
+      var c=(st==="out"||st==="injured reserve")?"out":(st==="questionable"||st==="doubtful")?"q":"";
+      return '<div class="ij"><span class="po">'+esc(p.position||"")+'</span>'
+        +'<span class="nm">'+esc(p.player)+' <span class="st '+c+'">'+esc(p.status)+'</span></span>'
+        +'<span class="bp">'+esc(p.body_part||"")+'</span></div>';
+    }).join("")+(sd.not_shown?'<p class="none">+'+sd.not_shown+' more on the report.</p>':"");
+  }
+  return '<div class="tmh">'+esc(r.away)+'</div>'+side(r.away,r.injuries.away)
+    +'<div class="tmh">'+esc(r.home)+'</div>'+side(r.home,r.injuries.home)
+    +'<p class="note">ESPN report'
+    +(r.injuries.espn_timestamp?", "+when(r.injuries.espn_timestamp):"")+'.</p>';
+}
+
+function spark(mv){
+  if(!mv||!mv.points||mv.points.length<2) return "";
+  var keys=Object.keys(mv.points[0]).filter(function(k){return k!=="t";});
+  var vals=[]; mv.points.forEach(function(p){keys.forEach(function(k){
+    if(p[k]!=null) vals.push(p[k]);});});
+  var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals);
+  // Identical across every observation: the book has not repriced. Drawing a
+  // flat line implies a trend we did not measure.
+  if(hi-lo<0.005) return '<p class="none">Unchanged across '+mv.points.length
+    +' observations since '+when(mv.points[0].t)+'.</p>';
+  // Autoscaling to the data alone turns a 2-point wiggle into a full-height
+  // swing, which reads as a market move that did not happen. Hold the axis to
+  // at least MIN_SPAN points of implied probability so a small move looks
+  // small, and print the range so the scale is never implied.
+  var MIN_SPAN=6, mid=(hi+lo)/2, span=Math.max(hi-lo,MIN_SPAN)*1.15;
+  var range=(hi-lo).toFixed(1);
+  lo=mid-span/2; hi=mid+span/2;
+  var W=280,H=44;
+  var paths=keys.map(function(k,i){
+    var pts=mv.points.map(function(p,ix){
+      if(p[k]==null) return null;
+      return ((ix/(mv.points.length-1))*W).toFixed(1)+","
+        +(H-((p[k]-lo)/(hi-lo))*H).toFixed(1);
+    }).filter(Boolean).join(" ");
+    return '<polyline class="'+(i?"ln2":"ln")+'" points="'+pts+'"/>';
+  }).join("");
+  return '<svg class="spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img" '
+    +'aria-label="Implied probability over time">'+paths+'</svg>'
+    +'<div class="ax"><span>'+when(mv.points[0].t,1)+'</span>'
+    +'<span>'+range+' pts range</span>'
+    +'<span>'+when(mv.points[mv.points.length-1].t,1)+'</span></div>';
+}
+
+// Price and movement read together: what the number is, and where it has been.
+function market(r){
+  var out=[];
+  ["spread","total","moneyline"].forEach(function(mk){
+    var b=r.odds[mk]; if(!b) return;
+    var lh=r.movement[mk+"_line"], mv=r.movement[mk];
+    var rows=Object.keys(b.sides).map(function(k){
+      var s=b.sides[k];
+      var nm=s.label==="home"?r.home:s.label==="away"?r.away:s.label;
+      var ln=s.line==null?"":" "+fmtLine(mk,s.line);
+      return '<div class="rw"><span class="sd">'+esc(nm)+ln+'</span>'
+        +'<span class="pr">'+am(s.best_price)+(b.n_books>1?' <span class="bs">'
+          +esc(s.best_book)+'</span>':"")+'</span>'
+        +'<span class="fr">'+(s.fair_prob==null?"·":(s.fair_prob*100).toFixed(1)+"%")
+        +(s.gain_pts!=null?' <span class="gap">'+sig(s.gain_pts,2)+'</span>':"")
+        +'</span></div>';
+    }).join("");
+    out.push('<div class="mk"><div class="hd"><span class="nm">'+esc(mk)
+      +(b.line==null?"":" "+fmtLine(mk,b.line))+'</span>'
+      +'<span class="bs">'+esc(b.fair_basis)+' · '+b.vig_pts.toFixed(2)+' pts margin</span></div>'
+      +rows
+      +(lh&&lh.moved?'<p class="note" style="margin:5px 0 0">Opened '+lh.opened
+        +', now '+lh.current+' ('+(lh.moved>0?"+":"")+lh.moved+').</p>':"")
+      +(mv?spark(mv):"")+'</div>');
+  });
+  return out.join("")||'<p class="none">No prices posted yet.</p>';
+}
+
+function report(r){
+  return '<tr class="rp"><td colspan="8"><div class="rpin">'
+    +'<div class="lede"><div>'
+      +'<h2>'+esc(r.away)+' at '+esc(r.home)+'</h2>'
+      +'<ul class="facts">'+r.facts.map(function(f){
+          return '<li class="k-'+esc(f.kind)+'">'+esc(f.text)+'</li>';}).join("")+'</ul>'
+    +'</div></div>'
+    +'<div class="grid">'
+      +'<div class="blk"><h3>Form</h3>'+compare(r)+'</div>'
+      +'<div class="blk"><h3>Availability</h3>'+injuries(r)+'</div>'
+      +'<div class="blk"><h3>Price &amp; movement</h3>'+market(r)+'</div>'
+    +'</div>'
+    +'<div class="askw"><input type="text" data-ask="'+esc(r.event_id)+'" '
+      +'placeholder="Ask about this game — e.g. what has the total done?" '
+      +'aria-label="Ask about this matchup">'
+      +'<div class="askr"><button class="btn" data-go="'+esc(r.event_id)+'">Ask</button>'
+      +'<span class="note" style="margin:0">Answers may only use the numbers on this board.</span>'
+      +'</div><div class="ans" id="ans-'+esc(r.event_id)+'"></div></div>'
+    +'</div></td></tr>';
+}
+
+// ---- render ----------------------------------------------------------------
+var SORTS={
+  game:function(x){return (x.r.away+x.r.home).toLowerCase();},
+  kick:function(x){return x.d.kick;},
+  form:function(x){return x.d.edge==null?-1:Math.abs(x.d.edge);},
+  out: function(x){return x.d.out;},
+  spread:function(x){return x.d.spread==null?999:Math.abs(x.d.spread);},
+  total:function(x){return x.d.total==null?0:x.d.total;},
+  books:function(x){return x.d.books;},
+  gap: function(x){return x.d.gap==null?-1:x.d.gap;}
+};
+
+function render(){
+  var rows=(DATA.reports||[]).map(function(r){return {r:r,d:derive(r)};})
+    .filter(function(x){
+      if(WEEK && String(x.r.week)!==WEEK) return false;
+      if(!FILTER) return true;
+      return (x.r.home+" "+x.r.away).toLowerCase().indexOf(FILTER)>=0;
+    });
+  var key=SORTS[SORT]||SORTS.kick;
+  rows.sort(function(a,b){
+    var av=key(a), bv=key(b);
+    return (av<bv?-1:av>bv?1:0)*DIR;
+  });
+  var html="";
+  rows.forEach(function(x){
+    html+=boardRow(x.r,x.d);
+    if(OPEN===x.r.event_id) html+=report(x.r);
+  });
+  $("rows").innerHTML=html;
+  $("count").innerHTML="<b>"+rows.length+"</b> matchups";
+  $("empty").style.display=rows.length?"none":"block";
+  if(!rows.length) $("empty").innerHTML="<b>Nothing matches that filter.</b>"
+    +"The board covers upcoming games only.";
+  [].forEach.call(document.querySelectorAll("thead th.s"),function(th){
+    if(th.dataset.k===SORT){
+      th.setAttribute("aria-sort",DIR>0?"ascending":"descending");
+      th.querySelector(".ar")||th.insertAdjacentHTML("beforeend",
+        '<span class="ar">'+(DIR>0?"▲":"▼")+'</span>');
+      th.querySelector(".ar").textContent=DIR>0?"▲":"▼";
+    }else{
+      th.removeAttribute("aria-sort");
+      var a=th.querySelector(".ar"); if(a) a.remove();
+    }
+  });
+}
+
+document.addEventListener("click",function(e){
+  var th=e.target.closest("thead th.s");
+  if(th){
+    var k=th.dataset.k;
+    // Bigger-is-more-interesting columns open on descending; names and times
+    // read forwards.
+    if(SORT===k){ DIR=-DIR; }
+    else{ SORT=k; DIR=(k==="game"||k==="kick")?1:-1; }
+    return render();
+  }
+  var go=e.target.closest("[data-go]");
+  if(go){ return ask(go.getAttribute("data-go")); }
+  if(e.target.closest(".rp")) return;          // clicks inside a report do nothing
+  var row=e.target.closest("tr.g");
+  if(row){
+    OPEN = OPEN===row.dataset.id ? null : row.dataset.id;
+    render();
+  }
+});
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Enter") return;
+  var i=e.target.closest("[data-ask]"); if(i) ask(i.getAttribute("data-ask"));
+});
+
+function ask(id){
+  var input=document.querySelector('[data-ask="'+id+'"]');
+  var box=$("ans-"+id);
+  var q=(input&&input.value||"").trim();
+  if(!q){ if(box) box.textContent=""; return; }
+  box.textContent="Reading…";
+  fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({mode:"matchup",event_id:id,question:q})})
+    .then(function(r){return r.json();})
+    .then(function(j){ box.textContent=j.answer||j.error||"No answer."; })
+    .catch(function(){ box.textContent="The read is unavailable right now."; });
+}
+
+fetch("/data/research.json",{cache:"no-store"}).then(function(r){return r.json();})
+  .then(function(j){
+    DATA=j;
+    var weeks=[]; (j.reports||[]).forEach(function(r){
+      if(weeks.indexOf(r.week)<0) weeks.push(r.week);});
+    weeks.sort(function(a,b){return a-b;});
+    $("wk").innerHTML='<option value="">All weeks</option>'
+      +weeks.map(function(w){return '<option value="'+w+'">Week '+w+'</option>';}).join("");
+    if(j.n_shoppable===0 && (j.reports||[]).length){
+      $("thin").style.display="block";
+      $("thin").innerHTML="Books have not opened this slate across the market yet — "
+        +"one book is posting, so there is <b>no best price to shop</b> and the gap "
+        +"column stays empty. Fair prices have that book's margin removed. Gaps "
+        +"appear here as the rest of the market posts.";
+    }
+    $("prov").textContent="Prices from our own capture. Form from nflverse. "
+      +"Injuries from ESPN. Built "+when(j.generated_at)+".";
+    render();
+  })
+  .catch(function(){
+    $("empty").style.display="block";
+    $("empty").innerHTML="<b>The board is not available right now.</b>"
+      +"It rebuilds through the day.";
+  });
+
+$("q").addEventListener("input",function(e){FILTER=e.target.value.toLowerCase();render();});
+$("wk").addEventListener("change",function(e){WEEK=e.target.value;render();});
+</script>
+<script src="/assets/shell.js" defer></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

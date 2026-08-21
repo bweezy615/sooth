@@ -10,14 +10,11 @@
   // data views; Predictor + Ask AI the tools; Tools and Trust are hubs that
   // reach the rest (Record/Method/Verify/Guide/Ledger/Gamelog + calculators).
   var NAV=[
-    {href:"/",          key:"board",     label:"Board"},
+    {href:"/",          key:"board",     label:"Market"},
     {href:"/props",     key:"props",     label:"Props"},
-    {href:"/edges",     key:"edges",     label:"Edges"},
+    {href:"/edges",     key:"edges",     label:"Movement"},
     {href:"/research",  key:"research",  label:"Research"},
-    {href:"/predictor", key:"predictor", label:"Predictor"},
-    {href:"/ask",       key:"ask",       label:"Ask AI"},
-    {href:"/tools",     key:"tools",     label:"Tools"},
-    {href:"/trust",     key:"trust",     label:"Trust"}
+    {href:"/trust",     key:"trust",     label:"Ledger"}
   ];
 
   var MARK=

@@ -125,6 +125,8 @@
     <span class="count" id="count"></span>
   </div>
 
+  <p class="note" id="thin" style="display:none"></p>
+
   <div id="list"></div>
   <div class="empty panel" id="empty" style="display:none"></div>
 
@@ -206,7 +208,7 @@ function oddsTable(r){
       var name=s.label==="home"?r.home:s.label==="away"?r.away:s.label;
       var ln=s.line==null?"":" "+fmtLine(mk, s.line);
       return '<tr><td class="l lab">'+esc(name)+ln+'</td>'
-        +'<td>'+am(s.best_price)+'<span class="bk">'+esc(s.best_book)+'</span></td>'
+        +'<td>'+am(s.best_price)+(b.n_books>1?'<span class="bk">'+esc(s.best_book)+'</span>':"")+'</td>'
         +'<td>'+(s.fair_prob==null?"·":(s.fair_prob*100).toFixed(1)+"%")+'</td>'
         +'<td class="'+(s.gain_pts?"pos":"")+'">'
         +(s.gain_pts==null?"·":(s.gain_pts>0?"+":"")+s.gain_pts.toFixed(2))+'</td></tr>';
@@ -217,8 +219,7 @@ function oddsTable(r){
       +'<table><thead><tr><th class="l"></th><th>Best</th>'
       +'<th>Fair</th><th>Gain</th></tr></thead><tbody>'+sides+'</tbody></table>'
       +'<p class="note" style="margin-top:6px">'+esc(b.fair_basis)
-      +' · '+b.vig_pts.toFixed(2)+' pts margin'
-      +(b.shoppable?"":" · one book, no price to shop yet")+'</p></div>');
+      +' · '+b.vig_pts.toFixed(2)+' pts margin</p></div>');
   });
   return out.join("")||'<p class="none">No prices posted yet.</p>';
 }
@@ -363,6 +364,17 @@ fetch("/data/research.json",{cache:"no-store"}).then(function(r){return r.json()
     weeks.sort(function(a,b){return a-b;});
     $("wk").innerHTML='<option value="">All weeks</option>'
       +weeks.map(function(w){return '<option value="'+w+'">Week '+w+'</option>';}).join("");
+    // The market is thin before books open a slate. Say so once, at the top,
+    // rather than on every card — but never say nothing, or a fair price
+    // derived from a single book's margin reads as a cross-book consensus.
+    var thin=$("thin");
+    if(j.n_shoppable===0 && (j.reports||[]).length){
+      thin.style.display="block";
+      thin.innerHTML="Books have not opened this slate across the market yet — "
+        +"one book is posting, so there is <b>no best price to shop</b> and the "
+        +"gain column stays empty. Fair prices below have that book's margin "
+        +"removed. Gaps appear here as the rest of the market posts.";
+    }
     $("prov").textContent="Prices from our own capture. Form from nflverse. "
       +"Injuries from ESPN. Built "+when(j.generated_at)+".";
     render();

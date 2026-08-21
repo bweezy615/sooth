@@ -93,6 +93,10 @@ class TestSingleBookHonesty:
         assert blk["sides"]["side_a"]["gain_pts"] is not None
 
     def test_facts_do_not_advertise_an_edge_on_one_book(self):
+        """One book: no price fact at all. The thin-market state is carried
+        once, at report level (the ``market`` field) and as a single page
+        notice — not restated as a bullet on all 48 cards, which read as
+        advertising for the one book that happened to post."""
         blk = self._one_book()
         facts = build_facts(
             {"home": "Seattle Seahawks", "away": "New England Patriots"},
@@ -100,7 +104,6 @@ class TestSingleBookHonesty:
         kinds = {f["kind"] for f in facts}
         assert "price_gap" not in kinds
         assert "dispersion" not in kinds
-        assert "single_book" in kinds
 
 
 class TestReportHygiene:

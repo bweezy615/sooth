@@ -15,7 +15,7 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
-  <div class="ws-crumb"><a class="tl" href="/desk">← MARKET</a></div>
+  <div class="ws-crumb"><a class="tl" href="/">← MARKET</a></div>
   <div id="ws"></div>
 </main>
 
@@ -44,7 +44,7 @@ function kv(k,v,cls){return '<div class="kv"><span class="k">'+k
 function cell(k,v,cls){return '<div class="ws-cell"><span class="tl">'+k
   +'</span><div class="v n '+(cls||"")+'">'+v+'</div></div>';}
 
-function render(hit,moves,research){
+function render(hit,moves,research,timeline){
   var sp=hit.sp, ev=hit.e;
   var isOn=Date.parse(ev.starts)<=Date.now();
   var sides=ev.sides.slice().sort(function(a,b){return (b.fair_prob||0)-(a.fair_prob||0);});
@@ -124,8 +124,24 @@ function render(hit,moves,research){
   if(moves){ ["divergence","drift"].forEach(function(k){ (moves[k]||[]).forEach(function(a){
     if(String(a.event_id)===String(ID)) mvRows.push(a);});});}
   mvRows.sort(function(a,b){return String(b.observed_at).localeCompare(String(a.observed_at));});
-  html+='<div class="sec"><div class="sec-h"><span class="tl">MOVEMENT</span>'
-    +'<span class="sub">detected on our capture, points of implied probability</span></div>';
+  var tlEv=(timeline&&(timeline.events||[]).filter(function(t){
+    return String(t.event_id)===String(ID);})[0])||null;
+  html+='<div class="sec"><div class="sec-h"><span class="tl">MARKET TIMELINE</span>'
+    +'<span class="sub">our capture, hourly — a line change starts a new series</span>'
+    +(tlEv?'<span class="more" id="tlRange">'
+      +[6,24,72].map(function(h){return '<button class="an-chip" data-h="'+h
+        +'"'+(h===72?' aria-pressed="true"':'')+'>'+h+'H</button>';}).join(" ")
+      +'</span>':'')
+    +'</div>';
+  if(tlEv){
+    html+='<div id="tlHost"></div>';
+  }else{
+    html+='<div class="feed"><div class="state"><span class="tl">NO PUBLISHED HISTORY YET'
+      +'</span>The timeline publishes from the next capture cycle.</div></div>';
+  }
+  html+='</div>';
+  html+='<div class="sec"><div class="sec-h"><span class="tl">DETECTED MOVES</span>'
+    +'<span class="sub">drift and divergence above threshold, points of implied probability</span></div>';
   if(mvRows.length){
     html+='<div class="feed">'+mvRows.slice(0,6).map(function(a,i){
       var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
@@ -165,6 +181,29 @@ function render(hit,moves,research){
   ws.innerHTML=html;
   document.title="Sooth — "+ev.away+" at "+ev.home;
 
+  if(tlEv){
+    var tlH=72;
+    var drawTl=function(){
+      var host=document.getElementById("tlHost"), parts=[];
+      ["moneyline","spread","total"].forEach(function(mk){
+        var m=tlEv.markets[mk]; if(!m) return;
+        parts.push('<div class="mkt"><div class="sec-h"><span class="tl">'
+          +mk.toUpperCase()+(m.line!=null?" "+(mk==="spread"&&m.line>0?"+":"")+m.line:"")
+          +' · '+(m.ref==="over"?"OVER":"HOME")+' SIDE</span></div>'
+          +D.timeline(m,{hours:tlH,label:mk+" history",
+            marks:mvRows.filter(function(a){return a.market===mk;})}));
+      });
+      host.innerHTML=parts.join("")||'<div class="feed"><div class="state tl">NO HISTORY</div></div>';
+    };
+    drawTl();
+    document.getElementById("tlRange").addEventListener("click",function(e){
+      var b=e.target.closest("[data-h]"); if(!b) return;
+      tlH=+b.dataset.h; drawTl();
+      [].forEach.call(this.querySelectorAll("[data-h]"),function(x){
+        x.setAttribute("aria-pressed",x===b?"true":"false");});
+    });
+  }
+
   function ask(q){
     var out=document.getElementById("anout");
     out.textContent="READING THE BOARD…";
@@ -185,7 +224,7 @@ function render(hit,moves,research){
 }
 
 Promise.all([D.load("/data/board.json"),D.load("/data/moves.json"),
-             D.load("/data/research.json")]).then(function(rs){
+             D.load("/data/research.json"),D.load("/data/timeline.json")]).then(function(rs){
   var bd=rs[0];
   if(!bd.ok){ ws.innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
     +'The board could not be loaded — try again shortly.</div>'; return; }
@@ -199,7 +238,7 @@ Promise.all([D.load("/data/board.json"),D.load("/data/moves.json"),
     return;
   }
   D.sportRail(bd.data,hit.sp,function(s){location.href="/desk";});
-  render(hit,rs[1].ok?rs[1].data:null,rs[2].ok?rs[2].data:null);
+  render(hit,rs[1].ok?rs[1].data:null,rs[2].ok?rs[2].data:null,rs[3].ok?rs[3].data:null);
 });
 })();
 </script>
