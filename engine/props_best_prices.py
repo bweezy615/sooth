@@ -8,8 +8,16 @@ in the footers of props.html, edges.html and research.html.
 The module, the published file and the JSON key were all called "picks" until
 2026-08-21. That was a public path — sooth.bet/data/props_picks.json — carrying
 the one word three pages promise never to use, and a rule kept everywhere except
-in the URL is not a rule. Renamed while one page and one bot read it, which was
-cheap; after a channel launches pointing at it, it would not have been.
+in the URL is not a rule. Renamed while only this page read it, which was cheap; after anything
+external points at a path, it would not have been.
+
+The Discord bot deliberately does NOT read this file. It recomputes the same
+selection from props.json with the same rank key. Two independent
+implementations agreeing on one input is a live cross-check: if they ever
+diverge, that is a signal one side changed something. Sharing this file would
+make divergence impossible to detect by making it impossible to have. The only
+coupling that matters is the rank key and the tie-break — change either and the
+other side has to be told.
 
 Which props to publish is a selection question, and the selection mechanism is
 the whole product. Two candidates were available and they are not equally good:
