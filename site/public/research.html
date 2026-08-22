@@ -287,14 +287,18 @@ function ask(id){
 }
 
 D.connecting($("board"),"RESEARCH FEED");
-Promise.all([D.load("/data/research.json"),D.load("/data/timeline.json")]).then(function(rs){
+/* Inside a desk monitor the page shows its chrome immediately but holds its
+   ~1.5MB data fetch until the desk focuses this screen (a soothWake message)
+   — the center panel is real, and nobody pays for research they never open. */
+function bootData(){
+  Promise.all([D.load("/data/research.json"),D.load("/data/timeline.json")]).then(function(rs){
   if(!rs[0].ok){
     $("board").innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
       +'Reports rebuild through the day — try again shortly.</div>';
     return;
   }
   DATA=rs[0].data; TL=rs[1].ok?rs[1].data:null;
-  D.sportRail(null,"nfl",function(){location.href="/";});
+  if(!D.embedded) D.sportRail(null,"nfl",function(){location.href="/";});
   var weeks=[]; (DATA.reports||[]).forEach(function(r){
     if(weeks.indexOf(r.week)<0) weeks.push(r.week);});
   weeks.sort(function(a,b){return a-b;});
@@ -314,6 +318,19 @@ Promise.all([D.load("/data/research.json"),D.load("/data/timeline.json")]).then(
     +"EVERY FIGURE IN FACTS IS COMPUTED, NEVER GENERATED";
   render();
 });
+}
+if(D.embedded){
+  var wokeMe=false;
+  addEventListener("message",function(e){
+    if(e.origin!==location.origin) return;
+    if(e.data&&e.data.soothWake&&!wokeMe){ wokeMe=true; bootData(); }
+  });
+  /* direct visits with ?embed=1 outside the desk still work */
+  setTimeout(function(){ if(!wokeMe){ wokeMe=true; bootData(); } }, 15000);
+}else{
+  bootData();
+}
+
 $("q").addEventListener("input",function(e){FILTER=e.target.value.toLowerCase();render();});
 $("wk").addEventListener("change",function(e){WEEK=e.target.value;render();});
 })();

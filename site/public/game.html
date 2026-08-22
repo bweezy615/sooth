@@ -238,10 +238,10 @@ Promise.all([D.load("/data/board.json"),D.load("/data/moves.json"),
       +'This game is not on the live board — prices publish as kickoff approaches.'
       +(SPQ==="nfl"?' NFL matchup research may still cover it on <a href="/research" style="color:var(--brand)">the research desk</a>.':'')
       +'</div>';
-    var srail=bd.ok?bd.data:null; D.sportRail(srail,SPQ,function(s){location.href="/";});
+    var srail=bd.ok?bd.data:null; D.sportRail(srail,SPQ,function(s){D.go("/market");});
     return;
   }
-  D.sportRail(bd.data,hit.sp,function(s){location.href="/";});
+  D.sportRail(bd.data,hit.sp,function(s){D.go("/market");});
   D.land(ws,function(){
     render(hit,rs[1].ok?rs[1].data:null,rs[2].ok?rs[2].data:null,rs[3].ok?rs[3].data:null);
   });

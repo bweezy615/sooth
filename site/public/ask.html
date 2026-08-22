@@ -74,8 +74,10 @@
 "use strict";
 var D=window.Desk, busy=false;
 D.mount("ask");
-D.load("/data/board.json").then(function(r){
-  D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
+if(!D.embedded){ /* the rail lives in the site header; embedded, neither exists */
+  D.load("/data/board.json").then(function(r){
+    D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
+}
 function $(id){return document.getElementById(id);}
 var EX=[
   "Is Skubal over 6.5 Ks at -110 a fair number?",

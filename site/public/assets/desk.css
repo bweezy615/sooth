@@ -451,3 +451,7 @@ tr.locked .lock{color:var(--dim);font-size:10px}
 .noplay{border-left:2px solid var(--brand);background:rgba(45,212,167,.06);
   padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:13px;
   color:var(--ink2);margin:0 0 16px;max-width:80ch;line-height:1.6}
+
+/* ============ embedded (inside an Infinite Desk monitor) ============ */
+.embedded body{padding-top:4px}
+.embedded .skip{display:none}

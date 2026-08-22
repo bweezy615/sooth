@@ -3,307 +3,476 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Sports Betting Research</title>
-<meta name="description" content="Every sportsbook's price on one instrument: fair lines, book disagreement, movement, and research. Analysis only — never picks.">
-<meta property="og:title" content="Sooth — Sports Betting Research">
-<meta property="og:description" content="Form, availability, prices and movement — composed into one read per game. Every figure computed. No picks.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://sooth.bet/og.png">
+<title>Sooth — The Desk</title>
+<meta name="description" content="One desk, five instruments: the market board, the analyzer, research, the pick engine, and the proof ledger. The best sports betting research analyzer on the market — no picks sold as winning.">
 <link rel="canonical" href="https://sooth.bet/">
+<meta property="og:title" content="Sooth — The Desk">
+<meta property="og:description" content="Sit down at one continuous intelligence desk: market board, analyzer, research, pick engine, proof ledger. Every figure computed, every slate sealed.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sooth.bet/">
+<meta property="og:image" content="https://sooth.bet/og.png">
 <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#070A0D">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/desk.css">
 <style>
-  /* The page is the instrument, not a stack of cards. The games table sits
-     directly on the page plane — hairlines, no housing — so the one boxed,
-     machined surface left on the homepage is the radar, which earns it: it
-     is the physical instrument. */
-  #games.itab{background:transparent;border:0;border-radius:0;box-shadow:none}
-  #games thead th{background:var(--g0);border-bottom:1px solid var(--hair2)}
-  #games tbody td{border-bottom:1px solid var(--hair)}
+  /* ============================================================
+     THE INFINITE DESK — matched to the reference frame:
+     five glossy panels in a receding arc on a curved black desk,
+     screen reflections on the surface, sooth hardware props,
+     editorial header, full-width workspace labels.
+     ============================================================ */
+  :root{
+    --bg:#070A0D; --hw1:#0E1318; --hw2:#131A20; --hw3:#1A2229;
+    --screen:#0A1015; --hair:rgba(190,205,215,.12);
+    --ink:#E8EDF0; --mut:#7F8C94; --dim:#55616A;
+    --accent:#6EE7D2; --loss:#D96868;
+    --sans:'Inter',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
+    --glide:560ms cubic-bezier(.22,.8,.32,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{color:var(--ink);font:14px/1.5 var(--sans);
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+    display:flex;flex-direction:column;
+    background:
+      radial-gradient(90% 46% at 50% 30%, rgba(70,110,120,.10), transparent 70%),
+      radial-gradient(140% 90% at 50% 118%, #10161c 0%, transparent 55%),
+      var(--bg)}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  .tl{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--mut)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* ---- editorial header, per the reference frame ---- */
+  .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px 34px 0;flex:none}
+  .brand-row .no{font:600 20px var(--mono);letter-spacing:.14em;color:var(--dim)}
+  h1{font:600 21px/1 var(--mono);letter-spacing:.34em;color:var(--ink);white-space:nowrap}
+  .kicker{font:600 10px var(--mono);letter-spacing:.22em;color:var(--accent);
+    text-transform:uppercase;padding-bottom:2px}
+  .strap{padding:8px 34px 0;font:400 12.5px var(--sans);color:var(--mut);flex:none}
+
+  /* ---- workspace labels: full-width, active teal + underline ---- */
+  .ws-labels{display:flex;justify-content:space-between;flex:none;
+    max-width:1250px;width:94%;margin:10px auto 0;padding:0 8px}
+  .ws-labels button{font:600 11px var(--mono);letter-spacing:.18em;color:var(--ink);
+    padding:8px 4px 10px;position:relative;transition:color 120ms ease;opacity:.85}
+  .ws-labels button:hover{color:var(--accent);opacity:1}
+  .ws-labels button::after{content:"";position:absolute;left:10%;right:10%;bottom:0;
+    height:2px;background:var(--accent);transform:scaleX(0);
+    transition:transform 200ms cubic-bezier(.165,.84,.44,1)}
+  .ws-labels button[aria-current="true"]{color:var(--accent);opacity:1}
+  .ws-labels button[aria-current="true"]::after{transform:scaleX(1)}
+
+  /* ---- the stage ---- */
+  #stagewrap{position:relative;flex:1;min-height:0}
+  #desk{position:absolute;inset:0;overflow:hidden;
+    perspective:1500px;perspective-origin:50% 34%}
+
+  /* the physical desk: curved gloss platform + front apron, two arcs */
+  .floor{position:absolute;left:50%;bottom:-6%;width:150%;height:52%;
+    transform:translateX(-50%);pointer-events:none}
+  .floor .arc1{position:absolute;left:0;right:0;top:0;bottom:0;
+    background:radial-gradient(85% 130% at 50% 135%, #1B242D 0%, #10161C 45%, #0A0E12 71%, transparent 72%)}
+  .floor .arc1::before{content:"";position:absolute;left:10%;right:10%;top:9%;height:2px;
+    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(190,215,220,.34), transparent 80%)}
+  .floor .arc2{position:absolute;left:6%;right:6%;top:34%;bottom:-30%;
+    background:radial-gradient(75% 120% at 50% 130%, #232D37 0%, #131A21 50%, transparent 71%)}
+  .floor .arc2::before{content:"";position:absolute;left:16%;right:16%;top:7%;height:2px;
+    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(190,215,220,.22), transparent 80%)}
+  /* room vignette */
+  #desk::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(125% 92% at 50% 4%, transparent 52%, rgba(0,0,0,.55) 100%),
+      linear-gradient(0deg, rgba(0,0,0,.42), transparent 16%)}
+
+  /* ---- monitors: thin glossy panels ---- */
+  .monitor{position:absolute;left:50%;top:34%;width:952px;height:760px;
+    margin:-380px 0 0 -476px;transform-origin:50% 58%}
+  .desk-ready .monitor{transition:transform var(--glide),opacity var(--glide)}
+  .mon-label{display:none}
+  .bezel{position:absolute;left:0;top:0;width:952px;height:712px;
+    background:linear-gradient(180deg,#232B33,#0C1116 12%,#0A0E12);
+    border:1px solid rgba(200,215,225,.16);border-radius:14px;padding:16px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.10),
+      inset 0 -1px 0 rgba(0,0,0,.7),
+      0 42px 90px -34px rgba(0,0,0,.95),
+      0 8px 26px -8px rgba(0,0,0,.7)}
+  .screen{position:relative;width:920px;height:680px;background:var(--screen);
+    border-radius:6px;overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.65), inset 0 0 46px rgba(0,0,0,.4)}
+  .screen iframe{width:100%;height:100%;border:0;display:block;background:var(--screen)}
+  /* glass: one diagonal glare sweep, stronger near the top corner */
+  .glare{position:absolute;inset:0;pointer-events:none;border-radius:6px;
+    background:linear-gradient(112deg, rgba(210,230,235,.065) 0%, rgba(210,230,235,.02) 26%, transparent 40%)}
+  .monitor:not(.is-focused) .screen iframe{pointer-events:none}
+  .monitor:not(.is-focused){cursor:pointer}
+  .led{position:absolute;bottom:6px;left:50%;width:5px;height:5px;margin-left:-2.5px;
+    border-radius:50%;background:#26313A;transition:background var(--glide),box-shadow var(--glide)}
+  .monitor.is-focused .led{background:var(--accent);box-shadow:0 0 8px rgba(110,231,210,.6)}
+  /* the screen's reflection on the gloss desk — travels with its monitor */
+  .reflect{position:absolute;left:7%;right:7%;top:718px;height:130px;
+    background:linear-gradient(180deg, rgba(160,195,205,.13), rgba(160,195,205,.04) 50%, transparent 85%);
+    filter:blur(9px);border-radius:10px;pointer-events:none}
+
+  /* ---- desk props (overview only; they yield to the work) ---- */
+  .props{position:absolute;left:50%;bottom:4.5%;width:1200px;margin-left:-600px;
+    height:120px;pointer-events:none;transition:opacity var(--glide)}
+  .desk-focused .props{opacity:0}
+  .prop{position:absolute;bottom:0}
+  /* mug, stage left */
+  .mug{left:70px;width:64px;height:74px;background:linear-gradient(100deg,#171E25,#0C1014 70%);
+    border-radius:8px 8px 10px 10px;box-shadow:inset 2px 6px 10px rgba(255,255,255,.05),
+      0 14px 18px -8px rgba(0,0,0,.85)}
+  .mug::before{content:"";position:absolute;right:-20px;top:16px;width:26px;height:40px;
+    border:7px solid #12181E;border-left:0;border-radius:0 14px 14px 0}
+  .mug::after{content:"sooth.";position:absolute;left:0;right:0;top:38%;
+    font:600 12px var(--sans);color:#8B979E;text-align:center;letter-spacing:.02em}
+  /* control surface, centered */
+  .console{left:50%;width:300px;height:76px;margin-left:-170px;
+    background:linear-gradient(180deg,#1A222A,#0D1216 70%);
+    border:1px solid rgba(200,215,225,.10);border-radius:12px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.06), 0 18px 24px -10px rgba(0,0,0,.9)}
+  .console i{position:absolute;top:16px;width:26px;height:26px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #2A343E, #10161B 70%);
+    box-shadow:inset 0 -2px 4px rgba(0,0,0,.7), 0 2px 3px rgba(0,0,0,.6)}
+  .console i::after{content:"";position:absolute;left:50%;top:3px;width:2px;height:8px;
+    margin-left:-1px;background:#4A565F;border-radius:1px}
+  .console i:nth-child(1){left:22px}.console i:nth-child(2){left:60px}
+  .console i:nth-child(3){left:98px}.console i:nth-child(4){left:136px;top:44px}
+  .console b{position:absolute;right:24px;top:20px;width:88px;height:44px;
+    border-radius:6px;background:#0A0F13;box-shadow:inset 0 0 0 1px rgba(200,215,225,.08)}
+  .console b::before{content:"";position:absolute;left:10px;top:9px;width:5px;height:5px;
+    border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(110,231,210,.7)}
+  .console b::after{content:"";position:absolute;left:10px;bottom:9px;right:10px;height:3px;
+    background:repeating-linear-gradient(90deg,#222B33 0 6px,transparent 6px 10px)}
+  /* notebook device, right of console */
+  .book{left:50%;margin-left:150px;width:164px;height:84px;
+    background:linear-gradient(160deg,#141B22,#0B0F13 75%);
+    border-radius:10px;border:1px solid rgba(200,215,225,.09);
+    box-shadow:0 16px 22px -10px rgba(0,0,0,.9)}
+  .book::after{content:"sooth.";position:absolute;left:0;right:0;top:40%;
+    font:600 14px var(--sans);color:#77838B;text-align:center}
+  /* the clock — a real one */
+  .clockbox{right:66px;width:138px;height:66px;background:linear-gradient(180deg,#151C23,#0A0E12);
+    border-radius:10px;border:1px solid rgba(200,215,225,.10);
+    box-shadow:0 16px 22px -10px rgba(0,0,0,.9);pointer-events:none}
+  .clockbox .t{position:absolute;left:0;right:26px;top:50%;transform:translateY(-50%);
+    font:700 26px var(--mono);color:#E8EDF0;text-align:center;
+    font-variant-numeric:tabular-nums;letter-spacing:.04em}
+  .clockbox .z{position:absolute;right:9px;top:50%;transform:translateY(-50%);
+    font:600 9px var(--mono);color:var(--dim);letter-spacing:.08em;line-height:1.6}
+
+  /* ---- edge arrows ---- */
+  .arrow{position:absolute;top:42%;z-index:10;width:56px;height:90px;
+    font:300 40px/90px var(--sans);text-align:center;color:rgba(232,237,240,.75);
+    transition:color 120ms ease;user-select:none}
+  .arrow:hover{color:var(--ink)}
+  .arrow[hidden]{display:none}
+  #prev{left:4px} #next{right:4px}
+
+  /* ---- caption + location rail ---- */
+  .caption{flex:none;text-align:center;padding:4px 0 2px;
+    font:500 10.5px var(--mono);letter-spacing:.16em;color:var(--dim);
+    text-transform:uppercase;line-height:1.8}
+  .rail{display:flex;justify-content:center;align-items:center;padding:4px 0 6px;flex:none}
+  .rail button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 20px}
+  .rail .dot{width:6px;height:6px;border-radius:50%;background:#26313A;
+    transition:background 200ms ease,box-shadow 200ms ease}
+  .rail button[aria-current="true"] .dot{background:var(--accent);
+    box-shadow:0 0 8px rgba(110,231,210,.5)}
+  .rail .tl{font-size:8.5px}
+  .rail button[aria-current="true"] .tl{color:var(--ink)}
+  .rail .ln{width:40px;height:1px;background:var(--hair);margin-bottom:14px}
+
+  /* ---- shimmer for the not-yet-loaded research screen ---- */
+  .holding{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px}
+  .holding .tl{font-size:22px;letter-spacing:.3em}
+  .holding i{display:block;width:38%;height:14px;border-radius:3px;
+    background:linear-gradient(90deg,var(--hw1) 25%,var(--hw2) 50%,var(--hw1) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+  @keyframes shim{to{background-position:-200% 0}}
+
+  /* ---- footer ---- */
+  .ft{flex:none;padding:7px 26px 10px;color:#4A555E;font-size:10px;line-height:1.5;
+    border-top:1px solid rgba(190,205,215,.07)}
+  .ft b{color:var(--dim)}
+  .ft a{color:var(--dim);text-decoration:none}
+
+  /* ---- mobile pager ---- */
+  @media (max-width:859px){
+    body{overflow:auto}
+    .brand-row{padding:14px 16px 0;gap:12px}
+    .brand-row .no{font-size:14px} h1{font-size:14px;letter-spacing:.24em}
+    .kicker{display:none} .strap{padding:6px 16px 0}
+    .ws-labels{overflow-x:auto;justify-content:flex-start;gap:14px;flex-wrap:nowrap;
+      scrollbar-width:none;width:auto;margin:8px 0 0;padding:0 12px}
+    .ws-labels button{white-space:nowrap}
+    #desk{position:relative;perspective:none;display:flex;overflow-x:auto;
+      scroll-snap-type:x mandatory;scrollbar-width:none;height:70vh}
+    #desk::after{display:none}
+    .floor,.props{display:none}
+    #stagewrap{flex:1}
+    .monitor{position:relative;left:auto;top:auto;margin:0;transform:none!important;
+      opacity:1!important;flex:0 0 100vw;width:100vw;height:100%;
+      scroll-snap-align:center;padding:8px 10px 0}
+    .bezel{position:relative;width:100%;height:100%;padding:8px;border-radius:10px}
+    .screen{width:100%;height:100%}
+    .screen iframe{pointer-events:auto!important}
+    .reflect,.led{display:none}
+    .arrow{display:none}
+    .caption{display:none}
+  }
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<main id="main" class="wrap">
 
-  <!-- what this is, in one line — then the market -->
-  <div class="page-head" style="padding:26px 0 0">
-    <h1 style="font:760 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
-      The best sports betting research analyzer on the market.</h1>
-    <p style="color:var(--mut);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:66ch">
-      Form, availability, prices and movement — composed into one read per game,
-      every figure computed from real data, nothing written by a model's memory.
-      <b style="color:var(--ink2)">No picks, no predictions to trust.</b></p>
-  </div>
-  <div class="status" id="status" aria-live="polite" style="padding:18px 0 16px"></div>
-  <div id="notice"></div>
+<div class="brand-row">
+  <span class="no">SOOTH.</span>
+  <h1>INFINITE DESK</h1>
+  <span class="kicker">One desk. Multiple workspaces.</span>
+</div>
+<p class="strap">Move across an infinite desk of intelligence — research and analysis, never winning picks.</p>
 
-  <!-- ANALYZE — the product, on landing -->
-  <section class="sec" style="border-top:0;padding-top:6px" aria-labelledby="anH">
-    <div class="sec-h"><span class="tl" id="anH">ANALYZE A GAME</span>
-      <span class="sub">ask anything on tonight's slate — answers use only the live numbers, and it will not pick a side</span>
-      <span class="more tl" id="anterms"></span></div>
-    <div class="an-in" style="max-width:720px">
-      <input id="anq" maxlength="500" placeholder="e.g. Analyze tonight's Mets game — what's the number doing?">
-      <button id="ango">ANALYZE</button>
-    </div>
-    <div class="an-chips" id="anchips"></div>
-    <div class="an-out" id="anout"></div>
-  </section>
+<nav class="ws-labels" aria-label="Workspaces">
+  <button data-ws="0">MARKET BOARD</button>
+  <button data-ws="1">ANALYZER</button>
+  <button data-ws="2">RESEARCH</button>
+  <button data-ws="3">PICK ENGINE</button>
+  <button data-ws="4">PROOF LEDGER</button>
+</nav>
 
-  <!-- TODAY'S MARKET -->
-  <section class="sec" aria-labelledby="gmH">
-    <div class="sec-h"><span class="tl" id="gmH">TODAY'S GAMES</span>
-      <span class="sub" id="gmSub"></span></div>
-    <div class="itab" id="games"></div>
-  </section>
+<div id="stagewrap">
+  <button class="arrow" id="prev" aria-label="Previous workspace" hidden>‹</button>
+  <button class="arrow" id="next" aria-label="Next workspace" hidden>›</button>
+  <div id="desk" role="region" aria-label="The desk"></div>
+</div>
 
-  <!-- MARKET RADAR -->
-  <section class="sec" aria-labelledby="radarH">
-    <div class="sec-h"><span class="tl" id="radarH">WIDEST GAP RIGHT NOW</span>
-      <span class="sub">the same bet, priced by every book — this is the one they disagree on most</span></div>
-    <div class="radar" id="radar"></div>
-  </section>
+<p class="caption">Click · Arrow keys · 1–5<br>to move across the desk</p>
+<nav class="rail" aria-label="Workspace position">
+  <button data-ws="0"><span class="dot"></span><span class="tl">MKT</span></button>
+  <span class="ln"></span>
+  <button data-ws="1"><span class="dot"></span><span class="tl">ANL</span></button>
+  <span class="ln"></span>
+  <button data-ws="2"><span class="dot"></span><span class="tl">RES</span></button>
+  <span class="ln"></span>
+  <button data-ws="3"><span class="dot"></span><span class="tl">ENG</span></button>
+  <span class="ln"></span>
+  <button data-ws="4"><span class="dot"></span><span class="tl">LDG</span></button>
+</nav>
 
-</main>
+<footer class="ft">
+  <b>Entertainment and analysis only. We do not accept, place, or facilitate wagers</b>,
+  and we hold no customer funds. Past performance does not indicate future results — our
+  published backtest shows a loss against the closing market. Nothing here is a
+  recommendation to bet. 21+, where lawful. Problem gambling help:
+  <b>1-800-522-4700</b>, 24/7. ·
+  <a href="/learn">How it works</a> · <a href="/methodology">Methodology</a> ·
+  <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
+  <a href="/disclaimers">Disclaimers</a>
+</footer>
 
-<script src="/assets/desk.js"></script>
-<script src="/assets/crest.js"></script>
 <script>
 (function(){
-var D=window.Desk, SP="mlb", BOARD=null;
-D.mount("market");
+"use strict";
 
-function sideName(a,txt){
-  return String(txt).replace(/side_a/g,a.home).replace(/side_b/g,a.away);
-}
-var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+/* ---- the five workspaces ---- */
+/* Vercel serves clean URLs; the local dev server serves files. */
+var EXT=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?".html":"";
+var WS=[
+  {hash:"market",  label:"MARKET BOARD", src:"/market"+EXT+"?embed=1"},
+  {hash:"ask",     label:"ANALYZER",     src:"/ask"+EXT+"?embed=1"},
+  {hash:"research",label:"RESEARCH",     src:"/research"+EXT+"?embed=1"},
+  {hash:"picks",   label:"PICK ENGINE",  src:"/picks"+EXT+"?embed=1"},
+  {hash:"ledger",  label:"PROOF LEDGER", src:"/trust"+EXT+"?embed=1"},
+];
+var desk=document.getElementById("desk");
+var MOBILE=window.matchMedia("(max-width:859px)");
 
-function boardFor(sp){
-  return ((BOARD&&BOARD.boards)||[]).filter(function(b){return b.sport===sp;})[0]||null;
-}
-function started(ev){return Date.parse(ev.starts)<=Date.now();}
+/* ---- build the monitors ---- */
+desk.innerHTML='<div class="floor"><div class="arc1"></div><div class="arc2"></div></div>'
+ +WS.map(function(w,i){
+  return '<article class="monitor" data-i="'+i+'" role="button" tabindex="0" '
+    +'aria-label="Open '+w.label+'">'
+    +'<div class="bezel"><div class="screen" id="scr-'+i+'">'
+    +'<div class="holding"><span class="tl">'+w.label+'</span><i></i><i style="width:24%"></i></div>'
+    +'</div><div class="glare"></div><span class="led"></span></div>'
+    +'<div class="reflect"></div>'
+    +'</article>';
+}).join("")
+ +'<div class="props">'
+ +'<span class="prop mug"></span>'
+ +'<span class="prop console"><i></i><i></i><i></i><i></i><b></b></span>'
+ +'<span class="prop book"></span>'
+ +'<span class="prop clockbox"><span class="t" id="clock">—</span><span class="z">AM<br>ET</span></span>'
+ +'</div>';
+var MONS=[].slice.call(desk.querySelectorAll(".monitor"));
 
-/* pick the sport with a live board for the default view */
-function defaultSport(){
-  var order=["nfl","mlb","nba","nhl","ufc"];
-  for(var i=0;i<order.length;i++){
-    var b=boardFor(order[i]);
-    if(b&&b.events.some(function(e){return !started(e);})) return order[i];
-  }
-  return (BOARD.boards[0]||{}).sport||"nfl";
-}
-
-/* ---- status strip: only numbers the data actually contains ---- */
-function renderStatus(state){
-  var prices=0,games=0,books=0;
-  (BOARD.boards||[]).forEach(function(b){
-    games+=b.n_events; books=Math.max(books,b.n_books);
-    b.events.forEach(function(e){e.sides.forEach(function(s){
-      prices+=(s.quotes||[]).length;});});
+/* ---- iframe loading tiers ---- */
+var loaded=[];
+function loadFrame(i){
+  if(loaded[i]) return;
+  loaded[i]=true;
+  var scr=document.getElementById("scr-"+i);
+  var f=document.createElement("iframe");
+  f.src=WS[i].src;
+  f.title=WS[i].label;
+  f.addEventListener("load",function(){
+    var h=scr.querySelector(".holding"); if(h) h.remove();
   });
-  var today=new Date().toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"}).toUpperCase();
-  document.getElementById("status").innerHTML=
-    '<span class="tl" style="align-self:center">'+today+'</span>'
-    +'<span class="stat"><span class="v n">'+games+'</span><span class="tl">GAMES ON THE BOARD</span></span>'
-    +'<span class="stat"><span class="v n">'+books+'</span><span class="tl">BOOKS COMPARED</span></span>'
-    +'<span class="live"><span class="pulse '+(state==="live"?"on":state)+'"></span>'
-    +'<span class="tl">'+(state==="dead"?"FEED UNAVAILABLE":state==="stale"?"DELAYED — UPDATED ":"UPDATED ")
-    +'</span><span class="tl" data-ago="'+D.esc(BOARD.generated_at)+'">'
-    +D.ago(BOARD.generated_at)+'</span></span>';
-  if(state==="stale") document.getElementById("notice").innerHTML=
-    '<p class="notice"><b>Delayed data.</b> The board last refreshed '
-    +D.ago(BOARD.generated_at).toLowerCase()+'; prices shown may have moved. '
-    +'The feed rebuilds automatically.</p>';
+  scr.appendChild(f);
 }
-
-/* ---- radar: the widest disagreement among games not yet started ---- */
-function renderRadar(){
-  var pool=[];
-  (BOARD.boards||[]).forEach(function(b){
-    if(SP&&b.sport!==SP) return;
-    b.events.forEach(function(e){ if(!started(e)) pool.push({sp:b.sport,e:e}); });
+loadFrame(0);                                   /* the hero, eager */
+function idleLoads(){
+  [1,3,4,2].forEach(function(i,k){
+    setTimeout(function(){ loadFrame(i); }, 400*(k+1));
   });
-  if(!pool.length){ (BOARD.boards||[]).forEach(function(b){
-    b.events.forEach(function(e){ if(!started(e)) pool.push({sp:b.sport,e:e}); });});}
-  var el=document.getElementById("radar");
-  if(!pool.length){ el.innerHTML='<div class="state"><span class="tl">NO OPEN MARKETS'
-    +'</span>Nothing upcoming is inside the pricing window right now.</div>'; return; }
-  pool.sort(function(a,b){return b.e.max_gain_pts-a.e.max_gain_pts;});
-  var attested=pool.filter(function(p){return (p.e.n_books||0)>=5;});
-  var top=(attested[0]||pool[0]);
-  var sp=top.sp, ev=top.e;
-  /* the interesting side = the one carrying the max gap */
-  var side=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
-  var single=(side.n_books||0)<2;
-  el.innerHTML=
-    '<div class="radar-main">'
-    +'<span class="tl">'+D.esc(SPORT_LABEL[sp]||sp)+' · MONEYLINE · '
-      +D.esc(side.name).toUpperCase()+' SIDE</span>'
-    +'<div class="radar-mu"><span class="tm">'+window.Crest.team(ev.away,{size:15})+'</span>'
-    +'<span class="at">AT</span><span class="tm">'+window.Crest.team(ev.home,{size:15})+'</span>'
-    +'<span class="ko">'+D.esc(D.when(ev.starts))+'</span></div>'
-    +D.spectrum({quotes:side.quotes,fairProb:side.fair_prob,fairPrice:side.fair_price,
-      label:"Sportsbook prices for "+side.name,
-      right:single?"":"BEST "+D.am(side.best_price)+" "+D.bk(side.best_book)})
-    +'</div>'
-    +'<div class="radar-side">'
-    +kv("FAIR PRICE",D.am(side.fair_price),"")
-    +kv("BEST PRICE",D.am(side.best_price)+" · "+D.bk(side.best_book),single?"":"up")
-    +kv("WORST PRICE",D.am(side.worst_price)+" · "+D.bk(side.worst_book),"")
-    +kv("YOU GAIN",single?"—":D.pts(side.gain_pts)+" PTS",single?"dim":"up")
-    +'<a class="an-chip" style="margin-top:14px;text-align:center" href="/game?e='
-      +encodeURIComponent(ev.id)+'&s='+sp+'">SEE THE FULL READ →</a>'
-    +'</div>';
-  function kv(k,v,cls){return '<div class="kv"><span class="k">'+k
-    +'</span><span class="v n '+cls+'">'+v+'</span></div>';}
 }
+/* research's page loads with the others (real chrome in the center panel);
+   its 1.5MB data fetch waits for this wake on first focus */
+var woke=false;
+function wakeResearch(){
+  if(woke) return;
+  var f=document.querySelector("#scr-2 iframe");
+  if(f&&f.contentWindow){ woke=true;
+    f.contentWindow.postMessage({soothWake:1},location.origin); }
+}
+if("requestIdleCallback" in window) requestIdleCallback(idleLoads,{timeout:2500});
+else setTimeout(idleLoads,2500);
+/* research (1.5MB payload) waits for first focus — its shimmer is honest chrome */
 
-/* ---- the market table ---- */
-function renderGames(){
-  var b=boardFor(SP), el=document.getElementById("games");
-  document.getElementById("gmSub").textContent = b
-    ? (SPORT_LABEL[SP]+" · "+b.n_books+" book"+(b.n_books>1?"s":"")+" compared · tap a game for the full analysis")
-    : "";
-  if(!b){ el.innerHTML='<div class="state"><span class="tl">'+D.esc(SPORT_LABEL[SP]||SP)
-    +' — NO OPEN BOARD</span>Out of season or outside the pricing window. '
-    +'The rail shows what is live.</div>'; return; }
-  var evs=b.events.slice().sort(function(a,c){return Date.parse(a.starts)-Date.parse(c.starts);});
-  var rows=evs.map(function(e){
-    var isOn=started(e);
-    var fav=e.sides.slice().sort(function(a,c){return (c.fair_prob||0)-(a.fair_prob||0);})[0];
-    var best=e.sides.slice().sort(function(a,c){return (c.gain_pts||0)-(a.gain_pts||0);})[0];
-    var single=(e.n_books||0)<2;
-    var gapW=Math.min((best.gain_pts||0)/4,1)*100;
-    return '<tr data-href="/game?e='+D.esc(e.id)+'&s='+SP+'" tabindex="0">'
-      +'<td class="l dim">'+(isOn?'<span class="tl" style="color:var(--amber)">CLOSING SNAPSHOT</span>'
-        :D.esc(D.when(e.starts)))+'</td>'
-      +'<td class="l"><span class="mu">'+window.Crest.team(e.away,{size:14})
-        +'<span class="at">AT</span>'+window.Crest.team(e.home,{size:14})+'</span></td>'
-      +'<td>'+D.esc(fav.name.split(" ").pop())+' '+D.am(fav.fair_price)+'</td>'
-      +'<td>'+(single?'<span class="dim">·</span>'
-        :'<span class="up">'+D.am(best.best_price)+'</span><span class="bkk">'
-          +D.bk(best.best_book)+'</span>')+'</td>'
-      +'<td>'+(single?'<span class="dim">—</span>'
-        :'<span class="up">'+D.pts(best.gain_pts)+'</span>'
-        +'<span class="gaptrk"><i style="width:'+gapW.toFixed(0)+'%"></i></span>')+'</td>'
-      +'<td class="dim">'+e.n_books+'</td></tr>';
-  }).join("");
-  el.innerHTML='<div class="scr"><table>'
-    +'<thead><tr><th class="l">TIME</th><th class="l">GAME</th>'
-    +'<th>FAIR PRICE</th><th>BEST PRICE</th><th>YOU GAIN</th><th>BOOKS</th></tr></thead>'
-    +'<tbody>'+rows+'</tbody></table></div>';
-}
-
-document.getElementById("games").addEventListener("click",function(e){
-  var tr=e.target.closest("tr[data-href]"); if(tr) location.href=tr.dataset.href;});
-document.getElementById("games").addEventListener("keydown",function(e){
-  if(e.key!=="Enter")return;
-  var tr=e.target.closest("tr[data-href]"); if(tr) location.href=tr.dataset.href;});
-
-/* ---- the analyzer ---- */
-function mountAnalyzer(){
-  var chips=["What is the sharpest read on tonight's slate?",
-             "Where do the books disagree the most?",
-             "What moved today, and why does it matter?"];
-  /* first chip points at a real game once the board is in */
-  var pool=[];
-  (BOARD.boards||[]).forEach(function(b){b.events.forEach(function(e){
-    if(!started(e)) pool.push(e);});});
-  pool.sort(function(a,b){return b.max_gain_pts-a.max_gain_pts;});
-  if(pool[0]) chips[0]="Analyze "+pool[0].away+" at "+pool[0].home;
-  document.getElementById("anchips").innerHTML=chips.map(function(c){
-    return '<button class="an-chip" data-q="'+D.esc(c)+'">'+D.esc(c)+'</button>';}).join("");
-}
-/* if the question names a game on the board, the readout leads the answer —
-   built from the data, so the visual half can never be wrong */
-function matchGame(q){
-  var ql=q.toLowerCase(), hit=null;
-  (BOARD.boards||[]).forEach(function(b){ b.events.forEach(function(e){
-    if(hit||started(e)) return;
-    var names=[e.home,e.away];
-    var n=names.filter(function(nm){
-      var last=nm.split(" ").pop().toLowerCase();
-      return ql.indexOf(last)>=0;}).length;
-    if(n>=1) hit=e;
-  });});
-  return hit;
-}
-/* everything is free right now — say so plainly. The capped-state code below
-   stays wired so a future paywall needs an API change, not a UI rebuild. */
-document.getElementById("anterms").textContent="FREE \u00b7 NO LIMITS \u00b7 NO SIGNUP";
-function cappedCard(){
-  return '<div class="ans-card" style="max-width:720px">'
-    +'<span class="tl" style="display:block;margin-bottom:8px">TODAY\'S FREE ANALYSES ARE USED</span>'
-    +'<p style="color:var(--ink2);font-size:13px;line-height:1.6;margin:0 0 12px;max-width:56ch">'
-    +'Three free reads a day keeps the analyzer open to everyone. Sooth Pro is '
-    +'unlimited — every analysis, every instrument, $9.99/mo, cancel anytime.</p>'
-    +'<a href="/subscribe" style="display:inline-block;font:700 12px var(--sans);'
-    +'color:var(--g0);background:linear-gradient(180deg,#3BE3B6,#22BE93);'
-    +'padding:10px 16px;border-radius:var(--r);box-shadow:inset 0 1px 0 '
-    +'rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)">GO PRO \u2192</a>'
-    +'<span class="tl" style="margin-left:12px">OR COME BACK TOMORROW</span></div>';
-}
-function runAnalyze(q){
-  var out=document.getElementById("anout");
-  if(!q){out.innerHTML="";return;}
-  /* the readout is data — it renders NOW. The analyst note follows when the
-     model answers, and if the model never does, the numbers still stand. */
-  var ev=matchGame(q);
-  out.innerHTML=(ev?D.eventCard(ev,"THE NUMBERS"):"")
-    +'<div id="annote" style="margin-top:'+(ev?'12px':'0')+'">'
-    +'<span class="tl">ANALYZING THE BOARD…</span></div>';
-  function note(html){document.getElementById("annote").innerHTML=
-    (ev?'<span class="tl" style="display:block;margin-bottom:6px">ANALYST NOTE</span>':"")+html;}
-  fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
-    body:JSON.stringify({question:q})})
-    .then(function(r){return r.json().then(function(j){j._capped=(r.status===429);return j;});})
-    .then(function(j){
-      if(j._capped){document.getElementById("annote").innerHTML=cappedCard();return;}
-      note(D.answer(j.answer||j.error||"No answer."));})
-    .catch(function(){note('<span class="tl">THE ANALYST NOTE IS UNAVAILABLE RIGHT NOW'
-      +(ev?" — THE NUMBERS ABOVE ARE LIVE.":".")+'</span>');});
-}
-document.addEventListener("click",function(e){
-  var c=e.target.closest("#anchips .an-chip");
-  if(c){document.getElementById("anq").value=c.dataset.q; return runAnalyze(c.dataset.q);}
-  if(e.target.id==="ango") runAnalyze(document.getElementById("anq").value.trim());
-});
-document.getElementById("anq").addEventListener("keydown",function(e){
-  if(e.key==="Enter") runAnalyze(e.target.value.trim());});
-
-/* boot */
-D.connecting(document.getElementById("radar"));
-D.connecting(document.getElementById("games"),"PRICE FEED");
-D.load("/data/board.json").then(function(bd){
-  if(!bd.ok){
-    document.getElementById("status").innerHTML=
-      '<span class="live"><span class="pulse dead"></span><span class="tl">FEED UNAVAILABLE</span></span>';
-    ["radar","games"].forEach(function(id){
-      document.getElementById(id).innerHTML=
-        '<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
-        +'The board could not be loaded. It rebuilds automatically — try again shortly.</div>';});
+/* ---- camera: one state, per-monitor inline transforms ---- */
+var focus=-1;
+function apply(){
+  if(MOBILE.matches){
+    if(focus>=0){
+      loadFrame(focus);
+      MONS[focus].scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+    }
+    paintChrome();
     return;
   }
-  BOARD=bd.data;
-  SP=defaultSport();
-  renderStatus(D.feedState(bd,3));
-  function pick(sp){
-    if(sp===SP) return;
-    SP=sp; D.sportRail(BOARD,SP,pick);
-    /* a sport switch is a lens change, not new data: crossfade, no theater */
-    D.swap(document.getElementById("radar"),renderRadar);
-    D.swap(document.getElementById("games"),renderGames);
-  }
-  D.sportRail(BOARD,SP,pick);
-  /* first paint: the connecting shimmer hands off to the board as one unit */
-  D.land(document.getElementById("radar"),renderRadar);
-  D.land(document.getElementById("games"),renderGames);
-  mountAnalyzer();
+  var stageH=desk.clientHeight||700;
+  var fit=Math.min(1,(stageH-20)/764);      /* focused monitor must fit the stage */
+  desk.classList.toggle("desk-focused",focus>=0);
+  MONS.forEach(function(m,i){
+    var d, t, op, z;
+    if(focus<0){
+      /* the reference arc: big panels, tight spacing, receding outward */
+      d=i-2;
+      var ad=Math.abs(d);
+      t="translateX("+(d*285)+"px) translateZ("+(-60-ad*110)+"px) "
+       +"scale(0.30) rotateY("+(d*-7)+"deg)";
+      op=1; z=3-ad;
+    }else{
+      d=i-focus;
+      var ad2=Math.abs(d), sg=d<0?-1:1;
+      if(d===0){ t="translateX(0) translateZ(0) scale("+fit+") rotateY(0deg)"; op=1; z=5; }
+      else if(ad2===1){ t="translateX("+(sg*680)+"px) translateZ(-160px) scale("+(fit*0.5)+") rotateY("+(sg*-16)+"deg)"; op=.55; z=3; }
+      else if(ad2===2){ t="translateX("+(sg*1040)+"px) translateZ(-260px) scale("+(fit*0.42)+") rotateY("+(sg*-20)+"deg)"; op=.2; z=2; }
+      else{ t="translateX("+(sg*1500)+"px) translateZ(-300px) scale(0.4) rotateY(0deg)"; op=0; z=1; }
+    }
+    m.style.transform=t; m.style.opacity=op; m.style.zIndex=z;
+    m.classList.toggle("is-focused", i===focus);
+  });
+  if(focus>=0) loadFrame(focus);
+  if(focus===2) wakeResearch();
+  paintChrome();
+}
+function paintChrome(){
+  [].forEach.call(document.querySelectorAll("[data-ws]"),function(b){
+    b.setAttribute("aria-current", String(+b.dataset.ws===focus));
+  });
+  document.getElementById("prev").hidden=!(focus>0);
+  document.getElementById("next").hidden=!(focus>=0&&focus<4);
+  document.title= focus<0 ? "Sooth — The Desk"
+    : "Sooth — "+WS[focus].label.charAt(0)+WS[focus].label.slice(1).toLowerCase();
+}
+
+/* ---- routing: the hash is the single source of truth ---- */
+function toHash(f){
+  if(f<0) history.pushState("",document.title,location.pathname+location.search);
+  else location.hash=WS[f].hash;
+  if(f<0) route();                 /* pushState fires no hashchange */
+}
+function route(){
+  var h=location.hash.replace("#","");
+  var f=-1;
+  WS.forEach(function(w,i){ if(w.hash===h) f=i; });
+  focus=f; apply();
+}
+addEventListener("hashchange",route);
+addEventListener("popstate",route);
+
+/* ---- inputs ---- */
+desk.addEventListener("click",function(e){
+  var m=e.target.closest(".monitor"); if(!m) return;
+  var i=+m.dataset.i;
+  if(i!==focus) toHash(i);
+});
+desk.addEventListener("keydown",function(e){
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  var m=e.target.closest(".monitor"); if(!m) return;
+  e.preventDefault(); toHash(+m.dataset.i);
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("button[data-ws]");
+  if(b) toHash(+b.dataset.ws);
+  if(e.target.id==="prev"&&focus>0) toHash(focus-1);
+  if(e.target.id==="next"&&focus<4) toHash(focus+1);
+});
+function key(k){
+  if(k==="Escape") toHash(-1);
+  else if(k==="ArrowLeft"&&focus>0) toHash(focus-1);
+  else if(k==="ArrowLeft"&&focus<0) toHash(0);
+  else if(k==="ArrowRight"&&focus>=0&&focus<4) toHash(focus+1);
+  else if(k==="ArrowRight"&&focus<0) toHash(0);
+  else if(/^[1-5]$/.test(k)) toHash(+k-1);
+}
+addEventListener("keydown",function(e){
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  key(e.key);
+});
+/* embedded pages relay their keys up (desk.js embed branch) */
+addEventListener("message",function(e){
+  if(e.origin!==location.origin) return;
+  if(e.data&&e.data.soothDesk) key(e.data.soothDesk);
+});
+
+/* mobile pager: keep the rail honest while swiping */
+var scrollT=null;
+desk.addEventListener("scroll",function(){
+  if(!MOBILE.matches) return;
+  clearTimeout(scrollT);
+  scrollT=setTimeout(function(){
+    var i=Math.round(desk.scrollLeft/desk.clientWidth);
+    i=Math.max(0,Math.min(4,i));
+    if(i!==focus){ focus=i; loadFrame(i); loadFrame(Math.min(4,i+1)); paintChrome();
+      history.replaceState("",document.title,"#"+WS[i].hash); }
+  },120);
+});
+
+/* ---- the real clock (a desk has one; ours tells the truth) ---- */
+function clock(){
+  var el=document.getElementById("clock"); if(!el) return;
+  var t=new Date().toLocaleTimeString("en-US",
+    {hour:"numeric",minute:"2-digit",hour12:true,timeZone:"America/New_York"});
+  el.textContent=t.replace(/\s?[AP]M$/,"");
+  var z=document.querySelector(".clockbox .z");
+  if(z) z.innerHTML=(/PM/.test(t)?"PM":"AM")+"<br>ET";
+}
+clock(); setInterval(clock,30000);
+
+/* ---- first paint: apply state from the URL, THEN enable the glide ---- */
+route();
+if(MOBILE.matches&&focus<0){ focus=0; paintChrome(); loadFrame(1); }
+requestAnimationFrame(function(){
+  requestAnimationFrame(function(){ document.body.classList.add("desk-ready"); });
 });
 })();
 </script>

@@ -118,7 +118,41 @@ function sportRail(board,active,onpick){
     ink.style.transform="translateX("+activeBtn.offsetLeft+"px)";
   }
 }
+var EMBEDDED=/[?&]embed=1/.test(location.search);
+
+/* Navigate keeping the embed contract: inside a monitor, every hop stays
+   chromeless. Use for the JS-driven row navigations. */
+function go(url){
+  if(EMBEDDED && url.indexOf("://")<0 && !/[?&]embed=1/.test(url)){
+    url+= (url.indexOf("?")<0?"?":"&")+"embed=1";
+  }
+  location.href=url;
+}
+
 function mount(page){
+  /* Inside an Infinite Desk monitor (?embed=1) the page is one screen of a
+     larger instrument: no site header, no footer — the desk carries both. */
+  if(EMBEDDED){
+    document.documentElement.classList.add("embedded");
+    /* Bare-path links would re-grow the site chrome after one click: rewrite
+       same-origin navigations to carry the embed flag. */
+    document.addEventListener("click",function(e){
+      var a=e.target.closest("a[href]"); if(!a) return;
+      var href=a.getAttribute("href");
+      if(!href||href.charAt(0)==="#"||href.indexOf("://")>=0) return;
+      if(/[?&]embed=1/.test(href)) return;
+      e.preventDefault(); go(href);
+    });
+    /* Keyboard relay: the desk's spatial keys keep working while a monitor
+       holds focus — except while actually typing. */
+    addEventListener("keydown",function(e){
+      var t=e.target;
+      if(/INPUT|TEXTAREA|SELECT/.test(t.tagName)||t.isContentEditable) return;
+      if(!/^(Escape|ArrowLeft|ArrowRight|[1-5])$/.test(e.key)) return;
+      try{ parent.postMessage({soothDesk:e.key}, location.origin); }catch(err){}
+    });
+    return;
+  }
   document.body.insertAdjacentHTML("afterbegin",header(page));
   document.body.insertAdjacentHTML("beforeend",footer());
 }
@@ -459,9 +493,11 @@ function tick(){
   [].forEach.call(document.querySelectorAll("[data-ago]"),function(el){
     el.textContent=ago(el.getAttribute("data-ago"));});
 }
-setInterval(tick,15000);
+setInterval(function(){
+  if(document.querySelector("[data-ago]")) tick();
+},15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,reduced:reduced,land:land,swap:swap,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();
