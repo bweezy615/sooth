@@ -30,9 +30,22 @@ NOTE = (
 
 
 def _load_slate(data_dir: Path) -> tuple[str, list[dict]]:
-    """Return (slate_id, games) from the latest slate."""
+    """Return (slate_id, games) from the latest slate.
+
+    The opinion lives in the encrypted pro payload; the public file is
+    redacted until first kickoff. Prefer the decrypted payload when the key
+    is available (CI holds it as a secret), else fall back to the public
+    games — whose null opinions the caller now skips instead of pricing.
+    """
     slates = json.loads((data_dir / "slates.json").read_text())
     slate_id: str = slates["latest"]
+    enc = data_dir.resolve().parents[2] / "data/pro" / f"{slate_id}.pro.enc"
+    if enc.exists():
+        try:
+            from . import prosec
+            return slate_id, json.loads(prosec.decrypt(enc.read_text()))["games"]
+        except Exception:
+            pass  # no key here -> public fallback below, honestly thinner
     slate = json.loads((data_dir / f"{slate_id}.json").read_text())
     return slate_id, slate["games"]
 
@@ -67,9 +80,14 @@ def generate(data_dir: Path = DATA) -> dict:
     for sg in slate_games:
         home_abbr = sg.get("home", "")
         away_abbr = sg.get("away", "")
-        ind = sg.get("independent", {})
+        # Redacted public slates carry independent: null by design — the
+        # opinion lives in the encrypted pro payload now. None-safe or we
+        # take the whole capture cron down (2026-08-21, it did).
+        ind = sg.get("independent") or {}
         pick = ind.get("pick") or sg.get("pick")  # fallback for older slates
         our_prob = ind.get("prob") or sg.get("prob")
+        if not pick:
+            continue  # no opinion available to price; skip, never invent
         game_id = sg.get("game_id", "")
         kickoff = sg.get("kickoff", "")
 

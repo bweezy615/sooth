@@ -158,11 +158,26 @@ def _pickengine_payloads(root: Path, payload: dict) -> dict:
         pro_games, key=lambda g: rank_of[g["game_id"]])
     pro_doc["reveal"] = f"/data/{slate_id}.reveal.json"
 
+    # The ledger repo is public (that IS the timestamp anchor), so the Pro
+    # payload lands as AES-256-GCM ciphertext — the committed blob is itself a
+    # timestamped commitment to the Pro slate. A plaintext sidecar carries
+    # ONLY the teaser fields the locked view needs.
+    from .. import prosec
     pro_dir = root / "data/pro"
     pro_dir.mkdir(parents=True, exist_ok=True)
-    body = json.dumps(pro_doc, indent=2)
-    (pro_dir / f"{slate_id}.pro.json").write_text(body)
-    (pro_dir / "latest.pro.json").write_text(body)   # /api/picks reads this
+    body = prosec.encrypt(json.dumps(pro_doc, separators=(",", ":")))
+    (pro_dir / f"{slate_id}.pro.enc").write_text(body)
+    (pro_dir / "latest.pro.enc").write_text(body)    # /api/picks reads this
+    top = pro_doc["games"][0] if pro_doc["games"] else None
+    (pro_dir / "latest.meta.json").write_text(json.dumps({
+        "slate_id": slate_id,
+        "game_count": len(pro_doc["games"]),
+        "sealed_at": payload["committed_at"],
+        "merkle_root": payload["merkle_root"],
+        "earliest_kickoff": payload["earliest_kickoff"],
+        "top_divergence_matchup": (f"{top['away']} at {top['home']}"
+                                   if top else None),
+    }, indent=2))
 
     # Public teaser: every field present, the model's opinion absent.
     redact = now < datetime.fromisoformat(payload["earliest_kickoff"])

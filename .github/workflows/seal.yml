@@ -32,6 +32,8 @@ concurrency:
 jobs:
   seal:
     runs-on: ubuntu-latest
+    env:
+      PRO_PAYLOAD_KEY: ${{ secrets.PRO_PAYLOAD_KEY }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +41,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install --quiet requests pandas numpy scikit-learn
+        run: pip install --quiet requests pandas numpy scikit-learn cryptography
 
       - name: Find the next sealable week
         id: wk

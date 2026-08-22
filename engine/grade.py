@@ -293,17 +293,21 @@ def publish(grade: SlateGrade, site_dir: Path | str = "site/public/data",
     slate_id = grade.slate_id
     names = dict(names or {})
     candidates = ([Path(names_from)] if names_from else []) + [
-        Path("data/pro") / f"{slate_id}.pro.json",
+        Path("data/pro") / f"{slate_id}.pro.enc",
         Path("site/public/data") / f"{slate_id}.json",
     ]
     if not names:
         for c in candidates:
             try:
-                for g in json.loads(c.read_text()).get("games", []):
+                text = c.read_text()
+                if c.suffix == ".enc":
+                    from . import prosec
+                    text = prosec.decrypt(text)
+                for g in json.loads(text).get("games", []):
                     names[str(g["game_id"])] = g
                 break
-            except (OSError, json.JSONDecodeError, KeyError):
-                continue
+            except Exception:
+                continue  # names survive in the public file either way
 
     rows = []
     for g in grade.predictions:

@@ -10,13 +10,35 @@
 //
 // Fails closed: no AUTH_SECRET means nobody is Pro (auth.readPro returns
 // null); a missing pro payload file returns 404 with a plain reason.
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const auth = require("./_auth.js");
 
-const PRO_FILE = path.join(process.cwd(), "data/pro/latest.pro.json");
+const PRO_FILE = path.join(process.cwd(), "data/pro/latest.pro.enc");
+const META_FILE = path.join(process.cwd(), "data/pro/latest.meta.json");
 
-function loadSlate(file) {
+// The ledger repo is public by design, so the pro payload sits in it as
+// AES-256-GCM ciphertext: base64(nonce(12) || ct || tag(16)). The key lives
+// only in this function's env. No key, wrong key, tampered blob -> null,
+// and the caller degrades to the teaser: fail closed, never fail open.
+function decryptSlate(file, keyHex) {
+  try {
+    if (!/^[0-9a-f]{64}$/i.test(keyHex || "")) return null;
+    const raw = Buffer.from(fs.readFileSync(file, "utf8").trim(), "base64");
+    const nonce = raw.subarray(0, 12);
+    const tag = raw.subarray(raw.length - 16);
+    const ct = raw.subarray(12, raw.length - 16);
+    const d = crypto.createDecipheriv(
+      "aes-256-gcm", Buffer.from(keyHex, "hex"), nonce);
+    d.setAuthTag(tag);
+    return JSON.parse(Buffer.concat([d.update(ct), d.final()]).toString("utf8"));
+  } catch (e) {
+    return null;
+  }
+}
+
+function loadMeta(file) {
   try {
     return JSON.parse(fs.readFileSync(file, "utf8"));
   } catch (e) {
@@ -24,24 +46,23 @@ function loadSlate(file) {
   }
 }
 
-function firstKickoff(slate) {
-  // earliest_kickoff is sealed into the commitment; trust the slate file.
-  const t = Date.parse(slate.earliest_kickoff || "");
+function firstKickoff(meta) {
+  // earliest_kickoff is sealed into the commitment; trust the sidecar.
+  const t = Date.parse(meta.earliest_kickoff || "");
   return Number.isNaN(t) ? null : t;
 }
 
-function teaser(slate) {
-  // Divergence order is baked into the pro file at write time (weekly.py
-  // sorts by it), so the top matchup is just the first row — names only.
-  const top = (slate.games && slate.games[0]) || null;
+function teaser(meta) {
+  // Everything here comes from the plaintext sidecar weekly.py writes —
+  // teaser fields only, never an opinion.
   return {
     locked: true,
-    slate_id: slate.slate_id,
-    game_count: (slate.games || []).length,
-    sealed_at: slate.committed_at,
-    merkle_root: slate.merkle_root,
-    unlocks_at: slate.earliest_kickoff,
-    top_divergence_matchup: top ? top.away + " at " + top.home : null,
+    slate_id: meta.slate_id,
+    game_count: meta.game_count,
+    sealed_at: meta.sealed_at,
+    merkle_root: meta.merkle_root,
+    unlocks_at: meta.earliest_kickoff,
+    top_divergence_matchup: meta.top_divergence_matchup || null,
     upgrade: "/subscribe",
     note: "The full slate is sealed and Pro-only until first kickoff, then " +
           "free to everyone. Pro buys timing, not wins - our model's " +
@@ -59,23 +80,36 @@ function respond(res, code, body) {
 function handler(req, res, opts) {
   const o = opts || {};
   const file = o.file || PRO_FILE;
+  const metaFile = o.metaFile || META_FILE;
   const now = o.now || Date.now();
+  const keyHex = "keyHex" in o ? o.keyHex : process.env.PRO_PAYLOAD_KEY;
 
-  const slate = loadSlate(file);
-  if (!slate) {
+  const meta = loadMeta(metaFile);
+  if (!meta) {
     return respond(res, 404, {
       error: "No sealed slate is published yet. Slates seal Wednesdays in season.",
     });
   }
 
-  const kick = firstKickoff(slate);
+  const kick = firstKickoff(meta);
   const open = kick !== null && now >= kick; // time decay: post-kick == public
   if (open || auth.readPro(req)) {
-    return respond(res, 200, Object.assign({ locked: false }, slate));
+    const slate = decryptSlate(file, keyHex);
+    if (slate) {
+      return respond(res, 200, Object.assign({ locked: false }, slate));
+    }
+    // Entitled but undecryptable (missing/rotated key): the teaser plus the
+    // truth beats a 500, and it must never fail open.
+    const t = teaser(meta);
+    t.note = "The full payload is temporarily unavailable - the sealed " +
+             "commitment above still stands. " + t.note;
+    return respond(res, 200, t);
   }
-  return respond(res, 200, teaser(slate));
+  return respond(res, 200, teaser(meta));
 }
 
 module.exports = handler;
 module.exports.teaser = teaser;
 module.exports.PRO_FILE = PRO_FILE;
+module.exports.META_FILE = META_FILE;
+module.exports.decryptSlate = decryptSlate;

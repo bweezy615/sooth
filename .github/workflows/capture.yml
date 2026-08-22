@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install --quiet requests pandas numpy
+        run: pip install --quiet requests pandas numpy cryptography
 
       - name: Capture free ESPN game lines
         run: python -m engine.capture --season 2026 --weeks 3
@@ -47,6 +47,7 @@ jobs:
         run: python -m engine.lines --window-hours 36 --max-credits 40
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          PRO_PAYLOAD_KEY: ${{ secrets.PRO_PAYLOAD_KEY }}
         continue-on-error: true
 
       - name: Generate best lines (zero credits, joins slate + board)

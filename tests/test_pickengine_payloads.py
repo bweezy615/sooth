@@ -1,10 +1,22 @@
 """The payload split is the paywall's foundation: the public file must never
 contain a pick before first kickoff, and the pro file must always be complete."""
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 from engine.pipeline.weekly import _pickengine_payloads
+from engine import prosec
+
+# the pro payload ships encrypted; tests hold their own throwaway key
+os.environ.setdefault("PRO_PAYLOAD_KEY", "11" * 32)
+
+
+def _read_pro(tmp_path, name):
+    return json.loads(prosec.decrypt(
+        (tmp_path / "data/pro" / name).read_text()))
 
 
 def _payload(kickoff):
@@ -43,11 +55,11 @@ def test_redacts_before_kickoff(tmp_path):
     by_id = {g["game_id"]: g for g in pub["games"]}
     assert by_id["g2"]["divergence_rank"] == 1
 
-    pro = json.loads((tmp_path / "data/pro/2099-W01-nfl.pro.json").read_text())
+    pro = _read_pro(tmp_path, "2099-W01-nfl.pro.enc")
     assert pro["games"][0]["game_id"] == "g2"          # sorted by divergence
     assert pro["games"][0]["divergence"] == 0.21
     assert pro["games"][0]["independent"]["pick"] == "NO"
-    latest = json.loads((tmp_path / "data/pro/latest.pro.json").read_text())
+    latest = _read_pro(tmp_path, "latest.pro.enc")
     assert latest["slate_id"] == "2099-W01-nfl"
 
 
@@ -61,6 +73,17 @@ def test_open_after_kickoff(tmp_path):
 def test_no_best_lines_is_honest_nulls(tmp_path):
     kick = datetime.now(timezone.utc) + timedelta(days=2)
     _pickengine_payloads(tmp_path, _payload(kick))
-    pro = json.loads((tmp_path / "data/pro/latest.pro.json").read_text())
+    pro = _read_pro(tmp_path, "latest.pro.enc")
     assert pro["games"][0]["best_price"] is None
     assert pro["games"][0]["best_book"] is None
+
+
+def test_ciphertext_never_leaks_a_pick(tmp_path):
+    """The repo is public; the committed blob must be opaque."""
+    kick = datetime.now(timezone.utc) + timedelta(days=2)
+    _pickengine_payloads(tmp_path, _payload(kick))
+    blob = (tmp_path / "data/pro/latest.pro.enc").read_text()
+    assert "SEA" not in blob and "pick" not in blob
+    meta = json.loads((tmp_path / "data/pro/latest.meta.json").read_text())
+    assert meta["game_count"] == 2
+    assert "prob" not in json.dumps(meta)
