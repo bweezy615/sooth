@@ -15,7 +15,10 @@ name: capture-props
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    # Trimmed 30min->2h on 2026-08-22: the props endpoints are the quota's
+    # heaviest eater and the 20K month was running dry before Week 1. Restore
+    # */30 after the Sept billing reset if the burn rate allows.
+    - cron: "20 */2 * * *"
   workflow_dispatch:
 
 permissions:

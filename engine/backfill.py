@@ -165,7 +165,7 @@ def _rows_from_snapshot(payload: dict, snapshot: datetime, season: int,
 
 
 def backfill(seasons: list[int], max_calls: int, out_dir: Path | str,
-             dry_run: bool = False) -> dict:
+             dry_run: bool = False, reserve: int = 1500) -> dict:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     done_path = out / "_completed_snapshots.json"
@@ -207,6 +207,16 @@ def backfill(seasons: list[int], max_calls: int, out_dir: Path | str,
         stats["credits"] += CREDITS_PER_CALL
         remaining_header = resp.headers.get("x-requests-remaining", remaining_header)
 
+        # The live capture pipeline shares this quota. Historical pulls are a
+        # luxury; the board is the product — never spend the capture's lunch.
+        try:
+            if reserve and remaining_header is not None                     and float(remaining_header) <= reserve:
+                stats["stopped"] = (f"quota reserve reached "
+                                    f"({remaining_header} <= {reserve})")
+                break
+        except ValueError:
+            pass
+
         if resp.status_code != 200:
             stats.setdefault("errors", []).append(
                 f"{snap.isoformat()} HTTP {resp.status_code}")
@@ -235,6 +245,10 @@ def main() -> None:
     ap.add_argument("--max-calls", type=int, default=420)
     ap.add_argument("--out", default="data/backfill")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--reserve", type=int, default=1500,
+                    help="halt when the account's remaining credits drop to "
+                         "this floor (0 disables) - the live capture eats "
+                         "from the same plate")
     args = ap.parse_args()
 
     if "-" in args.seasons:
@@ -243,7 +257,8 @@ def main() -> None:
     else:
         seasons = [int(s) for s in args.seasons.split(",")]
 
-    stats = backfill(seasons, args.max_calls, args.out, args.dry_run)
+    stats = backfill(seasons, args.max_calls, args.out, args.dry_run,
+                     args.reserve)
     for k, v in stats.items():
         print(f"{k:28}: {v}")
 
