@@ -1,7 +1,10 @@
 /* Sooth service worker — network-first everywhere.
    A price board must never show stale numbers silently, so the network always
    wins; the cache only answers when the network can't (offline shell). */
-const CACHE = 'sooth-v3';
+// v4: new type + palette, stacked mobile tables, phone home. A returning
+// visitor holds the old shell until this string changes — bump it with any
+// change to desk.css / desk.js or they keep the previous design.
+const CACHE = 'sooth-v4';
 const SHELL = ['/', '/props', '/edges', '/research', '/trust',
                '/tools', '/engine', '/gamelog', '/ledger', '/methodology'];
 

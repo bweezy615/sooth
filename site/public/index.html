@@ -16,7 +16,7 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      THE INFINITE DESK — matched to the reference frame:
@@ -28,8 +28,8 @@
     --bg:#070A0D; --hw1:#0E1318; --hw2:#131A20; --hw3:#1A2229;
     --screen:#0A1015; --hair:rgba(190,205,215,.12);
     --ink:#E8EDF0; --mut:#7F8C94; --dim:#55616A;
-    --accent:#6EE7D2; --loss:#D96868;
-    --sans:'Inter',-apple-system,sans-serif; --mono:'JetBrains Mono',monospace;
+    --accent:#EDE9E0; --loss:#E0645F;
+    --sans:'Archivo',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace;
     --glide:560ms cubic-bezier(.22,.8,.32,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -205,8 +205,81 @@
   .ft a{color:var(--dim);text-decoration:none}
 
   /* ---- mobile pager ---- */
+  /* ---- the phone home ----------------------------------------------------
+     Not a shrunk desk. A vertical page whose first screen answers "what is
+     this and what are today's numbers", with four tiles that are the four
+     things anyone actually comes here for. No iframes, no sideways anything. */
+  /* This file carries its own palette for the desk hardware (--hw1, --screen,
+     --accent) and does NOT load desk.css. The phone home is a normal product
+     surface, so it maps that palette onto the names the rest of the site uses
+     rather than inventing a third set of colours. */
+  #mob{
+    --g1:var(--hw1); --g2:var(--hw2); --hair2:rgba(190,205,215,.2);
+    --brand:var(--accent); --ink2:#B9C2C8; --up:#34D399;
+    --t-hover:120ms; --r:0px;
+    display:none}
+  #mob[hidden]{display:none}
+  #mob .state{padding:26px 14px;text-align:center;color:var(--mut);font-size:12.5px;
+    border:1px solid var(--hair);background:var(--g1)}
+  #mob .state .tl{display:block;margin-bottom:7px;color:var(--dim)}
+  #mob a{text-decoration:none;color:inherit}
+  .m-top{display:flex;align-items:center;gap:9px;padding:18px 16px 0}
+  .m-mark{width:9px;height:9px;background:var(--brand);flex:0 0 auto}
+  .m-top b{font:700 16px/1 var(--sans);letter-spacing:.16em;color:var(--ink)}
+  .m-sub{font:500 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--dim);margin-left:auto;white-space:nowrap}
+  .m-lede{margin:13px 16px 0;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+  .m-lede b{color:var(--ink);font-family:var(--mono)}
+
+  .m-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 16px 0}
+  .m-tile{display:flex;flex-direction:column;padding:12px 12px 13px;
+    background:var(--g1);border:1px solid var(--hair);
+    transition:border-color var(--t-hover) ease,background var(--t-hover) ease}
+  .m-tile:active{background:var(--g2);border-color:var(--hair2)}
+  .m-t{font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--mut)}
+  /* The number leads. It is the only thing on a tile worth reading at arm's
+     length, and it used to be absolutely positioned into the description. */
+  .m-n{font:700 22px/1 var(--mono);color:var(--ink);letter-spacing:-.02em;
+    margin:9px 0 5px}
+  .m-tile:nth-child(1) .m-n,.m-tile:nth-child(2) .m-n{color:var(--brand)}
+  .m-d{font-size:11px;line-height:1.4;color:var(--dim);margin-top:auto}
+
+  .m-sec{margin:22px 0 0;padding:0 16px}
+  .m-h{display:flex;align-items:baseline;justify-content:space-between;
+    padding-bottom:9px;border-bottom:1px solid var(--hair2);margin-bottom:10px}
+  .m-h a{color:var(--mut)}
+
+  /* One game, one card. Both sides are always visible — the whole point is
+     comparing them, and a card that hides a side to save height is the same
+     mistake as the sideways table it replaced. */
+  .m-g{display:block;border:1px solid var(--hair);background:var(--g1);
+    padding:11px 12px;margin-bottom:8px}
+  .m-gh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid var(--hair)}
+  .m-gt{font:500 9.5px var(--mono);letter-spacing:.08em;color:var(--dim);
+    white-space:nowrap}
+  .m-gs{font:600 9.5px var(--mono);letter-spacing:.1em;color:var(--mut)}
+  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:10px;
+    align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)}
+  .m-side:last-child{border-bottom:0}
+  .m-nm{font:600 13px var(--sans);color:var(--ink);line-height:1.3}
+  .m-bk{display:block;font:500 9.5px var(--mono);color:var(--dim);
+    letter-spacing:.06em;margin-top:2px}
+  .m-px{font:700 15px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
+  .m-fair{font:500 10px var(--mono);color:var(--mut);text-align:right;min-width:8ch}
+  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:9px;
+    letter-spacing:.08em}
+  .m-gain{color:var(--up)}
+  .m-fine{margin:24px 16px 26px;font-size:11px;line-height:1.65;color:var(--dim)}
+  .m-fine a{color:var(--mut)}
+  .m-fine b{color:var(--mut)}
+
   @media (max-width:859px){
     body{overflow:auto}
+    /* the desk and all its furniture stand down; the phone home takes over */
+    #mob{display:block}
+    .brand-row,.strap,.ws-labels,#stagewrap,.caption,.rail{display:none}
+    body>footer.ft{display:none}
     .brand-row{padding:14px 16px 0;gap:12px}
     .brand-row .no{font-size:14px} h1{font-size:14px;letter-spacing:.24em}
     .kicker{display:none} .strap{padding:6px 16px 0}
@@ -231,6 +304,56 @@
 </style>
 </head>
 <body>
+
+<!-- The phone home. Rendered instead of the desk below 860px — see the
+     #mob block in the stylesheet and the MOBILE branch in the boot script.
+     The desk is a five-monitor spatial metaphor navigated sideways; on a
+     phone that became a horizontal pager of iframes, each holding a table
+     that itself scrolled sideways. Two axes of hidden content on the one
+     device where people actually check a price. This replaces it with the
+     shortest route to each answer, stacked vertically. -->
+<div id="mob" hidden>
+  <header class="m-top">
+    <span class="m-mark"></span>
+    <b>SOOTH</b>
+    <span class="m-sub">Research · never picks</span>
+  </header>
+  <p class="m-lede">Best price across <b id="mBooks">11</b> books, our fair price beside it,
+    and a weekly slate sealed before kickoff — graded in public after, losses included.
+    Free, no account.</p>
+
+  <nav class="m-tiles" aria-label="Sections">
+    <a href="/market" class="m-tile">
+      <span class="m-t">TODAY'S BOARD</span>
+      <span class="m-n" id="mGames">—</span>
+      <span class="m-d">Every game we price, best number per side</span></a>
+    <a href="/picks" class="m-tile">
+      <span class="m-t">PICK ENGINE</span>
+      <span class="m-n" id="mPickN">—</span>
+      <span class="m-d" id="mPickD">The sealed slate</span></a>
+    <a href="/trust" class="m-tile">
+      <span class="m-t">PROOF LEDGER</span>
+      <span class="m-n">49.5%</span>
+      <span class="m-d">Our record, including where we lose</span></a>
+    <a href="/ask" class="m-tile">
+      <span class="m-t">ASK THE ANALYST</span>
+      <span class="m-n">ASK</span>
+      <span class="m-d">Answers only from the board's own numbers</span></a>
+  </nav>
+
+  <section class="m-sec" aria-labelledby="mBoardH">
+    <div class="m-h"><span class="tl" id="mBoardH">NEXT UP</span>
+      <a class="tl" href="/market">FULL BOARD &rarr;</a></div>
+    <div id="mBoard"><div class="state"><span class="tl">LOADING THE BOARD…</span></div></div>
+  </section>
+
+  <p class="m-fine">Prices move — check the book before you bet. Entertainment and analysis
+    only; we do not accept wagers or hold funds. 21+ where lawful. Problem gambling:
+    <b>1-800-522-4700</b>.
+    <a href="/alerts">Alerts</a> · <a href="/learn">How it works</a> ·
+    <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
+    <a href="/disclaimers">Disclaimers</a></p>
+</div>
 
 <div class="brand-row">
   <span class="no">SOOTH.</span>
@@ -295,6 +418,99 @@ var WS=[
 ];
 var desk=document.getElementById("desk");
 var MOBILE=window.matchMedia("(max-width:859px)");
+
+/* ---- phone home ----
+   Take this branch and stop. Building the desk anyway would load five
+   same-origin iframes — the whole site, five times — on the connection least
+   able to afford it, to render something the stylesheet then hides. */
+if(MOBILE.matches){
+  document.getElementById("mob").hidden=false;
+  buildMobile();
+  /* A rotation into landscape on a tablet crosses the breakpoint. Reload
+     rather than try to hand off state between two different page models. */
+  MOBILE.addEventListener?MOBILE.addEventListener("change",function(){location.reload();})
+    :MOBILE.addListener(function(){location.reload();});
+  return;
+}
+
+/* ---- the phone home, rendered from the same JSON the board page reads ----
+   Native DOM, not an iframe: the board is 79KB of JSON we already publish, and
+   rendering the next few games directly is cheaper and far more legible than
+   framing a page built for a 1280px screen. */
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
+/* NOT named clock(): the desk's own clock() is declared later in this same
+   scope and hoisting silently overwrote this one, which is why every card
+   header rendered with an empty kickoff time. */
+function kickTime(iso){
+  var t=Date.parse(iso); if(isNaN(t)) return "";
+  return new Date(t).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"});
+}
+function gameCard(ev,sport){
+  var sides=(ev.sides||[]).slice(0,2).map(function(s){
+    /* gain_pts is the reason to shop: how many points of implied probability
+       the best number adds over the worst. Shown only when it is real. */
+    var gain=(s.gain_pts!=null&&s.gain_pts>=0.5)
+      ? '<i class="m-gain">+'+s.gain_pts.toFixed(1)+' PTS</i>' : '<i>FAIR</i>';
+    return '<div class="m-side">'
+      +'<span class="m-nm">'+esc(s.name)
+        +'<span class="m-bk">BEST AT '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
+      +'<span class="m-px">'+am(s.best_price)+'</span>'
+      +'<span class="m-fair">FAIR '+am(s.fair_price)+gain+'</span>'
+      +'</div>';
+  }).join("");
+  return '<a class="m-g" href="/market" aria-label="'+esc(ev.away+" at "+ev.home)+'">'
+    +'<div class="m-gh"><span class="m-gs">'+esc(String(sport).toUpperCase())
+      +' &middot; '+esc(ev.n_books||0)+' BOOKS</span>'
+    +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
+    +sides+'</a>';
+}
+function buildMobile(){
+  /* The sealed-slate tile answers "is there a slate, and when does it open"
+     before the reader has to tap anything. */
+  fetch("/api/picks",{cache:"no-store"}).then(function(r){return r.json();})
+    .then(function(s){
+      if(!s||s.error) return;
+      var n=document.getElementById("mPickN"), d=document.getElementById("mPickD");
+      n.textContent=(s.game_count!=null?s.game_count:"—");
+      if(s.locked&&s.unlocks_at){
+        var ms=Date.parse(s.unlocks_at)-Date.now();
+        var days=Math.max(0,Math.round(ms/86400000));
+        d.textContent="Sealed — opens in "+days+(days===1?" day":" days");
+      }else if(!s.locked){ d.textContent="Open — every game, no selection rule"; }
+    }).catch(function(){});
+
+  fetch("/data/board.json",{cache:"no-store"}).then(function(r){return r.json();})
+    .then(function(b){
+      var rows=[];
+      (b.boards||[]).forEach(function(bd){
+        (bd.events||[]).forEach(function(e){ rows.push({e:e,sport:bd.sport}); });
+      });
+      var total=rows.length;
+      document.getElementById("mGames").textContent=total||"—";
+      var books=(b.boards&&b.boards[0]&&b.boards[0].n_books)||11;
+      document.getElementById("mBooks").textContent=books;
+      /* soonest first, and only games that have not started */
+      var now=Date.now();
+      rows=rows.filter(function(r){var t=Date.parse(r.e.starts);return !isNaN(t)&&t>now;})
+               .sort(function(a,b2){return Date.parse(a.e.starts)-Date.parse(b2.e.starts);});
+      var el=document.getElementById("mBoard");
+      if(!rows.length){
+        el.innerHTML='<div class="state"><span class="tl">NOTHING PRICED RIGHT NOW</span>'
+          +'Every game on the board has already started. The full board keeps the '
+          +'history.</div>';
+        return;
+      }
+      el.innerHTML=rows.slice(0,6).map(function(r){return gameCard(r.e,r.sport);}).join("");
+    })
+    .catch(function(){
+      document.getElementById("mBoard").innerHTML=
+        '<div class="state"><span class="tl">BOARD UNAVAILABLE</span>'
+        +'We could not load prices just now. Nothing is being hidden — try again '
+        +'in a moment.</div>';
+    });
+}
 
 /* ---- build the monitors ---- */
 desk.innerHTML='<div class="floor"><div class="arc1"></div><div class="arc2"></div></div>'

@@ -138,7 +138,61 @@ function go(url){
   location.href=url;
 }
 
+/* ---------- responsive tables ----------
+   Copy each column's header onto its cells as data-l, so the phone stylesheet
+   can turn a row into a labelled card (see the max-width:720px block in
+   desk.css). Doing it here rather than in every renderer means a table added
+   later is responsive without anyone remembering to make it so.
+
+   The FIRST cell of a row is left unlabelled on purpose and becomes the
+   card's title line. In every one of these tables column one is the row's
+   identity — the matchup, the game, the pick — and labelling it "MATCHUP"
+   would demote the one thing that tells you which card you are reading.
+   Cells spanning columns are skipped for the same reason: a colspan cell is
+   structural, not a field.
+
+   An observer rather than a one-shot call because most of these tables are
+   written by fetch callbacks long after DOMContentLoaded, and several rerender
+   on a sport switch. Labelling is idempotent and skipped once done. */
+function labelCells(scope){
+  var tables=(scope||document).querySelectorAll?
+    (scope||document).querySelectorAll("table"):[];
+  [].forEach.call(tables,function(t){
+    var heads=t.querySelectorAll("thead th");
+    if(!heads.length) return;
+    var labels=[].map.call(heads,function(h){return h.textContent.trim();});
+    [].forEach.call(t.querySelectorAll("tbody tr"),function(tr){
+      if(tr.dataset.stacked) return;
+      tr.dataset.stacked="1";
+      var i=0;
+      [].forEach.call(tr.children,function(td,idx){
+        var span=td.colSpan||1;
+        if(idx>0 && span===1 && labels[i]) td.setAttribute("data-l",labels[i]);
+        i+=span;
+      });
+    });
+  });
+}
+var stackQueued=false;
+function stack(){
+  if(stackQueued) return;
+  stackQueued=true;
+  /* setTimeout, not requestAnimationFrame: rAF does not run in a backgrounded
+     tab, so a table rendered by a fetch callback while the tab is hidden would
+     stay unlabelled until the user came back — and on a phone, "came back"
+     is exactly when they look at it. */
+  setTimeout(function(){ stackQueued=false; labelCells(document); },0);
+}
+function watchTables(){
+  stack();
+  if(!window.MutationObserver) return;
+  new MutationObserver(stack).observe(document.body,{childList:true,subtree:true});
+}
+
 function mount(page){
+  /* Before anything else, and in embedded mode too: a monitor on a phone has
+     the same 760px table problem the standalone page does. */
+  watchTables();
   /* Inside an Infinite Desk monitor (?embed=1) the page is one screen of a
      larger instrument: no site header, no footer — the desk carries both. */
   if(EMBEDDED){
@@ -401,9 +455,9 @@ function timeline(mkt,opts){
     }
   });
   if(cons.length>1){
-    out+='<path d="'+path(cons)+'" fill="none" stroke="#2DD4A7" stroke-width="1.6"/>'
+    out+='<path d="'+path(cons)+'" fill="none" stroke="#8C877E" stroke-width="1.6"/>'
       +'<text x="'+(X(cons[cons.length-1][0])+4)+'" y="'
-      +(Y(cons[cons.length-1][1])-6)+'" class="fair-lb" fill="#2DD4A7">CONS</text>';
+      +(Y(cons[cons.length-1][1])-6)+'" class="fair-lb" fill="#8C877E">CONS</text>';
   }
   /* detected moves pinned where they happened */
   (opts.marks||[]).forEach(function(m){
@@ -563,6 +617,6 @@ setInterval(function(){
 },15000);
 
 window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
-  bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
+  bk:bk,mount:mount,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

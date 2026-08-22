@@ -5,32 +5,57 @@
    information or it is not used. Numbers are the typography.
    ============================================================ */
 
+/* THE COLOUR RULE — read this before adding a colour.
+   ---------------------------------------------------
+   Colour on this site is reserved for numbers that mean something: green for
+   a favourable price, red for an adverse one, amber for caution or staleness.
+   Nothing else is coloured — not the logo, not the active nav item, not the
+   buttons. Emphasis is carried by weight, size and a warm bone ink instead.
+
+   This replaced a mint-green brand accent on near-black. Two problems with
+   it, one cosmetic and one substantive. Cosmetic: near-black plus a single
+   mint-green pop, set in Inter, is the most over-produced look on the web
+   right now — it reads as generated rather than designed, which is a bad
+   thing to look like when the entire product claim is that a person actually
+   did the work. Substantive: the mint sat a few degrees from --up, so the
+   brand colour and "this price is good for you" were nearly the same signal
+   on a page full of prices. Emphasis was competing with meaning.
+
+   Warmed the neutrals a step at the same time. A cool blue-grey ramp is the
+   default of every dashboard template; ink and paper is closer to what a
+   ledger actually is.
+   ============================================================ */
+
 :root{
-  /* ground — graphite, one step warmer than pure black */
-  --g0:#0A0B0D;          /* page */
-  --g1:#0E1013;          /* working surface */
-  --g2:#14161A;          /* raised surface / hover */
-  --g3:#1B1E24;          /* inputs, selected */
-  --hair:rgba(255,255,255,.07);
-  --hair2:rgba(255,255,255,.13);
+  /* ground — warm graphite, one step off pure black */
+  --g0:#0B0B0C;          /* page */
+  --g1:#101012;          /* working surface */
+  --g2:#17171A;          /* raised surface / hover */
+  --g3:#1E1E22;          /* inputs, selected */
+  --hair:rgba(233,228,216,.075);
+  --hair2:rgba(233,228,216,.14);
 
-  /* ink */
-  --ink:#E8EAED;         /* primary */
-  --ink2:#B4BAC4;        /* secondary */
-  --mut:#8A919D;         /* labels */
-  --dim:#5A6170;         /* faint metadata */
+  /* ink — bone, not blue-white */
+  --ink:#EDE9E0;         /* primary */
+  --ink2:#B9B3A8;        /* secondary */
+  --mut:#8C877E;         /* labels */
+  --dim:#5C5852;         /* faint metadata */
 
-  /* information color — never decoration */
-  --brand:#2DD4A7;       /* sooth identity + interactive accent, sparingly */
-  --up:#34D399;          /* objectively favorable price/state */
-  --dn:#F0716C;          /* objectively negative / adverse movement */
-  --amber:#E8B04B;       /* divergence, staleness, caution */
-  --up-dim:rgba(52,211,153,.10);
-  --dn-dim:rgba(240,113,108,.10);
-  --amber-dim:rgba(232,176,75,.10);
+  /* information color — never decoration. See THE COLOUR RULE above. */
+  --brand:#EDE9E0;       /* emphasis, not a hue: active nav, focus, buttons */
+  --up:#3FB980;          /* objectively favorable price/state */
+  --dn:#E0645F;          /* objectively negative / adverse movement */
+  --amber:#D99B36;       /* divergence, staleness, caution */
+  --up-dim:rgba(63,185,128,.10);
+  --dn-dim:rgba(224,100,95,.10);
+  --amber-dim:rgba(217,155,54,.10);
 
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  /* Archivo over Inter and IBM Plex Mono over JetBrains Mono: both carry more
+     of a voice at the small sizes this interface lives at, and neither is the
+     default anyone reaches for first. The mono is doing most of the work here
+     — it sets nearly every number on the site. */
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
 
   --r:3px;               /* radius is an accent, not a personality */
   --wrap:1360px;
@@ -63,13 +88,13 @@ html{-webkit-text-size-adjust:100%}
 body{color:var(--ink);font:14px/1.5 var(--sans);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   background:
-    radial-gradient(1100px 480px at 50% -180px, rgba(45,212,167,.05), transparent 70%),
+    radial-gradient(1100px 480px at 50% -180px, rgba(233,228,216,.035), transparent 70%),
     radial-gradient(900px 600px at 85% 8%, rgba(255,255,255,.015), transparent 60%),
     var(--g0)}
 a{color:inherit;text-decoration:none}
 a:hover{color:var(--ink)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-::selection{background:rgba(45,212,167,.25)}
+::selection{background:rgba(233,228,216,.22)}
 
 /* every number in the product sits on tabular figures */
 .n,td,th{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
@@ -91,7 +116,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media (max-width:720px){.wrap{padding:0 14px}}
 
 /* ============ app shell ============ */
-.hd{border-bottom:1px solid var(--hair);background:rgba(10,11,13,.85);
+.hd{border-bottom:1px solid var(--hair);background:rgba(11,11,12,.86);
   position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);
   animation:hd-in var(--t-view) var(--e-out)}
 @keyframes hd-in{from{opacity:0}}
@@ -186,7 +211,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* raised keys — controls you can press read as physically raised */
 .hd-cta,.an-in button{
-  background:linear-gradient(180deg,#3BE3B6,#22BE93);
+  background:linear-gradient(180deg,#F3EFE6,#DCD6C9);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
              inset 0 -1px 0 rgba(0,0,0,.25),
              0 3px 8px -2px rgba(0,0,0,.6)}
@@ -292,6 +317,67 @@ a.mv-row:hover{background:var(--g2)}
   border-radius:2px;vertical-align:2px;margin-left:8px;position:relative}
 .gaptrk i{position:absolute;left:0;top:0;height:3px;border-radius:2px;
   background:var(--up);display:block}
+
+/* ---- the same table, on a phone ------------------------------------------
+   A seven-column instrument table has a 760px floor. In a 375px viewport that
+   is a horizontal scroller holding 415px of hidden content — and what is
+   hidden is every number on the page. The matchup column stays visible and
+   the entire product goes off-screen to the right.
+
+   So below 720px the table stops being a table. Each row becomes a card and
+   each cell becomes a labelled line, with the column header supplied as
+   `data-l` by Desk.stack(). Nothing is truncated, nothing scrolls sideways,
+   and the reading order is the same one the markup already had. */
+@media (max-width:720px){
+  .itab{border-radius:0;border-left:0;border-right:0;background:none}
+  .itab .scr{overflow-x:visible}
+  .itab table{min-width:0;width:100%;display:block}
+  .itab thead{display:none}
+  .itab tbody,.itab tbody tr,.itab tbody td{display:block;width:auto}
+  .itab tbody tr{border:1px solid var(--hair);background:var(--g1);
+    padding:11px 13px 3px;margin:0 0 8px}
+  .itab tbody tr:last-child{margin-bottom:0}
+  .itab tbody td{padding:6px 0;text-align:right;white-space:normal;
+    border-bottom:1px solid var(--hair);
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .itab tbody tr td:last-child{border-bottom:0}
+  .itab tbody td::before{content:attr(data-l);flex:0 0 auto;text-align:left;
+    font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--dim)}
+  /* An unlabelled cell — always the first, sometimes a colspan — is a
+     full-width title line for the card, so the row keeps its identity. */
+  .itab tbody td:not([data-l])::before{content:none}
+  .itab tbody td:not([data-l]){display:block;text-align:left;padding-bottom:9px}
+  .itab tbody tr:hover td{background:none}
+  /* the price spectrum is a fixed-width instrument; let it size down instead
+     of forcing the card wider than the screen */
+  .itab .spec,.itab svg{max-width:100%}
+  .itab .mu{font-size:14px}
+}
+
+/* ============ lede + progressive disclosure ============
+   Several pages opened with 1,500–1,800 characters of dense argument before
+   the first number. On a desktop that reads as rigour; on a phone it is four
+   full screens of scrolling to reach the thing the visitor came for. The lede
+   carries the position and the disqualifying figure — the two sentences that
+   must never be buried — and the rest moves behind a disclosure the reader
+   opens on purpose. Nothing is deleted; the order is fixed. */
+.lede{color:var(--ink2);font-size:14px;line-height:1.65;margin:12px 0 0;max-width:70ch}
+.lede b{color:var(--ink)}
+.lede a{color:var(--brand);text-decoration:none;white-space:nowrap}
+.lede a:hover{text-decoration:underline;text-underline-offset:2px}
+details.more{margin:14px 0 0;max-width:86ch}
+details.more>summary{display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font:600 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mut);padding:7px 0;list-style:none;
+  transition:color var(--t-hover) ease}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";font-size:13px;line-height:1;
+  color:var(--dim);width:11px;text-align:center}
+details.more[open]>summary::before{content:"\2212"}
+details.more>summary:hover{color:var(--ink2)}
+details.more>summary:hover::before{color:var(--brand)}
+details.more>*+*{margin-top:10px}
 
 /* ============ states ============ */
 .state{padding:34px 22px;text-align:center;color:var(--mut);font-size:13px}
@@ -448,7 +534,7 @@ tr.locked .lock{color:var(--dim);font-size:10px}
 .clv.pos{color:var(--up);border-color:rgba(52,211,153,.35);background:var(--up-dim)}
 .clv.neg{color:var(--dn);border-color:rgba(240,113,108,.35);background:var(--dn-dim)}
 .clv.na{color:var(--dim)}
-.noplay{border-left:2px solid var(--brand);background:rgba(45,212,167,.06);
+.noplay{border-left:2px solid var(--brand);background:rgba(233,228,216,.045);
   padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:13px;
   color:var(--ink2);margin:0 0 16px;max-width:80ch;line-height:1.6}
 

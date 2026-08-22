@@ -14,7 +14,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
@@ -38,8 +38,13 @@
   .dtin{padding:16px 18px 18px}
   .dtin .kv .k{font:500 11px var(--mono);letter-spacing:.06em;color:var(--mut)}
   .dt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  /* Marks the one column that is actually withheld. Deliberately quiet — it
+     is a state, not a promotion, and it sits on every row. */
+  .sealed{display:inline-block;font:600 9.5px var(--mono);letter-spacing:.14em;
+    color:var(--amber);background:var(--amber-dim);
+    border:1px solid rgba(232,176,75,.28);padding:3px 7px}
   .lockcta{display:inline-block;font:700 12px var(--sans);color:var(--g0);
-    background:linear-gradient(180deg,#3BE3B6,#22BE93);padding:11px 18px;
+    background:linear-gradient(180deg,#F3EFE6,#DCD6C9);padding:11px 18px;
     border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
     0 3px 8px -2px rgba(0,0,0,.6)}
   .gradedh{margin-top:8px}
@@ -66,28 +71,32 @@
   <div class="ph">
     <span class="tl">SOOTH PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC · NEVER SOLD AS WINNING</span>
     <h1>Every game on the slate. No selection rule.</h1>
-    <p class="creed">Every honest record in this market is a <b>selected subset</b> — filtered
-      by star tier, by an edge threshold, or by a betting card that plays a third of the
-      games. Ours is not: <b>the whole slate is committed, unfiltered</b>, under a Merkle
-      root anchored to a public GitHub commit — timestamped by someone other than us, and
-      verifiable at <a href="/verify">/verify</a>. That is what makes the next sentence
-      credible instead of embarrassing. Our model measurably <b>loses to the closing
-      market</b>: 49.5% against the spread on 2,608 decided walk-forward games (2,671
-      graded, 63 pushes), below the 52.38% break-even, and worse still — 48.7% — on the
-      smaller sample with real consensus closing lines. Every population is broken out at
-      <a href="/record">/record</a>. We do not claim an edge and you should not bet these
-      picks expecting profit. What this is: a transparent research instrument. Every week,
-      before the first kickoff, we seal our full slate — every game, both models, no
-      cherry-picking — under a Merkle commitment anchored to a public GitHub timestamp you
-      can verify at <a href="/verify">/verify</a>. After the games close, we grade ourselves
-      against the closing line, from price sources we captured ourselves, and publish every
-      result — losses styled exactly like wins. <b>All of it is free.</b> There is no paid
-      tier, no account, and nothing to buy — the slate stays sealed until the first
-      kickoff because that is what makes the timestamp mean anything, not because we are
-      charging for the wait. The seal and the grade are emailed to anyone who asks at
-      <a href="/alerts">/alerts</a>. A season is ~285 games — not enough to statistically
-      separate a 52% picker from a coin. We say that out loud because the ledger would out
-      us if we didn't. If someone sells you certainty, ask for their merkle root.</p>
+    <p class="lede">Every honest record in this market is a <b>selected subset</b> — filtered
+      by star tier, an edge threshold, or a card that plays a third of the games. Ours is
+      not. And our model <b>loses to the closing market</b>: 49.5% ATS on 2,608 decided
+      walk-forward games, below the 52.38% break-even. <a href="/record">See every
+      population &rarr;</a></p>
+    <details class="more">
+      <summary>How the seal works, and what this isn't</summary>
+      <p class="creed">The whole slate is committed <b>unfiltered</b>, under a Merkle root
+      anchored to a public GitHub commit — timestamped by someone other than us, and
+      verifiable at <a href="/verify">/verify</a>. That is what makes the losing number
+      above credible instead of embarrassing. The smaller sample with real consensus
+      closing lines is worse still, 48.7%. We do not claim an edge and you should not bet
+      these picks expecting profit.</p>
+      <p class="creed">What this is: a transparent research instrument. Every week, before
+      the first kickoff, we seal the full slate — every game, both models, no
+      cherry-picking. After the games close we grade ourselves against the closing line,
+      from price sources we captured ourselves, and publish every result — losses styled
+      exactly like wins.</p>
+      <p class="creed"><b>All of it is free.</b> No paid tier, no account, nothing to buy.
+      The slate stays sealed until the first kickoff because that is what makes the
+      timestamp mean anything, not because we are charging for the wait. The seal and the
+      grade are emailed to anyone who asks at <a href="/alerts">/alerts</a>.</p>
+      <p class="creed">A season is ~285 games — not enough to statistically separate a 52%
+      picker from a coin. We say that out loud because the ledger would out us if we
+      didn't. If someone sells you certainty, ask for their merkle root.</p>
+    </details>
   </div>
 
   <div class="strip" id="strip"></div>
@@ -162,37 +171,80 @@ function strip(s,locked){
   armCountdown(s.unlocks_at||s.earliest_kickoff);
 }
 
-/* ---------- locked: the shape of the slate, none of the opinion ---------- */
+/* ---------- locked: the shape of the slate, none of the opinion ----------
+   This used to render game_count rows of blurred ▓▓ blocks and nothing else —
+   sixteen identical redaction bars, which reads as a broken page rather than
+   a sealed one, and gives a visitor no reason to be here before kickoff.
+
+   It was also hiding data we already publish. The redacted slate at
+   /data/<slate>.json carries every matchup, kickoff, spread and market
+   probability in the clear; only our model's own columns are nulled at write
+   time in weekly.py. So the schedule was being masked as if it were a secret
+   while sitting in a public file two clicks away.
+
+   Now the row shows what is genuinely public and marks exactly what is
+   sealed. The distinction is the product: you can see the games, the line and
+   what the market thinks; what you cannot see is which side we took. */
+function lockedRows(games){
+  return games.map(function(g){
+    var mp=g.market_prob;
+    return '<tr>'
+      +'<td class="l"><span class="mu">'+D.esc(g.away)+'<span class="at">at</span>'
+        +D.esc(g.home)+'</span></td>'
+      +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
+      +'<td>'+(g.spread_line==null?'·':(g.spread_line>0?'+':'')+g.spread_line)+'</td>'
+      +'<td>'+(mp==null?'·':D.pct(mp,0))+'</td>'
+      +'<td><span class="sealed">SEALED</span></td>'
+      +'<td class="dim">'+(g.divergence_rank==null?'·':'#'+g.divergence_rank)+'</td>'
+      +'</tr>';
+  }).join("");
+}
+function lockedTable(games){
+  return '<div class="scr"><table><thead><tr>'
+    +'<th class="l">MATCHUP</th><th class="l">KICKOFF</th>'
+    +'<th>SPREAD</th><th>MARKET HOME WIN</th>'
+    +'<th>OUR PICK</th><th>DISAGREEMENT</th></tr></thead><tbody>'
+    +lockedRows(games)+'</tbody></table></div>';
+}
 function lockedView(t){
   strip(t,true);
-  $("board").innerHTML='<div class="scr"><table><thead><tr>'
-    +'<th class="l">MATCHUP</th><th class="l">KICKOFF</th><th>INDEPENDENT</th>'
-    +'<th>MARKET</th><th>DIVERGENCE</th><th>BEST PRICE</th><th>FAIR</th></tr></thead><tbody>'
-    +'<tr class="locked"><td class="l" colspan="2"><span class="pick">'
-      +D.esc(t.top_divergence_matchup||"The slate")
-      +'</span> <span class="lock">— our #1 divergence this week</span></td>'
-    +'<td><span class="mask">▓▓▓ ▓▓%</span></td><td><span class="mask">▓▓%</span></td>'
-    +'<td><span class="mask">▓.▓▓</span></td><td><span class="mask">▓▓▓ ▓▓</span></td>'
-    +'<td><span class="mask">▓▓▓</span></td></tr>'
-    +Array.from({length:Math.max(0,(t.game_count||1)-1)},function(){
-      return '<tr class="locked"><td class="l" colspan="2"><span class="mask">▓▓▓▓▓▓▓ at ▓▓▓▓▓▓▓</span></td>'
-        +'<td><span class="mask">▓▓▓ ▓▓%</span></td><td><span class="mask">▓▓%</span></td>'
-        +'<td><span class="mask">▓.▓▓</span></td><td><span class="mask">▓▓▓ ▓▓</span></td>'
-        +'<td><span class="mask">▓▓▓</span></td></tr>';}).join("")
-    +'</tbody></table></div>';
+  /* The public slate file is the source for the visible columns. If it is
+     missing we say the schedule is unavailable rather than inventing rows —
+     an empty state beats sixteen fake ones. */
+  $("board").innerHTML='<div class="state"><span class="tl">LOADING THE SEALED SLATE…</span></div>';
+  fetch("/data/"+encodeURIComponent(t.slate_id)+".json",{cache:"no-store"})
+    .then(function(r){ return r.ok?r.json():null; })
+    .then(function(pub){
+      var games=(pub&&pub.games||[]).slice().sort(function(a,b){
+        return (a.divergence_rank||99)-(b.divergence_rank||99); });
+      if(!games.length){
+        $("board").innerHTML='<div class="state"><span class="tl">SEALED</span>'
+          +D.esc((t.game_count||0)+" games are sealed under the root above. The "
+            +"schedule file isn't published yet — the slate itself opens at the "
+            +"first kickoff either way.")+'</div>';
+        return;
+      }
+      $("board").innerHTML=lockedTable(games);
+    })
+    .catch(function(){
+      $("board").innerHTML='<div class="state"><span class="tl">SEALED</span>'
+        +'Couldn\'t load the schedule. The slate opens at the first kickoff.</div>';
+    });
   /* No upsell here any more: there is nothing to buy. The lock is the proof
      mechanism, not a price — say exactly that, and point at the one thing a
      reader can actually do with the wait, which is check the root now and
      hold us to it later. */
   $("cta").innerHTML='<div style="padding:18px 0 4px">'
     +'<a class="lockcta" href="/verify">VERIFY THE SEALED ROOT NOW &rarr;</a>'
-    +'<p class="note" style="margin-top:10px">These picks already exist and are '
-    +'already sealed — the root is public and timestamped by a GitHub commit, not '
-    +'by us. They open to everyone at the first kickoff, free; nothing unlocks them '
-    +'earlier and there is no version of this you can pay for. The wait is what makes '
-    +'the timestamp worth anything. Verify the root now, then check it against the '
-    +'slate when it opens. <a href="/alerts" style="color:var(--mut)">Get told when '
-    +'it does &rarr;</a></p></div>';
+    +'<p class="note" style="margin-top:10px">Everything above is public: the games, '
+    +'the line, and what the market gives the home side. What is sealed is which side '
+    +'we took and how strongly — already written, already hashed into the root above, '
+    +'already timestamped by a GitHub commit rather than by us. <b style="color:var(--ink2)">'
+    +'DISAGREEMENT</b> ranks how far our model sits from the market on each game, '
+    +'biggest first; the direction stays sealed. Nothing unlocks it early and there is '
+    +'nothing to buy — it opens to everyone at the first kickoff. Verify the root now, '
+    +'then check it against the slate when it opens. '
+    +'<a href="/alerts" style="color:var(--mut)">Get told when it does &rarr;</a></p></div>';
 }
 
 /* ---------- open/pro: the full instrument ---------- */
