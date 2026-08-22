@@ -366,16 +366,19 @@ function apply(){
       /* the reference arc: big panels, tight spacing, receding outward */
       d=i-2;
       var ad=Math.abs(d);
-      t="translateX("+(d*285)+"px) translateZ("+(-60-ad*110)+"px) "
+      t="translateX("+(d*285)+"px) translateY(0px) translateZ("+(-60-ad*110)+"px) "
        +"scale(0.30) rotateY("+(d*-7)+"deg)";
       op=1; z=3-ad;
     }else{
       d=i-focus;
       var ad2=Math.abs(d), sg=d<0?-1:1;
-      if(d===0){ t="translateX(0) translateZ(0) scale("+fit+") rotateY(0deg)"; op=1; z=5; }
-      else if(ad2===1){ t="translateX("+(sg*680)+"px) translateZ(-160px) scale("+(fit*0.5)+") rotateY("+(sg*-16)+"deg)"; op=.55; z=3; }
-      else if(ad2===2){ t="translateX("+(sg*1040)+"px) translateZ(-260px) scale("+(fit*0.42)+") rotateY("+(sg*-20)+"deg)"; op=.2; z=2; }
-      else{ t="translateX("+(sg*1500)+"px) translateZ(-300px) scale(0.4) rotateY(0deg)"; op=0; z=1; }
+      /* overview anchors the row at 34% for the desk composition; a focused
+         monitor must CENTER in the stage or its top clips off. */
+      var ty=Math.round(stageH*0.16);
+      if(d===0){ t="translateX(0) translateY("+ty+"px) translateZ(0) scale("+fit+") rotateY(0deg)"; op=1; z=5; }
+      else if(ad2===1){ t="translateX("+(sg*680)+"px) translateY("+ty+"px) translateZ(-160px) scale("+(fit*0.5)+") rotateY("+(sg*-16)+"deg)"; op=.55; z=3; }
+      else if(ad2===2){ t="translateX("+(sg*1040)+"px) translateY("+ty+"px) translateZ(-260px) scale("+(fit*0.42)+") rotateY("+(sg*-20)+"deg)"; op=.2; z=2; }
+      else{ t="translateX("+(sg*1500)+"px) translateY("+ty+"px) translateZ(-300px) scale(0.4) rotateY(0deg)"; op=0; z=1; }
     }
     m.style.transform=t; m.style.opacity=op; m.style.zIndex=z;
     m.classList.toggle("is-focused", i===focus);

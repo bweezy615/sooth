@@ -31,6 +31,9 @@
   #sportRailLocal{display:none}
   .embedded #sportRailLocal{display:block;margin:4px 0 0}
   .embedded #sportRailLocal .hd-r2{border-top:0;height:38px}
+  .embedded .status{padding:6px 0 8px}
+  .embedded .stat .v{font-size:18px}
+  .embedded .sec{padding-bottom:14px}
 </style>
 </head>
 <body>
@@ -38,6 +41,9 @@
 <main id="main" class="wrap">
 
   <!-- what this is, in one line — then the market -->
+  <div class="scr-strip"><span class="nm">MARKET BOARD</span>
+    <span class="tl" id="es-mkt"></span>
+    <span class="tl" style="margin-left:auto">FAIR VS BEST · EVERY BOOK WE TRACK</span></div>
   <div class="page-head" style="padding:26px 0 0">
     <h1 style="font:760 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
       The best sports betting research analyzer on the market.</h1>
@@ -300,6 +306,10 @@ D.load("/data/board.json").then(function(bd){
   BOARD=bd.data;
   SP=defaultSport();
   renderStatus(D.feedState(bd,3));
+  var es=document.getElementById("es-mkt");
+  if(es){ var tg=0,tb=0;(BOARD.boards||[]).forEach(function(b){tg+=b.n_events;tb=Math.max(tb,b.n_books);});
+    es.innerHTML="<b>"+tg+"</b> GAMES · <b>"+tb+"</b> BOOKS · UPDATED <b><span data-ago=\""
+      +D.esc(BOARD.generated_at)+"\">"+D.ago(BOARD.generated_at)+"</span></b>"; }
   function pick(sp){
     if(sp===SP) return;
     SP=sp; D.sportRail(BOARD,SP,pick);

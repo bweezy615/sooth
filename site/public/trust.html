@@ -24,11 +24,30 @@
   .stance p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.7}
   .stance b{color:var(--brand)}
   .stance .n{font-family:var(--mono)}
+  .embedded .stance{display:none}
+  .pick{font:600 12.5px var(--sans);color:var(--ink)}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
+
+  <div class="scr-strip"><span class="nm">PROOF LEDGER</span>
+    <span class="tl">SEALED → REVEALED → GRADED · LOSSES PUBLISH LIKE WINS</span>
+    <span class="tl" style="margin-left:auto"><a href="/verify" style="color:var(--mut)">VERIFY THE ROOT →</a></span></div>
+
+  <section class="sec" id="proofSec" style="display:none;border-top:0;padding-top:4px"
+    aria-labelledby="pfH">
+    <div class="sec-h"><span class="tl" id="pfH">GRADED PICKS</span>
+      <span class="sub" id="pfSub"></span>
+      <a class="more tl" href="/record">FULL RECORD →</a></div>
+    <div id="pfNote"></div>
+    <div class="itab"><div class="scr"><table>
+      <thead><tr><th class="l">PUBLISHED PICK</th><th class="l">MATCHUP</th>
+        <th>STATED</th><th>RESULT</th><th>VS CLOSE</th><th class="l">PROOF</th></tr></thead>
+      <tbody id="pfRows"></tbody></table></div></div>
+    <p class="note" id="pfFoot"></p>
+  </section>
 
   <div class="page-head" style="padding:30px 0 0">
     <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 6px">
@@ -76,6 +95,49 @@ var R=[
 ];
 document.getElementById("receipts").innerHTML=R.map(function(r,i){
   return D.feedRow(i,r[0],r[1],r[2],r[3]);}).join("");
+
+/* The proof readout: real graded rows from the same file the record reads.
+   A LOSS gets byte-identical treatment to a WIN — that equality is the
+   entire point of this screen. Absent data states itself honestly. */
+function pct(x){return x==null?"·":(x*100).toFixed(0)+"%";}
+fetch("/data/pickengine-record.json",{cache:"no-store"})
+  .then(function(r){if(!r.ok)throw 0;return r.json();})
+  .then(function(rec){
+    var weeks=(rec.weeks||[]);
+    if(!weeks.length) return;
+    document.getElementById("proofSec").style.display="";
+    var rehearsal=weeks.every(function(w){return w.rehearsal;});
+    document.getElementById("pfSub").textContent = rec.independent_record
+      ? "independent model, season to date: "+rec.independent_record
+        +(rec.mean_clv!=null?" · mean CLV "+rec.mean_clv+" pts":"")
+      : "no live slate has settled yet — first real grade lands the Tuesday after Week 1";
+    if(rehearsal) document.getElementById("pfNote").innerHTML=
+      '<p class="notice" style="margin:0 0 10px"><b>REHEARSAL.</b> These rows replay '
+      +'settled 2025 weeks through the live seal→grade→publish pipeline to prove it '
+      +'end to end. They are excluded from the record and will be replaced by the '
+      +'first live graded slate automatically.</p>';
+    var rows=[];
+    weeks.slice(-2).reverse().forEach(function(w){
+      (w.picks||[]).slice(0,12).forEach(function(p){
+        rows.push('<tr>'
+          +'<td class="l"><span class="pick">'+D.esc(p.pick)
+            +(w.rehearsal?' <span class="tl" style="color:var(--amber)">R</span>':'')
+            +'</span></td>'
+          +'<td class="l dim">'+D.esc(p.matchup)+'</td>'
+          +'<td class="dim">'+pct(p.prob)+'</td>'
+          +'<td>'+(p.won===null?'<span class="dim">PUSH</span>'
+            :p.won?'<span class="up">WON</span>':'<span class="dn">LOST</span>')+'</td>'
+          +'<td>'+D.clvChip(p.clv==null?null:p.clv*100,p.clv_blocked_reason)+'</td>'
+          +'<td class="l"><a class="tl" href="/verify" style="color:var(--dim)">'
+            +D.esc(String(w.merkle_root||"").slice(0,8))+'…</a></td></tr>');
+      });
+    });
+    document.getElementById("pfRows").innerHTML=rows.join("");
+    document.getElementById("pfFoot").textContent=
+      "Every row regenerates from pickengine-record.json; every root is anchored by a "
+      +"public GitHub commit made before kickoff. If someone sells you certainty, ask "
+      +"for their merkle root.";
+  }).catch(function(){});
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>

@@ -452,6 +452,19 @@ tr.locked .lock{color:var(--dim);font-size:10px}
   padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:13px;
   color:var(--ink2);margin:0 0 16px;max-width:80ch;line-height:1.6}
 
-/* ============ embedded (inside an Infinite Desk monitor) ============ */
+/* ============ embedded (inside an Infinite Desk monitor) ============
+   Milestone 2: inside a monitor the page is an instrument screen, not an
+   article. Editorial headers collapse to instrument strips; density leads. */
 .embedded body{padding-top:4px}
 .embedded .skip{display:none}
+.embedded .wrap{padding:0 18px 28px}
+/* the instrument strip every embedded screen leads with */
+.scr-strip{display:none}
+.embedded .scr-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 2px 8px;border-bottom:1px solid var(--hair);margin-bottom:10px}
+.embedded .scr-strip .nm{font:700 11px var(--mono);letter-spacing:.22em;color:var(--ink)}
+.embedded .scr-strip .tl b{color:var(--ink2)}
+/* editorial furniture yields inside the monitor */
+.embedded .ph,.embedded .page-head{display:none}
+.embedded .sec{padding-top:12px;margin-top:0}
+.embedded h1{font-size:18px}
