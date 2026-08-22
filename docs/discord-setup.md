@@ -31,33 +31,54 @@ claim rather than a growth promise:
 
 ---
 
-## 2. Channels
+## 2. Channels — paste-ready
 
-Fewer channels than feels natural. An empty channel reads as a dead server,
-and this community has one thing to say per board refresh.
+Six channels in four categories. Create them top to bottom; Discord orders them
+in creation order. Each **topic** goes in Edit Channel → Topic and is what a new
+member reads under the channel name before they read anything else.
 
-```
-INFORMATION
-  #start-here      read-only. Pinned: what this is, how to read a price.
-  #the-rules       read-only. Pinned: compliance post below.
+Fewer than feels natural, on purpose. An empty channel reads as a dead server.
 
-THE BOARD
-  #best-prices     read-only. The bot posts here. This is the product.
-  #line-moves      read-only. Reserved — nothing posts here yet.
+### INFORMATION  *(category)*
 
-COMMUNITY
-  #general         members can post.
-  #questions       members can post. Where "what does de-vigged mean" goes.
-```
+**`start-here`** — read-only
+> What Sooth is, how to read a price, and what we don't claim. Start here.
 
-For every read-only channel: **Edit Channel → Permissions → @everyone → Send
-Messages: off**, View Channel: on.
+**`the-rules`** — read-only
+> Four rules. The one about touting is the one that gets you removed.
 
-Reserve `#line-moves` but do not create it until something posts to it. A
-channel that has been empty since launch is worse than one that does not
-exist.
+### THE BOARD  *(category)*
 
----
+**`best-prices`** — read-only, free webhook posts here
+> The best available price on the board against the de-vigged consensus,
+> refreshed with the board. Selected on price, never on a forecast.
+
+### COMMUNITY  *(category)*
+
+**`general`** — members can post
+> Anything. Keep it civil, keep it legal, no touting.
+
+**`questions`** — members can post
+> Ask anything, including the basics. Nobody here has to already know what vig
+> means.
+
+### PRO  *(category — private, restricted to the Pro role)*
+
+**`pro-slate`** — read-only, Pro webhook posts here
+> The sealed weekly slate at seal time. It unlocks free for everyone at first
+> kickoff — Pro buys timing, not accuracy. Our model loses to the closing
+> market and the record is on the page that sells this.
+
+**Read-only setup**, for every channel marked read-only:
+Edit Channel → Permissions → @everyone → **Send Messages: off**, View Channel: on.
+
+**Private category setup**, for PRO:
+Edit Category → Permissions → @everyone → **View Channel: off**, then add the
+Pro role with View Channel: on. Create the role first under Server Settings →
+Roles → **Pro**.
+
+Do not create channels you have nothing to put in yet. `#line-moves`,
+`#injuries`, `#nfl` and the rest can exist the day something posts to them.
 
 ## 3. Webhooks
 
@@ -69,9 +90,9 @@ want to retrofit that later.
 - Name: `Sooth`
 - Copy the URL. **Do not paste it into a chat window or a file in this repo.**
 
-Repeat in whatever channel the paid tier will use. If the paid tier does not
-exist yet, make the second webhook point at `#best-prices` too and change it
-when it does.
+Repeat in `#pro-slate` for the second webhook. That channel is the paid tier's
+home — the bot already reads two separate secrets and posts the free board and
+the sealed slate to different places.
 
 ---
 
@@ -154,11 +175,23 @@ already knows.
 > not a prediction. Nothing has to be forecast correctly for a better number
 > to be worth more, which is why this is the whole product.
 >
-> **What we do not do**
+> **What we sell, and what we don't**
 >
-> We do not sell picks and we do not tell you who wins. We built a prediction
-> model, measured it honestly, and published the result: it does not beat the
-> market. <https://sooth.bet/props-model>
+> We sell access and instrumentation. We never sell outcomes.
+>
+> There is a weekly NFL slate — sealed before kickoff, graded in public, and
+> free to everyone once it can be graded. Paid access buys it *earlier*, not
+> more accurately. The model behind it **loses to the closing market**: 49.5%
+> against the spread over 2,608 graded games, where 52.4% breaks even. That
+> figure is on the page that sells it, because a number you only find in the
+> small print isn't disclosure.
+>
+> We also measured a model against player props and it had no edge at all on
+> the props books actually post. We published that too, in full, including the
+> explanations we got wrong first. <https://sooth.bet/props-model>
+>
+> Nothing here is a recommendation to bet, and nobody here will tell you who
+> wins.
 >
 > **Reading a post in #best-prices**
 >
@@ -168,6 +201,17 @@ already knows.
 > The number worth having is the smallest one.
 >
 > Full explainer: <https://sooth.bet/learn> · The board: <https://sooth.bet>
+
+### `#pro-slate`  *(pin this before the first slate posts)*
+
+> The slate posts here at seal time and unlocks free for everyone at first
+> kickoff. You are paying for the hours in between, and nothing else.
+>
+> Every slate is graded in public afterwards — the weeks it goes badly are
+> published on the same schedule as the weeks it goes well. If that ever stops
+> being true, stop paying for this.
+>
+> Record, in full: <https://sooth.bet/record>
 
 ### `#the-rules`
 
