@@ -141,6 +141,21 @@ So, as hard constraints:
 Whoever reads this under that pressure will not have been part of the
 conversation that built it. That is why it is here.
 
+**None of the four is currently enforced by anything, and the gap is specific.**
+`.github/workflows/grade.yml` commits whatever settled that week and treats an
+empty result as success — `if git diff --cached --quiet; then echo "nothing
+newly settled"; exit 0`. So a sealed week that is never graded is
+indistinguishable from a week where nothing was due: green check, no commit, no
+signal anywhere. The one failure this section names is the one failure CI
+reports as fine.
+
+Closing it means a check that knows what was sealed: for every sealed slate
+past its settle time, a published grade must exist, and its absence has to be
+loud — a failed run, and visible on the trust surface rather than only in a
+workflow log. Until that exists these are promises, and today's other lesson
+was that a rule held by convention rather than construction is one edit away
+from not being held at all.
+
 A daily post publishes the best available prop prices, refreshed with the board
 and rendered from the same data the page reads. It is a **price** product and
 must always read as one: selected on the gap to the de-vigged consensus, never
