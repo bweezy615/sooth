@@ -1,87 +1,66 @@
 {
- "generated_at": "2026-08-22T10:34:31.459297+00:00",
+ "generated_at": "2026-08-22T14:32:01.188545+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 198,
+ "n_considered": 274,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Toronto Blue Jays @ New York Yankees",
-   "starts": "2026-08-22T17:36:00Z",
-   "player": "Brett Bateman",
+   "matchup": "Atlanta Braves @ Milwaukee Brewers",
+   "starts": "2026-08-22T18:11:00Z",
+   "player": "Michael Harris II",
    "market": "batter_hits",
    "market_label": "Hits",
    "line": 0.5,
-   "side": "under",
-   "best_price": 155,
-   "best_book": "BetMGM",
-   "n_books": 3,
-   "fair_price": 147,
-   "price_edge_pts": 1.32,
-   "book_spread_pts": 4.45,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
+   "side": "over",
+   "best_price": -148,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": -157,
+   "price_edge_pts": 1.43,
+   "book_spread_pts": 6.99,
+   "hit_l5": {
+    "n": 5,
+    "over": 5
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 8
+   },
+   "hit_season": {
+    "n": 123,
+    "over": 86
+   },
    "model_p_over": null,
    "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Washington Nationals @ Miami Marlins",
-   "starts": "2026-08-22T20:11:00Z",
-   "player": "Esteury Ruiz",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
+   "matchup": "Atlanta Braves @ Milwaukee Brewers",
+   "starts": "2026-08-22T18:11:00Z",
+   "player": "Michael Harris II",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
    "side": "over",
-   "best_price": -125,
-   "best_book": "BetMGM",
+   "best_price": 150,
+   "best_book": "BetRivers",
    "n_books": 4,
-   "fair_price": -132,
-   "price_edge_pts": 1.27,
-   "book_spread_pts": 6.71,
+   "fair_price": 146,
+   "price_edge_pts": 0.66,
+   "book_spread_pts": 4.44,
    "hit_l5": {
     "n": 5,
     "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 5
+    "over": 3
    },
    "hit_season": {
-    "n": 84,
-    "over": 28
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Washington Nationals @ Miami Marlins",
-   "starts": "2026-08-22T20:11:00Z",
-   "player": "Otto Lopez",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 130,
-   "best_book": "BetMGM",
-   "n_books": 6,
-   "fair_price": 124,
-   "price_edge_pts": 1.23,
-   "book_spread_pts": 5.54,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 1
-   },
-   "hit_season": {
-    "n": 125,
-    "over": 58
+    "n": 123,
+    "over": 54
    },
    "model_p_over": null,
    "model_version": null
@@ -98,9 +77,9 @@
    "best_price": -150,
    "best_book": "BetMGM",
    "n_books": 5,
-   "fair_price": -157,
-   "price_edge_pts": 1.1,
-   "book_spread_pts": 6.67,
+   "fair_price": -153,
+   "price_edge_pts": 0.42,
+   "book_spread_pts": 6.56,
    "hit_l5": {
     "n": 5,
     "over": 2
@@ -118,30 +97,60 @@
   },
   {
    "sport": "mlb",
+   "matchup": "Atlanta Braves @ Milwaukee Brewers",
+   "starts": "2026-08-22T18:11:00Z",
+   "player": "Drake Baldwin",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 145,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": 143,
+   "price_edge_pts": 0.35,
+   "book_spread_pts": 4.64,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 106,
+    "over": 44
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
    "matchup": "Washington Nationals @ Miami Marlins",
    "starts": "2026-08-22T20:11:00Z",
-   "player": "Jorbit Vivas",
+   "player": "Esteury Ruiz",
    "market": "batter_hits",
    "market_label": "Hits",
    "line": 0.5,
-   "side": "under",
-   "best_price": -105,
+   "side": "over",
+   "best_price": -130,
    "best_book": "BetMGM",
-   "n_books": 3,
-   "fair_price": -109,
-   "price_edge_pts": 1.05,
-   "book_spread_pts": 6.41,
+   "n_books": 4,
+   "fair_price": -132,
+   "price_edge_pts": 0.3,
+   "book_spread_pts": 5.74,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 3
    },
    "hit_l10": {
     "n": 10,
     "over": 5
    },
    "hit_season": {
-    "n": 95,
-    "over": 46
+    "n": 84,
+    "over": 28
    },
    "model_p_over": null,
    "model_version": null
