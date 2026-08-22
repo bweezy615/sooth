@@ -43,6 +43,10 @@ const SYSTEM = [
   "  carries edge_vs_fair_pts -1.77, so it is 1.77 points worse than fair.",
   "  If you catch yourself subtracting two prices, stop and read the field.",
   "  If the field is absent, say the figure is not available.",
+  "- SUPERLATIVES ARE PRECOMPUTED. Any question about the biggest, largest,",
+  "  widest or best gap is answered from data.board.leaders — quote the top",
+  "  row verbatim, with its game and side. NEVER rank by reading the events",
+  "  list yourself; you will get it wrong on a board this size.",
   "- The events list is the COMPLETE board for the sports listed. If a game is",
   "  not in it, that sport or matchup is not currently priced in our capture —",
   "  say exactly that, and never imply the list was cut short.",
@@ -65,10 +69,18 @@ function extractUrl(text) {
 // exercise it offline.
 // Book keys are long and repeat on every quote; the whole board only fits the
 // context window as abbreviations.
+// The board carries book identity in TWO shapes — quotes[].book holds the
+// feed key ("draftkings"), best_book holds the display name ("DraftKings") —
+// so a key-only map silently produced "DRAF", "MYBO", "BETM" in answers.
 var BOOK_ABBR = {draftkings:"DK",fanduel:"FD",betmgm:"MGM",williamhill_us:"CZR",
   betrivers:"BR",bovada:"BOV",betonlineag:"BOL",lowvig:"LVG",betus:"BUS",
-  mybookieag:"MYB",fanatics:"FAN",espnbet:"ESPN"};
-function abbr(k){ return BOOK_ABBR[k] || String(k).slice(0,4).toUpperCase(); }
+  mybookieag:"MYB",fanatics:"FAN",espnbet:"ESPN",caesars:"CZR",mybookie:"MYB",
+  betonline:"BOL",williamhill:"CZR"};
+function abbr(k){
+  if (!k) return "";
+  var n = String(k).toLowerCase().replace(/[^a-z]/g, "");
+  return BOOK_ABBR[n] || String(k).slice(0, 4).toUpperCase();
+}
 
 // A truncated board is worse than a small one: slicing raw JSON at N chars
 // drops most games mid-object, and the model then reports a real matchup as
@@ -97,8 +109,33 @@ function compactBoard(board) {
       });
     });
   });
-  return { as_of: board.generated_at, market: "moneyline",
-           n_events: events.length, events: events };
+  // A model asked for "the biggest gap" scans 41 events and picks wrong —
+  // measured three times, three different answers, none correct. Superlatives
+  // are arithmetic, so they get computed here and quoted there, exactly like
+  // the research report's facts[]. Same discipline, same reason.
+  function rank(field) {
+    var rows = [];
+    events.forEach(function (e) {
+      e.sides.forEach(function (s) {
+        if (typeof s[field] === "number")
+          rows.push({ game: e.game, sport: e.sport, side: s.side,
+                      value: s[field], best: s.best, best_book: s.best_book,
+                      worst: s.worst, worst_book: s.worst_book });
+      });
+    });
+    return rows.sort(function (a, b) { return b.value - a.value; }).slice(0, 5);
+  }
+  return {
+    as_of: board.generated_at, market: "moneyline",
+    n_events: events.length,
+    leaders: {
+      note: "PRECOMPUTED. For any 'biggest/largest/widest/best' question, " +
+            "quote these rows verbatim. Do not scan the events list to rank.",
+      widest_gap_gain_pts: rank("gain_pts"),
+      best_vs_fair_edge_pts: rank("edge_vs_fair_pts"),
+    },
+    events: events,
+  };
 }
 
 function compactProps(props) {

@@ -39,6 +39,25 @@ const bigPrompt = ask.buildPrompt(big, null, "what is on the board?");
 assert(bigPrompt.includes("A39 at H39"), "the LAST event must survive into the prompt");
 assert(ask.compactBoard(big).n_events === 40, "compactBoard must keep every event");
 
+// Superlatives are arithmetic, not reading comprehension: the leaders block
+// must rank correctly so the model quotes instead of scanning.
+const ranked = { generated_at: "x", boards: [{ sport: "mlb", events: [
+  { home: "H1", away: "A1", n_books: 11, sides: [
+    { name: "A1", best_price: 100, best_book: "DraftKings", worst_price: 90,
+      worst_book: "BetMGM", fair_price: 95, gain_pts: 1.1, edge_vs_fair_pts: 0.2, quotes: [] }] },
+  { home: "H2", away: "A2", n_books: 11, sides: [
+    { name: "A2", best_price: 153, best_book: "DraftKings", worst_price: 130,
+      worst_book: "BetRivers", fair_price: 154, gain_pts: 3.95, edge_vs_fair_pts: -0.1, quotes: [] }] },
+]}]};
+const cb = ask.compactBoard(ranked);
+assert(cb.leaders.widest_gap_gain_pts[0].value === 3.95,
+  "leaders must rank the true maximum first");
+assert(cb.leaders.widest_gap_gain_pts[0].side === "A2", "and name its side");
+assert(cb.leaders.widest_gap_gain_pts[0].best_book === "DK",
+  "display-name books must abbreviate too (best_book carries 'DraftKings')");
+assert(/SUPERLATIVES ARE PRECOMPUTED/.test(ask.SYSTEM),
+  "system prompt must route superlatives to the leaders block");
+
 // Units: the house voice must forbid subtracting American odds to invent a gap.
 assert(/POINTS OF IMPLIED PROBABILITY/i.test(ask.SYSTEM),
   "system prompt must define what a point is");
