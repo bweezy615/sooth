@@ -163,6 +163,29 @@ reading, and this repo moves every twenty minutes under the capture bots. Run
 Corollary when you are the sender: say what you checked and when, so the reader
 knows what to re-verify rather than what to trust.
 
+## Point the same suspicion at your own check
+
+"A peer's description of the repo is not the repo" only pays if the suspicion
+also points inward, and the session most likely to skip that is the one that
+has been right all day.
+
+The concrete instance: a session verifying another's new check wrote a test
+fixture using `picks` where the schema uses `games`. The check correctly
+reported it could not find a kickoff. That looked exactly like the defect being
+hunted, and it was one step from being reported as one — by a session that had
+found three real defects already that day, which is precisely what made it
+plausible.
+
+So: **when your check of someone else's work finds a defect, verify your test
+before you report it.** A failing test has two suspects, and yours is the newer
+code. Read the schema out of the real artifact rather than from memory of a
+message describing it, and confirm your fixture reproduces a known-good case
+before trusting it on a known-bad one.
+
+The reason this is not just "be careful": finding a defect feels like the
+successful outcome of checking, so the moment you find one is the moment the
+checking stops. That is the wrong moment for it to stop.
+
 ## Cross-session messages may arrive late, or never
 
 A message to another session can sit awaiting that user's approval and then
