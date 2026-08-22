@@ -13,6 +13,14 @@ Sources, both official or long-stable public CDNs:
   NFL   https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png — abbreviations
         come from data/teamstats-nfl.json, which the research page already
         publishes, so no new source of truth.
+  NBA   https://a.espncdn.com/i/teamlogos/nba/500/{abbr}.png
+  NHL   https://a.espncdn.com/i/teamlogos/nhl/500/{abbr}.png — same CDN. ESPN's
+        JSON teams API (site.api.espn.com) answers 403 to server-side callers,
+        so the name -> abbreviation bridge is a table here rather than a fetch.
+        That is acceptable precisely because every URL is HEAD-verified below:
+        a stale or mistyped abbreviation drops the team rather than shipping a
+        broken image, and the roster of both leagues changes about once a
+        decade. Keys are the full names the odds feed publishes.
 
 Every URL is verified with a HEAD request before it is written. A logo that
 404s renders as a broken image on a live board, and a missing crest is much
@@ -41,6 +49,45 @@ OUT = "site/public/data/team-logos.json"
 NFL_STATS = "site/public/data/teamstats-nfl.json"
 MLB_LOGO = "https://www.mlbstatic.com/team-logos/{id}.svg"
 NFL_LOGO = "https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png"
+ESPN_LOGO = "https://a.espncdn.com/i/teamlogos/{league}/500/{abbr}.png"
+
+# Full name -> ESPN abbreviation. The name side must match what the odds feed
+# returns, because that is the key the board looks up.
+NBA_TEAMS = {
+    "Atlanta Hawks": "atl", "Boston Celtics": "bos", "Brooklyn Nets": "bkn",
+    "Charlotte Hornets": "cha", "Chicago Bulls": "chi",
+    "Cleveland Cavaliers": "cle", "Dallas Mavericks": "dal",
+    "Denver Nuggets": "den", "Detroit Pistons": "det",
+    "Golden State Warriors": "gs", "Houston Rockets": "hou",
+    "Indiana Pacers": "ind", "LA Clippers": "lac",
+    "Los Angeles Lakers": "lal", "Memphis Grizzlies": "mem",
+    "Miami Heat": "mia", "Milwaukee Bucks": "mil",
+    "Minnesota Timberwolves": "min", "New Orleans Pelicans": "no",
+    "New York Knicks": "ny", "Oklahoma City Thunder": "okc",
+    "Orlando Magic": "orl", "Philadelphia 76ers": "phi",
+    "Phoenix Suns": "phx", "Portland Trail Blazers": "por",
+    "Sacramento Kings": "sac", "San Antonio Spurs": "sa",
+    "Toronto Raptors": "tor", "Utah Jazz": "utah",
+    "Washington Wizards": "wsh",
+}
+NHL_TEAMS = {
+    "Anaheim Ducks": "ana", "Boston Bruins": "bos", "Buffalo Sabres": "buf",
+    "Calgary Flames": "cgy", "Carolina Hurricanes": "car",
+    "Chicago Blackhawks": "chi", "Colorado Avalanche": "col",
+    "Columbus Blue Jackets": "cbj", "Dallas Stars": "dal",
+    "Detroit Red Wings": "det", "Edmonton Oilers": "edm",
+    "Florida Panthers": "fla", "Los Angeles Kings": "la",
+    "Minnesota Wild": "min", "Montreal Canadiens": "mtl",
+    "Nashville Predators": "nsh", "New Jersey Devils": "nj",
+    "New York Islanders": "nyi", "New York Rangers": "nyr",
+    "Ottawa Senators": "ott", "Philadelphia Flyers": "phi",
+    "Pittsburgh Penguins": "pit", "San Jose Sharks": "sj",
+    "Seattle Kraken": "sea", "St. Louis Blues": "stl",
+    "Tampa Bay Lightning": "tb", "Toronto Maple Leafs": "tor",
+    "Utah Mammoth": "utah", "Vancouver Canucks": "van",
+    "Vegas Golden Knights": "vgk", "Washington Capitals": "wsh",
+    "Winnipeg Jets": "wpg",
+}
 
 
 def norm(s: str) -> str:
@@ -93,11 +140,31 @@ def nfl(session: requests.Session) -> dict:
     return out
 
 
+def espn_league(session: requests.Session, league: str, table: dict) -> dict:
+    """One ESPN-hosted league from a name -> abbreviation table."""
+    out = {}
+    for name, abbr in table.items():
+        url = ESPN_LOGO.format(league=league, abbr=abbr)
+        if not ok(session, url):
+            continue
+        out[norm(name)] = {"sport": league, "name": name,
+                           "abbr": abbr.upper(), "logo": url}
+    return out
+
+
+def nba(session: requests.Session) -> dict:
+    return espn_league(session, "nba", NBA_TEAMS)
+
+
+def nhl(session: requests.Session) -> dict:
+    return espn_league(session, "nhl", NHL_TEAMS)
+
+
 def main() -> None:
     session = requests.Session()
     session.headers["User-Agent"] = "sooth-site/1.0 (+https://sooth.bet)"
     teams = {}
-    for label, fn in (("mlb", mlb), ("nfl", nfl)):
+    for label, fn in (("mlb", mlb), ("nfl", nfl), ("nba", nba), ("nhl", nhl)):
         got = fn(session)
         print(f"{label}: {len(got)} crests verified")
         teams.update(got)
