@@ -71,7 +71,10 @@
   #card thead th{background:var(--g0);border-bottom:1px solid rgba(45,212,167,.30)}
   #card tbody td{border-bottom:1px solid var(--hair)}
   .itab .pl{font:600 13px var(--sans);color:var(--ink);letter-spacing:-.01em}
-  .itab .pl .mk2{display:block;font:500 10px var(--mono);color:var(--dim);
+  .itab .pl .pl{display:inline-flex;align-items:center;gap:9px}
+  .pl-t{display:inline-flex;flex-direction:column;min-width:0}
+  .bp-who{display:inline-flex;align-items:center;gap:7px}
+  .mk2{display:block;font:500 10px var(--mono);color:var(--dim);
     letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
   .itab .match{font:500 10.5px var(--mono);color:var(--dim)}
   .itab .bk2{display:block;font:500 10px var(--mono);color:var(--dim)}
@@ -242,6 +245,10 @@
 (function(){
 var D=window.Desk, DOC=null;
 D.mount("props");
+/* The props board is the one page that wants faces, so it is the one page that
+   pays for the map. Rows may render before or after it lands; hydratePlayers()
+   fills whatever was written early and is idempotent. */
+if(window.Crest&&window.Crest.loadPlayers) window.Crest.loadPlayers();
 function $(id){return document.getElementById(id);}
 
 Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
@@ -306,7 +313,9 @@ function bestPrices(d){
     // that fails it is priced in plain ink; nothing about the number changes.
     html+='<div class="bp-r'+(p.price_edge_pts>0?" beats":"")+'">'
       +'<span class="bp-n">'+(i+1)+'</span>'
-      +'<span class="bp-who"><b>'+D.esc(p.player)+'</b> '
+      +'<span class="bp-who" data-face="'+D.esc(p.player)+'" data-size="22">'
+        +(window.Crest&&Crest.face?Crest.face(p.player,22):"")
+        +'<b>'+D.esc(p.player)+'</b> '
         +'<span class="bp-side">'+D.esc(p.side)+' '+p.line+' '
         +D.esc((p.market_label||p.market||"").toLowerCase())+'</span></span>'
       +'<span class="bp-px">'+D.am(p.best_price)
@@ -387,8 +396,10 @@ function render(){
       +' title="last 5: '+p.hit.l5.over+'/'+p.hit.l5.n+' · season: '
       +p.hit.season.over+'/'+p.hit.season.n+'">'+p.hit.l10.over+'/'+p.hit.l10.n+'</span>'):"·";
     html+='<tr>'
-      +'<td class="l"><span class="pl">'+D.esc(p.player)
-        +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></td>'
+      +'<td class="l"><span class="pl" data-face="'+D.esc(p.player)+'" data-size="30">'
+        +(window.Crest&&Crest.face?Crest.face(p.player,30):"")
+        +'<span class="pl-t">'+D.esc(p.player)
+        +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></span></td>'
       +'<td class="l"><span class="match">'
         +window.Crest.team(e.away,{abbr:true,size:14})+' AT '
         +window.Crest.team(e.home,{abbr:true,size:14})
@@ -406,6 +417,7 @@ function render(){
         +D.pts(p.gain_pts,1)+'</td></tr>';
   });
   $("tbody").innerHTML=html;
+  if(window.Crest&&window.Crest.hydratePlayers) window.Crest.hydratePlayers($("tbody"));
   $("empty").style.display=rows.length?"none":"block";
   if(!rows.length) $("empty").innerHTML="<b>NOTHING MATCHES THAT FILTER</b>";
   $("count").textContent=rows.length+" SHOWN · "+b.label.toUpperCase();

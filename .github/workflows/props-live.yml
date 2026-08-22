@@ -147,6 +147,13 @@ jobs:
           echo "--- daily best-prices post ---"
           python -m engine.props_best_prices --top 5 \
             || echo "BEST PRICES failed - props_best_prices.json left as it was"
+          # Headshots for whoever is on tonight's board. Resolution is cached
+          # against yesterday's map, so a typical run makes a handful of calls
+          # for new names only. Never fatal: a board with no faces is the board
+          # we shipped before, and engine.player_headshots drops any name it
+          # cannot resolve unambiguously rather than guessing a face.
+          python -m engine.player_headshots \
+            || echo "HEADSHOTS failed - player-headshots.json left as it was"
 
       - name: Report skip
         if: steps.gate.outputs.refresh != 'true'
@@ -157,7 +164,8 @@ jobs:
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add site/public/data/props.json site/public/data/props_best_prices.json
+          git add site/public/data/props.json site/public/data/props_best_prices.json \
+            site/public/data/player-headshots.json
           if git diff --staged --quiet; then
             echo "no change in props board"
           else

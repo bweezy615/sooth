@@ -607,7 +607,7 @@ function gameCard(ev,sport){
        board.json publishes full team names, which is exactly how
        team-logos.json is keyed, so no sport hint is needed here. Crest fails
        silent: no map, no network, no match — the name still reads. */
-    var mark=(window.Crest?window.Crest.img(s.name,16):"");
+    var mark=(window.Crest&&Crest.img?Crest.img(s.name,16):"");
     return '<div class="m-side">'
       +'<span class="m-nm" data-crest="'+esc(s.name)+'" data-size="16">'+mark
         +'<span class="m-tn">'+esc(s.name)+'</span>'
@@ -618,8 +618,8 @@ function gameCard(ev,sport){
   }).join("");
   return '<a class="m-g" href="/market" aria-label="'+esc(ev.away+" at "+ev.home)+'">'
     +'<div class="m-gh"><span class="m-gs">'
-      +(window.Crest?window.Crest.img(ev.away,13):"")
-      +(window.Crest?window.Crest.img(ev.home,13):"")
+      +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
+      +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
       +esc(String(sport).toUpperCase())
       +' &middot; '+esc(ev.n_books||0)+' BOOKS</span>'
     +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
@@ -722,7 +722,7 @@ function fill(id,rows,emptyMsg){
   el.innerHTML=rows.length
     ? rows.map(function(r){return gameCard(r.e,r.sport);}).join("")
     : '<div class="state"><span class="tl">NOTHING TO SHOW</span>'+esc(emptyMsg)+'</div>';
-  if(window.Crest) window.Crest.hydrate(el);
+  if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
 }
 
 /* ---- the sealed slate card ---- */

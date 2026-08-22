@@ -13,6 +13,9 @@
      script tag, and so no shared stylesheet has to be touched to do it. */
   (function styles() {
     var css = ".crest{vertical-align:-3px;object-fit:contain}"
+      + ".face{border-radius:50%;object-fit:cover;vertical-align:-8px;"
+      + "background:rgba(190,222,228,.06);border:1px solid rgba(190,222,228,.16)}"
+      + ".pl-c{display:inline-flex;align-items:center;gap:8px}"
       + ".tm-c{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}"
       + ".mu .tm-c,.match .tm-c,.radar-mu .tm-c{gap:4px}";
     var el = document.createElement("style");
@@ -133,7 +136,58 @@
     });
   }
 
-  window.Crest = { load: load, get: get, img: img, team: team, hydrate: hydrate };
+  /* ---- player headshots ----
+     A separate map and a separate fetch, loaded ONLY when a page asks for a
+     face. The team map is ~124 rows and every board page wants it; the player
+     map changes daily and only the props board wants it, so making the crest
+     helper pull both would put a second request on every other page for
+     nothing.
+
+     Same failure rule as crests, and it matters more here: a wrong crest is
+     embarrassing, a wrong FACE is a photograph of a real person attached to a
+     claim about someone else. engine/player_headshots.py already refuses to
+     resolve an ambiguous name, so a miss here means "we do not know", and the
+     row falls back to the player's name in text. */
+  var PMAP = null, PPENDING = null;
+  function loadPlayers() {
+    if (PMAP) return Promise.resolve(PMAP);
+    if (PPENDING) return PPENDING;
+    PPENDING = fetch("/data/player-headshots.json", { cache: "force-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { PMAP = (d && d.players) || {}; hydratePlayers(); return PMAP; })
+      .catch(function () { PMAP = {}; return PMAP; });
+    return PPENDING;
+  }
+  function player(name) { return (PMAP || {})[norm(name)] || null; }
+  function face(name, size) {
+    var p = player(name);
+    if (!p) return "";
+    var s = size || 28;
+    return '<img class="face" src="' + p.img + '" width="' + s + '" height="' + s
+      + '" loading="lazy" decoding="async" alt=""'
+      + ' onerror="this.style.display=\'none\'">';
+  }
+  /* Mark the spot, fill it when the map lands — same contract as hydrate(). */
+  function playerTag(name, size) {
+    return '<span class="pl-c" data-face="' + esc(name) + '"'
+      + (size ? ' data-size="' + (size | 0) + '"' : "") + '>'
+      + face(name, size) + '</span>';
+  }
+  function hydratePlayers(root) {
+    if (!PMAP) return;
+    var spots = (root || document).querySelectorAll("[data-face]");
+    for (var i = 0; i < spots.length; i++) {
+      var el = spots[i];
+      if (el.querySelector("img.face")) continue;
+      var html = face(el.getAttribute("data-face"),
+                      parseInt(el.getAttribute("data-size"), 10) || 28);
+      if (html) el.insertAdjacentHTML("afterbegin", html);
+    }
+  }
+
+  window.Crest = { load: load, get: get, img: img, team: team, hydrate: hydrate,
+                   loadPlayers: loadPlayers, player: player, face: face,
+                   playerTag: playerTag, hydratePlayers: hydratePlayers };
 
   /* Start fetching as soon as the script parses, and sweep once more after the
      page settles so rows written by a late render still get their crest. */
