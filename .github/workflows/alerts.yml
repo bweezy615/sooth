@@ -1,8 +1,14 @@
 name: send-alerts
 
-# The Sooth Pro flagship: email a subscriber the moment a book is paying over
-# the market on a game that hasn't started. Detection lives in engine.alerts;
-# this workflow is the delivery arm (engine.alert_email).
+# Email a subscriber the moment a book is paying over the market on a game that
+# hasn't started. Detection lives in engine.alerts; this workflow is the
+# delivery arm (engine.alert_email).
+#
+# Alerts are FREE and opt-in, not a Pro feature. This job used to draw its
+# recipients from active Stripe subscriptions, which — with Pro disarmed — is
+# an empty set by construction, so the most-requested feature in the whole
+# competitive scan was wired to nobody. Recipients now come from
+# engine.subscribers: people who confirmed an address at /alerts.
 #
 # It recomputes from the committed capture history rather than the published
 # moves.json — capture-odds refreshes data/capture every 30 min, moves.json is
@@ -10,8 +16,9 @@ name: send-alerts
 # here so a re-run or two overlapping ticks never double-send.
 #
 # Runs a few minutes after capture-odds so the freshest prices are already in.
-# Needs two repo secrets beyond ODDS_API_KEY: STRIPE_SECRET_KEY (who is Pro) and
-# RESEND_API_KEY (the sender). No subscribers yet => it records-and-skips.
+# Needs three repo secrets beyond ODDS_API_KEY: STRIPE_SECRET_KEY (where the
+# subscriber list lives), RESEND_API_KEY (the sender), and AUTH_SECRET (signs
+# the unsubscribe link). No subscribers yet => it records-and-skips.
 
 on:
   schedule:
@@ -37,11 +44,16 @@ jobs:
       - name: Install deps
         run: pip install --quiet requests
 
-      - name: Email fresh divergence alerts to Pro subscribers
+      # --min-send is only the floor for a run with nobody subscribed; a real
+      # run scans at the lowest threshold anyone on the list actually chose and
+      # then filters each alert per person. AUTH_SECRET signs the unsubscribe
+      # link in every email — without it the sender refuses to send at all.
+      - name: Email fresh divergence alerts to subscribers
         run: python -m engine.alert_email --min-send 2.0
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
       - name: Commit the sent-watermark
         run: |

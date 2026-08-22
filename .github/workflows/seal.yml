@@ -77,3 +77,29 @@ jobs:
             git pull --rebase && sleep 5
           done
           exit 1
+
+      # Only AFTER the push, because the email quotes the commit that anchors
+      # the root. Announcing a seal we had not yet pushed would mail a link to
+      # a commit that does not exist — the one claim in the email that has to
+      # be checkable by a stranger.
+      - name: Tell the subscribers it is sealed
+        if: steps.wk.outputs.target != ''
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        run: python -m engine.alert_lifecycle --kind seal --commit "$(git rev-parse HEAD)"
+
+      - name: Commit the announcement watermark
+        if: steps.wk.outputs.target != ''
+        run: |
+          git add data/lifecycle_sent.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "nothing announced"; exit 0
+          fi
+          git commit -m "alerts: announced seal $(date -u +%FT%TZ)"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase --autostash && sleep 5
+          done
+          exit 1

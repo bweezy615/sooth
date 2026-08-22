@@ -48,6 +48,7 @@ var NAV=[
   {href:"/research",    key:"research",label:"RESEARCH"},
   {href:"/ask",         key:"ask",     label:"ANALYST"},
   {href:"/trust",       key:"ledger",  label:"LEDGER"},
+  {href:"/alerts",      key:"alerts",  label:"ALERTS"},
   {href:"/learn",       key:"learn",   label:"GUIDE", newcomer:true}
 ];
 function header(page){

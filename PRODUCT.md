@@ -86,11 +86,22 @@ is the whole rule, and everything below is what it permits and forbids.
 
 Two paid things:
 
-1. **Tools and data.** The full board, line-movement alerts, more books,
-   historical closing-line lookups, exports.
+1. **Tools and data.** The full board, more books, historical closing-line
+   lookups, exports.
 2. **The sealed weekly slate.** The pick engine publishes a slate sealed at
    seal time, which unlocks free for everyone at first kickoff, plus per-pick
-   instrumentation and divergence alerts. Pro buys *timing*, not accuracy.
+   instrumentation. Pro buys *timing*, not accuracy.
+
+**Alerts are not one of them.** Email — the sealed root, the graded result,
+and price divergence at a threshold the subscriber sets — is free, opt-in, and
+open to anyone at `/alerts`. Two reasons, and the second is the load-bearing
+one. Retention: a product with no reason to return has no retention, and
+putting the only reason to return behind a paywall on a $0 tier means nobody
+ever returns. Consent: paying us and wanting mail from us are different
+decisions, so buying Pro subscribes you to nothing and subscribing costs
+nothing. This section previously listed alerts under both paid tiers, and
+`/subscribe` sold them as a Pro feature; that was corrected on 2026-08-22 when
+the alert list was actually built.
 
 The second one is the reason this section was rewritten on 2026-08-21. The
 document previously said "explicitly not picks" while the product shipped a

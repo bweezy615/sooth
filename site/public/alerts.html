@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth — Alerts</title>
+<meta name="description" content="Three emails, only when something actually happens: a slate is sealed, a week is graded, or a book prices away from the market. Free, opt-in, and never a pick.">
+<meta property="og:title" content="Sooth — Alerts">
+<meta property="og:description" content="We'll tell you when something happened. Never what to do about it.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:url" content="https://sooth.bet/alerts">
+<link rel="canonical" href="https://sooth.bet/alerts">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<style>
+  .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin:22px 0 8px;
+    align-items:start}
+  @media (max-width:860px){.cols{grid-template-columns:1fr}}
+  .pane{padding:20px 22px}
+
+  fieldset{border:0;margin:0;padding:0}
+  legend{padding:0}
+
+  /* One alert type: a checkbox, what it is, and how often it really fires. */
+  .opt{display:grid;grid-template-columns:18px 1fr;gap:12px;align-items:start;
+    padding:14px 0;border-bottom:1px solid var(--hair);cursor:pointer}
+  .opt:last-of-type{border-bottom:0}
+  .opt input{margin:2px 0 0;width:15px;height:15px;accent-color:var(--brand);cursor:pointer}
+  .opt .nm{font:600 13px var(--sans);color:var(--ink);display:block}
+  .opt .ds{display:block;font-size:12.5px;color:var(--ink2);line-height:1.6;margin:4px 0 0}
+  .opt .fq{font:600 10.5px var(--mono);color:var(--mut);letter-spacing:.07em;
+    text-transform:uppercase;margin:6px 0 0;display:block}
+
+  /* Threshold bands, revealed only when price alerts are on. */
+  .bands{margin:12px 0 2px 30px;padding:12px 0 2px;border-top:1px solid var(--hair)}
+  .bands[hidden]{display:none}
+  .band{display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:start;
+    padding:8px 0;cursor:pointer}
+  .band input{margin:1px 0 0;accent-color:var(--brand);cursor:pointer}
+  .band .bn{display:block;font:600 12px var(--mono);color:var(--ink)}
+  .band .bd{display:block;font-size:12px;color:var(--mut);line-height:1.55;margin:3px 0 0}
+
+  .row{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
+  .row input[type=email]{flex:1;min-width:220px;background:var(--g2);
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--ink);
+    font:14px var(--sans);padding:12px 13px}
+  .row input[type=email]::placeholder{color:var(--dim)}
+  .go{font:700 13px var(--sans);color:var(--g0);
+    background:linear-gradient(180deg,#3BE3B6,#22BE93);padding:12px 20px;
+    border-radius:var(--r);border:0;cursor:pointer;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.25)}
+  .go:hover{filter:brightness(1.07)}
+  .go[disabled]{opacity:.5;cursor:default;filter:none}
+
+  .msg{margin:14px 0 0;padding:12px 14px;font-size:13px;line-height:1.6;
+    border-left:2px solid var(--hair2);background:var(--g1);color:var(--ink2)}
+  .msg[hidden]{display:none}
+  .msg.ok{border-left-color:var(--brand);color:var(--ink)}
+  .msg.bad{border-left-color:var(--dn)}
+  .msg b{color:var(--ink)}
+  /* The outcome of a confirm/unsubscribe click gets its own slot at the TOP of
+     the page. Arriving from an email link is the single most common way anyone
+     sees this page, and the in-form message sits ~1200px down — below the fold
+     on a phone, which is exactly the device the link was clicked on. */
+  #banner{margin:18px 0 0;font-size:13.5px;padding:14px 16px}
+  #banner[hidden]{display:none}
+
+  .fine{font-size:11.5px;color:var(--dim);line-height:1.6;margin:14px 0 0}
+  .never li{font-size:12.5px;color:var(--ink2);line-height:1.6;padding:9px 0 9px 18px;
+    position:relative;border-bottom:1px solid var(--hair);list-style:none}
+  .never li:last-child{border-bottom:0}
+  .never ul{margin:0;padding:0}
+  .never li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:1.5px;
+    background:var(--dn)}
+  .never li b{color:var(--ink)}
+  .measured{border-left:2px solid var(--amber);background:var(--g1);
+    padding:14px 18px;margin-top:16px}
+  .measured p{color:var(--ink2);font-size:12.5px;line-height:1.65;margin:0}
+  .measured .n{font-family:var(--mono);color:var(--ink)}
+</style>
+</head>
+<body>
+<a class="skip" href="#form">Skip to the form</a>
+<main id="main" class="wrap" style="max-width:1040px">
+
+  <div class="scr-strip"><span class="nm">ALERTS</span>
+    <span class="tl">FREE · OPT-IN · NEVER A PICK</span>
+    <span class="tl" style="margin-left:auto"><a href="/trust" style="color:var(--mut)">PROOF LEDGER →</a></span></div>
+
+  <div class="page-head" style="padding:26px 0 0">
+    <h1 style="font:760 clamp(22px,3.4vw,32px)/1.16 var(--sans);letter-spacing:-.02em;margin:0 0 10px">
+      We'll tell you when something happened.<br>Never what to do about it.</h1>
+    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:70ch;line-height:1.68;margin:0">
+      Three things are worth an email, and none of them is a tip. A slate got sealed before
+      kickoff. A week got graded, win or lose. A book is pricing away from the rest of the
+      market right now. Everything here is free — alerts are not the paid tier and never were.</p>
+  </div>
+
+  <div class="msg" id="banner" hidden role="status" aria-live="polite"></div>
+
+  <div class="cols">
+
+    <!-- ------------------------------------------------------------------ -->
+    <form class="feed pane" id="form" novalidate>
+      <fieldset>
+        <legend class="tl" style="margin-bottom:2px">WHAT SHOULD WE TELL YOU ABOUT</legend>
+
+        <label class="opt">
+          <input type="checkbox" name="kind" value="seal" checked>
+          <span>
+            <span class="nm">A slate is sealed</span>
+            <span class="ds">The week's full model slate, committed under a Merkle root and
+              anchored to a public GitHub commit before the first kickoff. The email carries
+              the root itself — so the claim also exists in your mailbox, stamped by your mail
+              provider rather than by us.</span>
+            <span class="fq">Wednesdays in season · ~1 per week</span>
+          </span>
+        </label>
+
+        <label class="opt">
+          <input type="checkbox" name="kind" value="graded" checked>
+          <span>
+            <span class="nm">A week is graded</span>
+            <span class="ds">The result of that sealed slate against what actually happened,
+              with closing-line value where it is measurable and the reason where it is not.
+              Sent by the same automated step that publishes the result, so a losing week
+              reaches you exactly the way a winning one does.</span>
+            <span class="fq">Tuesdays in season · ~1 per week</span>
+          </span>
+        </label>
+
+        <label class="opt">
+          <input type="checkbox" name="kind" value="price" id="kPrice">
+          <span>
+            <span class="nm">A book is out of line</span>
+            <span class="ds">One book's price sits away from the cross-book consensus on a
+              game that hasn't started. A fact about prices, not a forecast about the game —
+              and the number may be gone by the time you look.</span>
+            <span class="fq">Whenever it happens · set your own bar below</span>
+          </span>
+        </label>
+
+        <div class="bands" id="bands" hidden>
+          <div class="tl" style="margin-bottom:4px">HOW FAR OUT OF LINE IS WORTH AN EMAIL</div>
+          <label class="band">
+            <input type="radio" name="min" value="1.5">
+            <span><span class="bn">1.5+ points</span>
+              <span class="bd">Everything the detector fires on. In a busy stretch this is
+                many emails a day.</span></span>
+          </label>
+          <label class="band">
+            <input type="radio" name="min" value="2.5" checked>
+            <span><span class="bn">2.5+ points</span>
+              <span class="bd">Clearer gaps only. The default, and still not quiet.</span></span>
+          </label>
+          <label class="band">
+            <input type="radio" name="min" value="4">
+            <span><span class="bn">4+ points</span>
+              <span class="bd">Rare. Mostly a stale line or a book that has stopped
+                competing on that side.</span></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="row">
+        <input type="email" name="email" id="email" placeholder="you@example.com"
+          autocomplete="email" spellcheck="false" aria-label="Your email address">
+        <button class="go" type="submit" id="go">Send the confirmation</button>
+      </div>
+
+      <div class="msg" id="msg" hidden role="status" aria-live="polite"></div>
+
+      <p class="fine">We email you a confirmation link first and store nothing until you
+        click it. Every email after that carries a one-click unsubscribe and a link to change
+        these settings. We don't sell, share, or rent the list.</p>
+    </form>
+
+    <!-- ------------------------------------------------------------------ -->
+    <div>
+      <div class="feed pane never">
+        <div class="tl" style="margin-bottom:8px">WHAT WE WILL NEVER SEND</div>
+        <ul>
+          <li><b>A pick, in an email.</b> Not a lock, not a play of the day, not a lean.
+            The sealed slate is published on the site and graded in public; nothing gets
+            whispered to a mailing list first.</li>
+          <li><b>A win claim, or a record we chose.</b> Any number in an email comes from
+            the same graded artifact as the ledger, whole slate, no selection rule.</li>
+          <li><b>A streak, a hot hand, or urgency.</b> If a price is worth taking it is
+            because of arithmetic that is in the email; if it isn't, the email doesn't exist.</li>
+          <li><b>Anything on a day nothing happened.</b> There is no digest, no newsletter,
+            and no re-engagement campaign. Silence means silence.</li>
+        </ul>
+      </div>
+
+      <div class="measured">
+        <p><b style="color:var(--ink)">The frequency, measured rather than promised.</b>
+          Between <span class="n">Aug 10</span> and <span class="n">Aug 22, 2026</span> our own
+          capture history recorded <span class="n">160</span> divergences clearing
+          <span class="n">2.0</span> points across MLB game lines and player props — about
+          <span class="n">13</span> a day. Alerts are batched per run, not one email per
+          alert, and an NFL-only week is far quieter. If that is more mail than you want,
+          take the <span class="n">4+</span> band or leave price alerts off entirely.</p>
+      </div>
+
+      <p class="fine">Alerts have nothing to do with Sooth Pro. Paying for Pro does not
+        subscribe you to anything, and subscribing here costs nothing. Consent for one is
+        not consent for the other.</p>
+    </div>
+  </div>
+
+</main>
+
+<script src="/assets/desk.js"></script>
+<script>
+(function(){
+  window.Desk.mount("alerts");
+
+  var form = document.getElementById("form"),
+      bands = document.getElementById("bands"),
+      kPrice = document.getElementById("kPrice"),
+      email = document.getElementById("email"),
+      go = document.getElementById("go"),
+      msg = document.getElementById("msg"),
+      banner = document.getElementById("banner");
+
+  function say(text, cls, where){
+    var el = where || msg;
+    el.textContent = text;
+    el.className = "msg" + (cls ? " " + cls : "");
+    el.hidden = false;
+  }
+  function kinds(){
+    return Array.prototype.slice
+      .call(form.querySelectorAll('input[name=kind]:checked'))
+      .map(function(i){ return i.value; });
+  }
+  function minPts(){
+    var r = form.querySelector('input[name=min]:checked');
+    return r ? parseFloat(r.value) : 2.5;
+  }
+  function syncBands(){ bands.hidden = !kPrice.checked; }
+  kPrice.addEventListener("change", syncBands);
+  syncBands();
+
+  // A preferences link from an email proves the address, so the form updates
+  // in place instead of asking someone to re-confirm an address they are
+  // demonstrably reading mail at.
+  var params = new URLSearchParams(location.search);
+  var prefsToken = params.get("prefs");
+  if (prefsToken) {
+    email.closest(".row").style.display = "none";
+    go.textContent = "Save these settings";
+    form.insertBefore(go, msg);
+    go.style.marginTop = "18px";
+    say("Editing the settings for the address this link was sent to.", "", banner);
+  }
+
+  // Outcome of a confirm / unsubscribe round-trip through /api/alerts. These
+  // go in the top banner, not the in-form message: the reader just arrived
+  // from an email link and needs the answer in the first viewport.
+  var state = params.get("state");
+  if (state === "on") {
+    say("You're on the list. That's the last thing we'll send until something actually happens.", "ok", banner);
+  } else if (state === "off") {
+    say("Unsubscribed. We won't email that address again unless you sign up here.", "ok", banner);
+  } else if (state === "badlink") {
+    say("That link has expired or been altered, so we didn't act on it. Sign up again below and we'll send a fresh one.", "bad", banner);
+  } else if (state === "error") {
+    say("Something broke on our end and we didn't change anything. Try again in a minute.", "bad", banner);
+  }
+  if (state || prefsToken) {
+    // Keep the message but drop the token from the URL bar and from history.
+    history.replaceState(null, "", "/alerts");
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var picked = kinds();
+    if (!picked.length) return say("Pick at least one thing to be told about.", "bad");
+    var body = { kinds: picked, min_pts: minPts() };
+    if (prefsToken) body.token = prefsToken;
+    else {
+      var addr = email.value.trim();
+      if (!addr) return say("We need an email address to send to.", "bad");
+      body.email = addr;
+    }
+    go.disabled = true;
+    say("Sending…");
+    fetch("/api/alerts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body)
+    }).then(function(r){
+      return r.json().then(function(j){ return { ok: r.ok, j: j }; });
+    }).then(function(res){
+      go.disabled = false;
+      if (!res.ok) return say(res.j.error || "That didn't go through. Try again in a minute.", "bad");
+      if (res.j.saved) return say("Saved. These settings are live from the next alert on.", "ok");
+      say("Check your inbox — we sent a confirmation link to " + body.email +
+          ". Nothing is stored until you click it, and the link is good for 48 hours.", "ok");
+      form.reset(); syncBands();
+    }).catch(function(){
+      go.disabled = false;
+      say("Couldn't reach the server. Check your connection and try again.", "bad");
+    });
+  });
+})();
+</script>
+</body>
+</html>

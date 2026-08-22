@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth Pro — the pick engine, at seal time</title>
-<meta name="description" content="Sooth Pro: the sealed weekly slate at seal time, full desk instrumentation, and divergence alerts. $9.99/month. Research access — never winning picks; our model's losing record is published.">
+<meta name="description" content="Sooth Pro: the sealed weekly slate at seal time and full desk instrumentation. $9.99/month. Research access — never winning picks; our model's losing record is published.">
 <meta property="og:title" content="Sooth Pro — the pick engine, at seal time">
 <meta property="og:description" content="Pro buys timing, not wins. Sealed weekly, graded in public, losses included.">
 <meta property="og:type" content="website">
@@ -27,6 +27,9 @@
   .feat li:last-child{border-bottom:0}
   .feat li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:5px;
     border-radius:1px;background:var(--brand)}
+  /* the "not included" list must not wear the same green square as the
+     included one — a matching bullet reads as "you get this too" */
+  .feat .out li::before{width:7px;height:1.5px;border-radius:0;background:var(--dim);top:18px}
   .card-buy{position:sticky;top:110px}
   .amt{font:700 34px/1 var(--mono);letter-spacing:-.02em;
     background:linear-gradient(180deg,#FFFFFF 0%,#D9DDE4 55%,#9AA1AC 100%);
@@ -78,7 +81,7 @@
       Merkle commitment and grade it in the open after — losses included. At first kickoff
       the whole slate unlocks for everyone, free, forever.
       <b style="color:var(--ink2)">Pro buys the look before kickoff</b> — the slate at seal
-      time, per-pick desk instrumentation, and divergence alerts. It does not buy wins:
+      time and per-pick desk instrumentation. It does not buy wins:
       our model measurably loses to the closing market (49.5% ATS on 2,608 decided walk-forward games, and 48.7% on the smaller sample with real closing lines,
       published at <a href="/record" style="color:var(--ink2)">/record</a>), and nothing
       here is betting advice. The market, the analyzer, research and the record stay free.
@@ -94,8 +97,15 @@
             before the market digests it. Free users see the identical slate after kickoff.</li>
         <li><b>Per-pick desk instrumentation</b> — our fair price against every book on one
             spectrum, confidence, divergence, best available number.</li>
-        <li><b>Divergence alerts</b> — when the independent model disagrees with the market
-            beyond threshold, straight to your inbox.</li>
+      </ul>
+      <div class="tl" style="margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--hair)">
+        WHAT DOESN'T — AND NEVER DID</div>
+      <ul class="out">
+        <li><b>Alerts are free.</b> The sealed root, the graded result and divergence
+            emails go to anyone who asks at <a href="/alerts" style="color:var(--ink2)">/alerts</a>,
+            subscriber or not. Paying does not sign you up for anything, and signing up
+            costs nothing — this page used to list alerts as a Pro feature and that was
+            wrong.</li>
       </ul>
     </div>
 

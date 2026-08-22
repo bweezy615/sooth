@@ -71,6 +71,30 @@ jobs:
           done
           exit 1
 
+      # Mailed from the grading job itself, on purpose. PRODUCT.md commits to
+      # publishing a sealed slate whether it wins or loses; a separate "send
+      # the results email" workflow would be a place for someone to not press
+      # the button on a bad week. Here there is no button.
+      - name: Tell the subscribers it is graded
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        run: python -m engine.alert_lifecycle --kind graded
+
+      - name: Commit the announcement watermark
+        run: |
+          git add data/lifecycle_sent.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "nothing announced"; exit 0
+          fi
+          git commit -m "alerts: announced grading $(date -u +%FT%TZ)"
+          for i in 1 2 3; do
+            git push && exit 0
+            git pull --rebase --autostash && sleep 5
+          done
+          exit 1
+
       - name: Every sealed slate past settle time must be graded
         # Runs regardless of what the grade step did, because the failure this
         # catches is the run where grading produced nothing and exited 0. An
