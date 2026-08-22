@@ -111,8 +111,22 @@ function countdown(iso){
   var ms=Date.parse(iso)-Date.now();
   if(isNaN(ms)) return "—";
   if(ms<=0) return "OPEN TO EVERYONE";
-  var d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
-  return (d?d+"D ":"")+h+"H "+m+"M TO FIRST KICKOFF";
+  var d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5),
+      m=Math.floor(ms%36e5/6e4), sec=Math.floor(ms%6e4/1e3);
+  return (d?d+"D ":"")+h+"H "+m+"M "+(d?"":String(sec).padStart(2,"0")+"S ")
+    +"TO FIRST KICKOFF";
+}
+var _cdTimer=null;
+function armCountdown(iso){
+  if(_cdTimer) clearInterval(_cdTimer);
+  var el=document.getElementById("cd"); if(!el||!iso) return;
+  _cdTimer=setInterval(function(){
+    var ms=Date.parse(iso)-Date.now();
+    el.textContent=countdown(iso);
+    /* amber only under 5 minutes — a real threshold, not a mood */
+    if(ms>0&&ms<3e5) el.style.color="var(--amber)";
+    if(ms<=0){ clearInterval(_cdTimer); el.style.color="var(--up)"; }
+  },1000);
 }
 
 function strip(s,locked){
@@ -122,10 +136,12 @@ function strip(s,locked){
       +D.esc(String(s.merkle_root||"").slice(0,10))+'…</a>'
     +'<span class="tl">AT <b><span data-ago="'+D.esc(s.sealed_at||s.committed_at||"")+'">'
       +D.ago(s.sealed_at||s.committed_at||"")+'</span></b></span>'
-    +'<span class="tl" style="color:'+(locked?"var(--amber)":"var(--up)")+'">'
+    +'<span class="tl" id="cd" style="font-variant-numeric:tabular-nums;color:'
+      +(locked?"var(--amber)":"var(--up)")+'">'
       +countdown(s.unlocks_at||s.earliest_kickoff)+'</span>'
     +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
       +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>';
+  armCountdown(s.unlocks_at||s.earliest_kickoff);
 }
 
 /* ---------- locked: the shape of the slate, none of the opinion ---------- */
@@ -281,8 +297,10 @@ fetch(SRC,{cache:"no-store"})
         +D.esc(s.error)+'</div>';
       return;
     }
-    if(s.locked){ lockedView(s); }
-    else { window.__slate=s; openView(s); }
+    D.land($("board"),function(){
+      if(s.locked){ lockedView(s); }
+      else { window.__slate=s; openView(s); }
+    });
     graded();
   })
   .catch(function(){

@@ -292,9 +292,18 @@ D.load("/data/board.json").then(function(bd){
   BOARD=bd.data;
   SP=defaultSport();
   renderStatus(D.feedState(bd,3));
-  function pick(sp){ SP=sp; D.sportRail(BOARD,SP,pick); renderRadar(); renderGames(); }
+  function pick(sp){
+    if(sp===SP) return;
+    SP=sp; D.sportRail(BOARD,SP,pick);
+    /* a sport switch is a lens change, not new data: crossfade, no theater */
+    D.swap(document.getElementById("radar"),renderRadar);
+    D.swap(document.getElementById("games"),renderGames);
+  }
   D.sportRail(BOARD,SP,pick);
-  renderRadar(); renderGames(); mountAnalyzer();
+  /* first paint: the connecting shimmer hands off to the board as one unit */
+  D.land(document.getElementById("radar"),renderRadar);
+  D.land(document.getElementById("games"),renderGames);
+  mountAnalyzer();
 });
 })();
 </script>

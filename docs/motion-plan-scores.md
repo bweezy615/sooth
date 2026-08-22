@@ -1,0 +1,7 @@
+# Motion synthesis scores
+
+A (living-market): telemetry-not-marketing 9/10, honesty 10/10, craft-per-effort 8/10, deck coherence 7/10 = 34/40. The prev===null diff guard is the only proposal that makes honesty structurally enforceable; bimodal instant/deliberate split matches the 30-min data reality; phases ship cheap wins first. Loses points only because its centerpiece fires rarely and pin/deck physics are secondary.
+
+B (broadcast-open): telemetry 7/10, honesty 7/10, craft-per-effort 9/10, deck coherence 5/10 = 28/40. Best engineering shortcuts (Desk.land primitive, vt() View Transitions, refetch backoff, explicit matchMedia JS guard), but the DESK POWER-ON spends the identity budget on load choreography that skirts the "no loading animations" ban, VT is unsupported on the user's own macOS 12 Safari (its flagship technique degrades to nothing on the dev machine), and it defers the actual telemetry layer (flash/tick-roll) entirely.
+
+C (instrument-physics): telemetry 8/10, honesty 8/10, craft-per-effort 6/10, deck coherence 9/10 = 31/40. Best expression of the SVG deck as a physical instrument (pin glide, fair-post breath, settle easing), but its signature moment — pins gliding across a sport switch — implies price continuity between different games (dishonest; A's crossfade argument wins), the pointer-parallax deck hover brushes the banned parallax/decorative line, and it front-loads all four innerHTML refactors (worst effort curve).

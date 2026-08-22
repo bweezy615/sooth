@@ -91,20 +91,68 @@ function sportRail(board,active,onpick){
   ((board&&board.boards)||[]).forEach(function(b){
     live[b.sport]=true; counts[b.sport]=b.n_events;});
   var el=document.getElementById("sportRail"); if(!el) return;
-  el.innerHTML=SPORTS.map(function(s){
-    var on=!!live[s.k];
-    return '<button class="sp" role="tab" data-sp="'+s.k+'"'
-      +(s.k===active?' aria-selected="true"':' aria-selected="false"')+'>'
-      +'<span class="d'+(on?"":" off")+'"></span>'+s.l
-      +(on?'<span class="c n">'+counts[s.k]+'</span>':'')
-      +'</button>';}).join("");
-  el.addEventListener("click",function(e){
-    var b=e.target.closest(".sp"); if(b&&onpick) onpick(b.dataset.sp);});
+  if(!el.dataset.built){
+    el.innerHTML=SPORTS.map(function(s){
+      return '<button class="sp" role="tab" data-sp="'+s.k+'" aria-selected="false">'
+        +'<span class="d off"></span>'+s.l+'<span class="c n"></span></button>';
+    }).join("")+'<span class="rail-ink" aria-hidden="true"></span>';
+    el.dataset.built="1";
+    el.addEventListener("click",function(e){
+      var b=e.target.closest(".sp");
+      if(b&&el._onpick) el._onpick(b.dataset.sp);
+    });
+  }
+  el._onpick=onpick;
+  var activeBtn=null;
+  [].forEach.call(el.querySelectorAll(".sp"),function(b){
+    var k=b.dataset.sp, on=!!live[k];
+    b.setAttribute("aria-selected",k===active?"true":"false");
+    if(k===active) activeBtn=b;
+    b.querySelector(".d").className="d"+(on?"":" off");
+    b.querySelector(".c").textContent=on?counts[k]:"";
+  });
+  /* the ink slides to the active pill — user action, --t-ui --e-out */
+  var ink=el.querySelector(".rail-ink");
+  if(ink&&activeBtn){
+    ink.style.width=activeBtn.offsetWidth+"px";
+    ink.style.transform="translateX("+activeBtn.offsetLeft+"px)";
+  }
 }
 function mount(page){
   document.body.insertAdjacentHTML("afterbegin",header(page));
   document.body.insertAdjacentHTML("beforeend",footer());
 }
+
+/* ---------- motion machinery ----------
+   CONTRACT: motion helpers fire only from (a) a user action, (b) a witnessed
+   payload diff, or (c) a real clock event. prev === null NEVER animates —
+   content that was already true when the page opened arrives without
+   ceremony. CSS handles its own reduced-motion kill; these helpers guard the
+   JS side, because the CSS kill cannot stop WAAPI or rAF. */
+var _rm=null;
+function reduced(){
+  if(_rm===null){
+    try{_rm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}
+    catch(e){_rm=false;}
+  }
+  return _rm;
+}
+/* shimmer -> content handoff AND lens change: one beat, two names.
+   land(el, render): fade whatever is there out over --t-view, run the
+   synchronous render at the dark midpoint, fade the new content in whole —
+   one unit, no stagger. The JSON arrived as one file; animating assembly
+   would lie about the transport. swap() is the same beat under its
+   lens-change name (sport switch, range toggle). */
+function land(el,render){
+  if(reduced()||!el.firstChild){ render(); if(el.style)el.style.opacity="1"; return; }
+  el.style.transition="opacity var(--t-view) var(--e-out)";
+  el.style.opacity="0";
+  setTimeout(function(){
+    render();
+    requestAnimationFrame(function(){ el.style.opacity="1"; });
+  },160);
+}
+var swap=land;
 
 /* ---------- data machinery ---------- */
 function load(url){
@@ -413,7 +461,7 @@ function tick(){
 }
 setInterval(tick,15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,reduced:reduced,land:land,swap:swap,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();
