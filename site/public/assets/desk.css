@@ -631,3 +631,47 @@ details.more>*+*{margin-top:10px}
   border-radius:var(--r);padding:7px 12px;cursor:pointer;
   transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
 .embedded .embed-back:hover{color:var(--brand);border-color:var(--brand)}
+
+/* ---------- the phone tab bar ----------
+   index.html's own note calls this "the one element that makes this read as
+   an app", and until now it was the only page that had one: every tab took
+   the visitor out of the app and onto a plain page whose only way back was
+   the browser's own button. desk.js injects this on every non-embedded
+   screen so the bar survives the tap.
+
+   index.html carries a second copy of these rules because it deliberately
+   does not load this file (see its FROZEN MARKET note). Change one, change
+   both — they are the same component wearing two stylesheets. */
+.m-tabs{display:none}
+@media (max-width:859px){
+  .m-tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;
+    background:rgba(6,8,10,.94);backdrop-filter:blur(12px);
+    border-top:1px solid var(--hair2);
+    padding-bottom:env(safe-area-inset-bottom,0px)}
+  .m-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:5px;min-height:48px;padding:9px 2px 8px;
+    font:600 8.5px var(--mono);letter-spacing:.1em;color:var(--mut);
+    /* --mut, not --dim: --dim on this ground is 3.2:1, under AA for text,
+       and this is primary navigation rather than faint metadata. */
+    text-decoration:none;transition:color var(--t-hover) ease}
+  /* The current tab wears a lit rule as well as the hue. Colour alone would
+     be the only thing separating it, which is exactly the cue a colourblind
+     visitor does not get. */
+  .m-tabs a[aria-current]{color:var(--brand);
+    box-shadow:inset 0 2px 0 var(--brand)}
+  .m-ti{width:16px;height:16px;border:1.5px solid currentColor;position:relative}
+  /* each glyph is drawn from the same square so the row stays optically even */
+  .m-ti[data-i="board"]{border-width:1.5px 1.5px 5px 1.5px}
+  .m-ti[data-i="picks"]{border-radius:50%}
+  .m-ti[data-i="picks"]::after{content:"";position:absolute;inset:3px;
+    border:1.5px solid currentColor;border-radius:50%}
+  .m-ti[data-i="ledger"]{border-width:1.5px;border-left-width:5px}
+  .m-ti[data-i="ask"]{border-radius:3px}
+  .m-ti[data-i="ask"]::after{content:"";position:absolute;left:3px;bottom:-4px;
+    border:3px solid transparent;border-top-color:currentColor}
+  .m-ti[data-i="alerts"]{border-radius:50% 50% 3px 3px;border-bottom-width:4px}
+  /* the bar is fixed, so the end of the page has to clear it — otherwise it
+     sits on top of the compliance line, which is the one line that may
+     never be covered */
+  body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+}

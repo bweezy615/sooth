@@ -230,7 +230,34 @@ function mount(page){
     return;
   }
   document.body.insertAdjacentHTML("afterbegin",header(page));
-  document.body.insertAdjacentHTML("beforeend",footer());
+  document.body.insertAdjacentHTML("beforeend",footer()+tabs());
+}
+
+/* The bar that keeps the phone reading as an app. It lives on index.html
+   already; every other screen was dropping it on arrival, so a tap on PICKS
+   left the visitor on a page with no way back but the browser's button.
+   Injected rather than pasted into five files: one nav, one place to fix it.
+   Styles: ".m-tabs" in desk.css. Never inside a monitor (mount returns
+   before this when EMBEDDED) — the desk carries its own navigation there. */
+/* Fourth column is the rest of the surface that tab owns, so a visitor who
+   followed "SEE ALL" off the board still sees which room they are in. Only
+   pages the phone shell can actually reach through that tab are listed —
+   /learn, /record and the rest hang off the fine print, belong to no tab,
+   and correctly light nothing. */
+var TABS=[["/","board","BOARD",["/market","/edges","/game"]],
+          ["/picks","picks","PICKS",[]],
+          ["/trust","ledger","LEDGER",[]],
+          ["/ask","ask","ANALYST",[]],
+          ["/alerts","alerts","ALERTS",[]]];
+function tabs(){
+  /* index.html writes its own; never stack a second one on top of it */
+  if(document.querySelector(".m-tabs")) return "";
+  var here=location.pathname.replace(/\.html$/,"").replace(/(.)\/$/,"$1")||"/";
+  return '<nav class="m-tabs" aria-label="Main">'+TABS.map(function(t){
+    var on=t[0]===here||t[3].indexOf(here)>=0;
+    return '<a href="'+t[0]+'"'+(on?' aria-current="page"':'')+
+      '><span class="m-ti" data-i="'+t[1]+'"></span>'+t[2]+'</a>';
+  }).join("")+'</nav>';
 }
 
 /* ---------- motion machinery ----------
@@ -616,7 +643,7 @@ setInterval(function(){
   if(document.querySelector("[data-ago]")) tick();
 },15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={tabs:tabs,esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();
