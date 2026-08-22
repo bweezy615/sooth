@@ -65,6 +65,26 @@ def main() -> None:
     print(f"predictions    : {c.n_predictions}  root {c.root[:16]}...")
     print()
     grade = grade_slate(slate_id, ledger_dir=out, out_dir=out)
+
+    # A replay takes its reference price from the same nflverse row that
+    # supplies the close, so ref == close and every CLV lands at exactly
+    # 0.0000. Publishing that as "CLV 0.00" would claim we measured a push
+    # against the closing line when we measured nothing at all. Null it out
+    # and say why — a replay proves the PIPELINE, never the price.
+    for g in grade.predictions:
+        g.clv = None
+        g.closing_price = None
+        g.clv_blocked_reason = ("replay: the reference price is the same "
+                                "nflverse close used to grade it, so CLV is "
+                                "not measurable — only live sealed slates "
+                                "carry a real pre-close reference price")
+    grade.clv_coverage = 0.0
+    grade.clv_note = ("CLV unavailable by construction on replays. Live slates "
+                      "seal a reference price days before the close.")
+    for m in grade.by_model.values():
+        m["mean_clv"] = None
+        m["clv_n"] = 0
+
     print(grade.summary())
     if args.publish:
         from engine.grade import publish

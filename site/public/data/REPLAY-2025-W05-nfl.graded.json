@@ -1,7 +1,7 @@
 {
   "slate_id": "REPLAY-2025-W05-nfl",
-  "version": 2,
-  "merkle_root": "49b7ccbf05646c44fdf864f92da648eac1405ffac9827220f7f1ac8f3fa1e874",
+  "version": 3,
+  "merkle_root": "b11afeddc0e556d4f070a4b4d8e9add7629c876696e1e5792ebdb7411dd46a38",
   "n_predictions": 28,
   "n_settled": 28,
   "by_model": {
@@ -10,20 +10,20 @@
       "record": "4-10",
       "win_pct": 0.2857,
       "brier": 0.35653,
-      "mean_clv": 0.00254,
-      "clv_n": 14
+      "mean_clv": null,
+      "clv_n": 0
     },
     "elo+epa-v1": {
       "n": 14,
       "record": "4-10",
       "win_pct": 0.2857,
       "brier": 0.35332,
-      "mean_clv": 0.00254,
-      "clv_n": 14
+      "mean_clv": null,
+      "clv_n": 0
     }
   },
-  "clv_coverage": 1.0,
-  "clv_note": "CLV computed only from prices we captured ourselves or paid for. ",
+  "clv_coverage": 0.0,
+  "clv_note": "CLV unavailable by construction on replays. Live slates seal a reference price days before the close.",
   "predictions": [
     {
       "event_id": "2025_05_SF_LA",
@@ -33,9 +33,9 @@
       "won": false,
       "brier": 0.4096,
       "reference_price": -440,
-      "closing_price": -440,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_SF_LA",
@@ -45,9 +45,9 @@
       "won": false,
       "brier": 0.55935441,
       "reference_price": -440,
-      "closing_price": -440,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_MIN_CLE",
@@ -57,9 +57,9 @@
       "won": true,
       "brier": 0.09678321000000002,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_MIN_CLE",
@@ -69,9 +69,9 @@
       "won": true,
       "brier": 0.09480240999999998,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_HOU_BAL",
@@ -81,9 +81,9 @@
       "won": false,
       "brier": 0.54922921,
       "reference_price": 124,
-      "closing_price": 124,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_HOU_BAL",
@@ -93,9 +93,9 @@
       "won": false,
       "brier": 0.38204761,
       "reference_price": 124,
-      "closing_price": 124,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_MIA_CAR",
@@ -105,9 +105,9 @@
       "won": false,
       "brier": 0.29138403999999996,
       "reference_price": -120,
-      "closing_price": -120,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_MIA_CAR",
@@ -117,9 +117,9 @@
       "won": false,
       "brier": 0.28366275999999996,
       "reference_price": -120,
-      "closing_price": -120,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_LV_IND",
@@ -129,9 +129,9 @@
       "won": true,
       "brier": 0.07717284000000002,
       "reference_price": -360,
-      "closing_price": -360,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_LV_IND",
@@ -141,9 +141,9 @@
       "won": true,
       "brier": 0.05161983999999998,
       "reference_price": -360,
-      "closing_price": -360,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_NYG_NO",
@@ -153,9 +153,9 @@
       "won": true,
       "brier": 0.16646400000000003,
       "reference_price": -120,
-      "closing_price": -130,
-      "clv": 0.01976284584980237,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_NYG_NO",
@@ -165,9 +165,9 @@
       "won": true,
       "brier": 0.18852964000000003,
       "reference_price": -120,
-      "closing_price": -130,
-      "clv": 0.01976284584980237,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DAL_NYJ",
@@ -177,9 +177,9 @@
       "won": false,
       "brier": 0.26853124,
       "reference_price": -115,
-      "closing_price": -120,
-      "clv": 0.010570824524312905,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DAL_NYJ",
@@ -189,9 +189,9 @@
       "won": false,
       "brier": 0.26050816,
       "reference_price": -115,
-      "closing_price": -120,
-      "clv": 0.010570824524312905,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DEN_PHI",
@@ -201,9 +201,9 @@
       "won": false,
       "brier": 0.55815841,
       "reference_price": -218,
-      "closing_price": -218,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DEN_PHI",
@@ -213,9 +213,9 @@
       "won": false,
       "brier": 0.55294096,
       "reference_price": -218,
-      "closing_price": -218,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_TEN_ARI",
@@ -225,9 +225,9 @@
       "won": false,
       "brier": 0.6417612100000001,
       "reference_price": -425,
-      "closing_price": -425,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_TEN_ARI",
@@ -237,9 +237,9 @@
       "won": false,
       "brier": 0.68525284,
       "reference_price": -425,
-      "closing_price": -425,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_TB_SEA",
@@ -249,9 +249,9 @@
       "won": false,
       "brier": 0.33790969000000004,
       "reference_price": -180,
-      "closing_price": -180,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_TB_SEA",
@@ -261,9 +261,9 @@
       "won": false,
       "brier": 0.388129,
       "reference_price": -180,
-      "closing_price": -180,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DET_CIN",
@@ -273,9 +273,9 @@
       "won": true,
       "brier": 0.11730625000000001,
       "reference_price": -575,
-      "closing_price": -600,
-      "clv": 0.005291005291005235,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_DET_CIN",
@@ -285,9 +285,9 @@
       "won": true,
       "brier": 0.04937283999999998,
       "reference_price": -575,
-      "closing_price": -600,
-      "clv": 0.005291005291005235,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_WAS_LAC",
@@ -297,9 +297,9 @@
       "won": false,
       "brier": 0.31967716,
       "reference_price": -155,
-      "closing_price": -155,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_WAS_LAC",
@@ -309,9 +309,9 @@
       "won": false,
       "brier": 0.3401222400000001,
       "reference_price": -155,
-      "closing_price": -155,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_NE_BUF",
@@ -321,9 +321,9 @@
       "won": false,
       "brier": 0.7192736099999999,
       "reference_price": -395,
-      "closing_price": -395,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_NE_BUF",
@@ -333,9 +333,9 @@
       "won": false,
       "brier": 0.72097081,
       "reference_price": -395,
-      "closing_price": -395,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_KC_JAX",
@@ -345,9 +345,9 @@
       "won": false,
       "brier": 0.39325441,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     },
     {
       "event_id": "2025_05_KC_JAX",
@@ -357,9 +357,9 @@
       "won": false,
       "brier": 0.43414921000000006,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price"
     }
   ],
   "picks": [
@@ -372,9 +372,9 @@
       "won": false,
       "brier": 0.4096,
       "reference_price": -440,
-      "closing_price": -440,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-02 00:00:00"
     },
     {
@@ -386,9 +386,9 @@
       "won": false,
       "brier": 0.55935441,
       "reference_price": -440,
-      "closing_price": -440,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-02 00:00:00"
     },
     {
@@ -400,9 +400,9 @@
       "won": true,
       "brier": 0.09678321000000002,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -414,9 +414,9 @@
       "won": true,
       "brier": 0.09480240999999998,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -428,9 +428,9 @@
       "won": false,
       "brier": 0.54922921,
       "reference_price": 124,
-      "closing_price": 124,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -442,9 +442,9 @@
       "won": false,
       "brier": 0.38204761,
       "reference_price": 124,
-      "closing_price": 124,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -456,9 +456,9 @@
       "won": false,
       "brier": 0.29138403999999996,
       "reference_price": -120,
-      "closing_price": -120,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -470,9 +470,9 @@
       "won": false,
       "brier": 0.28366275999999996,
       "reference_price": -120,
-      "closing_price": -120,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -484,9 +484,9 @@
       "won": true,
       "brier": 0.07717284000000002,
       "reference_price": -360,
-      "closing_price": -360,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -498,9 +498,9 @@
       "won": true,
       "brier": 0.05161983999999998,
       "reference_price": -360,
-      "closing_price": -360,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -512,9 +512,9 @@
       "won": true,
       "brier": 0.16646400000000003,
       "reference_price": -120,
-      "closing_price": -130,
-      "clv": 0.01976284584980237,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -526,9 +526,9 @@
       "won": true,
       "brier": 0.18852964000000003,
       "reference_price": -120,
-      "closing_price": -130,
-      "clv": 0.01976284584980237,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -540,9 +540,9 @@
       "won": false,
       "brier": 0.26853124,
       "reference_price": -115,
-      "closing_price": -120,
-      "clv": 0.010570824524312905,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -554,9 +554,9 @@
       "won": false,
       "brier": 0.26050816,
       "reference_price": -115,
-      "closing_price": -120,
-      "clv": 0.010570824524312905,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -568,9 +568,9 @@
       "won": false,
       "brier": 0.55815841,
       "reference_price": -218,
-      "closing_price": -218,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -582,9 +582,9 @@
       "won": false,
       "brier": 0.55294096,
       "reference_price": -218,
-      "closing_price": -218,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -596,9 +596,9 @@
       "won": false,
       "brier": 0.6417612100000001,
       "reference_price": -425,
-      "closing_price": -425,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -610,9 +610,9 @@
       "won": false,
       "brier": 0.68525284,
       "reference_price": -425,
-      "closing_price": -425,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -624,9 +624,9 @@
       "won": false,
       "brier": 0.33790969000000004,
       "reference_price": -180,
-      "closing_price": -180,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -638,9 +638,9 @@
       "won": false,
       "brier": 0.388129,
       "reference_price": -180,
-      "closing_price": -180,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -652,9 +652,9 @@
       "won": true,
       "brier": 0.11730625000000001,
       "reference_price": -575,
-      "closing_price": -600,
-      "clv": 0.005291005291005235,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -666,9 +666,9 @@
       "won": true,
       "brier": 0.04937283999999998,
       "reference_price": -575,
-      "closing_price": -600,
-      "clv": 0.005291005291005235,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -680,9 +680,9 @@
       "won": false,
       "brier": 0.31967716,
       "reference_price": -155,
-      "closing_price": -155,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -694,9 +694,9 @@
       "won": false,
       "brier": 0.3401222400000001,
       "reference_price": -155,
-      "closing_price": -155,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -708,9 +708,9 @@
       "won": false,
       "brier": 0.7192736099999999,
       "reference_price": -395,
-      "closing_price": -395,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -722,9 +722,9 @@
       "won": false,
       "brier": 0.72097081,
       "reference_price": -395,
-      "closing_price": -395,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-05 00:00:00"
     },
     {
@@ -736,9 +736,9 @@
       "won": false,
       "brier": 0.39325441,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-06 00:00:00"
     },
     {
@@ -750,11 +750,11 @@
       "won": false,
       "brier": 0.43414921000000006,
       "reference_price": -198,
-      "closing_price": -198,
-      "clv": 0.0,
-      "clv_blocked_reason": null,
+      "closing_price": null,
+      "clv": null,
+      "clv_blocked_reason": "replay: the reference price is the same nflverse close used to grade it, so CLV is not measurable \u2014 only live sealed slates carry a real pre-close reference price",
       "kickoff": "2025-10-06 00:00:00"
     }
   ],
-  "published_at": "2026-08-21T23:26:29.129525+00:00"
+  "published_at": "2026-08-22T14:55:44.726893+00:00"
 }

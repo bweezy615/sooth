@@ -58,6 +58,12 @@
   </div>
 
   <section class="sec" style="border-top:0;padding-top:4px">
+    <div class="sec-h"><span class="tl">CLOSING-LINE VALUE ON SEALED PICKS</span>
+      <span class="sub">the number that cannot be faked without a timestamp</span></div>
+    <div id="clv"></div>
+  </section>
+
+  <section class="sec">
     <div class="sec-h"><span class="tl">EVERY SAMPLE WE QUOTE, WITH ITS OWN DENOMINATOR</span></div>
     <div id="pops"></div>
   </section>
@@ -99,6 +105,45 @@ var R=[
   ["DISCLAIMERS","No wagers, no funds held, no performance claims, no affiliation with any league or book. Written plainly.","THE FINE PRINT →","/disclaimers"]
 ];
 if(Desk.populations) Desk.populations(document.getElementById("pops"));
+
+/* CLV is the one claim in this market that a timestamp makes and nothing else
+   does: it compares the price that existed WHEN WE SEALED against the closing
+   price, and only a pre-committed pick can be measured that way. It is stated
+   whether it flatters us or not — and stated as unavailable when it is. */
+fetch("/data/pickengine-record.json",{cache:"no-store"})
+  .then(function(r){return r.ok?r.json():null;})
+  .then(function(rec){
+    var el=document.getElementById("clv");
+    var live=(rec&&rec.weeks||[]).filter(function(w){return !w.rehearsal;});
+    var settled=live.reduce(function(a,w){return a+(w.n_settled||0);},0);
+    if(!settled){
+      el.innerHTML='<p class="notice" style="margin:0"><b>No sealed slate has '
+        +'reached a close yet.</b> The first CLV numbers land the Tuesday after '
+        +'Week 1, computed automatically. Until then this section stays empty '
+        +'rather than showing a rehearsal number: our replayed weeks take their '
+        +'reference price from the same row that supplies the close, so their '
+        +'CLV is not measurable and is published as unavailable, not as zero.</p>'
+        +'<p class="note">What it will measure: for every sealed pick, the price '
+        +'available when the Merkle root was published against the closing price '
+        +'we captured ourselves. A positive average means we sealed better '
+        +'numbers than the market settled on. We publish it either way.</p>';
+      return;
+    }
+    el.innerHTML='<div class="itab"><div class="scr"><table><thead><tr>'
+      +'<th class="l">SLATE</th><th>SETTLED</th><th>MEAN CLV</th><th>COVERAGE</th>'
+      +'</tr></thead><tbody>'
+      +live.slice().reverse().map(function(w){
+        var m=null; Object.keys(w.by_model||{}).forEach(function(k){
+          if(k.indexOf("elo+epa-v1")===0&&k.indexOf("market")<0) m=w.by_model[k];});
+        var c=m&&m.mean_clv!=null?m.mean_clv:null;
+        return '<tr><td class="l">'+D.esc(w.slate_id)+'</td><td>'+(w.n_settled||0)+'</td>'
+          +'<td class="'+(c>0?"up":c<0?"dn":"dim")+'">'+(c==null?"·":D.pts(c*100))+'</td>'
+          +'<td class="dim">'+(w.clv_coverage!=null?Math.round(w.clv_coverage*100)+"%":"·")+'</td></tr>';
+      }).join("")+'</tbody></table></div></div>'
+      +'<p class="note">Season mean CLV '+(rec.mean_clv==null?"·":D.pts(rec.mean_clv))
+      +' pts across '+settled+' settled picks. Positive means the sealed price beat '
+      +'the close. Every row regenerates from pickengine-record.json.</p>';
+  }).catch(function(){});
 document.getElementById("receipts").innerHTML=R.map(function(r,i){
   return D.feedRow(i,r[0],r[1],r[2],r[3]);}).join("");
 
