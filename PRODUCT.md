@@ -111,6 +111,36 @@ dishonest, and legally exposed. Time decay is what keeps the paywall off the
 trust surface — the proof is always free, because the slate is free the moment
 it can be graded.
 
+### What the pick engine depends on, and what would break it
+
+Charging for a slate from a model whose published record is 49.5% against a
+52.4% break-even is the most exposed thing this product does. The exposure is
+not legal — the record leads the page that sells it, so no claim needs
+substantiating. It is an **honesty** exposure, and it holds only while
+"sealed, graded in public, Pro buys timing" stays literally true.
+
+The specific failure is predictable, so it is written here rather than left to
+be noticed: **the pressure will be to stop publishing the weeks that went
+badly.** Not to lie — to let a bad slate go ungraded, to delay a publish, to
+quietly drop a losing week from the record while the good ones stay. Every one
+of those is the same act, and any of them turns this from a transparent
+instrument into a tout with better typography.
+
+So, as hard constraints:
+
+- A sealed slate is graded and published **whether it wins or loses**. A week
+  that goes badly is published on the same schedule as one that goes well.
+- The slate unlocks free at first kickoff, every time. If the free unlock ever
+  becomes conditional, the paywall has moved onto the trust surface and the
+  product is no longer what this document describes.
+- The record shown on the page selling access is the **full** record, not a
+  window chosen after the fact.
+- If any of these become inconvenient, that is the signal to stop selling the
+  slate — not the signal to adjust what gets published.
+
+Whoever reads this under that pressure will not have been part of the
+conversation that built it. That is why it is here.
+
 A daily post publishes the best available prop prices, refreshed with the board
 and rendered from the same data the page reads. It is a **price** product and
 must always read as one: selected on the gap to the de-vigged consensus, never
