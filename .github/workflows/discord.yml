@@ -71,7 +71,15 @@ jobs:
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add data/discord_sent.json
+          # The watermark does not exist until the bot has actually posted
+          # something, and `git add` on a missing path is a hard error — so
+          # every run before the first post would fail here. A red X on every
+          # scheduled run is worse than no check at all: it trains whoever sees
+          # it to ignore this workflow, which is the one that will carry a real
+          # failure later.
+          if [ -f data/discord_sent.json ]; then
+            git add data/discord_sent.json
+          fi
           if git diff --staged --quiet; then
             echo "nothing new posted"
           else
