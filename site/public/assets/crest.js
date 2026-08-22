@@ -26,25 +26,66 @@
       .toLowerCase().replace(/[^a-z0-9]+/g, "");
   }
 
+  /* team-logos.json is keyed by full team name ("arizonacardinals"), which is
+     what board.json publishes. The sealed slate does NOT: the pick engine
+     works in schedule abbreviations ("MIA", "LV"), so every crest lookup on
+     /picks missed and the whole slate rendered without a single logo. Index
+     the abbreviations too, once, at load.
+
+     Collisions are real and must not be silently resolved: ATL is both the
+     Braves and the Falcons, and several more overlap across leagues. An
+     ambiguous abbreviation resolves to NOTHING rather than to a coin flip —
+     a wrong crest beside a matchup is worse than no crest, because it looks
+     authoritative. Callers that know their sport can pass {sport:"nfl"}. */
+  var ABBR = null;
+  function indexAbbrs() {
+    ABBR = {};
+    var seen = {};
+    Object.keys(MAP || {}).forEach(function (k) {
+      var t = MAP[k];
+      if (!t || !t.abbr) return;
+      var a = norm(t.abbr);
+      /* team-logos.json carries an explicit `sport` on every entry; prefer it
+         and only fall back to sniffing the CDN path, so a logo host change
+         cannot quietly break the scoped lookup. */
+      var league = /espncdn\.com\/i\/teamlogos\/(\w+)\//.exec(t.logo || "");
+      var sport = norm(t.sport || "")
+        || (league ? league[1] : (/mlbstatic/.test(t.logo || "") ? "mlb" : ""));
+      if (sport) ABBR[sport + ":" + a] = t;          // unambiguous, always safe
+      if (seen[a]) { ABBR[a] = null; return; }        // ambiguous -> no crest
+      seen[a] = 1;
+      ABBR[a] = t;
+    });
+  }
+
   function load() {
     if (MAP) return Promise.resolve(MAP);
     if (PENDING) return PENDING;
     PENDING = fetch("/data/team-logos.json", { cache: "force-cache" })
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { MAP = (d && d.teams) || {}; hydrate(); return MAP; })
-      .catch(function () { MAP = {}; return MAP; });
+      .then(function (d) { MAP = (d && d.teams) || {}; indexAbbrs(); hydrate(); return MAP; })
+      .catch(function () { MAP = {}; ABBR = {}; return MAP; });
     return PENDING;
   }
 
-  function get(team) {
-    return (MAP || {})[norm(team)] || null;
+  /* get("Boston Red Sox") · get("MIA") · get("MIA", "nfl") */
+  function get(team, sport) {
+    var k = norm(team);
+    var direct = (MAP || {})[k];
+    if (direct) return direct;
+    if (!ABBR) return null;
+    if (sport) {
+      var scoped = ABBR[norm(sport) + ":" + k];
+      if (scoped) return scoped;
+    }
+    return ABBR[k] || null;
   }
 
   /* Markup for one crest. Width and height are set so the row does not reflow
      when the image lands — a board that twitches as 20 logos resolve is worse
      than one with no logos at all. */
-  function img(team, size) {
-    var t = get(team);
+  function img(team, size, sport) {
+    var t = get(team, sport);
     if (!t) return "";
     var s = size || 16;
     return '<img class="crest" src="' + t.logo + '" width="' + s + '" height="' + s
@@ -56,7 +97,7 @@
      from the name it belongs to. */
   function team(name, opts) {
     opts = opts || {};
-    var t = get(name);
+    var t = get(name, opts.sport);
     var abbr = opts.abbr && t;
     var label = abbr ? t.abbr : name;
     // When the label is shortened the full name must stay recoverable. "BOS"
@@ -64,8 +105,9 @@
     // person we are trying not to lose.
     return '<span class="tm-c" data-crest="' + esc(name) + '"'
       + (opts.size ? ' data-size="' + (opts.size | 0) + '"' : "")
+      + (opts.sport ? ' data-sport="' + esc(opts.sport) + '"' : "")
       + (abbr ? ' title="' + esc(name) + '"' : "") + '>'
-      + img(name, opts.size) + '<span>' + esc(label) + '</span></span>';
+      + img(name, opts.size, opts.sport) + '<span>' + esc(label) + '</span></span>';
   }
 
   /* Pages render whenever their own data lands, which may be before or after
@@ -79,7 +121,8 @@
       var el = spots[i];
       if (el.querySelector("img.crest")) continue;
       var html = img(el.getAttribute("data-crest"),
-                     parseInt(el.getAttribute("data-size"), 10) || 16);
+                     parseInt(el.getAttribute("data-size"), 10) || 16,
+                     el.getAttribute("data-sport") || "");
       if (html) el.insertAdjacentHTML("afterbegin", html);
     }
   }

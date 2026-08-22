@@ -46,30 +46,44 @@ PAGES = [
      "and make no performance claims."),
 ]
 
+# ⚠ DRIFT WARNING — read before running this script.
+#
+# build_ledger() and friends REGENERATE site/public/{ledger,methodology,verify,
+# disclaimers}.html from this constant plus an f-string body. Those four files
+# were hand-re-skinned to the FROZEN MARKET concept on 2026-08-22
+# (docs/DESIGN-frozen-market.md), and verify.html in particular gained frost
+# treatment on its commitment blocks that this generator knows nothing about.
+#
+# The palette below has been ported so a rebuild no longer reverts the colours
+# and type. It will still discard any hand-edit to the four pages' STRUCTURE.
+# Before running: diff the generated output against what is on disk, or port
+# the structural change up into here first.
 CSS = """
-:root{--bg:#0A0B0D;--panel:#101216;--panel-2:#1B1E24;--line:rgba(255,255,255,.07);
---line-2:rgba(255,255,255,.13);
---ink:#E8EAED;--muted:#8A919D;--dim:#5A6170;--accent:#2DD4A7;--warn:#E8B04B;
---bad:#F0716C;--link:#2DD4A7;
---mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+:root{--bg:#06080A;--panel:#0B0F13;--panel-2:#18222B;--line:rgba(190,222,228,.085);
+--line-2:rgba(190,222,228,.17);
+--ink:#F0F5F6;--muted:#7E8D93;--dim:#546268;--accent:#2DD4A7;--warn:#E2A94A;
+--bad:#FF6B6B;--link:#2DD4A7;--frost:#BFEAF2;--frost-rim:rgba(191,234,242,.34);
+--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
 *{box-sizing:border-box}
 body{margin:0;color:var(--ink);
-font:15px/1.7 Inter,system-ui,-apple-system,sans-serif;
+font:15px/1.7 Archivo,system-ui,-apple-system,sans-serif;
 -webkit-font-smoothing:antialiased;
-background:radial-gradient(1100px 480px at 50% -180px,rgba(45,212,167,.05),transparent 70%),var(--bg)}
+background:radial-gradient(1100px 480px at 50% -180px,rgba(45,212,167,.055),transparent 72%),var(--bg)}
 .wrap{max-width:860px;margin:0 auto;padding:0 24px}
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:2px}
 header{border-bottom:1px solid var(--line);position:sticky;top:0;
-background:rgba(10,11,13,.85);backdrop-filter:blur(10px);z-index:10}
+background:rgba(6,8,10,.86);backdrop-filter:blur(10px);z-index:10}
 nav{display:flex;align-items:center;gap:18px;height:52px;
 max-width:1360px;margin:0 auto;padding:0 28px}
-.brand{font:700 15px/1 Inter,sans-serif;letter-spacing:.10em;text-transform:uppercase;
+.brand{font:600 17px/1 Archivo,sans-serif;letter-spacing:-.02em;text-transform:none;
 text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
 .brand:hover{text-decoration:none}
-.brand .dot{width:9px;height:9px;border-radius:1px;background:var(--accent)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);
+box-shadow:0 0 10px rgba(45,212,167,.55)}
+.brand i{font-style:normal;color:var(--accent)}
 nav .spacer{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font:600 11.5px/1 Inter,sans-serif;
+nav a.l{color:var(--muted);text-decoration:none;font:600 11.5px/1 Archivo,sans-serif;
 letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:3px}
 nav a.l:hover{color:var(--ink);background:var(--panel);text-decoration:none}
 .prose{padding:40px 0 60px}
@@ -127,7 +141,7 @@ SHELL = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} — {brand}</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0A0B0D">
+<meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -141,7 +155,7 @@ SHELL = """<!doctype html>
 <meta property="og:url" content="{domain}/{slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- desk.css first so this page's own rules below still win on any clash;
      it is here for the shared header and footer that desk.js injects. -->
 <link rel="stylesheet" href="/assets/desk.css">

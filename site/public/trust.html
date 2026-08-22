@@ -18,14 +18,67 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
+  /* FROZEN MARKET — the proof surface.
+     Three moves, and nothing else on this page is coloured:
+     1. A published Merkle root is a frozen artifact. Roots and commitment ids
+        are set in ice (--frost, mono), and they are the only ice here.
+     2. A sealed slate that has not reached a close yet is committed-but-not-
+        revealed — rule 2 exactly — so that state renders as a frosted surface
+        instead of an amber warning. Amber is kept for the one real caution on
+        the page: the rehearsal rows.
+     3. WON and LOST are drawn by ONE rule whose only varying property is hue.
+        Equal weight is a product promise, so it is enforced structurally
+        rather than left to two declarations staying in sync. */
+
+  /* the position: a teal hairline is the only chrome that is ours */
   .stance{border-left:2px solid var(--brand);background:var(--g1);
     padding:18px 22px;margin:22px 0 6px;max-width:86ch;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .stance p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.7}
-  .stance b{color:var(--brand)}
-  .stance .n{font-family:var(--mono)}
+  /* was teal. Teal marks a number that beats the market, not a sentence —
+     spending the one hue on emphasis makes the signal mean less. */
+  .stance b{color:var(--ink)}
+  .stance .n{font-family:var(--mono);color:var(--ink);
+    font-variant-numeric:tabular-nums}
   .embedded .stance{display:none}
   .pick{font:600 12.5px var(--sans);color:var(--ink)}
+
+  /* the graded verdict — one rule, one differing property */
+  .vd{font:600 11px/1 var(--mono);letter-spacing:.12em}
+  .vd.w{color:var(--up)}
+  .vd.l{color:var(--dn)}
+  .vd.p{color:var(--mut)}
+
+  /* a commitment id, frozen. Ice-toned, mono, under a frost rim: it is the
+     one thing in the row that was fixed before anybody knew the result. */
+  .root{font:500 11px/1 var(--mono);letter-spacing:.07em;color:var(--frost);
+    opacity:.72;border-bottom:1px solid var(--frost-rim);padding-bottom:2px;
+    transition:opacity var(--t-hover) ease}
+  .root:hover{opacity:1;color:var(--frost)}
+
+  /* sealed, not yet thawed */
+  .await{padding:15px 17px;margin:0 0 8px;font-size:12.5px;line-height:1.6;
+    color:var(--ink2);max-width:84ch}
+  .await b{color:var(--frost)}
+
+  /* The shared populations block writes each sample's name and its provenance
+     into one cell as <b> + <small>, and desk.css has no rule for that <small>:
+     they render glued together — "Backtest Anflverse spread_line…". A sample
+     that cannot be read from its own denominator row defeats the purpose of
+     the block, so it is separated here until the shell owns the rule. */
+  #pops .itab td.l small{display:block;margin-top:3px;max-width:38ch;
+    white-space:normal;font:400 10.5px/1.45 var(--mono);color:var(--dim)}
+
+  /* the small print under an instrument (.note has no shared rule yet) */
+  .note{font-size:11.5px;line-height:1.6;color:var(--dim);margin:9px 0 0;
+    max-width:84ch}
+  .note:empty{display:none}
+
+  /* the one lit rim on the page, on the surface that carries the grades.
+     Raised over the sticky header row, and dropped on phones where the
+     table has already become a stack of cards. */
+  #proofSec .rimlit::after{z-index:2}
+  @media (max-width:720px){#proofSec .rimlit::after{display:none}}
 </style>
 </head>
 <body>
@@ -42,7 +95,7 @@
       <span class="sub" id="pfSub"></span>
       <a class="more tl" href="/record">FULL RECORD →</a></div>
     <div id="pfNote"></div>
-    <div class="itab"><div class="scr"><table>
+    <div class="itab rimlit"><div class="scr"><table>
       <thead><tr><th class="l">PUBLISHED PICK</th><th class="l">MATCHUP</th>
         <th>STATED</th><th>RESULT</th><th>VS CLOSE</th><th class="l">PROOF</th></tr></thead>
       <tbody id="pfRows"></tbody></table></div></div>
@@ -118,7 +171,9 @@ fetch("/data/pickengine-record.json",{cache:"no-store"})
     var live=(rec&&rec.weeks||[]).filter(function(w){return !w.rehearsal;});
     var settled=live.reduce(function(a,w){return a+(w.n_settled||0);},0);
     if(!settled){
-      el.innerHTML='<p class="notice" style="margin:0"><b>No sealed slate has '
+      /* committed, not yet revealed: rule 2 says that state is ice, not a
+         warning. Nothing is wrong here — the slate simply has not thawed. */
+      el.innerHTML='<p class="frosted await"><b>No sealed slate has '
         +'reached a close yet.</b> The first CLV numbers land the Tuesday after '
         +'Week 1, computed automatically. Until then this section stays empty '
         +'rather than showing a rehearsal number: our replayed weeks take their '
@@ -177,10 +232,12 @@ fetch("/data/pickengine-record.json",{cache:"no-store"})
             +'</span></td>'
           +'<td class="l dim">'+D.esc(p.matchup)+'</td>'
           +'<td class="dim">'+pct(p.prob)+'</td>'
-          +'<td>'+(p.won===null?'<span class="dim">PUSH</span>'
-            :p.won?'<span class="up">WON</span>':'<span class="dn">LOST</span>')+'</td>'
+          /* one class, one differing letter: a loss is drawn at exactly the
+             weight of a win, and no future edit can quietly change that. */
+          +'<td>'+(p.won===null?'<span class="vd p">PUSH</span>'
+            :p.won?'<span class="vd w">WON</span>':'<span class="vd l">LOST</span>')+'</td>'
           +'<td>'+D.clvChip(p.clv==null?null:p.clv*100,p.clv_blocked_reason)+'</td>'
-          +'<td class="l"><a class="tl" href="/verify" style="color:var(--dim)">'
+          +'<td class="l"><a class="root" href="/verify">'
             +D.esc(String(w.merkle_root||"").slice(0,8))+'…</a></td></tr>');
       });
     });

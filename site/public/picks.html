@@ -38,15 +38,58 @@
   .dtin{padding:16px 18px 18px}
   .dtin .kv .k{font:500 11px var(--mono);letter-spacing:.06em;color:var(--mut)}
   .dt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-  /* Marks the one column that is actually withheld. Deliberately quiet — it
-     is a state, not a promotion, and it sits on every row. */
-  .sealed{display:inline-block;font:600 9.5px var(--mono);letter-spacing:.14em;
-    color:var(--amber);background:var(--amber-dim);
-    border:1px solid rgba(232,176,75,.28);padding:3px 7px}
-  .lockcta{display:inline-block;font:700 12px var(--sans);color:var(--g0);
-    background:linear-gradient(180deg,#F3EFE6,#DCD6C9);padding:11px 18px;
-    border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
-    0 3px 8px -2px rgba(0,0,0,.6)}
+  /* The one withheld column used to be an amber chip, which said CAUTION about
+     something that is merely committed. Amber is staleness; this is ice. The
+     shared .frost primitive now carries it — same state, same object, taught
+     once for the whole site. */
+
+  /* ---- THE THAW ----------------------------------------------------------
+     The strip's countdown is not a generic timer: it is the moment the ice
+     breaks. The bar under it IS the ice, receding — full width at seal time,
+     nothing at first kickoff — drawn from the two real timestamps the payload
+     already carries and from nothing else. If we don't know when the slate was
+     sealed we draw no bar rather than invent a duration. */
+  .thaw{display:inline-flex;flex-direction:column;gap:6px}
+  .thaw-r{display:flex;align-items:baseline;gap:9px}
+  .thaw-k{color:var(--frost);opacity:.7}
+  .melt{display:block;height:2px;background:rgba(191,234,242,.07);
+    position:relative;overflow:hidden}
+  .melt b{position:absolute;left:0;top:0;bottom:0;width:100%;display:block;
+    background:var(--frost-rim);transition:width 1s linear}
+  /* the wet leading edge where the ice is actually going */
+  .melt b::after{content:"";position:absolute;right:0;top:0;bottom:0;width:1px;
+    background:var(--frost);box-shadow:0 0 6px rgba(191,234,242,.55)}
+  #thaw.open .thaw-k{color:var(--up);opacity:1}
+  #thaw.open .melt b{width:0}
+
+  /* ---- the locked board is a frozen surface ------------------------------
+     .frosted is the shared whole-surface treatment; .rimlit is the single teal
+     hairline off the logo, and this slate is the page's hero, so it gets the
+     one rim. Only the sealed view carries them — once it thaws it is an
+     ordinary instrument again. */
+  #board.frosted thead th{border-bottom-color:var(--frost-rim);
+    background:linear-gradient(180deg,rgba(191,234,242,.08),
+      rgba(191,234,242,.02)),var(--g1)}
+  #board.frosted .state .tl{color:var(--frost)}
+  @media (max-width:720px){
+    /* the stacked row-cards sit inside the ice rather than against its rim */
+    #board.frosted{padding:10px 10px 2px}
+  }
+
+  /* Was a glossy cream key lifted off the page — the one warm, rounded, lit
+     object on a cold flat site. The promo's vocabulary is a hairline and a
+     triangle: teal, precise, flat. */
+  .lockcta{display:inline-flex;align-items:center;gap:9px;
+    font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--brand);background:var(--brand-dim);
+    border:1px solid rgba(45,212,167,.42);padding:12px 16px;
+    border-radius:var(--r);
+    transition:color var(--t-hover) ease,border-color var(--t-hover) ease,
+      background var(--t-hover) ease}
+  .lockcta::before{content:"";flex:0 0 auto;
+    border:4px solid transparent;border-left-color:currentColor}
+  .lockcta:hover{color:var(--brand-hi);border-color:var(--brand-hi);
+    background:rgba(45,212,167,.15)}
   .gradedh{margin-top:8px}
   .rowline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
   .rehearsal{border-left:2px solid var(--amber);background:var(--amber-dim);
@@ -69,7 +112,7 @@
     before kickoff and graded after — losses styled exactly like wins. The slate opens to
     everyone at first kickoff. Not advice; nothing here claims to win.</p>
   <div class="ph">
-    <span class="tl">SOOTH PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC · NEVER SOLD AS WINNING</span>
+    <span class="tl">PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC · NEVER SOLD AS WINNING</span>
     <h1>Every game on the slate. No selection rule.</h1>
     <p class="lede">Every honest record in this market is a <b>selected subset</b> — filtered
       by star tier, an edge threshold, or a card that plays a third of the games. Ours is
@@ -144,31 +187,72 @@ function countdown(iso){
     +"TO FIRST KICKOFF";
 }
 var _cdTimer=null;
-function armCountdown(iso){
+/* The thaw. `from` is the seal timestamp: with both ends of the sealed window
+   we can draw how much of it is left as a receding edge of ice. Without it we
+   still run the clock and simply draw no bar — the melt has to be measured,
+   not decorative. */
+function armCountdown(iso,from){
   if(_cdTimer) clearInterval(_cdTimer);
   var el=document.getElementById("cd"); if(!el||!iso) return;
-  _cdTimer=setInterval(function(){
-    var ms=Date.parse(iso)-Date.now();
+  var t1=Date.parse(iso), t0=Date.parse(from||""), span=t1-t0;
+  var ice=document.getElementById("ice"), box=document.getElementById("thaw");
+  var first=true;
+  function paint(){
+    var ms=t1-Date.now();
     el.textContent=countdown(iso);
     /* amber only under 5 minutes — a real threshold, not a mood */
     if(ms>0&&ms<3e5) el.style.color="var(--amber)";
-    if(ms<=0){ clearInterval(_cdTimer); el.style.color="var(--up)"; }
-  },1000);
+    if(ice&&span>0){
+      var w=(Math.max(0,Math.min(1,ms/span))*100).toFixed(2)+"%";
+      if(first){
+        /* This much ice was already gone when the page opened, so it lands at
+           its true width instead of melting in — the desk's motion contract:
+           prev===null never animates. Every tick after this one is a real
+           clock event and does. */
+        ice.style.transition="none"; ice.style.width=w;
+        void ice.offsetWidth; ice.style.transition="";
+      } else ice.style.width=w;
+    }
+    first=false;
+    if(ms<=0){
+      if(_cdTimer){ clearInterval(_cdTimer); _cdTimer=null; }
+      el.style.color="var(--up)";
+      if(box) box.classList.add("open");   /* the ice is gone; so is the bar */
+    }
+  }
+  paint();
+  if(t1-Date.now()<=0) return;
+  _cdTimer=setInterval(paint,1000);
 }
 
 function strip(s,locked){
+  /* The melt bar is only honest when BOTH ends of the sealed window are known:
+     it draws the fraction of that window still to run. With no parsable seal
+     timestamp there is no measurable span, span>0 is false in armCountdown,
+     and the bar would sit at its CSS default of 100% forever — silently
+     claiming no time had passed. Measure it or do not draw it. */
+  var sealedAt=Date.parse(s.sealed_at||s.committed_at||"");
+  var meltable=locked && !isNaN(sealedAt)
+    && Date.parse(s.unlocks_at||s.earliest_kickoff||"")>sealedAt;
   $("strip").innerHTML=
     '<span class="tl">SLATE <b>'+D.esc(s.slate_id||"—")+'</b></span>'
     +'<a class="seal-badge" href="/verify" title="Verify this commitment">⛓ SEALED '
       +D.esc(String(s.merkle_root||"").slice(0,10))+'…</a>'
     +'<span class="tl">AT <b><span data-ago="'+D.esc(s.sealed_at||s.committed_at||"")+'">'
       +D.ago(s.sealed_at||s.committed_at||"")+'</span></b></span>'
-    +'<span class="tl" id="cd" style="font-variant-numeric:tabular-nums;color:'
-      +(locked?"var(--amber)":"var(--up)")+'">'
-      +countdown(s.unlocks_at||s.earliest_kickoff)+'</span>'
+    /* Sealed is frost, not amber: a committed slate is not a warning about
+       anything, and the code below already reserves amber for the last five
+       minutes. The melt bar only exists while there is ice to melt. */
+    +'<span class="thaw" id="thaw"><span class="thaw-r">'
+      +'<span class="tl thaw-k">THAW</span>'
+      +'<span class="tl" id="cd" style="font-variant-numeric:tabular-nums;color:'
+        +(locked?"var(--frost)":"var(--up)")+'">'
+        +countdown(s.unlocks_at||s.earliest_kickoff)+'</span></span>'
+      +(meltable?'<i class="melt"><b id="ice"></b></i>':'')
+    +'</span>'
     +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
       +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>';
-  armCountdown(s.unlocks_at||s.earliest_kickoff);
+  armCountdown(s.unlocks_at||s.earliest_kickoff,s.sealed_at||s.committed_at);
 }
 
 /* ---------- locked: the shape of the slate, none of the opinion ----------
@@ -189,12 +273,19 @@ function lockedRows(games){
   return games.map(function(g){
     var mp=g.market_prob;
     return '<tr>'
-      +'<td class="l"><span class="mu">'+D.esc(g.away)+'<span class="at">at</span>'
-        +D.esc(g.home)+'</span></td>'
+      /* Crests beside the matchup, as on the live board. The slate speaks in
+         schedule abbreviations (MIA, LV) while team-logos.json is keyed by
+         full name, so the sport MUST be passed: MIA, ATL, DET, CLE, KC and
+         nine more are both an NFL and an MLB club, and an unscoped lookup
+         would put a Dolphins crest on a Marlins game. */
+      +'<td class="l"><span class="mu">'
+        +window.Crest.team(g.away,{size:15,sport:"nfl"})
+        +'<span class="at">at</span>'
+        +window.Crest.team(g.home,{size:15,sport:"nfl"})+'</span></td>'
       +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
       +'<td>'+(g.spread_line==null?'·':(g.spread_line>0?'+':'')+g.spread_line)+'</td>'
       +'<td>'+(mp==null?'·':D.pct(mp,0))+'</td>'
-      +'<td><span class="sealed">SEALED</span></td>'
+      +'<td><span class="frost">SEALED</span></td>'
       +'<td class="dim">'+(g.divergence_rank==null?'·':'#'+g.divergence_rank)+'</td>'
       +'</tr>';
   }).join("");
@@ -208,6 +299,11 @@ function lockedTable(games){
 }
 function lockedView(t){
   strip(t,true);
+  /* Sixteen games committed and not yet revealed: the whole slate is one
+     sealed object, so the surface itself goes under ice rather than only the
+     chips inside it. .rimlit is the promo's single lit arc — the page's hero
+     surface gets it, and only while it is sealed. */
+  $("board").className="itab frosted rimlit";
   /* The public slate file is the source for the visible columns. If it is
      missing we say the schedule is unavailable rather than inventing rows —
      an empty state beats sixteen fake ones. */
@@ -299,6 +395,8 @@ function detail(g){
 }
 function openView(s){
   strip(s,false);
+  /* thawed: the ice comes off the surface with the seal */
+  $("board").className="itab";
   var games=s.games||[];
   var maxDiv=games.reduce(function(m,g){return Math.max(m,g.divergence||0);},0);
   if(maxDiv<NOPLAY_DIVERGENCE&&games.length){

@@ -28,25 +28,37 @@
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 <style>
-  :root{
-    --teal:#10A372; --amber:#BC862B;
-  }
-  body{background:
-      radial-gradient(900px 400px at 70% -90px, rgba(2,132,199,.13), transparent 65%),
-      var(--bg);
-    padding:0 20px 64px}
+  /* ============ FROZEN MARKET — engine room ============
+     This page was carrying three hues the system does not have: a blue radial
+     wash on the body plus three blues for the model series and code chips, a
+     second green sitting next to --up for the market series and the price-edge
+     fills, and its own --amber override — a shared token, which must never be
+     redefined. All of it collapses to one teal plus cool white here.
+
+     The two series colours now mean something. Teal is ours: the Sooth model
+     line, the best-price line. Cool white is the market. On the honesty chart
+     that reads exactly as it should — our own colour is the one running below
+     the market's, in public, on the page that says so. */
+  :root{--ser:var(--ink2)}   /* the market series: cool white, never a hue */
+  body{padding:0 20px 64px}  /* ground and light come from desk.css — rule 4 */
   .wrap-page{max-width:980px; margin:0 auto}
   .page-head{padding:44px 0 10px}
   h1{font-size:clamp(26px,4.5vw,38px); font-weight:770; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance}
   .sub{color:var(--muted); max-width:66ch; margin:0 0 8px; font-size:15px}
+  /* a live indicator is chrome that belongs to us, so it is teal and square */
   .live{display:inline-flex; align-items:center; gap:7px; font-family:var(--num); font-size:11px;
-    letter-spacing:.1em; color:var(--pos); border:1px solid rgba(22,163,74,.25);
-    border-radius:999px; padding:3px 11px; margin-top:10px}
-  .live i{width:7px;height:7px;border-radius:50%;background:var(--pos);display:inline-block;flex:none}
+    letter-spacing:.1em; color:var(--brand); border:1px solid rgba(45,212,167,.28);
+    border-radius:var(--r); padding:4px 11px; margin-top:10px}
+  .live i{width:6px;height:6px;border-radius:50%;background:var(--brand);display:inline-block;flex:none;
+    box-shadow:0 0 8px rgba(45,212,167,.55)}
   h2{font-size:13px; font-family:var(--num); letter-spacing:.16em; text-transform:uppercase;
     color:var(--muted); font-weight:600; margin:44px 0 14px}
-  .card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3)); border:1px solid var(--line);
-    border-radius:16px; padding:22px}
+  /* glass, not cards — rule 3. Thin, dark, lit along the top edge, radius as
+     an accent rather than a personality (this was a 16px rounded panel). */
+  .card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    border:1px solid var(--line); border-radius:var(--r); padding:22px;
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
+      0 18px 40px -22px rgba(0,0,0,.9)}
   .panel-sub{margin:0 0 16px; font-size:13.5px; color:var(--muted); max-width:68ch}
 
   /* pipeline */
@@ -59,21 +71,26 @@
   .stage h3{margin:0 0 4px; font-size:13px; font-weight:650}
   .stage p{margin:0; font-size:11.5px; color:var(--muted); line-height:1.5}
   .stage code{display:inline-block; margin-top:8px; font-family:var(--num); font-size:10px;
-    color:#0369A1; background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:1px 6px}
+    color:var(--brand); background:var(--bg); border:1px solid var(--line);
+    border-radius:var(--r); padding:1px 6px}
   .stage .num{font-family:var(--num); font-size:10px; color:var(--dim); letter-spacing:.14em}
 
   .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-bottom:16px}
-  .tile{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:14px 16px 12px}
+  .tile{background:var(--bg); border:1px solid var(--line); border-radius:var(--r);
+    padding:14px 16px 12px; box-shadow:inset 0 1px 0 rgba(190,240,245,.05)}
   .tile b{display:block; font-family:var(--num); font-size:24px; font-weight:600;
-    font-variant-numeric:tabular-nums}
+    font-variant-numeric:tabular-nums; color:var(--ink)}
   .tile span{font-size:11.5px; color:var(--muted)}
-  .tile.ours b{color:#0284C7}.tile.mkt b{color:#15803D}.tile.brk b{color:var(--muted)}
+  /* the model's number carries our colour; the market's is cool white. Neither
+     clears break-even and the tile does not pretend otherwise. */
+  .tile.ours b{color:var(--brand)}.tile.mkt b{color:var(--ser)}.tile.brk b{color:var(--muted)}
 
   #chartbox{position:relative}
   #btchart{width:100%; height:auto; display:block}
-  .tip{position:absolute; pointer-events:none; background:var(--bg-3); border:1px solid var(--line);
-    border-radius:10px; padding:9px 12px; font-size:12px; color:var(--muted); display:none;
-    box-shadow:0 8px 30px rgba(16,20,24,.10); white-space:nowrap; z-index:2; line-height:1.7}
+  .tip{position:absolute; pointer-events:none; background:var(--g2); border:1px solid var(--line-2);
+    border-radius:var(--r); padding:9px 12px; font-size:12px; color:var(--muted); display:none;
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.08),0 14px 34px -20px rgba(0,0,0,.9);
+    white-space:nowrap; z-index:2; line-height:1.7}
   .tip b{color:var(--ink); font-family:var(--num); font-weight:600}
   .tip i{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:7px}
   .axis{font-family:var(--num); font-size:10px; fill:var(--dim)}
@@ -82,17 +99,20 @@
   .legend i{display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:7px; vertical-align:3px}
   .legend .dash i{background:repeating-linear-gradient(90deg,var(--dim) 0 4px,transparent 4px 7px)}
 
-  .verdict{border-left:3px solid var(--iris); padding:4px 0 4px 16px; margin-top:18px}
+  .verdict{border-left:2px solid var(--brand); padding:4px 0 4px 16px; margin-top:18px}
   .verdict p{margin:0; font-size:13.5px; color:var(--muted); max-width:66ch}
   .verdict b{color:var(--ink)}
 
   .gains{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
-  .gain{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:13px 15px 11px}
-  .gain b{display:block; font-family:var(--num); font-size:21px; font-weight:600; color:var(--pos)}
+  .gain{background:var(--bg); border:1px solid var(--line); border-radius:var(--r);
+    padding:13px 15px 11px; box-shadow:inset 0 1px 0 rgba(190,240,245,.05)}
+  /* a price gap IS a better-than-market number, which is exactly what the one
+     hue is reserved for — rule 1 */
+  .gain b{display:block; font-family:var(--num); font-size:21px; font-weight:600; color:var(--up)}
   .gain span{font-size:11px; color:var(--muted)}
   .gain em{font-style:normal; display:block; font-family:var(--num); font-size:10px; color:var(--dim); margin-top:2px}
   .stamp{font-family:var(--num); font-size:11px; color:var(--dim); margin-top:14px}
-  .err{color:#DC2626; font-size:12.5px; font-family:var(--num)}
+  .err{color:var(--dn); font-size:12.5px; font-family:var(--num)}
 </style>
 </head>
 <body data-page="trust">
@@ -143,8 +163,8 @@
   chart clears breakeven, and we publish that instead of hiding it.</b></p>
   <div class="tiles" id="bt-tiles"></div>
   <div class="legend" aria-hidden="true">
-    <span><i style="background:#0C9BDB"></i>Sooth model</span>
-    <span><i style="background:var(--teal)"></i>Market (closing line)</span>
+    <span><i style="background:var(--brand)"></i>Sooth model</span>
+    <span><i style="background:var(--ser)"></i>Market (closing line)</span>
     <span class="dash"><i></i>Breakeven at −110 (52.4%)</span>
   </div>
   <div id="chartbox">
@@ -161,7 +181,7 @@
   <p class="panel-sub">Because the archive holds every book's price on every game, the engine
   knows the spread <i>between</i> books. Taking the best number instead of the worst is pure,
   measurable value — no prediction required. These figures are read live from
-  <code style="font-family:var(--num);font-size:11px;color:#0369A1">board.json</code>, the same
+  <code style="font-family:var(--num);font-size:11px;color:var(--brand)">board.json</code>, the same
   file the public board renders.</p>
   <div class="gains" id="gains"><span class="err" style="display:none" id="gains-err"></span></div>
   <p class="stamp" id="board-stamp"></p>
@@ -172,9 +192,9 @@
   <p class="panel-sub" id="pe-method"></p>
   <div class="tiles" id="pe-tiles"></div>
   <div class="legend" aria-hidden="true">
-    <span><i style="background:#0C9BDB"></i>Settled at best price</span>
+    <span><i style="background:var(--brand)"></i>Settled at best price</span>
     <span><i style="background:var(--dim)"></i>Settled at median price</span>
-    <span><i style="background:rgba(22,163,74,.35)"></i>The price edge (gap)</span>
+    <span><i style="background:rgba(45,212,167,.35)"></i>The price edge (gap)</span>
   </div>
   <div id="pebox" style="position:relative">
     <svg id="pechart" viewBox="0 0 900 300" role="img"
@@ -228,13 +248,13 @@ function drawCurve(bt){
   const bl=el('text',{x:W-padR+8,y:ys(bt.breakeven)+3,'class':'slabel',fill:css('--muted')});
   bl.textContent='breakeven';
   const path=(key)=>pts.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[key]).toFixed(1)).join(' ');
-  el('path',{d:path('market'),fill:'none',stroke:css('--teal'),'stroke-width':2,'stroke-linejoin':'round'});
-  el('path',{d:path('ours'),fill:'none',stroke:'#0C9BDB','stroke-width':2,'stroke-linejoin':'round'});
+  el('path',{d:path('market'),fill:'none',stroke:css('--ser'),'stroke-width':2,'stroke-linejoin':'round'});
+  el('path',{d:path('ours'),fill:'none',stroke:css('--brand'),'stroke-width':2,'stroke-linejoin':'round'});
   const last=pts[pts.length-1];
-  el('circle',{cx:xs(pts.length-1),cy:ys(last.ours),r:4,fill:'#0C9BDB'});
-  el('circle',{cx:xs(pts.length-1),cy:ys(last.market),r:4,fill:css('--teal')});
-  const l1=el('text',{x:W-padR+8,y:ys(last.market)+3,'class':'slabel',fill:css('--teal')});l1.textContent='market '+pct(last.market);
-  const l2=el('text',{x:W-padR+8,y:ys(last.ours)+9,'class':'slabel',fill:'#0C9BDB'});l2.textContent='model '+pct(last.ours);
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.ours),r:4,fill:css('--brand')});
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.market),r:4,fill:css('--ser')});
+  const l1=el('text',{x:W-padR+8,y:ys(last.market)+3,'class':'slabel',fill:css('--ser')});l1.textContent='market '+pct(last.market);
+  const l2=el('text',{x:W-padR+8,y:ys(last.ours)+9,'class':'slabel',fill:css('--brand')});l2.textContent='model '+pct(last.ours);
   if(Math.abs(ys(last.ours)-ys(last.market))<14){l2.setAttribute('y',ys(last.market)+17);}
   /* crosshair + tooltip */
   const tip=document.getElementById('tip');
@@ -248,8 +268,8 @@ function drawCurve(bt){
     cross.setAttribute('x1',x);cross.setAttribute('x2',x);cross.setAttribute('visibility','visible');
     tip.style.display='block';
     tip.innerHTML=`<b>${p.t}</b> · ${p.n.toLocaleString()} games graded<br>`+
-      `<i style="background:${'#0C9BDB'}"></i>model <b>${pct(p.ours)}</b><br>`+
-      `<i style="background:${css('--teal')}"></i>market <b>${pct(p.market)}</b>`;
+      `<i style="background:${css('--brand')}"></i>model <b>${pct(p.ours)}</b><br>`+
+      `<i style="background:${css('--ser')}"></i>market <b>${pct(p.market)}</b>`;
     let tx=x/W*box.width+14; if(tx+tip.offsetWidth>box.width) tx=x/W*box.width-tip.offsetWidth-14;
     tip.style.left=tx+'px'; tip.style.top=(ev.clientY-box.top-20)+'px';
   });
@@ -295,14 +315,14 @@ function drawEdge(pe){
     const t=el('text',{x:xs(i),y:H-8,'text-anchor':'start','class':'axis'});t.textContent="'"+s.slice(2);});
   const path=k=>pts.map((p,i)=>(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[k]).toFixed(1)).join(' ');
   el('path',{d:path('best')+' '+pts.map((p,i)=>'L'+xs(pts.length-1-i).toFixed(1)+' '+ys(pts[pts.length-1-i].median).toFixed(1)).join(' ')+' Z',
-    fill:'rgba(22,163,74,.13)',stroke:'none'});
-  el('path',{d:path('median'),fill:'none',stroke:css('--dim'),'stroke-width':2,'stroke-linejoin':'round'});
-  el('path',{d:path('best'),fill:'none',stroke:'#0C9BDB','stroke-width':2,'stroke-linejoin':'round'});
+    fill:'rgba(45,212,167,.13)',stroke:'none'});
+  el('path',{d:path('median'),fill:'none',stroke:css('--ser'),'stroke-width':2,'stroke-linejoin':'round'});
+  el('path',{d:path('best'),fill:'none',stroke:css('--brand'),'stroke-width':2,'stroke-linejoin':'round'});
   const last=pts[pts.length-1];
-  el('circle',{cx:xs(pts.length-1),cy:ys(last.best),r:4,fill:'#0C9BDB'});
-  el('circle',{cx:xs(pts.length-1),cy:ys(last.median),r:4,fill:css('--dim')});
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.best),r:4,fill:css('--brand')});
+  el('circle',{cx:xs(pts.length-1),cy:ys(last.median),r:4,fill:css('--ser')});
   const kfmt=v=>(v<0?'−$':'$')+(Math.abs(v)/1000).toFixed(1)+'k';
-  const t1=el('text',{x:W-padR+8,y:ys(last.best)+3,'class':'slabel',fill:'#0C9BDB'});t1.textContent='best '+kfmt(last.best);
+  const t1=el('text',{x:W-padR+8,y:ys(last.best)+3,'class':'slabel',fill:css('--brand')});t1.textContent='best '+kfmt(last.best);
   const t2=el('text',{x:W-padR+8,y:ys(last.median)+3,'class':'slabel',fill:css('--muted')});t2.textContent='median '+kfmt(last.median);
   if(Math.abs(ys(last.best)-ys(last.median))<14)t2.setAttribute('y',ys(last.median)+15);
   const tip=document.getElementById('petip');
@@ -316,9 +336,9 @@ function drawEdge(pe){
     cross.setAttribute('x1',x);cross.setAttribute('x2',x);cross.setAttribute('visibility','visible');
     tip.style.display='block';
     tip.innerHTML=`<b>${p.t}</b> · ${usd(p.staked)} staked<br>`+
-      `<i style="background:${'#0C9BDB'}"></i>best price <b>${usd(p.best)}</b><br>`+
-      `<i style="background:${css('--dim')}"></i>median price <b>${usd(p.median)}</b><br>`+
-      `<i style="background:rgba(22,163,74,.6)"></i>gap <b>${usd(p.best-p.median)}</b>`;
+      `<i style="background:${css('--brand')}"></i>best price <b>${usd(p.best)}</b><br>`+
+      `<i style="background:${css('--ser')}"></i>median price <b>${usd(p.median)}</b><br>`+
+      `<i style="background:rgba(45,212,167,.6)"></i>gap <b>${usd(p.best-p.median)}</b>`;
     let tx=x/W*box.width+14; if(tx+tip.offsetWidth>box.width) tx=x/W*box.width-tip.offsetWidth-14;
     tip.style.left=tx+'px'; tip.style.top=(ev.clientY-box.top-20)+'px';
   });

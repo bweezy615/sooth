@@ -40,8 +40,11 @@ FOOTER_TEXT = (
 )
 
 # Desk palette, inlined — email clients strip <style> and have no CSS variables.
-INK, INK2, MUT, DIM = "#E8EAED", "#B4BAC4", "#8A919D", "#5A6170"
-BG, HAIR, BRAND = "#0A0B0D", "rgba(255,255,255,.13)", "#2DD4A7"
+# Mirrors the FROZEN MARKET tokens in assets/desk.css; an email that arrives in
+# last season's colours is the most public place a palette drift shows up.
+INK, INK2, MUT, DIM = "#F0F5F6", "#AEBDC2", "#7E8D93", "#546268"
+BG, HAIR, BRAND = "#06080A", "rgba(190,222,228,.17)", "#2DD4A7"
+FROST = "#BFEAF2"
 
 
 def esc(s: Any) -> str:

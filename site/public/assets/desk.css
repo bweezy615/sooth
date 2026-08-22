@@ -5,50 +5,73 @@
    information or it is not used. Numbers are the typography.
    ============================================================ */
 
-/* THE COLOUR RULE — read this before adding a colour.
-   ---------------------------------------------------
-   Colour on this site is reserved for numbers that mean something: green for
-   a favourable price, red for an adverse one, amber for caution or staleness.
-   Nothing else is coloured — not the logo, not the active nav item, not the
-   buttons. Emphasis is carried by weight, size and a warm bone ink instead.
+/* FROZEN MARKET — the concept, and the rules that come out of it.
+   ---------------------------------------------------------------
+   From the sooth.bet promos: a black ground, one teal, and the product
+   encased in ice. The ice is not decoration. It is the most accurate picture
+   of what this product actually does.
 
-   This replaced a mint-green brand accent on near-black. Two problems with
-   it, one cosmetic and one substantive. Cosmetic: near-black plus a single
-   mint-green pop, set in Inter, is the most over-produced look on the web
-   right now — it reads as generated rather than designed, which is a bad
-   thing to look like when the entire product claim is that a person actually
-   did the work. Substantive: the mint sat a few degrees from --up, so the
-   brand colour and "this price is good for you" were nearly the same signal
-   on a page full of prices. Emphasis was competing with meaning.
+   A betting market is LIQUID — every price on the board is moving, and the
+   whole board is a photograph of something still in motion. What the pick
+   engine does is FREEZE a piece of it: at seal time the slate stops moving,
+   gets hashed, and cannot be edited by us or anyone else. At first kickoff it
+   THAWS and everyone sees it. Liquid → frozen → thawed is the product, and it
+   is also the visual language.
 
-   Warmed the neutrals a step at the same time. A cool blue-grey ramp is the
-   default of every dashboard template; ink and paper is closer to what a
-   ledger actually is.
+   So, four rules:
+
+   1. TEAL IS THE SIGNAL. One hue on the site. It marks the thing sooth exists
+      to find — a better number than the market is showing — and it marks the
+      chrome that belongs to us (rules, rings, the .bet in the wordmark).
+      --up is the SAME teal, deliberately: "this price is favourable" and "this
+      is the sooth signal" are one idea, and giving them two nearly-identical
+      greens made the brand compete with the meaning. Red is the only other
+      hue, for adverse movement. Amber survives for staleness because a
+      warning must not look like a brand colour.
+
+   2. FROST MEANS SEALED. Anything committed-but-not-yet-revealed is rendered
+      as ice: a pale cyan rim, a frosted fill, a crystalline highlight. The
+      SEALED chip on a locked slate is the clearest example — the state and
+      the metaphor are the same object, so nobody has to be taught it.
+
+   3. GLASS, NOT CARDS. Surfaces are thin, dark and lit from one edge, the way
+      the block in the promo is: a 1px light rim on top, a darker rim below, a
+      faint inner glow. Not a flat grey box with a radius.
+
+   4. THE GROUND IS COLD AND NEARLY BLACK. #06080A, not a warm graphite and
+      not a blue-grey dashboard. Everything else sits a few steps above it.
    ============================================================ */
 
 :root{
-  /* ground — warm graphite, one step off pure black */
-  --g0:#0B0B0C;          /* page */
-  --g1:#101012;          /* working surface */
-  --g2:#17171A;          /* raised surface / hover */
-  --g3:#1E1E22;          /* inputs, selected */
-  --hair:rgba(233,228,216,.075);
-  --hair2:rgba(233,228,216,.14);
+  /* ground — cold, nearly black, as in the promos */
+  --g0:#06080A;          /* page */
+  --g1:#0B0F13;          /* working surface */
+  --g2:#111820;          /* raised surface / hover */
+  --g3:#18222B;          /* inputs, selected */
+  --hair:rgba(190,222,228,.085);
+  --hair2:rgba(190,222,228,.17);
 
-  /* ink — bone, not blue-white */
-  --ink:#EDE9E0;         /* primary */
-  --ink2:#B9B3A8;        /* secondary */
-  --mut:#8C877E;         /* labels */
-  --dim:#5C5852;         /* faint metadata */
+  /* ink — cool white, the wordmark's own colour */
+  --ink:#F0F5F6;         /* primary */
+  --ink2:#AEBDC2;        /* secondary */
+  --mut:#7E8D93;         /* labels */
+  --dim:#546268;         /* faint metadata */
 
-  /* information color — never decoration. See THE COLOUR RULE above. */
-  --brand:#EDE9E0;       /* emphasis, not a hue: active nav, focus, buttons */
-  --up:#3FB980;          /* objectively favorable price/state */
-  --dn:#E0645F;          /* objectively negative / adverse movement */
-  --amber:#D99B36;       /* divergence, staleness, caution */
-  --up-dim:rgba(63,185,128,.10);
-  --dn-dim:rgba(224,100,95,.10);
-  --amber-dim:rgba(217,155,54,.10);
+  /* THE one hue. See rule 1 above before adding another. */
+  --brand:#2DD4A7;       /* sooth signal + identity + interactive */
+  --brand-hi:#5BF0D4;    /* the lit ring: hover, focus, live edges */
+  --brand-dim:rgba(45,212,167,.10);
+  --up:#2DD4A7;          /* favourable price === the sooth signal */
+  --dn:#FF6B6B;          /* adverse movement */
+  --amber:#E2A94A;       /* staleness and caution — never brand */
+  --up-dim:rgba(45,212,167,.10);
+  --dn-dim:rgba(255,107,107,.10);
+  --amber-dim:rgba(226,169,74,.10);
+
+  /* frost — the sealed state. Rule 2. */
+  --frost:#BFEAF2;       /* ice edge / sealed text */
+  --frost-dim:rgba(191,234,242,.09);
+  --frost-rim:rgba(191,234,242,.34);
 
   /* Archivo over Inter and IBM Plex Mono over JetBrains Mono: both carry more
      of a voice at the small sizes this interface lives at, and neither is the
@@ -85,16 +108,18 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
+/* The promos light the subject from above against a black room. Same here:
+   one cold teal wash from over the top edge, one faint cool fill, black. */
 body{color:var(--ink);font:14px/1.5 var(--sans);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   background:
-    radial-gradient(1100px 480px at 50% -180px, rgba(233,228,216,.035), transparent 70%),
-    radial-gradient(900px 600px at 85% 8%, rgba(255,255,255,.015), transparent 60%),
+    radial-gradient(1200px 520px at 50% -200px, rgba(45,212,167,.055), transparent 72%),
+    radial-gradient(900px 620px at 82% 6%, rgba(190,222,228,.022), transparent 62%),
     var(--g0)}
 a{color:inherit;text-decoration:none}
 a:hover{color:var(--ink)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-::selection{background:rgba(233,228,216,.22)}
+::selection{background:rgba(45,212,167,.26)}
 
 /* every number in the product sits on tabular figures */
 .n,td,th{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
@@ -116,7 +141,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media (max-width:720px){.wrap{padding:0 14px}}
 
 /* ============ app shell ============ */
-.hd{border-bottom:1px solid var(--hair);background:rgba(11,11,12,.86);
+.hd{border-bottom:1px solid var(--hair);background:rgba(6,8,10,.86);
   position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);
   animation:hd-in var(--t-view) var(--e-out)}
 @keyframes hd-in{from{opacity:0}}
@@ -137,9 +162,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .hd-spacer{display:none}
 }
 .brand{display:inline-flex;align-items:baseline;gap:9px}
-.brand .mk{width:9px;height:9px;border-radius:1px;background:var(--brand);
-  align-self:center}
-.brand b{font:700 16px/1 var(--sans);letter-spacing:.10em}
+/* The wordmark is the promo's: lowercase, tight, cool white, with the .bet in
+   the one hue. The old mark was uppercase letterspaced "SOOTH" with a square
+   dot, which shares nothing with the artwork the brand is actually presented
+   in. The square dot survives as a small frozen pip beside it. */
+.brand .mk{width:8px;height:8px;border-radius:50%;background:var(--brand);
+  align-self:center;box-shadow:0 0 10px rgba(45,212,167,.55)}
+.brand b{font:600 17px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);
+  text-transform:none}
+.brand b i{font-style:normal;color:var(--brand)}
 .brand .sb{font:500 8.5px/1 var(--mono);letter-spacing:.22em;color:var(--dim);
   text-transform:uppercase}
 .hd-spacer{flex:1}
@@ -199,15 +230,59 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   color:var(--dim)}
 .sec-h .more:hover{color:var(--brand)}
 
-/* ---- depth: every instrument surface is lit from above and sits on an
-        ambient shadow. One recipe, shared, so the light source is coherent. */
+/* ---- depth: every instrument surface is a slab of dark glass, lit along its
+        top edge and sitting on an ambient shadow — the block in the promo.
+        One recipe, shared, so the light source is coherent. Rule 3. */
 .radar,.feed,.itab,.mkt,.ws-grid{
-  background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),
-             inset 0 -1px 0 rgba(0,0,0,.5),
-             0 18px 40px -22px rgba(0,0,0,.85),
-             0 2px 8px -2px rgba(0,0,0,.5)}
+  background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+  box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
+             inset 0 -1px 0 rgba(0,0,0,.55),
+             0 18px 40px -22px rgba(0,0,0,.9),
+             0 2px 8px -2px rgba(0,0,0,.55)}
 .radar-side{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05));}
+
+/* ============ FROST — the sealed state ============
+   Rule 2: committed-but-not-yet-revealed is rendered as ice. The chip below
+   is the atom; .frosted is the same treatment applied to a whole surface.
+
+   The crystalline edge is two hard-stopped linear gradients crossing at 60°,
+   which reads as facets rather than as a blur. No images: this has to survive
+   inside an email-safe stylesheet and on a phone on a bad connection. */
+.frost{display:inline-flex;align-items:center;gap:6px;
+  font:600 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--frost);padding:4px 9px;border:1px solid var(--frost-rim);
+  background:
+    linear-gradient(115deg,rgba(191,234,242,.16) 0 18%,transparent 18% 34%,
+      rgba(191,234,242,.10) 34% 44%,transparent 44%),
+    linear-gradient(180deg,rgba(191,234,242,.13),rgba(191,234,242,.03));
+  box-shadow:inset 0 1px 0 rgba(220,248,255,.28),0 0 14px rgba(191,234,242,.10)}
+.frost::before{content:"";width:5px;height:5px;flex:0 0 auto;
+  background:var(--frost);transform:rotate(45deg);
+  box-shadow:0 0 7px rgba(191,234,242,.7)}
+/* a whole surface under ice — locked slates, unrevealed rows */
+.frosted{position:relative;border:1px solid var(--frost-rim)!important;
+  background:
+    linear-gradient(126deg,rgba(191,234,242,.055) 0 22%,transparent 22% 41%,
+      rgba(191,234,242,.035) 41% 52%,transparent 52%),
+    linear-gradient(180deg,#101a20,#0A1116)!important;
+  box-shadow:inset 0 1px 0 rgba(220,248,255,.16),
+             0 0 34px -12px rgba(191,234,242,.22)!important}
+/* the lit rim from the logo: a hairline that catches the light on one side */
+.rimlit{position:relative}
+.rimlit::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(45,212,167,.55) 22%,
+    rgba(91,240,212,.75) 50%,rgba(45,212,167,.55) 78%,transparent)}
+
+/* ============ the promo's bullet ============
+   ▸ LIVE PRICING / ▸ AI ANALYSIS — a teal triangle, mono caps, wide tracking.
+   This is the list style for anything that names a capability. */
+.caps{list-style:none;margin:0;padding:0}
+.caps li{position:relative;padding:7px 0 7px 17px;
+  font:600 10.5px/1.4 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink2)}
+.caps li::before{content:"";position:absolute;left:0;top:11px;
+  border:4px solid transparent;border-left-color:var(--brand)}
 
 /* raised keys — controls you can press read as physically raised */
 .hd-cta,.an-in button{
@@ -235,8 +310,8 @@ a.mv-row:hover{transform:translateY(-1px);
 .gaptrk{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(255,255,255,.04));
   box-shadow:inset 0 1px 2px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.04);
   height:4px}
-.gaptrk i{background:linear-gradient(180deg,#4BE3AE,#27A87D);
-  box-shadow:0 0 6px rgba(52,211,153,.35);height:4px}
+.gaptrk i{background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+  box-shadow:0 0 6px rgba(45,212,167,.35);height:4px}
 
 /* ============ THE MARKET — price spectrum ============ */
 .spec{width:100%}
@@ -484,8 +559,8 @@ details.more>*+*{margin-top:10px}
   box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
 .cmp .h i{position:absolute;top:0;height:5px;border-radius:2px;display:block;
   background:linear-gradient(180deg,#6B7280,#4B5563)}
-.cmp .h.b i{left:0;background:linear-gradient(180deg,#4BE3AE,#27A87D);
-  box-shadow:0 0 5px rgba(52,211,153,.3)}
+.cmp .h.b i{left:0;background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+  box-shadow:0 0 5px rgba(45,212,167,.3)}
 .cmp .h.a i{right:0}
 /* diverging form cell on the board */
 .fm{display:inline-flex;align-items:center;gap:8px}
@@ -496,7 +571,7 @@ details.more>*+*{margin-top:10px}
 .fm .tr::after{content:"";position:absolute;left:50%;top:-2px;width:1px;height:9px;
   background:var(--hair2)}
 .fm .fl{position:absolute;top:0;height:5px;border-radius:2px;
-  background:linear-gradient(180deg,#4BE3AE,#27A87D)}
+  background:linear-gradient(180deg,var(--brand-hi),var(--brand))}
 .fm .fl.away{background:linear-gradient(180deg,#8A919D,#5A6170)}
 
 /* footer */
@@ -516,25 +591,19 @@ details.more>*+*{margin-top:10px}
 .hd-links a.hd-new:hover{color:var(--brand)}
 
 /* ============ pick engine ============ */
-/* locked rows: the shape of the data, none of the opinion. Redaction is
-   server-side; the blur is theater on ▓▓ placeholders, not on secrets. */
-tr.locked td{filter:blur(0)}
-tr.locked .mask{color:var(--dim);letter-spacing:1px;filter:blur(2.5px);
-  user-select:none}
-tr.locked .lock{color:var(--dim);font-size:10px}
 .seal-badge{display:inline-flex;align-items:center;gap:6px;
   font:600 10px var(--mono);letter-spacing:.1em;color:var(--up);
-  border:1px solid rgba(52,211,153,.35);background:var(--up-dim);
+  border:1px solid rgba(45,212,167,.35);background:var(--up-dim);
   padding:4px 9px;border-radius:var(--r)}
 .seal-badge{transition:filter var(--t-hover) ease}
 .seal-badge:hover{filter:brightness(1.15)}
 .clv{font:600 10px var(--mono);letter-spacing:.05em;padding:2px 6px;
   border-radius:var(--r);border:1px solid var(--hair2);
   font-variant-numeric:tabular-nums}
-.clv.pos{color:var(--up);border-color:rgba(52,211,153,.35);background:var(--up-dim)}
-.clv.neg{color:var(--dn);border-color:rgba(240,113,108,.35);background:var(--dn-dim)}
+.clv.pos{color:var(--up);border-color:rgba(45,212,167,.35);background:var(--up-dim)}
+.clv.neg{color:var(--dn);border-color:rgba(255,107,107,.35);background:var(--dn-dim)}
 .clv.na{color:var(--dim)}
-.noplay{border-left:2px solid var(--brand);background:rgba(233,228,216,.045);
+.noplay{border-left:2px solid var(--brand);background:var(--brand-dim);
   padding:12px 16px;border-radius:0 var(--r) var(--r) 0;font-size:13px;
   color:var(--ink2);margin:0 0 16px;max-width:80ch;line-height:1.6}
 

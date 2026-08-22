@@ -17,25 +17,68 @@
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
+  /* FROZEN MARKET — the guide.
+     This is the one page written for somebody who has never priced a bet, so
+     warmth here has to come from clarity, not from colour. The moves are all
+     subtractive:
+
+     1. The headline was half teal. Teal on this site marks a number that beats
+        the market — spending it on a sentence, on the first page a newcomer
+        reads, teaches them the wrong thing about the hue before they ever see
+        it on a price. The two clauses are separated by value instead.
+     2. The worked example set the book's ~4.8% cut in --up. That is the money
+        the book keeps; painting it in the favourable-price hue says the
+        opposite of what the paragraph says. It is cool white now, and the only
+        teal left on the page is the four ▸ step markers and the one key.
+     3. The four steps take the promo's ▸ marker — the same recipe as .caps in
+        the shared sheet — so the guide's spine is drawn in the same idiom as
+        the capability list on the slab face.
+
+     No copy, no number and no disclaimer changed. */
+
   .lead{padding:38px 0 8px;max-width:70ch}
-  .lead h1{font:700 clamp(25px,3.8vw,34px)/1.12 var(--sans);letter-spacing:-.022em;margin:12px 0 0}
-  .lead h1 .g{color:var(--brand)}
+  /* the setup recedes, the promise lands: contrast by value, not by hue */
+  .lead h1{font:700 clamp(25px,3.8vw,34px)/1.12 var(--sans);letter-spacing:-.022em;
+    margin:12px 0 0;color:var(--ink2)}
+  .lead h1 .g{color:var(--ink)}
   .lead p{color:var(--ink2);font-size:15px;margin:14px 0 0;line-height:1.65;max-width:60ch}
+
+  /* the promo's ▸ capability marker, on the guide's four steps. The step
+     number reads a step brighter than its label so the sequence is countable
+     at a glance — inside .sec-h the shared sheet already sets both to --mut. */
+  .sec-h .tl{position:relative;padding-left:15px}
+  .sec-h .tl::before{content:"";position:absolute;left:0;top:0;
+    border:4px solid transparent;border-left-color:var(--brand)}
+  .sec-h .tl b{color:var(--ink2)}
+
+  /* the worked example: a read-out cut into the slab, and the one lit rim */
   .ex{font-family:var(--mono);font-size:12.5px;color:var(--ink2);
-    background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
-    border-radius:var(--r);padding:13px 16px;margin:12px 0 0;line-height:1.8;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-  .ex .g{color:var(--up);font-weight:700}
+    background:linear-gradient(180deg,#12181E,#0B1015);border:1px solid var(--hair);
+    border-radius:var(--r);padding:14px 16px;margin:12px 0 0;line-height:1.8;
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.07),inset 0 -1px 0 rgba(0,0,0,.5)}
+  .ex .g{color:var(--ink);font-weight:700}
   .step-body{max-width:66ch}
   .step-body p{color:var(--ink2);font-size:13.5px;line-height:1.65;margin:8px 0 0}
   .step-body p b{color:var(--ink)}
   .cta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 4px}
   .cta a{font:600 11px var(--mono);letter-spacing:.08em;padding:10px 16px;
-    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut)}
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut);
+    transition:color var(--t-hover) ease,border-color var(--t-hover) ease,
+      filter var(--t-hover) ease}
   .cta a:hover{color:var(--brand);border-color:var(--brand)}
-  .cta a.pri{background:linear-gradient(180deg,#F3EFE6,#DCD6C9);color:var(--g0);border:0;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)}
+  /* the same key the sign-up form uses: raised-key physics, one hue */
+  .cta a.pri{color:var(--g0);border-color:var(--brand);
+    background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 3px 10px -3px rgba(0,0,0,.7),
+      0 0 18px -6px rgba(45,212,167,.55)}
+  .cta a.pri:hover{color:var(--g0);border-color:var(--brand);filter:brightness(1.07)}
+  .cta a.pri:active{transition-duration:var(--t-press);transform:translateY(1px)}
+
   .fine{color:var(--mut);font-size:12.5px;line-height:1.65;margin:26px 0 0;max-width:66ch}
+  /* the compliance floor is separated from the guide by a hairline, the way
+     every other surface on the site is separated from the one above it */
+  main>p.fine:first-of-type{border-top:1px solid var(--hair);padding-top:22px;
+    margin-top:32px}
 </style>
 </head>
 <body>
@@ -51,7 +94,7 @@
   </div>
 
   <section class="sec">
-    <div class="sec-h"><span class="tl">01 · THE ONE IDEA</span></div>
+    <div class="sec-h"><span class="tl"><b>01</b> · THE ONE IDEA</span></div>
     <div class="step-body">
       <p><b>Every bet has a "fair price."</b> The fair price is what the odds should be if
         the sportsbook took no cut. When a book offers you a <b>better number than fair</b>,
@@ -61,19 +104,19 @@
   </section>
 
   <section class="sec">
-    <div class="sec-h"><span class="tl">02 · THE BOOK'S CUT</span></div>
+    <div class="sec-h"><span class="tl"><b>02</b> · THE BOOK'S CUT</span></div>
     <div class="step-body">
       <p><b>The book always keeps a little. We show you how much.</b> Two even sides at
         -110 each look like a coin flip, but they're not: -110 is really about 52.4% to hit,
         and 52.4% + 52.4% = 104.8%. That extra <b>~4.8%</b> is the book's cut. We strip it
         out to show the true, fair price, then find the book beating it by the most.</p>
-      <div class="ex">-110 &amp; -110 &nbsp;→&nbsp; 52.4% + 52.4% = 104.8%<br>
+      <div class="ex rimlit">-110 &amp; -110 &nbsp;→&nbsp; 52.4% + 52.4% = 104.8%<br>
         the book's cut = <span class="g">~4.8%</span> &nbsp;·&nbsp; we remove it to find the fair price</div>
     </div>
   </section>
 
   <section class="sec">
-    <div class="sec-h"><span class="tl">03 · WHAT YOU'RE LOOKING FOR</span></div>
+    <div class="sec-h"><span class="tl"><b>03</b> · WHAT YOU'RE LOOKING FOR</span></div>
     <div class="step-body">
       <p><b>"Gap points" — the size of the deal.</b> For each side, the market shows the
         points of implied probability you gain by taking the best price instead of the
@@ -83,7 +126,7 @@
   </section>
 
   <section class="sec">
-    <div class="sec-h"><span class="tl">04 · READING THE MARKET</span></div>
+    <div class="sec-h"><span class="tl"><b>04</b> · READING THE MARKET</span></div>
     <div class="step-body">
       <p><b>Green is the price to take.</b> Each row on the market is one game: the
         <b>FAIR</b> column is the price with the book's cut removed, the <b>BEST</b> column

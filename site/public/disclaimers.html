@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Disclaimers — Sooth</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0A0B0D">
+<meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,45 +24,45 @@
      it is here for the shared header and footer that desk.js injects. -->
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
-:root{--bg:#0A0B0D;--panel:#101216;--panel-2:#1B1E24;--line:rgba(255,255,255,.07);
---line-2:rgba(255,255,255,.13);
---ink:#EDE9E0;--muted:#8C877E;--dim:#5C5852;--accent:#EDE9E0;--warn:#D99B36;
---bad:#E0645F;--link:#EDE9E0;
---mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+/* FROZEN MARKET — the long-form pages carry their own stylesheet. The legacy
+   token names these rules were written against now resolve onto the desk
+   system instead of a second, warmer palette, so the article and the shell it
+   is mounted inside are one cold surface rather than two that meet awkwardly
+   at the header. Nothing below redefines a shared token. */
+:root{--bg:var(--g0);--panel:var(--g1);--panel-2:var(--g3);
+--line:var(--hair);--line-2:var(--hair2);--muted:var(--mut);
+--accent:var(--brand);--warn:var(--amber);--bad:var(--dn);--link:var(--brand)}
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);
-font:15px/1.7 Inter,system-ui,-apple-system,sans-serif;
--webkit-font-smoothing:antialiased;
-background:radial-gradient(1100px 480px at 50% -180px,rgba(233,228,216,.035),transparent 70%),var(--bg)}
-.wrap{max-width:860px;margin:0 auto;padding:0 24px}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline;text-underline-offset:2px}
-header{border-bottom:1px solid var(--line);position:sticky;top:0;
-background:rgba(10,11,13,.85);backdrop-filter:blur(10px);z-index:10}
-nav{display:flex;align-items:center;gap:18px;height:52px;
-max-width:1360px;margin:0 auto;padding:0 28px}
-.brand{font:700 15px/1 Inter,sans-serif;letter-spacing:.10em;text-transform:uppercase;
-text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
-.brand:hover{text-decoration:none}
-.brand .dot{width:9px;height:9px;border-radius:1px;background:var(--accent)}
-nav .spacer{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font:600 11.5px/1 Inter,sans-serif;
-letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:3px}
-nav a.l:hover{color:var(--ink);background:var(--panel);text-decoration:none}
-.prose{padding:40px 0 60px}
-.prose h1{font-size:clamp(24px,3.6vw,32px);line-height:1.15;
-letter-spacing:-.02em;margin:0 0 24px;font-weight:760}
-.prose h2{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-color:var(--muted);margin:42px 0 14px;padding-top:22px;border-top:1px solid var(--line)}
+body{margin:0;color:var(--ink);font:15px/1.7 var(--sans);
+-webkit-font-smoothing:antialiased}
+/* The shell is the shell. .wrap used to be redefined to 860px here, which
+   quietly shrank the injected header and footer on these three pages alone —
+   and the bare `nav{}` rule below it was landing on the shell's own nav. Both
+   are gone; only the measure of the prose is narrow now. */
+.prose{max-width:812px;margin:0 auto;padding:44px 0 60px}
+.prose a{color:var(--link);text-decoration:none}
+.prose a:hover{text-decoration:underline;text-underline-offset:2px}
+.prose h1{font:700 clamp(24px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.025em;
+margin:0 0 24px;color:var(--ink)}
+/* Section heads take the promo's teal triangle — the same mark .caps uses for
+   a capability list. One hue, one bullet, on every surface that names a part. */
+.prose h2{display:flex;align-items:flex-start;gap:9px;
+font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--muted);margin:42px 0 14px;padding-top:22px;
+border-top:1px solid var(--line)}
+.prose h2::before{content:"";flex:0 0 auto;margin-top:2px;
+border:4px solid transparent;border-left-color:var(--brand)}
 .prose h3{font-size:15px;margin:26px 0 8px;font-weight:650;color:var(--ink)}
-.prose p{margin:0 0 15px;color:#B4BAC4}
-.prose li{margin:0 0 7px;color:#B4BAC4}
+.prose p{margin:0 0 15px;color:var(--ink2)}
+.prose li{margin:0 0 7px;color:var(--ink2)}
 .prose strong{font-weight:650;color:var(--ink)}
 .prose code{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);
-border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;color:var(--ink)}
-.prose pre{background:var(--panel);border:1px solid var(--line);
-border-radius:3px;padding:15px 17px;overflow-x:auto;font-size:12px;
-line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+border:1px solid var(--line-2);border-radius:var(--r);padding:1px 5px;color:var(--ink)}
+/* A code block is a slab of dark glass lit along its top edge — rule 3. */
+.prose pre{background:linear-gradient(180deg,#0E141A 0%,#0A0F14 100%);
+border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;
+overflow-x:auto;font-size:12px;line-height:1.55;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.09),inset 0 -1px 0 rgba(0,0,0,.5)}
 .prose pre code{background:none;border:0;padding:0;font-size:12px}
 .prose table{width:100%;border-collapse:collapse;font-size:13px;margin:18px 0;
 display:block;overflow-x:auto;font-family:var(--mono);
@@ -70,28 +70,46 @@ font-variant-numeric:tabular-nums}
 .prose th{text-align:left;font-weight:600;color:var(--dim);font-size:9.5px;
 text-transform:uppercase;letter-spacing:.12em;padding:0 12px 9px;
 border-bottom:1px solid var(--line-2);white-space:nowrap;font-family:var(--mono)}
-.prose td{padding:9px 12px;border-bottom:1px solid var(--line);color:#B4BAC4}
+.prose td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink2)}
+/* Below 720px a table stops being a table, exactly as .itab already does on
+   the board: each row becomes a labelled card, using the data-l attributes
+   Desk.stack() already writes onto every table on the site. A six-column
+   backtest table was otherwise a sideways scroller that hid every number to
+   the right of the model name — which on this page is the whole argument. */
+@media (max-width:720px){
+  .prose table{display:block;overflow-x:visible}
+  .prose tbody,.prose tr,.prose td{display:block;width:auto}
+  .prose thead{display:none}
+  .prose tr{border:1px solid var(--line);background:var(--panel);
+    padding:11px 13px 3px;margin:0 0 8px}
+  .prose td{padding:6px 0;text-align:right;white-space:normal;
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .prose td::before{content:attr(data-l);flex:0 0 auto;text-align:left;
+    font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--dim)}
+  .prose td:not([data-l]){display:block;text-align:left;padding-bottom:9px;
+    color:var(--ink)}
+  .prose td:not([data-l])::before{content:none}
+  .prose tr td:last-child{border-bottom:0}
+}
 .prose blockquote{margin:18px 0;padding:14px 18px;background:var(--panel);
-border-left:2px solid var(--warn);border-radius:0 3px 3px 0}
+border-left:2px solid var(--warn);border-radius:0 var(--r) var(--r) 0}
 .prose blockquote p{margin:0}
 .prose hr{border:0;border-top:1px solid var(--line);margin:34px 0}
-footer{border-top:1px solid var(--line);padding:26px 0 44px;
-color:var(--dim);font-size:11.5px;line-height:1.7}
 footer p{max-width:86ch;margin:0 0 9px}
-footer b,footer strong{color:var(--muted)}
-footer a{color:var(--muted)}
 .mono{font-family:var(--mono)}
-.hash{font-family:var(--mono);font-size:11.5px;color:var(--accent);
+.hash{font-family:var(--mono);font-size:11.5px;color:var(--frost);
 word-break:break-all}
 .badge{display:inline-block;font:700 9.5px/1 var(--mono);
-letter-spacing:.08em;padding:3px 7px;border-radius:4px;
+letter-spacing:.08em;padding:3px 7px;border-radius:var(--r);
 border:1px solid var(--line-2);color:var(--muted);vertical-align:2px}
-.badge.sealed{color:var(--warn);border-color:var(--warn)}
-.badge.revealed{color:var(--accent);border-color:var(--accent)}
-.card{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
-border:1px solid var(--line);border-radius:3px;padding:17px 19px;margin:0 0 13px;
-box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
-0 12px 30px -20px rgba(0,0,0,.85)}
+/* Rule 2: frost means sealed. A SEALED badge is ice, not a caution colour. */
+.badge.sealed{color:var(--frost);border-color:var(--frost-rim)}
+.badge.revealed{color:var(--brand);border-color:var(--brand)}
+.card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;margin:0 0 13px;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
+0 18px 40px -22px rgba(0,0,0,.9)}
 .card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:12.5px}
 .card .k{color:var(--dim);min-width:118px;font-family:var(--mono);font-size:10.5px;
 letter-spacing:.06em;text-transform:uppercase;padding-top:2px}

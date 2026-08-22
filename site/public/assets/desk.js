@@ -54,8 +54,8 @@ var NAV=[
 function header(page){
   return '<header class="hd"><div class="wrap">'
     +'<div class="hd-r1">'
-    +'<a class="brand" href="/"><span class="mk"></span><b>SOOTH</b>'
-    +'<span class="sb">Sports Intelligence</span></a>'
+    +'<a class="brand" href="/"><span class="mk"></span><b>sooth<i>.bet</i></b>'
+    +'<span class="sb">Market intelligence. Honest edge.</span></a>'
     +'<span class="hd-spacer"></span>'
     +'<nav class="hd-links" aria-label="Sections">'
     +NAV.map(function(n){return '<a href="'+n.href+'"'
@@ -331,7 +331,7 @@ function spectrum(opts){
     +'<stop offset="0" stop-color="#C7CDD8"/><stop offset=".45" stop-color="#8A919D"/>'
     +'<stop offset="1" stop-color="#565C68"/></linearGradient>'
   +'<linearGradient id="mkB" x1="0" y1="0" x2="0" y2="1">'
-    +'<stop offset="0" stop-color="#7FF2CB"/><stop offset=".45" stop-color="#34D399"/>'
+    +'<stop offset="0" stop-color="#8CF6DC"/><stop offset=".45" stop-color="#2DD4A7"/>'
     +'<stop offset="1" stop-color="#1B8A66"/></linearGradient>'
   +'<linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">'
     +'<stop offset="0" stop-color="rgba(255,255,255,.015)"/>'
@@ -343,7 +343,7 @@ function spectrum(opts){
   +'<filter id="mkS" x="-60%" y="-60%" width="220%" height="260%">'
     +'<feDropShadow dx="0" dy="1.5" stdDeviation="1.4" flood-color="#000" flood-opacity=".6"/></filter>'
   +'<filter id="mkG" x="-120%" y="-120%" width="340%" height="340%">'
-    +'<feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#34D399" flood-opacity=".5"/></filter>'
+    +'<feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#2DD4A7" flood-opacity=".5"/></filter>'
   +'</defs>';
 
   /* the deck itself: surface, back highlight, converging lane lines */
@@ -379,7 +379,7 @@ function spectrum(opts){
     out+='<g'+(best?' class="g-best"':'')+'>'
       +'<ellipse cx="'+x+'" cy="'+laneY+'" rx="7" ry="2.2" fill="rgba(0,0,0,.55)"/>'
       +'<line x1="'+x+'" y1="'+laneY+'" x2="'+x+'" y2="'+(headY+14)
-        +'" stroke="'+(best?"rgba(52,211,153,.55)":"rgba(138,145,157,.45)")+'" stroke-width="1.2"/>'
+        +'" stroke="'+(best?"rgba(45,212,167,.55)":"rgba(138,145,157,.45)")+'" stroke-width="1.2"/>'
       +'<rect x="'+(x-3.5)+'" y="'+headY+'" width="7" height="15" rx="1.8" '
         +'fill="url(#'+(best?"mkB":"mkN")+')" filter="url(#'+(best?"mkG":"mkS")+')"/>'
       +'<rect x="'+(x-3.5)+'" y="'+headY+'" width="7" height="3.5" rx="1.6" fill="url(#rfl)"/>'

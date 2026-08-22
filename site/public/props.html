@@ -18,23 +18,86 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
-  .field{background:var(--g2);border:1px solid var(--hair2);border-radius:var(--r);
-    color:var(--ink);padding:8px 12px;font:12.5px var(--sans)}
-  select.field{font:600 12px var(--mono);cursor:pointer}
+  /* ======================================================================
+     FROZEN MARKET — the props board is liquid, like /market.
+     Every price here is still moving; nothing on this page is sealed, so
+     nothing on it is iced. What the page has to carry instead is rule 1 in
+     its strictest form, because a props board is where the one hue is most
+     easily spent: teal marks a number that beats the de-vigged consensus,
+     and the page's own copy says most of these do not.
+
+     So the best-price list stops painting every price teal. A row that beats
+     consensus fair is lit — teal figure, a teal leading edge on the row. A
+     row that does not is set in plain ink, and the sentence beside it already
+     says the gap is the vig. The colour and the claim now agree.
+
+     Three other moves: the filter rail becomes one machined control surface
+     (it had no rule at all — `.bar` is undefined outside /predictor, so the
+     count's `margin-left:auto` was inert and the controls floated loose); the
+     board's header rule becomes the teal waterline used on /market, because a
+     rule under a live board is chrome that belongs to us; and the list, not
+     the table, takes the page's single lit rim.
+     ====================================================================== */
+
+  /* ---- the control rail: one instrument surface, fields carved into it --- */
+  .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 14px;
+    padding:7px 9px;border:1px solid var(--hair);border-radius:var(--r);
+    background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
+               inset 0 -1px 0 rgba(0,0,0,.55),
+               0 14px 34px -24px rgba(0,0,0,.9);
+    transition:border-color var(--t-hover) ease}
+  .bar:focus-within{border-color:rgba(45,212,167,.42)}
+  .bar .count{color:var(--mut);white-space:nowrap;padding-right:4px}
+  .field{color:var(--ink);padding:8px 11px;font:12.5px var(--sans);
+    border:1px solid rgba(0,0,0,.5);border-radius:2px;
+    background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(255,255,255,.02));
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.6);
+    transition:border-color var(--t-hover) ease,color var(--t-hover) ease}
+  .field::placeholder{color:var(--mut)}
+  .field:hover{border-color:var(--hair2)}
+  select.field{font:600 12px var(--mono);letter-spacing:.06em;cursor:pointer}
+  #q.field{min-width:0;flex:1 1 190px}
+  @media (max-width:560px){
+    .bar{gap:6px}
+    .bar .count{flex:0 0 100%;margin-left:0!important;padding:2px 0 0}
+  }
+
+  /* ---- the board ------------------------------------------------------
+     It sits on the page plane rather than in a housing, so the one boxed,
+     machined surface above it keeps the eye. The header rule is the
+     waterline: ours, therefore teal; the row rules below it are not. */
+  #card.itab{background:transparent;border:0;border-radius:0;box-shadow:none}
+  #card thead th{background:var(--g0);border-bottom:1px solid rgba(45,212,167,.30)}
+  #card tbody td{border-bottom:1px solid var(--hair)}
   .itab .pl{font:600 13px var(--sans);color:var(--ink);letter-spacing:-.01em}
   .itab .pl .mk2{display:block;font:500 10px var(--mono);color:var(--dim);
     letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
   .itab .match{font:500 10.5px var(--mono);color:var(--dim)}
   .itab .bk2{display:block;font:500 10px var(--mono);color:var(--dim)}
-  .itab td .up .bk2{color:rgba(52,211,153,.7)}
+  /* the book under a best price, tinted by the one hue — was still the old
+     green (52,212,153) from before the palette moved to the promo's teal */
+  .itab td .up .bk2{color:rgba(45,212,167,.72)}
+  .itab td.up{font-weight:600}
   .hit-hot{color:var(--ink);font-weight:700}
+  @media (min-width:721px){
+    /* the row under the cursor is marked on its leading edge, not flooded */
+    #card tbody tr:hover td:first-child{box-shadow:inset 2px 0 0 var(--brand)}
+  }
 
   /* Best prices — the same selection the alerts read, at the top of the page.
-     Deliberately not cards: this is the board's own language one size up. */
-  .bp{border:1px solid var(--hair);background:var(--g1)}
+     Deliberately not cards: this is the board's own language one size up, on
+     the page's one lit slab. */
+  .bp{position:relative;border:1px solid var(--hair);
+    background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
+               inset 0 -1px 0 rgba(0,0,0,.55),
+               0 18px 40px -22px rgba(0,0,0,.9),
+               0 2px 8px -2px rgba(0,0,0,.55)}
   .bp-r{display:grid;grid-template-columns:22px minmax(0,1fr) auto;
     gap:2px 14px;padding:11px 14px;border-bottom:1px solid var(--hair);
-    align-items:baseline}
+    align-items:baseline;
+    transition:background var(--t-hover) ease}
   .bp-r:last-child{border-bottom:0}
   .bp-r:hover{background:var(--g2)}
   .bp-n{font:600 11px var(--mono);color:var(--dim);grid-row:span 2}
@@ -43,9 +106,17 @@
   .bp-who b{font-weight:700}
   .bp-side{font:600 11px var(--mono);color:var(--ink2);letter-spacing:.03em;
     text-transform:uppercase}
-  .bp-px{font:700 15px var(--mono);color:var(--up);text-align:right;white-space:nowrap}
+  /* Default ink, not teal. Most rows on this list are the smallest amount of
+     vig on the board, not a number that beats it, and the page says so two
+     lines up. Only .beats — set from the same price_edge_pts the sentence is
+     written from — gets the signal. */
+  .bp-px{font:700 15px var(--mono);color:var(--ink);text-align:right;
+    white-space:nowrap}
   .bp-px .bk{display:block;font:500 10px var(--mono);color:var(--dim);
     letter-spacing:.03em;margin-top:2px}
+  .bp-r.beats .bp-px{color:var(--up)}
+  .bp-r.beats .bp-px .bk{color:rgba(45,212,167,.72)}
+  .bp-r.beats{box-shadow:inset 2px 0 0 var(--brand)}
   .bp-meta{grid-column:2/4;font:500 11px var(--mono);color:var(--mut);
     line-height:1.6;display:flex;flex-wrap:wrap;gap:3px 12px}
   .bp-meta .fair-up{color:var(--up)}
@@ -53,11 +124,14 @@
   .bp-meta .sep{color:var(--dim)}
   .bp-meta .tm{color:var(--dim)}
   /* Explanation is available, not administered: closed by default so the
-     board reads exactly as dense as it did, one click for anyone who wants it. */
+     board reads exactly as dense as it did, one click for anyone who wants it.
+     Quieter than it was — this is the same "?" affordance the header's GUIDE
+     link uses, so it is findable without competing with the prices. */
   .gloss{margin-top:8px}
-  .gloss summary{cursor:pointer;color:var(--brand);font:600 11.5px var(--sans);
+  .gloss summary{cursor:pointer;color:var(--mut);font:600 11.5px var(--sans);
     list-style:none;display:inline-flex;align-items:center;gap:5px;
-    padding:3px 0;user-select:none}
+    padding:3px 0;user-select:none;transition:color var(--t-hover) ease}
+  .gloss summary:hover,.gloss[open] summary{color:var(--brand)}
   .gloss summary::-webkit-details-marker{display:none}
   .gloss summary::before{content:"?";display:inline-block;width:13px;height:13px;
     line-height:13px;text-align:center;border-radius:50%;border:1px solid currentColor;
@@ -67,7 +141,10 @@
     color:var(--ink2)}
   .gloss p b{color:var(--ink);font-weight:600}
   .gloss p:last-child{margin-bottom:0}
-  .bp-state{padding:16px 14px;font:500 12px var(--sans);color:var(--mut);line-height:1.6}
+  /* the reading above the list — how many of these actually beat fair. It is
+     a finding, so it is set as one, not as helper text. */
+  .bp-state{padding:14px 14px 13px;font:500 12.5px var(--sans);color:var(--ink2);
+    line-height:1.6}
   @media (max-width:560px){
     .bp-r{grid-template-columns:18px minmax(0,1fr);row-gap:4px}
     .bp-px{grid-column:2;text-align:left;font-size:14px}
@@ -112,7 +189,9 @@
       and that difference is the only thing on this page that does not depend on
       predicting anything. <a href="/learn">The 60-second guide</a> covers the
       rest.</p></details>
-    <div class="bp" id="bp" aria-live="polite"></div>
+    <!-- the page's one lit rim: the promo's single teal arc, on the surface
+         that carries the selection the alerts are written from -->
+    <div class="bp rimlit" id="bp" aria-live="polite"></div>
   </div>
 
   <div class="bar">
@@ -222,7 +301,10 @@ function bestPrices(d){
         +window.Crest.team(mt[1],{size:14})+'</span>'
       : '<span>'+D.esc(p.matchup)+'</span>');
     if(p.starts) meta.push('<span class="tm">'+D.when(p.starts)+'</span>');
-    html+='<div class="bp-r">'
+    // Teal is the signal, and the signal is "this price beats the de-vigged
+    // consensus" — the same test edgeCell() writes its sentence from. A row
+    // that fails it is priced in plain ink; nothing about the number changes.
+    html+='<div class="bp-r'+(p.price_edge_pts>0?" beats":"")+'">'
       +'<span class="bp-n">'+(i+1)+'</span>'
       +'<span class="bp-who"><b>'+D.esc(p.player)+'</b> '
         +'<span class="bp-side">'+D.esc(p.side)+' '+p.line+' '
@@ -262,6 +344,15 @@ function init(res){
   $("market").addEventListener("change",render);
   $("q").addEventListener("input",render);
   fillMarkets(); render();
+}
+/* Teal is the sooth signal, not a column style. Every best price used to be
+   painted teal, which said "this beats the market" on rows where the best
+   available number is still worse than the de-vigged fair price — i.e. on most
+   of them. A side earns the hue only when its best price actually pays more
+   than fair. */
+function beats(side){
+  if(!side||side.best_price==null||side.fair_price==null) return "";
+  return D.implied(side.best_price) < D.implied(side.fair_price) ? "up" : "";
 }
 function board(){
   var v=$("sport").value;
@@ -303,15 +394,16 @@ function render(){
         +window.Crest.team(e.home,{abbr:true,size:14})
         +'<br>'+D.when(e.starts)+'</span></td>'
       +'<td>'+p.line+'</td>'
-      +'<td class="up">'+D.am(p.over.best_price)
+      +'<td class="'+beats(p.over)+'">'+D.am(p.over.best_price)
         +'<span class="bk2">'+D.bk(p.over.best_book)+'</span></td>'
       +'<td class="dim">'+D.am(p.over.fair_price)+'</td>'
-      +'<td class="up">'+D.am(p.under.best_price)
+      +'<td class="'+beats(p.under)+'">'+D.am(p.under.best_price)
         +'<span class="bk2">'+D.bk(p.under.best_book)+'</span></td>'
       +'<td class="dim">'+D.am(p.under.fair_price)+'</td>'
       +'<td>'+hit+'</td>'
       +'<td class="dim">'+Math.min(p.over.n_books,p.under.n_books)+'</td>'
-      +'<td class="up" style="font-weight:700">'+D.pts(p.gain_pts,1)+'</td></tr>';
+      +'<td class="'+(p.gain_pts>=0.5?"up":"")+'" style="font-weight:700">'
+        +D.pts(p.gain_pts,1)+'</td></tr>';
   });
   $("tbody").innerHTML=html;
   $("empty").style.display=rows.length?"none":"block";

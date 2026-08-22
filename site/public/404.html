@@ -12,13 +12,18 @@
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
+  /* FROZEN MARKET: nothing here is sealed, so nothing here is under ice.
+     A dead route gets the cold ground, a cool-white line, one teal clause,
+     and a hairline before the ways out. Restraint is the treatment. */
   .nf{padding:84px 0 50px;max-width:62ch}
   .nf h1{font:700 clamp(28px,4.6vw,42px)/1.08 var(--sans);letter-spacing:-.025em;margin:16px 0 0}
   .nf h1 .g{color:var(--brand)}
   .nf p{color:var(--ink2);font-size:14.5px;line-height:1.65;margin:16px 0 0;max-width:52ch}
-  .nf .go{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 0}
+  .nf .go{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 0;
+    padding-top:26px;border-top:1px solid var(--hair)}
   .nf .go a{font:600 11px var(--mono);letter-spacing:.08em;padding:10px 16px;
-    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut)}
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut);
+    transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
   .nf .go a:hover{color:var(--brand);border-color:var(--brand)}
   .nf .go a.pri{background:linear-gradient(180deg,#F3EFE6,#DCD6C9);color:var(--g0);
     border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)}

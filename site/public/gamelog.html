@@ -42,7 +42,14 @@
   .count{font-family:var(--num);font-size:12px;color:var(--dim);margin-left:auto}
   .count b{color:var(--muted);font-weight:600}
 
-  .tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  /* FROZEN MARKET: the archive is a slab of dark glass lit along its top edge
+     — rule 3 — and that lit edge is the only teal on a page of 7,548 rows.
+     Nothing here is sealed (every one of these games has been played and every
+     line is public), so nothing here is under ice. */
+  .tbl-card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    box-shadow:inset 0 -1px 0 rgba(0,0,0,.55),0 18px 40px -22px rgba(0,0,0,.9)}
+  .tbl-card.rimlit::after{z-index:2}
   .scroll{overflow-x:auto;max-height:72vh;overflow-y:auto;overscroll-behavior:contain}
   .scroll::-webkit-scrollbar{width:8px;height:8px}
   .scroll::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
@@ -57,17 +64,49 @@
   tr:hover td{background:var(--bg-3)}
   td .w{color:var(--ink);font-weight:700}
   td.mu{font-family:var(--sans);font-size:13px}
+  /* Rule 1: teal marks a better-than-market number, not a category. A playoff
+     round, a cover, and an over/under result are all just facts about a game
+     that finished years ago — spending the signal hue on 7,548 of them is what
+     turns a brand colour into wallpaper. They read in cool white and grey; the
+     letter and the team code already carry the datum. */
   .chip{display:inline-block;font-size:9.5px;letter-spacing:.08em;border:1px solid var(--line-2);
-    border-radius:var(--r-sm);padding:1px 5px;color:var(--iris);margin-left:7px;vertical-align:1px}
-  .cov{color:var(--pos);font-weight:600}
-  .push{color:var(--muted)}
-  .ou-o{color:var(--warn)} .ou-u{color:var(--iris)}
+    border-radius:var(--r-sm);padding:1px 5px;color:var(--muted);margin-left:7px;vertical-align:1px}
+  .cov{color:var(--ink);font-weight:700}
+  .push{color:var(--dim)}
+  .ou-o,.ou-u{color:var(--ink-2);font-weight:700}
 
   .gl-footer{margin-top:14px;font-size:11.5px;color:var(--dim);display:flex;
     justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:var(--num)}
   .gl-note{font-size:11px;color:var(--dim);max-width:72ch;margin:12px 0 0;line-height:1.6}
 
   @media(max-width:720px){.gl-wrap{padding:0 16px 40px}}
+  /* ---- the archive on a phone ----------------------------------------
+     A ten-column table with a 760px floor is, in a 375px viewport, a sideways
+     scroller that hides the score, the spread and both moneylines off to the
+     right — everything except the week number. Below 720px it becomes the same
+     labelled card the board's .itab already becomes, using the data-l
+     attributes Desk.stack() writes onto every table on the site. The matchup
+     leads, because that is what tells you which game you are reading. */
+  @media(max-width:720px){
+    table{min-width:0;width:100%;display:block}
+    thead{display:none}
+    tbody,tr,td{display:block;width:auto}
+    tr{display:flex;flex-direction:column;border:1px solid var(--line);
+      background:var(--bg-2);padding:11px 13px 3px;margin:0 0 8px}
+    tr:hover td{background:none}
+    td{padding:6px 0;text-align:right;white-space:normal;
+      border-bottom:1px solid var(--line);
+      display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+    td::before{content:attr(data-l);flex:0 0 auto;text-align:left;
+      font:600 9.5px var(--num);letter-spacing:.11em;text-transform:uppercase;
+      color:var(--dim)}
+    td.mu{order:-1;display:block;text-align:left;font-size:15px;
+      padding-bottom:9px;border-bottom:1px solid var(--line-2)}
+    td.mu::before{content:none}
+    /* column one is the only cell Desk.stack() leaves unlabelled */
+    td:first-child::before{content:"WK"}
+    tr td:last-child{border-bottom:0}
+  }
 </style>
 
 </head>
@@ -99,7 +138,7 @@
   <span class="count" id="count" aria-live="polite"></span>
 </div>
 
-<div class="tbl-card"><div class="scroll">
+<div class="tbl-card rimlit"><div class="scroll">
   <table aria-label="NFL game log with closing lines">
     <thead><tr>
       <th class="l" scope="col">Wk</th>

@@ -11,6 +11,79 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
+<style>
+  /* ======================================================================
+     FROZEN MARKET — the single-game workspace.
+     Same half of the metaphor as the board: this is liquid, one game deep.
+     The instrument grid stays exactly the grid it was; it is recoloured to
+     the cold palette and given the one lit rim, because on this page it is
+     the hero surface — the first read of the game.
+     Teal appears on three things only: the rim, the better number, and the
+     control the reader is currently pressing. Everything else is hairline,
+     cool white and near-black.
+     ====================================================================== */
+  .ws-crumb a.tl{transition:color var(--t-hover) ease}
+  .ws-crumb a.tl:hover{color:var(--brand)}
+
+  /* the instrument grid: cold glass, and the favourable number is the only
+     lit reading on it */
+  .ws-grid{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%)}
+  .ws-cell .v.up{text-shadow:0 0 14px rgba(45,212,167,.30)}
+  .ws-cell .v small{color:var(--dim)}
+
+  /* per-side market slabs: the fair price in the header is a reading, not a
+     caption, so it comes up out of metadata grey */
+  .mkt .sec-h .more{color:var(--ink2)}
+
+  /* the waterline — a live table's header rule is chrome that belongs to
+     us, so it is the one hue. Matches the board on /market. */
+  .itab thead th{border-bottom:1px solid rgba(45,212,167,.30)}
+
+  /* ---- instrument controls on dark glass ------------------------------
+     The analyst row was a search field and a key loose on the page. Here it
+     is one control surface: a slab lit along its top edge, the field cut
+     into it as an inset groove, one lit key, and a rim that answers focus.
+     Identical treatment to /market so the two pages are one instrument. */
+  .an-in{gap:0;align-items:stretch;padding:5px;max-width:720px;
+    border:1px solid var(--hair2);border-radius:var(--r);
+    background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
+               inset 0 -1px 0 rgba(0,0,0,.55),
+               0 18px 40px -26px rgba(0,0,0,.9);
+    transition:border-color var(--t-hover) ease,box-shadow var(--t-hover) ease}
+  .an-in:focus-within{border-color:rgba(45,212,167,.45);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.12),
+               0 0 0 1px rgba(45,212,167,.16),
+               0 18px 40px -26px rgba(0,0,0,.9)}
+  .an-in input{border:1px solid rgba(0,0,0,.5);border-right:0;
+    border-radius:2px 0 0 2px;padding:10px 13px;
+    background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(255,255,255,.02));
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+  .an-in input::placeholder{color:var(--mut)}
+  .an-in button{font:700 11px/1 var(--mono);letter-spacing:.16em;
+    color:var(--g0);background:var(--brand);border-radius:2px;padding:0 20px;
+    box-shadow:inset 0 1px 0 rgba(219,255,246,.45),
+               0 0 20px -8px rgba(45,212,167,.9)}
+
+  /* the question chips carry the promo's teal triangle; hover lights the
+     triangle rather than washing the whole chip in the signal colour */
+  .an-chips .an-chip{position:relative;text-align:left;color:var(--ink2);
+    padding:8px 12px 8px 24px;letter-spacing:.08em;border-color:var(--hair2)}
+  .an-chips .an-chip::before{content:"";position:absolute;left:11px;top:50%;
+    margin-top:-4px;border:4px solid transparent;border-left-color:var(--brand);
+    opacity:.42;transition:opacity var(--t-hover) ease}
+  .an-chips .an-chip:hover{color:var(--ink);border-color:rgba(45,212,167,.42)}
+  .an-chips .an-chip:hover::before{opacity:1}
+
+  /* the timeline range keys are a selector, and the selected one had no
+     state at all — aria-pressed was announced but never drawn. The pressed
+     key is the one place teal is allowed to fill, because it is reporting
+     which window you are actually looking at. */
+  #tlRange{display:inline-flex;gap:4px}
+  #tlRange .an-chip{padding:6px 10px;letter-spacing:.1em}
+  #tlRange .an-chip[aria-pressed="true"]{color:var(--brand);
+    border-color:rgba(45,212,167,.45);background:var(--brand-dim)}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -67,7 +140,8 @@ function render(hit,moves,research,timeline){
     +'<p class="tl" style="text-align:center">'+D.esc(SPORT_LABEL[sp]||sp)+' · '
     +(isOn?'<b style="color:var(--amber)">CLOSING SNAPSHOT — GAME STARTED</b>'
           :D.esc(D.when(ev.starts)).toUpperCase())+'</p>'
-    +'<div class="ws-grid">'
+    /* the workspace's hero surface gets the coin's single lit rim */
+    +'<div class="ws-grid rimlit">'
     +cell("FAIR "+D.esc(fav.name.split(" ").pop()),D.am(fav.fair_price))
     +cell("IMPLIED",D.pct(fav.fair_prob))
     +cell("BEST AVAILABLE",single?"·":D.am(best.best_price)

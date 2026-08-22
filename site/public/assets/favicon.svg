@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="sooth">
-  <rect width="32" height="32" rx="7" fill="#0A0B0F"/>
-  <circle cx="16" cy="16" r="9.5" fill="none" stroke="#2A2F3A" stroke-width="2.4"/>
-  <path d="M16 6.5 A9.5 9.5 0 0 1 25.5 16" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round"/>
-  <circle cx="16" cy="16" r="2.4" fill="#4ADE80"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="sooth.bet">
+  <!-- The promo coin, reduced to what survives at 16px: a black round field,
+       one lit teal arc on the top-left rim, the cool-white double-track glyph,
+       and the teal pip. The previous mark used #4ADE80 — a green that was
+       never the brand teal — on a rounded square that matched nothing. -->
+  <circle cx="16" cy="16" r="15.2" fill="#06080A"/>
+  <circle cx="16" cy="16" r="14.4" fill="none" stroke="#101820" stroke-width="1.4"/>
+  <!-- the lit rim: teal hairline over the top-left quadrant only -->
+  <path d="M4.6 21.2 A12.6 12.6 0 0 1 21.6 4.5" fill="none"
+        stroke="#2DD4A7" stroke-width="1.3" stroke-linecap="round" opacity=".95"/>
+  <!-- double-track glyph, brushed cool white -->
+  <path d="M10.4 12.4 H19.4 a2.6 2.6 0 0 1 0 5.2 H12.6"
+        fill="none" stroke="#F0F5F6" stroke-width="3.1" stroke-linecap="round"/>
+  <path d="M10.4 20.4 H18.6"
+        fill="none" stroke="#F0F5F6" stroke-width="3.1" stroke-linecap="round"/>
+  <!-- the pip -->
+  <circle cx="23.4" cy="20.4" r="1.9" fill="#2DD4A7"/>
 </svg>

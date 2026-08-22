@@ -17,6 +17,87 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
+<style>
+  /* ======================================================================
+     FROZEN MARKET — this is the page where the market is caught moving.
+
+     Everything here is a disagreement: a book out of line with the consensus,
+     two books out of line with each other, a price that has drifted away from
+     where it was two days ago. The page had no styles of its own at all, so it
+     read as three identical slabs stacked down the screen with no account of
+     which one mattered. Four moves, no new hue:
+
+       1. BEATING FAIR is the sooth signal — the only feed on the page that is
+          about a number better than the market — so it takes the page's one
+          lit rim, and its edge figures are the only ones set in teal.
+       2. Every points figure is drawn as a tick off a rule: a short leading
+          edge in its own colour, so a row reads as a mark standing off the
+          line before you read the digits. Teal where the move is favourable,
+          red where it is adverse, amber where books have merely diverged.
+       3. The section labels take the promo's slab face — a teal hairline,
+          then mono caps — because a rule naming our own instrument is chrome
+          that belongs to us.
+       4. The empty states are findings ("nothing beats fair right now" is the
+          honest state of an efficient market), so they are set as sentences,
+          left-ranged, rather than centred like a failed dialog.
+
+     No ambient motion. A page about a market that moves is not a licence to
+     animate its own furniture — the motion contract still holds.
+     ====================================================================== */
+
+  /* the slab face from promo 2: a teal hairline, then the mono-caps label */
+  .sec-h .tl{display:inline-block;padding-left:12px;line-height:1.4;
+    border-left:1px solid rgba(45,212,167,.42);color:var(--mut)}
+
+  /* the one lit rim, on the one feed that is about our signal */
+  #ev.rimlit::after{z-index:2}
+
+  /* ---- a move is a tick off a rule -------------------------------------
+     currentColor, so the mark is drawn once and the up/dn/am classes the
+     feed already sets are the only thing that varies.
+     nowrap so the figure and its unit stay one object: without it a narrow
+     row breaks between "+1.52" and "PTS" and strands the unit on its own
+     line, away from the tick that is supposed to be marking it. */
+  .mv-hl .pts{border-left:2px solid currentColor;padding-left:8px;
+    margin-left:11px;font-weight:600;white-space:nowrap}
+
+  /* the kind tag on a beating-fair row: GAME or PROP, quiet, mono, tagged */
+  #ev .kind{font:600 9px/1 var(--mono);letter-spacing:.16em;color:var(--dim);
+    border:1px solid var(--hair);border-radius:2px;padding:3px 5px;
+    margin-left:9px;vertical-align:1px;text-transform:uppercase}
+  /* the price you can actually take is ink; the fair line it is measured
+     against is the benchmark, so it stays metadata. The gap between the two
+     lines is the whole row. */
+  #ev .mv-meta{color:var(--ink2)}
+  #ev .mv-meta .vs{color:var(--dim)}
+
+  /* a book out of line with the pack, marked on its leading edge — the
+     divergence rows and the single-book drifts below them are two different
+     observations sharing one feed, and nothing said so.
+     A background-image rather than an inset box-shadow, so the row keeps the
+     shared hover lift instead of having its shadow overwritten. */
+  #mv .dvg{background-image:linear-gradient(90deg,var(--amber) 0 2px,transparent 2px)}
+
+  /* findings, not failures */
+  .feed .state{text-align:left;padding:22px 18px;max-width:78ch;
+    color:var(--ink2);line-height:1.65}
+  .feed .state .tl{color:var(--mut);margin-bottom:9px}
+
+  /* the freshness reading is the live fact on a live feed */
+  .status .live .tl[data-ago]{color:var(--ink2)}
+  .status .pulse.on{box-shadow:0 0 8px rgba(45,212,167,.75)}
+
+  /* ---- on a phone -------------------------------------------------------
+     The row is a three-column grid whose last column is nowrap metadata; at
+     375px that is what pushes the page sideways. It stacks instead — nothing
+     truncated, nothing scrolling, same reading order. */
+  @media (max-width:560px){
+    .mv-row{grid-template-columns:26px minmax(0,1fr);row-gap:6px;padding:12px 13px}
+    .mv-meta{grid-column:2;text-align:left;white-space:normal;color:var(--dim)}
+    .mv-sub{max-width:none}
+    .sec-h .tl{padding-left:10px}
+  }
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -34,7 +115,7 @@
     <div class="sec-h"><span class="tl" id="evH">BEATING FAIR</span>
       <span class="sub">best available price above the de-vigged consensus, games and props,
       ranked by edge — these close fast, the timestamp is part of the data</span></div>
-    <div class="feed" id="ev"></div>
+    <div class="feed rimlit" id="ev"></div>
   </section>
 
   <section class="sec" aria-labelledby="arbH">
@@ -99,9 +180,10 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
   if(evs.length){
     $("ev").innerHTML=evs.slice(0,20).map(function(r,i){
       return D.feedRow(i,D.esc(r.t)+'<span class="pts n up">'+D.pts(r.edge,1)+' PTS</span>'
-        +' <span class="bkk" style="font:600 9.5px var(--mono);color:var(--dim)">'+r.kind+'</span>',
+        +'<span class="kind">'+r.kind+'</span>',
         D.esc(r.sub),
-        D.bk(r.bk)+" "+D.am(r.pr)+"<br>FAIR "+D.am(r.fair));}).join("");
+        D.bk(r.bk)+" "+D.am(r.pr)
+        +'<br><span class="vs">FAIR '+D.am(r.fair)+'</span>');}).join("");
   }else if(!b.ok&&!p.ok){
     state("ev","FEED UNAVAILABLE","Could not load the board — prices elsewhere may be stale.");
   }else{
@@ -163,6 +245,11 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
         '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span><br>'
         +String(a.sport).toUpperCase()+" · "+String(a.market).toUpperCase(),
         "/game?e="+encodeURIComponent(a.event_id)+"&s="+a.sport);}).join("");
+    // Divergence (a book out of line with the pack) and drift (one book
+    // moving on its own) are different observations sharing one feed. The
+    // divergence rows take the leading-edge mark so the boundary is visible.
+    [].forEach.call($("mv").children,function(el,i){
+      if(all[i]&&all[i].kind==="divergence") el.className+=" dvg";});
   }else{
     state("mv","QUIET MARKET","Nothing above "+(mv.data.min_move_pts||1.5)
       +" pts in the last two days.");

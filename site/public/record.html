@@ -24,9 +24,12 @@
   .rec-head p b{color:var(--ink)}
   .strip{display:flex;gap:22px;flex-wrap:wrap;padding:14px 0 0}
   .strip .tl b{color:var(--ink2)}
-  .tblh{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
-    border:1px solid var(--hair);border-radius:var(--r);margin:12px 0 8px;overflow-x:auto;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 34px -20px rgba(0,0,0,.85)}
+  /* The bespoke slab here was a near-copy of the shared instrument recipe, so
+     the tables are now plain .itab surfaces: one light source for the whole
+     site, and — the reason that matters — the shared phone stylesheet turns
+     each row into a labelled card instead of hiding six of seven columns
+     behind a 680px horizontal scroller. .tblh keeps only its spacing. */
+  .tblh{margin:12px 0 8px}
   table.rec{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;
     font-variant-numeric:tabular-nums;min-width:680px}
   table.rec th{text-align:right;font:600 9.5px var(--mono);color:var(--dim);
@@ -39,12 +42,32 @@
   table.rec .mdl{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink)}
   table.rec .mdl small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);
     font-weight:400;margin-top:2px}
-  table.rec tr.market td{background:rgba(52,211,153,.05)}
+  /* the benchmark row was a full-width wash in the OLD green (#34D399) — a
+     second hue, and a lot of surface for one hue that is meant to be a
+     highlight. It is now a single lit edge on the row's own cell. */
+  table.rec tr.market td:first-child{box-shadow:inset 2px 0 0 var(--brand)}
   table.rec tr.market .mdl{color:var(--up)}
   .pos{color:var(--up)} .no{color:var(--dn)} .warnc{color:var(--amber)}
+  /* the verdict, drawn by one rule: "yes" and "no" carry identical weight and
+     differ only in hue — the same promise the ledger's WON/LOST makes. */
+  .vd{font:600 12.5px/1 var(--mono);letter-spacing:.06em}
+  .vd.w{color:var(--up)} .vd.l{color:var(--dn)}
   .cap-note{font-size:11.5px;color:var(--dim);margin:6px 0 0;max-width:76ch}
-  .callout{border-left:2px solid var(--amber);background:var(--amber-dim);
-    border-radius:0 var(--r) var(--r) 0;padding:18px 20px;margin:26px 0 8px}
+  /* the same block writes each sample's name and provenance into one cell as
+     <b> + <small>, with no shared rule for the <small>: they render glued
+     together ("Backtest Anflverse spread_line…"). Separated until the shell
+     owns the rule — a denominator you cannot read is not a denominator. */
+  #pops .itab td.l small{display:block;margin-top:3px;max-width:38ch;
+    white-space:normal;font:400 10.5px/1.45 var(--mono);color:var(--dim)}
+  /* the shared populations block prints a <p class="note"> and desk.css has no
+     rule for it, so it was setting at body size — louder than the table it
+     annotates. Same treatment as .cap-note until the shell owns one. */
+  .note{font-size:11.5px;color:var(--dim);margin:9px 0 0;line-height:1.6;max-width:84ch}
+  /* amber marks the caution; the 10% amber fill under it was a second hue
+     spread over a whole panel. Glass instead, rule left standing. */
+  .callout{border-left:2px solid var(--amber);background:var(--g1);
+    border-radius:0 var(--r) var(--r) 0;padding:18px 20px;margin:26px 0 8px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .callout h3{font:600 15px var(--sans);margin:8px 0 10px;color:var(--ink)}
   .callout p{color:var(--ink2);font-size:13px;line-height:1.65;margin:0;max-width:70ch}
   .cmp{display:flex;gap:26px;flex-wrap:wrap;margin:12px 0 2px;font-family:var(--mono)}
@@ -52,21 +75,48 @@
   .cmp .v{font-size:19px;font-weight:700;margin-top:4px;color:var(--ink);
     font-variant-numeric:tabular-nums}
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-  .stats .stat{background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
-    border-radius:var(--r);padding:14px 16px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
-  .stats .v{font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  /* the shared slab light: lit along the top edge, dark along the bottom,
+     sitting on its own ambient shadow — same recipe as every instrument */
+  .stats .stat,.glo .g{
+    background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+    border:1px solid var(--hair);border-radius:var(--r);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
+               inset 0 -1px 0 rgba(0,0,0,.55),
+               0 18px 40px -22px rgba(0,0,0,.9)}
+  .stats .stat{padding:14px 16px}
+  /* .stat also names the shell's big gradient-filled status figure; these are
+     instrument cells, so the gradient fill and its drop-shadow are cancelled */
+  .stats .v{font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;
+    background:none;-webkit-background-clip:border-box;background-clip:border-box;
+    filter:none}
   .stats .k{font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.45}
   .glo{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
-  .glo .g{background:linear-gradient(180deg,#15181D,#101216);border:1px solid var(--hair);
-    border-radius:var(--r);padding:15px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+  .glo .g{padding:15px 16px}
   .glo .g b{font-size:13px;color:var(--ink)}
   .glo .g p{font-size:12.5px;color:var(--mut);margin:6px 0 0;line-height:1.55}
   .fine{color:var(--dim);font-size:11.5px;margin:8px 0 0;line-height:1.6}
   .fine a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
   .fine b{color:var(--mut)}
   .empty{padding:20px 0;color:var(--mut);font-size:13px}
-  @media (max-width:720px){.glo,.stats{grid-template-columns:1fr}}
+  /* the sealed slates are the one pre-committed thing on this page, so they
+     get the single lit rim — raised above the sticky header row, and dropped
+     on phones where the table is already a stack of cards */
+  #peSec .rimlit::after{z-index:2}
+  /* REHEARSAL is a caution, not a state: amber, exactly as on the ledger */
+  #peTbl .mdl small{color:var(--amber)}
+  /* commitment ids read as frozen artifacts */
+  #peTbl .mdl{color:var(--frost)}
+  @media (max-width:720px){
+    .glo,.stats{grid-template-columns:1fr}
+    #peSec .rimlit::after{display:none}
+    /* hand the rows back to the shared stacking stylesheet: no floor width,
+       no nowrap, no cell padding fighting the label/value line */
+    table.rec{min-width:0}
+    table.rec td{padding:6px 0;white-space:normal}
+    table.rec tr.market td:first-child{box-shadow:none}
+    table.rec tr.market{box-shadow:inset 2px 0 0 var(--brand)}
+    table.rec .mdl small{display:inline;margin:0 0 0 6px}
+  }
 </style>
 </head>
 <body>
@@ -97,14 +147,14 @@
     <div class="sec-h"><span class="tl">A · NFLVERSE LINES, 2016–2025</span>
       <span class="sub" id="a-prov">Larger sample, weaker provenance.</span>
       <span class="more tl" id="a-n">·</span></div>
-    <div class="tblh"><table class="rec" id="tbl-a"><tbody></tbody></table></div>
+    <div class="itab tblh"><div class="scr"><table class="rec" id="tbl-a"><thead></thead><tbody></tbody></table></div></div>
   </section>
 
   <section class="sec">
     <div class="sec-h"><span class="tl">B · REAL CONSENSUS CLOSES, 2023–2025</span>
       <span class="sub" id="b-prov">Smaller sample, far better provenance.</span>
       <span class="more tl" id="b-n">·</span></div>
-    <div class="tblh"><table class="rec" id="tbl-b"><tbody></tbody></table></div>
+    <div class="itab tblh"><div class="scr"><table class="rec" id="tbl-b"><thead></thead><tbody></tbody></table></div></div>
   </section>
 
   <div class="callout">
@@ -124,7 +174,7 @@
     <div class="sec-h"><span class="tl">RELIABILITY · INDEPENDENT MODEL</span></div>
     <p class="cap-note">Per probability band: what we predicted vs how often it happened. A positive
       gap means we were overconfident.</p>
-    <div class="tblh"><table class="rec" id="tbl-rel"><tbody></tbody></table></div>
+    <div class="itab tblh"><div class="scr"><table class="rec" id="tbl-rel"><thead></thead><tbody></tbody></table></div></div>
   </section>
 
   <section class="sec">
@@ -138,7 +188,7 @@
       <span class="sub">sealed before kickoff, graded here after — the running record, rehearsals excluded</span>
       <a class="more tl" href="/picks">THE ENGINE →</a></div>
     <p class="cap-note" id="peLine"></p>
-    <div class="tblh"><table class="rec" id="peTbl"><tbody></tbody></table></div>
+    <div class="itab tblh rimlit"><div class="scr"><table class="rec" id="peTbl"><thead></thead><tbody></tbody></table></div></div>
   </section>
 
   <section class="sec">
@@ -195,10 +245,16 @@
         +'<td>'+num(r.ece)+'</td>'
         +'<td>'+r.ats_record+'</td>'
         +'<td>'+pct(r.ats_pct)+'</td>'
-        +'<td class="'+(r.beats_breakeven?"pos":"no")+'">'+(r.beats_breakeven?"yes":"no")+'</td>'
+        /* clearing break-even and failing it are the same object at the same
+           weight; only the hue differs */
+        +'<td><span class="vd '+(r.beats_breakeven?"w":"l")+'">'
+          +(r.beats_breakeven?"yes":"no")+'</span></td>'
         +'</tr>';
     }).join("");
-    el.querySelector("tbody").innerHTML=head+rows;
+    /* the header row belongs in <thead>: that is what Desk.stack() reads to
+       label each cell, and what lets the row become a card on a phone */
+    el.querySelector("thead").innerHTML=head;
+    el.querySelector("tbody").innerHTML=rows;
   }
 
   function reliability(el,rows){
@@ -210,7 +266,8 @@
         +'<td>'+r.n+'</td><td>'+pct(r.predicted)+'</td><td>'+pct(r.actual)+'</td>'
         +'<td class="'+cls+'">'+g+'</td></tr>';
     }).join("");
-    el.querySelector("tbody").innerHTML=head+body;
+    el.querySelector("thead").innerHTML=head;
+    el.querySelector("tbody").innerHTML=body;
   }
 
   function boot(){
@@ -282,7 +339,9 @@
             +'<td>'+(m&&m.mean_clv!=null?m.mean_clv:"·")+'</td>'
             +'<td>'+(w.clv_coverage!=null?Math.round(w.clv_coverage*100)+"%":"·")+'</td></tr>';
         }).join("");
-        document.getElementById("peTbl").querySelector("tbody").innerHTML=head+rows;
+        var pe=document.getElementById("peTbl");
+        pe.querySelector("thead").innerHTML=head;
+        pe.querySelector("tbody").innerHTML=rows;
       }).catch(function(){});
   }
   addEventListener("DOMContentLoaded",function(){

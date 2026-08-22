@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ledger — Sooth</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0A0B0D">
+<meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,84 +24,86 @@
      it is here for the shared header and footer that desk.js injects. -->
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
-:root{--bg:#0A0B0D;--panel:#101216;--panel-2:#1B1E24;--line:rgba(255,255,255,.07);
---line-2:rgba(255,255,255,.13);
---ink:#EDE9E0;--muted:#8C877E;--dim:#5C5852;--accent:#EDE9E0;--warn:#D99B36;
---bad:#E0645F;--link:#EDE9E0;
---mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+/* FROZEN MARKET — this page is the frozen artifact itself.
+   A sealed slate is a commitment nobody can edit afterwards, so the seal chip
+   and the published root are the two things rendered as ice (rule 2), and
+   nothing else on the page carries a hue.
+
+   The page used to carry its own warm palette and redefine --ink, --dim and
+   --mono on :root. Those tokens belong to the shell: the header and footer
+   desk.js injects were reading them, so the wordmark and the compliance floor
+   rendered in a different colour here than on every other page. The local
+   palette is gone and everything below is expressed in desk.css tokens.
+
+   The header/nav/.brand/footer rules went with it. They were not merely dead:
+   .brand was declared here, after desk.css and at equal specificity, with
+   text-transform:uppercase — it was rendering the lowercase sooth.bet
+   wordmark in caps on this page alone — and bare nav{} was giving the
+   injected .hd-links its own height, max-width and 28px padding. */
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);
-font:15px/1.7 Inter,system-ui,-apple-system,sans-serif;
--webkit-font-smoothing:antialiased;
-background:radial-gradient(1100px 480px at 50% -180px,rgba(233,228,216,.035),transparent 70%),var(--bg)}
-.wrap{max-width:860px;margin:0 auto;padding:0 24px}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline;text-underline-offset:2px}
-header{border-bottom:1px solid var(--line);position:sticky;top:0;
-background:rgba(10,11,13,.85);backdrop-filter:blur(10px);z-index:10}
-nav{display:flex;align-items:center;gap:18px;height:52px;
-max-width:1360px;margin:0 auto;padding:0 28px}
-.brand{font:700 15px/1 Inter,sans-serif;letter-spacing:.10em;text-transform:uppercase;
-text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
-.brand:hover{text-decoration:none}
-.brand .dot{width:9px;height:9px;border-radius:1px;background:var(--accent)}
-nav .spacer{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font:600 11.5px/1 Inter,sans-serif;
-letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:3px}
-nav a.l:hover{color:var(--ink);background:var(--panel);text-decoration:none}
-.prose{padding:40px 0 60px}
-.prose h1{font-size:clamp(24px,3.6vw,32px);line-height:1.15;
-letter-spacing:-.02em;margin:0 0 24px;font-weight:760}
+/* only the prose column is 860px; the shell's own .wrap stays site-width */
+body>.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+.prose{padding:40px 0 60px;font:15px/1.7 var(--sans);color:var(--ink2)}
+.prose a{color:var(--brand)}
+.prose a:hover{text-decoration:underline;text-underline-offset:2px}
+.prose h1{font:760 clamp(24px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.02em;
+margin:0 0 24px;color:var(--ink)}
 .prose h2{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-color:var(--muted);margin:42px 0 14px;padding-top:22px;border-top:1px solid var(--line)}
-.prose h3{font-size:15px;margin:26px 0 8px;font-weight:650;color:var(--ink)}
-.prose p{margin:0 0 15px;color:#B4BAC4}
-.prose li{margin:0 0 7px;color:#B4BAC4}
+color:var(--mut);margin:42px 0 14px;padding-top:22px;border-top:1px solid var(--hair)}
+.prose h3{font:650 15px/1.4 var(--sans);margin:26px 0 8px;color:var(--ink)}
+.prose p{margin:0 0 15px;color:var(--ink2)}
+.prose li{margin:0 0 7px;color:var(--ink2)}
 .prose strong{font-weight:650;color:var(--ink)}
-.prose code{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);
-border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;color:var(--ink)}
-.prose pre{background:var(--panel);border:1px solid var(--line);
-border-radius:3px;padding:15px 17px;overflow-x:auto;font-size:12px;
-line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.prose code{font-family:var(--mono);font-size:12.5px;background:var(--g2);
+border:1px solid var(--hair2);border-radius:var(--r);padding:1px 5px;color:var(--ink)}
+.prose pre{background:var(--g1);border:1px solid var(--hair);
+border-radius:var(--r);padding:15px 17px;overflow-x:auto;font-size:12px;
+line-height:1.55;box-shadow:inset 0 1px 0 rgba(190,240,245,.08)}
 .prose pre code{background:none;border:0;padding:0;font-size:12px}
+/* a table here wraps rather than scrolling sideways: the column is already
+   narrow enough to read on a phone, and a scroller hides the numbers */
 .prose table{width:100%;border-collapse:collapse;font-size:13px;margin:18px 0;
-display:block;overflow-x:auto;font-family:var(--mono);
-font-variant-numeric:tabular-nums}
-.prose th{text-align:left;font-weight:600;color:var(--dim);font-size:9.5px;
+font-family:var(--mono);font-variant-numeric:tabular-nums}
+.prose th{text-align:left;font:600 9.5px var(--mono);color:var(--dim);
 text-transform:uppercase;letter-spacing:.12em;padding:0 12px 9px;
-border-bottom:1px solid var(--line-2);white-space:nowrap;font-family:var(--mono)}
-.prose td{padding:9px 12px;border-bottom:1px solid var(--line);color:#B4BAC4}
-.prose blockquote{margin:18px 0;padding:14px 18px;background:var(--panel);
-border-left:2px solid var(--warn);border-radius:0 3px 3px 0}
+border-bottom:1px solid var(--hair2)}
+.prose td{padding:9px 12px;border-bottom:1px solid var(--hair);color:var(--ink2)}
+.prose blockquote{margin:18px 0;padding:14px 18px;background:var(--g1);
+border-left:2px solid var(--amber);border-radius:0 var(--r) var(--r) 0}
 .prose blockquote p{margin:0}
-.prose hr{border:0;border-top:1px solid var(--line);margin:34px 0}
-footer{border-top:1px solid var(--line);padding:26px 0 44px;
-color:var(--dim);font-size:11.5px;line-height:1.7}
-footer p{max-width:86ch;margin:0 0 9px}
-footer b,footer strong{color:var(--muted)}
-footer a{color:var(--muted)}
-.mono{font-family:var(--mono)}
-.hash{font-family:var(--mono);font-size:11.5px;color:var(--accent);
+.prose hr{border:0;border-top:1px solid var(--hair);margin:34px 0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* the published root — the one artifact on this site that is genuinely
+   frozen, so it is the one thing set in ice */
+.hash{font:500 11.5px/1.55 var(--mono);color:var(--frost);letter-spacing:.02em;
 word-break:break-all}
-.badge{display:inline-block;font:700 9.5px/1 var(--mono);
-letter-spacing:.08em;padding:3px 7px;border-radius:4px;
-border:1px solid var(--line-2);color:var(--muted);vertical-align:2px}
-.badge.sealed{color:var(--warn);border-color:var(--warn)}
-.badge.revealed{color:var(--accent);border-color:var(--accent)}
-.card{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
-border:1px solid var(--line);border-radius:3px;padding:17px 19px;margin:0 0 13px;
-box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
-0 12px 30px -20px rgba(0,0,0,.85)}
-.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:12.5px}
-.card .k{color:var(--dim);min-width:118px;font-family:var(--mono);font-size:10.5px;
-letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+/* SEALED is the shared .frost chip (see the markup below). .badge survives for
+   any other state the builder emits: REVEALED has thawed and is verifiable, so
+   it takes the one hue. */
+.prose .frost{vertical-align:1px}
+.badge{display:inline-block;font:600 9.5px/1 var(--mono);letter-spacing:.14em;
+text-transform:uppercase;padding:4px 8px;
+border:1px solid var(--hair2);color:var(--mut);vertical-align:2px}
+.badge.sealed{color:var(--frost);border-color:var(--frost-rim);
+background:var(--frost-dim)}
+.badge.revealed{color:var(--brand);border-color:rgba(45,212,167,.35)}
+/* one slate, one slab of dark glass, lit along its top edge — the shared
+   instrument recipe, so the light source matches the rest of the site */
+.card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+border:1px solid var(--hair);border-radius:var(--r);padding:17px 19px;margin:0 0 13px;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
+0 18px 40px -22px rgba(0,0,0,.9)}
+.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:12.5px;
+color:var(--ink2)}
+.card .k{color:var(--dim);min-width:118px;font:600 10px/1 var(--mono);
+letter-spacing:.14em;text-transform:uppercase;padding-top:5px}
 </style>
 </head>
 <body>
 <div class="wrap"><div class="prose">
 
 <h1>Ledger</h1>
-<p>Every slate we have ever committed, newest first. A <span class="badge sealed">SEALED</span>
+<p>Every slate we have ever committed, newest first. A <span class="frost">SEALED</span>
 slate has had its Merkle root published before kickoff; its predictions are
 published alongside it, and the root proves they cannot be altered afterwards.
 A <span class="badge revealed">REVEALED</span> slate has been graded after the
@@ -111,10 +113,10 @@ altered after sealing, the recomputed root would not match the published one —
 that is the entire point, and <a href="/verify">you can check it yourself</a>.</p>
 <p><strong>1</strong> slate(s) committed.</p>
 
-<div class="card">
+<div class="card rimlit">
   <div class="row"><span class="k">slate</span>
     <span><strong>2026-W01-nfl</strong>
-    <span class="badge sealed">SEALED</span></span></div>
+    <span class="frost">SEALED</span></span></div>
   <div class="row"><span class="k">predictions</span><span>32</span></div>
   <div class="row"><span class="k">merkle root</span><span class="hash">438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec</span></div>
   <div class="row"><span class="k">sealed at</span><span class="mono">2026-08-06T05:36:17.176614+00:00</span></div>

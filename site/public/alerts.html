@@ -18,6 +18,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
+  /* FROZEN MARKET — the sign-up surface.
+     The slab face in promo 2 reads in one order: a small label, a teal
+     hairline rule, then a ▸ capability list in mono caps. That is exactly
+     what this fieldset is — three named things the desk can tell you about,
+     with a switch on each — so it is drawn that way rather than as a stack of
+     sentences with tick-boxes.
+
+     Teal appears four times on this page and nowhere else: the rule under the
+     legend, the pip on an alert that is ON, its ▸ marker, and the one key that
+     submits. Everything else is the cold ground, cool white and grey. The
+     frequency lines, the consent paragraph and the "never send" list are
+     verbatim; only their typography moved. */
+
   .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin:22px 0 8px;
     align-items:start}
   @media (max-width:860px){.cols{grid-template-columns:1fr}}
@@ -25,37 +38,94 @@
 
   fieldset{border:0;margin:0;padding:0}
   legend{padding:0}
+  /* label, then the teal hairline: the top two lines of the slab face */
+  #form legend{display:block;width:100%;padding-bottom:10px;margin-bottom:2px;
+    border-bottom:1px solid rgba(45,212,167,.28)}
 
-  /* One alert type: a checkbox, what it is, and how often it really fires. */
-  .opt{display:grid;grid-template-columns:18px 1fr;gap:12px;align-items:start;
-    padding:14px 0;border-bottom:1px solid var(--hair);cursor:pointer}
+  /* One alert type: a switch, what it is, and how often it really fires. */
+  .opt{display:grid;grid-template-columns:15px 1fr;gap:13px;align-items:start;
+    padding:15px 0;border-bottom:1px solid var(--hair);cursor:pointer}
   .opt:last-of-type{border-bottom:0}
-  .opt input{margin:2px 0 0;width:15px;height:15px;accent-color:var(--brand);cursor:pointer}
-  .opt .nm{font:600 13px var(--sans);color:var(--ink);display:block}
-  .opt .ds{display:block;font-size:12.5px;color:var(--ink2);line-height:1.6;margin:4px 0 0}
-  .opt .fq{font:600 10.5px var(--mono);color:var(--mut);letter-spacing:.07em;
-    text-transform:uppercase;margin:6px 0 0;display:block}
 
-  /* Threshold bands, revealed only when price alerts are on. */
-  .bands{margin:12px 0 2px 30px;padding:12px 0 2px;border-top:1px solid var(--hair)}
+  /* The coin's solid teal pip, as a switch. OFF is an empty square cut into
+     the slab; ON is filled and lit. Native input, native semantics, native
+     keyboard behaviour — only the paint changes, and forced-colors gets the
+     platform control back. */
+  .opt input{-webkit-appearance:none;appearance:none;width:15px;height:15px;
+    margin:2px 0 0;cursor:pointer;border:1px solid var(--hair2);border-radius:2px;
+    background:linear-gradient(180deg,rgba(190,222,228,.06),rgba(0,0,0,.35));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+    transition:background var(--t-hover) ease,border-color var(--t-hover) ease,
+      box-shadow var(--t-hover) ease}
+  .opt:hover input{border-color:var(--frost-rim)}
+  .opt input:checked{border-color:var(--brand);
+    background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 11px rgba(45,212,167,.35)}
+
+  /* the promo's ▸ line, same recipe as .caps in the shared sheet: mono caps,
+     wide tracking, a small triangle that lights when the alert is on */
+  .opt .nm{position:relative;display:block;padding-left:15px;
+    font:600 11px/1.35 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--mut);transition:color var(--t-hover) ease}
+  .opt .nm::before{content:"";position:absolute;left:0;top:2px;
+    border:4px solid transparent;border-left-color:var(--dim);
+    transition:border-left-color var(--t-hover) ease}
+  .opt input:checked+span .nm{color:var(--ink)}
+  .opt input:checked+span .nm::before{border-left-color:var(--brand)}
+  .opt .ds{display:block;font-size:12.5px;color:var(--ink2);line-height:1.6;
+    margin:7px 0 0;padding-left:15px;max-width:64ch}
+  .opt .fq{display:block;margin:8px 0 0;padding-left:15px;
+    font:600 10px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--dim)}
+
+  /* Threshold bands, revealed only when price alerts are on. They are a branch
+     of the switch above, not a new section, so the rail runs down from it. */
+  .bands{margin:2px 0 6px 15px;padding:12px 0 2px 16px;
+    border-left:1px solid var(--hair2)}
   .bands[hidden]{display:none}
   .band{display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:start;
     padding:8px 0;cursor:pointer}
-  .band input{margin:1px 0 0;accent-color:var(--brand);cursor:pointer}
-  .band .bn{display:block;font:600 12px var(--mono);color:var(--ink)}
+  .band input{-webkit-appearance:none;appearance:none;width:13px;height:13px;
+    margin:2px 0 0;cursor:pointer;border-radius:50%;border:1px solid var(--hair2);
+    background:linear-gradient(180deg,rgba(190,222,228,.06),rgba(0,0,0,.35));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+    transition:background var(--t-hover) ease,border-color var(--t-hover) ease,
+      box-shadow var(--t-hover) ease}
+  .band:hover input{border-color:var(--frost-rim)}
+  .band input:checked{border-color:var(--brand);background:var(--brand);
+    box-shadow:inset 0 0 0 2.5px var(--g1),0 0 9px rgba(45,212,167,.32)}
+  .band .bn{display:block;font:600 11.5px var(--mono);letter-spacing:.04em;
+    color:var(--ink2);transition:color var(--t-hover) ease}
+  .band input:checked+span .bn{color:var(--ink)}
   .band .bd{display:block;font-size:12px;color:var(--mut);line-height:1.55;margin:3px 0 0}
 
+  @media (forced-colors:active){
+    .opt input,.band input{-webkit-appearance:auto;appearance:auto}}
+
   .row{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
-  .row input[type=email]{flex:1;min-width:220px;background:var(--g2);
+  /* the address field is a groove cut into the slab, not a raised box */
+  .row input[type=email]{flex:1;min-width:220px;
+    background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(190,222,228,.03));
     border:1px solid var(--hair2);border-radius:var(--r);color:var(--ink);
-    font:14px var(--sans);padding:12px 13px}
+    font:14px var(--sans);padding:12px 13px;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.55);
+    transition:border-color var(--t-hover) ease}
   .row input[type=email]::placeholder{color:var(--dim)}
-  .go{font:700 13px var(--sans);color:var(--g0);
-    background:linear-gradient(180deg,#F3EFE6,#DCD6C9);padding:12px 20px;
-    border-radius:var(--r);border:0;cursor:pointer;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.25)}
+  .row input[type=email]:focus{border-color:rgba(45,212,167,.55)}
+  /* the one key on the page: the shared sheet's raised-key physics wearing the
+     one hue, because a control that commits something is chrome that belongs
+     to us. Mono caps so it reads as an instrument key, not a web button. */
+  .go{font:700 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--g0);background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+    padding:13px 20px;border-radius:var(--r);border:0;cursor:pointer;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.28),
+      0 3px 10px -3px rgba(0,0,0,.7),0 0 18px -6px rgba(45,212,167,.55);
+    transition:filter var(--t-hover) ease,transform var(--t-view) var(--e-out)}
   .go:hover{filter:brightness(1.07)}
-  .go[disabled]{opacity:.5;cursor:default;filter:none}
+  .go:active{transition-duration:var(--t-press);transform:translateY(1px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 1px 3px -1px rgba(0,0,0,.6)}
+  .go[disabled]{opacity:.42;cursor:default;filter:none;transform:none;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
 
   .msg{margin:14px 0 0;padding:12px 14px;font-size:13px;line-height:1.6;
     border-left:2px solid var(--hair2);background:var(--g1);color:var(--ink2)}
@@ -75,9 +145,14 @@
     position:relative;border-bottom:1px solid var(--hair);list-style:none}
   .never li:last-child{border-bottom:0}
   .never ul{margin:0;padding:0}
-  .never li::before{content:"";position:absolute;left:2px;top:16px;width:5px;height:1.5px;
-    background:var(--dn)}
+  /* was --dn. Red is the site's adverse-movement hue; spending it on a
+     decorative bullet makes it mean less where it carries a number. A struck
+     hairline says "not this" without a second colour. */
+  .never li::before{content:"";position:absolute;left:0;top:16px;width:8px;height:1px;
+    background:var(--dim)}
   .never li b{color:var(--ink)}
+  /* amber, kept: this block exists to warn about volume, and a caution must
+     not look like the brand hue */
   .measured{border-left:2px solid var(--amber);background:var(--g1);
     padding:14px 18px;margin-top:16px}
   .measured p{color:var(--ink2);font-size:12.5px;line-height:1.65;margin:0}
@@ -106,9 +181,9 @@
   <div class="cols">
 
     <!-- ------------------------------------------------------------------ -->
-    <form class="feed pane" id="form" novalidate>
+    <form class="feed pane rimlit" id="form" novalidate>
       <fieldset>
-        <legend class="tl" style="margin-bottom:2px">WHAT SHOULD WE TELL YOU ABOUT</legend>
+        <legend class="tl">WHAT SHOULD WE TELL YOU ABOUT</legend>
 
         <label class="opt">
           <input type="checkbox" name="kind" value="seal" checked>

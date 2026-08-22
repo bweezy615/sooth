@@ -18,12 +18,59 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
-  .ask-ta{width:100%;min-height:96px;resize:vertical;background:var(--g2);
-    color:var(--ink);border:1px solid var(--hair2);border-radius:var(--r);
-    font:14px/1.55 var(--sans);padding:13px 14px}
+  /* FROZEN MARKET — the analyst.
+     One instrument, and it is inert until it is given something to read. The
+     field is a groove cut into the slab rather than a raised box; the key
+     beside it is dark and unlit while the field is empty, and becomes the teal
+     key the moment there is a live question in it. Teal arrives twice on this
+     page and both times it means the same thing — something is live — so the
+     hue is doing work rather than decorating a control.
+
+     The compliance paragraph and the "will not pick a side" line are
+     untouched. */
+
+  /* the input groove */
+  .ask-ta{width:100%;min-height:96px;resize:vertical;color:var(--ink);
+    border:1px solid var(--hair2);border-radius:var(--r);
+    font:14px/1.55 var(--sans);padding:13px 14px;
+    background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(190,222,228,.03));
+    box-shadow:inset 0 1px 3px rgba(0,0,0,.6);
+    transition:border-color var(--t-hover) ease}
   .ask-ta::placeholder{color:var(--dim)}
+  .ask-ta:focus{border-color:rgba(45,212,167,.55)}
   .ask-row{display:flex;align-items:center;justify-content:space-between;gap:12px;
     margin-top:10px;flex-wrap:wrap}
+
+  /* The key. Unlit: a dark slab key with a grey mono label, which is the
+     honest state — there is nothing to read yet. Lit: the same key wearing the
+     one hue, driven by the field itself, so the affordance cannot drift out of
+     sync with what the button would actually do. */
+  #go{font:700 11px/1 var(--mono);letter-spacing:.13em;color:var(--mut);
+    background:linear-gradient(180deg,#1A222A,#10161C);
+    border:1px solid var(--hair2);border-radius:var(--r);padding:11px 18px;
+    cursor:pointer;
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.08),0 3px 8px -3px rgba(0,0,0,.7);
+    transition:color var(--t-hover) ease,background var(--t-hover) ease,
+      border-color var(--t-hover) ease,transform var(--t-view) var(--e-out)}
+  #q:not(:placeholder-shown)~.ask-row #go{color:var(--g0);border-color:var(--brand);
+    background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 3px 10px -3px rgba(0,0,0,.7),
+      0 0 18px -6px rgba(45,212,167,.55)}
+  #go:hover{color:var(--ink)}
+  #q:not(:placeholder-shown)~.ask-row #go:hover{color:var(--g0);filter:brightness(1.07)}
+  #go:active{transition-duration:var(--t-press);transform:translateY(1px)}
+  #go[disabled]{opacity:.45;cursor:default;filter:none;transform:none}
+
+  /* the character budget is telemetry until it is nearly spent, then it is a
+     caution — which is the one thing amber is still for */
+  .cnt.near b{color:var(--amber)}
+
+  /* The answer: the live state, and the only surface here that is allowed to
+     carry the hue. The left rule is set by the script — teal for a read, amber
+     when the read failed — so only the slab itself is drawn here. */
+  .an-out{background:linear-gradient(180deg,#12181E,#0C1116);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.07),
+               0 14px 34px -24px rgba(0,0,0,.9)}
 </style>
 </head>
 <body>
@@ -43,7 +90,7 @@
       will not pick a side.</b></p>
   </div>
 
-  <div class="mkt" style="margin-top:22px">
+  <div class="mkt rimlit" style="margin-top:22px">
     <div class="tl" style="margin-bottom:10px">YOUR BET</div>
     <textarea id="q" class="ask-ta" maxlength="500"
       placeholder="e.g. Is Skubal over 6.5 strikeouts at -110 a fair number? — or paste your bet-slip link"></textarea>
@@ -51,12 +98,8 @@
     <div class="ask-row">
       <span class="tl">READS THE LIVE BOARD &amp; PROPS · NOT ADVICE</span>
       <span style="display:flex;align-items:center;gap:12px">
-        <span class="tl"><b id="cnt">0</b>/500</span>
-        <button type="button" id="go" class="an-in-btn" style="font:700 12px var(--sans);
-          color:var(--g0);background:linear-gradient(180deg,#F3EFE6,#DCD6C9);
-          padding:11px 18px;border-radius:var(--r);border:0;cursor:pointer;
-          box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)">
-          GET THE READ</button>
+        <span class="tl cnt" id="cntWrap"><b id="cnt">0</b>/500</span>
+        <button type="button" id="go" class="an-in-btn">GET THE READ</button>
       </span>
     </div>
   </div>
@@ -87,7 +130,11 @@ var EX=[
   "Who has the best price on the Yankees moneyline tonight?",
   "How much edge is in the biggest bargain on the board?"
 ];
-function setCount(){ $("cnt").textContent=$("q").value.length; }
+function setCount(){
+  var n=$("q").value.length;
+  $("cnt").textContent=n;
+  $("cntWrap").classList.toggle("near", n>450);
+}
 function render(text,isErr){
   var out=$("out");
   out.style.borderLeftColor=isErr?"var(--amber)":"var(--brand)";

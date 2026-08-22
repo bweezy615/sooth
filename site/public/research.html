@@ -17,6 +17,66 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
+<style>
+  /* FROZEN MARKET — research chrome.
+     This page had no stylesheet of its own, and roughly half of what it
+     renders is written by the script below against classes desk.css does not
+     carry: .bar, .grid, .blk, .ij, .tmh, .rpin, th.s, .note. Everything an
+     opened report shows — form, availability, prices — was arriving as
+     unstyled default HTML on top of the shared slab. The rules below are
+     page-scoped chrome only; they invent no new colour and no new primitive.
+
+     Nothing on this page is sealed — research is the liquid state of the
+     market, all of it public and none of it committed — so there is no frost
+     here. The ice belongs to /picks and /verify. What this page gets is the
+     cold ground, cold hairlines, and one teal edge on the report you opened. */
+
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 2px}
+  .field::placeholder{color:var(--dim)}
+  .count{white-space:nowrap}
+  .note{font-size:11.5px;line-height:1.6;color:var(--dim);margin:10px 0 0;max-width:88ch}
+  .note:empty{display:none}
+
+  /* a sortable column head is a control; it should look pressable */
+  .itab th.s{cursor:pointer;user-select:none;
+    transition:color var(--t-hover) ease}
+  .itab th.s:hover{color:var(--ink2)}
+  /* a board row is a door into its own report */
+  .itab tbody tr.g{cursor:pointer}
+  .itab tbody tr.g.open td{background:var(--g2)}
+
+  /* ---- the opened report ----
+     Lit along its top edge, like every other surface here: the one teal
+     hairline says "this row is open" without a second colour or a chevron. */
+  .rpin{box-shadow:inset 0 1px 0 rgba(45,212,167,.45)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:22px 28px;margin-top:4px}
+  .blk{min-width:0}
+  .blk h3{font:600 9.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--mut);margin:0 0 10px;padding-bottom:7px;
+    border-bottom:1px solid var(--hair)}
+
+  /* availability: a team head, then one line per player */
+  .tmh{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--dim);margin:12px 0 2px}
+  .tmh:first-child{margin-top:0}
+  .ij{display:grid;grid-template-columns:32px 1fr auto;gap:10px;
+    align-items:baseline;padding:6px 0;border-bottom:1px solid var(--hair)}
+  .ij .po{font:600 10px var(--mono);letter-spacing:.06em;color:var(--dim)}
+  .ij .nm{font:500 12.5px var(--sans);color:var(--ink2);min-width:0}
+  .ij .st{font:600 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--mut);margin-left:6px;white-space:nowrap}
+  /* out is adverse, questionable is caution — the only two non-teal hues the
+     system allows, used for exactly what they mean */
+  .ij .st.out{color:var(--dn)}
+  .ij .st.q{color:var(--amber)}
+  .ij .bp{font:500 10.5px var(--mono);color:var(--dim);text-align:right;
+    white-space:nowrap}
+  @media (max-width:720px){
+    .rpin{padding:16px 0 18px!important}
+    .grid{grid-template-columns:1fr;gap:20px}
+  }
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>

@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://sooth.bet/">
 <meta property="og:image" content="https://sooth.bet/og.png">
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#070A0D">
+<meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,12 +23,21 @@
      five glossy panels in a receding arc on a curved black desk,
      screen reflections on the surface, sooth hardware props,
      editorial header, full-width workspace labels.
+
+     FROZEN MARKET re-skin: this page does not load desk.css, so its own
+     hardware palette is retuned to the promo's — cold near-black ground,
+     one teal signal, cool-white ink. The names below are local (--hw*,
+     --screen, --accent) but the values are the shared tokens, so the desk
+     and the rest of the site are now literally the same colours.
      ============================================================ */
   :root{
-    --bg:#070A0D; --hw1:#0E1318; --hw2:#131A20; --hw3:#1A2229;
-    --screen:#0A1015; --hair:rgba(190,205,215,.12);
-    --ink:#E8EDF0; --mut:#7F8C94; --dim:#55616A;
-    --accent:#EDE9E0; --loss:#E0645F;
+    /* the ground is cold and nearly black (rule 4) */
+    --bg:#06080A; --hw1:#0B0F13; --hw2:#111820; --hw3:#18222B;
+    --screen:#070B0F; --hair:rgba(190,205,215,.10);
+    --ink:#F0F5F6; --ink2:#AEBDC2; --mut:#7E8D93; --dim:#546268;
+    /* THE one hue. Teal is the signal and the chrome that belongs to us. */
+    --accent:#2DD4A7; --accent-hi:#5BF0D4; --accent-dim:rgba(45,212,167,.10);
+    --frost:#BFEAF2; --frost-rim:rgba(191,234,242,.30); --loss:#FF6B6B;
     --sans:'Archivo',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace;
     --glide:560ms cubic-bezier(.22,.8,.32,1);
   }
@@ -38,8 +47,8 @@
     -webkit-font-smoothing:antialiased;overflow:hidden;
     display:flex;flex-direction:column;
     background:
-      radial-gradient(90% 46% at 50% 30%, rgba(70,110,120,.10), transparent 70%),
-      radial-gradient(140% 90% at 50% 118%, #10161c 0%, transparent 55%),
+      radial-gradient(90% 46% at 50% 30%, rgba(45,212,167,.055), transparent 70%),
+      radial-gradient(140% 90% at 50% 118%, #0B1116 0%, transparent 55%),
       var(--bg)}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .tl{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
@@ -47,24 +56,44 @@
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-  /* ---- editorial header, per the reference frame ---- */
+  /* ---- editorial header, per the reference frame ----
+     The wordmark is the promo's: lowercase, tight, cool white, .bet in the one
+     hue, with the coin's small teal pip beside it. "INFINITE DESK" is the slab
+     face's label — mono caps behind a teal hairline rule, exactly as the promo
+     sets MARKET INTELLIGENCE DESK. */
   .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px 34px 0;flex:none}
-  .brand-row .no{font:600 20px var(--mono);letter-spacing:.14em;color:var(--dim)}
-  h1{font:600 21px/1 var(--mono);letter-spacing:.34em;color:var(--ink);white-space:nowrap}
+  .brand-row .no{display:inline-flex;align-items:baseline;gap:9px}
+  .brand-row .no .pip{width:8px;height:8px;border-radius:50%;background:var(--accent);
+    align-self:center;flex:0 0 auto;box-shadow:0 0 10px rgba(45,212,167,.55)}
+  .brand-row .no b{font:600 20px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);
+    text-transform:none}
+  .brand-row .no b i{font-style:normal;color:var(--accent)}
+  h1{font:600 21px/1 var(--mono);letter-spacing:.34em;color:var(--ink2);white-space:nowrap;
+    padding-left:22px;border-left:1px solid rgba(45,212,167,.32)}
   .kicker{font:600 10px var(--mono);letter-spacing:.22em;color:var(--accent);
     text-transform:uppercase;padding-bottom:2px}
   .strap{padding:8px 34px 0;font:400 12.5px var(--sans);color:var(--mut);flex:none}
 
-  /* ---- workspace labels: full-width, active teal + underline ---- */
+  /* ---- workspace labels ----
+     These five ARE the promo's capability list. Same idiom: mono caps, wide
+     tracking, a small teal triangle in front of each, lit up on the active one.
+     The underline is the lit rim, not a slab of colour. */
   .ws-labels{display:flex;justify-content:space-between;flex:none;
     max-width:1250px;width:94%;margin:10px auto 0;padding:0 8px}
-  .ws-labels button{font:600 11px var(--mono);letter-spacing:.18em;color:var(--ink);
-    padding:8px 4px 10px;position:relative;transition:color 120ms ease;opacity:.85}
-  .ws-labels button:hover{color:var(--accent);opacity:1}
+  .ws-labels button{font:600 11px var(--mono);letter-spacing:.18em;color:var(--ink2);
+    padding:8px 4px 10px 15px;position:relative;transition:color 120ms ease;opacity:.9}
+  .ws-labels button::before{content:"";position:absolute;left:0;top:11px;
+    border:4px solid transparent;border-left-color:var(--accent);opacity:.38;
+    transition:opacity 120ms ease}
+  .ws-labels button:hover{color:var(--ink);opacity:1}
+  .ws-labels button:hover::before{opacity:1}
   .ws-labels button::after{content:"";position:absolute;left:10%;right:10%;bottom:0;
-    height:2px;background:var(--accent);transform:scaleX(0);
+    height:1px;transform:scaleX(0);
+    background:linear-gradient(90deg,transparent,rgba(45,212,167,.55) 22%,
+      rgba(91,240,212,.85) 50%,rgba(45,212,167,.55) 78%,transparent);
     transition:transform 200ms cubic-bezier(.165,.84,.44,1)}
   .ws-labels button[aria-current="true"]{color:var(--accent);opacity:1}
+  .ws-labels button[aria-current="true"]::before{opacity:1}
   .ws-labels button[aria-current="true"]::after{transform:scaleX(1)}
 
   /* ---- the stage ---- */
@@ -75,49 +104,62 @@
   /* the physical desk: curved gloss platform + front apron, two arcs */
   .floor{position:absolute;left:50%;bottom:-6%;width:150%;height:52%;
     transform:translateX(-50%);pointer-events:none}
+  /* the wet black floor of promo 2: colder greys, and the two front edges
+     catch the light as a frost hairline with a teal core */
   .floor .arc1{position:absolute;left:0;right:0;top:0;bottom:0;
-    background:radial-gradient(85% 130% at 50% 135%, #1B242D 0%, #10161C 45%, #0A0E12 71%, transparent 72%)}
+    background:radial-gradient(85% 130% at 50% 135%, #16202A 0%, #0C1218 45%, #070A0D 71%, transparent 72%)}
   .floor .arc1::before{content:"";position:absolute;left:10%;right:10%;top:9%;height:2px;
-    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(190,215,220,.34), transparent 80%)}
+    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(91,240,212,.26),
+      rgba(191,234,242,.18) 42%, transparent 80%)}
   .floor .arc2{position:absolute;left:6%;right:6%;top:34%;bottom:-30%;
-    background:radial-gradient(75% 120% at 50% 130%, #232D37 0%, #131A21 50%, transparent 71%)}
+    background:radial-gradient(75% 120% at 50% 130%, #1D2831 0%, #0E151B 50%, transparent 71%)}
   .floor .arc2::before{content:"";position:absolute;left:16%;right:16%;top:7%;height:2px;
-    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(190,215,220,.22), transparent 80%)}
+    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(191,234,242,.20), transparent 80%)}
   /* room vignette */
   #desk::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:
-      radial-gradient(125% 92% at 50% 4%, transparent 52%, rgba(0,0,0,.55) 100%),
-      linear-gradient(0deg, rgba(0,0,0,.42), transparent 16%)}
+      radial-gradient(125% 92% at 50% 4%, transparent 52%, rgba(0,0,0,.60) 100%),
+      linear-gradient(0deg, rgba(0,0,0,.46), transparent 16%)}
 
   /* ---- monitors: thin glossy panels ---- */
   .monitor{position:absolute;left:50%;top:34%;width:952px;height:760px;
     margin:-380px 0 0 -476px;transform-origin:50% 58%}
   .desk-ready .monitor{transition:transform var(--glide),opacity var(--glide)}
   .mon-label{display:none}
+  /* Glass, not a card (rule 3): a thin dark slab, lit along ONE edge — the top
+     — with the radius pulled back from 14px to the system's accent radius so it
+     reads as cut glass rather than as a rounded panel. */
   .bezel{position:absolute;left:0;top:0;width:952px;height:712px;
-    background:linear-gradient(180deg,#232B33,#0C1116 12%,#0A0E12);
-    border:1px solid rgba(200,215,225,.16);border-radius:14px;padding:16px;
+    background:linear-gradient(180deg,#18222B,#0A0F14 13%,#06090C);
+    border:1px solid rgba(170,205,215,.14);border-radius:4px;padding:16px;
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.10),
-      inset 0 -1px 0 rgba(0,0,0,.7),
+      inset 0 1px 0 rgba(214,240,246,.10),
+      inset 0 -1px 0 rgba(0,0,0,.75),
       0 42px 90px -34px rgba(0,0,0,.95),
       0 8px 26px -8px rgba(0,0,0,.7)}
+  /* the lit rim from the coin: a teal hairline that catches the light across
+     the top edge, brightest on the monitor you are actually at */
+  .bezel::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;
+    z-index:2;pointer-events:none;opacity:.5;transition:opacity var(--glide);
+    background:linear-gradient(90deg,transparent,rgba(45,212,167,.45) 20%,
+      rgba(91,240,212,.75) 50%,rgba(45,212,167,.45) 80%,transparent)}
+  .monitor.is-focused .bezel::before{opacity:1}
   .screen{position:relative;width:920px;height:680px;background:var(--screen);
-    border-radius:6px;overflow:hidden;
-    box-shadow:inset 0 0 0 1px rgba(0,0,0,.65), inset 0 0 46px rgba(0,0,0,.4)}
+    border-radius:2px;overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 46px rgba(0,0,0,.45)}
   .screen iframe{width:100%;height:100%;border:0;display:block;background:var(--screen)}
-  /* glass: one diagonal glare sweep, stronger near the top corner */
-  .glare{position:absolute;inset:0;pointer-events:none;border-radius:6px;
-    background:linear-gradient(112deg, rgba(210,230,235,.065) 0%, rgba(210,230,235,.02) 26%, transparent 40%)}
+  /* wet glass: one cold diagonal sweep, strongest at the top corner */
+  .glare{position:absolute;inset:0;pointer-events:none;border-radius:4px;
+    background:linear-gradient(112deg, rgba(191,234,242,.075) 0%, rgba(191,234,242,.022) 26%, transparent 40%)}
   .monitor:not(.is-focused) .screen iframe{pointer-events:none}
   .monitor:not(.is-focused){cursor:pointer}
   .led{position:absolute;bottom:6px;left:50%;width:5px;height:5px;margin-left:-2.5px;
-    border-radius:50%;background:#26313A;transition:background var(--glide),box-shadow var(--glide)}
-  .monitor.is-focused .led{background:var(--accent);box-shadow:0 0 8px rgba(110,231,210,.6)}
-  /* the screen's reflection on the gloss desk — travels with its monitor */
+    border-radius:50%;background:#1B242C;transition:background var(--glide),box-shadow var(--glide)}
+  .monitor.is-focused .led{background:var(--accent);box-shadow:0 0 8px rgba(45,212,167,.65)}
+  /* the screen's reflection on the wet desk — travels with its monitor */
   .reflect{position:absolute;left:7%;right:7%;top:718px;height:130px;
-    background:linear-gradient(180deg, rgba(160,195,205,.13), rgba(160,195,205,.04) 50%, transparent 85%);
-    filter:blur(9px);border-radius:10px;pointer-events:none}
+    background:linear-gradient(180deg, rgba(178,222,230,.12), rgba(178,222,230,.035) 50%, transparent 85%);
+    filter:blur(9px);border-radius:4px;pointer-events:none}
 
   /* ---- desk props (overview only; they yield to the work) ---- */
   .props{position:absolute;left:50%;bottom:4.5%;width:1200px;margin-left:-600px;
@@ -125,53 +167,53 @@
   .desk-focused .props{opacity:0}
   .prop{position:absolute;bottom:0}
   /* mug, stage left */
-  .mug{left:70px;width:64px;height:74px;background:linear-gradient(100deg,#171E25,#0C1014 70%);
-    border-radius:8px 8px 10px 10px;box-shadow:inset 2px 6px 10px rgba(255,255,255,.05),
+  .mug{left:70px;width:64px;height:74px;background:linear-gradient(100deg,#131A21,#080C10 70%);
+    border-radius:3px 3px 6px 6px;box-shadow:inset 2px 6px 10px rgba(191,234,242,.05),
       0 14px 18px -8px rgba(0,0,0,.85)}
   .mug::before{content:"";position:absolute;right:-20px;top:16px;width:26px;height:40px;
-    border:7px solid #12181E;border-left:0;border-radius:0 14px 14px 0}
+    border:7px solid #0E141A;border-left:0;border-radius:0 12px 12px 0}
   .mug::after{content:"sooth.";position:absolute;left:0;right:0;top:38%;
-    font:600 12px var(--sans);color:#8B979E;text-align:center;letter-spacing:.02em}
+    font:600 12px var(--sans);color:#7E8D93;text-align:center;letter-spacing:-.01em}
   /* control surface, centered */
   .console{left:50%;width:300px;height:76px;margin-left:-170px;
-    background:linear-gradient(180deg,#1A222A,#0D1216 70%);
-    border:1px solid rgba(200,215,225,.10);border-radius:12px;
-    box-shadow:inset 0 2px 0 rgba(255,255,255,.06), 0 18px 24px -10px rgba(0,0,0,.9)}
+    background:linear-gradient(180deg,#151D25,#0A0F13 70%);
+    border:1px solid rgba(170,205,215,.10);border-radius:4px;
+    box-shadow:inset 0 1px 0 rgba(214,240,246,.07), 0 18px 24px -10px rgba(0,0,0,.9)}
   .console i{position:absolute;top:16px;width:26px;height:26px;border-radius:50%;
-    background:radial-gradient(circle at 34% 30%, #2A343E, #10161B 70%);
-    box-shadow:inset 0 -2px 4px rgba(0,0,0,.7), 0 2px 3px rgba(0,0,0,.6)}
+    background:radial-gradient(circle at 34% 30%, #232D36, #0C1216 70%);
+    box-shadow:inset 0 -2px 4px rgba(0,0,0,.75), 0 2px 3px rgba(0,0,0,.6)}
   .console i::after{content:"";position:absolute;left:50%;top:3px;width:2px;height:8px;
-    margin-left:-1px;background:#4A565F;border-radius:1px}
+    margin-left:-1px;background:#3F4B53;border-radius:1px}
   .console i:nth-child(1){left:22px}.console i:nth-child(2){left:60px}
   .console i:nth-child(3){left:98px}.console i:nth-child(4){left:136px;top:44px}
   .console b{position:absolute;right:24px;top:20px;width:88px;height:44px;
-    border-radius:6px;background:#0A0F13;box-shadow:inset 0 0 0 1px rgba(200,215,225,.08)}
+    border-radius:2px;background:#070B0F;box-shadow:inset 0 0 0 1px rgba(170,205,215,.08)}
   .console b::before{content:"";position:absolute;left:10px;top:9px;width:5px;height:5px;
-    border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(110,231,210,.7)}
+    border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(45,212,167,.7)}
   .console b::after{content:"";position:absolute;left:10px;bottom:9px;right:10px;height:3px;
-    background:repeating-linear-gradient(90deg,#222B33 0 6px,transparent 6px 10px)}
+    background:repeating-linear-gradient(90deg,#1B242C 0 6px,transparent 6px 10px)}
   /* notebook device, right of console */
   .book{left:50%;margin-left:150px;width:164px;height:84px;
-    background:linear-gradient(160deg,#141B22,#0B0F13 75%);
-    border-radius:10px;border:1px solid rgba(200,215,225,.09);
+    background:linear-gradient(160deg,#111820,#080C10 75%);
+    border-radius:3px;border:1px solid rgba(170,205,215,.09);
     box-shadow:0 16px 22px -10px rgba(0,0,0,.9)}
   .book::after{content:"sooth.";position:absolute;left:0;right:0;top:40%;
-    font:600 14px var(--sans);color:#77838B;text-align:center}
+    font:600 14px var(--sans);color:#6C7A80;text-align:center;letter-spacing:-.01em}
   /* the clock — a real one */
-  .clockbox{right:66px;width:138px;height:66px;background:linear-gradient(180deg,#151C23,#0A0E12);
-    border-radius:10px;border:1px solid rgba(200,215,225,.10);
+  .clockbox{right:66px;width:138px;height:66px;background:linear-gradient(180deg,#121A21,#070B0E);
+    border-radius:3px;border:1px solid rgba(170,205,215,.10);
     box-shadow:0 16px 22px -10px rgba(0,0,0,.9);pointer-events:none}
   .clockbox .t{position:absolute;left:0;right:26px;top:50%;transform:translateY(-50%);
-    font:700 26px var(--mono);color:#E8EDF0;text-align:center;
+    font:700 26px var(--mono);color:var(--ink);text-align:center;
     font-variant-numeric:tabular-nums;letter-spacing:.04em}
   .clockbox .z{position:absolute;right:9px;top:50%;transform:translateY(-50%);
     font:600 9px var(--mono);color:var(--dim);letter-spacing:.08em;line-height:1.6}
 
   /* ---- edge arrows ---- */
   .arrow{position:absolute;top:42%;z-index:10;width:56px;height:90px;
-    font:300 40px/90px var(--sans);text-align:center;color:rgba(232,237,240,.75);
+    font:300 40px/90px var(--sans);text-align:center;color:rgba(174,189,194,.6);
     transition:color 120ms ease;user-select:none}
-  .arrow:hover{color:var(--ink)}
+  .arrow:hover{color:var(--accent)}
   .arrow[hidden]{display:none}
   #prev{left:4px} #next{right:4px}
 
@@ -181,28 +223,30 @@
     text-transform:uppercase;line-height:1.8}
   .rail{display:flex;justify-content:center;align-items:center;padding:4px 0 6px;flex:none}
   .rail button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 20px}
-  .rail .dot{width:6px;height:6px;border-radius:50%;background:#26313A;
+  .rail .dot{width:6px;height:6px;border-radius:50%;background:#1B242C;
     transition:background 200ms ease,box-shadow 200ms ease}
+  .rail button:hover .dot{background:#2C3A43}
   .rail button[aria-current="true"] .dot{background:var(--accent);
-    box-shadow:0 0 8px rgba(110,231,210,.5)}
+    box-shadow:0 0 8px rgba(45,212,167,.55)}
   .rail .tl{font-size:8.5px}
-  .rail button[aria-current="true"] .tl{color:var(--ink)}
+  .rail button[aria-current="true"] .tl{color:var(--accent)}
   .rail .ln{width:40px;height:1px;background:var(--hair);margin-bottom:14px}
 
   /* ---- shimmer for the not-yet-loaded research screen ---- */
   .holding{position:absolute;inset:0;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px}
-  .holding .tl{font-size:22px;letter-spacing:.3em}
-  .holding i{display:block;width:38%;height:14px;border-radius:3px;
-    background:linear-gradient(90deg,var(--hw1) 25%,var(--hw2) 50%,var(--hw1) 75%);
+  .holding .tl{font-size:22px;letter-spacing:.3em;color:var(--ink2)}
+  .holding i{display:block;width:38%;height:14px;border-radius:2px;
+    background:linear-gradient(90deg,var(--hw1) 25%,rgba(45,212,167,.11) 50%,var(--hw1) 75%);
     background-size:200% 100%;animation:shim 1.4s linear infinite}
   @keyframes shim{to{background-position:-200% 0}}
 
   /* ---- footer ---- */
-  .ft{flex:none;padding:7px 26px 10px;color:#4A555E;font-size:10px;line-height:1.5;
+  .ft{flex:none;padding:7px 26px 10px;color:#46525A;font-size:10px;line-height:1.5;
     border-top:1px solid rgba(190,205,215,.07)}
   .ft b{color:var(--dim)}
-  .ft a{color:var(--dim);text-decoration:none}
+  .ft a{color:var(--dim);text-decoration:none;transition:color 120ms ease}
+  .ft a:hover{color:var(--accent)}
 
   /* ---- mobile pager ---- */
   /* ---- the phone home ----------------------------------------------------
@@ -214,29 +258,44 @@
      surface, so it maps that palette onto the names the rest of the site uses
      rather than inventing a third set of colours. */
   #mob{
-    --g1:var(--hw1); --g2:var(--hw2); --hair2:rgba(190,205,215,.2);
-    --brand:var(--accent); --ink2:#B9C2C8; --up:#34D399;
+    --g1:var(--hw1); --g2:var(--hw2); --hair2:rgba(190,205,215,.18);
+    --brand:var(--accent); --brand-hi:var(--accent-hi); --ink2:#AEBDC2;
+    /* rule 1: a favourable price and the sooth signal are one idea, so --up
+       is the brand teal rather than a second green. */
+    --up:var(--accent);
     --t-hover:120ms; --r:0px;
     display:none}
   #mob[hidden]{display:none}
   #mob .state{padding:26px 14px;text-align:center;color:var(--mut);font-size:12.5px;
-    border:1px solid var(--hair);background:var(--g1)}
+    border:1px solid var(--hair);background:linear-gradient(180deg,#0D141A,#080C10)}
   #mob .state .tl{display:block;margin-bottom:7px;color:var(--dim)}
   #mob a{text-decoration:none;color:inherit}
   .m-top{display:flex;align-items:center;gap:9px;padding:18px 16px 0}
-  .m-mark{width:9px;height:9px;background:var(--brand);flex:0 0 auto}
-  .m-top b{font:700 16px/1 var(--sans);letter-spacing:.16em;color:var(--ink)}
+  .m-mark{width:8px;height:8px;border-radius:50%;background:var(--brand);flex:0 0 auto;
+    box-shadow:0 0 10px rgba(45,212,167,.55)}
+  .m-top b{font:600 17px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);
+    text-transform:none}
+  .m-top b i{font-style:normal;color:var(--brand)}
   .m-sub{font:500 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
     color:var(--dim);margin-left:auto;white-space:nowrap}
-  .m-lede{margin:13px 16px 0;font-size:13.5px;line-height:1.6;color:var(--ink2)}
+  /* the promo's teal hairline rule, directly under the wordmark */
+  .m-lede{margin:13px 16px 0;padding-top:13px;font-size:13.5px;line-height:1.6;
+    color:var(--ink2);border-top:1px solid rgba(45,212,167,.24)}
   .m-lede b{color:var(--ink);font-family:var(--mono)}
 
+  /* The four tiles are the promo's capability list on the slab face: mono caps
+     behind a small teal triangle, on thin dark glass lit along the top edge. */
   .m-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 16px 0}
   .m-tile{display:flex;flex-direction:column;padding:12px 12px 13px;
-    background:var(--g1);border:1px solid var(--hair);
+    background:linear-gradient(180deg,#0E151B,#080D11);border:1px solid var(--hair);
+    box-shadow:inset 0 1px 0 rgba(214,240,246,.07);
     transition:border-color var(--t-hover) ease,background var(--t-hover) ease}
-  .m-tile:active{background:var(--g2);border-color:var(--hair2)}
-  .m-t{font:700 9.5px var(--mono);letter-spacing:.12em;color:var(--mut)}
+  .m-tile:active{background:linear-gradient(180deg,#131C23,#0B1116);
+    border-color:rgba(45,212,167,.34)}
+  .m-t{position:relative;padding-left:14px;
+    font:700 9.5px/1.4 var(--mono);letter-spacing:.12em;color:var(--mut)}
+  .m-t::before{content:"";position:absolute;left:0;top:2px;
+    border:4px solid transparent;border-left-color:var(--brand)}
   /* The number leads. It is the only thing on a tile worth reading at arm's
      length, and it used to be absolutely positioned into the description. */
   .m-n{font:700 22px/1 var(--mono);color:var(--ink);letter-spacing:-.02em;
@@ -246,14 +305,17 @@
 
   .m-sec{margin:22px 0 0;padding:0 16px}
   .m-h{display:flex;align-items:baseline;justify-content:space-between;
-    padding-bottom:9px;border-bottom:1px solid var(--hair2);margin-bottom:10px}
+    padding-bottom:9px;border-bottom:1px solid rgba(45,212,167,.24);margin-bottom:10px}
   .m-h a{color:var(--mut)}
 
   /* One game, one card. Both sides are always visible — the whole point is
      comparing them, and a card that hides a side to save height is the same
      mistake as the sideways table it replaced. */
-  .m-g{display:block;border:1px solid var(--hair);background:var(--g1);
+  .m-g{display:block;border:1px solid var(--hair);
+    background:linear-gradient(180deg,#0E151B,#080D11);
+    box-shadow:inset 0 1px 0 rgba(214,240,246,.06);
     padding:11px 12px;margin-bottom:8px}
+  .m-g:active{border-color:rgba(45,212,167,.30)}
   .m-gh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
     padding-bottom:8px;margin-bottom:2px;border-bottom:1px solid var(--hair)}
   .m-gt{font:500 9.5px var(--mono);letter-spacing:.08em;color:var(--dim);
@@ -262,14 +324,20 @@
   .m-side{display:grid;grid-template-columns:1fr auto auto;gap:10px;
     align-items:baseline;padding:8px 0;border-bottom:1px solid var(--hair)}
   .m-side:last-child{border-bottom:0}
-  .m-nm{font:600 13px var(--sans);color:var(--ink);line-height:1.3}
+  .m-nm{font:600 13px var(--sans);color:var(--ink);line-height:1.3;
+    display:grid;grid-template-columns:16px 1fr;column-gap:7px;align-items:center}
+  .m-nm .crest{grid-row:1/3;align-self:center;object-fit:contain}
+  .m-nm .m-bk{grid-column:2}
   .m-bk{display:block;font:500 9.5px var(--mono);color:var(--dim);
     letter-spacing:.06em;margin-top:2px}
   .m-px{font:700 15px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
   .m-fair{font:500 10px var(--mono);color:var(--mut);text-align:right;min-width:8ch}
   .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:9px;
     letter-spacing:.08em}
-  .m-gain{color:var(--up)}
+  /* the shopped-price gain is exactly what teal is for (rule 1). It was losing
+     to `.m-fair i` on specificity and rendering as dim grey, so the one number
+     on the card worth marking wasn't marked. Same selector weight now. */
+  .m-fair i.m-gain{color:var(--up)}
   .m-fine{margin:24px 16px 26px;font-size:11px;line-height:1.65;color:var(--dim)}
   .m-fine a{color:var(--mut)}
   .m-fine b{color:var(--mut)}
@@ -281,7 +349,7 @@
     .brand-row,.strap,.ws-labels,#stagewrap,.caption,.rail{display:none}
     body>footer.ft{display:none}
     .brand-row{padding:14px 16px 0;gap:12px}
-    .brand-row .no{font-size:14px} h1{font-size:14px;letter-spacing:.24em}
+    .brand-row .no b{font-size:15px} h1{font-size:14px;letter-spacing:.24em;padding-left:12px}
     .kicker{display:none} .strap{padding:6px 16px 0}
     .ws-labels{overflow-x:auto;justify-content:flex-start;gap:14px;flex-wrap:nowrap;
       scrollbar-width:none;width:auto;margin:8px 0 0;padding:0 12px}
@@ -294,7 +362,7 @@
     .monitor{position:relative;left:auto;top:auto;margin:0;transform:none!important;
       opacity:1!important;flex:0 0 100vw;width:100vw;height:100%;
       scroll-snap-align:center;padding:8px 10px 0}
-    .bezel{position:relative;width:100%;height:100%;padding:8px;border-radius:10px}
+    .bezel{position:relative;width:100%;height:100%;padding:8px;border-radius:4px}
     .screen{width:100%;height:100%}
     .screen iframe{pointer-events:auto!important}
     .reflect,.led{display:none}
@@ -315,7 +383,7 @@
 <div id="mob" hidden>
   <header class="m-top">
     <span class="m-mark"></span>
-    <b>SOOTH</b>
+    <b>sooth<i>.bet</i></b>
     <span class="m-sub">Research · never picks</span>
   </header>
   <p class="m-lede">Best price across <b id="mBooks">11</b> books, our fair price beside it,
@@ -356,7 +424,7 @@
 </div>
 
 <div class="brand-row">
-  <span class="no">SOOTH.</span>
+  <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
   <h1>INFINITE DESK</h1>
   <span class="kicker">One desk. Multiple workspaces.</span>
 </div>
@@ -400,6 +468,7 @@
   <a href="/disclaimers">Disclaimers</a>
 </footer>
 
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 "use strict";
@@ -453,15 +522,23 @@ function gameCard(ev,sport){
        the best number adds over the worst. Shown only when it is real. */
     var gain=(s.gain_pts!=null&&s.gain_pts>=0.5)
       ? '<i class="m-gain">+'+s.gain_pts.toFixed(1)+' PTS</i>' : '<i>FAIR</i>';
+    /* The crest sits with the team it belongs to, the way the board does it.
+       board.json publishes full team names, which is exactly how
+       team-logos.json is keyed, so no sport hint is needed here. Crest fails
+       silent: no map, no network, no match — the name still reads. */
+    var mark=(window.Crest?window.Crest.img(s.name,16):"");
     return '<div class="m-side">'
-      +'<span class="m-nm">'+esc(s.name)
+      +'<span class="m-nm" data-crest="'+esc(s.name)+'" data-size="16">'+mark+esc(s.name)
         +'<span class="m-bk">BEST AT '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
       +'<span class="m-px">'+am(s.best_price)+'</span>'
       +'<span class="m-fair">FAIR '+am(s.fair_price)+gain+'</span>'
       +'</div>';
   }).join("");
   return '<a class="m-g" href="/market" aria-label="'+esc(ev.away+" at "+ev.home)+'">'
-    +'<div class="m-gh"><span class="m-gs">'+esc(String(sport).toUpperCase())
+    +'<div class="m-gh"><span class="m-gs">'
+      +(window.Crest?window.Crest.img(ev.away,13):"")
+      +(window.Crest?window.Crest.img(ev.home,13):"")
+      +esc(String(sport).toUpperCase())
       +' &middot; '+esc(ev.n_books||0)+' BOOKS</span>'
     +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
     +sides+'</a>';
