@@ -236,3 +236,42 @@ the product needs to change, or your rule was aimed at the wrong level — and
 finding out at writing time costs a minute, while finding out afterwards costs
 a reconciliation commit and every session that built against the wrong rule in
 between.
+
+## What actually did the finding, and how to get it without a second session
+
+Five durable items in this file and PRODUCT.md exist because one session would
+not take another's word. None came from anyone re-reading their own work. That
+is worth stating precisely, because the obvious reading of it — "have two
+agents check each other" — is not available most of the time, and the useful
+part is available always.
+
+The mechanism was not two sessions. It was that **a claim and the artifact it
+described got compared by someone who had not just written one of them.** The
+specific shape recurred all day:
+
+- A guard was written to enforce a vocabulary rule. Reading the *rule* later
+  found the guard exempted footers.
+- A constraint said never rank by model edge. Reading the *code* against it
+  found an override that reopened the path.
+- PRODUCT.md promised every sealed slate gets graded. Reading *grade.yml*
+  against that promise found an empty result exits 0.
+
+In every case the finder had the written claim in one hand and the code in the
+other, and had not authored both in the same sitting. A second session supplies
+that separation for free. A solo session can manufacture it:
+
+**Write the constraint down before you audit against it, and audit against
+what you wrote rather than what you meant.** The document is the second pair of
+eyes. This is also why a rule that lives only in a commit message or a chat
+thread buys nothing — there is nothing to read it back against later.
+
+Two failure modes to expect either way:
+
+- **Checking lapses exactly when it stops finding things.** The sessions that
+  had been right all day were the ones closest to skipping a check.
+- **Finding a defect feels like the end of checking.** It is the moment to
+  check hardest, and specifically to check your own instrument — see "Point the
+  same suspicion at your own check".
+
+Do not read any of this as a claim that the process was good. It caught five
+things; nobody knows what it missed.
