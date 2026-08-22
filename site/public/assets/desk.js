@@ -121,10 +121,19 @@ function sportRail(board,active,onpick){
 var EMBEDDED=/[?&]embed=1/.test(location.search);
 
 /* Navigate keeping the embed contract: inside a monitor, every hop stays
-   chromeless. Use for the JS-driven row navigations. */
+   chromeless — EXCEPT the desk itself and the money flow, which always
+   escape to the top window. Checkout does not belong inside a 920px frame,
+   and "/" inside a monitor would nest the desk inside itself. */
+function escapes(url){
+  return url==="/" || url.indexOf("/subscribe")===0;
+}
 function go(url){
-  if(EMBEDDED && url.indexOf("://")<0 && !/[?&]embed=1/.test(url)){
-    url+= (url.indexOf("?")<0?"?":"&")+"embed=1";
+  if(EMBEDDED && url.indexOf("://")<0){
+    if(escapes(url)){
+      try{ window.top.location.href=url; return; }catch(e){}
+    }
+    if(!/[?&]embed=1/.test(url))
+      url+= (url.indexOf("?")<0?"?":"&")+"embed=1";
   }
   location.href=url;
 }
@@ -140,9 +149,22 @@ function mount(page){
       var a=e.target.closest("a[href]"); if(!a) return;
       var href=a.getAttribute("href");
       if(!href||href.charAt(0)==="#"||href.indexOf("://")>=0) return;
-      if(/[?&]embed=1/.test(href)) return;
+      if(/[?&]embed=1/.test(href)&&!escapes(href)) return;
       e.preventDefault(); go(href);
     });
+    /* a monitor that navigated away from its workspace root needs a way
+       home that isn't the browser's back button */
+    var ROOTS=/^\/(market|ask|research|picks|trust)(\.html)?$/;
+    if(!ROOTS.test(location.pathname)){
+      document.addEventListener("DOMContentLoaded",function(){
+        document.body.insertAdjacentHTML("afterbegin",
+          '<button class="embed-back" aria-label="Back">← BACK</button>');
+        document.querySelector(".embed-back").addEventListener("click",function(){
+          if(history.length>1) history.back();
+          else go(location.pathname.indexOf("game")>=0?"/market":"/market");
+        });
+      });
+    }
     /* Keyboard relay: the desk's spatial keys keep working while a monitor
        holds focus — except while actually typing. */
     addEventListener("keydown",function(e){

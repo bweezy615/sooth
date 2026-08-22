@@ -468,3 +468,11 @@ tr.locked .lock{color:var(--dim);font-size:10px}
 .embedded .ph,.embedded .page-head{display:none}
 .embedded .sec{padding-top:12px;margin-top:0}
 .embedded h1{font-size:18px}
+
+/* the way home for a monitor that navigated deeper */
+.embedded .embed-back{position:sticky;top:6px;z-index:50;margin:6px 0 0 6px;
+  font:600 10px var(--mono);letter-spacing:.1em;color:var(--mut);
+  background:rgba(16,18,22,.92);border:1px solid var(--hair2);
+  border-radius:var(--r);padding:7px 12px;cursor:pointer;
+  transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
+.embedded .embed-back:hover{color:var(--brand);border-color:var(--brand)}

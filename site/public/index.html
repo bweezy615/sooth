@@ -253,7 +253,7 @@
   <div id="desk" role="region" aria-label="The desk"></div>
 </div>
 
-<p class="caption">Click · Arrow keys · 1–5<br>to move across the desk</p>
+<p class="caption">Click · Arrow keys · 1–5 · Esc<br>to move across the desk</p>
 <nav class="rail" aria-label="Workspace position">
   <button data-ws="0"><span class="dot"></span><span class="tl">MKT</span></button>
   <span class="ln"></span>
@@ -280,6 +280,8 @@
 <script>
 (function(){
 "use strict";
+/* the desk never renders inside a monitor — if framed, take the top */
+if(window.top!==window.self){ try{ window.top.location=window.self.location; }catch(e){} return; }
 
 /* ---- the five workspaces ---- */
 /* Vercel serves clean URLs; the local dev server serves files. */
@@ -414,7 +416,8 @@ addEventListener("popstate",route);
 
 /* ---- inputs ---- */
 desk.addEventListener("click",function(e){
-  var m=e.target.closest(".monitor"); if(!m) return;
+  var m=e.target.closest(".monitor");
+  if(!m){ if(focus>=0) toHash(-1); return; }  /* the dark stage is the way out */
   var i=+m.dataset.i;
   if(i!==focus) toHash(i);
 });
