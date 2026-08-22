@@ -1,14 +1,14 @@
 name: post-discord
 
 # The community arm of the alert pipeline. engine.alert_discord posts the daily
-# best prices, ranked by best available price against the de-vigged consensus
-# (edge_vs_fair_pts). NOT by model edge: that mechanism measured 48.1% on 156
-# real disagreements and POSTABLE is empty accordingly. NOT by gain_pts either,
-# which only measures how much books disagree with each other.
+# Line movement: books currently pricing away from the cross-book consensus on
+# a game that has not started. A fact about prices — several books disagree and
+# this one is out of line — never a forecast. NOT model edge: that mechanism
+# measured 48.1% on 156 real disagreements and POSTABLE is empty accordingly.
 #
-# The sign is published, never suppressed. On most boards every price sits
-# below consensus fair — that is vig, the post says so at the top, and the
-# entries are framed as the best available numbers, never as value plays.
+# Free tier gets player props, Pro gets props plus game lines, which is the
+# tiering our user set. Hourly rather than a fixed daily slot because a book
+# off the pack is an event, not a digest, and the watermark stops repeats.
 #
 # Runs after props-live so the freshest model annotations are already in.
 # Three ticks a day rather than every two hours: the watermark stops repeats,
@@ -20,9 +20,7 @@ name: post-discord
 
 on:
   schedule:
-    - cron: "45 13 * * *"   # ~8:45am CT — morning slate
-    - cron: "45 17 * * *"   # ~12:45pm CT — afternoon
-    - cron: "45 21 * * *"   # ~4:45pm CT  — primetime
+    - cron: "20 * * * *"    # hourly, 20 past — a few minutes after capture
   workflow_dispatch:
     inputs:
       tier:
@@ -51,18 +49,18 @@ jobs:
       - name: Install deps
         run: pip install --quiet requests
 
-      - name: Post the daily best prices to the free channel
+      - name: Post line movement to the free channel
         run: >-
           python -m engine.alert_discord
-          --mode prices --tier free
+          --mode movement --tier free
           --top ${{ github.event.inputs.top || '3' }}
         env:
           SOOTH_DISCORD_WEBHOOK_FREE: ${{ secrets.SOOTH_DISCORD_WEBHOOK_FREE }}
 
-      - name: Post the daily best prices to the Pro channel
+      - name: Post line movement to the Pro channel
         run: >-
           python -m engine.alert_discord
-          --mode prices --tier pro
+          --mode movement --tier pro
           --top ${{ github.event.inputs.top || '3' }}
         env:
           SOOTH_DISCORD_WEBHOOK_PRO: ${{ secrets.SOOTH_DISCORD_WEBHOOK_PRO }}
