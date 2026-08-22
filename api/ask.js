@@ -75,7 +75,7 @@ function extractUrl(text) {
 var BOOK_ABBR = {draftkings:"DK",fanduel:"FD",betmgm:"MGM",williamhill_us:"CZR",
   betrivers:"BR",bovada:"BOV",betonlineag:"BOL",lowvig:"LVG",betus:"BUS",
   mybookieag:"MYB",fanatics:"FAN",espnbet:"ESPN",caesars:"CZR",mybookie:"MYB",
-  betonline:"BOL",williamhill:"CZR"};
+  betonline:"BOL",williamhill:"CZR",williamhillus:"CZR",betonlineagcom:"BOL"};
 function abbr(k){
   if (!k) return "";
   var n = String(k).toLowerCase().replace(/[^a-z]/g, "");
