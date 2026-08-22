@@ -57,6 +57,11 @@
       ones that argue against us. This page is the index of the receipts.</p>
   </div>
 
+  <section class="sec" style="border-top:0;padding-top:4px">
+    <div class="sec-h"><span class="tl">EVERY SAMPLE WE QUOTE, WITH ITS OWN DENOMINATOR</span></div>
+    <div id="pops"></div>
+  </section>
+
   <div class="stance">
     <p><b>We publish our own model losing.</b> Across <span class="n">2,671</span> graded
     walk-forward NFL games (<span class="n">2,608</span> decided, <span class="n">63</span>
@@ -93,6 +98,7 @@ var R=[
   ["GAME LOG","Every NFL game since 1999 with its closing spread, total and moneylines — the raw history behind every claim.","7,548 GAMES →","/gamelog"],
   ["DISCLAIMERS","No wagers, no funds held, no performance claims, no affiliation with any league or book. Written plainly.","THE FINE PRINT →","/disclaimers"]
 ];
+if(Desk.populations) Desk.populations(document.getElementById("pops"));
 document.getElementById("receipts").innerHTML=R.map(function(r,i){
   return D.feedRow(i,r[0],r[1],r[2],r[3]);}).join("");
 

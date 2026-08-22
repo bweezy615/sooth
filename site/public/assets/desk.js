@@ -510,6 +510,54 @@ function clvChip(v,reason){
   return '<span class="clv '+cls+'">CLV '+pts(v)+'</span>';
 }
 
+
+/* ---------- the populations block ----------
+   Three DIFFERENT samples get quoted on this site and they must never be
+   allowed to blur into one headline number — that blur is the exact flaw
+   that makes a competitor's "1,297 tracked / 175 published" unanswerable.
+   Each row states its own n, its own date range, and its own provenance. */
+function populations(el){
+  Promise.all([
+    fetch("/data/figures.json",{cache:"no-store"}).then(function(r){return r.json();}),
+    fetch("/data/pickengine-record.json",{cache:"no-store"})
+      .then(function(r){return r.ok?r.json():null;}).catch(function(){return null;})
+  ]).then(function(x){
+    var f=x[0], rec=x[1];
+    var be=(f.breakeven_ats*100).toFixed(2)+"%";
+    function row(name,prov,res,note){
+      if(!res) return "";
+      var pct=(res.ats_pct*100).toFixed(1)+"%";
+      var beats=res.ats_pct>=f.breakeven_ats;
+      return '<tr><td class="l"><b>'+esc(name)+'</b><small>'+esc(prov)+'</small></td>'
+        +'<td>'+res.n+'</td><td>'+esc(res.ats_record)+'</td>'
+        +'<td class="'+(beats?"up":"dn")+'">'+pct+'</td>'
+        +'<td class="dim">'+esc(note||"")+'</td></tr>';
+    }
+    var live=rec&&rec.independent_record?rec.independent_record:null;
+    var liveN=0;
+    if(rec) (rec.weeks||[]).forEach(function(w){ if(!w.rehearsal) liveN+=(w.n_settled||0); });
+    var html='<table><thead><tr><th class="l">SAMPLE</th><th>N</th>'
+      +'<th>RECORD</th><th>ATS</th><th class="l">WHAT IT IS</th></tr></thead><tbody>'
+      +row("Backtest A", f.evaluation_a.provenance,
+           f.evaluation_a.results.independent, "walk-forward, weaker line source")
+      +row("Backtest B", f.evaluation_b.provenance,
+           f.evaluation_b.results.independent, "walk-forward, real consensus closes")
+      +'<tr><td class="l"><b>Live sealed slates</b><small>committed before kickoff, '
+      +'graded in public</small></td><td>'+liveN+'</td><td>'+(live||"·")+'</td>'
+      +'<td class="dim">'+(live?"":"·")+'</td>'
+      +'<td class="dim">'+(liveN?"the only sample that was pre-committed"
+        :"nothing settled yet — first grade lands after Week 1")+'</td></tr>'
+      +'</tbody></table>';
+    el.innerHTML='<div class="itab"><div class="scr">'+html+'</div></div>'
+      +'<p class="note">Three different samples, three different denominators. '
+      +'Break-even is '+be+'; no sample clears it. The backtests are historical '
+      +'and were never wagered; the live slates are pre-committed and unfiltered '
+      +'— every game on the slate, no star tier, no edge threshold, no betting '
+      +'card. Ask any service showing you a record which bets are in their '
+      +'tracker but not in their published picks, and when that filter was chosen.</p>';
+  }).catch(function(){ el.innerHTML='<p class="note">Figures unavailable.</p>'; });
+}
+
 /* ---------- ago ticker ---------- */
 function tick(){
   [].forEach.call(document.querySelectorAll("[data-ago]"),function(el){
@@ -519,7 +567,7 @@ setInterval(function(){
   if(document.querySelector("[data-ago]")) tick();
 },15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();
