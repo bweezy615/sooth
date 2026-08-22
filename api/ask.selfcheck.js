@@ -13,12 +13,36 @@ assert(ask.SYSTEM.includes("85%"), "system prompt must state the 85% cap");
 assert(/NO betting advice/i.test(ask.SYSTEM), "system prompt must disclaim advice");
 
 // buildPrompt must fold the live numbers in and echo the question
-const board = { boards: [{ sport: "mlb", events: [{ home: "DET", away: "CLE" }] }] };
-const props = { props: [{ player: "Skubal", best_price: 105, best_book: "fanduel" }] };
+const board = { boards: [{ sport: "mlb", events: [{ home: "DET", away: "CLE",
+  n_books: 2, starts: "2026-01-01T00:00:00Z", sides: [
+    { name: "CLE", best_price: 120, best_book: "fanduel", worst_price: 110,
+      worst_book: "betmgm", fair_price: 115, fair_prob: 0.46, gain_pts: 2.1,
+      edge_vs_fair_pts: 0.4, quotes: [{book:"fanduel",price:120},{book:"betmgm",price:110}] }] }] }] };
+const props = { props: [{ player: "Skubal", market: "strikeouts", line: 6.5,
+  best_price: 105, best_book: "fanduel" }] };
 const p = ask.buildPrompt(board, props, "is skubal over 6.5 a good number?");
-assert(p.includes("fanduel"), "prompt must include the live best-book context");
+assert(p.includes("FD"), "prompt must carry the best book (abbreviated)");
 assert(p.includes("Skubal"), "prompt must include the live props context");
 assert(p.includes("skubal over 6.5"), "prompt must include the visitor question");
+assert(p.includes("2.1"), "prompt must carry the computed gain_pts");
+
+// The board must arrive COMPLETE: a raw-JSON slice used to drop ~75% of games,
+// and the model then called a real matchup "not in the data".
+const big = { generated_at: "2026-01-01T00:00:00Z", boards: [{ sport: "mlb",
+  events: Array.from({ length: 40 }, (_, i) => ({
+    home: "H" + i, away: "A" + i, n_books: 11, starts: "2026-01-01T00:00:00Z",
+    sides: [{ name: "A" + i, best_price: -150, best_book: "draftkings",
+      worst_price: -170, worst_book: "bovada", fair_price: -160,
+      fair_prob: 0.61, gain_pts: 2.5, edge_vs_fair_pts: 0.9,
+      quotes: [{ book: "draftkings", price: -150 }, { book: "bovada", price: -170 }] }] })) }] };
+const bigPrompt = ask.buildPrompt(big, null, "what is on the board?");
+assert(bigPrompt.includes("A39 at H39"), "the LAST event must survive into the prompt");
+assert(ask.compactBoard(big).n_events === 40, "compactBoard must keep every event");
+
+// Units: the house voice must forbid subtracting American odds to invent a gap.
+assert(/POINTS OF IMPLIED PROBABILITY/i.test(ask.SYSTEM),
+  "system prompt must define what a point is");
+assert(ask.SYSTEM.includes("gain_pts"), "system prompt must name the real field");
 
 // length cap holds
 const long = ask.buildPrompt(board, props, "x".repeat(5000));

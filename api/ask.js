@@ -31,6 +31,14 @@ const SYSTEM = [
   "- Our own prediction model is measured WORSE than the closing market; never",
   "  present it as an edge. The edge is price, not prediction.",
   "- Be terse. The audience is sharp bettors who know what vig is.",
+  "- \"POINTS\" ALWAYS MEANS POINTS OF IMPLIED PROBABILITY, never the numeric",
+  "  difference between two American prices. -244 vs -275 is NOT 31 points.",
+  "  The board already carries gain_pts (best vs worst on a side) and",
+  "  edge_vs_fair_pts (best vs fair). Quote those fields; never subtract",
+  "  American odds to invent a gap.",
+  "- The events list is the COMPLETE board for the sports listed. If a game is",
+  "  not in it, that sport or matchup is not currently priced in our capture —",
+  "  say exactly that, and never imply the list was cut short.",
   "- EVERY NUMBER YOU STATE MUST APPEAR VERBATIM IN THE JSON YOU WERE GIVEN.",
   "  Do not compute, estimate, average, or recall a statistic. If a number is",
   "  not in the data, say it is not available. The arithmetic was done before",
@@ -48,16 +56,66 @@ function extractUrl(text) {
 // Pure, testable: fold the live board + the question (+ any scraped bet slip)
 // into the user message. Kept separate from the handler so the self-check can
 // exercise it offline.
+// Book keys are long and repeat on every quote; the whole board only fits the
+// context window as abbreviations.
+var BOOK_ABBR = {draftkings:"DK",fanduel:"FD",betmgm:"MGM",williamhill_us:"CZR",
+  betrivers:"BR",bovada:"BOV",betonlineag:"BOL",lowvig:"LVG",betus:"BUS",
+  mybookieag:"MYB",fanatics:"FAN",espnbet:"ESPN"};
+function abbr(k){ return BOOK_ABBR[k] || String(k).slice(0,4).toUpperCase(); }
+
+// A truncated board is worse than a small one: slicing raw JSON at N chars
+// drops most games mid-object, and the model then reports a real matchup as
+// "not in the data" (measured: 24.9% of the board was reaching it). This
+// projects every event into the fields an answer may cite, so the COMPLETE
+// board fits with room to spare.
+function compactBoard(board) {
+  if (!board || !board.boards) return null;
+  var events = [];
+  board.boards.forEach(function (b) {
+    (b.events || []).forEach(function (e) {
+      events.push({
+        sport: b.sport, game: e.away + " at " + e.home, starts: e.starts,
+        n_books: e.n_books,
+        sides: (e.sides || []).map(function (s) {
+          return {
+            side: s.name, best: s.best_price, best_book: abbr(s.best_book),
+            worst: s.worst_price, worst_book: abbr(s.worst_book),
+            fair: s.fair_price, fair_prob: s.fair_prob,
+            gain_pts: s.gain_pts, edge_vs_fair_pts: s.edge_vs_fair_pts,
+            books: (s.quotes || []).map(function (q) {
+              return abbr(q.book) + " " + (q.price > 0 ? "+" : "") + q.price;
+            }).join(","),
+          };
+        }),
+      });
+    });
+  });
+  return { as_of: board.generated_at, market: "moneyline",
+           n_events: events.length, events: events };
+}
+
+function compactProps(props) {
+  if (!props || !props.props) return null;
+  return { as_of: props.generated_at, n: props.props.length,
+    props: props.props.slice(0, 40).map(function (p) {
+      return { player: p.player, market: p.market, line: p.line,
+        side: p.side, best: p.best_price, best_book: abbr(p.best_book || ""),
+        fair: p.fair_price, gain_pts: p.gain_pts };
+    }) };
+}
+
 function buildPrompt(board, props, question, betText) {
-  var ctx = { board: board || null, props: props || null };
+  var ctx = { board: compactBoard(board), props: compactProps(props) };
   var slip = betText
     ? "\n\nThe visitor pasted a bet-slip link. Scraped page below — extract the" +
       " wager (team/player, market, line, price, book) from it, then read it" +
       " against the numbers above:\n" + String(betText)
     : "";
   return (
-    "Live sooth data (best price per side, de-vigged fair line, edge in points):\n" +
-    JSON.stringify(ctx).slice(0, 12000) +
+    "Live sooth data — the COMPLETE current board (best price per side, " +
+    "de-vigged fair line, gain_pts = best-vs-worst in points of implied " +
+    "probability, books = every posted price):\n" +
+    JSON.stringify(ctx).slice(0, 40000) +
     slip +
     "\n\nThe visitor asks:\n" + String(question).slice(0, MAX_Q) +
     "\n\nAnswer using only the numbers above. If the bet is not in the data, say so" +
@@ -236,6 +294,7 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports.buildPrompt = buildPrompt;
+module.exports.compactBoard = compactBoard;
 module.exports.buildMatchupPrompt = buildMatchupPrompt;
 module.exports.findReport = findReport;
 module.exports.extractUrl = extractUrl;
