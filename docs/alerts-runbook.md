@@ -61,30 +61,38 @@ sooth_source        "alerts-page"
 Unsubscribing flips the flag and never deletes the record, so an opt-out cannot
 be lost by someone re-adding the address later.
 
-## ⚠ Before this can send: one secret, two places
+## ⚠ Before this can send: one secret, one place
 
-Everything else is already configured. `AUTH_SECRET` exists in Vercel (it signs
-the Pro cookie) but **not** in GitHub Actions, and the Actions senders need it
-to sign the unsubscribe link in every email.
+Checked live on 2026-08-22:
 
-1. **GitHub → repo Settings → Secrets and variables → Actions → New secret**
-   Name `AUTH_SECRET`, value: the same string already set in the Vercel
-   project. It must match exactly — a link signed with a different secret fails
-   verification and the unsubscribe button does nothing.
-2. **Vercel → project Settings → Environment Variables**
-   Add `RESEND_API_KEY` (the same value already in Actions). Vercel sends the
-   double-opt-in confirmation email; without it, signup returns
-   *"Alerts are not configured yet."*
+| Secret | Vercel | Actions | Needed for |
+|---|---|---|---|
+| `STRIPE_SECRET_KEY` | ✅ | ✅ | the list itself |
+| `RESEND_API_KEY` | ✅ | ✅ | sending |
+| `AUTH_SECRET` | ✅ | ❌ **missing** | signing the unsubscribe link |
 
-Until both are set the system **fails closed and stays honest**: the senders
-refuse to send rather than mail a dead unsubscribe link, and the signup form
-says it is not configured rather than pretending to subscribe someone.
+Signup already works end to end on sooth.bet — a POST to `/api/alerts` returns
+`{"ok":true,"sent":true}` and mails a confirmation. What cannot run yet is the
+**Actions** side: `engine.alert_token` refuses to mint an unsubscribe link
+without `AUTH_SECRET`, so `alert_email` and `alert_lifecycle` exit without
+sending rather than mail a dead opt-out link.
 
-Verify after setting them:
+**Fix:** GitHub → repo Settings → Secrets and variables → Actions → New secret.
+Name `AUTH_SECRET`, value **exactly** the string already set in the Vercel
+project (Vercel → Settings → Environment Variables). It has to match
+character-for-character: a link signed in Actions with a different secret fails
+verification in Vercel, and the unsubscribe button silently does nothing.
+
+Until then the system **fails closed and stays honest** — it does not send.
+
+Verify after setting it:
 
 ```bash
-gh workflow run send-alerts && sleep 45 && gh run list --workflow=send-alerts --limit 1
+gh workflow run send-alerts
 ```
+
+then `gh run list --workflow=send-alerts --limit 1`, and check the log says
+`sent N/M` rather than the AUTH_SECRET refusal.
 
 ## Checks
 
