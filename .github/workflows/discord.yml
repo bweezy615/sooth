@@ -1,0 +1,81 @@
+name: post-discord
+
+# The community arm of the alert pipeline. engine.alert_discord posts the daily
+# best prices, ranked by best available price against the de-vigged consensus
+# (edge_vs_fair_pts). NOT by model edge: that mechanism measured 48.1% on 156
+# real disagreements and POSTABLE is empty accordingly. NOT by gain_pts either,
+# which only measures how much books disagree with each other.
+#
+# The sign is published, never suppressed. On most boards every price sits
+# below consensus fair — that is vig, the post says so at the top, and the
+# entries are framed as the best available numbers, never as value plays.
+#
+# Runs after props-live so the freshest model annotations are already in.
+# Three ticks a day rather than every two hours: the watermark stops repeats,
+# but a channel that fires five embeds every couple of hours reads as a tout
+# service, which is the exact register sooth is built against.
+#
+# Needs one repo secret per tier. With neither set the job prints "not
+# configured" and exits clean, so this stays green until the server exists.
+
+on:
+  schedule:
+    - cron: "45 13 * * *"   # ~8:45am CT — morning slate
+    - cron: "45 17 * * *"   # ~12:45pm CT — afternoon
+    - cron: "45 21 * * *"   # ~4:45pm CT  — primetime
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "free | pro"
+        default: "free"
+      top:
+        description: "how many best prices to post"
+        default: "3"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: post-discord
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install --quiet requests
+
+      - name: Post the daily best prices to the free channel
+        run: >-
+          python -m engine.alert_discord
+          --mode prices --tier free
+          --top ${{ github.event.inputs.top || '3' }}
+        env:
+          SOOTH_DISCORD_WEBHOOK_FREE: ${{ secrets.SOOTH_DISCORD_WEBHOOK_FREE }}
+
+      - name: Post the daily best prices to the Pro channel
+        run: >-
+          python -m engine.alert_discord
+          --mode prices --tier pro
+          --top ${{ github.event.inputs.top || '3' }}
+        env:
+          SOOTH_DISCORD_WEBHOOK_PRO: ${{ secrets.SOOTH_DISCORD_WEBHOOK_PRO }}
+
+      - name: Commit the posted-watermark
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/discord_sent.json
+          if git diff --staged --quiet; then
+            echo "nothing new posted"
+          else
+            git commit -m "discord: posted-watermark $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
