@@ -64,6 +64,10 @@ assert(/POINTS OF IMPLIED PROBABILITY/i.test(ask.SYSTEM),
 assert(ask.SYSTEM.includes("gain_pts"), "system prompt must name the real field");
 assert(ask.SYSTEM.includes("edge_vs_fair_pts"),
   "system prompt must name the vs-fair field");
+assert(/-244[\s\S]{0,200}2\.40/.test(ask.SYSTEM),
+  "system prompt must carry the best-vs-worst worked example too");
+assert(/ABSOLUTE: never state a number that is the arithmetic difference/.test(ask.SYSTEM),
+  "the price-subtraction ban must be absolute, not situational");
 assert(/-230[\s\S]{0,320}-1\.77/.test(ask.SYSTEM),
   "system prompt must carry the worked example that kills American-odds subtraction");
 
