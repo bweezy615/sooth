@@ -43,6 +43,10 @@ assert(ask.compactBoard(big).n_events === 40, "compactBoard must keep every even
 assert(/POINTS OF IMPLIED PROBABILITY/i.test(ask.SYSTEM),
   "system prompt must define what a point is");
 assert(ask.SYSTEM.includes("gain_pts"), "system prompt must name the real field");
+assert(ask.SYSTEM.includes("edge_vs_fair_pts"),
+  "system prompt must name the vs-fair field");
+assert(/-230[\s\S]{0,320}-1\.77/.test(ask.SYSTEM),
+  "system prompt must carry the worked example that kills American-odds subtraction");
 
 // length cap holds
 const long = ask.buildPrompt(board, props, "x".repeat(5000));
