@@ -49,14 +49,9 @@ Fewer than feels natural, on purpose. An empty channel reads as a dead server.
 
 ### THE BOARD  *(category)*
 
-**`best-prices`** — read-only, free webhook posts here
-> The best available price on each side, against the de-vigged consensus.
-> Posted 3x daily, graded later. Research, not a recommendation.
-
-*(Author's wording, used verbatim. If Discord's limit bites, cut the last
-sentence first and the middle one second — "the best available price on each
-side, against the de-vigged consensus" is the part that must survive, because
-it is the only sentence that says what the selection actually is.)*
+**`line-movement`** — read-only, free webhook posts here
+> Books currently pricing away from the cross-book consensus, on games that
+> haven't started. A gap between prices, not a forecast.
 
 ### COMMUNITY  *(category)*
 
@@ -69,7 +64,11 @@ it is the only sentence that says what the selection actually is.)*
 
 ### PRO  *(category — private, restricted to the Pro role)*
 
-**`pro-slate`** — read-only, Pro webhook posts here
+**`pro-movement`** — read-only, Pro webhook posts here
+> The same movement feed plus game lines — moneylines, spreads and totals, not
+> only player props.
+
+**`pro-slate`** — read-only
 > The sealed weekly slate at seal time. It unlocks free for everyone at first
 > kickoff — Pro buys timing, not accuracy. Our model loses to the closing
 > market and the record is on the page that sells this.
@@ -90,14 +89,13 @@ Do not create channels you have nothing to put in yet. `#line-moves`,
 Two, because the bot already supports a free and a paid tier and you will not
 want to retrofit that later.
 
-`#best-prices` → **Edit Channel → Integrations → Webhooks → New Webhook**
+`#line-movement` → **Edit Channel → Integrations → Webhooks → New Webhook**
 
 - Name: `Sooth`
 - Copy the URL. **Do not paste it into a chat window or a file in this repo.**
 
-Repeat in `#pro-slate` for the second webhook. That channel is the paid tier's
-home — the bot already reads two separate secrets and posts the free board and
-the sealed slate to different places.
+Repeat in `#pro-movement` for the second webhook. The bot reads two separate
+secrets and sends the free feed and the Pro feed to different channels.
 
 ---
 
@@ -107,8 +105,8 @@ Repo → **Settings → Secrets and variables → Actions → New repository sec
 
 | Secret name | Value |
 |---|---|
-| `SOOTH_DISCORD_WEBHOOK_FREE` | the `#best-prices` webhook URL |
-| `SOOTH_DISCORD_WEBHOOK_PRO` | the paid-tier webhook URL |
+| `SOOTH_DISCORD_WEBHOOK_FREE` | the `#line-movement` webhook URL |
+| `SOOTH_DISCORD_WEBHOOK_PRO` | the `#pro-movement` webhook URL |
 
 These names are what `engine/alert_discord.py` already reads. Nothing else in
 the repo has to change to match them.
@@ -117,28 +115,26 @@ the repo has to change to match them.
 
 ## 5. Merge the bot
 
-PR #5, branch `feat/discord-community`. It carries `engine/alert_discord.py`
-and `.github/workflows/discord.yml`.
+**The bot is already on `main`.** `engine/alert_discord.py` and
+`.github/workflows/discord.yml` merged on 2026-08-21, before the server existed,
+specifically so launching is a webhook and not a merge. With no secrets set it
+prints "not configured yet, nothing posted" and exits clean, so the scheduled
+runs have been green and empty rather than red and ignored.
 
-Before merging, one decision that is not the bot's to make:
+The movement feed this channel actually carries is **PR #6**. Check it is
+merged before expecting anything to post.
 
-**The best-prices post does not consult `POSTABLE` and will post as soon as the
-secrets exist.** No key needs adding to make the channel work. It ranks every
-priced side on `edge_vs_fair_pts` and publishes the top few — price arithmetic,
-no model involved, nothing gated.
+Nothing needs to be added to `POSTABLE` to make the channel work.
 
-**`POSTABLE` gates a different path entirely** — `--mode edges`, which ranks by
-model edge. It is deliberately empty because the strikeout model measured no
-edge on the population books actually post (see `/props-model`), and that mode
-is now diagnostic-only and cannot publish under any flag. PRODUCT.md carries
-"never rank or select anything by model edge" as a hard constraint.
+**What `POSTABLE` actually gates** is `--mode edges`, which ranks by *model*
+edge. It is deliberately empty because the strikeout model measured no edge on
+the population books actually post (see `/props-model`), and that mode is now
+diagnostic-only and cannot publish under any flag. PRODUCT.md carries "never
+rank a price product by model edge" as a hard constraint.
 
-So: if the channel is quiet after setup, the cause is the secrets, the schedule,
-or an empty board — never `POSTABLE`. Adding a key there will not make a post
-appear, and whoever adds one is claiming someone measured that market. Do not
-add one to make the channel look alive.
-
----
+Movement is not that. It ranks on how far one book's price sits from the
+cross-book consensus — a fact about prices, with no model in it. Same family as
+the best-price selection, which is why neither is gated by `POSTABLE`.
 
 ## 6. Test before anyone is in the server
 
@@ -198,14 +194,37 @@ already knows.
 > Nothing here is a recommendation to bet, and nobody here will tell you who
 > wins.
 >
-> **Reading a post in #best-prices**
+> **Reading a post in #line-movement**
 >
-> Each line shows the best price, which book has it, and how that price
-> compares to the fair line. Most of the time it will be *below* fair — that
-> gap is the house's cut and it is on almost every price you will ever see.
-> The number worth having is the smallest one.
+> Each alert is one book pricing away from where every other book has it, on a
+> game that hasn't started. That's a gap between prices — it isn't a
+> prediction that the side wins, and we're not telling you to take it.
+>
+> **The channel is quiet most days.** That's the design, not a fault.
 >
 > Full explainer: <https://sooth.bet/learn> · The board: <https://sooth.bet>
+
+### `#line-movement`  *(pin this before the first alert)*
+
+> **This channel is quiet by design.**
+>
+> It fires when a book is 2+ points off the cross-book consensus on a game
+> that hasn't started. On a thin slate that's nothing at all, and you'll see
+> nothing for a day or two.
+>
+> A quiet day means the books agree with each other. It does not mean the feed
+> is broken, and we would rather post nothing than manufacture something to
+> keep the channel busy.
+>
+> **What an alert is:** one book's price sitting away from where the rest of
+> the market has it. A fact about prices.
+>
+> **What it isn't:** a prediction, a recommendation, or a claim that the side
+> wins. We publish a model that loses to the closing market — nothing here is
+> that model, and nothing here is a pick.
+>
+> Prices move fast. By the time you read it the gap may be gone; check the
+> book.
 
 ### `#pro-slate`  *(pin this before the first slate posts)*
 
