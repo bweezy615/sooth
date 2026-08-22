@@ -180,9 +180,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   transition:background var(--t-hover) ease,color var(--t-hover) ease}
 .hd-links a:hover{color:var(--ink);background:var(--g2)}
 .hd-links a[aria-current]{color:var(--brand)}
-.hd-cta{font:700 12px/1 var(--sans);color:var(--g0);background:var(--brand);
-  padding:8px 14px;border-radius:var(--r)}
-.hd-cta:hover{filter:brightness(1.08);color:var(--g0)}
 
 /* sport switcher — second shell row, horizontal, states carry data */
 .hd-r2{display:flex;align-items:center;gap:4px;height:42px;
@@ -285,14 +282,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   border:4px solid transparent;border-left-color:var(--brand)}
 
 /* raised keys — controls you can press read as physically raised */
-.hd-cta,.an-in button{
+.an-in button{
   background:linear-gradient(180deg,#F3EFE6,#DCD6C9);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),
              inset 0 -1px 0 rgba(0,0,0,.25),
              0 3px 8px -2px rgba(0,0,0,.6)}
-.hd-cta,.an-in button{transition:filter var(--t-hover) ease,
+.an-in button{transition:filter var(--t-hover) ease,
   transform var(--t-view) var(--e-out)}
-.hd-cta:active,.an-in button:active{transition-duration:var(--t-press);
+.an-in button:active{transition-duration:var(--t-press);
   transform:translateY(1px);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 3px -1px rgba(0,0,0,.6)}
 .sp[aria-selected="true"]{
@@ -317,9 +314,6 @@ a.mv-row:hover{transform:translateY(-1px);
 .spec{width:100%}
 .spec-scroll{overflow-x:auto;scrollbar-width:thin}
 .spec svg{width:100%;display:block;overflow:visible}
-/* under 720px the instrument keeps a readable scale and scrolls in place —
-   the one surface where horizontal scroll serves the research */
-@media (max-width:720px){.spec svg{min-width:560px}}
 .spec .track{stroke:var(--hair2);stroke-width:1}
 .spec .tick{stroke:var(--hair);stroke-width:1}
 .spec .bk{fill:var(--mut)}
@@ -330,7 +324,43 @@ a.mv-row:hover{transform:translateY(-1px);
 .spec .fair{stroke:var(--ink2);stroke-width:1;stroke-dasharray:2 3}
 .spec .fair-lb{font:600 9.5px var(--mono);fill:var(--mut);letter-spacing:.1em}
 .spec .fair-pr{font:700 11px var(--mono);fill:var(--ink)}
-.spec-cap{display:flex;justify-content:space-between;margin-top:6px}
+/* THE SPECTRUM ON A PHONE.
+   It used to hold a 560px floor and scroll in place — the last horizontal
+   scroller carrying data on the site, and hiding stats sideways is exactly
+   what we were told to stop doing.
+
+   Scaling it to fit does not work either: measured at 375px the whole
+   instrument renders at about 0.54, and pushing the labels back up to a
+   legible size makes them collide (5 clusters, 1 overlap at 20 user units).
+   With eleven books there is no size that is both legible and collision-free
+   in 347px.
+
+   So drop what the phone cannot carry and keep what the instrument is FOR.
+   The per-book price labels are the part that collides — and they are the one
+   part fully duplicated by the SPORTSBOOK COMPARISON table directly below,
+   which now stacks into readable cards. What the table cannot show is the
+   SHAPE: how far apart the books are and where the de-vigged fair price sits
+   among them. Everything that carries the shape survives untouched — the pins,
+   their ground shadows and the receding plane are unclassed geometry — along
+   with the FAIR label and the BEST price, which stays printed because hiding
+   it would remove the one figure the instrument exists to point at. Nothing is
+   hidden off-screen and no number is lost: the rest moved to the surface that
+   can render it properly.
+
+   (The .track/.tick/.fair/.bk rules below are for the FLAT spectrum variant;
+   the perspective-deck variant on /game draws unclassed geometry instead, so
+   they are a no-op there rather than the thing doing the work.) */
+@media (max-width:720px){
+  .spec svg{min-width:0}
+  .spec-scroll{overflow-x:visible}
+  .spec .bk-lb,.spec .bk-pr{display:none}
+  /* ...except the best price, which is the point of the instrument */
+  .spec .g-best .bk-pr{display:inline;font-size:20px}
+  .spec .fair-lb{font-size:17px}
+  .spec .fair-pr{font-size:19px}
+  .spec .track,.spec .tick,.spec .fair{stroke-width:1.8}
+  .spec .bk{r:4}
+}.spec-cap{display:flex;justify-content:space-between;margin-top:6px}
 .spec-cap .tl b{color:var(--ink2)}
 
 /* ============ market radar ============ */

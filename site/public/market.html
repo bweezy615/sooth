@@ -61,9 +61,11 @@
     /* Inside the stacked card the shared stylesheet already builds, the
        title line is the first cell — which here is the clock. The matchup
        is the card's identity, so the clock demotes to a caption above it
-       and the matchup takes the title. Nothing is added, nothing scrolls. */
+       and the matchup takes the title. Nothing is added, nothing scrolls.
+       11px is the floor: at 9.5px the kickoff time was the smallest type on
+       the page and it is the first thing read on every card. */
     #games tbody td:not([data-l]){padding:0 0 5px;border-bottom:0;
-      font:600 9.5px/1.3 var(--mono);letter-spacing:.11em;color:var(--dim)}
+      font:600 11px/1.3 var(--mono);letter-spacing:.1em;color:var(--dim)}
     #games tbody td[data-l="GAME"]{display:block;text-align:left;
       padding:0 0 9px;border-bottom:1px solid var(--hair)}
     #games tbody td[data-l="GAME"]::before{content:none}
