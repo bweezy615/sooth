@@ -50,8 +50,13 @@ Fewer than feels natural, on purpose. An empty channel reads as a dead server.
 ### THE BOARD  *(category)*
 
 **`best-prices`** — read-only, free webhook posts here
-> The best available price on the board against the de-vigged consensus,
-> refreshed with the board. Selected on price, never on a forecast.
+> The best available price on each side, against the de-vigged consensus.
+> Posted 3x daily, graded later. Research, not a recommendation.
+
+*(Author's wording, used verbatim. If Discord's limit bites, cut the last
+sentence first and the middle one second — "the best available price on each
+side, against the de-vigged consensus" is the part that must survive, because
+it is the only sentence that says what the selection actually is.)*
 
 ### COMMUNITY  *(category)*
 
