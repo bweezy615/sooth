@@ -174,3 +174,42 @@ So: never block on a reply, and never treat a pending message as coordination
 that has happened. Do the work that does not depend on the answer, and if the
 answer genuinely gates you, raise it with the user rather than waiting. If a
 reply does arrive, re-check anything time-sensitive in it before acting.
+
+## Before you write a hard constraint, grep for what it forbids
+
+PRODUCT.md drifted from the product twice in twelve hours. The second time, one
+session was writing a constraint while another was shipping the feature that
+constraint forbade. Neither session was wrong and neither could have known.
+
+"Announce before editing shared surfaces" did not prevent it, and would not
+have: the edit and the feature were concurrent, and the session shipping the
+feature reasonably treated amending the document as part of its own change
+rather than as touching something shared. Announcing is not the missing piece.
+
+Two things are, and both are checkable rather than procedural.
+
+**Scope a constraint to the evidence it came from.** "Never rank or select
+anything by model edge" was written from a props measurement — 194 board props,
+model versus market, no edge — and stated as a rule about the whole product. It
+then forbade the pick engine's core mechanic, which nobody had measured and
+which the rule's evidence said nothing about. The measurement was sound; the
+generalisation was not. Write the surface into the rule: *never rank a price
+product by model edge* forbids exactly what was measured and nothing else.
+
+**Then grep for what the rule would forbid, before you write it.** A hard
+constraint that outlaws something already shipping is either a bug in the
+product or a bug in the constraint, and you want to know which BEFORE it is in
+the document that everyone else builds against. It costs one command:
+
+    grep -rn "picks" site/public api engine     # before banning the word
+    grep -rln "delta\|divergence" engine        # before banning model ranking
+
+Both of today's drifts would have been caught by that grep. The first would
+have found `/picks` and `data/props_picks.json`; the second would have found
+the pick engine ranking on divergence.
+
+If the grep finds a violation, you have learned something either way. Either
+the product needs to change, or your rule was aimed at the wrong level — and
+finding out at writing time costs a minute, while finding out afterwards costs
+a reconciliation commit and every session that built against the wrong rule in
+between.
