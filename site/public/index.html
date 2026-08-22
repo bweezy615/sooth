@@ -19,10 +19,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     THE INFINITE DESK — matched to the reference frame:
-     five glossy panels in a receding arc on a curved black desk,
-     screen reflections on the surface, sooth hardware props,
-     editorial header, full-width workspace labels.
+     THE DESK — five glossy panels in a receding arc, lit from above in a
+     black room. The curved desk platform and the hardware props (mug,
+     console, notebook, clock) were REMOVED on 2026-08-22: at this scale they
+     rendered as flat grey rectangles along the bottom edge and read as
+     clutter rather than as a room. The panels and their reflections carry the
+     scene on their own.
 
      FROZEN MARKET re-skin: this page does not load desk.css, so its own
      hardware palette is retuned to the promo's — cold near-black ground,
@@ -58,9 +60,10 @@
 
   /* ---- editorial header, per the reference frame ----
      The wordmark is the promo's: lowercase, tight, cool white, .bet in the one
-     hue, with the coin's small teal pip beside it. "INFINITE DESK" is the slab
-     face's label — mono caps behind a teal hairline rule, exactly as the promo
-     sets MARKET INTELLIGENCE DESK. */
+     hue, with the coin's small teal pip beside it, followed by the promo's own
+     strapline. The "INFINITE DESK" title was removed — it named the mechanism
+     rather than the product, and a visitor does not arrive looking for a
+     desk. */
   .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px 34px 0;flex:none}
   .brand-row .no{display:inline-flex;align-items:baseline;gap:9px}
   .brand-row .no .pip{width:8px;height:8px;border-radius:50%;background:var(--accent);
@@ -99,115 +102,89 @@
   /* ---- the stage ---- */
   #stagewrap{position:relative;flex:1;min-height:0}
   #desk{position:absolute;inset:0;overflow:hidden;
-    perspective:1500px;perspective-origin:50% 34%}
+    perspective:1500px;perspective-origin:50% 40%}
 
-  /* the physical desk: curved gloss platform + front apron, two arcs */
-  .floor{position:absolute;left:50%;bottom:-6%;width:150%;height:52%;
-    transform:translateX(-50%);pointer-events:none}
-  /* the wet black floor of promo 2: colder greys, and the two front edges
-     catch the light as a frost hairline with a teal core */
-  .floor .arc1{position:absolute;left:0;right:0;top:0;bottom:0;
-    background:radial-gradient(85% 130% at 50% 135%, #16202A 0%, #0C1218 45%, #070A0D 71%, transparent 72%)}
-  .floor .arc1::before{content:"";position:absolute;left:10%;right:10%;top:9%;height:2px;
-    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(91,240,212,.26),
-      rgba(191,234,242,.18) 42%, transparent 80%)}
-  .floor .arc2{position:absolute;left:6%;right:6%;top:34%;bottom:-30%;
-    background:radial-gradient(75% 120% at 50% 130%, #1D2831 0%, #0E151B 50%, transparent 71%)}
-  .floor .arc2::before{content:"";position:absolute;left:16%;right:16%;top:7%;height:2px;
-    border-radius:50%;background:radial-gradient(50% 100% at 50% 50%, rgba(191,234,242,.20), transparent 80%)}
   /* room vignette */
   #desk::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:
-      radial-gradient(125% 92% at 50% 4%, transparent 52%, rgba(0,0,0,.60) 100%),
+      radial-gradient(130% 96% at 50% 12%, transparent 54%, rgba(0,0,0,.62) 100%),
       linear-gradient(0deg, rgba(0,0,0,.46), transparent 16%)}
 
   /* ---- monitors: thin glossy panels ---- */
-  .monitor{position:absolute;left:50%;top:34%;width:952px;height:760px;
+  .monitor{position:absolute;left:50%;top:40%;width:952px;height:760px;
     margin:-380px 0 0 -476px;transform-origin:50% 58%}
   .desk-ready .monitor{transition:transform var(--glide),opacity var(--glide)}
   .mon-label{display:none}
-  /* Glass, not a card (rule 3): a thin dark slab, lit along ONE edge — the top
-     — with the radius pulled back from 14px to the system's accent radius so it
-     reads as cut glass rather than as a rounded panel. */
+  /* Glass, not a card (rule 3). The panels used to sit at roughly the same
+     value as the room, so five of them read as five dark rectangles. Three
+     changes make them read as rendered objects instead:
+
+       1. a real bevel — the bezel is lit at the top and occluded at the
+          bottom, with a second inset hairline just inside the frame, so the
+          edge has thickness rather than being a 1px outline;
+       2. the screen is now DARKER than its frame and carries an inner
+          vignette, which is how a real display sits inside its housing;
+       3. the ambient light in the room falls off with distance, so unfocused
+          panels recede instead of competing with the one you are reading.
+
+     No blur, no filter, no extra compositing layers: all of it is background
+     and box-shadow on elements that already existed, so the 560ms glide keeps
+     running on transform and opacity alone. */
   .bezel{position:absolute;left:0;top:0;width:952px;height:712px;
-    background:linear-gradient(180deg,#18222B,#0A0F14 13%,#06090C);
-    border:1px solid rgba(170,205,215,.14);border-radius:4px;padding:16px;
+    background:
+      linear-gradient(180deg,#243039 0%,#131C24 3%,#0B1116 45%,#070B0F 100%);
+    border:1px solid rgba(170,205,215,.16);border-radius:5px;padding:16px;
     box-shadow:
-      inset 0 1px 0 rgba(214,240,246,.10),
-      inset 0 -1px 0 rgba(0,0,0,.75),
-      0 42px 90px -34px rgba(0,0,0,.95),
-      0 8px 26px -8px rgba(0,0,0,.7)}
-  /* the lit rim from the coin: a teal hairline that catches the light across
-     the top edge, brightest on the monitor you are actually at */
+      inset 0 1px 0 rgba(226,246,250,.16),
+      inset 0 2px 5px -3px rgba(226,246,250,.30),
+      inset 0 -1px 0 rgba(0,0,0,.85),
+      inset 0 0 0 1px rgba(0,0,0,.45),
+      0 60px 120px -40px rgba(0,0,0,.98),
+      0 18px 46px -14px rgba(0,0,0,.85),
+      0 3px 10px -3px rgba(0,0,0,.7)}
+  /* the lit rim from the coin: a teal hairline across the top edge, brightest
+     on the panel you are actually at */
   .bezel::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;
-    z-index:2;pointer-events:none;opacity:.5;transition:opacity var(--glide);
+    z-index:2;pointer-events:none;opacity:.38;transition:opacity var(--glide);
     background:linear-gradient(90deg,transparent,rgba(45,212,167,.45) 20%,
-      rgba(91,240,212,.75) 50%,rgba(45,212,167,.45) 80%,transparent)}
+      rgba(91,240,212,.8) 50%,rgba(45,212,167,.45) 80%,transparent)}
   .monitor.is-focused .bezel::before{opacity:1}
-  .screen{position:relative;width:920px;height:680px;background:var(--screen);
+  /* the screen sits INSIDE the housing: darker than the frame, with the
+     corners falling away — the single strongest cue that this is a display */
+  .screen{position:relative;width:920px;height:680px;background:#04070A;
     border-radius:2px;overflow:hidden;
-    box-shadow:inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 46px rgba(0,0,0,.45)}
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,.9),
+      inset 0 1px 0 rgba(0,0,0,.9),
+      inset 0 0 60px rgba(0,0,0,.55),
+      inset 0 0 140px -40px rgba(0,0,0,.75)}
   .screen iframe{width:100%;height:100%;border:0;display:block;background:var(--screen)}
-  /* wet glass: one cold diagonal sweep, strongest at the top corner */
-  .glare{position:absolute;inset:0;pointer-events:none;border-radius:4px;
-    background:linear-gradient(112deg, rgba(191,234,242,.075) 0%, rgba(191,234,242,.022) 26%, transparent 40%)}
+  /* wet glass: one cold diagonal sweep, strongest at the top corner. Sits
+     above the iframe but never takes the pointer. */
+  .glare{position:absolute;inset:0;pointer-events:none;border-radius:4px;z-index:1;
+    background:
+      linear-gradient(112deg, rgba(191,234,242,.085) 0%, rgba(191,234,242,.028) 24%,
+        transparent 38%),
+      radial-gradient(120% 60% at 50% -10%, rgba(191,234,242,.05), transparent 60%)}
   .monitor:not(.is-focused) .screen iframe{pointer-events:none}
   .monitor:not(.is-focused){cursor:pointer}
+  /* distance falloff: the room only lights what you are looking at. Applied to
+     the bezel, never to the screen, so the numbers inside never dim. */
+  .monitor{opacity:1}
+  .desk-focused .monitor:not(.is-focused) .bezel{filter:brightness(.62)}
+  .desk-focused .monitor:not(.is-focused) .reflect{opacity:.4}
+  .bezel,.reflect{transition:filter var(--glide),opacity var(--glide)}
   .led{position:absolute;bottom:6px;left:50%;width:5px;height:5px;margin-left:-2.5px;
     border-radius:50%;background:#1B242C;transition:background var(--glide),box-shadow var(--glide)}
   .monitor.is-focused .led{background:var(--accent);box-shadow:0 0 8px rgba(45,212,167,.65)}
-  /* the screen's reflection on the wet desk — travels with its monitor */
-  .reflect{position:absolute;left:7%;right:7%;top:718px;height:130px;
-    background:linear-gradient(180deg, rgba(178,222,230,.12), rgba(178,222,230,.035) 50%, transparent 85%);
-    filter:blur(9px);border-radius:4px;pointer-events:none}
-
-  /* ---- desk props (overview only; they yield to the work) ---- */
-  .props{position:absolute;left:50%;bottom:4.5%;width:1200px;margin-left:-600px;
-    height:120px;pointer-events:none;transition:opacity var(--glide)}
-  .desk-focused .props{opacity:0}
-  .prop{position:absolute;bottom:0}
-  /* mug, stage left */
-  .mug{left:70px;width:64px;height:74px;background:linear-gradient(100deg,#131A21,#080C10 70%);
-    border-radius:3px 3px 6px 6px;box-shadow:inset 2px 6px 10px rgba(191,234,242,.05),
-      0 14px 18px -8px rgba(0,0,0,.85)}
-  .mug::before{content:"";position:absolute;right:-20px;top:16px;width:26px;height:40px;
-    border:7px solid #0E141A;border-left:0;border-radius:0 12px 12px 0}
-  .mug::after{content:"sooth.";position:absolute;left:0;right:0;top:38%;
-    font:600 12px var(--sans);color:#7E8D93;text-align:center;letter-spacing:-.01em}
-  /* control surface, centered */
-  .console{left:50%;width:300px;height:76px;margin-left:-170px;
-    background:linear-gradient(180deg,#151D25,#0A0F13 70%);
-    border:1px solid rgba(170,205,215,.10);border-radius:4px;
-    box-shadow:inset 0 1px 0 rgba(214,240,246,.07), 0 18px 24px -10px rgba(0,0,0,.9)}
-  .console i{position:absolute;top:16px;width:26px;height:26px;border-radius:50%;
-    background:radial-gradient(circle at 34% 30%, #232D36, #0C1216 70%);
-    box-shadow:inset 0 -2px 4px rgba(0,0,0,.75), 0 2px 3px rgba(0,0,0,.6)}
-  .console i::after{content:"";position:absolute;left:50%;top:3px;width:2px;height:8px;
-    margin-left:-1px;background:#3F4B53;border-radius:1px}
-  .console i:nth-child(1){left:22px}.console i:nth-child(2){left:60px}
-  .console i:nth-child(3){left:98px}.console i:nth-child(4){left:136px;top:44px}
-  .console b{position:absolute;right:24px;top:20px;width:88px;height:44px;
-    border-radius:2px;background:#070B0F;box-shadow:inset 0 0 0 1px rgba(170,205,215,.08)}
-  .console b::before{content:"";position:absolute;left:10px;top:9px;width:5px;height:5px;
-    border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(45,212,167,.7)}
-  .console b::after{content:"";position:absolute;left:10px;bottom:9px;right:10px;height:3px;
-    background:repeating-linear-gradient(90deg,#1B242C 0 6px,transparent 6px 10px)}
-  /* notebook device, right of console */
-  .book{left:50%;margin-left:150px;width:164px;height:84px;
-    background:linear-gradient(160deg,#111820,#080C10 75%);
-    border-radius:3px;border:1px solid rgba(170,205,215,.09);
-    box-shadow:0 16px 22px -10px rgba(0,0,0,.9)}
-  .book::after{content:"sooth.";position:absolute;left:0;right:0;top:40%;
-    font:600 14px var(--sans);color:#6C7A80;text-align:center;letter-spacing:-.01em}
-  /* the clock — a real one */
-  .clockbox{right:66px;width:138px;height:66px;background:linear-gradient(180deg,#121A21,#070B0E);
-    border-radius:3px;border:1px solid rgba(170,205,215,.10);
-    box-shadow:0 16px 22px -10px rgba(0,0,0,.9);pointer-events:none}
-  .clockbox .t{position:absolute;left:0;right:26px;top:50%;transform:translateY(-50%);
-    font:700 26px var(--mono);color:var(--ink);text-align:center;
-    font-variant-numeric:tabular-nums;letter-spacing:.04em}
-  .clockbox .z{position:absolute;right:9px;top:50%;transform:translateY(-50%);
-    font:600 9px var(--mono);color:var(--dim);letter-spacing:.08em;line-height:1.6}
+  /* the panel's own reflection. The desk platform is gone, so this is now the
+     only thing standing the panels on a surface — it does the whole job of
+     grounding them, which is why it got taller and softer rather than
+     deleted along with the floor. */
+  .reflect{position:absolute;left:5%;right:5%;top:716px;height:170px;
+    background:linear-gradient(180deg, rgba(178,222,230,.14), rgba(178,222,230,.04) 45%,
+      transparent 82%);
+    filter:blur(11px);border-radius:6px;pointer-events:none}
 
   /* ---- edge arrows ---- */
   .arrow{position:absolute;top:42%;z-index:10;width:56px;height:90px;
@@ -435,7 +412,6 @@
     #desk{position:relative;perspective:none;display:flex;overflow-x:auto;
       scroll-snap-type:x mandatory;scrollbar-width:none;height:70vh}
     #desk::after{display:none}
-    .floor,.props{display:none}
     #stagewrap{flex:1}
     .monitor{position:relative;left:auto;top:auto;margin:0;transform:none!important;
       opacity:1!important;flex:0 0 100vw;width:100vw;height:100%;
@@ -473,7 +449,7 @@
   <header class="m-top">
     <span class="m-mark"></span>
     <b>sooth<i>.bet</i></b>
-    <span class="m-sub">Research · never picks</span>
+    <span class="m-sub">Market intelligence</span>
   </header>
 
   <!-- Sport rail. Driven by the board, never hardcoded: a league with no
@@ -532,10 +508,10 @@
 
 <div class="brand-row">
   <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
-  <h1>INFINITE DESK</h1>
-  <span class="kicker">One desk. Multiple workspaces.</span>
+  <span class="kicker">Market intelligence. Honest edge.</span>
 </div>
-<p class="strap">Move across an infinite desk of intelligence — research and analysis, never winning picks.</p>
+<p class="strap">Every book's price on one board, the vig stripped out, and a weekly slate
+  sealed before kickoff and graded in public after.</p>
 
 <nav class="ws-labels" aria-label="Workspaces">
   <button data-ws="0">MARKET BOARD</button>
@@ -551,7 +527,7 @@
   <div id="desk" role="region" aria-label="The desk"></div>
 </div>
 
-<p class="caption">Click · Arrow keys · 1–5 · Esc<br>to move across the desk</p>
+<p class="caption">Click a screen &middot; arrow keys &middot; 1&ndash;5 &middot; Esc</p>
 <nav class="rail" aria-label="Workspace position">
   <button data-ws="0"><span class="dot"></span><span class="tl">MKT</span></button>
   <span class="ln"></span>
@@ -819,8 +795,7 @@ if(MOBILE.matches){
 }
 
 /* ---- build the monitors ---- */
-desk.innerHTML='<div class="floor"><div class="arc1"></div><div class="arc2"></div></div>'
- +WS.map(function(w,i){
+desk.innerHTML=WS.map(function(w,i){
   return '<article class="monitor" data-i="'+i+'" role="button" tabindex="0" '
     +'aria-label="Open '+w.label+'">'
     +'<div class="bezel"><div class="screen" id="scr-'+i+'">'
@@ -828,13 +803,7 @@ desk.innerHTML='<div class="floor"><div class="arc1"></div><div class="arc2"></d
     +'</div><div class="glare"></div><span class="led"></span></div>'
     +'<div class="reflect"></div>'
     +'</article>';
-}).join("")
- +'<div class="props">'
- +'<span class="prop mug"></span>'
- +'<span class="prop console"><i></i><i></i><i></i><i></i><b></b></span>'
- +'<span class="prop book"></span>'
- +'<span class="prop clockbox"><span class="t" id="clock">—</span><span class="z">AM<br>ET</span></span>'
- +'</div>';
+}).join("");
 var MONS=[].slice.call(desk.querySelectorAll(".monitor"));
 
 /* ---- iframe loading tiers ---- */
@@ -854,7 +823,7 @@ function loadFrame(i){
 loadFrame(0);                                   /* the hero, eager */
 function idleLoads(){
   [1,3,4,2].forEach(function(i,k){
-    setTimeout(function(){ loadFrame(i); }, 400*(k+1));
+    setTimeout(function(){ loadFrame(i); }, 260*(k+1));
   });
 }
 /* research's page loads with the others (real chrome in the center panel);
@@ -866,8 +835,16 @@ function wakeResearch(){
   if(f&&f.contentWindow){ woke=true;
     f.contentWindow.postMessage({soothWake:1},location.origin); }
 }
-if("requestIdleCallback" in window) requestIdleCallback(idleLoads,{timeout:2500});
-else setTimeout(idleLoads,2500);
+/* setTimeout is the GUARANTEE; requestIdleCallback is only an accelerator.
+   rIC does not fire in a backgrounded tab — same trap as requestAnimationFrame
+   — so a visitor who opens sooth.bet in a background tab, or any capture that
+   is not compositing, would find four of the five panels still showing their
+   holding label. On a landing page that reads as broken rather than as
+   lazy. Whichever fires first wins; idleLoads is guarded so it runs once. */
+var idleRan=false;
+function idleOnce(){ if(idleRan) return; idleRan=true; idleLoads(); }
+setTimeout(idleOnce,900);
+if("requestIdleCallback" in window) requestIdleCallback(idleOnce,{timeout:900});
 /* research (1.5MB payload) waits for first focus — its shimmer is honest chrome */
 
 /* ---- camera: one state, per-monitor inline transforms ---- */
@@ -985,16 +962,6 @@ desk.addEventListener("scroll",function(){
   },120);
 });
 
-/* ---- the real clock (a desk has one; ours tells the truth) ---- */
-function clock(){
-  var el=document.getElementById("clock"); if(!el) return;
-  var t=new Date().toLocaleTimeString("en-US",
-    {hour:"numeric",minute:"2-digit",hour12:true,timeZone:"America/New_York"});
-  el.textContent=t.replace(/\s?[AP]M$/,"");
-  var z=document.querySelector(".clockbox .z");
-  if(z) z.innerHTML=(/PM/.test(t)?"PM":"AM")+"<br>ET";
-}
-clock(); setInterval(clock,30000);
 
 /* ---- first paint: apply state from the URL, THEN enable the glide ---- */
 route();
