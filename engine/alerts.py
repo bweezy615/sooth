@@ -60,6 +60,7 @@ class Alert:
     market: str
     selection: str
     line: float | None        # spread/total line the price was quoted at
+    player: str               # player props only; "" for game lines
     kickoff: str              # ISO start time, "" when the capture row lacks it
     book: str
     from_price: int | None    # drift: earlier price. divergence: None.
@@ -72,17 +73,22 @@ class Alert:
         return asdict(self)
 
 
-def load_observations(pattern: str = "data/capture/*/*.jsonl") -> list[dict]:
-    """Every price we watched ourselves, oldest first."""
+def load_observations(pattern: str = "data/capture/*/*.jsonl",
+                      include_props: bool = False) -> list[dict]:
+    """Every price we watched ourselves, oldest first.
+
+    Player props are EXCLUDED BY DEFAULT and that default is deliberate. The
+    glob data/capture/*/*.jsonl also matches data/capture/mlb-props, and folding
+    prop quotes into the game-line pass published pitcher-strikeout prices under
+    "Books off the pack right now" and surfaced games that had finished a day
+    earlier. Both causes are now fixed — not_started reads commence_time, and
+    _series keys on player — but the fix is opt-in rather than automatic so no
+    existing caller changes behaviour by inheriting it. engine.alert_email and
+    the published moves.json both take the default and are untouched.
+    """
     rows: list[dict] = []
     for path in sorted(glob.glob(pattern)):
-        # Player props are a different market and a different page. The default
-        # glob is data/capture/*/*.jsonl, which also matches data/capture/
-        # mlb-props — so pitcher-strikeout quotes were being folded into the
-        # game-line consensus and published under "Books off the pack right
-        # now". They also carry no kickoff, so they slipped past the
-        # started-game guard below and surfaced games finished a day earlier.
-        if Path(path).parent.name.endswith("-props"):
+        if not include_props and Path(path).parent.name.endswith("-props"):
             continue
         with open(path) as fh:
             for line in fh:
@@ -105,25 +111,41 @@ def load_observations(pattern: str = "data/capture/*/*.jsonl") -> list[dict]:
     return rows
 
 
-def _series(rows: Iterable[dict]) -> dict[tuple, list[dict]]:
-    """One price history per (event, market, selection, LINE, book).
+def _series(rows: Iterable[dict],
+            by_player: bool = False) -> dict[tuple, list[dict]]:
+    """One price history per (event, market, selection, LINE, PLAYER, book).
 
     The line is part of the identity: -105 at total 47.5 and -115 at total
     48.5 are prices for different bets, and comparing them manufactures a
     juice move that never happened. A book re-posting at a new line starts a
     new series; the line move itself is visible on the board, not faked here.
+
+    The player is part of it for the same reason, and props make it load
+    bearing: both starting pitchers in one game have pitcher_strikeouts, so
+    without the player two opposing starters at the same line and book share a
+    key. On the data this was fixed against, 346 keys merged two or more
+    different players — Michael Lorenzen and Michael McGreevy, strikeouts over
+    3.5, DraftKings, among them. Comparing one pitcher's price to another's and
+    publishing the difference as movement is a fabricated alert carrying a real
+    player's name.
+
+    by_player is OPT-IN so the key shape does not change under callers that
+    never asked for props. engine.research and engine.timeline unpack a
+    five-tuple and only ever read game-line captures; they keep exactly the key
+    they had. Only the prop path asks for the sixth component.
     """
     out: dict[tuple, list[dict]] = defaultdict(list)
     for r in rows:
         key = (str(r.get("event_id")), str(r.get("market")),
-               str(r.get("selection")), str(r.get("line")), str(r.get("book")))
+               str(r.get("selection")), str(r.get("line")))
+        key += ((str(r.get("player")),) if by_player else ()) + (str(r.get("book")),)
         out[key].append(r)
     for k in out:
         out[k].sort(key=lambda r: str(r.get("observed_at", "")))
     return out
 
 
-def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Alert]:
+def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False) -> list[Alert]:
     """A book's own price moved between consecutive observations.
 
     Compares each observation to the one before it on the same series, so a
@@ -138,7 +160,9 @@ def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Ale
     rows = [r for r in rows if not_started(r, now)]
 
     alerts: list[Alert] = []
-    for (event_id, market, selection, line, book), obs in _series(rows).items():
+    for key, obs in _series(rows, by_player=by_player).items():
+        event_id, market, selection, line = key[:4]
+        player, book = (key[4], key[5]) if by_player else ("", key[4])
         for prev, cur in zip(obs, obs[1:]):
             delta = (implied(int(cur["price"])) - implied(int(prev["price"]))) * 100
             if abs(delta) < min_move:
@@ -149,7 +173,8 @@ def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Ale
                 kind="drift", sport=str(cur.get("sport", "")), event_id=event_id,
                 home=str(cur.get("home", "")), away=str(cur.get("away", "")),
                 market=market, selection=selection,
-                line=cur.get("line"), kickoff=str(cur.get("kickoff", "")),
+                line=cur.get("line"), player=str(cur.get("player") or ""),
+                kickoff=str(cur.get("kickoff") or cur.get("commence_time") or ""),
                 book=book,
                 from_price=int(prev["price"]), to_price=int(cur["price"]),
                 move_pts=round(delta, 2),
@@ -160,7 +185,7 @@ def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Ale
     return sorted(alerts, key=lambda a: -abs(a.move_pts))
 
 
-def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> list[Alert]:
+def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False) -> list[Alert]:
     """A book's latest price sits away from the cross-book consensus.
 
     Consensus is the median across books on the same selection at the latest
@@ -176,17 +201,25 @@ def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> lis
         if not not_started(r, now):
             continue
         key = (str(r.get("event_id")), str(r.get("market")),
-               str(r.get("selection")), str(r.get("line")), str(r.get("book")))
+               str(r.get("selection")), str(r.get("line")))
+        # The player belongs in the identity for the same reason the line does.
+        # Both starting pitchers in one game have pitcher_strikeouts, so without
+        # it two opposing starters at the same line pool into one "consensus"
+        # and each is reported as diverging from the other. That is a fabricated
+        # alert with a real player's name on it, and this is the function whose
+        # output gets published.
+        key += ((str(r.get("player")),) if by_player else ()) + (str(r.get("book")),)
         cur = latest.get(key)
         if cur is None or str(r.get("observed_at", "")) > str(cur.get("observed_at", "")):
             latest[key] = r
 
     by_selection: dict[tuple, list[dict]] = defaultdict(list)
-    for (event_id, market, selection, line, _), r in latest.items():
-        by_selection[(event_id, market, selection, line)].append(r)
+    for key, r in latest.items():
+        by_selection[key[:5] if by_player else key[:4]].append(r)
 
     alerts: list[Alert] = []
-    for (event_id, market, selection, line), quotes in by_selection.items():
+    for sel_key, quotes in by_selection.items():
+        event_id, market, selection, line = sel_key[:4]
         # Stale quotes may no longer be offered: only books observed within
         # two capture cycles of the freshest observation join the consensus.
         newest = max(str(q.get("observed_at", "")) for q in quotes)
@@ -211,7 +244,8 @@ def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE) -> lis
                 kind="divergence", sport=str(q.get("sport", "")), event_id=event_id,
                 home=str(q.get("home", "")), away=str(q.get("away", "")),
                 market=market, selection=selection,
-                line=q.get("line"), kickoff=str(q.get("kickoff", "")),
+                line=q.get("line"), player=str(q.get("player") or ""),
+                kickoff=str(q.get("kickoff") or q.get("commence_time") or ""),
                 book=str(q.get("book", "")),
                 from_price=None, to_price=int(q["price"]),
                 move_pts=round(delta, 2),
@@ -232,7 +266,13 @@ def not_started(row: dict, now: "datetime | None" = None) -> bool:
     is not an alert we can publish under the word "now".
     """
     now = now or datetime.now(timezone.utc)
-    kick = str(row.get("kickoff", "") or "")
+    # Game-line captures carry `kickoff`; player-prop captures carry
+    # `commence_time` for the same thing. Reading only the first silently
+    # excluded every prop row from drift and divergence — 3412 of 3697 rows on
+    # disk at the time this was fixed — which is why moves.json carried no prop
+    # markets at all. Nothing errored; the gate simply failed closed on all of
+    # them, which is the correct behaviour applied to the wrong field name.
+    kick = str(row.get("kickoff") or row.get("commence_time") or "")
     if not kick:
         return False
     try:
@@ -242,10 +282,11 @@ def not_started(row: dict, now: "datetime | None" = None) -> bool:
 
 
 def scan(pattern: str = "data/capture/*/*.jsonl",
-         min_move: float = DEFAULT_MIN_MOVE) -> dict[str, Any]:
-    rows = load_observations(pattern)
-    drift = find_drift(rows, min_move)
-    div = find_divergence(rows, min_move)
+         min_move: float = DEFAULT_MIN_MOVE,
+         include_props: bool = False) -> dict[str, Any]:
+    rows = load_observations(pattern, include_props=include_props)
+    drift = find_drift(rows, min_move, by_player=include_props)
+    div = find_divergence(rows, min_move, by_player=include_props)
     return {
         # Every other published feed carries generated_at and the page stamps
         # itself from them; moves.json was the one exception, so 2,000+ drift

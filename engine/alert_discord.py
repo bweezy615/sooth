@@ -196,6 +196,13 @@ _BANNED_RE = re.compile(
 # Picks carry their own footer. The edges footer talks about model
 # probabilities, and a pick is explicitly not a model output — saying so is the
 # entire reason a pick may be published when the model may not.
+MOVEMENT_FOOTER = (
+    "One book pricing away from what the others show for the same wager. A "
+    "measured gap between prices, not a prediction, and NOT GUARANTEED. "
+    "Consensus moves and books reprice — confirm at the book before you act. "
+    "Sooth is an odds analysis tool, not a sportsbook, and not betting advice. "
+    "21+. Problem gambling? Call 1-800-522-4700.")
+
 PICKS_FOOTER = (
     "Selected on price against the de-vigged consensus of the books pricing "
     "it — not a prediction, and NOT GUARANTEED. A better number is not a "
@@ -320,6 +327,87 @@ def analysed_props(path: str = PROPS, min_delta: float | None = None,
                 })
     out.sort(key=lambda p: p["delta_pts"], reverse=True)
     return out, skipped
+
+
+# ---- 1a. line movement: a book off the cross-book consensus -----------------
+
+# Points of implied probability a book must sit away from the consensus before
+# it is worth pushing. Detection fires at 1.5; posting at 2.0 keeps a channel
+# alert meaning something rather than narrating every tick.
+DEFAULT_MIN_MOVE = 2.0
+
+# Divergence only, never drift. Drift is "this book's own price moved since we
+# last looked", which is retrospective — it tells you that you beat the close,
+# not that there is anything to do now. Divergence is "this book is pricing away
+# from the rest of the market right now", which is still there when you read it.
+# engine.alert_email made the same call for the same reason.
+
+
+def movement_alerts(pattern: str = "data/capture/*/*.jsonl",
+                    min_move: float = DEFAULT_MIN_MOVE,
+                    props_only: bool = False) -> list[dict]:
+    """Books currently pricing away from the cross-book consensus.
+
+    This is a fact about prices, not a forecast: it says several books disagree
+    and names which one is out of line. No model is consulted and none could be
+    — PRODUCT.md forbids ranking a price product by model edge, and this ranks
+    it by how far a price sits from the other prices for the same wager.
+    """
+    from . import alerts as alerts_mod
+    scan = alerts_mod.scan(pattern, min_move=min_move, include_props=True)
+    out = [a for a in scan.get("divergence", []) if a.get("move_pts", 0) >= min_move]
+    if props_only:
+        out = [a for a in out if a.get("player")]
+    out.sort(key=lambda a: -a.get("move_pts", 0))
+
+    # One entry per WAGER, keeping the widest book. When several books are off
+    # the pack on the same side, listing each is three lines telling a reader
+    # one thing, and it pushes the next wager off the message. The best number
+    # is the actionable one; that others are also off the pack is implied by
+    # there being a consensus to be off.
+    best: dict[tuple, dict] = {}
+    for a in out:
+        k = (a.get("event_id"), a.get("market"), a.get("selection"),
+             str(a.get("line")), a.get("player"))
+        if k not in best:
+            best[k] = a
+    return list(best.values())
+
+
+def movement_key(a: dict) -> str:
+    return (f"{a.get('event_id')}|{a.get('market')}|{a.get('selection')}|"
+            f"{a.get('line')}|{a.get('player')}|{a.get('book')}")
+
+
+def _market_label(market: str) -> str:
+    return (market.replace("pitcher_", "").replace("batter_", "")
+            .replace("_", " ") or market)
+
+
+def render_movement(a: dict) -> dict:
+    """One alert. The claim is the gap between books, and nothing more."""
+    player = a.get("player") or ""
+    mkt = _market_label(a.get("market", ""))
+    if player:
+        title = f"{player} — {mkt} {a.get('selection')} {a.get('line')}"
+    else:
+        title = f"{a.get('away')} @ {a.get('home')} — {mkt}"
+    # One claim per line. The detail string from engine.alerts already names
+    # the book count, so restating the gap above it says the same thing twice.
+    parts = [f"**{a.get('book')} {_odds(a.get('to_price'))}** — "
+             f"**{a.get('move_pts', 0):.1f} pts** above the cross-book consensus"]
+    books = re.search(r"(\d+)-book", str(a.get("detail", "")))
+    if books:
+        parts[0] += f" of {books.group(1)} books"
+    if not player:
+        parts.append(f"On {a.get('selection')}")
+    if a.get("kickoff"):
+        parts.append(f"Starts {str(a['kickoff'])[:16].replace('T', ' ')} UTC")
+    parts.append("A gap between books, not a forecast. Prices move — check the book.")
+    desc = "\n".join(parts)
+    check_language(title + desc + MOVEMENT_FOOTER)
+    return {"title": title, "description": desc, "color": 0xE67E22,
+            "footer": {"text": MOVEMENT_FOOTER}}
 
 
 # ---- 1b. daily picks: selected on PRICE, not on the model -------------------
@@ -541,11 +629,12 @@ def main() -> int:
     # containing the literal string, and that string appears in job logs and in
     # any runbook quoting the command. Cheap to close the last place the word
     # survives on a path somebody reads.
-    ap.add_argument("--mode", choices=("prices", "picks", "edges"),
-                    default="prices",
-                    help="prices: rank by best available price against "
-                         "consensus fair (the live product). edges: DIAGNOSTIC "
-                         "ONLY — ranks by model delta and can never post.")
+    ap.add_argument("--mode", choices=("movement", "prices", "picks", "edges"),
+                    default="movement",
+                    help="movement: books currently off the cross-book "
+                         "consensus (the live product). prices: best available "
+                         "price against consensus fair. edges: DIAGNOSTIC ONLY "
+                         "— ranks by model delta and can never post.")
     ap.add_argument("--top", type=int, default=None,
                     help="how many best prices to post")
     ap.add_argument("--no-gloss", action="store_true",
@@ -555,6 +644,8 @@ def main() -> int:
     ap.add_argument("--min-delta", type=float, default=None,
                     help="tighten the delta floor of markets already in "
                          "POSTABLE; cannot make an unlisted market postable")
+    ap.add_argument("--min-move", type=float, default=DEFAULT_MIN_MOVE,
+                    help="points of implied probability off consensus to post")
     ap.add_argument("--min-obs", type=int, default=None,
                     help="tighten the evidence floor of markets already in "
                          "POSTABLE; cannot make an unlisted market postable")
@@ -565,6 +656,36 @@ def main() -> int:
     a = ap.parse_args()
 
     sent = load_sent()
+
+    if a.mode == "movement":
+        # free = props only; pro = props + game lines. The tiering our user
+        # set, and it falls out of one flag rather than two code paths.
+        found = movement_alerts(min_move=a.min_move, props_only=(a.tier != "pro"))
+        fresh = [x for x in found if a.dry_run or movement_key(x) not in sent]
+        fresh = fresh[:(a.top if a.top is not None else a.max)]
+        if not fresh:
+            print(f"no book is {a.min_move:.1f}+ pts off consensus on an "
+                  f"unstarted game — posting nothing.")
+            return 0
+        embeds = [render_movement(x) for x in fresh]
+        header = ("**Off the pack.** Books currently pricing away from the "
+                  "cross-book consensus on games that have not started. A gap "
+                  "between prices, not a forecast.")
+        print(f"movement: {len(fresh)}  widest: {fresh[0]['move_pts']:.1f} pts")
+        if a.dry_run:
+            print(json.dumps({"content": header, "embeds": embeds}, indent=1))
+            return 0
+        env = ("SOOTH_DISCORD_WEBHOOK_PRO" if a.tier == "pro"
+               else "SOOTH_DISCORD_WEBHOOK_FREE")
+        webhook = os.environ.get(env, "")
+        if not webhook:
+            print(f"{env} not set — Discord not configured yet, nothing posted.")
+            return 0
+        if post(webhook, header, embeds):
+            save_sent(sent | {movement_key(x) for x in fresh})
+            print(f"posted {len(embeds)} movement alerts to {a.tier}")
+            return 0
+        return 1
 
     if a.mode in ("prices", "picks"):
         found = daily_picks(a.props, a.min_obs if a.min_obs is not None else 10)
