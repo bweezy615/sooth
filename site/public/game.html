@@ -213,9 +213,10 @@ function render(hit,moves,research,timeline){
       body:JSON.stringify(body)})
       .then(function(r){return r.json().then(function(j){j._capped=(r.status===429);return j;});})
       .then(function(j){
-        out.innerHTML=D.answer(j.answer||j.error||"No answer.")
-          +(j._capped&&j.upgrade?'<p style="margin-top:8px"><a href="'+D.esc(j.upgrade)
-            +'" style="color:var(--brand);font:600 11px var(--mono);letter-spacing:.08em">GO PRO \u2192 UNLIMITED ANALYSES</a></p>':"");
+        /* The cap used to render an upgrade link here. There is no paid tier
+           to upgrade to, so a capped answer now just says so \u2014 api/ask.js no
+           longer returns an `upgrade` field at all. */
+        out.innerHTML=D.answer(j.answer||j.error||"No answer.");
       })
       .catch(function(){out.textContent="The analyst is unavailable right now.";});
   }

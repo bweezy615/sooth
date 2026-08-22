@@ -247,20 +247,18 @@ function matchGame(q){
   });});
   return hit;
 }
-/* everything is free right now — say so plainly. The capped-state code below
-   stays wired so a future paywall needs an API change, not a UI rebuild. */
+/* everything is free — say so plainly. The daily cap is switched off in
+   api/ask.js (CAP_ACTIVE=false); this card renders only if it is ever switched
+   back on, and it no longer offers an upgrade, because there isn't one. */
 document.getElementById("anterms").textContent="FREE \u00b7 NO LIMITS \u00b7 NO SIGNUP";
 function cappedCard(){
   return '<div class="ans-card" style="max-width:720px">'
-    +'<span class="tl" style="display:block;margin-bottom:8px">TODAY\'S FREE ANALYSES ARE USED</span>'
-    +'<p style="color:var(--ink2);font-size:13px;line-height:1.6;margin:0 0 12px;max-width:56ch">'
-    +'Three free reads a day keeps the analyzer open to everyone. Sooth Pro is '
-    +'unlimited — every analysis, every instrument, $9.99/mo, cancel anytime.</p>'
-    +'<a href="/subscribe" style="display:inline-block;font:700 12px var(--sans);'
-    +'color:var(--g0);background:linear-gradient(180deg,#3BE3B6,#22BE93);'
-    +'padding:10px 16px;border-radius:var(--r);box-shadow:inset 0 1px 0 '
-    +'rgba(255,255,255,.35),0 3px 8px -2px rgba(0,0,0,.6)">GO PRO \u2192</a>'
-    +'<span class="tl" style="margin-left:12px">OR COME BACK TOMORROW</span></div>';
+    +'<span class="tl" style="display:block;margin-bottom:8px">TODAY\'S ANALYSES ARE USED</span>'
+    +'<p style="color:var(--ink2);font-size:13px;line-height:1.6;margin:0;max-width:56ch">'
+    +'A daily cap keeps the analyzer open to everyone and the inference bill '
+    +'survivable. There is nothing to buy to skip it. Come back tomorrow \u2014 or '
+    +'read the same numbers on the board right now, which are the numbers the '
+    +'analyst was reading anyway.</p></div>';
 }
 function runAnalyze(q){
   var out=document.getElementById("anout");

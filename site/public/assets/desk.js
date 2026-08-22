@@ -62,7 +62,6 @@ function header(page){
       +(n.newcomer?' class="hd-new" title="New to betting? Start here"':'')
       +(n.key===page?' aria-current="page"':'')+'>'+n.label+'</a>';}).join("")
     +'</nav>'
-    +'<a class="hd-cta" href="/subscribe">PRO</a>'
     +'</div>'
     +'<div class="hd-r2" id="sportRail" role="tablist" aria-label="Sports"></div>'
     +'</div></header>';
@@ -122,11 +121,11 @@ function sportRail(board,active,onpick){
 var EMBEDDED=/[?&]embed=1/.test(location.search);
 
 /* Navigate keeping the embed contract: inside a monitor, every hop stays
-   chromeless — EXCEPT the desk itself and the money flow, which always
-   escape to the top window. Checkout does not belong inside a 920px frame,
-   and "/" inside a monitor would nest the desk inside itself. */
+   chromeless — EXCEPT the desk itself, which always escapes to the top
+   window, because "/" inside a monitor would nest the desk inside itself.
+   (/subscribe used to escape too; there is no checkout to escape to now.) */
 function escapes(url){
-  return url==="/" || url.indexOf("/subscribe")===0;
+  return url==="/";
 }
 function go(url){
   if(EMBEDDED && url.indexOf("://")<0){
@@ -490,18 +489,13 @@ function feedRow(i,hl,sub,meta,href){
 
 
 /* ---------- pick-engine helpers ---------- */
-/* entitlement probe; resolves {pro:bool}. Never throws, fails to not-pro. */
+/* entitlement probe; resolves {pro:bool}. Never throws, fails to not-pro.
+   Nothing grants that entitlement any more — the checkout was removed on
+   2026-08-22 — so this answers false for everyone. Kept because /api/picks
+   still honours a comped cookie and this is the only way to read one. */
 function me(){
   return fetch("/api/me",{cache:"no-store"}).then(function(r){return r.json();})
     .catch(function(){return {pro:false};});
-}
-/* flip the static PRO cta to a state chip once we know the answer */
-function proBadge(isPro){
-  var el=document.querySelector(".hd-cta"); if(!el||!isPro) return;
-  el.textContent="PRO ACTIVE"; el.setAttribute("aria-label","Sooth Pro active");
-  el.style.background="linear-gradient(180deg,#1E2A26,#15201C)";
-  el.style.color="var(--up)";
-  el.style.boxShadow="inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(52,211,153,.35)";
 }
 /* a CLV chip: green beat the close, red lost to it, dim n/a with a reason */
 function clvChip(v,reason){
@@ -568,7 +562,7 @@ setInterval(function(){
   if(document.querySelector("[data-ago]")) tick();
 },15000);
 
-window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,proBadge:proBadge,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
+window.Desk={esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

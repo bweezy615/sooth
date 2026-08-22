@@ -71,7 +71,11 @@ assert.equal(res.statusCode, 200, "teaser must be 200, never 401");
 assert.equal(res.body.locked, true);
 assert.equal(res.body.game_count, 2);
 assert.equal(res.body.top_divergence_matchup, "NO at DET", "names only, from row 0");
-assert.equal(res.body.upgrade, "/subscribe");
+// The paid tier was removed on 2026-08-22. A locked teaser must not point at
+// a checkout that no longer exists, and must not imply one is coming.
+assert.equal(res.body.upgrade, undefined, "no upgrade funnel: there is nothing to buy");
+assert(!/Pro|subscribe|\$9/.test(JSON.stringify(res.body)),
+  "the teaser must not sell anything");
 assert(!JSON.stringify(res.body).includes('"pick"'), "teaser must not leak a pick");
 assert.equal(res.headers["cache-control"], "no-store");
 

@@ -7,7 +7,7 @@
 <meta name="description" content="Our full model slate, sealed before kickoff under a public Merkle commitment and graded in public against the closing line — losses included. Never sold as winning.">
 <link rel="canonical" href="https://sooth.bet/picks">
 <meta property="og:title" content="Sooth Pick Engine — sealed weekly, graded in public">
-<meta property="og:description" content="Every pick sealed before kickoff, graded against the close after, losses styled like wins. Pro buys timing, not wins.">
+<meta property="og:description" content="Every game on the slate, sealed before kickoff and graded against the close after. Losses styled like wins. Free.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sooth.bet/picks">
 <meta property="og:image" content="https://sooth.bet/og.png">
@@ -61,8 +61,8 @@
     <span class="tl">EVERY GAME · <b>NO SELECTION RULE</b> · TIMESTAMPED BY GITHUB</span>
     <span class="tl" style="margin-left:auto">MODEL RECORD: LOSES TO THE CLOSE — <a href="/record" style="color:var(--mut)">49.5% ATS</a></span></div>
   <p class="note scr-creed">Every game, both models, sealed under a public Merkle commitment
-    before kickoff and graded after — losses styled exactly like wins. Pro buys the slate at
-    seal time; everyone gets it free at first kickoff. Not advice; nothing here claims to win.</p>
+    before kickoff and graded after — losses styled exactly like wins. The slate opens to
+    everyone at first kickoff. Not advice; nothing here claims to win.</p>
   <div class="ph">
     <span class="tl">SOOTH PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC · NEVER SOLD AS WINNING</span>
     <h1>Every game on the slate. No selection rule.</h1>
@@ -81,11 +81,11 @@
       cherry-picking — under a Merkle commitment anchored to a public GitHub timestamp you
       can verify at <a href="/verify">/verify</a>. After the games close, we grade ourselves
       against the closing line, from price sources we captured ourselves, and publish every
-      result — losses styled exactly like wins. <b>Pro buys you the slate at seal time
-      instead of after kickoff</b> and the full desk instrumentation. Alerts are not part
-      of it — the seal and the grade are emailed free to anyone who asks at
-      <a href="/alerts">/alerts</a>. Pro does not
-      buy you wins; nothing here does. A season is ~285 games — not enough to statistically
+      result — losses styled exactly like wins. <b>All of it is free.</b> There is no paid
+      tier, no account, and nothing to buy — the slate stays sealed until the first
+      kickoff because that is what makes the timestamp mean anything, not because we are
+      charging for the wait. The seal and the grade are emailed to anyone who asks at
+      <a href="/alerts">/alerts</a>. A season is ~285 games — not enough to statistically
       separate a 52% picker from a coin. We say that out loud because the ledger would out
       us if we didn't. If someone sells you certainty, ask for their merkle root.</p>
   </div>
@@ -180,12 +180,19 @@ function lockedView(t){
         +'<td><span class="mask">▓.▓▓</span></td><td><span class="mask">▓▓▓ ▓▓</span></td>'
         +'<td><span class="mask">▓▓▓</span></td></tr>';}).join("")
     +'</tbody></table></div>';
+  /* No upsell here any more: there is nothing to buy. The lock is the proof
+     mechanism, not a price — say exactly that, and point at the one thing a
+     reader can actually do with the wait, which is check the root now and
+     hold us to it later. */
   $("cta").innerHTML='<div style="padding:18px 0 4px">'
-    +'<a class="lockcta" href="'+D.esc(t.upgrade||"/subscribe")+'">SEE THE SLATE AT SEAL TIME — GO PRO</a>'
-    +'<p class="note" style="margin-top:10px">The picks above already exist and are '
-    +'already sealed — the root is public and timestamped. You are buying the look '
-    +'before kickoff, not a different set of picks after the fact. At first kickoff '
-    +'the whole slate unlocks for everyone, free.</p></div>';
+    +'<a class="lockcta" href="/verify">VERIFY THE SEALED ROOT NOW &rarr;</a>'
+    +'<p class="note" style="margin-top:10px">These picks already exist and are '
+    +'already sealed — the root is public and timestamped by a GitHub commit, not '
+    +'by us. They open to everyone at the first kickoff, free; nothing unlocks them '
+    +'earlier and there is no version of this you can pay for. The wait is what makes '
+    +'the timestamp worth anything. Verify the root now, then check it against the '
+    +'slate when it opens. <a href="/alerts" style="color:var(--mut)">Get told when '
+    +'it does &rarr;</a></p></div>';
 }
 
 /* ---------- open/pro: the full instrument ---------- */
@@ -305,7 +312,6 @@ function graded(){
 }
 
 /* ---------- boot ---------- */
-D.me().then(function(m){ D.proBadge(m.pro); });
 var SRC=new URLSearchParams(location.search).get("mock")||"/api/picks";
 fetch(SRC,{cache:"no-store"})
   .then(function(r){return r.json();})

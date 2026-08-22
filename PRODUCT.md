@@ -81,54 +81,49 @@ good.
 
 ## Business model
 
-**We sell access and instrumentation. We never sell outcomes.** That sentence
-is the whole rule, and everything below is what it permits and forbids.
+**There isn't one yet, and the site now says so in one sentence: everything is
+free.** The paid tier was removed on 2026-08-22 — checkout endpoints deleted,
+`/subscribe` gone, the PRO button out of the nav. No account, no signup, no
+tier, nothing to buy anywhere on sooth.bet.
 
-Two paid things:
+This is a correction, not a pivot. The paywall had been disarmed for weeks
+while every surface still sold it: the nav had a PRO button, `/picks` said
+"Pro buys you the slate at seal time", `/subscribe` listed a $9.99 price and a
+feature comparison, the analyzer's capped state offered an upgrade, and
+`/api/picks` returned an `upgrade` funnel — all pointing at a purchase the
+product had already decided not to make. A reader could not get a straight
+answer to "what is this and what does it cost", which is a worse problem than
+being free.
 
-1. **Tools and data.** The full board, more books, historical closing-line
-   lookups, exports.
-2. **The sealed weekly slate.** The pick engine publishes a slate sealed at
-   seal time, which unlocks free for everyone at first kickoff, plus per-pick
-   instrumentation. Pro buys *timing*, not accuracy.
+**What replaced it, exactly:**
 
-**Alerts are not one of them.** Email — the sealed root, the graded result,
-and price divergence at a threshold the subscriber sets — is free, opt-in, and
-open to anyone at `/alerts`. Two reasons, and the second is the load-bearing
-one. Retention: a product with no reason to return has no retention, and
-putting the only reason to return behind a paywall on a $0 tier means nobody
-ever returns. Consent: paying us and wanting mail from us are different
-decisions, so buying Pro subscribes you to nothing and subscribing costs
-nothing. This section previously listed alerts under both paid tiers, and
-`/subscribe` sold them as a Pro feature; that was corrected on 2026-08-22 when
-the alert list was actually built.
+- The sealed slate still locks until first kickoff. That is the **proof
+  mechanism, not a price** — a commitment nobody can read early is what makes
+  the timestamp worth anything. `/picks` now says that instead of selling it,
+  and the locked view's call to action is "verify the sealed root now" rather
+  than "go pro".
+- Alerts are free and opt-in at `/alerts`.
+- The analyzer's daily cap exists to keep the inference bill survivable, not
+  to sell a way around it. It is currently switched off.
 
-The second one is the reason this section was rewritten on 2026-08-21. The
-document previously said "explicitly not picks" while the product shipped a
-paid pick surface, and the two were reconciled by an amendment appended to a
-contradiction. Stated properly instead:
-
-Selling a **prediction** carries a performance claim and therefore a
-substantiation burden. Selling **early access to a prediction whose losing
-record is published on the page selling it** does not — because no claim of
-profitability is made anywhere, and the disqualifying figure is not in the
-small print, it is the lead. /picks opens with "our model measurably loses to
-the closing market — 49.5% ATS over 2,608 graded games, below the 52.4%
-break-even" and tells the reader not to buy it expecting profit.
-
-That is the line, and it is narrow. The moment any surface implies the slate
-wins money, this becomes the thing the old wording was written to prevent:
-dishonest, and legally exposed. Time decay is what keeps the paywall off the
-trust surface — the proof is always free, because the slate is free the moment
-it can be graded.
+**When money comes back, these are the constraints it inherits.** *We sell
+access and instrumentation. We never sell outcomes.* Selling a **prediction**
+carries a performance claim and a substantiation burden. Selling **early
+access to a prediction whose losing record is published on the page selling
+it** does not — no claim of profitability is made anywhere, and the
+disqualifying figure is the lead, not the small print. Time decay is what
+keeps a paywall off the trust surface: the proof is always free, because the
+slate is free the moment it can be graded. Anything that cannot satisfy all of
+that does not ship.
 
 ### What the pick engine depends on, and what would break it
 
-Charging for a slate from a model whose published record is 49.5% against a
-52.4% break-even is the most exposed thing this product does. The exposure is
-not legal — the record leads the page that sells it, so no claim needs
-substantiating. It is an **honesty** exposure, and it holds only while
-"sealed, graded in public, Pro buys timing" stays literally true.
+Publishing a slate from a model whose record is 49.5% against a 52.4%
+break-even is the most exposed thing this product does — and it was more
+exposed still while we were charging for it. Nothing is charged for now, which
+removes the legal edge of the problem entirely and leaves the one that
+actually matters: it is an **honesty** exposure, and it holds only while
+"sealed, graded in public, losses published like wins" stays literally true.
 
 The specific failure is predictable, so it is written here rather than left to
 be noticed: **the pressure will be to stop publishing the weeks that went

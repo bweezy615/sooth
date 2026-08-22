@@ -63,10 +63,12 @@ function teaser(meta) {
     merkle_root: meta.merkle_root,
     unlocks_at: meta.earliest_kickoff,
     top_divergence_matchup: meta.top_divergence_matchup || null,
-    upgrade: "/subscribe",
-    note: "The full slate is sealed and Pro-only until first kickoff, then " +
-          "free to everyone. Pro buys timing, not wins - our model's " +
-          "published record is at /record.",
+    // No `upgrade` field any more: the checkout was removed on 2026-08-22 and
+    // there is nothing to sell. The lock is the proof mechanism, not a price.
+    note: "The full slate is sealed until the first kickoff, then free to " +
+          "everyone. Nothing unlocks it earlier and there is no paid tier. " +
+          "The root is public now (/verify); our model's published record " +
+          "is at /record.",
   };
 }
 

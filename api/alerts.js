@@ -1,6 +1,6 @@
 // Alert subscriptions — signup, double opt-in confirm, preferences, unsubscribe.
 //
-// Sibling of checkout.js: a Vercel Node serverless function, zero deps. Three
+// A Vercel Node serverless function, zero deps. Three
 // jobs behind one path, because they are one resource:
 //
 //   POST /api/alerts            {email, kinds[], min_pts}  -> mails a confirm link

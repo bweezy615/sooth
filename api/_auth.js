@@ -1,10 +1,16 @@
-// Shared auth helpers for Sooth Pro. Zero deps (Node's built-in crypto). The
+// Shared HMAC token helpers. Zero deps (Node's built-in crypto). The
 // leading underscore keeps Vercel from turning this into an HTTP endpoint.
 //
 // A token is  base64url(JSON payload) + "." + HMAC-SHA256(body, AUTH_SECRET).
-// Stateless: no DB. Entitlement is a signed cookie set only after Stripe
-// confirms payment (see session-verify.js). Fails CLOSED — with no AUTH_SECRET,
-// verify() always returns null, so Pro is never granted by accident.
+// Used by api/alerts.js for confirm/unsubscribe links (and mirrored in
+// engine/alert_token.py so links minted in GitHub Actions verify here).
+// Stateless: no DB. Fails CLOSED — with no AUTH_SECRET, verify() always
+// returns null, so no token is ever honoured by accident.
+//
+// It also still reads the sooth_pro entitlement cookie for api/picks.js. The
+// checkout that used to mint that cookie was deleted on 2026-08-22 when the
+// paid tier was removed, so in practice nothing sets it and readPro() answers
+// null for everyone; the path stays only as a comp mechanism.
 const crypto = require("crypto");
 
 function secret() { return process.env.AUTH_SECRET || ""; }

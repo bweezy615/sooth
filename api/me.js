@@ -1,9 +1,11 @@
-// Read-only entitlement probe: does this browser hold a valid Sooth Pro cookie?
+// Read-only entitlement probe: does this browser hold a valid sooth_pro cookie?
 //
-// It's how the site shows Pro state, and how we confirm a checkout actually
-// granted access — hit it after subscribing and it flips to {"pro":true}. No
-// secrets, no writes, no Stripe call: it just verifies the signed sooth_pro
+// No secrets, no writes, no Stripe call: it just verifies the signed sooth_pro
 // cookie (fails closed to pro:false without AUTH_SECRET or a valid cookie).
+//
+// Since the paid tier was removed on 2026-08-22 nothing mints that cookie, so
+// this answers {"pro":false} for every visitor. Kept because api/picks.js
+// still honours a comped cookie and this is the only way to read one back.
 const auth = require("./_auth.js");
 
 module.exports = function handler(req, res) {

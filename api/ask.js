@@ -276,8 +276,8 @@ module.exports = async function handler(req, res) {
   if (!gate.allowed) {
     res.statusCode = 429;
     return res.end(JSON.stringify({
-      error: "That's today's free reads used up. Sooth Pro is unlimited — $9.99/mo.",
-      upgrade: "/subscribe",
+      error: "That's today's reads used up. There's no paid tier to skip it — " +
+             "come back tomorrow, or read the same numbers on the board now.",
     }));
   }
   var askCookie = gate.cookie;
