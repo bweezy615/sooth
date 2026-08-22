@@ -73,7 +73,7 @@
 (function(){
 "use strict";
 var D=window.Desk, busy=false;
-D.mount("");
+D.mount("ask");
 D.load("/data/board.json").then(function(r){
   D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
 function $(id){return document.getElementById(id);}

@@ -88,6 +88,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
   "use strict";
@@ -112,7 +113,8 @@
     return '<tr>'
       +'<td class="l"><span class="pick">'+D.esc(g.pick)
         +'<small>best at '+D.esc(g.best_book)+' · '+D.esc(g.n_books)+' books</small></span></td>'
-      +'<td class="l dim">'+D.esc(g.away)+' at '+D.esc(g.home)+'</td>'
+      +'<td class="l dim">'+window.Crest.team(g.away,{size:14})+' at '
+        +window.Crest.team(g.home,{size:14})+'</td>'
       +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
       +'<td>'+pct+'%<span class="confbar" aria-hidden="true"><i style="width:'+pct+'%"></i></span></td>'
       +'<td class="up">'+D.am(g.best_price)+'</td>'

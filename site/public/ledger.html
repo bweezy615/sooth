@@ -20,6 +20,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- desk.css first so this page's own rules below still win on any clash;
+     it is here for the shared header and footer that desk.js injects. -->
+<link rel="stylesheet" href="/assets/desk.css">
 <style>
 :root{--bg:#0A0B0D;--panel:#101216;--panel-2:#1B1E24;--line:rgba(255,255,255,.07);
 --line-2:rgba(255,255,255,.13);
@@ -95,15 +98,6 @@ letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
 </style>
 </head>
 <body>
-<header><nav>
-  <a class="brand" href="/"><span class="dot"></span>Sooth</a>
-  <span class="spacer"></span>
-  <a class="l" href="/">Market</a>
-  <a class="l" href="/props">Props</a>
-  <a class="l" href="/edges">Movement</a>
-  <a class="l" href="/research">Research</a>
-  <a class="l" href="/trust">Ledger</a>
-</nav></header>
 <div class="wrap"><div class="prose">
 
 <h1>Ledger</h1>
@@ -137,19 +131,8 @@ the <a href="/methodology">methodology</a> — including the part where our
 backtest loses to the closing market.</p>
 
 </div></div>
-<footer><div class="wrap">
-<p><strong>Entertainment and analysis only. We do not accept, place, or
-facilitate wagers</strong>, and we hold no customer funds. Not affiliated with
-the NFL or any sportsbook.</p>
-<p>Past performance does not indicate future results. Our published backtest
-shows a loss against the closing market. Nothing here is a recommendation to
-bet. 21+, where lawful.</p>
-<p>If gambling is causing harm, the NCPG helpline is
-<strong>1-800-522-4700</strong>, available 24/7.</p>
-<p style="margin-top:16px"><a href="/methodology">Methodology</a> ·
-<a href="/verify">Verify</a> · <a href="/ledger">Ledger</a> ·
-<a href="/disclaimers">Disclaimers</a></p>
-</div></footer>
+<script src="/assets/desk.js"></script>
+<script>window.Desk.mount("");</script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>

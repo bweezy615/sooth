@@ -57,6 +57,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk;
@@ -116,14 +117,14 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
       .forEach(function(e){
         var s1=e.sides[0],s2=e.sides[1];
         var tot=D.implied(s1.best_price)+D.implied(s2.best_price);
-        if(tot<1) rows.push({hl:D.esc(e.away)+" at "+D.esc(e.home)
+        if(tot<1) rows.push({hl:window.Crest.team(e.away,{size:14})+" at "+window.Crest.team(e.home,{size:14})
           +'<span class="pts n up">+'+((1-tot)*100).toFixed(2)+'% LOCK</span>',
           sub:D.bk(s1.best_book)+" "+D.am(s1.best_price)+" on "+D.esc(s1.name)
           +" · "+D.bk(s2.best_book)+" "+D.am(s2.best_price)+" on "+D.esc(s2.name),
           meta:bd.label+" · MONEYLINE",sort:(1-tot)*100});});});
   if(m.ok) (m.data.middles||[]).filter(function(x){return upcoming(x.starts);})
     .forEach(function(x){
-      rows.push({hl:D.esc(x.away)+" at "+D.esc(x.home)
+      rows.push({hl:window.Crest.team(x.away,{size:14})+" at "+window.Crest.team(x.home,{size:14})
         +'<span class="pts n am" style="color:var(--amber)">WINDOW '+D.esc(String(x.width))+'</span>',
         sub:D.bk(x.low_book)+" "+D.esc(x.low_label)+" ("+D.am(x.low_price)+") · "
         +D.bk(x.high_book)+" "+D.esc(x.high_label)+" ("+D.am(x.high_price)
@@ -156,7 +157,7 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
     $("mv").innerHTML=all.map(function(a,i){
       var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
       return D.feedRow(i,
-        D.esc(a.away)+' <span style="color:var(--dim)">/</span> '+D.esc(a.home)
+        window.Crest.team(a.away,{size:14})+' <span style="color:var(--dim)">/</span> '+window.Crest.team(a.home,{size:14})
         +'<span class="pts n '+cls+'">'+D.pts(a.move_pts,2)+' PTS</span>',
         D.esc(name(a,a.detail)),
         '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span><br>'
