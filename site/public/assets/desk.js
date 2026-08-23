@@ -193,7 +193,7 @@ function mount(page){
   /* Before anything else, and in embedded mode too: a monitor on a phone has
      the same 760px table problem the standalone page does. */
   watchTables();
-  /* Inside an Infinite Desk monitor (?embed=1) the page is one screen of a
+  /* Inside a desk monitor (?embed=1) the page is one screen of a
      larger instrument: no site header, no footer — the desk carries both. */
   if(EMBEDDED){
     document.documentElement.classList.add("embedded");
