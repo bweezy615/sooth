@@ -153,28 +153,31 @@
      No blur, no filter, no extra compositing layers: all of it is background
      and box-shadow on elements that already existed, so the 560ms glide keeps
      running on transform and opacity alone. */
+  /* THE HOUSING IS A RENDER, NOT A GRADIENT.
+     It used to be linear-gradients plus box-shadows plus a skewed overlay
+     standing in for glass — which reads as exactly what it is, a stylesheet
+     drawing hardware. assets/panel.png is a real Cycles render (see
+     tools/render_panel.py): one bezel, orthographic and dead-on so the CSS 3D
+     transforms still supply all the perspective, with the screen aperture
+     rendered as ALPHA so the live page shows through it.
+
+     Padding is in PERCENT because it has to track the aperture baked into the
+     image (94.5% x 91.7% of the frame). Hard pixel padding would drift the
+     moment the render is regenerated at a different margin. */
   .bezel{position:absolute;left:0;top:0;width:952px;height:712px;
-    background:
-      linear-gradient(180deg,#243039 0%,#131C24 3%,#0B1116 45%,#070B0F 100%);
-    border:1px solid rgba(170,205,215,.16);border-radius:5px;padding:16px;
+    padding:4.13% 2.75%;
+    background:url("/assets/panel.png") center/100% 100% no-repeat;
     box-shadow:
-      inset 0 1px 0 rgba(226,246,250,.16),
-      inset 0 2px 5px -3px rgba(226,246,250,.30),
-      inset 0 -1px 0 rgba(0,0,0,.85),
-      inset 0 0 0 1px rgba(0,0,0,.45),
       0 60px 120px -40px rgba(0,0,0,.98),
       0 18px 46px -14px rgba(0,0,0,.85),
       0 3px 10px -3px rgba(0,0,0,.7)}
-  /* the lit rim from the coin: a teal hairline across the top edge, brightest
-     on the panel you are actually at */
-  .bezel::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;
-    z-index:2;pointer-events:none;opacity:.38;transition:opacity var(--glide);
-    background:linear-gradient(90deg,transparent,rgba(45,212,167,.45) 20%,
-      rgba(91,240,212,.8) 50%,rgba(45,212,167,.45) 80%,transparent)}
-  .monitor.is-focused .bezel::before{opacity:1}
+  /* The teal rim is baked into the render, so the CSS one is gone. What stays
+     in CSS is the FOCUS response, which the image cannot do: the focused panel
+     lifts out of the room. */
+  .monitor.is-focused .bezel{filter:brightness(1.18) saturate(1.05)}
   /* the screen sits INSIDE the housing: darker than the frame, with the
      corners falling away — the single strongest cue that this is a display */
-  .screen{position:relative;width:920px;height:680px;background:#04070A;
+  .screen{position:relative;width:100%;height:100%;background:#04070A;
     border-radius:2px;overflow:hidden;
     box-shadow:
       inset 0 0 0 1px rgba(0,0,0,.9),
