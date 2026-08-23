@@ -19,6 +19,13 @@
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
+  /* The band is desk.css's; this page supplies only its plate. assets/field.jpg
+     is the low view across the wet floor and the shards — the same room, with
+     the seal deliberately out of frame. /tools is neither the liquid half nor
+     the frozen half of the system: it is arithmetic. Wearing the seal plate
+     would assert something about a slate this page has nothing to do with. */
+  .ice-band{background-image:url("/assets/field.jpg")}
+
   .wrap-page{max-width:1000px;margin:0 auto;padding:0 24px 60px}
   .page-head{padding:38px 0 24px}
   .page-head h1{font:700 clamp(23px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 8px}
@@ -72,6 +79,8 @@
        surface at the same viewport */
     .wrap-page{padding:0 14px 40px}
     .page-head{padding:26px 0 18px}
+    /* clears the band, which desk.css drops to 150px on a phone */
+    .page-head{padding-top:168px}
     .grid{gap:12px}
     .card{padding:16px 15px}
     /* 36px is a mouse target. A finger gets 44, and the paired fields stop
@@ -83,6 +92,9 @@
 </head>
 <body data-page="tools">
 <a class="skip" href="#main">Skip to main content</a>
+<!-- Decorative only; carries no information the type does not. -->
+<div class="ice-band" aria-hidden="true"></div>
+
 <main id="main" class="wrap-page">
 <header class="page-head">
   <h1>The board's arithmetic, by hand.</h1>

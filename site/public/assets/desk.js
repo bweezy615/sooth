@@ -231,6 +231,12 @@ function mount(page){
   }
   document.body.insertAdjacentHTML("afterbegin",header(page));
   document.body.insertAdjacentHTML("beforeend",footer()+tabs());
+  /* HERE, not at script load. iceBand() measures .hd, and .hd is created on
+     the line above — called any earlier it finds no header, returns, and the
+     band silently stays pinned to the top of the page. Note the embedded
+     branch returns before this: inside a desk monitor there is no header to
+     measure and no masthead to decorate. */
+  iceBand();
 }
 
 /* The bar that keeps the phone reading as an app. It lives on index.html
@@ -634,6 +640,23 @@ function populations(el){
   }).catch(function(){ el.innerHTML='<p class="note">Figures unavailable.</p>'; });
 }
 
+/* ---------- ice band ----------
+   The masthead plate starts where the CONTENT starts, not where the page does.
+   The site header is sticky and its height is set by the breakpoint — measured
+   95px at 1440 and 175px at 375 — so any constant top is wrong somewhere. At
+   375 a band pinned to the top rendered entirely behind the nav and the page
+   showed no ice at all.
+   Decoration, so it fails safe in both directions: no band or no header and it
+   does nothing, and with scripting off the band sits at the top of the page,
+   which is where it already renders correctly on desktop. */
+function iceBand(){
+  var band=document.querySelector(".ice-band"),hd=document.querySelector(".hd");
+  if(!band||!hd) return;
+  function place(){ band.style.top=hd.offsetHeight+"px"; }
+  place();
+  addEventListener("resize",place);
+}
+
 /* ---------- ago ticker ---------- */
 function tick(){
   [].forEach.call(document.querySelectorAll("[data-ago]"),function(el){
@@ -645,5 +668,5 @@ setInterval(function(){
 
 window.Desk={tabs:tabs,esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
   bk:bk,mount:mount,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
-  connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
+  connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick,iceBand:iceBand};
 })();

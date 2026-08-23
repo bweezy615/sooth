@@ -89,6 +89,18 @@ VIEWS = {
     # block occupies roughly the right 45% and the left stays dark room.
     "seal": dict(out="seal.png", res=(1800, 460), samples=110,
                  cam=(1.15, -7.00, 1.45), lens=44, pitch=90.0, yaw=0.0),
+    # field — 4.74:1, camera almost on the floor, looking ACROSS the wet
+    # surface at the broken-off shards with the block's base cut by the right
+    # edge. No seal in frame at all.
+    #
+    # /tools and /predictor are neither the liquid half nor the frozen half of
+    # the system: they are instruments. Giving them the seal plate would have
+    # said "this is the sealed slate" on two pages that are not it, and three
+    # pages carrying one identical picture reads as a template. This is the
+    # same room and the same ice with the subject deliberately absent — the
+    # reflection is what carries it.
+    "field": dict(out="field.png", res=(1800, 380), samples=110,
+                  cam=(-1.60, -5.20, 0.30), lens=40, pitch=88.5, yaw=-10.0),
 }
 VIEW = VIEWS[os.environ.get("SOOTH_HERO_VIEW", "hero")]
 

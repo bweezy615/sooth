@@ -238,6 +238,52 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
              0 2px 8px -2px rgba(0,0,0,.55)}
 .radar-side{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05));}
 
+/* ============ ICE BAND — the render, as a masthead ============
+   Rule 1 said teal is the only hue and rule 2 made frost mean sealed, but for
+   a long time both existed only as borders and chips: the ice was a vocabulary
+   the site talked in and never a thing anyone could see. This is the shared
+   mount for the rendered plates (tools/render_hero.py), taught once here
+   rather than copied into every page that wants one.
+
+   IMPORTANT — this is BRAND, not STATE. .frost still means "sealed": it is a
+   claim about a specific object at a specific time. A band is just the room
+   the product lives in, which is why /tools and /predictor can carry one
+   without asserting anything about a slate.
+
+   Each page supplies its own plate and nothing else:
+       .ice-band{background-image:url("/assets/field.jpg")}
+
+   Absolutely positioned, so it costs the page NO HEIGHT — the masthead type
+   sits on it rather than being pushed below it. On an instrument the numbers
+   do not move down to make room for a picture. Its top is set from the
+   measured header by Desk.iceBand(); see the note there.
+
+   left/right:0, never width:100vw — 100vw includes the scrollbar, which is
+   how full-bleed bands hand a page a horizontal scrollbar on desktop. */
+.ice-band{position:absolute;top:0;left:0;right:0;height:330px;z-index:0;
+  pointer-events:none;
+  background:var(--g0) 68% 46%/cover no-repeat}
+.ice-band::after{content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(97deg, rgba(6,8,10,.95) 0%, rgba(6,8,10,.82) 30%,
+      rgba(6,8,10,.34) 56%, rgba(6,8,10,.06) 76%, transparent 88%),
+    linear-gradient(to bottom, rgba(6,8,10,.52) 0%, rgba(6,8,10,.16) 26%,
+      rgba(6,8,10,.84) 78%, var(--g0) 100%)}
+/* the page's own content has to sit above it */
+main{position:relative;z-index:1}
+/* ON A PHONE IT STOPS BEING A BACKDROP AND BECOMES A MASTHEAD.
+   Desktop has a wide dark left for type to sit in; a phone does not — the
+   column is the full width, so the heading lands on the lit face of the ice.
+   Measured there: small mono caps in --mut over bright ice is about 1.5:1,
+   and no scrim fixes that without darkening the plate until there is no point
+   having it. So the plate takes its own band and the heading starts below it.
+   Each page pays for the clearance with its own padding-top — which must be
+   declared AFTER the rule it overrides, because a media query adds no
+   specificity and a `padding:` shorthand later in a file will win. */
+@media (max-width:720px){
+  .ice-band{height:150px;background-position:70% 44%}
+}
+
 /* ============ FROST — the sealed state ============
    Rule 2: committed-but-not-yet-revealed is rendered as ice. The chip below
    is the atom; .frosted is the same treatment applied to a whole surface.

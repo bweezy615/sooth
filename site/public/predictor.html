@@ -17,6 +17,19 @@
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
+  /* Same shared band, same plate as /tools: this page reports the model next to
+     the market, which is an instrument rather than a sealed object. The seal
+     plate belongs to /picks. */
+  .ice-band{background-image:url("/assets/field.jpg")}
+  /* Stops where .ph does (measured: 157px below the header), instead of the
+     shared 330px. Immediately below the masthead sits the "Read this first"
+     disclosure — the paragraph stating that our model is measured WORSE than
+     the closing market — and its background is rgba(226,169,74,.1), which is
+     effectively transparent. At the shared height that text was reading over
+     lit ice. Of every paragraph on this site, that is the one that must never
+     be hard to read. */
+  .ice-band{height:155px}
+
   .ph{padding:36px 0 4px;max-width:72ch}
   .ph h1{font:700 clamp(23px,3.4vw,30px)/1.15 var(--sans);letter-spacing:-.02em;margin:10px 0 0}
   .ph p{color:var(--mut);font-size:13.5px;margin:8px 0 0;max-width:62ch;line-height:1.6}
@@ -61,6 +74,8 @@
   .itab .state a{color:var(--brand)}
   @media (max-width:720px){
     .ph{padding:24px 0 2px}
+    /* clears the band, which desk.css drops to 150px on a phone */
+    .ph{padding-top:168px}
     /* a 34px select is a mouse target. Fingers get 44. */
     .bar{margin:14px 0 10px;gap:10px}
     .bar select{min-height:44px;width:100%;margin-left:0}
@@ -71,6 +86,9 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to the predictor</a>
+<!-- Decorative only; carries no information the type does not. -->
+<div class="ice-band" aria-hidden="true"></div>
+
 <main class="wrap" id="main">
 
   <div class="ph">
@@ -92,8 +110,13 @@
   <p class="noplay" style="margin-top:2px">This page shows the model's projection next to
     the market. The full <b>Pick Engine</b> — the whole slate sealed before kickoff,
     divergence-ranked, graded in public after — lives at
-    <a href="/picks" style="color:var(--brand)">/picks</a>. Pro sees it at seal time;
-    everyone sees it free at kickoff.</p>
+    <a href="/picks" style="color:var(--brand)">/picks</a>. It is free, and it opens to
+    everyone the moment it is sealed.</p>
+  <!-- Was "Pro sees it at seal time; everyone sees it free at kickoff." Both
+       halves had become false: the paid tier was deleted on 2026-08-22 and the
+       time gate went with it. It described a product that no longer exists AND
+       undersold the one that does. -->
+
 
   <div class="bar">
     <span class="tl" id="rstats"></span>
