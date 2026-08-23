@@ -637,6 +637,27 @@ function graded(){
     }).catch(function(){ /* no graded slate yet — the section stays hidden */ });
 }
 
+/* Layer live best prices onto a sealed slate. Never rejects: a missing or
+   malformed best_lines.json leaves the columns as the dots they already are,
+   which is the correct empty state, not an error. */
+function fillBestPrices(s){
+  var games=(s&&s.games)||[];
+  if(!games.some(function(g){return g.best_price==null;})) return Promise.resolve();
+  return fetch("/data/best_lines.json",{cache:"no-store"})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(bl){
+      var by={};
+      ((bl&&bl.games)||[]).forEach(function(b){ by[b.game_id]=b; });
+      games.forEach(function(g){
+        var b=by[g.game_id]; if(!b) return;
+        if(g.best_price==null){ g.best_price=b.best_price; g.best_book=b.best_book; }
+        if(g.edge_pts==null) g.edge_pts=b.edge_pts;
+        if(g.n_books==null) g.n_books=b.n_books;
+      });
+    })
+    .catch(function(){});
+}
+
 /* ---------- boot ---------- */
 var SRC=new URLSearchParams(location.search).get("mock")||"/api/picks";
 /* The slate's own height before the slate exists. Ten rows is a reservation,
@@ -653,11 +674,24 @@ fetch(SRC,{cache:"no-store"})
       settled();
       return;
     }
-    D.land($("board"),function(){
-      if(s.locked){ lockedView(s); }
-      else { window.__slate=s; openView(s); }
+    /* BEST PRICE / EDGE PTS are LIVE shopping numbers, not sealed ones.
+       weekly.py joins them from best_lines.json at seal time, but a slate
+       seals weeks before the books post the game — 2026-W01-nfl sealed 17
+       days out, when no NFL was priced, so all sixteen rows froze with the
+       honest nulls that join is documented to write. best_lines.json has
+       filled in since, and the sealed blob can never be regenerated without
+       breaking the Merkle root.
+       So the join belongs at READ time. That is also the truer place for it:
+       the best available price is a number that moves, and one baked in at
+       seal time would be stale even where it existed. Only ever fills a null
+       — a sealed value, if some future slate carries one, still wins. */
+    fillBestPrices(s).then(function(){
+      D.land($("board"),function(){
+        if(s.locked){ lockedView(s); }
+        else { window.__slate=s; openView(s); }
+      });
+      graded();
     });
-    graded();
   })
   .catch(function(){
     $("board").className="itab";
