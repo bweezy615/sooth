@@ -10,10 +10,15 @@
 <meta property="og:description" content="Ask about any game. Every figure is computed from published data, our model's losing record included. Analysis, never picks.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sooth.bet/">
-<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:image" content="https://sooth.bet/og.jpg">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<!-- The hero plate is the largest contentful paint on the desktop page, and it
+     is referenced from a stylesheet, so it is not discovered until the CSS is
+     parsed. The media query keeps phones — which render the app shell and
+     never draw it — from requesting it at all. -->
+<link rel="preload" as="image" href="/assets/hero.jpg" media="(min-width:860px)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,10 +53,18 @@
     --gut:34px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html{height:100%}
+  /* THE PAGE SCROLLS NOW, AND ONLY JUST.
+     It used to be one locked viewport — body was a flex column with
+     overflow:hidden and the desk took whatever height was left over. The hero
+     render needs room that a single screen cannot give it without shrinking
+     the desk, so the page is now exactly two stops: the hero, then the desk
+     with its own full viewport. Nothing below the second screen except what
+     was already at the bottom of the first one.
+     The flex column moved down to .deskwrap, which is where #stagewrap's
+     flex:1 now resolves against. */
   body{color:var(--ink);font:14px/1.5 var(--sans);
-    -webkit-font-smoothing:antialiased;overflow:hidden;
-    display:flex;flex-direction:column;
+    -webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden;
     background:
       radial-gradient(90% 46% at 50% 34%, rgba(45,212,167,.05), transparent 70%),
       /* the floor is gone, so the light it used to bounce is carried by this
@@ -67,6 +80,15 @@
   .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
     clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  /* NO `html{scroll-behavior:smooth}` HERE, deliberately.
+     It looks like the tidy way to animate the hop from the hero to the desk,
+     and on this page it was measurably worse than nothing: with that property
+     set, EVERY scrolling API stopped moving the document in the engine this
+     was tested in — scrollIntoView, scrollTo, and even a plain
+     `scrollingElement.scrollTop = n` assignment, which is not supposed to be
+     affected at all. Remove the property and all three work again.
+     The smooth request is made in JS instead, where it can be checked and
+     landed by hand if the engine ignored it. See toDesk(). */
 
   /* ---- editorial header, per the reference frame ----
      The wordmark is the promo's: lowercase, tight, cool white, .bet in the one
@@ -86,6 +108,90 @@
   /* a real measure, not a 150-character line ruled across the whole screen */
   .strap{padding:9px var(--gut) 0;font:400 13px/1.55 var(--sans);color:var(--ink2);
     flex:none;max-width:calc(62ch + var(--gut))}
+
+  /* ============================================================
+     THE HERO — assets/hero.jpg, from tools/render_hero.py.
+
+     Three passes of CSS could not make the top of this page stop looking
+     drawn, because it WAS drawn: gradients standing in for light. This is a
+     photograph of the product's own metaphor instead — the seal frozen in a
+     block of ice, one teal source behind it, wet black floor. It carries no
+     numbers, no dates and no teams, so it can never go stale.
+
+     The render was framed around this copy rather than the other way round:
+     the block sits right of centre and the left third of the plate is
+     deliberately its darkest, emptiest area. That is why the scrim below is
+     as light as it is — the image was built to be typed on.
+     ============================================================ */
+  .hero{position:relative;isolation:isolate;
+    height:min(82vh,860px);min-height:540px;
+    display:flex;flex-direction:column;padding-bottom:18px}
+  /* The plate. z-index:-2 rather than a wrapper div so the hero's children
+     need no stacking rules of their own. */
+  .hero::before{content:"";position:absolute;inset:0;z-index:-2;
+    background:var(--bg) center right/cover no-repeat}
+  /* Two jobs, one layer:
+       1. a LEFT-weighted scrim, so the copy has ground under it without
+          dimming the block on the right — a flat overlay would have taken
+          the render's contrast away to rescue text that is nowhere near it;
+       2. a fade to --bg at the bottom edge, so the plate ends in the page
+          rather than on a horizon line across the viewport. */
+  .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:
+      linear-gradient(101deg, rgba(6,8,10,.94) 0%, rgba(6,8,10,.80) 26%,
+        rgba(6,8,10,.34) 50%, rgba(6,8,10,.05) 68%, transparent 80%),
+      linear-gradient(to bottom, transparent 58%, rgba(6,8,10,.72) 86%, var(--bg) 100%)}
+
+  .hero .brand-row{padding-top:26px}
+  .hero-copy{margin:auto 0;padding:0 var(--gut);max-width:700px}
+  .hero h1{font:600 clamp(31px,3.5vw,53px)/1.05 var(--sans);letter-spacing:-.028em;
+    color:var(--ink);text-wrap:balance;margin-bottom:16px}
+  /* The one phrase the positioning turns on gets the one hue. This page has
+     said the wrong thing about what the product IS twice; making the true
+     answer the brightest four words on it is deliberate. */
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero .strap{padding:0;max-width:58ch;font-size:14px;color:var(--ink2)}
+
+  /* The primary action, per PRODUCT.md: ask the analyzer about a game.
+     It is an ordinary GET form to /ask, so it works with scripting off and
+     the answer has a real URL. */
+  .hero-ask{display:flex;align-items:stretch;gap:0;margin-top:22px;max-width:520px;
+    background:rgba(10,15,20,.72);border:1px solid var(--hair);border-radius:3px;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    transition:border-color 140ms ease,box-shadow 140ms ease}
+  .hero-ask:focus-within{border-color:rgba(45,212,167,.55);
+    box-shadow:0 0 0 3px rgba(45,212,167,.12)}
+  .hero-ask input{flex:1;min-width:0;background:none;border:0;color:var(--ink);
+    font:400 14px var(--sans);padding:13px 15px}
+  /* --mut, not --dim. --dim (#546268) on this ground is about 3:1, which is
+     under the 4.5:1 small-text floor — and a placeholder is the only label
+     this field has once it is on screen. */
+  .hero-ask input::placeholder{color:var(--mut)}
+  .hero-ask input:focus{outline:none}
+  .hero-ask button{flex:none;padding:0 18px;color:var(--accent);
+    font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;
+    border-left:1px solid var(--hair);transition:background 140ms ease}
+  .hero-ask button:hover{background:rgba(45,212,167,.09)}
+  .hero-fine{margin-top:11px;font:600 10px var(--mono);letter-spacing:.16em;
+    text-transform:uppercase;color:var(--mut)}
+
+  /* Says the page continues, and is a real control rather than a decoration:
+     it scrolls the desk into view. Without it the desk reads as the whole
+     page having ended, because the hero fills the screen. */
+  .hero-cue{align-self:flex-start;margin-left:var(--gut);display:flex;
+    align-items:center;gap:10px;padding:6px 0;color:var(--mut);
+    transition:color 140ms ease}
+  .hero-cue:hover{color:var(--ink)}
+  .hero-cue .tl{color:inherit}
+  .hero-cue i{width:7px;height:7px;border-right:1px solid currentColor;
+    border-bottom:1px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);
+    animation:cue 2.4s ease-in-out infinite}
+  @keyframes cue{0%,100%{transform:rotate(45deg) translate(-2px,-2px)}
+    50%{transform:rotate(45deg) translate(1px,1px)}}
+
+  /* The desk keeps a full viewport to itself. This is the flex column body
+     used to be — #stagewrap's flex:1 resolves here now. */
+  .deskwrap{height:100vh;display:flex;flex-direction:column}
 
   /* ---- workspace labels ----
      These five ARE the promo's capability list. Same idiom: mono caps, wide
@@ -527,12 +633,26 @@
     border:3px solid transparent;border-top-color:currentColor}
   .m-ti[data-i="alerts"]{border-radius:50% 50% 3px 3px;border-bottom-width:4px}
 
+  /* The plate is named ONLY here. Below 860px the hero is display:none and
+     the phone shell takes the page, so gating the URL behind the same
+     breakpoint means a phone never requests a 2000px render it will not draw
+     — belt and braces alongside display:none, which already suppresses the
+     fetch in every engine we support. */
+  @media (min-width:860px){
+    .hero::before{background-image:url("/assets/hero.jpg")}
+  }
+
   @media (max-width:859px){
     body{overflow:auto}
     /* the desk and all its furniture stand down; the phone home takes over */
     #mob{display:block}
-    .brand-row,.strap,.ws-labels,#stagewrap,.caption,.rail{display:none}
-    body>footer.ft{display:none}
+    /* Two elements now, because the desktop page is two sections. Hiding
+       .deskwrap is also what hides footer.ft — the compliance footer moved
+       inside it, so the old `body>footer.ft` selector stopped matching. That
+       matters more than it looks: #mob carries its own byte-identical copy of
+       that language, and a phone showing both would be the only surface on the
+       site with the disclaimer twice. */
+    .hero,.deskwrap{display:none}
     /* The desk's own header used to have phone overrides here. They sat below
        the display:none above them and could never apply, so they went with
        the rest of the dead weight. */
@@ -653,14 +773,41 @@
   </nav>
 </div>
 
-<div class="brand-row">
-  <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
-  <span class="kicker">Market intelligence. Honest edge.</span>
-</div>
-<p class="strap">Ask about any game and get research built only from numbers you can check —
-  every price we track with the vig stripped out, and our own record, losses included.
-  Analysis, not picks.</p>
+<section class="hero">
+  <div class="brand-row">
+    <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
+    <span class="kicker">Market intelligence. Honest edge.</span>
+  </div>
 
+  <div class="hero-copy">
+    <!-- The ratified line, the same one that heads /market. It has been
+         rewritten toward price comparison twice and corrected twice; it says
+         what the product IS, and the board, the vig-stripping and the eleven
+         books are evidence for it, not the claim itself. -->
+    <h1>The best sports betting <em>research analyzer</em> on the market.</h1>
+    <p class="strap">Ask about any game and get research built only from numbers you can check —
+      every price we track with the vig stripped out, and our own record, losses included.
+      Analysis, not picks.</p>
+
+    <form class="hero-ask" action="/ask" method="get">
+      <label class="vh" for="heroQ">Ask the analyst about a game</label>
+      <input name="q" id="heroQ" type="text" autocomplete="off"
+        placeholder="Ask about any game on tonight&rsquo;s board">
+      <button type="submit">Ask</button>
+    </form>
+    <p class="hero-fine">Free &middot; No account &middot; Nothing to buy</p>
+  </div>
+
+  <!-- NOT "the desk". The desk is the internal name for the five-panel
+       metaphor and it was explicitly struck from the visible copy; a visitor
+       did not come here looking for furniture. This says what is actually
+       below the fold: five real pages, running. -->
+  <button class="hero-cue" type="button" id="cue">
+    <span class="tl">See it live</span><i aria-hidden="true"></i>
+  </button>
+</section>
+
+<div class="deskwrap">
 <nav class="ws-labels" aria-label="Workspaces">
   <button data-ws="0">MARKET BOARD</button>
   <button data-ws="1">ANALYZER</button>
@@ -698,6 +845,7 @@
   <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
   <a href="/disclaimers">Disclaimers</a>
 </footer>
+</div><!-- /.deskwrap -->
 
 <script src="/assets/crest.js"></script>
 <script>
@@ -1106,11 +1254,47 @@ function toHash(f){
   else location.hash=WS[f].hash;
   if(f<0) route();                 /* pushState fires no hashchange */
 }
+/* The desk is a screen further down now, so anything that focuses a workspace
+   has to bring it into view or the click appears to do nothing at all: the
+   label is in the hero, the panel that moves is below the fold.
+   `booted` keeps the very first application instant — a direct load of
+   /#picks should ARRIVE at the desk, not animate down to it. */
+var booted=false;
+/* Ask for a smooth scroll, then MAKE SURE IT HAPPENED.
+   Smooth scrolling is the kind of thing that is either beautiful or silently
+   absent, and there is no feature test for it: engines accept
+   {behavior:"smooth"} and then decline to move. Measured here, the request
+   moved the document zero pixels while {behavior:"auto"} moved it the full
+   738. A navigation control that does nothing is the worst outcome available,
+   so the animation is requested optimistically and, if the document has not
+   begun moving one frame-ish later, it is simply put where it belongs. */
+function toDesk(instant){
+  var wrap=document.querySelector(".deskwrap");
+  if(!wrap) return;
+  var se=document.scrollingElement||document.documentElement;
+  var from=se.scrollTop;
+  var target=Math.round(wrap.getBoundingClientRect().top+from);
+  if(Math.abs(from-target)<4) return;               /* already parked there */
+  if(instant||matchMedia("(prefers-reduced-motion:reduce)").matches){
+    se.scrollTop=target; return;
+  }
+  wrap.scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(function(){
+    if(Math.abs(se.scrollTop-from)<2) se.scrollTop=target;
+  },90);
+}
+function reveal(){
+  if(MOBILE.matches) return;
+  /* A direct load of /#picks should ARRIVE at the desk, not animate down to
+     it from a hero the visitor never asked to see. */
+  toDesk(!booted);
+}
 function route(){
   var h=location.hash.replace("#","");
   var f=-1;
   WS.forEach(function(w,i){ if(w.hash===h) f=i; });
   focus=f; apply();
+  if(f>=0) reveal();
 }
 addEventListener("hashchange",route);
 addEventListener("popstate",route);
@@ -1165,8 +1349,15 @@ desk.addEventListener("scroll",function(){
 });
 
 
+/* The cue is a button, not an anchor to #deskwrap: every hash on this page is
+   a workspace route, so an anchor would have handed route() a hash it does not
+   know and dropped the desk back to overview on the way down. */
+var cue=document.getElementById("cue");
+if(cue) cue.addEventListener("click",function(){ toDesk(false); });
+
 /* ---- first paint: apply state from the URL, THEN enable the glide ---- */
 route();
+booted=true;
 if(MOBILE.matches&&focus<0){ focus=0; paintChrome(); loadFrame(1); }
 requestAnimationFrame(function(){
   requestAnimationFrame(function(){ document.body.classList.add("desk-ready"); });

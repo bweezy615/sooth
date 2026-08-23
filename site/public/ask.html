@@ -8,7 +8,7 @@
 <meta property="og:title" content="Sooth — Analyst">
 <meta property="og:description" content="Run a bet past the live board. Reads the math, not the winner.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="https://sooth.bet/ask">
 <link rel="canonical" href="https://sooth.bet/ask">
 <link rel="manifest" href="/manifest.json">
@@ -252,6 +252,23 @@ $("go").addEventListener("click",ask);
 $("q").addEventListener("keydown",function(e){
   if((e.metaKey||e.ctrlKey)&&e.key==="Enter") ask();});
 setCount();
+
+/* ?q= — ARRIVE WITH THE QUESTION ALREADY ASKED.
+   Two surfaces have been sending one here for a while: the phone home's ask
+   field (#mAsk) and now the desktop hero's, both plain GET forms posting q to
+   this page. Nothing on this page had ever read it. Someone typed a question,
+   pressed the arrow, and landed on an empty analyzer with their words gone —
+   the site's stated primary action, silently failing at the last step.
+   It auto-runs rather than only prefilling: the visitor already pressed submit,
+   so making them press Ask again would be asking twice for one intent.
+   maxlength is enforced here too, because a URL is not a textarea. */
+try{
+  var seed=new URLSearchParams(location.search).get("q");
+  if(seed){
+    seed=seed.trim().slice(0,500);
+    if(seed){ $("q").value=seed; setCount(); ask(); }
+  }
+}catch(e){}
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>

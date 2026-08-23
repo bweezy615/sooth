@@ -3,74 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
-<!-- Source for /assets/og.png. Rendered at 1200x630 and screenshotted; it reuses
-     the real desk.css tokens/type so the share card IS the brand, not new art.
+<title>sooth.bet share card source</title>
+<!-- SOURCE FOR /og.png — the image every shared link shows.
 
-     IN SYNC AS OF 2026-08-21. og.png was regenerated from this file. Editing
-     it still changes NOTHING anyone sees until someone re-renders and commits
-     the PNG:
+     Regenerate (works from the filesystem, no server needed):
 
-       chrome --headless --window-size=1200,630 \
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+         --headless --disable-gpu --hide-scrollbars \
+         --window-size=1200,630 --virtual-time-budget=6000 \
          --screenshot=site/public/og.png \
-         http://localhost:PORT/assets/og-source.html
+         "file://$PWD/site/public/assets/og-source.html?base=file://$PWD/site/public"
 
-     It must be served over HTTP, not opened as a file:// URL — the absolute
-     /assets/desk.css path does not resolve from the filesystem and the card
-     renders as unstyled serif text on white.
+     Editing this file changes NOTHING anyone sees until the PNG is
+     re-rendered and committed.
 
-     Regenerating is a visible change to the most-shared asset on the site, so
-     it is a decision rather than a chore. Check the render before committing:
-     this template predates the desk system and has already gone stale once by
-     referencing classes a later migration deleted. -->
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/desk.css">
+     WHAT CHANGED ON 2026-08-23, and why it mattered more than the art
+     -----------------------------------------------------------------
+     This card read "Better prices. Every book." — the price-comparison
+     positioning that has been corrected twice, sitting on the single most
+     distributed asset the site has. Every link posted anywhere said the
+     product was a price comparison tool. The board and the de-vigged fair
+     line are EVIDENCE for the analysis; they are not the claim. The headline
+     is now the ratified line, the same one that heads / and /market.
+
+     It also now shows the hero render rather than type on flat black, which
+     is the whole point of having made the render.
+
+     TWO og.png FILES USED TO EXIST. This file's own comment said it was the
+     source for /assets/og.png, while every meta tag on the site points at
+     /og.png — so regenerating the card updated a copy nobody ever fetched.
+     The unreferenced /assets/og.png was deleted; /og.png is the only one.
+
+     PATHS: the plate is resolved at runtime from ?base= so this renders from
+     a file:// URL. The previous version linked /assets/desk.css absolutely,
+     which does not resolve off the filesystem and made the card come out as
+     unstyled serif text on white unless it was served over HTTP. Tokens are
+     restated inline below instead — they are copies of desk.css's values and
+     must be kept in step with it. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@600&display=swap" rel="stylesheet">
 <style>
-  /* legacy token aliases — this template predates the desk system */
-  :root{--bg:var(--g0);--pos:var(--up);--ink-2:var(--ink2);--muted:var(--mut);
-    --line:var(--hair);--num:var(--mono)}
-</style>
-<style>
-  html,body{margin:0}
-  .og{width:1200px;height:630px;background:var(--bg);position:relative;
-    padding:76px 84px;display:flex;flex-direction:column;justify-content:space-between;
-    overflow:hidden;border-bottom:3px solid var(--pos)}
-  .brand{display:flex;align-items:center;gap:16px;position:relative}
-  .brand svg{width:52px;height:52px}
-  .brand b{font-size:38px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
-  .brand .tld{color:var(--pos)}
-  .mid{position:relative}
-  .mid h1{font-size:108px;line-height:.98;letter-spacing:-.03em;margin:0;color:var(--ink);font-weight:800}
-  .mid h1 .g{color:var(--pos);display:block}
-  .mid p{font-family:var(--num);font-size:26px;color:var(--ink-2);margin:26px 0 0;letter-spacing:-.01em}
-  .foot{display:flex;align-items:center;gap:16px;position:relative}
-  /* .chip and .pos lived in sooth.css, which was retired with the desk
-     migration — this template kept referencing them and the pill silently
-     rendered as bare text. Restated here from live desk.css tokens so the
-     card does not depend on classes that no longer exist. */
-  .foot .chip{font-family:var(--num);font-size:20px;padding:8px 18px;
-    border:1px solid var(--line);border-radius:999px;color:var(--ink-2)}
-  .foot .chip.pos{color:var(--pos);border-color:rgba(52,211,153,.35)}
-  .foot .plus{font-family:var(--num);font-size:20px;color:var(--muted);letter-spacing:.04em}
+  /* from assets/desk.css — FROZEN MARKET */
+  :root{--bg:#06080A;--ink:#F0F5F6;--ink2:#AEBDC2;--mut:#7E8D93;--accent:#2DD4A7}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{position:relative;background:var(--bg);color:var(--ink);
+    font:400 14px/1.5 'Archivo',-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  #plate{position:absolute;inset:0;z-index:0;
+    background:var(--bg) center right/cover no-repeat}
+  /* Left-weighted, like the live hero: it gives the copy ground without
+     dimming the block on the right. A flat overlay would flatten the render
+     to rescue text that is nowhere near it. */
+  #scrim{position:absolute;inset:0;z-index:1;
+    background:
+      linear-gradient(99deg, rgba(6,8,10,.96) 0%, rgba(6,8,10,.86) 30%,
+        rgba(6,8,10,.42) 54%, rgba(6,8,10,.06) 72%, transparent 84%),
+      linear-gradient(to bottom, transparent 62%, rgba(6,8,10,.55) 100%)}
+  /* right:520 keeps the measure clear of the block. At 430 the headline ran
+     across the ice and the two teal words landed on the brightest part of it —
+     teal on teal. The copy column has to end where the subject begins. */
+  #copy{position:absolute;z-index:2;left:64px;top:58px;right:520px;bottom:58px;
+    display:flex;flex-direction:column}
+  .no{display:inline-flex;align-items:center;gap:10px}
+  .no .pip{width:9px;height:9px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 12px rgba(45,212,167,.6)}
+  .no b{font:600 23px/1 'Archivo',sans-serif;letter-spacing:-.02em}
+  .no b i{font-style:normal;color:var(--accent)}
+  h1{margin:auto 0 0;font:600 44px/1.06 'Archivo',sans-serif;
+    letter-spacing:-.03em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--accent)}
+  p{margin-top:18px;font:400 17px/1.45 'Archivo',sans-serif;color:var(--ink2);
+    max-width:30ch}
+  /* Nothing important below y=560: X, Slack and iMessage overlay a domain
+     label along the bottom edge of the card. */
+  .fine{margin-top:22px;font:600 11px 'IBM Plex Mono',monospace;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 </style>
 </head>
 <body>
-<div class="og">
-  <div class="brand">
-    <svg viewBox="0 0 32 32" aria-hidden="true">
-      <circle cx="16" cy="16" r="13" fill="none" stroke="#101820" stroke-width="2.5"/>
-      <path d="M5.4 21 A11 11 0 0 1 20.2 5.6" fill="none" stroke="#2DD4A7" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="16" cy="16" r="2.6" fill="#2DD4A7"/>
-    </svg>
-    <b>sooth<span class="tld">.bet</span></b>
-  </div>
-  <div class="mid">
-    <h1>Better prices.<span class="g">Every book.</span></h1>
-    <p>The best available price on every side, against the de-vigged fair line.</p>
-  </div>
-  <div class="foot">
-    <span class="chip pos">tools &amp; data, not picks</span>
-    <span class="plus">21+ · where lawful</span>
-  </div>
+<div id="plate"></div>
+<div id="scrim"></div>
+<div id="copy">
+  <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
+  <h1>The best sports betting <em>research analyzer</em> on the market.</h1>
+  <p>Ask about any game. Every figure computed from published prices — our own
+    losing record included.</p>
+  <span class="fine">Free &middot; No account &middot; Analysis, never picks</span>
 </div>
+<script>
+  var base = new URLSearchParams(location.search).get("base") || "";
+  document.getElementById("plate").style.backgroundImage =
+    'url("' + base + '/assets/hero.jpg")';
+</script>
 </body>
 </html>

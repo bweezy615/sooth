@@ -133,6 +133,18 @@ def ice_field():
 
     Seeded so the render is reproducible — an asset that comes out different
     every run cannot be regenerated to match what is already deployed.
+
+    NOTE ON THE COMMITTED PLATE. Every argument of transform_apply defaults to
+    True, so the original `transform_apply(scale=True, rotation=True)` below
+    also applied LOCATION, resetting each slab's origin and collapsing all
+    eleven into one clump at the world origin instead of spreading them along
+    the horizon. The same mistake showed up unmistakably in tools/render_hero.py,
+    where it threw the bubbles and the seal out of the ice and onto the floor,
+    which is how it was finally caught here.
+    room.jpg is used blurred to 34px at 30% opacity as pure coloured bounce, so
+    the clump was invisible and the deployed plate is not wrong to look at — but
+    the script did not reproduce it. Fixed below, and the plate re-rendered, so
+    the two agree again.
     """
     random.seed(7)
     mat = ice_material()
@@ -143,7 +155,7 @@ def ice_field():
         c = bpy.context.object
         c.scale = (random.uniform(0.7, 1.9), random.uniform(0.6, 1.5), h)
         c.rotation_euler = (0, 0, random.uniform(0, 3.14))
-        bpy.ops.object.transform_apply(scale=True, rotation=True)
+        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
         # Bevel then subdivide: the facets are what catch the rim light.
         bev = c.modifiers.new("b", "BEVEL")
         bev.width = random.uniform(0.04, 0.12)
