@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sooth — The Desk</title>
-<meta name="description" content="One desk, five instruments: the market board, the analyzer, research, the pick engine, and the proof ledger. The best sports betting research analyzer on the market — no picks sold as winning.">
+<title>sooth.bet — sports betting research and analysis</title>
+<meta name="description" content="The best sports betting research analyzer on the market. Ask about any game and get an answer built only from published numbers — prices with the vig stripped out, our model's full record, and a weekly slate sealed before kickoff. Analysis, never picks.">
 <link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="Sooth — The Desk">
-<meta property="og:description" content="Sit down at one continuous intelligence desk: market board, analyzer, research, pick engine, proof ledger. Every figure computed, every slate sealed.">
+<meta property="og:title" content="sooth.bet — sports betting research and analysis">
+<meta property="og:description" content="Ask about any game. Every figure is computed from published data, our model's losing record included. Analysis, never picks.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sooth.bet/">
 <meta property="og:image" content="https://sooth.bet/og.png">
@@ -627,8 +627,9 @@
   <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
   <span class="kicker">Market intelligence. Honest edge.</span>
 </div>
-<p class="strap">Every book's price on one board, the vig stripped out, and a weekly slate
-  sealed before kickoff and graded in public after.</p>
+<p class="strap">Ask about any game and get research built only from numbers you can check —
+  every price we track with the vig stripped out, and our own record, losses included.
+  Analysis, not picks.</p>
 
 <nav class="ws-labels" aria-label="Workspaces">
   <button data-ws="0">MARKET BOARD</button>
@@ -1062,8 +1063,11 @@ function paintChrome(){
   });
   document.getElementById("prev").hidden=!(focus>0);
   document.getElementById("next").hidden=!(focus>=0&&focus<4);
-  document.title= focus<0 ? "Sooth — The Desk"
-    : "Sooth — "+WS[focus].label.charAt(0)+WS[focus].label.slice(1).toLowerCase();
+  /* The overview title must say what the product IS, not name the furniture.
+     The <title> tag was already corrected; this line was quietly overwriting
+     it on every route, so the tab still read "The Desk". */
+  document.title= focus<0 ? "sooth.bet — sports betting research and analysis"
+    : "sooth.bet — "+WS[focus].label.charAt(0)+WS[focus].label.slice(1).toLowerCase();
 }
 
 /* ---- routing: the hash is the single source of truth ---- */
