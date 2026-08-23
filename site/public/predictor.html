@@ -156,8 +156,12 @@
     return '<tr>'
       +'<td class="l"><span class="pick">'+D.esc(g.pick)
         +'<small>best at '+D.esc(g.best_book)+' · '+D.esc(g.n_books)+' books</small></span></td>'
-      +'<td class="l dim">'+window.Crest.team(g.away,{size:14})+' at '
-        +window.Crest.team(g.home,{size:14})+'</td>'
+      /* best_lines.json writes ABBREVIATIONS (engine/best_lines.py:_abbrev),
+         not the full names board.json publishes, so these lookups need the
+         sport or the 30 dual-league abbreviations resolve to nothing. Latent
+         until now only because the NFL board is empty out of season. */
+      +'<td class="l dim">'+window.Crest.team(g.away,{size:14,sport:"nfl"})+' at '
+        +window.Crest.team(g.home,{size:14,sport:"nfl"})+'</td>'
       +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
       +'<td>'+pct+'%<span class="confbar" aria-hidden="true"><i style="width:'+pct+'%"></i></span></td>'
       +'<td class="up">'+D.am(g.best_price)+'</td>'

@@ -225,8 +225,9 @@
       from price sources we captured ourselves, and publish every result — losses styled
       exactly like wins.</p>
       <p class="creed"><b>All of it is free.</b> No paid tier, no account, nothing to buy.
-      The slate stays sealed until the first kickoff because that is what makes the
-      timestamp mean anything, not because we are charging for the wait. The seal and the
+      The slate is published as soon as it is sealed. What makes the timestamp mean
+      anything is that the hash went into a public GitHub commit before the games,
+      not how long we sit on the contents — so we do not sit on them. The seal and the
       grade are emailed to anyone who asks at <a href="/alerts">/alerts</a>.</p>
       <p class="creed">A season is ~285 games — not enough to statistically separate a 52%
       picker from a coin. We say that out loud because the ledger would out us if we
@@ -467,7 +468,7 @@ function lockedView(t){
     +'already timestamped by a GitHub commit rather than by us. <b style="color:var(--ink2)">'
     +'DISAGREEMENT</b> ranks how far our model sits from the market on each game, '
     +'biggest first; the direction stays sealed. Nothing unlocks it early and there is '
-    +'nothing to buy — it opens to everyone at the first kickoff. Verify the root now, '
+    +'nothing to buy. Verify the root now, '
     +'then check it against the slate when it opens. '
     +'<a href="/alerts" style="color:var(--mut)">Get told when it does &rarr;</a></p></div>';
 }
@@ -479,8 +480,14 @@ function row(g){
   return '<tr class="g" data-id="'+D.esc(g.game_id)+'" tabindex="0"'
     +' aria-expanded="'+(OPEN===g.game_id?"true":"false")+'">'
     +'<td class="l"><span class="pick">'+D.esc(ind.pick||"·")
-      +'<span class="m">'+window.Crest.team(g.away,{size:14})+' AT '
-        +window.Crest.team(g.home,{size:14})+'</span></span></td>'
+      /* sport:"nfl" is REQUIRED, not decoration. The slate speaks in schedule
+         abbreviations and 30 of them are a club in more than one league — MIA,
+         DEN, ARI, DAL, TB, CIN, WAS and BAL among them — so an unscoped lookup
+         correctly refuses to guess and those rows rendered with no crest while
+         LV, KC and LAC resolved. Half a board of missing logos, from one
+         missing argument. */
+      +'<span class="m">'+window.Crest.team(g.away,{size:14,sport:"nfl"})+' AT '
+        +window.Crest.team(g.home,{size:14,sport:"nfl"})+'</span></span></td>'
     +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
     /* the bar leads and the number closes the cell, so every stated chance in
        the column ends on the same right edge instead of being shunted around

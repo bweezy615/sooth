@@ -46,6 +46,12 @@ MARKETS = "h2h"           # 1 credit per sport per call
 REGIONS = "us"
 
 # NFL is the priority; the rest fill the calendar so the board is never empty.
+# How many future games to carry for a sport with nothing inside the window,
+# so a season that has not started yet is still browsable. Small on purpose:
+# this is "the season is coming and here is what it is priced at", not a
+# schedule dump.
+LOOKAHEAD_EVENTS = 8
+
 SPORTS = {
     "americanfootball_nfl": {"label": "NFL", "slug": "nfl"},
     "baseball_mlb":         {"label": "MLB", "slug": "mlb"},
@@ -126,7 +132,7 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
                 g["commence_time"].replace("Z", "+00:00"))
         except (KeyError, ValueError):
             continue
-        if not (now <= starts <= now + window):
+        if starts < now:
             continue
 
         home, away = g.get("home_team", ""), g.get("away_team", "")
@@ -175,11 +181,37 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
         out.append({
             "id": g.get("id", ""), "home": home, "away": away,
             "starts": g["commence_time"],
+            "in_window": starts <= now + window,
             "sides": sorted(sides, key=lambda s: -(s["gain_pts"] or 0)),
             "max_gain_pts": max((s["gain_pts"] for s in sides), default=0),
             "n_books": max((s["n_books"] for s in sides), default=0),
         })
-    return out, spent
+
+    # A sport whose season has not started yet used to vanish from the board.
+    # The window is 36h and the NFL runs weekly, so on 2026-08-22 the next NFL
+    # kickoff was 430 hours out, the NHL 907 and the NBA 1409 — three of the
+    # five sports we cover were dark, and the phone's sport rail had nothing to
+    # offer for any of them.
+    #
+    # The odds request is not time-filtered (it returns the sport's whole
+    # schedule and we filter here), so carrying the soonest few games for an
+    # otherwise-empty sport costs NOTHING extra in credits. Books post NFL
+    # Week 1 prices months ahead and they are genuinely shoppable — comparing
+    # them is exactly what this board is for.
+    #
+    # In-window games always win; the look-ahead only fills a sport that would
+    # otherwise show nothing at all. Every card carries its own kickoff time,
+    # so "18 days out" is never presented as "tonight".
+    live_now = [e for e in out if e.get("in_window")]
+    if live_now:
+        chosen = live_now
+    else:
+        chosen = sorted(out, key=lambda e: e["starts"])[:LOOKAHEAD_EVENTS]
+    for e in chosen:
+        e["upcoming"] = not e.pop("in_window", False)
+    for e in out:
+        e.pop("in_window", None)
+    return chosen, spent
 
 
 

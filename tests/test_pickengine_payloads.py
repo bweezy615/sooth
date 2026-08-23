@@ -43,13 +43,23 @@ def _payload(kickoff):
     }
 
 
-def test_redacts_before_kickoff(tmp_path):
+def test_publishes_the_full_slate_before_kickoff(tmp_path):
+    """The slate is published as soon as it is sealed, not held until kickoff.
+
+    This test asserted the opposite until 2026-08-22. The redaction it guarded
+    existed to sell TIMING for the paid tier; with that tier deleted it was
+    withholding for its own sake. It was never what made the commitment
+    trustworthy: commit-reveal integrity rests on the hash being published and
+    externally timestamped BEFORE the event, and the reveal time does not enter
+    into it. The reveal file has carried every prediction in the clear the whole
+    time regardless.
+    """
     kick = datetime.now(timezone.utc) + timedelta(days=2)
     pub = _pickengine_payloads(tmp_path, _payload(kick))
-    assert pub["locked"] is True
+    assert pub["locked"] is False
     for g in pub["games"]:
-        assert g["independent"] is None and g["consensus"] is None
-        assert g["divergence"] is None
+        assert g["independent"] is not None
+        assert g["divergence"] is not None
         assert g["divergence_rank"] in (1, 2)
     # g2 diverges more (|0.45-0.66| = .21 vs |0.64-0.62| = .02) -> rank 1
     by_id = {g["game_id"]: g for g in pub["games"]}

@@ -65,10 +65,10 @@ function teaser(meta) {
     top_divergence_matchup: meta.top_divergence_matchup || null,
     // No `upgrade` field any more: the checkout was removed on 2026-08-22 and
     // there is nothing to sell. The lock is the proof mechanism, not a price.
-    note: "The full slate is sealed until the first kickoff, then free to " +
-          "everyone. Nothing unlocks it earlier and there is no paid tier. " +
-          "The root is public now (/verify); our model's published record " +
-          "is at /record.",
+    // This note now renders ONLY when the slate cannot be decrypted — there
+    // is no lock left to describe. Say what is actually true in that state.
+    note: "The sealed commitment above is published and verifiable at " +
+          "/verify. Our model's published record is at /record.",
   };
 }
 
@@ -93,21 +93,30 @@ function handler(req, res, opts) {
     });
   }
 
-  const kick = firstKickoff(meta);
-  const open = kick !== null && now >= kick; // time decay: post-kick == public
-  if (open || auth.readPro(req)) {
-    const slate = decryptSlate(file, keyHex);
-    if (slate) {
-      return respond(res, 200, Object.assign({ locked: false }, slate));
-    }
-    // Entitled but undecryptable (missing/rotated key): the teaser plus the
-    // truth beats a 500, and it must never fail open.
-    const t = teaser(meta);
-    t.note = "The full payload is temporarily unavailable - the sealed " +
-             "commitment above still stands. " + t.note;
-    return respond(res, 200, t);
+  // THE SLATE IS OPEN. There is no time gate any more (removed 2026-08-22).
+  //
+  // The gate sold TIMING for the paid tier: Pro saw the slate at seal time,
+  // everyone else waited for first kickoff. The paid tier is gone, so the lock
+  // had nothing left to sell.
+  //
+  // It was never what made the commitment trustworthy, and the site said
+  // otherwise for a while, so: commit-reveal integrity rests on the hash being
+  // published and externally timestamped BEFORE the event, not on when the
+  // contents are shown. 2026-W01's root was anchored to a public GitHub commit
+  // five weeks before its first kickoff. Revealing early proves exactly as
+  // much. {slate_id}.reveal.json has in fact carried every prediction in the
+  // clear the whole time.
+  //
+  // Still fails CLOSED on a decryption problem: a slate we cannot read is
+  // reported as unavailable, never invented.
+  const slate = decryptSlate(file, keyHex);
+  if (slate) {
+    return respond(res, 200, Object.assign({ locked: false }, slate));
   }
-  return respond(res, 200, teaser(meta));
+  const t = teaser(meta);
+  t.note = "The full payload is temporarily unavailable - the sealed " +
+           "commitment above still stands. " + t.note;
+  return respond(res, 200, t);
 }
 
 module.exports = handler;

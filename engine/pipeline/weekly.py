@@ -102,14 +102,27 @@ def _elo_through(adapter: NFLAdapter, season: int, week: int) -> EloModel:
 #
 # One slate becomes two files:
 #   data/pro/{slate_id}.pro.json      the full slate, served only by /api/picks
-#   site/public/data/{slate_id}.json  the public file, with picks REDACTED
-#                                     until first kickoff
+#   site/public/data/{slate_id}.json  the public file — the full slate
 #
-# Redaction happens HERE, in Python, at write time. A JS-side redaction would
-# ship every pick to every client and hide them with CSS — that is not a
-# paywall, it is a view-source Easter egg. After first kickoff /api/picks
-# serves the full payload to everyone (time decay), so the public file only
-# ever needs the teaser: the paywall never touches the proof.
+# THE SLATE IS NO LONGER WITHHELD UNTIL KICKOFF (changed 2026-08-22).
+#
+# The redaction here existed to sell TIMING: Pro bought the slate at seal time,
+# everyone else waited for first kickoff. The paid tier was deleted, so the
+# lock had nothing left to sell and was withholding for its own sake.
+#
+# It was never a proof mechanism, and it is worth being precise about why,
+# because the opposite was claimed on the site for a while. Commit-reveal
+# integrity rests on ONE thing: hash(picks) published, and externally
+# timestamped, BEFORE the event. Anyone can then check hash(revealed) against
+# the committed root. The reveal TIME is irrelevant to that proof as long as
+# the commit preceded the games. The 2026-W01 root was anchored to a public
+# GitHub commit on 2026-08-06 for games starting 2026-09-10; revealing on
+# 08-22 still proves the picks existed five weeks early.
+#
+# The reveal file has in fact been public the whole time —
+# {slate_id}.reveal.json carries all 32 predictions in the clear as the Merkle
+# leaf set. So the redaction was not even hiding the picks; it was declining
+# to render them on one page while publishing them on another.
 # --------------------------------------------------------------------------
 
 def _pickengine_payloads(root: Path, payload: dict) -> dict:
@@ -179,24 +192,14 @@ def _pickengine_payloads(root: Path, payload: dict) -> dict:
                                    if top else None),
     }, indent=2))
 
-    # Public teaser: every field present, the model's opinion absent.
-    redact = now < datetime.fromisoformat(payload["earliest_kickoff"])
+    # The full slate, published with the commitment. `locked` stays in the
+    # payload as False so every consumer keeps its shape.
     public_games = []
     for g in pro_doc["games"]:
-        if not redact:
-            public_games.append(g)
-            continue
-        public_games.append({
-            "game_id": g["game_id"], "kickoff": g["kickoff"],
-            "home": g["home"], "away": g["away"],
-            "spread_line": g["spread_line"],
-            "market_prob": g["market_prob"],
-            "divergence_rank": rank_of[g["game_id"]],
-            "independent": None, "consensus": None,
-            "models_disagree": None, "independent_vs_market": None,
-            "divergence": None,
-        })
-    return {"locked": redact, "unlocks_at": payload["earliest_kickoff"],
+        g = dict(g)
+        g["divergence_rank"] = rank_of[g["game_id"]]
+        public_games.append(g)
+    return {"locked": False, "unlocks_at": payload["earliest_kickoff"],
             "games": public_games}
 
 

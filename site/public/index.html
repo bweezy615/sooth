@@ -406,6 +406,8 @@
     border-bottom:1px solid var(--hair)}
   .m-gs{display:inline-flex;align-items:center;gap:6px;min-width:0;
     font:600 11px var(--mono);letter-spacing:.08em;color:var(--mut)}
+  /* the season has not started: say so on the card, not just in the date */
+  .m-up{font-style:normal;color:var(--accent);letter-spacing:.1em}
   .m-gt{margin-left:auto;flex:0 0 auto;font:500 11px var(--mono);color:var(--mut);
     white-space:nowrap}
   /* flex:1 on the sides: every card in a rail is stretched to the tallest one,
@@ -728,7 +730,8 @@ function gameCard(ev,sport){
       +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
       +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
       +esc(String(sport).toUpperCase())
-      +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')+'</span>'
+      +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')
+      +(ev.upcoming?' <i class="m-up">UPCOMING</i>':'')+'</span>'
     +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
     +sides+'</a>';
 }

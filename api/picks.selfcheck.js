@@ -1,8 +1,13 @@
 // Offline self-check for the pick-engine gate — runs with no server and no
 // AUTH_SECRET requirement beyond what each case sets.
 //   node api/picks.selfcheck.js
-// Drives every branch: missing file, locked teaser, pro cookie, time decay,
-// and the fail-closed path when AUTH_SECRET is absent.
+// Drives every branch: missing file, the open slate before AND after kickoff,
+// and every fail-CLOSED path (no key, wrong key, tampered blob).
+//
+// The time gate was removed on 2026-08-22 with the paid tier, so the cases
+// that used to assert "locked before kickoff" now assert the opposite: the
+// slate is served whenever it can be decrypted. What must NOT change is that
+// an unreadable slate degrades to the teaser rather than to an invention.
 const assert = require("assert");
 const fs = require("fs");
 const os = require("os");
@@ -63,60 +68,68 @@ picks(req(), res, { metaFile: path.join(tmp, "nope.json"), keyHex: KEY });
 assert.equal(res.statusCode, 404);
 assert(/No sealed slate/.test(res.body.error), "missing file must explain itself");
 
-// 2. sealed + pre-kick + anonymous -> 200 locked teaser, names only, no picks
+// 2. sealed, BEFORE first kickoff, anonymous -> the full slate
+// This is the case that inverted. The commitment is what proves the picks
+// predate the games; showing them early proves exactly as much.
 writeBoth(future);
 res = fakeRes();
 picks(req(), res, { file, metaFile, keyHex: KEY });
-assert.equal(res.statusCode, 200, "teaser must be 200, never 401");
-assert.equal(res.body.locked, true);
-assert.equal(res.body.game_count, 2);
-assert.equal(res.body.top_divergence_matchup, "NO at DET", "names only, from row 0");
-// The paid tier was removed on 2026-08-22. A locked teaser must not point at
-// a checkout that no longer exists, and must not imply one is coming.
-assert.equal(res.body.upgrade, undefined, "no upgrade funnel: there is nothing to buy");
-assert(!/Pro|subscribe|\$9/.test(JSON.stringify(res.body)),
-  "the teaser must not sell anything");
-assert(!JSON.stringify(res.body).includes('"pick"'), "teaser must not leak a pick");
+assert.equal(res.statusCode, 200, "must be 200, never 401");
+assert.equal(res.body.locked, false, "no time gate: the slate is open");
+assert.equal(res.body.games[0].independent.pick, "NO",
+  "the picks are visible before kickoff");
+assert.equal(res.body.upgrade, undefined, "nothing to buy");
+assert(!/subscribe|\$9/.test(JSON.stringify(res.body)),
+  "the payload must not sell anything");
 assert.equal(res.headers["cache-control"], "no-store");
 
-// 3. valid pro cookie -> full slate
+// 3. a comped cookie changes nothing — everyone gets the same payload
 const cookie = "sooth_pro=" +
   auth.sign({ email: "t@x.com", exp: Date.now() + 60000 });
 res = fakeRes();
 picks(req(cookie), res, { file, metaFile, keyHex: KEY });
 assert.equal(res.body.locked, false);
-assert.equal(res.body.games[0].independent.pick, "NO", "pro sees the picks");
+assert.equal(res.body.games[0].independent.pick, "NO");
 
-// 4. after first kickoff -> full slate for everyone (time decay)
+// 4. after first kickoff -> unchanged, still the full slate
 writeBoth(past);
 res = fakeRes();
 picks(req(), res, { file, metaFile, keyHex: KEY });
 assert.equal(res.body.locked, false, "post-kick the payload is public");
 
-// 5. entitled but NO KEY -> teaser with the truth, never a 500, never open
+// 5. NO KEY -> teaser with the truth, never a 500, never an invented slate
 res = fakeRes();
-picks(req(cookie), res, { file, metaFile, keyHex: "" });
+picks(req(), res, { file, metaFile, keyHex: "" });
 assert.equal(res.statusCode, 200);
 assert.equal(res.body.locked, true, "undecryptable must fail closed");
 assert(/temporarily unavailable/.test(res.body.note), "and say so");
 
 // 6. wrong key / tampered blob -> same closed teaser
 res = fakeRes();
-picks(req(cookie), res, { file, metaFile, keyHex: "22".repeat(32) });
+picks(req(), res, { file, metaFile, keyHex: "22".repeat(32) });
 assert.equal(res.body.locked, true, "wrong key must fail closed");
 
-// 7. the ciphertext itself must not leak a pick to a repo reader
-assert(!fs.readFileSync(file, "utf8").includes("NO"),
-  "plaintext pick visible in the committed blob");
+// 7. the ciphertext itself must not leak a pick to a repo reader.
+// This used to assert the blob did not contain the substring "NO". The blob is
+// base64 over a RANDOM nonce, so a given two-character sequence appears by
+// chance in a few hundred characters roughly one run in eleven — the check
+// failed intermittently for a reason that had nothing to do with encryption.
+// Test the actual property instead: the committed file must not be readable
+// as the payload, and must not carry a distinctive plaintext marker.
+const blob = fs.readFileSync(file, "utf8");
+assert.throws(() => JSON.parse(blob), "the committed blob must not be plain JSON");
+assert(!/"pick"|"independent"|"merkle_root"/.test(blob),
+  "plaintext payload keys visible in the committed blob");
 
-// 8. fail closed: no AUTH_SECRET means the cookie verifies to nothing
+// 8. no AUTH_SECRET is no longer relevant to the slate — it gates nothing
+// here now — but the endpoint must still serve rather than break.
 delete require.cache[require.resolve("./_auth.js")];
 delete require.cache[require.resolve("./picks.js")];
 process.env.AUTH_SECRET = "";
 const picks2 = require("./picks.js");
 writeBoth(future);
 res = fakeRes();
-picks2(req(cookie), res, { file, metaFile, keyHex: KEY });
-assert.equal(res.body.locked, true, "no AUTH_SECRET -> nobody is Pro");
+picks2(req(), res, { file, metaFile, keyHex: KEY });
+assert.equal(res.body.locked, false, "the slate does not depend on AUTH_SECRET");
 
 console.log("picks.selfcheck: OK");
