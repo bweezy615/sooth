@@ -189,9 +189,58 @@
                    loadPlayers: loadPlayers, player: player, face: face,
                    playerTag: playerTag, hydratePlayers: hydratePlayers };
 
+  /* SELF-HEALING, and it has to be.
+     ------------------------------------------------------------------
+     This file used to sweep exactly three times: when the map resolved, on
+     DOMContentLoaded, and on window.load. Every one of those fires before a
+     board page has its DATA. board.json is ~100KB and the rows are written
+     from its .then(); team-logos.json is 20KB and served with force-cache, so
+     in production it resolves first, all three sweeps run against an empty
+     table, and every row written afterwards keeps its data-crest placeholder
+     for the life of the page. Live, the whole board rendered with ZERO images
+     — not one crest on any sport.
+
+     It survived review because on localhost board.json returns in a handful of
+     milliseconds and usually wins the race, so the bug is invisible exactly
+     where it gets tested. It also looks sport-specific from the outside: you
+     see it on whichever tab you happen to open, which is why it was reported
+     as "the NBA logos are missing".
+
+     Only index.html called hydrate() after its own render. Rather than add
+     that call to the other four pages and rely on the next page remembering
+     to, watch the document: any node that arrives with a crest slot in it gets
+     filled, whenever it arrives and whoever wrote it.
+
+     setTimeout, not requestAnimationFrame or requestIdleCallback: neither of
+     those fires in a backgrounded tab, and a board left open in another tab is
+     the normal case here. That exact mistake has already cost this codebase
+     three separate bugs. */
+  function watch() {
+    if (!window.MutationObserver) return;       // sweeps below still apply
+    var queued = false;
+    new MutationObserver(function (muts) {
+      if (queued) return;
+      for (var i = 0; i < muts.length; i++) {
+        if (muts[i].addedNodes && muts[i].addedNodes.length) {
+          queued = true;
+          setTimeout(function () {
+            queued = false;
+            hydrate();
+            hydratePlayers();
+          }, 0);
+          return;
+        }
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    /* Terminates: hydrate() inserts <img class="crest">, which is an added
+       node and does queue one more pass, but that pass finds every slot
+       already filled, inserts nothing, and the cycle stops. */
+  }
+
   /* Start fetching as soon as the script parses, and sweep once more after the
      page settles so rows written by a late render still get their crest. */
   load();
+  watch();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () { hydrate(); });
   }
