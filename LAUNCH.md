@@ -80,8 +80,15 @@ money. Link in comments / profile per sub rules.
 
 ## Checklist for Friday (from the plan)
 
-- [ ] Buy domain, `vercel domains add <domain>`, update canonical/OG tags in index.html
-- [ ] Run week's ledger commitment so launch day has a receipt
-- [ ] Final smoke-test every page on the real domain
+- [x] Buy domain, `vercel domains add <domain>`, update canonical/OG tags in index.html
+      — sooth.bet live; canonical + og:url on all 20 indexable pages (2026-08-23).
+      `/404` is noindex and `/game?id=…` is per-game, so neither carries a canonical.
+- [x] Run week's ledger commitment so launch day has a receipt
+      — `data/2026-W01-nfl.commitment.json` + `.reveal.json` committed; `seal.yml` runs weekly.
+- [x] Final smoke-test every page on the real domain
+      — 2026-08-23: 21/21 routes 200, bad route 404s, 9/9 data payloads served non-empty,
+      market/picks/props/edges/record/research all render rows, zero console errors,
+      tab bar + compliance footer present on every desk page.
 - [ ] Post (X first, Reddit after — Reddit needs the account to not look like an ad)
-- [ ] 18+ / responsible-gambling line present on every page (constraint from PRODUCT.md)
+- [x] 18+ / responsible-gambling line present on every page (constraint from PRODUCT.md)
+      — `desk.js` footer injects it site-wide; index carries its own copy.
