@@ -1,136 +1,55 @@
 {
- "generated_at": "2026-08-23T10:34:50.132268+00:00",
+ "generated_at": "2026-08-23T14:33:25.633607+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 84,
+ "n_considered": 268,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Washington Nationals @ Miami Marlins",
-   "starts": "2026-08-23T17:41:00Z",
-   "player": "Daylen Lile",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 125,
-   "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 124,
-   "price_edge_pts": 0.21,
-   "book_spread_pts": 4.82,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 129,
-    "over": 47
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
    "matchup": "Tampa Bay Rays @ Baltimore Orioles",
    "starts": "2026-08-23T17:36:00Z",
-   "player": "Jackson Holliday",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
+   "player": "Coby Mayo",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
    "side": "over",
-   "best_price": 160,
+   "best_price": -117,
    "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 160,
-   "price_edge_pts": 0.03,
-   "book_spread_pts": 4.64,
+   "n_books": 4,
+   "fair_price": -138,
+   "price_edge_pts": 4.03,
+   "book_spread_pts": 9.32,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 78,
-    "over": 21
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Washington Nationals @ Miami Marlins",
-   "starts": "2026-08-23T17:41:00Z",
-   "player": "Abimelec Ortiz",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 160,
-   "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 161,
-   "price_edge_pts": -0.12,
-   "book_spread_pts": 4.09,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "St. Louis Cardinals @ Philadelphia Phillies",
-   "starts": "2026-08-23T17:35:00Z",
-   "player": "Kyle Leahy",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 3.5,
-   "side": "under",
-   "best_price": -104,
-   "best_book": "FanDuel",
-   "n_books": 4,
-   "fair_price": -102,
-   "price_edge_pts": -0.46,
-   "book_spread_pts": 6.28,
-   "hit_l5": {
-    "n": 5,
     "over": 4
    },
-   "hit_l10": {
-    "n": 10,
-    "over": 7
-   },
    "hit_season": {
-    "n": 24,
-    "over": 16
+    "n": 103,
+    "over": 51
    },
-   "model_p_over": 0.7942,
-   "model_version": "kpoisson-v1"
+   "model_p_over": null,
+   "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Tampa Bay Rays @ Baltimore Orioles",
+   "matchup": "Toronto Blue Jays @ New York Yankees",
    "starts": "2026-08-23T17:36:00Z",
-   "player": "Liam Hicks",
+   "player": "Ernie Clement",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 163,
+   "best_price": 175,
    "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 166,
-   "price_edge_pts": -0.46,
-   "book_spread_pts": 3.47,
+   "n_books": 4,
+   "fair_price": 165,
+   "price_edge_pts": 1.31,
+   "book_spread_pts": 5.3,
    "hit_l5": {
     "n": 5,
     "over": 2
@@ -140,8 +59,98 @@
     "over": 3
    },
    "hit_season": {
-    "n": 116,
+    "n": 127,
+    "over": 52
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "St. Louis Cardinals @ Philadelphia Phillies",
+   "starts": "2026-08-23T17:35:00Z",
+   "player": "Luis Arraez",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 200,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": 190,
+   "price_edge_pts": 1.13,
+   "book_spread_pts": 6.67,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 122,
+    "over": 48
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Washington Nationals @ Miami Marlins",
+   "starts": "2026-08-23T17:41:00Z",
+   "player": "Xavier Edwards",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 160,
+   "best_book": "BetMGM",
+   "n_books": 6,
+   "fair_price": 153,
+   "price_edge_pts": 1.07,
+   "book_spread_pts": 4.27,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 130,
     "over": 44
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Baltimore Orioles",
+   "starts": "2026-08-23T17:36:00Z",
+   "player": "Taylor Walls",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": -115,
+   "best_book": "BetMGM",
+   "n_books": 4,
+   "fair_price": -120,
+   "price_edge_pts": 1.03,
+   "book_spread_pts": 6.19,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 8
+   },
+   "hit_season": {
+    "n": 106,
+    "over": 57
    },
    "model_p_over": null,
    "model_version": null
