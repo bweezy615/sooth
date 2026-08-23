@@ -4,17 +4,26 @@ Product truth only. No visual decisions live here.
 
 ## What it is
 
-Sooth reads every major US sportsbook and publishes two numbers for every game:
+Sooth is a **sports betting research analyzer**. Ask about a game and get an
+answer assembled only from numbers that are published and checkable — never a
+recommendation, and never a figure the model wrote.
+
+Corrected 2026-08-22, twice, by the owner: the product is the analysis. "Every
+book's price on one board" is **not** the mission. Price comparison is the
+richest INPUT the analyzer has, and it belongs in the second sentence rather
+than the first. Anything that states what the product IS — title, h1, meta
+description, store blurb — has to lead with the analysis.
+
+What it computes, and what the analyzer reasons over:
 
 1. **Best available price** — the most generous quote on a side, and which book has it.
 2. **Fair line** — the de-vigged consensus across all books. Median implied
    probability per side, normalised so the sides sum to 1, which strips out the
    bookmaker's margin.
 
-It also runs a **pick engine**: a weekly NFL slate, sealed before kickoff,
-graded in public, and free to everyone once it can be graded. Paid access buys
-the slate earlier and the instrumentation around it. The model behind it loses
-to the closing market and says so on its own page.
+It also runs a **pick engine**: a weekly NFL slate, sealed before kickoff and
+published with its commitment, then graded in public. Everything is free. The
+model behind it loses to the closing market and says so on its own page.
 
 It is an odds analysis tool. It is not a sportsbook, does not accept wagers,
 holds no customer funds, and is unaffiliated with any league, team or book.
@@ -97,11 +106,16 @@ being free.
 
 **What replaced it, exactly:**
 
-- The sealed slate still locks until first kickoff. That is the **proof
-  mechanism, not a price** — a commitment nobody can read early is what makes
-  the timestamp worth anything. `/picks` now says that instead of selling it,
-  and the locked view's call to action is "verify the sealed root now" rather
-  than "go pro".
+- The sealed slate is **published as soon as it is sealed** (changed
+  2026-08-22). It used to hold until first kickoff, and this document argued
+  that the wait was the proof mechanism. That was wrong. Commit-reveal
+  integrity rests on the hash being published and externally timestamped
+  BEFORE the event; the reveal time does not enter into it. W1's root was
+  anchored to a public GitHub commit five weeks before its first kickoff, so
+  revealing early proves exactly as much. The withholding was never even doing
+  what it claimed — `{slate}.reveal.json` has carried every prediction in the
+  clear the whole time as the Merkle leaf set. The lock existed to sell timing
+  to the paid tier, and that tier is gone.
 - Alerts are free and opt-in at `/alerts`.
 - The analyzer's daily cap exists to keep the inference bill survivable, not
   to sell a way around it. It is currently switched off.
@@ -136,12 +150,12 @@ So, as hard constraints:
 
 - A sealed slate is graded and published **whether it wins or loses**. A week
   that goes badly is published on the same schedule as one that goes well.
-- The slate unlocks free at first kickoff, every time. If the free unlock ever
-  becomes conditional, the paywall has moved onto the trust surface and the
-  product is no longer what this document describes.
-- The record shown on the page selling access is the **full** record, not a
-  window chosen after the fact.
-- If any of these become inconvenient, that is the signal to stop selling the
+- The slate is free and unconditional. If access to it ever becomes
+  conditional, a paywall has moved onto the trust surface and the product is no
+  longer what this document describes.
+- The record shown anywhere the slate is presented is the **full** record, not
+  a window chosen after the fact.
+- If any of these become inconvenient, that is the signal to stop publishing a
   slate — not the signal to adjust what gets published.
 
 Whoever reads this under that pressure will not have been part of the
@@ -168,7 +182,10 @@ must always read as one: selected on the gap to the de-vigged consensus, never
 on a forecast, and it states plainly when nothing beats fair — which on most
 boards is every line on it, because that gap is the house's cut.
 
-Primary action on the landing surface: **subscribe.**
+Primary action on the landing surface: **ask the analyzer about a game.**
+There is nothing to subscribe to — the paid tier was deleted on 2026-08-22.
+The only other conversion on the site is the free, opt-in alert list at
+`/alerts`.
 
 ## Coverage
 
