@@ -47,6 +47,26 @@
      to be told to sit above it or the slab's lit edge hides under the thead */
   .itab.rimlit::after{z-index:2}
   @media (max-width:720px){.itab.rimlit::after{display:none}}
+  /* LOADING WITHOUT A JUMP.
+     The board opened with a single dim line of text and then grew to the whole
+     slate the instant the fetch landed — on a phone that is the entire page
+     moving under your thumb while you are reading the warning above it. Six
+     ghost rows hold roughly the height the real board takes, so the numbers
+     arrive in place instead of shoving everything down. */
+  .gh td{padding:0}
+  .gh .shimmer{display:block;margin:15px 14px}
+  #rows[aria-busy="true"]{pointer-events:none}
+  /* an empty or failed board is a message, not a blank slab */
+  .itab .state{padding:30px 20px}
+  .itab .state a{color:var(--brand)}
+  @media (max-width:720px){
+    .ph{padding:24px 0 2px}
+    /* a 34px select is a mouse target. Fingers get 44. */
+    .bar{margin:14px 0 10px;gap:10px}
+    .bar select{min-height:44px;width:100%;margin-left:0}
+    .bar .tl{flex:0 0 100%}
+    .gh .shimmer{margin:13px 0}
+  }
 </style>
 </head>
 <body>
@@ -67,7 +87,7 @@
     point spread?) on 2,608 decided walk-forward games — 2,671 graded, 63 pushes — where 52.38% is the break-even needed just to
     profit at standard -110 odds. This page is transparency, <b>not a pick</b>. The durable
     edge on Sooth is price: take the best number and you gain expected value regardless of who
-    wins. <a href="/record" style="color:var(--amber)">See the full record →</a></p>
+    wins. <a href="/record" style="color:var(--brand)">See the full record &rarr;</a></p>
 
   <p class="noplay" style="margin-top:2px">This page shows the model's projection next to
     the market. The full <b>Pick Engine</b> — the whole slate sealed before kickoff,
@@ -89,7 +109,14 @@
       <thead><tr><th class="l">MODEL PICK</th><th class="l">MATCHUP</th>
         <th class="l">KICKOFF</th><th>CONFIDENCE</th><th>BEST PRICE</th>
         <th>PRICE EDGE</th></tr></thead>
-      <tbody id="rows"><tr><td colspan="6" class="l dim">Loading the predictor…</td></tr></tbody>
+      <tbody id="rows" aria-busy="true">
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:64%"></span></td></tr>
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:52%"></span></td></tr>
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:70%"></span></td></tr>
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:46%"></span></td></tr>
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:61%"></span></td></tr>
+        <tr class="gh"><td colspan="6"><span class="shimmer" style="width:55%"></span></td></tr>
+      </tbody>
     </table></div>
   </div>
 
@@ -148,6 +175,18 @@
 
   function draw(){
     $("rows").innerHTML=sortGames(DATA.games).map(rowHTML).join("");
+    $("rows").removeAttribute("aria-busy");
+  }
+  /* one place to put a message where rows would have been, so the empty and
+     the failed board read the same way rather than one being a bare line */
+  function boardState(label,body){
+    $("rows").removeAttribute("aria-busy");
+    /* The cell must release .itab td's white-space:nowrap. An empty state is a
+       SENTENCE, not a datum, and inheriting nowrap stretched this td to
+       1631px inside a 1222px scroller — a horizontal scroller created by the
+       message that explains why there is nothing to scroll. */
+    $("rows").innerHTML='<tr><td colspan="6" style="white-space:normal">'
+      +'<div class="state"><span class="tl">'+label+'</span>'+body+'</div></td></tr>';
   }
 
   $("sort").addEventListener("change",function(){sortBy=this.value;draw();});
@@ -155,8 +194,10 @@
   D.load("/data/best_lines.json").then(function(res){
     if(!res.ok){
       $("s-state").textContent="OFFLINE";
-      $("rows").innerHTML='<tr><td colspan="6" class="l dim">Predictor unavailable. '
-        +'Raw data is at <a href="/data/best_lines.json" style="color:var(--mut)">best_lines.json</a>.</td></tr>';
+      $("rstats").innerHTML="";
+      boardState("PREDICTOR UNAVAILABLE",
+        "The projection feed did not answer. Nothing has been withheld — the same "
+        +'numbers are in the raw file: <a href="/data/best_lines.json">best_lines.json</a>.');
       return;
     }
     var d=res.data; DATA=d;
@@ -167,8 +208,10 @@
       +" UTC · "+D.esc(d.slate_id||"");
     if(!d.games||!d.games.length){
       $("rstats").innerHTML="";
-      $("rows").innerHTML='<tr><td colspan="6" class="l dim">No games projected right now — '
-        +'the predictor fills as the next slate is priced.</td></tr>';
+      boardState("NO GAMES PROJECTED",
+        "A projected side and confidence for every game on the next slate belongs "
+        +"here. The slate has not been priced yet, so there is nothing to project "
+        +"against — this fills as books post the next round of games.");
       return;
     }
     drawStats(d);

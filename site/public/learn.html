@@ -11,6 +11,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://sooth.bet/learn">
 <meta property="og:image" content="https://sooth.bet/og.png">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,34 +35,56 @@
         the shared sheet — so the guide's spine is drawn in the same idiom as
         the capability list on the slab face.
 
+     POLISH PASS — clarity is the whole job on this page:
+     · The four step titles were spans. They are headings now, so the guide has
+       a structure a screen reader and a skimming eye can both follow, and the
+       page reads as 1-2-3-4 rather than as four unrelated paragraphs.
+     · The measure is fixed. The page used the full 1360px shell while its
+       prose stopped at 66ch, which left the guide hanging off the left edge of
+       a desktop screen; it now sits in a column the width of what it holds.
+     · Both keys at the foot clear 44px, and the type scale is the one /alerts
+       and /ask use: h1 clamp(24→32) · lede 14 · body 13.5 · fine 13.
+
      No copy, no number and no disclaimer changed. */
 
-  .lead{padding:38px 0 8px;max-width:70ch}
+  /* ONE COLUMN, ONE MEASURE. The page sat in the 1360px shell while its prose
+     stopped at 66ch, so the guide hung off the left edge of a desktop screen
+     and every section rule over-ran its own paragraph by ~300px. The column is
+     now the width of what it holds, and the inner caps are released — so the
+     rules, the headings, the prose, the keys and the fine print all start and
+     stop on the same two edges. The line length is unchanged (~85 characters);
+     only the empty half of the screen went away. */
+  main.wrap{max-width:600px}
+  .lead{padding:38px 0 8px}
   /* the setup recedes, the promise lands: contrast by value, not by hue */
-  .lead h1{font:700 clamp(25px,3.8vw,34px)/1.12 var(--sans);letter-spacing:-.022em;
+  .lead h1{font:700 clamp(24px,3.4vw,32px)/1.14 var(--sans);letter-spacing:-.02em;
     margin:12px 0 0;color:var(--ink2)}
   .lead h1 .g{color:var(--ink)}
-  .lead p{color:var(--ink2);font-size:15px;margin:14px 0 0;line-height:1.65;max-width:60ch}
+  .lead p{color:var(--ink2);font-size:14px;margin:14px 0 0;line-height:1.65}
 
   /* the promo's ▸ capability marker, on the guide's four steps. The step
      number reads a step brighter than its label so the sequence is countable
      at a glance — inside .sec-h the shared sheet already sets both to --mut. */
-  .sec-h .tl{position:relative;padding-left:15px}
-  .sec-h .tl::before{content:"";position:absolute;left:0;top:0;
+  .sec-h h2.tl{position:relative;padding-left:15px;font:600 10px/1 var(--mono);
+    letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .sec-h h2.tl::before{content:"";position:absolute;left:0;top:0;
     border:4px solid transparent;border-left-color:var(--brand)}
-  .sec-h .tl b{color:var(--ink2)}
+  .sec-h h2.tl b{color:var(--ink2);font-weight:600}
 
   /* the worked example: a read-out cut into the slab, and the one lit rim */
   .ex{font-family:var(--mono);font-size:12.5px;color:var(--ink2);
     background:linear-gradient(180deg,#12181E,#0B1015);border:1px solid var(--hair);
-    border-radius:var(--r);padding:14px 16px;margin:12px 0 0;line-height:1.8;
+    border-radius:var(--r);padding:14px 16px;margin:14px 0 0;line-height:1.8;
     box-shadow:inset 0 1px 0 rgba(190,240,245,.07),inset 0 -1px 0 rgba(0,0,0,.5)}
   .ex .g{color:var(--ink);font-weight:700}
-  .step-body{max-width:66ch}
   .step-body p{color:var(--ink2);font-size:13.5px;line-height:1.65;margin:8px 0 0}
   .step-body p b{color:var(--ink)}
-  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 4px}
-  .cta a{font:600 11px var(--mono);letter-spacing:.08em;padding:10px 16px;
+
+  /* the two ways out of the guide. Both are keys, both clear a thumb. */
+  .cta{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 0}
+  .cta a{display:inline-flex;align-items:center;justify-content:center;
+    min-height:44px;
+    font:600 11px var(--mono);letter-spacing:.08em;padding:10px 18px;
     border:1px solid var(--hair2);border-radius:var(--r);color:var(--mut);
     transition:color var(--t-hover) ease,border-color var(--t-hover) ease,
       filter var(--t-hover) ease}
@@ -73,8 +96,9 @@
       0 0 18px -6px rgba(45,212,167,.55)}
   .cta a.pri:hover{color:var(--g0);border-color:var(--brand);filter:brightness(1.07)}
   .cta a.pri:active{transition-duration:var(--t-press);transform:translateY(1px)}
+  @media (max-width:480px){.cta a{flex:1 1 100%}}
 
-  .fine{color:var(--mut);font-size:12.5px;line-height:1.65;margin:26px 0 0;max-width:66ch}
+  .fine{color:var(--mut);font-size:13px;line-height:1.65;margin:26px 0 0}
   /* the compliance floor is separated from the guide by a hairline, the way
      every other surface on the site is separated from the one above it */
   main>p.fine:first-of-type{border-top:1px solid var(--hair);padding-top:22px;
@@ -83,9 +107,13 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<main class="wrap" id="main">
+<main class="wrap" id="main" tabindex="-1">
 
-  <div class="lead">
+  <div class="scr-strip"><span class="nm">GUIDE</span>
+    <span class="tl">60 SECONDS · NO JARGON</span>
+    <span class="tl" style="margin-left:auto"><a href="/" style="color:var(--mut)">OPEN THE MARKET →</a></span></div>
+
+  <div class="lead page-head">
     <span class="tl">HOW IT WORKS · 60-SECOND GUIDE · NO JARGON</span>
     <h1>Same bet, different prices. <span class="g">We show you the best one.</span></h1>
     <p>Every sportsbook prices the same game a little differently. Sooth reads them all,
@@ -93,8 +121,8 @@
       You don't need any math to use it.</p>
   </div>
 
-  <section class="sec">
-    <div class="sec-h"><span class="tl"><b>01</b> · THE ONE IDEA</span></div>
+  <section class="sec" aria-labelledby="s1">
+    <div class="sec-h"><h2 class="tl" id="s1"><b>01</b> · THE ONE IDEA</h2></div>
     <div class="step-body">
       <p><b>Every bet has a "fair price."</b> The fair price is what the odds should be if
         the sportsbook took no cut. When a book offers you a <b>better number than fair</b>,
@@ -103,8 +131,8 @@
     </div>
   </section>
 
-  <section class="sec">
-    <div class="sec-h"><span class="tl"><b>02</b> · THE BOOK'S CUT</span></div>
+  <section class="sec" aria-labelledby="s2">
+    <div class="sec-h"><h2 class="tl" id="s2"><b>02</b> · THE BOOK'S CUT</h2></div>
     <div class="step-body">
       <p><b>The book always keeps a little. We show you how much.</b> Two even sides at
         -110 each look like a coin flip, but they're not: -110 is really about 52.4% to hit,
@@ -115,8 +143,8 @@
     </div>
   </section>
 
-  <section class="sec">
-    <div class="sec-h"><span class="tl"><b>03</b> · WHAT YOU'RE LOOKING FOR</span></div>
+  <section class="sec" aria-labelledby="s3">
+    <div class="sec-h"><h2 class="tl" id="s3"><b>03</b> · WHAT YOU'RE LOOKING FOR</h2></div>
     <div class="step-body">
       <p><b>"Gap points" — the size of the deal.</b> For each side, the market shows the
         points of implied probability you gain by taking the best price instead of the
@@ -125,8 +153,8 @@
     </div>
   </section>
 
-  <section class="sec">
-    <div class="sec-h"><span class="tl"><b>04</b> · READING THE MARKET</span></div>
+  <section class="sec" aria-labelledby="s4">
+    <div class="sec-h"><h2 class="tl" id="s4"><b>04</b> · READING THE MARKET</h2></div>
     <div class="step-body">
       <p><b>Green is the price to take.</b> Each row on the market is one game: the
         <b>FAIR</b> column is the price with the book's cut removed, the <b>BEST</b> column
@@ -153,6 +181,6 @@
 
 </main>
 <script src="/assets/desk.js"></script>
-<script>Desk.mount("");</script>
+<script>Desk.mount("learn");</script>
 </body>
 </html>

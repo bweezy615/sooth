@@ -30,9 +30,20 @@
         Equal weight is a product promise, so it is enforced structurally
         rather than left to two declarations staying in sync. */
 
+  /* ---- ONE VERTICAL SCALE ------------------------------------------------
+     8 / 14 / 22 / 32, and the shared .sec supplies 20 top / 30 bottom. The
+     margins below are chosen so the gap ABOVE a block and the gap BELOW it
+     land on the same number once the neighbouring section padding is counted
+     — the stance in particular had 52px above and 26px below. */
+
+  /* the proof surface leads this page, ahead of the headline, and it was
+     starting four pixels under the sport rail */
+  #proofSec{padding-top:26px}
+  .sec-h .sub{color:var(--mut)}
+
   /* the position: a teal hairline is the only chrome that is ours */
   .stance{border-left:2px solid var(--brand);background:var(--g1);
-    padding:18px 22px;margin:22px 0 6px;max-width:86ch;
+    padding:18px 22px;margin:4px 0 14px;max-width:86ch;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .stance p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.7}
   /* was teal. Teal marks a number that beats the market, not a sentence —
@@ -50,11 +61,20 @@
   .vd.p{color:var(--mut)}
 
   /* a commitment id, frozen. Ice-toned, mono, under a frost rim: it is the
-     one thing in the row that was fixed before anybody knew the result. */
-  .root{font:500 11px/1 var(--mono);letter-spacing:.07em;color:var(--frost);
-    opacity:.72;border-bottom:1px solid var(--frost-rim);padding-bottom:2px;
+     one thing in the row that was fixed before anybody knew the result. It is
+     also a link to /verify, so it carries a real thumb target rather than the
+     eleven-pixel line of text it used to be. */
+  .root{position:relative;font:500 11px/1 var(--mono);letter-spacing:.07em;
+    color:var(--frost);opacity:.72;padding-bottom:2px;
+    border-bottom:1px solid var(--frost-rim);
     transition:opacity var(--t-hover) ease}
   .root:hover{opacity:1;color:var(--frost)}
+  @media (max-width:720px){
+    /* the target grows to 44px without the underline drifting away from the
+       text: the hit area is a transparent overlay, not extra padding */
+    .root::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;
+      transform:translateY(-50%)}
+  }
 
   /* sealed, not yet thawed */
   .await{padding:15px 17px;margin:0 0 8px;font-size:12.5px;line-height:1.6;
@@ -67,12 +87,48 @@
      that cannot be read from its own denominator row defeats the purpose of
      the block, so it is separated here until the shell owns the rule. */
   #pops .itab td.l small{display:block;margin-top:3px;max-width:38ch;
-    white-space:normal;font:400 10.5px/1.45 var(--mono);color:var(--dim)}
+    white-space:normal;font:400 11px/1.45 var(--mono);color:var(--mut)}
+  /* the same block writes its "what it is" note into a plain <td> under a
+     left-aligned <th>, so the column header sat left and every value in it
+     sat right — the one ragged column on the page. */
+  #pops .itab tbody td:last-child{text-align:left}
+  @media (max-width:720px){#pops .itab tbody td:last-child{text-align:right}}
 
-  /* the small print under an instrument (.note has no shared rule yet) */
-  .note{font-size:11.5px;line-height:1.6;color:var(--dim);margin:9px 0 0;
+  /* the small print under an instrument (.note has no shared rule yet).
+     --dim on --g0 is metadata contrast; these paragraphs are sentences. */
+  .note{font-size:12px;line-height:1.65;color:var(--mut);margin:10px 0 0;
     max-width:84ch}
   .note:empty{display:none}
+  .note a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
+  .note a:hover{color:var(--ink)}
+
+  /* ---- reserved space, not a blank --------------------------------------
+     Three surfaces here fill from a fetch and every one of them was a bare
+     zero-height gap until it resolved — and the CLV block swallowed its own
+     errors, so a failed read left a titled section with nothing under it
+     forever. The skeleton holds the height the real instrument lands at. */
+  .skw{border:1px solid var(--hair);border-radius:var(--r);background:var(--g1);
+    overflow:hidden}
+  .skh{padding:9px 14px;border-bottom:1px solid var(--hair2);background:var(--g2)}
+  .skl{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    height:41px;padding:0 14px;border-bottom:1px solid var(--hair)}
+  .skl:last-child{border-bottom:0}
+  .skl i{display:block;height:8px;border-radius:2px;
+    background:linear-gradient(90deg,var(--g2) 25%,var(--g3) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+  .skw .state{padding:28px 22px;text-align:left;line-height:1.65;max-width:82ch}
+  .skw .state a{color:var(--ink2);text-decoration:underline;text-underline-offset:2px}
+  .skw .state a:hover{color:var(--ink)}
+  @media (max-width:720px){
+    /* the shared section header is one baseline row; in 347px that makes the
+       title wrap to three lines beside its own caption. The caption takes its
+       own line instead. */
+    .sec-h{flex-wrap:wrap;gap:7px 14px}
+    .sec-h .sub{flex:1 0 100%}
+    .skw{border-left:0;border-right:0;border-radius:0}
+    .skl{height:auto;min-height:86px;flex-direction:column;align-items:stretch;
+      gap:11px;padding:14px 13px}
+  }
 
   /* the one lit rim on the page, on the surface that carries the grades.
      Raised over the sticky header row, and dropped on phones where the
@@ -89,7 +145,7 @@
     <span class="tl">SEALED → REVEALED → GRADED · LOSSES PUBLISH LIKE WINS</span>
     <span class="tl" style="margin-left:auto"><a href="/verify" style="color:var(--mut)">VERIFY THE ROOT →</a></span></div>
 
-  <section class="sec" id="proofSec" style="display:none;border-top:0;padding-top:4px"
+  <section class="sec" id="proofSec" style="display:none;border-top:0"
     aria-labelledby="pfH">
     <div class="sec-h"><span class="tl" id="pfH">GRADED PICKS</span>
       <span class="sub" id="pfSub"></span>
@@ -158,12 +214,29 @@ var R=[
   ["DISCLAIMERS","No wagers, no funds held, no performance claims, no affiliation with any league or book. Written plainly.","THE FINE PRINT →","/disclaimers"],
   ["GET THE SEAL AND THE GRADE BY EMAIL","The Merkle root when a slate is sealed, and the result when it is graded — sent by the same automated step that publishes it, so a losing week reaches you the same way a winning one does. Free, opt-in, never a pick.","SET UP ALERTS →","/alerts"]
 ];
+/* a skeleton at the height the instrument lands at, so the page below it does
+   not travel when a fetch resolves. Deterministic widths: a skeleton that
+   shimmers differently on every load claims variance it cannot know. */
+function skel(n,label){
+  var s='<div class="skh"><span class="tl">'+D.esc(label)+'</span></div>';
+  for(var i=0;i<n;i++)
+    s+='<div class="skl"><i style="width:'+(30+(i*13)%24)+'%"></i>'
+      +'<i style="width:10%"></i></div>';
+  return '<div class="skw" aria-hidden="true">'+s+'</div>';
+}
+function fail(el,label,body){
+  el.innerHTML='<div class="skw"><div class="state"><span class="tl">'
+    +D.esc(label)+'</span>'+body+'</div></div>';
+}
+
+document.getElementById("pops").innerHTML=skel(3,"READING THE PUBLISHED FIGURES…");
 if(Desk.populations) Desk.populations(document.getElementById("pops"));
 
 /* CLV is the one claim in this market that a timestamp makes and nothing else
    does: it compares the price that existed WHEN WE SEALED against the closing
    price, and only a pre-committed pick can be measured that way. It is stated
    whether it flatters us or not — and stated as unavailable when it is. */
+document.getElementById("clv").innerHTML=skel(3,"READING THE SEALED LEDGER…");
 fetch("/data/pickengine-record.json",{cache:"no-store"})
   .then(function(r){return r.ok?r.json():null;})
   .then(function(rec){
@@ -199,7 +272,16 @@ fetch("/data/pickengine-record.json",{cache:"no-store"})
       +'<p class="note">Season mean CLV '+(rec.mean_clv==null?"·":D.pts(rec.mean_clv))
       +' pts across '+settled+' settled picks. Positive means the sealed price beat '
       +'the close. Every row regenerates from pickengine-record.json.</p>';
-  }).catch(function(){});
+  }).catch(function(){
+    /* this used to swallow the error and leave a titled section with nothing
+       under it — indistinguishable from "we have nothing to report" */
+    fail(document.getElementById("clv"),"LEDGER UNREADABLE",
+      'This is where every sealed slate\'s closing-line value is listed, slate by '
+      +'slate. The published file behind it could not be read just now — it is '
+      +'served straight from '
+      +'<a href="/data/pickengine-record.json">pickengine-record.json</a>, which you '
+      +'can open yourself. Nothing has been withheld and nothing has changed.');
+  });
 document.getElementById("receipts").innerHTML=R.map(function(r,i){
   return D.feedRow(i,r[0],r[1],r[2],r[3]);}).join("");
 
@@ -207,9 +289,19 @@ document.getElementById("receipts").innerHTML=R.map(function(r,i){
    A LOSS gets byte-identical treatment to a WIN — that equality is the
    entire point of this screen. Absent data states itself honestly. */
 function pct(x){return x==null?"·":(x*100).toFixed(0)+"%";}
+document.getElementById("pfRows").innerHTML=
+  '<tr aria-hidden="true"><td colspan="6" style="padding:0">'
+  +skel(6,"READING THE GRADED SLATES…")+'</td></tr>';
 fetch("/data/pickengine-record.json",{cache:"no-store"})
-  .then(function(r){if(!r.ok)throw 0;return r.json();})
+  .then(function(r){
+    /* 404 means nothing has been published yet, which is not an error and
+       keeps the section hidden. Anything else IS an error and gets said. */
+    if(r.status===404) return null;
+    if(!r.ok) throw new Error(r.status);
+    return r.json();
+  })
   .then(function(rec){
+    if(!rec) return;
     var weeks=(rec.weeks||[]);
     if(!weeks.length) return;
     document.getElementById("proofSec").style.display="";
@@ -246,7 +338,20 @@ fetch("/data/pickengine-record.json",{cache:"no-store"})
       "Every row regenerates from pickengine-record.json; every root is anchored by a "
       +"public GitHub commit made before kickoff. If someone sells you certainty, ask "
       +"for their merkle root.";
-  }).catch(function(){});
+  }).catch(function(){
+    document.getElementById("proofSec").style.display="";
+    document.getElementById("pfSub").textContent=
+      "the graded rows could not be loaded — the published file is linked below";
+    document.getElementById("pfRows").innerHTML=
+      '<tr><td colspan="6" style="text-align:left;white-space:normal">'
+      +'<span class="tl" style="display:block;margin-bottom:6px">GRADES UNREADABLE'
+      +'</span>Every sealed pick and its result belongs on these rows, wins and '
+      +'losses alike. The file they are built from could not be read just now; it is '
+      +'public at <a class="root" href="/data/pickengine-record.json">'
+      +'pickengine-record.json</a> and nothing in it changes when this page fails.'
+      +'</td></tr>';
+    document.getElementById("pfFoot").textContent="";
+  });
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>

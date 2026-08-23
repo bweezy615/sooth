@@ -79,7 +79,28 @@
     justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:var(--num)}
   .gl-note{font-size:11px;color:var(--dim);max-width:72ch;margin:12px 0 0;line-height:1.6}
 
-  @media(max-width:720px){.gl-wrap{padding:0 16px 40px}}
+  /* nothing has been filtered out of existence, so say which combination came
+     up empty rather than showing an empty slab */
+  .gl-empty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px;
+    line-height:1.6}
+  .gl-empty .tl{display:block;margin-bottom:8px}
+
+  @media(max-width:720px){
+    .gl-wrap{padding:0 14px 40px}
+    .gl-header{padding:24px 0 14px}
+    .gl-header .sub{font-size:13.5px}
+    /* THE ARCHIVE STOPS BEING A WINDOW ON A PHONE.
+       The 72vh inner scroller is right on a desktop, where the sticky header
+       row stays put while 285 rows move under it. Below 720px the header is
+       gone and every row is a card, so all it does is trap the whole archive
+       in a 580px box the reader has to scroll inside the page they are
+       already scrolling — two scrollbars, one thumb. The cards run down the
+       page instead. */
+    .scroll{max-height:none;overflow-y:visible;overscroll-behavior:auto}
+    .controls{gap:8px;margin:16px 0 12px}
+    .controls select{flex:1 1 44%;min-height:44px}
+    .count{flex:0 0 100%;margin-left:0;text-align:right}
+  }
   /* ---- the archive on a phone ----------------------------------------
      A ten-column table with a 760px floor is, in a 375px viewport, a sideways
      scroller that hides the score, the spread and both moneylines off to the
@@ -106,6 +127,10 @@
     /* column one is the only cell Desk.stack() leaves unlabelled */
     td:first-child::before{content:"WK"}
     tr td:last-child{border-bottom:0}
+    /* the empty-state row is a message, not a field: no label, no card chrome */
+    tr:has(td.emp){border:0;background:none;padding:0}
+    td.emp{display:block;text-align:left;border-bottom:0;padding:0}
+    td.emp::before{content:none}
   }
 </style>
 
@@ -226,6 +251,14 @@ function render(){
     frag.appendChild(tr);
   });
   tb.appendChild(frag);
+  if(!rows.length){
+    const tr=document.createElement('tr');
+    const kind=gt==='POST'?'playoff games':gt==='REG'?'regular-season games':'games';
+    tr.innerHTML=`<td colspan="10" class="emp"><div class="gl-empty"><span class="tl">NO GAMES IN THIS SLICE</span>`+
+      `${team?`${team} played no ${kind} in ${season}.`:`The archive holds no ${kind} for ${season}.`} `+
+      `Nothing has been filtered out of the record — widen the filter above to see it.</div></td>`;
+    tb.appendChild(tr);
+  }
   $('count').innerHTML=`<b>${rows.length}</b> games · ${season}`;
 }
 selS.addEventListener('change',()=>{fillTeams();render();});

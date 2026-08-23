@@ -41,8 +41,16 @@
    wordmark in caps on this page alone — and bare nav{} was giving the
    injected .hd-links its own height, max-width and 28px padding. */
 *{box-sizing:border-box}
+/* The generator (scripts/build_site.py) writes one inline `color:var(--muted)`
+   into the "superseded" row, and defines --muted in its own CSS constant. This
+   page dropped that constant when it was re-skinned, so the token resolved to
+   nothing and the longest, least important sentence on the page rendered at
+   full body brightness — louder than the roots above it. Aliasing the legacy
+   name onto the desk token fixes it here and survives the next rebuild. */
+:root{--muted:var(--mut)}
 /* only the prose column is 860px; the shell's own .wrap stays site-width */
 body>.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+@media (max-width:720px){body>.wrap{padding:0 14px}}
 .prose{padding:40px 0 60px;font:15px/1.7 var(--sans);color:var(--ink2)}
 .prose a{color:var(--brand)}
 .prose a:hover{text-decoration:underline;text-underline-offset:2px}
@@ -93,10 +101,25 @@ background:var(--frost-dim)}
 border:1px solid var(--hair);border-radius:var(--r);padding:17px 19px;margin:0 0 13px;
 box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
 0 18px 40px -22px rgba(0,0,0,.9)}
-.card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:12.5px;
-color:var(--ink2)}
-.card .k{color:var(--dim);min-width:118px;font:600 10px/1 var(--mono);
-letter-spacing:.14em;text-transform:uppercase;padding-top:5px}
+.card .row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:13px;
+padding:5px 0;font-size:12.5px;color:var(--ink2);align-items:baseline}
+.card .k{color:var(--dim);font:600 10px/1.5 var(--mono);
+letter-spacing:.14em;text-transform:uppercase}
+/* A flex row with a 118px minimum on the key wrapped unpredictably: some
+   values sat beside their label, a 64-character hash dropped to its own line,
+   and the rows came out 29px, 57px, 72px and 121px tall in the same card. A
+   two-column grid puts every label on one rail and every value on another, so
+   the card reads down a single edge. Below 560px there is not room for two
+   rails, so the label stacks above its value instead of squeezing it. */
+@media (max-width:560px){
+  .card .row{grid-template-columns:minmax(0,1fr);gap:3px;padding:7px 0}
+  .card{padding:15px 14px}
+}
+/* the prose column is generated markdown; give its lists their markers back
+   (desk.css's reset zeroes padding on everything) */
+.prose ul,.prose ol{margin:0 0 15px;padding-left:22px}
+.prose li::marker{color:var(--mut)}
+.prose p,.prose li{max-width:72ch}
 </style>
 </head>
 <body>

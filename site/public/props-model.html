@@ -37,25 +37,40 @@
      happened to come back negative, not as a confession.
      ====================================================================== */
 
+  /* Nothing here is set below 11px. The shared `.tl` is 10px; every label
+     inside #main is authored on this page, so raising it here changes this
+     page and nothing else. (Reported: the shared token is the real place.) */
+  #main .tl{font-size:11px}
+
   /* the position: a teal hairline is the only chrome that is ours */
   .stance{border-left:2px solid var(--brand);background:var(--g1);
-    padding:18px 22px;margin:22px 0 6px;max-width:86ch;
+    /* 78ch, the same as .prose and the standfirst, so the three blocks that
+       open the page share one right edge instead of stepping out by 8ch */
+    padding:18px 22px;margin:24px 0 8px;max-width:78ch;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .stance p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.7}
   /* was teal. Teal marks a number that beats the market, not a sentence —
      and least of all this sentence. Matches the same block on /trust. */
   .stance b{color:var(--ink)}
 
-  /* every quoted figure, inline: mono, tabular, full ink. The prose is the
-     scaffolding; the measurements are the load. */
-  .n{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+  /* Every quoted figure, inline: mono, tabular, full ink. The prose is the
+     scaffolding; the measurements are the load. Set a hair smaller than the
+     surrounding sans, because Plex Mono at the same nominal size reads a size
+     larger — the figures should sit IN the sentence, not shout over it. */
+  .n{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;
+    font-size:.94em;letter-spacing:-.01em}
 
   .prose{max-width:78ch}
   .prose p{color:var(--ink2);font-size:13.5px;line-height:1.75;margin:0 0 14px}
+  .prose p:last-child{margin-bottom:0}
   .prose h2{font:700 16px/1.3 var(--sans);color:var(--ink);letter-spacing:-.01em;
     margin:30px 0 10px}
-  .prose h3{font:650 13.5px/1.4 var(--sans);color:var(--ink);margin:22px 0 8px}
+  .prose h3{font:650 13.5px/1.4 var(--sans);color:var(--ink);margin:24px 0 8px}
   .prose em{color:var(--ink);font-style:normal;font-weight:600}
+  /* the page had no links at all, which made a published result a dead end */
+  .prose a{color:var(--brand);text-decoration:none;
+    border-bottom:1px solid rgba(45,212,167,.32)}
+  .prose a:hover{border-bottom-color:var(--brand)}
 
   /* ---- the figures ------------------------------------------------------
      Rule 3: glass, not cards. Same recipe and the same light source as the
@@ -73,14 +88,15 @@
                0 18px 40px -22px rgba(0,0,0,.9),
                0 2px 8px -2px rgba(0,0,0,.55)}
   .fig table{border-collapse:collapse;width:100%}
-  .fig th{font:600 10px/1.3 var(--mono);letter-spacing:.13em;text-transform:uppercase;
-    color:var(--dim);text-align:right;padding:11px 14px;
+  .fig th{font:600 11px/1.35 var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--mut);text-align:right;padding:11px 14px;vertical-align:bottom;
     border-bottom:1px solid var(--hair2)}
-  .fig th:first-child{text-align:left;color:var(--mut)}
+  .fig th:first-child{text-align:left}
   .fig td{font-family:var(--mono);font-size:12.5px;color:var(--ink2);
-    text-align:right;padding:10px 14px;border-bottom:1px solid var(--hair);
-    font-variant-numeric:tabular-nums}
-  .fig td:first-child{text-align:left;font-family:var(--sans);color:var(--ink)}
+    text-align:right;padding:11px 14px;border-bottom:1px solid var(--hair);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .fig td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);
+    white-space:normal;line-height:1.45}
   .fig tr:last-child td{border-bottom:0}
   /* .hi was teal. It sits on 11.5 pts (the size of the disagreement that
      kills the model), on 0.48 (real information, on a population no book
@@ -89,12 +105,12 @@
      They keep their emphasis — full ink, heavier — and lose the signal. */
   .fig .hi{color:var(--ink);font-weight:600}
   .fig .bad{color:var(--dn);font-weight:600}
-  .cap{font-size:11.5px;color:var(--mut);line-height:1.6;padding:10px 14px;
+  .cap{font-size:11.5px;color:var(--mut);line-height:1.6;padding:11px 14px;
     border-top:1px solid var(--hair);background:rgba(0,0,0,.22)}
 
   /* the slab face from promo 2: a teal hairline, then a mono-caps label,
      then the headline — the same block, in the same order, as /market. */
-  .kicker{display:inline-block;font:600 10px/1.4 var(--mono);letter-spacing:.16em;
+  .kicker{display:inline-block;font:600 11px/1.4 var(--mono);letter-spacing:.16em;
     text-transform:uppercase;color:var(--mut);margin:0 0 13px;padding-left:13px;
     border-left:1px solid rgba(45,212,167,.42)}
 
@@ -104,12 +120,13 @@
      and the right-hand column is the measurement. Three columns, two of them
      short numbers, fit without it; the label column simply wraps. */
   @media (max-width:720px){
+    .stance{padding:16px 16px;margin:20px 0 8px}
     .fig{margin:16px 0}
-    .fig th,.fig td{padding:9px 8px}
-    .fig th{font-size:9px;letter-spacing:.1em}
+    .fig th,.fig td{padding:10px 9px}
+    .fig th{font-size:11px;letter-spacing:.06em}
     .fig td{font-size:12px}
-    .fig td:first-child{font-size:12.5px;line-height:1.4}
-    .cap{padding:9px 8px}
+    .fig td:first-child{font-size:12.5px;line-height:1.45}
+    .cap{padding:10px 9px}
   }
 </style>
 </head>
@@ -166,7 +183,7 @@
            and it belongs on the surface carrying the result we published. -->
       <div class="fig rimlit">
         <table>
-          <tr><th>On 194 real board props</th><th>Model</th><th>Market</th></tr>
+          <tr><th scope="col">On 194 real board props</th><th scope="col">Model</th><th scope="col">Market</th></tr>
           <tr><td>Predicted the over</td><td>46.4%</td><td>48.6%</td></tr>
           <tr><td>Actually went over</td><td>43.3%</td><td>43.3%</td></tr>
           <tr><td>Average disagreement with the price</td><td class="hi">11.5 pts</td><td>—</td></tr>
@@ -203,7 +220,7 @@
 
       <div class="fig">
         <table>
-          <tr><th>Population</th><th>Sample</th><th>Information in the model</th></tr>
+          <tr><th scope="col">Population</th><th scope="col">Sample</th><th scope="col">Information in the model</th></tr>
           <tr><td>All pitcher-starts</td><td>1,482</td><td class="hi">0.48</td></tr>
           <tr><td>Only games books posted a prop on</td><td>194</td><td class="bad">−0.07</td></tr>
         </table>
@@ -241,7 +258,7 @@
 
       <div class="fig">
         <table>
-          <tr><th></th><th>Worst error</th><th>Brier score</th></tr>
+          <tr><th scope="col"></th><th scope="col">Worst error</th><th scope="col">Brier score</th></tr>
           <tr><td>The model as built</td><td class="bad">22.4 pts</td><td>0.2800</td></tr>
           <tr><td>After recalibration</td><td class="hi">2.7 pts</td><td>0.2480</td></tr>
           <tr><td>The market itself</td><td>4.1 pts</td><td>0.2439</td></tr>
@@ -294,7 +311,8 @@
   <section class="sec" aria-labelledby="h6a">
     <div class="sec-h"><span class="tl" id="h6a">WHAT THIS MEANS FOR THE SITE</span></div>
     <div class="prose">
-      <p>We do publish a daily prop post, and this result decides what it can say.
+      <p>We do publish a <a href="/props">daily prop post</a>, and this result decides
+      what it can say.
       It is selected on <em>price</em> — the best available number across the books
       pricing each prop, measured against their own de-vigged consensus. It is not
       selected on model edge, because the model does not have any. Those are different

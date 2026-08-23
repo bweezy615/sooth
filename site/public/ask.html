@@ -27,25 +27,56 @@
      hue is doing work rather than decorating a control.
 
      The compliance paragraph and the "will not pick a side" line are
-     untouched. */
+     untouched.
+
+     POLISH PASS:
+     · The read-out is never a bare blank. At rest it holds an idle state that
+       names what will appear there and what it will not; while a read is in
+       flight it holds a shimmer at the shape of an answer; a failed read keeps
+       the slot and says what failed. Because the slot is always occupied, an
+       answer landing does not push the compliance line down the page.
+     · The character budget is tabular and width-locked, so counting up from
+       0 to 100 no longer nudges the key sideways.
+     · Every control clears 44px on a phone, the field has a real label rather
+       than a placeholder standing in for one, and the type scale matches
+       /alerts and /learn: h1 clamp(24→32) · lede 14 · body 13.5. */
+
+  h1{font:700 clamp(24px,3.4vw,32px)/1.16 var(--sans);letter-spacing:-.02em;
+    margin:0 0 10px}
+  .page-head .sub{color:var(--ink2);font-size:14px;line-height:1.65;
+    max-width:74ch;margin:0}
+  .page-head .sub b{color:var(--ink)}
+
+  /* the field label: mono caps, like every other label on the site */
+  .ask-lb{display:block;margin-bottom:10px}
 
   /* the input groove */
-  .ask-ta{width:100%;min-height:96px;resize:vertical;color:var(--ink);
+  .ask-ta{width:100%;min-height:104px;resize:vertical;color:var(--ink);
     border:1px solid var(--hair2);border-radius:var(--r);
     font:14px/1.55 var(--sans);padding:13px 14px;
     background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(190,222,228,.03));
     box-shadow:inset 0 1px 3px rgba(0,0,0,.6);
     transition:border-color var(--t-hover) ease}
-  .ask-ta::placeholder{color:var(--dim)}
+  .ask-ta::placeholder{color:var(--mut)}
   .ask-ta:focus{border-color:rgba(45,212,167,.55)}
   .ask-row{display:flex;align-items:center;justify-content:space-between;gap:12px;
-    margin-top:10px;flex-wrap:wrap}
+    margin-top:12px;flex-wrap:wrap}
+
+  /* The examples are written by the script, so the row reserves its own height
+     first — otherwise the whole instrument grows by 44px a beat after the page
+     paints, under the reader's thumb. */
+  .an-chips{min-height:44px;align-items:center}
+  .an-chip{display:inline-flex;align-items:center;min-height:38px;
+    line-height:1.35;text-align:left}
+  @media (max-width:720px){.an-chip{min-height:44px}}
 
   /* The key. Unlit: a dark slab key with a grey mono label, which is the
      honest state — there is nothing to read yet. Lit: the same key wearing the
      one hue, driven by the field itself, so the affordance cannot drift out of
      sync with what the button would actually do. */
-  #go{font:700 11px/1 var(--mono);letter-spacing:.13em;color:var(--mut);
+  #go{display:inline-flex;align-items:center;justify-content:center;
+    min-height:44px;
+    font:700 11px/1 var(--mono);letter-spacing:.13em;color:var(--mut);
     background:linear-gradient(180deg,#1A222A,#10161C);
     border:1px solid var(--hair2);border-radius:var(--r);padding:11px 18px;
     cursor:pointer;
@@ -60,17 +91,48 @@
   #q:not(:placeholder-shown)~.ask-row #go:hover{color:var(--g0);filter:brightness(1.07)}
   #go:active{transition-duration:var(--t-press);transform:translateY(1px)}
   #go[disabled]{opacity:.45;cursor:default;filter:none;transform:none}
+  /* on a phone the label and the key stop sharing a line; the key takes the
+     full width rather than sitting as a small target in the corner */
+  @media (max-width:560px){
+    .ask-row{align-items:stretch}
+    .ask-row .keys{width:100%;justify-content:space-between}
+    #go{flex:1;max-width:none}}
 
   /* the character budget is telemetry until it is nearly spent, then it is a
-     caution — which is the one thing amber is still for */
+     caution — which is the one thing amber is still for. Width-locked on
+     tabular figures so the count cannot shove the key as it grows. */
+  .cnt{font-size:11px;white-space:nowrap}
+  .cnt b{display:inline-block;min-width:3ch;text-align:right;
+    font-variant-numeric:tabular-nums;color:var(--mut)}
   .cnt.near b{color:var(--amber)}
 
   /* The answer: the live state, and the only surface here that is allowed to
      carry the hue. The left rule is set by the script — teal for a read, amber
      when the read failed — so only the slab itself is drawn here. */
-  .an-out{background:linear-gradient(180deg,#12181E,#0C1116);
+  /* The shared slab caps itself at 88ch, which on this page stopped it 170px
+     short of the instrument above it — two stacked surfaces that did not line
+     up on either edge. The slab takes the column; the measure moves onto the
+     paragraphs, where it belongs. */
+  .an-out{max-width:none;background:linear-gradient(180deg,#12181E,#0C1116);
     box-shadow:inset 0 1px 0 rgba(190,240,245,.07),
-               0 14px 34px -24px rgba(0,0,0,.9)}
+               0 14px 34px -24px rgba(0,0,0,.9);
+    padding:16px 18px}
+  .an-out p,.an-out li{max-width:76ch}
+  /* At rest the slot is not lit and not empty: it says what will land here.
+     A blank rectangle would make a working instrument look broken. */
+  /* one floor under all three states, so the compliance line below does not
+     ride up the page when a read replaces the idle text and back down when it
+     fails. Measured: idle 166, shimmer 150, a failed read 150. */
+  #out{min-height:150px}
+  .an-out.is-idle{border-left-color:var(--hair2);color:var(--mut)}
+  .an-out.is-idle .lb{display:block;margin-bottom:9px}
+  .an-out.is-idle .fo{display:block;margin-top:11px;line-height:1.5}
+  .an-out .shimmer{margin:11px 0 0}
+  .an-out .shimmer:first-of-type{margin-top:13px}
+
+  /* the compliance floor is separated from the instrument by a hairline, the
+     way every other surface on the site is separated from the one above it */
+  p.ft{border-top:1px solid var(--hair);margin:28px 0 0;padding:20px 0 0}
 </style>
 </head>
 <body>
@@ -80,33 +142,40 @@
   <div class="scr-strip"><span class="nm">AI ANALYZER</span>
     <span class="tl">ANSWERS USE ONLY THE LIVE BOARD — IT WILL NOT PICK A SIDE</span>
     <span class="tl" style="margin-left:auto">FREE · NO SIGNUP</span></div>
-  <div class="page-head" style="padding:30px 0 0" id="ask">
-    <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 8px">
-      Sooth Analyst</h1>
-    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:74ch;line-height:1.6;margin:0">
+  <div class="page-head" style="padding:30px 0 0" id="ask" tabindex="-1">
+    <h1>Sooth Analyst</h1>
+    <p class="sub">
       Paste a bet or a bet-slip link and get a read from the live board: the fair price with
       the book's margin stripped out, which book has the best number, and the points you gain
-      by taking it. <b style="color:var(--ink2)">It reads the math, not the winner — and it
+      by taking it. <b>It reads the math, not the winner — and it
       will not pick a side.</b></p>
   </div>
 
   <div class="mkt rimlit" style="margin-top:22px">
-    <div class="tl" style="margin-bottom:10px">YOUR BET</div>
+    <label class="tl ask-lb" for="q">YOUR BET</label>
     <textarea id="q" class="ask-ta" maxlength="500"
       placeholder="e.g. Is Skubal over 6.5 strikeouts at -110 a fair number? — or paste your bet-slip link"></textarea>
-    <div class="an-chips" id="examples"></div>
+    <div class="an-chips" id="examples" role="group" aria-label="Example questions"></div>
     <div class="ask-row">
       <span class="tl">READS THE LIVE BOARD &amp; PROPS · NOT ADVICE</span>
-      <span style="display:flex;align-items:center;gap:12px">
+      <span class="keys" style="display:flex;align-items:center;gap:12px">
         <span class="tl cnt" id="cntWrap"><b id="cnt">0</b>/500</span>
-        <button type="button" id="go" class="an-in-btn">GET THE READ</button>
+        <button type="button" id="go" class="an-in-btn"
+          aria-keyshortcuts="Meta+Enter Control+Enter"
+          title="Get the read (⌘↵ / Ctrl+↵)">GET THE READ</button>
       </span>
     </div>
   </div>
 
-  <div id="out" class="an-out" aria-live="polite"></div>
+  <div id="out" class="an-out is-idle" aria-live="polite">
+    <span class="tl lb">THE READ</span>
+    <p>Nothing read yet. Ask about a game or a prop on tonight's board and the answer lands
+      here: the fair price with the book's cut stripped out, which book is posting the best
+      number, and the points you gain by taking it there.</p>
+    <span class="tl fo">WILL NOT NAME A SIDE · SAYS SO WHEN NOTHING IS LIVE</span>
+  </div>
 
-  <p class="ft" style="border:0;margin:18px 0 0;padding:0">Sooth reads odds; it is not a
+  <p class="ft">Sooth reads odds; it is not a
   sportsbook and gives no betting advice. Our prediction model is measured worse than the
   closing market — the edge here is price, not a pick. Prices move constantly; always confirm
   at the book. Analysis and entertainment only. 21+ where lawful. Problem gambling help:
@@ -135,25 +204,41 @@ function setCount(){
   $("cnt").textContent=n;
   $("cntWrap").classList.toggle("near", n>450);
 }
+/* The three states of the read-out share one slot, so the page height does not
+   move underneath the reader between them. */
 function render(text,isErr){
   var out=$("out");
+  out.classList.remove("is-idle");
+  out.removeAttribute("aria-busy");
   out.style.borderLeftColor=isErr?"var(--amber)":"var(--brand)";
   out.innerHTML=D.answer(text);
+}
+function pending(){
+  var out=$("out");
+  out.classList.remove("is-idle");
+  out.setAttribute("aria-busy","true");
+  out.style.borderLeftColor="var(--brand)";
+  out.innerHTML='<span class="tl lb" style="display:block;margin-bottom:2px">'
+    +'READING THE BOARD…</span>'
+    +'<div class="shimmer" style="width:92%"></div>'
+    +'<div class="shimmer" style="width:78%"></div>'
+    +'<div class="shimmer" style="width:85%"></div>'
+    +'<div class="shimmer" style="width:61%"></div>';
 }
 function ask(){
   if(busy) return;
   var q=$("q").value.trim();
-  if(!q){ render("Type a bet first — a player prop, a moneyline, or 'the best bargain on the board'.",true); return; }
+  if(!q){ render("Type a bet first — a player prop, a moneyline, or 'the best bargain on the board'.",true); $("q").focus(); return; }
   busy=true; $("go").disabled=true;
-  render("Reading the board…",false);
+  pending();
   fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
     body:JSON.stringify({question:q})})
     .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
     .then(function(res){
       if(res.ok&&res.j.answer){ render(res.j.answer,false); }
-      else{ render(res.j.error||"The read is unavailable right now.",true); }
+      else{ render(res.j.error||"The read is unavailable right now. Nothing was lost — press the key again in a moment.",true); }
     })
-    .catch(function(){ render("Could not reach the read service. Try again in a moment.",true); })
+    .catch(function(){ render("Could not reach the read service. Check your connection and try again — your question is still in the field.",true); })
     .finally(function(){ busy=false; $("go").disabled=false; });
 }
 $("examples").innerHTML=EX.map(function(e,i){

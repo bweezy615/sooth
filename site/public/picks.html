@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth Pick Engine</title>
-<meta name="description" content="Our full model slate, sealed before kickoff under a public Merkle commitment and graded in public against the closing line — losses included. Never sold as winning.">
+<meta name="description" content="Our full model slate, sealed before kickoff under a public Merkle commitment and graded in public against the closing line — losses included.">
 <link rel="canonical" href="https://sooth.bet/picks">
 <meta property="og:title" content="Sooth Pick Engine — sealed weekly, graded in public">
 <meta property="og:description" content="Every game on the slate, sealed before kickoff and graded against the close after. Losses styled like wins. Free.">
@@ -18,26 +18,75 @@
 <link rel="stylesheet" href="/assets/desk.css">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <style>
-  .ph{padding:34px 0 4px;max-width:88ch}
-  .ph h1{font:700 clamp(22px,3.2vw,29px)/1.15 var(--sans);letter-spacing:-.02em;margin:10px 0 0}
-  .creed{color:var(--mut);font-size:13px;line-height:1.7;margin:12px 0 0;max-width:86ch}
+  /* ---- ONE VERTICAL SCALE ------------------------------------------------
+     8 / 14 / 22 / 32. Every margin and every gap on this page is one of those
+     four numbers, so no pair of blocks is accidentally cramped and no gap is
+     orphaned. Type runs 11 / 12 / 13 / 14 and nothing sets below 11. */
+  .ph{padding:32px 0 0;max-width:88ch}
+  .ph h1{font:700 clamp(22px,3.2vw,29px)/1.15 var(--sans);letter-spacing:-.02em;margin:8px 0 0}
+  .creed{color:var(--mut);font-size:13px;line-height:1.7;margin:14px 0 0;max-width:86ch}
   .creed b{color:var(--ink2)}
   .creed a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
   .creed a:hover{color:var(--ink)}
-  .strip{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 12px}
+  /* desk.css has no rule for .note, so every small print block on this page
+     was setting at body size in full --ink — louder than the instrument it
+     annotates, and out of step with the ledger and the record, which both
+     define one. Same scale as those two until the shell owns it. */
+  .note{font-size:12px;line-height:1.65;color:var(--mut);margin:10px 0 0;max-width:84ch}
+  .note b{color:var(--ink2)}
+  .note a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
+  .note a:hover{color:var(--ink)}
+  .note:empty{display:none}
+  /* the shared section sub-caption is --dim, which is metadata contrast; the
+     ones on this page carry real sentences, so they read at label contrast */
+  .sec-h .sub{color:var(--mut)}
+
+  /* ---- THE SEAL BAND -----------------------------------------------------
+     This was a loose row of chips floating twelve pixels above the slate. But
+     the slate is ONE sealed object, and its identity — which slate, which
+     root, when it was sealed, when it thaws — belongs to that object rather
+     than hovering near it. So while it is sealed the strip is welded to the
+     top of the surface: shared side borders, no bottom border, and the melt
+     running the full width as an actual sheet of ice receding along the
+     slate's top edge, directly above the teal rim. Thawed, it goes back to
+     being an ordinary caption row. */
+  .strip{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;
+    margin:22px 0 14px}
   .strip .tl b{color:var(--ink2)}
-  .count{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-left:auto}
+  .strip.sealed{margin:22px 0 0;padding:12px 14px 0;
+    border:1px solid var(--frost-rim);border-bottom:0;
+    border-radius:var(--r) var(--r) 0 0;
+    background:
+      linear-gradient(126deg,rgba(191,234,242,.055) 0 22%,transparent 22% 41%,
+        rgba(191,234,242,.035) 41% 52%,transparent 52%),
+      linear-gradient(180deg,#101a20,#0A1116);
+    box-shadow:inset 0 1px 0 rgba(220,248,255,.16)}
+  .strip .seal-badge{min-height:30px}
+  .count{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--mut);margin-left:auto}
+  /* thawed there is no second line to fall to, so the count keeps the right
+     edge and the clock stays beside the timestamps it belongs with */
+  .strip:not(.sealed) .count{order:1}
   .confbar{display:inline-block;width:46px;height:4px;border-radius:2px;vertical-align:2px;
-    margin-left:7px;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(255,255,255,.04));
+    margin-right:9px;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(255,255,255,.04));
     box-shadow:inset 0 1px 2px rgba(0,0,0,.7);position:relative;overflow:hidden}
   .confbar i{position:absolute;left:0;top:0;height:100%;display:block;
     background:linear-gradient(180deg,#C7CDD8,#8A919D)}
+  .rk{color:var(--dim);margin-right:1px}
   .pick{font:600 13px var(--sans);color:var(--ink)}
-  .pick .m{font:500 10px var(--mono);color:var(--dim);margin-left:6px}
+  .pick .m{font:500 11px var(--mono);color:var(--mut);margin-left:7px}
   tr.dt>td{padding:0;background:var(--g0);border-bottom:1px solid var(--hair2)}
   .dtin{padding:16px 18px 18px}
   .dtin .kv .k{font:500 11px var(--mono);letter-spacing:.06em;color:var(--mut)}
-  .dt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .dt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+  /* WON and LOST, and the graded push, are ONE rule whose only varying
+     property is hue. Equal weight is a product promise, so it is enforced
+     structurally here exactly as it is on the ledger, rather than left to
+     separate declarations staying in sync. */
+  .vd{font:600 11px/1 var(--mono);letter-spacing:.12em}
+  .vd.w{color:var(--up)}
+  .vd.l{color:var(--dn)}
+  .vd.p{color:var(--mut)}
   /* The one withheld column used to be an amber chip, which said CAUTION about
      something that is merely committed. Amber is staleness; this is ice. The
      shared .frost primitive now carries it — same state, same object, taught
@@ -50,12 +99,19 @@
      already carries and from nothing else. If we don't know when the slate was
      sealed we draw no bar rather than invent a duration. */
   .thaw{display:inline-flex;flex-direction:column;gap:6px}
-  .thaw-r{display:flex;align-items:baseline;gap:9px}
-  .thaw-k{color:var(--frost);opacity:.7}
-  .melt{display:block;height:2px;background:rgba(191,234,242,.07);
+  .thaw-r{display:flex;align-items:baseline;gap:10px}
+  .thaw-k{color:var(--frost);opacity:.75}
+  /* the clock is the hero's one moving number: read it as a number, not as a
+     caption, and hold tabular figures so it cannot jitter as it counts */
+  .thaw-r #cd{font-size:12.5px;letter-spacing:.1em}
+  /* sealed, the melt spans the whole band, edge to edge with its borders */
+  .strip.sealed .thaw{flex:1 0 100%;display:block;margin:12px -14px 0}
+  .strip.sealed .thaw-r{margin-bottom:8px;padding:0 14px}
+  .melt{display:block;width:100%;height:3px;background:rgba(191,234,242,.07);
     position:relative;overflow:hidden}
   .melt b{position:absolute;left:0;top:0;bottom:0;width:100%;display:block;
-    background:var(--frost-rim);transition:width 1s linear}
+    background:linear-gradient(90deg,var(--frost-dim),var(--frost-rim));
+    transition:width 1s linear}
   /* the wet leading edge where the ice is actually going */
   .melt b::after{content:"";position:absolute;right:0;top:0;bottom:0;width:1px;
     background:var(--frost);box-shadow:0 0 6px rgba(191,234,242,.55)}
@@ -71,18 +127,54 @@
     background:linear-gradient(180deg,rgba(191,234,242,.08),
       rgba(191,234,242,.02)),var(--g1)}
   #board.frosted .state .tl{color:var(--frost)}
+  /* the row focus ring is drawn INSIDE the row: .itab clips its overflow, so
+     an offset ring on the first or last row would be sliced off by the
+     surface it sits in */
+  #board tr.g:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+
+  /* ---- RESERVED SPACE, NOT A BLANK --------------------------------------
+     The board was a zero-height box until a fetch resolved and then jumped to
+     its full height, taking the verify call-to-action and the compliance line
+     down the page with it. The skeleton stands in at the row height the real
+     table lands at, so nothing below it moves when the data arrives, and it
+     says which stage it is in rather than showing a bare gap. */
+  .skh{padding:9px 14px;border-bottom:1px solid var(--hair2)}
+  .skl{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    height:41px;padding:0 14px;border-bottom:1px solid var(--hair)}
+  .skl:last-child{border-bottom:0}
+  .skl i{display:block;height:8px;border-radius:2px;
+    background:linear-gradient(90deg,var(--g2) 25%,var(--g3) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+
   @media (max-width:720px){
+    /* the shared section header is one baseline row; in 347px that makes the
+       title wrap to three lines beside its own caption. The caption takes its
+       own line instead. */
+    .sec-h{flex-wrap:wrap;gap:7px 14px}
+    .sec-h .sub{flex:1 0 100%}
     /* the stacked row-cards sit inside the ice rather than against its rim */
     #board.frosted{padding:10px 10px 2px}
+    /* wrapped, the count is a line of its own — pushed right by an auto
+       margin it read as a ragged orphan hanging off the row above */
+    .count{margin-left:0;flex:1 0 100%}
+    /* thumb targets: both of these are links a phone visitor is meant to hit */
+    .strip .seal-badge{min-height:44px;padding:0 12px}
+    .lockcta{width:100%;justify-content:center}
+    /* the skeleton takes the shape the stacked row-cards land in */
+    .skl{height:auto;min-height:112px;flex-direction:column;align-items:stretch;
+      gap:11px;padding:14px 13px;border:1px solid var(--hair);margin-bottom:8px}
+    .skl:last-child{border-bottom:1px solid var(--hair)}
   }
 
   /* Was a glossy cream key lifted off the page — the one warm, rounded, lit
      object on a cold flat site. The promo's vocabulary is a hairline and a
      triangle: teal, precise, flat. */
-  .lockcta{display:inline-flex;align-items:center;gap:9px;
+  /* 44px minimum, because it is the one thing a phone visitor is asked to
+     tap on this screen. Vertical padding was 12+11+12 = 37px. */
+  .lockcta{display:inline-flex;align-items:center;gap:9px;min-height:44px;
     font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
     color:var(--brand);background:var(--brand-dim);
-    border:1px solid rgba(45,212,167,.42);padding:12px 16px;
+    border:1px solid rgba(45,212,167,.42);padding:0 18px;
     border-radius:var(--r);
     transition:color var(--t-hover) ease,border-color var(--t-hover) ease,
       background var(--t-hover) ease}
@@ -90,15 +182,15 @@
     border:4px solid transparent;border-left-color:currentColor}
   .lockcta:hover{color:var(--brand-hi);border-color:var(--brand-hi);
     background:rgba(45,212,167,.15)}
-  .gradedh{margin-top:8px}
-  .rowline{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .ctaw{padding:22px 0 0}
+  .gradedh{margin-top:14px}
   .rehearsal{border-left:2px solid var(--amber);background:var(--amber-dim);
-    padding:9px 13px;border-radius:0 var(--r) var(--r) 0;font-size:12px;
-    color:var(--mut);margin:0 0 12px;max-width:86ch}
+    padding:10px 14px;border-radius:0 var(--r) var(--r) 0;font-size:12px;
+    line-height:1.6;color:var(--mut);margin:0 0 14px;max-width:86ch}
   .rehearsal b{color:var(--amber)}
   .scr-creed{display:none}
   .embedded .scr-creed{display:block;margin:0 0 10px;max-width:92ch}
-  .embedded .strip{margin-top:4px}
+  .embedded .strip{margin-top:8px}
 </style>
 </head>
 <body>
@@ -144,7 +236,7 @@
 
   <div class="strip" id="strip"></div>
   <div id="noplay"></div>
-  <div class="itab" id="board"></div>
+  <div class="itab frosted rimlit" id="board" aria-busy="true"></div>
   <div id="cta"></div>
 
   <section class="sec gradedh" id="gradedSec" style="display:none">
@@ -156,7 +248,7 @@
     <p class="note" id="recline"></p>
   </section>
 
-  <p class="note" style="margin-top:18px">Research and entertainment only. Not betting
+  <p class="note" style="margin-top:32px">Research and entertainment only. Not betting
   advice, not a claim any pick will win. We do not accept wagers and hold no funds.
   21+ where lawful. If gambling is causing harm: <b>1-800-522-4700</b>, 24/7.</p>
 
@@ -177,6 +269,22 @@ var NOPLAY_DIVERGENCE=0.05;
 
 function $(id){return document.getElementById(id);}
 function pcts(x){return x==null?"·":(x*100).toFixed(1)+"%";}
+
+/* ---------- reserved space ----------
+   A skeleton at the exact row height the real table lands at. It exists so
+   that the verify call-to-action and the compliance line below the board do
+   not travel down the page when sixteen rows arrive. The widths are fixed,
+   not random: a skeleton that shimmers differently on every load is claiming
+   variance it cannot know. */
+function skel(n,label){
+  var s='<div class="skh"><span class="tl">'+D.esc(label)+'</span></div>';
+  for(var i=0;i<n;i++)
+    s+='<div class="skl"><i style="width:'+(30+(i*11)%26)+'%"></i>'
+      +'<i style="width:9%"></i></div>';
+  return '<div aria-hidden="true">'+s+'</div>';
+}
+function settled(){ $("board").setAttribute("aria-busy","false"); }
+
 function countdown(iso){
   var ms=Date.parse(iso)-Date.now();
   if(isNaN(ms)) return "—";
@@ -234,24 +342,28 @@ function strip(s,locked){
   var sealedAt=Date.parse(s.sealed_at||s.committed_at||"");
   var meltable=locked && !isNaN(sealedAt)
     && Date.parse(s.unlocks_at||s.earliest_kickoff||"")>sealedAt;
+  /* Sealed, the band is welded to the top of the slate and carries the melt
+     across its full width; thawed, it is an ordinary caption row again. */
+  $("strip").className="strip"+(locked?" sealed":"");
   $("strip").innerHTML=
     '<span class="tl">SLATE <b>'+D.esc(s.slate_id||"—")+'</b></span>'
     +'<a class="seal-badge" href="/verify" title="Verify this commitment">⛓ SEALED '
       +D.esc(String(s.merkle_root||"").slice(0,10))+'…</a>'
     +'<span class="tl">AT <b><span data-ago="'+D.esc(s.sealed_at||s.committed_at||"")+'">'
       +D.ago(s.sealed_at||s.committed_at||"")+'</span></b></span>'
+    +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
+      +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>'
     /* Sealed is frost, not amber: a committed slate is not a warning about
        anything, and the code below already reserves amber for the last five
-       minutes. The melt bar only exists while there is ice to melt. */
+       minutes. The melt bar only exists while there is ice to melt, and it is
+       last in the band so it can span the band's full width. */
     +'<span class="thaw" id="thaw"><span class="thaw-r">'
       +'<span class="tl thaw-k">THAW</span>'
       +'<span class="tl" id="cd" style="font-variant-numeric:tabular-nums;color:'
         +(locked?"var(--frost)":"var(--up)")+'">'
         +countdown(s.unlocks_at||s.earliest_kickoff)+'</span></span>'
       +(meltable?'<i class="melt"><b id="ice"></b></i>':'')
-    +'</span>'
-    +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
-      +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>';
+    +'</span>';
   armCountdown(s.unlocks_at||s.earliest_kickoff,s.sealed_at||s.committed_at);
 }
 
@@ -286,7 +398,11 @@ function lockedRows(games){
       +'<td>'+(g.spread_line==null?'·':(g.spread_line>0?'+':'')+g.spread_line)+'</td>'
       +'<td>'+(mp==null?'·':D.pct(mp,0))+'</td>'
       +'<td><span class="frost">SEALED</span></td>'
-      +'<td class="dim">'+(g.divergence_rank==null?'·':'#'+g.divergence_rank)+'</td>'
+      /* the rank is a published number and the hash is punctuation, so they
+         are not set at the same weight — the column reads as 1…16, not as a
+         column of identical grey tokens */
+      +'<td>'+(g.divergence_rank==null?'<span class="dim">·</span>'
+        :'<span class="rk">#</span>'+g.divergence_rank)+'</td>'
       +'</tr>';
   }).join("");
 }
@@ -306,8 +422,13 @@ function lockedView(t){
   $("board").className="itab frosted rimlit";
   /* The public slate file is the source for the visible columns. If it is
      missing we say the schedule is unavailable rather than inventing rows —
-     an empty state beats sixteen fake ones. */
-  $("board").innerHTML='<div class="state"><span class="tl">LOADING THE SEALED SLATE…</span></div>';
+     an empty state beats sixteen fake ones.
+
+     While it is in flight the board holds a skeleton at the height the real
+     rows land at, and at the row COUNT the sealed payload already told us, so
+     the surface below it does not move when the schedule arrives. */
+  $("board").setAttribute("aria-busy","true");
+  $("board").innerHTML=skel(t.game_count||12,"SEALED · READING THE SCHEDULE…");
   fetch("/data/"+encodeURIComponent(t.slate_id)+".json",{cache:"no-store"})
     .then(function(r){ return r.ok?r.json():null; })
     .then(function(pub){
@@ -318,21 +439,29 @@ function lockedView(t){
           +D.esc((t.game_count||0)+" games are sealed under the root above. The "
             +"schedule file isn't published yet — the slate itself opens at the "
             +"first kickoff either way.")+'</div>';
-        return;
+        settled(); return;
       }
       $("board").innerHTML=lockedTable(games);
+      settled();
     })
     .catch(function(){
-      $("board").innerHTML='<div class="state"><span class="tl">SEALED</span>'
-        +'Couldn\'t load the schedule. The slate opens at the first kickoff.</div>';
+      /* Name what is missing and what is not: the seal is unaffected by a
+         failed schedule read, and saying so is the difference between a
+         broken page and a page that is honest about one file. */
+      $("board").innerHTML='<div class="state"><span class="tl">SCHEDULE UNAVAILABLE</span>'
+        +'The matchups, kickoffs and market prices for this slate live in a public '
+        +'file that could not be read just now. Nothing about the seal depends on '
+        +'it — the root above is already committed, and the slate opens to everyone '
+        +'at the first kickoff.</div>';
+      settled();
     });
   /* No upsell here any more: there is nothing to buy. The lock is the proof
      mechanism, not a price — say exactly that, and point at the one thing a
      reader can actually do with the wait, which is check the root now and
      hold us to it later. */
-  $("cta").innerHTML='<div style="padding:18px 0 4px">'
+  $("cta").innerHTML='<div class="ctaw">'
     +'<a class="lockcta" href="/verify">VERIFY THE SEALED ROOT NOW &rarr;</a>'
-    +'<p class="note" style="margin-top:10px">Everything above is public: the games, '
+    +'<p class="note" style="margin-top:14px">Everything above is public: the games, '
     +'the line, and what the market gives the home side. What is sealed is which side '
     +'we took and how strongly — already written, already hashed into the root above, '
     +'already timestamped by a GitHub commit rather than by us. <b style="color:var(--ink2)">'
@@ -347,12 +476,17 @@ function lockedView(t){
 function row(g){
   var ind=g.independent||{}, con=g.consensus||{};
   var confPct=Math.round((ind.prob||0)*100);
-  return '<tr class="g" data-id="'+D.esc(g.game_id)+'" tabindex="0">'
+  return '<tr class="g" data-id="'+D.esc(g.game_id)+'" tabindex="0"'
+    +' aria-expanded="'+(OPEN===g.game_id?"true":"false")+'">'
     +'<td class="l"><span class="pick">'+D.esc(ind.pick||"·")
       +'<span class="m">'+window.Crest.team(g.away,{size:14})+' AT '
         +window.Crest.team(g.home,{size:14})+'</span></span></td>'
     +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
-    +'<td>'+pcts(ind.prob)+'<span class="confbar"><i style="width:'+confPct+'%"></i></span></td>'
+    /* the bar leads and the number closes the cell, so every stated chance in
+       the column ends on the same right edge instead of being shunted around
+       by a fixed-width bar sitting after it */
+    +'<td><span class="confbar"><i style="width:'+confPct+'%"></i></span>'
+      +pcts(ind.prob)+'</td>'
     +'<td class="dim">'+pcts(g.market_prob)+'</td>'
     +'<td>'+(g.divergence==null?'<span class="dim">·</span>'
       :'<b>'+g.divergence.toFixed(3)+'</b>')+'</td>'
@@ -414,18 +548,32 @@ function openView(s){
     if(OPEN===g.game_id) html+=detail(g);
   });
   $("board").innerHTML=html+'</tbody></table></div>';
+  settled();
 }
 
+/* Expanding a row rerenders the whole table, which throws away the element
+   the keyboard was standing on — so a visitor opening rows with Enter lost
+   their place to the top of the document every time. Put focus back on the
+   row they acted on. Only on the keyboard path: after a mouse click there is
+   nothing to restore and a ring would appear from nowhere. */
+function toggle(tr,refocus){
+  var id=tr.dataset.id;
+  OPEN=OPEN===id?null:id;
+  if(!window.__slate) return;
+  openView(window.__slate);
+  if(!refocus) return;
+  var rows=document.querySelectorAll("#board tr.g");
+  for(var i=0;i<rows.length;i++)
+    if(rows[i].dataset.id===id){ rows[i].focus(); return; }
+}
 document.addEventListener("click",function(e){
   var tr=e.target.closest("tr.g"); if(!tr) return;
-  OPEN=OPEN===tr.dataset.id?null:tr.dataset.id;
-  if(window.__slate) openView(window.__slate);
+  toggle(tr,false);
 });
 document.addEventListener("keydown",function(e){
   if(e.key!=="Enter") return;
   var tr=e.target.closest("tr.g"); if(!tr) return;
-  OPEN=OPEN===tr.dataset.id?null:tr.dataset.id;
-  if(window.__slate) openView(window.__slate);
+  toggle(tr,true);
 });
 
 /* ---------- graded section: reads what publish_record.py emits ---------- */
@@ -445,8 +593,10 @@ function graded(){
         return '<tr><td class="l"><span class="pick">'+D.esc(p.pick)
           +'<span class="m">'+D.esc(p.matchup)+'</span></span></td>'
           +'<td class="dim">'+pcts(p.prob)+'</td>'
-          +'<td>'+(p.won===null?'<span class="dim">push</span>'
-            :p.won?'<span class="up">WON</span>':'<span class="dn">LOST</span>')+'</td>'
+          /* one rule, one differing letter: a loss is drawn at exactly the
+             weight of a win and no later edit can quietly change that */
+          +'<td>'+(p.won===null?'<span class="vd p">PUSH</span>'
+            :p.won?'<span class="vd w">WON</span>':'<span class="vd l">LOST</span>')+'</td>'
           +'<td>'+D.clvChip(p.clv,p.clv_blocked_reason)+'</td></tr>';
       }).join("");
       $("graded").innerHTML='<div class="scr"><table><thead><tr>'
@@ -463,12 +613,18 @@ function graded(){
 
 /* ---------- boot ---------- */
 var SRC=new URLSearchParams(location.search).get("mock")||"/api/picks";
+/* The slate's own height before the slate exists. Ten rows is a reservation,
+   not a claim about the count — the real count replaces it as soon as the
+   sealed payload names one. */
+$("board").innerHTML=skel(10,"OPENING THE SEALED SLATE…");
 fetch(SRC,{cache:"no-store"})
   .then(function(r){return r.json();})
   .then(function(s){
     if(s.error){
+      $("board").className="itab";
       $("board").innerHTML='<div class="state"><span class="tl">NO SEALED SLATE YET</span>'
         +D.esc(s.error)+'</div>';
+      settled();
       return;
     }
     D.land($("board"),function(){
@@ -478,8 +634,12 @@ fetch(SRC,{cache:"no-store"})
     graded();
   })
   .catch(function(){
+    $("board").className="itab";
     $("board").innerHTML='<div class="state"><span class="tl">THE ENGINE IS UNREACHABLE'
-      +'</span>Try again shortly — slates seal Wednesdays in season.</div>';
+      +'</span>This is where the sealed slate stands — every game, both models, under '
+      +'the week\'s Merkle root. Nothing came back for it just now. Try again shortly; '
+      +'slates seal Wednesdays in season.</div>';
+    settled();
   });
 })();
 </script>

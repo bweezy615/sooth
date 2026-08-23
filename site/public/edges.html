@@ -61,9 +61,11 @@
   .mv-hl .pts{border-left:2px solid currentColor;padding-left:8px;
     margin-left:11px;font-weight:600;white-space:nowrap}
 
-  /* the kind tag on a beating-fair row: GAME or PROP, quiet, mono, tagged */
-  #ev .kind{font:600 9px/1 var(--mono);letter-spacing:.16em;color:var(--dim);
-    border:1px solid var(--hair);border-radius:2px;padding:3px 5px;
+  /* the kind tag on a beating-fair row: GAME or PROP, quiet, mono, tagged.
+     11px is the floor for readable type; the tag stays quiet on tracking and
+     weight instead of on size. */
+  #ev .kind{font:600 11px/1 var(--mono);letter-spacing:.1em;color:var(--mut);
+    border:1px solid var(--hair);border-radius:2px;padding:3px 6px;
     margin-left:9px;vertical-align:1px;text-transform:uppercase}
   /* the price you can actually take is ink; the fair line it is measured
      against is the benchmark, so it stays metadata. The gap between the two
@@ -97,16 +99,57 @@
     .mv-sub{max-width:none}
     .sec-h .tl{padding-left:10px}
   }
+  @media (max-width:720px){
+    /* a header on a phone is a label plus a sentence; in one non-wrapping row
+       the sentence gets crushed into a column against the label. It wraps. */
+    .sec-h{flex-wrap:wrap;row-gap:7px}
+    .sec-h .sub{flex:0 0 100%;line-height:1.5}
+    /* the freshness line was pinned to the right by margin-left:auto and then
+       wrapped onto a line of its own, leaving a 34px dead band above a single
+       right-ranged phrase. It sits with the counters it describes. */
+    .status{row-gap:14px;padding:20px 0 18px}
+    .status .live{flex:0 0 100%;margin-left:0}
+  }
+
+  /* ---- polish pass ------------------------------------------------------
+     Reserved height, honest empty states, and one right edge for the figures
+     that share a column. No new hue, no radius, no scroller. */
+
+  /* a section's sub is a sentence, not metadata: --dim is 3.2:1 on --g0,
+     under AA, and these lines carry what the surface actually is */
+  .sec-h .sub{color:var(--mut)}
+
+  /* each feed holds roughly the height it is about to need, so three
+     surfaces do not each grow under a reader who has started at the top */
+  #ev.ld{min-height:380px}
+  #arb.ld{min-height:210px}
+  #mv.ld{min-height:380px}
+
+  /* the counters are the page's headline numbers and they arrive last; the
+     strip keeps their room from the first paint */
+  .status{min-height:78px}
+
+  /* the stat glyph while the count is still unknown is a placeholder, not a
+     zero — it reads as metadata until it is a number */
+  .stat .v.pending{background:none;-webkit-text-fill-color:var(--dim);
+    color:var(--dim);filter:none}
+
+  /* the timestamp column: "3.2H AGO" over "MLB · MONEYLINE" on two lines,
+     right-ranged, so the freshness reading forms one edge down the feed.
+     11px is the floor — this column is the book, the price and the age of
+     the observation, which is data, not decoration. */
+  .mv-meta{font-size:11px}
+  #mv .mv-meta{line-height:1.6}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
 
-  <div class="status">
-    <span class="stat"><span class="v n" id="stEv">·</span><span class="tl">BEATING FAIR</span></span>
-    <span class="stat"><span class="v n" id="stArb">·</span><span class="tl">ARBS + MIDDLES</span></span>
-    <span class="stat"><span class="v n" id="stMv">·</span><span class="tl">MOVES · 48H</span></span>
+  <div class="status" aria-live="polite">
+    <span class="stat"><span class="v n pending" id="stEv">·</span><span class="tl">BEATING FAIR</span></span>
+    <span class="stat"><span class="v n pending" id="stArb">·</span><span class="tl">ARBS + MIDDLES</span></span>
+    <span class="stat"><span class="v n pending" id="stMv">·</span><span class="tl">MOVES · 48H</span></span>
     <span class="live"><span class="pulse on" id="pulse"></span><span class="tl">SNAPSHOT </span>
       <span class="tl" id="stT">—</span></span>
   </div>
@@ -132,7 +175,7 @@
     <div class="feed" id="mv"></div>
   </section>
 
-  <p class="ft" style="border:0;margin:4px 0 0;padding:0">All observation, no prediction.
+  <p class="ft" style="border:0;margin:14px 0 0;padding:0">All observation, no prediction.
   Research only — never a pick. Prices move; confirm at the book.</p>
 
 </main>
@@ -145,9 +188,16 @@ var D=window.Desk;
 D.mount("movement");
 function $(id){return document.getElementById(id);}
 function upcoming(iso){return Date.parse(iso)>Date.now();}
-function state(el,tl,body){$(el).innerHTML='<div class="state"><span class="tl">'+tl
+/* a state replaces a shimmer, so it also releases the reserved height */
+function state(el,tl,body){$(el).classList.remove("ld");
+  $(el).innerHTML='<div class="state"><span class="tl">'+tl
   +'</span>'+(body||"")+'</div>';}
-["ev","arb","mv"].forEach(function(id){D.connecting($(id),"MARKET FEED");});
+/* a count is a count once it exists; until then the glyph is metadata, not a
+   headline number wearing the polished-steel treatment */
+function count(el,n){var e=$(el); e.className="v n"; e.textContent=n;}
+function fill(el,html){$(el).classList.remove("ld"); $(el).innerHTML=html;}
+["ev","arb","mv"].forEach(function(id){
+  $(id).classList.add("ld"); D.connecting($(id),"MARKET FEED");});
 
 Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
              D.load("/data/middles.json"),D.load("/data/moves.json")]).then(function(rs){
@@ -176,16 +226,18 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
             t:pr.player+" "+sd[0]+" "+pr.line,sub:pr.market_label+" · "+e.away+" at "+e.home,
             bk:d.best_book,pr:d.best_price,fair:d.fair_price});});});});});
   evs.sort(function(a,c){return c.edge-a.edge;});
-  $("stEv").textContent=evs.length;
+  count("stEv",evs.length);
   if(evs.length){
-    $("ev").innerHTML=evs.slice(0,20).map(function(r,i){
+    fill("ev",evs.slice(0,20).map(function(r,i){
       return D.feedRow(i,D.esc(r.t)+'<span class="pts n up">'+D.pts(r.edge,1)+' PTS</span>'
         +'<span class="kind">'+r.kind+'</span>',
         D.esc(r.sub),
         D.bk(r.bk)+" "+D.am(r.pr)
-        +'<br><span class="vs">FAIR '+D.am(r.fair)+'</span>');}).join("");
+        +'<br><span class="vs">FAIR '+D.am(r.fair)+'</span>');}).join(""));
   }else if(!b.ok&&!p.ok){
-    state("ev","FEED UNAVAILABLE","Could not load the board — prices elsewhere may be stale.");
+    state("ev","FEED UNAVAILABLE","Neither the game board nor the props board could be "
+      +"loaded, so nothing can be measured against fair. Both rebuild automatically — "
+      +"try again shortly.");
   }else{
     state("ev","NOTHING BEATS FAIR RIGHT NOW",
       "The honest state of an efficient market most of the day. Edges appear when news "
@@ -207,17 +259,19 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
   if(m.ok) (m.data.middles||[]).filter(function(x){return upcoming(x.starts);})
     .forEach(function(x){
       rows.push({hl:window.Crest.team(x.away,{size:14})+" at "+window.Crest.team(x.home,{size:14})
-        +'<span class="pts n am" style="color:var(--amber)">WINDOW '+D.esc(String(x.width))+'</span>',
+        +'<span class="pts n am">WINDOW '+D.esc(String(x.width))+'</span>',
         sub:D.bk(x.low_book)+" "+D.esc(x.low_label)+" ("+D.am(x.low_price)+") · "
         +D.bk(x.high_book)+" "+D.esc(x.high_label)+" ("+D.am(x.high_price)
         +") — lands inside "+x.numbers.join(" · "),
         meta:x.label+" · "+String(x.market).toUpperCase(),sort:0});});
-  $("stArb").textContent=rows.length;
+  count("stArb",rows.length);
   if(rows.length){
     rows.sort(function(a,c){return c.sort-a.sort;});
-    $("arb").innerHTML=rows.map(function(r,i){return D.feedRow(i,r.hl,r.sub,r.meta);}).join("");
+    fill("arb",rows.map(function(r,i){return D.feedRow(i,r.hl,r.sub,r.meta);}).join(""));
   }else if(!b.ok){
-    state("arb","FEED UNAVAILABLE","");
+    state("arb","FEED UNAVAILABLE","An arb is two books priced against each other, so it "
+      +"cannot be computed without the board. The feed rebuilds automatically — try again "
+      +"shortly.");
   }else{
     state("arb","NO LIVE ARB OR MIDDLE AT THIS SNAPSHOT",
       "Arbs open when one book lags a move and close within minutes — our 2023–25 replay "
@@ -225,7 +279,9 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
   }
 
   /* ---- movement ---- */
-  if(!mv.ok){ state("mv","MOVEMENT FEED UNAVAILABLE",""); $("stMv").textContent="·"; return; }
+  if(!mv.ok){ state("mv","MOVEMENT FEED UNAVAILABLE",
+    "Drift and divergence are read from our own hourly capture, which could not be "
+    +"loaded. It republishes on the next cycle."); return; }
   var cutoff=Date.now()-48*36e5;
   function recent(a){return Date.parse(a.observed_at)>=cutoff;}
   function name(a,txt){return String(txt).replace(/side_a/g,a.home).replace(/side_b/g,a.away);}
@@ -233,10 +289,10 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
     .sort(function(a,c){return Math.abs(c.move_pts)-Math.abs(a.move_pts);});
   var dr=(mv.data.drift||[]).filter(recent)
     .sort(function(a,c){return Math.abs(c.move_pts)-Math.abs(a.move_pts);}).slice(0,15);
-  $("stMv").textContent=div.length+dr.length;
+  count("stMv",div.length+dr.length);
   var all=div.concat(dr);
   if(all.length){
-    $("mv").innerHTML=all.map(function(a,i){
+    fill("mv",all.map(function(a,i){
       var cls=a.kind==="divergence"?"am":(a.move_pts>0?"up":"dn");
       return D.feedRow(i,
         window.Crest.team(a.away,{size:14})+' <span style="color:var(--dim)">/</span> '+window.Crest.team(a.home,{size:14})
@@ -244,7 +300,7 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
         D.esc(name(a,a.detail)),
         '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span><br>'
         +String(a.sport).toUpperCase()+" · "+String(a.market).toUpperCase(),
-        "/game?e="+encodeURIComponent(a.event_id)+"&s="+a.sport);}).join("");
+        "/game?e="+encodeURIComponent(a.event_id)+"&s="+a.sport);}).join(""));
     // Divergence (a book out of line with the pack) and drift (one book
     // moving on its own) are different observations sharing one feed. The
     // divergence rows take the leading-edge mark so the boundary is visible.

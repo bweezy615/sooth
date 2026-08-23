@@ -40,8 +40,8 @@
     white-space:nowrap;color:var(--ink2)}
   table.rec tr:last-child td{border-bottom:0}
   table.rec .mdl{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink)}
-  table.rec .mdl small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);
-    font-weight:400;margin-top:2px}
+  table.rec .mdl small{display:block;font-family:var(--mono);font-size:11px;color:var(--mut);
+    font-weight:400;margin-top:3px}
   /* the benchmark row was a full-width wash in the OLD green (#34D399) — a
      second hue, and a lot of surface for one hue that is meant to be a
      highlight. It is now a single lit edge on the row's own cell. */
@@ -52,17 +52,26 @@
      differ only in hue — the same promise the ledger's WON/LOST makes. */
   .vd{font:600 12.5px/1 var(--mono);letter-spacing:.06em}
   .vd.w{color:var(--up)} .vd.l{color:var(--dn)}
-  .cap-note{font-size:11.5px;color:var(--dim);margin:6px 0 0;max-width:76ch}
+  /* --dim on --g0 is metadata contrast, and every one of these blocks is a
+     sentence a reader is meant to read. One prose scale for the page:
+     12px / --mut, matching the ledger. */
+  .cap-note{font-size:12px;line-height:1.6;color:var(--mut);margin:8px 0 0;max-width:76ch}
+  .sec-h .sub{color:var(--mut)}
   /* the same block writes each sample's name and provenance into one cell as
      <b> + <small>, with no shared rule for the <small>: they render glued
      together ("Backtest Anflverse spread_line…"). Separated until the shell
      owns the rule — a denominator you cannot read is not a denominator. */
   #pops .itab td.l small{display:block;margin-top:3px;max-width:38ch;
-    white-space:normal;font:400 10.5px/1.45 var(--mono);color:var(--dim)}
+    white-space:normal;font:400 11px/1.45 var(--mono);color:var(--mut)}
+  /* that block also writes its "what it is" note into a plain <td> under a
+     left-aligned <th>, so the header sat left while every value under it sat
+     right — the one ragged column on the page */
+  #pops .itab tbody td:last-child{text-align:left}
+  @media (max-width:720px){#pops .itab tbody td:last-child{text-align:right}}
   /* the shared populations block prints a <p class="note"> and desk.css has no
      rule for it, so it was setting at body size — louder than the table it
      annotates. Same treatment as .cap-note until the shell owns one. */
-  .note{font-size:11.5px;color:var(--dim);margin:9px 0 0;line-height:1.6;max-width:84ch}
+  .note{font-size:12px;color:var(--mut);margin:10px 0 0;line-height:1.65;max-width:84ch}
   /* amber marks the caution; the 10% amber fill under it was a second hue
      spread over a whole panel. Glass instead, rule left standing. */
   .callout{border-left:2px solid var(--amber);background:var(--g1);
@@ -70,11 +79,14 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   .callout h3{font:600 15px var(--sans);margin:8px 0 10px;color:var(--ink)}
   .callout p{color:var(--ink2);font-size:13px;line-height:1.65;margin:0;max-width:70ch}
-  .cmp{display:flex;gap:26px;flex-wrap:wrap;margin:12px 0 2px;font-family:var(--mono)}
-  .cmp .b{font:600 9.5px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
-  .cmp .v{font-size:19px;font-weight:700;margin-top:4px;color:var(--ink);
+  .cmp{display:flex;gap:26px;flex-wrap:wrap;margin:14px 0 2px;font-family:var(--mono)}
+  .cmp .b{font:600 11px var(--mono);color:var(--mut);letter-spacing:.1em;text-transform:uppercase}
+  .cmp .v{font-size:19px;font-weight:700;margin-top:6px;color:var(--ink);
     font-variant-numeric:tabular-nums}
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  /* three fixed columns broke to a single 200px-wide word per cell between
+     720 and 900; auto-fit lets them reflow to two before they collapse */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:14px;margin-top:14px}
   /* the shared slab light: lit along the top edge, dark along the bottom,
      sitting on its own ambient shadow — same recipe as every instrument */
   .stats .stat,.glo .g{
@@ -89,15 +101,42 @@
   .stats .v{font:700 19px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;
     background:none;-webkit-background-clip:border-box;background-clip:border-box;
     filter:none}
-  .stats .k{font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.45}
-  .glo{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
+  .stats .k{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.45}
+  .glo{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:14px;margin:14px 0 0}
   .glo .g{padding:15px 16px}
   .glo .g b{font-size:13px;color:var(--ink)}
   .glo .g p{font-size:12.5px;color:var(--mut);margin:6px 0 0;line-height:1.55}
-  .fine{color:var(--dim);font-size:11.5px;margin:8px 0 0;line-height:1.6}
+  /* the compliance floor and the regeneration instructions are the last thing
+     on the page and the last thing that may be hard to read */
+  .fine{color:var(--mut);font-size:12px;margin:14px 0 0;line-height:1.65}
   .fine a{color:var(--mut);text-decoration:underline;text-underline-offset:2px}
-  .fine b{color:var(--mut)}
-  .empty{padding:20px 0;color:var(--mut);font-size:13px}
+  .fine a:hover{color:var(--ink)}
+  .fine b{color:var(--ink2)}
+  .empty{padding:20px 0;color:var(--mut);font-size:13px;line-height:1.65;max-width:76ch}
+
+  /* ---- reserved space, not a blank --------------------------------------
+     Four tables, a stat row and a model row all filled from one fetch, and
+     every one of them was an empty box until it resolved — then the page grew
+     by about 1,400px underneath the reader. The skeleton stands in at the row
+     height the real table lands at, and the failure path writes a real
+     sentence into each surface instead of leaving it blank. */
+  tr.sk td{border-bottom:1px solid var(--hair)}
+  .skb{display:inline-block;height:8px;width:64%;border-radius:2px;
+    background:linear-gradient(90deg,var(--g2) 25%,var(--g3) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+  /* table.rec td sets nowrap and its own colour, so the failure cell has to
+     out-specify it or the sentence renders as one unwrapped line */
+  table.rec td.skc{text-align:left;white-space:normal;padding:20px 14px 22px;
+    color:var(--ink2);font:400 12.5px/1.65 var(--sans);max-width:76ch}
+  table.rec td.skc .tl{display:block;margin-bottom:7px}
+  table.rec td.skc a,.empty a{color:var(--ink2);
+    text-decoration:underline;text-underline-offset:2px}
+  table.rec td.skc a:hover,.empty a:hover{color:var(--ink)}
+  .stats .stat.sk .v .skb,.glo .g.sk .skb{width:70%;height:12px}
+  .stats .stat.sk{min-height:70px}
+  .glo .g.sk{min-height:100px}
+  .glo .g.sk .k{margin-top:10px}
   /* the sealed slates are the one pre-committed thing on this page, so they
      get the single lit rim — raised above the sticky header row, and dropped
      on phones where the table is already a stack of cards */
@@ -107,6 +146,14 @@
   /* commitment ids read as frozen artifacts */
   #peTbl .mdl{color:var(--frost)}
   @media (max-width:720px){
+    /* the page column was inset 24px while the shared header sits on 14px, so
+       every heading here started ten pixels right of the wordmark above it */
+    .wrap-n{padding:0 14px 60px}
+    /* the shared section header is one baseline row; in 347px that makes the
+       title wrap to three lines beside its own caption. The caption takes its
+       own line instead. */
+    .sec-h{flex-wrap:wrap;gap:7px 14px}
+    .sec-h .sub{flex:1 0 100%}
     .glo,.stats{grid-template-columns:1fr}
     #peSec .rimlit::after{display:none}
     /* hand the rows back to the shared stacking stylesheet: no floor width,
@@ -226,6 +273,33 @@
   function pct(x){return x==null?"·":(x*100).toFixed(2)+"%";}
   function num(x){return x==null?"·":Number(x).toFixed(5);}
 
+  /* ---------- reserved space ----------
+     Hold each surface at the height its real content lands at, so nothing on
+     the page travels when one fetch resolves. */
+  function skelTbl(el,cols,rows){
+    var h="";
+    for(var i=0;i<rows;i++){
+      h+='<tr class="sk" aria-hidden="true">';
+      for(var c=0;c<cols;c++) h+='<td><i class="skb"></i></td>';
+      h+='</tr>';
+    }
+    el.querySelector("thead").innerHTML="";
+    el.querySelector("tbody").innerHTML=h;
+  }
+  /* An unreadable file is not an empty result, and neither is a blank box:
+     say what belongs here and where the reader can get it themselves. */
+  function failTbl(el,cols,label,body){
+    el.querySelector("thead").innerHTML="";
+    el.querySelector("tbody").innerHTML='<tr><td class="skc" colspan="'+cols+'">'
+      +'<span class="tl">'+label+'</span>'+body+'</td></tr>';
+  }
+  function skelCells(el,n,cls){
+    var h="";
+    for(var i=0;i<n;i++) h+='<div class="'+cls+' sk" aria-hidden="true">'
+      +'<div class="v"><i class="skb"></i></div><div class="k"><i class="skb"></i></div></div>';
+    el.innerHTML=h;
+  }
+
   function tbl(el,results){
     var head='<tr>'
       +'<th>Model</th>'
@@ -271,7 +345,15 @@
   }
 
   function boot(){
-    fetch("/data/figures.json").then(function(r){return r.json();}).then(function(f){
+    skelTbl($("tbl-a"),7,4);
+    skelTbl($("tbl-b"),7,4);
+    skelTbl($("tbl-rel"),5,5);
+    skelCells($("prov"),3,"stat");
+    skelCells($("glo"),3,"g");
+    fetch("/data/figures.json").then(function(r){
+      if(!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(function(f){
       var a=f.evaluation_a, b=f.evaluation_b;
       $("s-be").textContent=(f.breakeven_ats*100).toFixed(2)+"%";
       $("s-cap").textContent=Math.round(f.confidence_cap*100)+"%";
@@ -309,6 +391,25 @@
       $("record").insertAdjacentHTML("beforeend",
         '<p class="empty">The published figures could not be '
         +'loaded. Raw data is at <a href="/data/figures.json">figures.json</a>.</p>');
+      /* five surfaces below this point were left as empty boxes when the
+         fetch failed. Each one now says what belongs in it. */
+      var src='It is regenerated by <code style="font-family:var(--mono)">'
+        +'python scripts/published_figures.py</code> into '
+        +'<a href="/data/figures.json">figures.json</a>, which you can open '
+        +'directly — nothing here is computed in the page.';
+      failTbl($("tbl-a"),7,"SAMPLE A UNAVAILABLE",
+        'Every model scored against the nflverse lines, with its n, its Brier '
+        +'score, its calibration error and its record against the spread. '+src);
+      failTbl($("tbl-b"),7,"SAMPLE B UNAVAILABLE",
+        'The same models scored against real consensus closes. '+src);
+      failTbl($("tbl-rel"),5,"RELIABILITY UNAVAILABLE",
+        'The independent model band by band: what it predicted against how '
+        +'often it actually happened. '+src);
+      $("prov").innerHTML='<p class="empty">How far the weaker line source sits '
+        +'from the real consensus close belongs here. '+src+'</p>';
+      $("glo").innerHTML='<p class="empty">Plain descriptions of the three '
+        +'models belong here. Their full specification is on the '
+        +'<a href="/methodology">methodology page</a> either way.</p>';
     });
   }
 

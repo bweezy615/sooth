@@ -135,6 +135,40 @@ letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
 /* The article itself carries the shared .rimlit hairline (see the markup):
    one lit teal edge across the top of the block, the single edge-light moment
    in the promo, spent on the page that carries the proof. */
+
+/* ---- long-form rhythm ----------------------------------------------------
+   Three typographic repairs, no colour and no new primitive.
+
+   1. MEASURE. The column ran the full 812px — roughly 100 characters at
+      15px Archivo, past the point where the eye reliably finds the start of
+      the next line. Running text is capped at 72ch; headings, tables and code
+      keep the whole column, so a six-column table still has room to breathe.
+
+   2. LIST MARKERS. desk.css's reset zeroes padding on every element, so every
+      <ul> and <ol> here inherited padding-left:0 and hung its bullets and its
+      numbers outside the measure. At 375px they were clipped off the left of
+      the screen: the numbered specification read "Canonical JSON… Leaf hash…"
+      with no numbers at all. 22px puts the markers back on the text's grid.
+
+   3. THE DOUBLED RULE. The markdown these pages are generated from writes
+      `---` before most `##`, and .prose h2 draws its own border-top — so every
+      section opened with two hairlines 42px apart and nothing between them.
+      A heading that already has an <hr> above it drops its own rule. */
+.prose p,.prose li{max-width:72ch}
+.prose ul,.prose ol{margin:0 0 15px;padding-left:22px}
+.prose li>ul,.prose li>ol{margin:7px 0 0}
+.prose li::marker{color:var(--mut)}
+.prose hr+h2{border-top:0;padding-top:0;margin-top:26px}
+.prose h2+h3{margin-top:16px}
+.prose h3+p,.prose h3+ul,.prose h3+ol{margin-top:0}
+@media (max-width:720px){
+  .prose{padding:28px 0 44px}
+  .prose h1{margin-bottom:18px}
+  .prose h2{margin:34px 0 12px;padding-top:18px}
+  .prose hr{margin:26px 0}
+  .prose ul,.prose ol{padding-left:20px}
+  .prose pre{padding:13px 14px}
+}
 </style>
 </head>
 <body>

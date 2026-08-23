@@ -605,9 +605,14 @@ details.more>*+*{margin-top:10px}
 .fm .fl.away{background:linear-gradient(180deg,#8A919D,#5A6170)}
 
 /* footer */
+/* The compliance floor was the LEAST readable text on every page: --dim on
+   --g0 at 11.5px measures 3.18:1, under AA. The one paragraph that has to be
+   read — not accepting wagers, past performance, 21+ — was harder to read than
+   any number on the board. --mut is 5.84:1 on the same ground, and the bold
+   runs go a step brighter again. */
 .ft{border-top:1px solid var(--hair);margin-top:44px;padding:26px 0 40px;
-  color:var(--dim);font-size:11.5px;line-height:1.7}
-.ft b{color:var(--mut)}
+  color:var(--mut);font-size:11.5px;line-height:1.7}
+.ft b{color:var(--ink2)}
 .ft a{color:var(--mut)} .ft a:hover{color:var(--ink)}
 .ft .links{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
 

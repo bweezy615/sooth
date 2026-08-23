@@ -72,9 +72,37 @@
   .ij .st.q{color:var(--amber)}
   .ij .bp{font:500 10.5px var(--mono);color:var(--dim);text-align:right;
     white-space:nowrap}
+  /* SORTING SURVIVES THE PHONE.
+     Below 720px the table stacks into cards and the header row is display:none
+     — which is right, but it took every sort control with it: the seven column
+     heads were the only way to reorder the board, so on a phone the board was
+     frozen in kickoff order. This select carries the same seven keys and calls
+     the same render(). It is hidden wherever the column heads are clickable. */
+  #sortm{display:none}
+
+  /* the board's own empty and error messages get a measure, so they do not
+     run the full width of the slab as one long grey line */
+  .itab .state{padding:32px 20px}
+  .itab .state span.tl{display:block;margin-bottom:8px}
+
   @media (max-width:720px){
     .rpin{padding:16px 0 18px!important}
     .grid{grid-template-columns:1fr;gap:20px}
+    /* a 32px search field and a 35px select are mouse targets. Fingers get 44,
+       and on one column each control gets the full width rather than being
+       squeezed against the other. */
+    .bar{gap:8px;margin:12px 0 2px}
+    .bar .field{flex:1 1 100%;min-height:44px}
+    .bar select{flex:1 1 100%;min-height:44px}
+    #sortm{display:block;background:var(--g2);border:1px solid var(--hair2);
+      border-radius:var(--r);color:var(--ink);padding:8px 10px;
+      font:600 12px var(--mono)}
+    .count{flex:0 0 100%;margin-left:0!important;text-align:right;
+      padding-top:2px}
+    /* the status strip's three figures were sitting on a 34px gap meant for a
+       1360px row; on one column that reads as three orphans */
+    .status{gap:24px;padding:18px 0 14px}
+    .status .live{margin-left:0;flex:0 0 100%}
   }
 </style>
 </head>
@@ -102,6 +130,15 @@
     <select id="wk" aria-label="Week"
       style="background:var(--g2);border:1px solid var(--hair2);border-radius:var(--r);
       color:var(--ink);padding:8px 10px;font:600 12px var(--mono)"></select>
+    <select id="sortm" aria-label="Sort the board">
+      <option value="kick">SORT · KICKOFF</option>
+      <option value="gap">SORT · BEST GAP</option>
+      <option value="form">SORT · FORM EDGE</option>
+      <option value="out">SORT · PLAYERS OUT</option>
+      <option value="spread">SORT · SPREAD</option>
+      <option value="total">SORT · TOTAL</option>
+      <option value="game">SORT · MATCHUP</option>
+    </select>
     <span class="count tl" id="count" style="margin-left:auto"></span>
   </div>
 
@@ -314,7 +351,9 @@ function render(){
     if(OPEN===x.r.event_id) html+=report(x.r);});
   html+='</tbody></table></div>';
   if(!rows.length) html='<div class="state"><span class="tl">NOTHING MATCHES THAT FILTER'
-    +'</span>The board covers upcoming games only.</div>';
+    +'</span>One report per upcoming matchup belongs here. Nothing has been removed: '
+    +'the board covers upcoming games only, so a finished game or a team on a bye '
+    +'will not appear. Clear the team filter, or choose another week.</div>';
   $("board").innerHTML=html;
   $("count").textContent=rows.length+" SHOWN";
 }
@@ -323,6 +362,7 @@ document.addEventListener("click",function(e){
   var th=e.target.closest("th.s");
   if(th){var k=th.dataset.k;
     if(SORT===k){DIR=-DIR;}else{SORT=k;DIR=(k==="game"||k==="kick")?1:-1;}
+    $("sortm").value=SORT;
     return render();}
   var go=e.target.closest("[data-go]");
   if(go) return ask(go.getAttribute("data-go"));
@@ -396,6 +436,8 @@ if(D.embedded){
 
 $("q").addEventListener("input",function(e){FILTER=e.target.value.toLowerCase();render();});
 $("wk").addEventListener("change",function(e){WEEK=e.target.value;render();});
+$("sortm").addEventListener("change",function(e){
+  SORT=e.target.value; DIR=(SORT==="game"||SORT==="kick")?1:-1; render();});
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>

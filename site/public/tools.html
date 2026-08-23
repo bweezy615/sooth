@@ -40,8 +40,11 @@
     border:4px solid transparent;border-left-color:var(--brand)}
   .card .how{font-size:12px;color:var(--dim);margin:0 0 14px;line-height:1.5}
   .card .how b{color:var(--mut)}
-  label{display:block;font:600 9.5px var(--mono);letter-spacing:.12em;
-    text-transform:uppercase;color:var(--dim);margin:12px 0 5px}
+  /* 10px, not 9.5: this is a form label, and the site's own telemetry label
+     (.tl in desk.css) sets the floor for a mono cap. Two label scales half a
+     pixel apart is not a distinction, it is drift. */
+  label{display:block;font:600 10px var(--mono);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--mut);margin:13px 0 6px}
   input,select{background:var(--g2);color:var(--ink);border:1px solid var(--hair2);
     border-radius:var(--r);padding:9px 12px;font-family:var(--mono);font-size:14px;
     width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums}
@@ -57,7 +60,24 @@
     box-shadow:inset 0 1px 3px rgba(0,0,0,.4)}
   .out b{color:var(--ink);font-size:14px}
   .out .g{color:var(--up)} .out .r{color:var(--dn)}
-  .out .hint{color:var(--dim);font-size:11.5px;font-family:var(--sans)}
+  .out .hint{color:var(--mut);font-size:11.5px;font-family:var(--sans);
+    line-height:1.55;display:inline-block}
+  /* a select that has nothing in it yet says so, rather than opening empty */
+  select:disabled{color:var(--dim);cursor:default}
+
+  @media (max-width:720px){
+    /* the rest of the site drops to a 14px gutter below 720px; this page kept
+       a 24px desktop gutter, so its cards sat 10px narrower than every other
+       surface at the same viewport */
+    .wrap-page{padding:0 14px 40px}
+    .page-head{padding:26px 0 18px}
+    .grid{gap:12px}
+    .card{padding:16px 15px}
+    /* 36px is a mouse target. A finger gets 44, and the paired fields stop
+       being two half-width boxes when the screen is already one column. */
+    input,select{min-height:44px}
+    .duo{gap:8px}
+  }
 </style>
 </head>
 <body data-page="tools">
@@ -102,13 +122,13 @@
   the sharpest read of the market)? Pick any 2023–25 NFL game, enter the price you
   got, and compare it against the consensus close across 10–16 books.</p>
   <div class="duo">
-    <div><label for="clv-season">Season</label><select id="clv-season" aria-describedby="clv-out"></select></div>
-    <div><label for="clv-week">Week</label><select id="clv-week" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-season">Season</label><select id="clv-season" aria-describedby="clv-out" disabled><option>Loading…</option></select></div>
+    <div><label for="clv-week">Week</label><select id="clv-week" aria-describedby="clv-out" disabled><option>Loading…</option></select></div>
   </div>
   <label for="clv-game">Game</label>
-  <select id="clv-game" aria-describedby="clv-out"></select>
+  <select id="clv-game" aria-describedby="clv-out" disabled><option>Loading the closing lines…</option></select>
   <div class="duo">
-    <div><label for="clv-side">Your side</label><select id="clv-side" aria-describedby="clv-out"></select></div>
+    <div><label for="clv-side">Your side</label><select id="clv-side" aria-describedby="clv-out" disabled><option>—</option></select></div>
     <div><label for="clv-price">Your price</label><input id="clv-price" inputmode="numeric" placeholder="+150" aria-describedby="clv-out"></div>
   </div>
   <div class="out" id="clv-out" aria-live="polite"><span class="hint">Pick a game and enter your price…</span></div>
@@ -181,12 +201,19 @@ $('cv-ip').addEventListener('input',fromIp);
 
 /* CLV checker */
 let CLV=null;
+const CLV_SELECTS=['clv-season','clv-week','clv-game','clv-side'];
 fetch('data/clv-nfl.json').then(r=>r.json()).then(d=>{
   CLV=d.games;
   const seasons=[...new Set(CLV.map(g=>g.s))].sort((a,b)=>b-a);
   $('clv-season').innerHTML=seasons.map(s=>`<option>${s}</option>`).join('');
+  CLV_SELECTS.forEach(id=>$(id).disabled=false);
   clvWeeks();
-}).catch(()=>{ $('clv-out').innerHTML='<span class="hint">Closing-line data unavailable.</span>'; });
+}).catch(()=>{
+  CLV_SELECTS.forEach(id=>{$(id).innerHTML='<option>Unavailable</option>';});
+  $('clv-out').innerHTML='<span class="hint">The 2023–25 closing-line archive did not '
+    +'load, so there is nothing to compare your price against. The other three '
+    +'calculators on this page do their arithmetic locally and still work.</span>';
+});
 function clvWeeks(){
   const s=+$('clv-season').value;
   const weeks=[...new Set(CLV.filter(g=>g.s===s).map(g=>g.w))].sort((a,b)=>a-b);

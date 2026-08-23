@@ -108,7 +108,8 @@
   #anchips .an-chip:hover::before{opacity:1}
 
   /* ---- the radar: the one hero surface, so it takes the one lit rim ---- */
-  #radar .radar-side .an-chip{display:block;font:600 10.5px/1 var(--mono);
+  #radar .radar-side .an-chip{display:flex;align-items:center;
+    justify-content:center;min-height:44px;font:600 11px/1 var(--mono);
     letter-spacing:.14em;color:var(--brand);background:var(--brand-dim);
     border-color:rgba(45,212,167,.42);padding:12px 14px}
   #radar .radar-side .an-chip:hover{color:var(--brand-hi);
@@ -118,6 +119,90 @@
      not metadata grey; the pulse gets the halo of a lit indicator */
   #status .live .tl[data-ago]{color:var(--ink2)}
   #status .pulse.on{box-shadow:0 0 8px rgba(45,212,167,.75)}
+
+  /* ---- polish pass: rhythm, alignment, reserved space, targets ----------
+     Nothing below adds a hue, a radius or a scroller. It fixes four things
+     the dense surface was getting wrong: numbers that did not line up, space
+     that appeared under the reader as data landed, a section with no rule,
+     and phone targets under 44px. */
+
+  /* a field needs a name. The placeholder is an example and it leaves the
+     moment you type, so it was never the label it was standing in for. */
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+    overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);
+    white-space:nowrap;border:0}
+
+  /* the analyzer is a section like every other one on the page and was the
+     only one with neither a rule above it nor the section's own top rhythm */
+  #analyzer{border-top:1px solid var(--hair);padding-top:20px}
+
+  /* a section's sub is a sentence, not metadata: --dim is 3.2:1 on --g0,
+     under AA, and these lines carry what the surface actually is */
+  .sec-h .sub{color:var(--mut)}
+  .sec-h .more{color:var(--mut)}
+
+  /* space the numbers hold before they arrive. Reserving is not decoration:
+     a board that grows 400px under a reader who has already started reading
+     is the same defect as a page that jumps. */
+  #status{min-height:78px}
+  #games.ld{min-height:430px}
+  #radar.ld{min-height:296px}
+
+  /* BEST PRICE was ragged — the price ends where the book code starts and the
+     code is two to four characters wide, so eleven right-aligned prices
+     printed on eleven different edges. Fixing the code's box restores the
+     column. Same reason the empty variants below keep the track's width. */
+  #games .bkk{display:inline-block;min-width:36px;text-align:left;font-size:11px}
+  #games .gaptrk.void{visibility:hidden}
+
+  /* 11px is the floor for type a person is expected to read. The column
+     names and the book codes on the board were 9.5 and 10; they buy the size
+     back out of tracking, not out of legibility. */
+  #games thead th{font-size:11px;letter-spacing:.1em}
+  #anchips .an-chip{font-size:11px}
+
+  /* Below 720px the row IS the card, and .itab clips: a focused card had its
+     ring cut off on both edges. Above 720 the ring is drawn inside the row
+     instead, because .scr has to keep clipping — it is the only thing
+     stopping a 960px-wide table from pushing the whole page sideways, and a
+     sticky column header is not worth a horizontal scrollbar on the body. */
+  #games{overflow:visible}
+  #games tbody tr[data-href]:focus-visible{outline-offset:-2px}
+
+  @media (max-width:720px){
+    /* The status strip is a baseline-aligned flex row with a 34px gap and a
+       live block pinned right by margin-left:auto. Wrapped into 375px that
+       produced a staggered, half-overlapping stack with a dead band down the
+       middle. On a phone it is a small grid instead: the date, then the two
+       readings side by side, then the freshness line on its own. */
+    #status{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;
+      align-items:start;padding:16px 0 14px;min-height:0}
+    #status>.tl{grid-column:1/-1}
+    #status .live{grid-column:1/-1;margin-left:0}
+
+    /* a section header on a phone is a label, a sentence and sometimes a
+       note; in one non-wrapping row the label breaks mid-word and the
+       sentence is crushed into a column. It wraps. */
+    .sec-h{flex-wrap:wrap;row-gap:7px}
+    .sec-h .sub{flex:0 0 100%;line-height:1.5}
+    .sec-h .more{margin-left:0}
+
+    /* 44px targets. The field was 40, the chips 29. */
+    #analyzer .an-in input{min-height:44px;padding:12px 13px}
+    #analyzer .an-in button{padding:0 15px;letter-spacing:.1em}
+    #anchips .an-chip{display:flex;align-items:center;min-height:44px;
+      padding:8px 14px 8px 26px}
+    /* the analyzer chips are full sentences; at 375 they read as a stack of
+       questions rather than three truncated fragments in a row */
+    #anchips{flex-direction:column;align-items:stretch}
+    /* Inside the stacked card each cell is a flex row of label + value, and a
+       value made of two parts (price + book, gain + track) was being split
+       across the whole card by space-between — the price ended up centred and
+       the book code stranded on the far edge. The value's parts travel
+       together to the right edge, as one reading, exactly as on the board. */
+    #games tbody td[data-l]{gap:9px}
+    #games tbody td[data-l]>span:first-of-type{margin-left:auto}
+  }
 
   /* Inside a desk monitor: the analyzer has its own screen, and the sport
      rail relocates from the (absent) site header into the page itself. */
@@ -141,7 +226,7 @@
     <span class="tl" style="margin-left:auto">FAIR VS BEST · EVERY BOOK WE TRACK</span></div>
   <div class="page-head" style="padding:26px 0 0">
     <span class="tl slab-lb">MARKET INTELLIGENCE DESK · LIVE PRICING</span>
-    <h1 style="font:760 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
+    <h1 style="font:700 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
       The best sports betting research analyzer on the market.</h1>
     <p style="color:var(--mut);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:66ch">
       Form, availability, prices and movement — composed into one read per game,
@@ -153,10 +238,11 @@
 
   <!-- ANALYZE — the product, on landing -->
   <div id="sportRailLocal"></div>
-  <section class="sec" id="analyzer" style="border-top:0;padding-top:6px" aria-labelledby="anH">
+  <section class="sec" id="analyzer" aria-labelledby="anH">
     <div class="sec-h"><span class="tl" id="anH">ANALYZE A GAME</span>
       <span class="sub">ask anything on tonight's slate — answers use only the live numbers, and it will not pick a side</span>
       <span class="more tl" id="anterms"></span></div>
+    <label class="vh" for="anq">Ask a question about tonight's board</label>
     <div class="an-in" style="max-width:720px">
       <input id="anq" maxlength="500" placeholder="e.g. Analyze tonight's Mets game — what's the number doing?">
       <button id="ango">ANALYZE</button>
@@ -242,8 +328,10 @@ function renderRadar(){
   if(!pool.length){ (BOARD.boards||[]).forEach(function(b){
     b.events.forEach(function(e){ if(!started(e)) pool.push({sp:b.sport,e:e}); });});}
   var el=document.getElementById("radar");
+  el.classList.remove("ld");
   if(!pool.length){ el.innerHTML='<div class="state"><span class="tl">NO OPEN MARKETS'
-    +'</span>Nothing upcoming is inside the pricing window right now.</div>'; return; }
+    +'</span>Nothing upcoming is inside the pricing window right now. '
+    +'Prices publish as kickoff approaches; the sport rail above shows what is live.</div>'; return; }
   pool.sort(function(a,b){return b.e.max_gain_pts-a.e.max_gain_pts;});
   var attested=pool.filter(function(p){return (p.e.n_books||0)>=5;});
   var top=(attested[0]||pool[0]);
@@ -277,6 +365,7 @@ function renderRadar(){
 /* ---- the market table ---- */
 function renderGames(){
   var b=boardFor(SP), el=document.getElementById("games");
+  el.classList.remove("ld");
   document.getElementById("gmSub").textContent = b
     ? (SPORT_LABEL[SP]+" · "+b.n_books+" book"+(b.n_books>1?"s":"")+" compared · tap a game for the full analysis")
     : "";
@@ -296,10 +385,14 @@ function renderGames(){
       +'<td class="l"><span class="mu">'+window.Crest.team(e.away,{size:14})
         +'<span class="at">AT</span>'+window.Crest.team(e.home,{size:14})+'</span></td>'
       +'<td>'+D.esc(fav.name.split(" ").pop())+' '+D.am(fav.fair_price)+'</td>'
-      +'<td>'+(single?'<span class="dim">·</span>'
+      /* the single-book variants keep the width of the book code and of the
+         gain track, so one thin row cannot knock the whole column's right
+         edge out of line */
+      +'<td>'+(single?'<span class="dim">·</span><span class="bkk"></span>'
         :'<span class="up">'+D.am(best.best_price)+'</span><span class="bkk">'
           +D.bk(best.best_book)+'</span>')+'</td>'
       +'<td>'+(single?'<span class="dim">—</span>'
+        +'<span class="gaptrk void" aria-hidden="true"></span>'
         :'<span class="up">'+D.pts(best.gain_pts)+'</span>'
         +'<span class="gaptrk"><i style="width:'+gapW.toFixed(0)+'%"></i></span>')+'</td>'
       +'<td class="dim">'+e.n_books+'</td></tr>';
@@ -385,7 +478,9 @@ document.addEventListener("click",function(e){
 document.getElementById("anq").addEventListener("keydown",function(e){
   if(e.key==="Enter") runAnalyze(e.target.value.trim());});
 
-/* boot */
+/* boot — .ld holds the height the surface is about to need, so the shimmer
+   and the board it hands off to occupy the same room */
+["radar","games"].forEach(function(id){document.getElementById(id).classList.add("ld");});
 D.connecting(document.getElementById("radar"));
 D.connecting(document.getElementById("games"),"PRICE FEED");
 D.load("/data/board.json").then(function(bd){
@@ -393,7 +488,8 @@ D.load("/data/board.json").then(function(bd){
     document.getElementById("status").innerHTML=
       '<span class="live"><span class="pulse dead"></span><span class="tl">FEED UNAVAILABLE</span></span>';
     ["radar","games"].forEach(function(id){
-      document.getElementById(id).innerHTML=
+      var el=document.getElementById(id); el.classList.remove("ld");
+      el.innerHTML=
         '<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
         +'The board could not be loaded. It rebuilds automatically — try again shortly.</div>';});
     return;

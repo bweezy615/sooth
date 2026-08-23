@@ -29,12 +29,31 @@
      legend, the pip on an alert that is ON, its ▸ marker, and the one key that
      submits. Everything else is the cold ground, cool white and grey. The
      frequency lines, the consent paragraph and the "never send" list are
-     verbatim; only their typography moved. */
+     verbatim; only their typography moved.
+
+     POLISH PASS — this is the most important form on the site, so:
+     · One type scale, shared with /ask and /learn: h1 clamp(24→32) · lede 14
+       · body 13.5 · dense 13 · mono label 11. Nothing this file sets falls
+       under 11px, and no prose on the ground is dimmer than --mut.
+     · Every control clears 44px on a phone, and the address field carries a
+       real visible label rather than a placeholder standing in for one.
+     · Three states that are not blank: NOTHING SELECTED says what you would
+       get (nothing) before you find out by submitting; SENDING disables the
+       key and says so; FAILED says what did not happen. The message slot
+       reserves two lines, so the consent paragraph under it does not jump
+       when a message lands. */
 
   .cols{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin:22px 0 8px;
     align-items:start}
   @media (max-width:860px){.cols{grid-template-columns:1fr}}
   .pane{padding:20px 22px}
+  @media (max-width:520px){.pane{padding:18px 16px}}
+
+  /* one heading scale across the three surfaces a newcomer lands on */
+  .page-head h1{font:700 clamp(24px,3.4vw,32px)/1.16 var(--sans);
+    letter-spacing:-.02em;margin:0 0 10px}
+  .page-head .sub{color:var(--ink2);font-size:14px;line-height:1.65;
+    max-width:70ch;margin:0}
 
   fieldset{border:0;margin:0;padding:0}
   legend{padding:0}
@@ -61,6 +80,9 @@
   .opt input:checked{border-color:var(--brand);
     background:linear-gradient(180deg,var(--brand-hi),var(--brand));
     box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 11px rgba(45,212,167,.35)}
+  /* the switch is 15px, so the ring alone is a small thing to find on a big
+     row — the whole row lights with it */
+  .opt:focus-within .nm,.band:focus-within .bn{color:var(--ink)}
 
   /* the promo's ▸ line, same recipe as .caps in the shared sheet: mono caps,
      wide tracking, a small triangle that lights when the alert is on */
@@ -72,11 +94,13 @@
     transition:border-left-color var(--t-hover) ease}
   .opt input:checked+span .nm{color:var(--ink)}
   .opt input:checked+span .nm::before{border-left-color:var(--brand)}
-  .opt .ds{display:block;font-size:12.5px;color:var(--ink2);line-height:1.6;
-    margin:7px 0 0;padding-left:15px;max-width:64ch}
+  .opt .ds{display:block;font-size:13.5px;color:var(--ink2);line-height:1.65;
+    margin:7px 0 0;padding-left:15px;max-width:62ch}
+  /* how often it really fires: a label, so mono caps — but at 11px and --mut,
+     because it is the line that decides whether somebody signs up */
   .opt .fq{display:block;margin:8px 0 0;padding-left:15px;
-    font:600 10px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--dim)}
+    font:600 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--mut)}
 
   /* Threshold bands, revealed only when price alerts are on. They are a branch
      of the switch above, not a new section, so the rail runs down from it. */
@@ -84,7 +108,7 @@
     border-left:1px solid var(--hair2)}
   .bands[hidden]{display:none}
   .band{display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:start;
-    padding:8px 0;cursor:pointer}
+    padding:9px 0;cursor:pointer}
   .band input{-webkit-appearance:none;appearance:none;width:13px;height:13px;
     margin:2px 0 0;cursor:pointer;border-radius:50%;border:1px solid var(--hair2);
     background:linear-gradient(180deg,rgba(190,222,228,.06),rgba(0,0,0,.35));
@@ -94,28 +118,38 @@
   .band:hover input{border-color:var(--frost-rim)}
   .band input:checked{border-color:var(--brand);background:var(--brand);
     box-shadow:inset 0 0 0 2.5px var(--g1),0 0 9px rgba(45,212,167,.32)}
-  .band .bn{display:block;font:600 11.5px var(--mono);letter-spacing:.04em;
+  .band .bn{display:block;font:600 12px var(--mono);letter-spacing:.04em;
     color:var(--ink2);transition:color var(--t-hover) ease}
   .band input:checked+span .bn{color:var(--ink)}
-  .band .bd{display:block;font-size:12px;color:var(--mut);line-height:1.55;margin:3px 0 0}
+  .band .bd{display:block;font-size:12.5px;color:var(--mut);line-height:1.55;
+    margin:4px 0 0;max-width:56ch}
 
   @media (forced-colors:active){
     .opt input,.band input{-webkit-appearance:auto;appearance:auto}}
 
-  .row{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap}
+  /* the address row: a labelled field and the one key that commits. Bottom
+     aligned, so the key sits on the field's baseline rather than stretching
+     to the height of the label above it. */
+  .row{display:flex;gap:10px;margin:20px 0 0;align-items:flex-end;flex-wrap:wrap}
+  .fld{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:7px}
   /* the address field is a groove cut into the slab, not a raised box */
-  .row input[type=email]{flex:1;min-width:220px;
+  .row input[type=email]{width:100%;min-height:46px;
     background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(190,222,228,.03));
     border:1px solid var(--hair2);border-radius:var(--r);color:var(--ink);
     font:14px var(--sans);padding:12px 13px;
     box-shadow:inset 0 1px 2px rgba(0,0,0,.55);
     transition:border-color var(--t-hover) ease}
-  .row input[type=email]::placeholder{color:var(--dim)}
+  .row input[type=email]::placeholder{color:var(--mut)}
   .row input[type=email]:focus{border-color:rgba(45,212,167,.55)}
+  /* a rejected address says so on the field as well as in the message, and
+     red is the site's adverse hue — this is the one adverse thing here */
+  .row input[type=email][aria-invalid="true"]{border-color:rgba(255,107,107,.55)}
   /* the one key on the page: the shared sheet's raised-key physics wearing the
      one hue, because a control that commits something is chrome that belongs
      to us. Mono caps so it reads as an instrument key, not a web button. */
-  .go{font:700 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  .go{display:inline-flex;align-items:center;justify-content:center;
+    min-height:46px;
+    font:700 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
     color:var(--g0);background:linear-gradient(180deg,var(--brand-hi),var(--brand));
     padding:13px 20px;border-radius:var(--r);border:0;cursor:pointer;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.28),
@@ -126,6 +160,14 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 1px 3px -1px rgba(0,0,0,.6)}
   .go[disabled]{opacity:.42;cursor:default;filter:none;transform:none;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+  /* below this the field and the key stop competing for one line */
+  /* stacked, the row's main axis is vertical — so the field's flex-basis has
+     to be released or it claims 240px of HEIGHT and opens a hole above the
+     key */
+  @media (max-width:560px){
+    .row{flex-direction:column;align-items:stretch}
+    .fld{flex:0 0 auto}
+    .go{width:100%}}
 
   .msg{margin:14px 0 0;padding:12px 14px;font-size:13px;line-height:1.6;
     border-left:2px solid var(--hair2);background:var(--g1);color:var(--ink2)}
@@ -133,6 +175,10 @@
   .msg.ok{border-left-color:var(--brand);color:var(--ink)}
   .msg.bad{border-left-color:var(--dn)}
   .msg b{color:var(--ink)}
+  /* SENDING… is one line and the confirmation is three; without a floor the
+     consent paragraph below jumps up the page while the request is in flight
+     and back down when it lands. Two lines of floor absorbs it. */
+  #msg{min-height:68px}
   /* The outcome of a confirm/unsubscribe click gets its own slot at the TOP of
      the page. Arriving from an email link is the single most common way anyone
      sees this page, and the in-form message sits ~1200px down — below the fold
@@ -140,22 +186,36 @@
   #banner{margin:18px 0 0;font-size:13.5px;padding:14px 16px}
   #banner[hidden]{display:none}
 
-  .fine{font-size:11.5px;color:var(--dim);line-height:1.6;margin:14px 0 0}
-  .never li{font-size:12.5px;color:var(--ink2);line-height:1.6;padding:9px 0 9px 18px;
+  /* The empty state of the fieldset. Zero switches on is a legitimate thing to
+     do to this form and it silently produces nothing, so it says so where the
+     choice was made instead of waiting for the submit to fail. Amber: this is
+     a caution, and a caution must not wear the brand hue. */
+  .none{margin:16px 0 0;padding:11px 14px;font-size:13px;line-height:1.55;
+    color:var(--ink2);border-left:2px solid var(--amber);background:var(--g1)}
+  .none[hidden]{display:none}
+  .none b{color:var(--ink)}
+
+  .fine{font-size:13px;color:var(--mut);line-height:1.65;margin:14px 0 0;
+    max-width:70ch}
+  /* the same rule the form's legend has, minus the hue: the two panes start
+     on the same line and are separated from their contents the same way */
+  .never h2{display:block;padding-bottom:10px;margin-bottom:2px;
+    border-bottom:1px solid var(--hair)}
+  .never li{font-size:13px;color:var(--ink2);line-height:1.6;padding:10px 0 10px 18px;
     position:relative;border-bottom:1px solid var(--hair);list-style:none}
   .never li:last-child{border-bottom:0}
   .never ul{margin:0;padding:0}
   /* was --dn. Red is the site's adverse-movement hue; spending it on a
      decorative bullet makes it mean less where it carries a number. A struck
      hairline says "not this" without a second colour. */
-  .never li::before{content:"";position:absolute;left:0;top:16px;width:8px;height:1px;
+  .never li::before{content:"";position:absolute;left:0;top:17px;width:8px;height:1px;
     background:var(--dim)}
   .never li b{color:var(--ink)}
   /* amber, kept: this block exists to warn about volume, and a caution must
      not look like the brand hue */
   .measured{border-left:2px solid var(--amber);background:var(--g1);
-    padding:14px 18px;margin-top:16px}
-  .measured p{color:var(--ink2);font-size:12.5px;line-height:1.65;margin:0}
+    padding:14px 18px;margin-top:18px}
+  .measured p{color:var(--ink2);font-size:13px;line-height:1.65;margin:0}
   .measured .n{font-family:var(--mono);color:var(--ink)}
 </style>
 </head>
@@ -168,9 +228,8 @@
     <span class="tl" style="margin-left:auto"><a href="/trust" style="color:var(--mut)">PROOF LEDGER →</a></span></div>
 
   <div class="page-head" style="padding:26px 0 0">
-    <h1 style="font:760 clamp(22px,3.4vw,32px)/1.16 var(--sans);letter-spacing:-.02em;margin:0 0 10px">
-      We'll tell you when something happened.<br>Never what to do about it.</h1>
-    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:70ch;line-height:1.68;margin:0">
+    <h1>We'll tell you when something happened.<br>Never what to do about it.</h1>
+    <p class="sub">
       Three things are worth an email, and none of them is a tip. A slate got sealed before
       kickoff. A week got graded, win or lose. A book is pricing away from the rest of the
       market right now. Everything here is free — alerts are not the paid tier and never were.</p>
@@ -181,7 +240,7 @@
   <div class="cols">
 
     <!-- ------------------------------------------------------------------ -->
-    <form class="feed pane rimlit" id="form" novalidate>
+    <form class="feed pane rimlit" id="form" tabindex="-1" novalidate>
       <fieldset>
         <legend class="tl">WHAT SHOULD WE TELL YOU ABOUT</legend>
 
@@ -220,8 +279,8 @@
           </span>
         </label>
 
-        <div class="bands" id="bands" hidden>
-          <div class="tl" style="margin-bottom:4px">HOW FAR OUT OF LINE IS WORTH AN EMAIL</div>
+        <div class="bands" id="bands" hidden role="group" aria-labelledby="bandsLb">
+          <div class="tl" id="bandsLb" style="margin-bottom:4px">HOW FAR OUT OF LINE IS WORTH AN EMAIL</div>
           <label class="band">
             <input type="radio" name="min" value="1.5">
             <span><span class="bn">1.5+ points</span>
@@ -242,15 +301,28 @@
         </div>
       </fieldset>
 
+      <p class="none" id="none" hidden aria-live="polite"><b>Nothing is selected.</b>
+        With all three switches off there is no email for us to send, so pick at least
+        one of them.</p>
+
       <div class="row">
-        <input type="email" name="email" id="email" placeholder="you@example.com"
-          autocomplete="email" spellcheck="false" aria-label="Your email address">
+        <div class="fld">
+          <label class="tl" for="email">YOUR EMAIL ADDRESS</label>
+          <input type="email" name="email" id="email" placeholder="you@example.com"
+            autocomplete="email" spellcheck="false" inputmode="email"
+            aria-describedby="consent">
+        </div>
         <button class="go" type="submit" id="go">Send the confirmation</button>
       </div>
 
       <div class="msg" id="msg" hidden role="status" aria-live="polite"></div>
 
-      <p class="fine">We email you a confirmation link first and store nothing until you
+      <noscript>
+        <p class="none">This form needs JavaScript to send your confirmation email. With it
+          off, nothing here will submit — everything else on the site still works.</p>
+      </noscript>
+
+      <p class="fine" id="consent">We email you a confirmation link first and store nothing until you
         click it. Every email after that carries a one-click unsubscribe and a link to change
         these settings. We don't sell, share, or rent the list.</p>
     </form>
@@ -258,7 +330,7 @@
     <!-- ------------------------------------------------------------------ -->
     <div>
       <div class="feed pane never">
-        <div class="tl" style="margin-bottom:8px">WHAT WE WILL NEVER SEND</div>
+        <h2 class="tl">WHAT WE WILL NEVER SEND</h2>
         <ul>
           <li><b>A pick, in an email.</b> Not a lock, not a play of the day, not a lean.
             The sealed slate is published on the site and graded in public; nothing gets
@@ -301,6 +373,7 @@
       email = document.getElementById("email"),
       go = document.getElementById("go"),
       msg = document.getElementById("msg"),
+      none = document.getElementById("none"),
       banner = document.getElementById("banner");
 
   function say(text, cls, where){
@@ -319,8 +392,12 @@
     return r ? parseFloat(r.value) : 2.5;
   }
   function syncBands(){ bands.hidden = !kPrice.checked; }
+  // The empty state of the fieldset, kept live: turning the last switch off
+  // says what that means at the moment it is done, not on submit.
+  function syncKinds(){ none.hidden = kinds().length > 0; }
   kPrice.addEventListener("change", syncBands);
-  syncBands();
+  form.addEventListener("change", syncKinds);
+  syncBands(); syncKinds();
 
   // A preferences link from an email proves the address, so the form updates
   // in place instead of asking someone to re-confirm an address they are
@@ -353,18 +430,31 @@
     history.replaceState(null, "", "/alerts");
   }
 
+  // A rejected address is marked on the field and given focus, so the fix is
+  // where the caret already is rather than only in a sentence further down.
+  function reject(text, el){
+    if (el) { el.setAttribute("aria-invalid", "true"); el.focus(); }
+    say(text, "bad");
+    return false;
+  }
+
   form.addEventListener("submit", function(e){
     e.preventDefault();
     var picked = kinds();
-    if (!picked.length) return say("Pick at least one thing to be told about.", "bad");
+    if (!picked.length) return reject("Pick at least one thing to be told about.",
+      form.querySelector('input[name=kind]'));
     var body = { kinds: picked, min_pts: minPts() };
     if (prefsToken) body.token = prefsToken;
     else {
       var addr = email.value.trim();
-      if (!addr) return say("We need an email address to send to.", "bad");
+      if (!addr) return reject("We need an email address to send to.", email);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(addr))
+        return reject("That doesn't look like an email address — check it for a typo.", email);
+      email.removeAttribute("aria-invalid");
       body.email = addr;
     }
     go.disabled = true;
+    form.setAttribute("aria-busy", "true");
     say("Sending…");
     fetch("/api/alerts", {
       method: "POST",
@@ -374,13 +464,15 @@
       return r.json().then(function(j){ return { ok: r.ok, j: j }; });
     }).then(function(res){
       go.disabled = false;
+      form.removeAttribute("aria-busy");
       if (!res.ok) return say(res.j.error || "That didn't go through. Try again in a minute.", "bad");
       if (res.j.saved) return say("Saved. These settings are live from the next alert on.", "ok");
-      say("Check your inbox — we sent a confirmation link to " + body.email +
+      say("Check your inbox — we sent a confirmation link to " + (body.email || "that address") +
           ". Nothing is stored until you click it, and the link is good for 48 hours.", "ok");
-      form.reset(); syncBands();
+      form.reset(); syncBands(); syncKinds();
     }).catch(function(){
       go.disabled = false;
+      form.removeAttribute("aria-busy");
       say("Couldn't reach the server. Check your connection and try again.", "bad");
     });
   });

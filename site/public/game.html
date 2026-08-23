@@ -83,6 +83,61 @@
   #tlRange .an-chip{padding:6px 10px;letter-spacing:.1em}
   #tlRange .an-chip[aria-pressed="true"]{color:var(--brand);
     border-color:rgba(45,212,167,.45);background:var(--brand-dim)}
+
+  /* ---- polish pass ------------------------------------------------------
+     Alignment, reserved space, real names on the controls, 44px targets, and
+     one section header for the pair of market slabs that had none. No new
+     hue, no radius, no scroller. */
+
+  /* a field needs a name of its own; a placeholder is an example and it
+     leaves the moment you type */
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+    overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);
+    white-space:nowrap;border:0}
+
+  /* the workspace holds the height it is about to need, so the page does not
+     grow 900px under a reader who has already started reading the header */
+  #ws.ld{min-height:640px}
+
+  /* a section's sub is a sentence, not metadata: --dim is 3.2:1 on --g0,
+     under AA, and these lines carry what the surface actually is */
+  .sec-h .sub{color:var(--mut)}
+
+  /* 11px is the floor for type a person is expected to read: the ladder's
+     column names and the analyst's question chips were under it. The size
+     comes back out of tracking, not out of legibility. */
+  .itab thead th{font-size:11px;letter-spacing:.1em}
+  .an-chips .an-chip,#tlRange .an-chip{font-size:11px}
+  /* the age of an observation is data, not decoration */
+  .mv-meta{font-size:11px}
+
+  /* the crumb was a 10px word with a 10px target. It is the only way back. */
+  .ws-crumb a.tl{display:inline-flex;align-items:center;min-height:44px;
+    padding-right:10px}
+
+  /* the instrument grid reads as one row of readings, so its cells sit on one
+     baseline: the label block is fixed and the number sits under it, whether
+     or not the number carries a unit */
+  .ws-cell{display:flex;flex-direction:column;justify-content:space-between;
+    min-height:70px}
+  .ws-cell .tl{line-height:1.3}
+
+  @media (max-width:720px){
+    /* a section header on a phone is a label, a sentence and sometimes a
+       control; in one non-wrapping row the control wins and the sentence is
+       crushed. It wraps. */
+    .sec-h{flex-wrap:wrap;row-gap:8px}
+    /* 44px targets on the two control rows */
+    .an-in input{min-height:44px;padding:12px 13px}
+    .an-chips .an-chip{display:flex;align-items:center;min-height:44px;
+      padding:8px 14px 8px 26px}
+    #tlRange{gap:6px}
+    #tlRange .an-chip{min-height:44px;display:inline-flex;align-items:center;
+      padding:6px 14px}
+    /* the range keys sit on their own line rather than being squeezed against
+       the section label by margin-left:auto */
+    .sec-h #tlRange{margin-left:0;width:100%}
+  }
 </style>
 </head>
 <body>
@@ -104,6 +159,9 @@ function sideName(a,txt){
 }
 var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
 var ws=document.getElementById("ws");
+/* .ld holds the height the workspace is about to need, so the shimmer and the
+   instrument it hands off to occupy the same room */
+ws.classList.add("ld");
 D.connecting(ws,"WORKSPACE");
 
 function findEvent(board){
@@ -118,6 +176,7 @@ function cell(k,v,cls){return '<div class="ws-cell"><span class="tl">'+k
   +'</span><div class="v n '+(cls||"")+'">'+v+'</div></div>';}
 
 function render(hit,moves,research,timeline){
+  ws.classList.remove("ld");
   var sp=hit.sp, ev=hit.e;
   var isOn=Date.parse(ev.starts)<=Date.now();
   var sides=ev.sides.slice().sort(function(a,b){return (b.fair_prob||0)-(a.fair_prob||0);});
@@ -155,15 +214,20 @@ function render(hit,moves,research,timeline){
     +cell("BOOKS",String(ev.n_books))
     +'</div>';
 
-  /* one spectrum per side */
-  html+=ev.sides.map(function(s){
+  /* one spectrum per side. The pair was the only block on the page arriving
+     without a section of its own, so it read as two loose slabs between the
+     grid and the ladder; it takes the same rule and header as everything
+     else and the page keeps one rhythm all the way down. */
+  html+='<div class="sec"><div class="sec-h"><span class="tl">PRICE BY BOOK</span>'
+    +'<span class="sub">every book on one scale, per side, against the de-vigged fair price</span></div>'
+    +ev.sides.map(function(s){
     return '<div class="mkt">'
       +'<div class="sec-h"><span class="tl">MONEYLINE · '+D.esc(s.name).toUpperCase()
       +'</span><span class="more tl">FAIR '+D.am(s.fair_price)+'</span></div>'
       +D.spectrum({quotes:s.quotes,fairProb:s.fair_prob,fairPrice:s.fair_price,
         label:"Prices for "+s.name})
       +'</div>';
-  }).join("");
+  }).join("")+'</div>';
 
   /* sportsbook comparison — both sides, one ladder */
   var books={};
@@ -176,19 +240,37 @@ function render(hit,moves,research,timeline){
       vs:(s.fair_prob!=null?(s.fair_prob-D.implied(q.price))*100:null)};});});
   var names=Object.keys(books);
   if(names.length>1){
+    /* the column headers must name the side the column was BUILT from.
+       `books[book][si]` is keyed by the index in ev.sides, while the headers
+       were reading from `sides`, which is ev.sides re-sorted by fair
+       probability — so on any game where the home side is the favourite the
+       two halves of this ladder were labelled with each other's team. Both
+       now read from ev.sides. */
+    var n0=ev.sides[0].name.split(" ").pop(), n1=ev.sides[1].name.split(" ").pop();
+    /* Explicit data-l per cell, and data-stacked so Desk.stack() leaves them
+       alone. Stacked into a phone card, two columns called IMPLIED and two
+       called VS FAIR are four lines with no way to tell which side each
+       belongs to; carrying the team name into the label fixes the card and
+       leaves the desktop header short. */
     html+='<div class="sec"><div class="sec-h"><span class="tl">SPORTSBOOK COMPARISON</span>'
       +'<span class="sub">implied probability per book, against the de-vigged fair price</span></div>'
       +'<div class="itab"><div class="scr"><table><thead><tr><th class="l">BOOK</th>'
-      +'<th>'+D.esc(sides[0].name.split(" ").pop())+'</th><th>IMPLIED</th><th>VS FAIR</th>'
-      +'<th>'+D.esc(sides[1].name.split(" ").pop())+'</th><th>IMPLIED</th><th>VS FAIR</th>'
+      +'<th>'+D.esc(n0)+'</th><th>IMPLIED</th><th>VS FAIR</th>'
+      +'<th>'+D.esc(n1)+'</th><th>IMPLIED</th><th>VS FAIR</th>'
       +'</tr></thead><tbody>'
       +names.map(function(b){
-        function c(x){ if(!x) return '<td class="dim">·</td><td class="dim">·</td><td class="dim">·</td>';
+        function c(x,nm){
+          var L=D.esc(String(nm).toUpperCase());
+          if(!x) return '<td class="dim" data-l="'+L+'">·</td>'
+            +'<td class="dim" data-l="'+L+' IMPLIED">·</td>'
+            +'<td class="dim" data-l="'+L+' VS FAIR">·</td>';
           var cls=x.best?"up":x.worst?"dn":"dim";
-          return '<td class="'+(x.best?"up":"")+'">'+D.am(x.price)+'</td><td class="dim">'
-            +D.pct(D.implied(x.price))+'</td><td class="'+cls+'">'+D.pts(x.vs)+'</td>';}
+          return '<td class="'+(x.best?"up":"")+'" data-l="'+L+'">'+D.am(x.price)+'</td>'
+            +'<td class="dim" data-l="'+L+' IMPLIED">'+D.pct(D.implied(x.price))+'</td>'
+            +'<td class="'+cls+'" data-l="'+L+' VS FAIR">'+D.pts(x.vs)+'</td>';}
         var s0=books[b][0],s1=books[b][1];
-        return '<tr><td class="l">'+D.bk(b)+'</td>'+c(s0)+c(s1)+'</tr>';
+        return '<tr data-stacked="1"><td class="l">'+D.bk(b)+'</td>'
+          +c(s0,n0)+c(s1,n1)+'</tr>';
       }).join("")
       +'</tbody></table></div></div></div>';
   }
@@ -202,9 +284,9 @@ function render(hit,moves,research,timeline){
     return String(t.event_id)===String(ID);})[0])||null;
   html+='<div class="sec"><div class="sec-h"><span class="tl">MARKET TIMELINE</span>'
     +'<span class="sub">our capture, hourly — a line change starts a new series</span>'
-    +(tlEv?'<span class="more" id="tlRange">'
+    +(tlEv?'<span class="more" id="tlRange" role="group" aria-label="Timeline window">'
       +[6,24,72].map(function(h){return '<button class="an-chip" data-h="'+h
-        +'"'+(h===72?' aria-pressed="true"':'')+'>'+h+'H</button>';}).join(" ")
+        +'" aria-pressed="'+(h===72?"true":"false")+'">'+h+'H</button>';}).join(" ")
       +'</span>':'')
     +'</div>';
   if(tlEv){
@@ -242,12 +324,17 @@ function render(hit,moves,research,timeline){
   }
 
   /* analyst */
-  html+='<div class="sec"><div class="sec-h"><span class="tl">SOOTH ANALYST</span>'
+  html+='<div class="sec"><div class="sec-h"><span class="tl">ANALYST</span>'
     +'<span class="sub">answers may only use the numbers on this page — it will not pick a side</span></div>'
+    /* the chips are questions, not labels — mono caps is the label voice, so
+       they were shouting a sentence. Sentence case, same as the board's. */
     +'<div class="an-chips">'
-    +['WHAT IS THE FAIR PRICE?','WHERE DO BOOKS DISAGREE?','WHAT MOVED?','SUMMARIZE THIS GAME']
-      .map(function(q){return '<button class="an-chip" data-q="'+D.esc(q)+'">'+q+'</button>';}).join("")
+    +['What is the fair price?','Where do the books disagree?','What moved?',
+      'Summarize this game']
+      .map(function(q){return '<button class="an-chip" data-q="'+D.esc(q)+'">'
+        +D.esc(q)+'</button>';}).join("")
     +'</div>'
+    +'<label class="vh" for="anq">Ask a question about this game</label>'
     +'<div class="an-in"><input id="anq" placeholder="Ask about this game…" maxlength="500">'
     +'<button id="ango">ASK</button></div>'
     +'<div class="an-out" id="anout"></div></div>';
@@ -280,7 +367,7 @@ function render(hit,moves,research,timeline){
 
   function ask(q){
     var out=document.getElementById("anout");
-    out.textContent="READING THE BOARD…";
+    out.innerHTML='<span class="tl">READING THIS GAME…</span>';
     var body=rep?{mode:"matchup",event_id:String(ID),question:q}
       :{question:q+" — the game is "+ev.away+" at "+ev.home+" ("+(SPORT_LABEL[sp]||sp)+")."};
     fetch("/api/ask",{method:"POST",headers:{"content-type":"application/json"},
@@ -292,7 +379,12 @@ function render(hit,moves,research,timeline){
            longer returns an `upgrade` field at all. */
         out.innerHTML=D.answer(j.answer||j.error||"No answer.");
       })
-      .catch(function(){out.textContent="The analyst is unavailable right now.";});
+      /* an error state that says what is still true: the analyst note is the
+         only thing missing, and every number above it was computed here */
+      .catch(function(){out.innerHTML=
+        '<span class="tl" style="display:block;margin-bottom:6px">ANALYST UNAVAILABLE</span>'
+        +'<p>The note could not be generated right now. Every figure above it is '
+        +'computed from the live board and is unaffected.</p>';});
   }
   document.addEventListener("click",function(e){
     var c=e.target.closest(".an-chip[data-q]"); if(c) return ask(c.dataset.q);
@@ -305,10 +397,13 @@ function render(hit,moves,research,timeline){
 Promise.all([D.load("/data/board.json"),D.load("/data/moves.json"),
              D.load("/data/research.json"),D.load("/data/timeline.json")]).then(function(rs){
   var bd=rs[0];
-  if(!bd.ok){ ws.innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
-    +'The board could not be loaded — try again shortly.</div>'; return; }
+  if(!bd.ok){ ws.classList.remove("ld");
+    ws.innerHTML='<div class="state"><span class="tl">FEED UNAVAILABLE</span>'
+    +'The board could not be loaded, so no price, fair line or movement can be '
+    +'shown for this game. The feed rebuilds automatically — try again shortly.</div>'; return; }
   var hit=findEvent(bd.data);
   if(!hit){
+    ws.classList.remove("ld");
     ws.innerHTML='<div class="state"><span class="tl">OUT OF PRICING WINDOW</span>'
       +'This game is not on the live board — prices publish as kickoff approaches.'
       +(SPQ==="nfl"?' NFL matchup research may still cover it on <a href="/research" style="color:var(--brand)">the research desk</a>.':'')

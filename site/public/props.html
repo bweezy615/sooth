@@ -39,8 +39,31 @@
      the table, takes the page's single lit rim.
      ====================================================================== */
 
+  /* ---- rhythm ----------------------------------------------------------
+     Two sections, a control rail between them, one measure for prose. The
+     rail belongs to the board below it, so it sits closer to the board than
+     to the list above: 22px above, 18px below, rather than 36/18.
+     `.sec-h .sub` is set `12px/1` in the shared sheet, which is right for the
+     one-line subheads it was written for and unreadable for the three-line
+     ones on this page — the lines touch, and the measure runs to 170
+     characters. Both subheads here are paragraphs, so the label sits above
+     rather than beside them, and the text takes a 78-character measure. */
+  /* Nothing on this page is set below 11px. The shared `.tl` is 10px, which
+     is the floor for a letterspaced mono cap and below the floor for a page
+     read on a phone in daylight; every label inside #main is authored here,
+     so raising it here changes this page and nothing else. (Reported: the
+     shared token is the real place for this.) */
+  #main .tl{font-size:11px}
+  .sec.s-top{border-top:0;padding:4px 0 22px}
+  .sec.s-board{border-top:0;padding:4px 0 30px}
+  .sec-h{display:block;margin-bottom:16px}
+  .sec-h .tl{display:block;margin-bottom:8px}
+  .sec-h .sub{display:block;max-width:78ch;font-size:12.5px;line-height:1.65}
+  .sec-h .sub a{color:var(--brand);text-decoration:none;white-space:nowrap}
+  .sec-h .sub a:hover{text-decoration:underline;text-underline-offset:2px}
+
   /* ---- the control rail: one instrument surface, fields carved into it --- */
-  .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 14px;
+  .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 18px;
     padding:7px 9px;border:1px solid var(--hair);border-radius:var(--r);
     background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
     box-shadow:inset 0 1px 0 rgba(190,240,245,.10),
@@ -48,9 +71,10 @@
                0 14px 34px -24px rgba(0,0,0,.9);
     transition:border-color var(--t-hover) ease}
   .bar:focus-within{border-color:rgba(45,212,167,.42)}
-  .bar .count{color:var(--mut);white-space:nowrap;padding-right:4px}
+  .bar .count{color:var(--mut);white-space:nowrap;padding-right:4px;
+    font-size:11px;letter-spacing:.12em;font-variant-numeric:tabular-nums}
   .field{color:var(--ink);padding:8px 11px;font:12.5px var(--sans);
-    border:1px solid rgba(0,0,0,.5);border-radius:2px;
+    min-height:36px;border:1px solid rgba(0,0,0,.5);border-radius:2px;
     background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(255,255,255,.02));
     box-shadow:inset 0 1px 3px rgba(0,0,0,.6);
     transition:border-color var(--t-hover) ease,color var(--t-hover) ease}
@@ -58,9 +82,16 @@
   .field:hover{border-color:var(--hair2)}
   select.field{font:600 12px var(--mono);letter-spacing:.06em;cursor:pointer}
   #q.field{min-width:0;flex:1 1 190px}
+  /* On a phone every control is a thumb target, so 44px, and 16px type —
+     below that iOS zooms the whole page on focus, which is a horizontal
+     scroller arriving by the back door. */
+  @media (max-width:720px){
+    .bar{gap:8px;padding:8px}
+    .field{min-height:44px;font-size:16px}
+    select.field{font-size:16px;letter-spacing:.02em}
+  }
   @media (max-width:560px){
-    .bar{gap:6px}
-    .bar .count{flex:0 0 100%;margin-left:0!important;padding:2px 0 0}
+    .bar .count{flex:0 0 100%;margin-left:0!important;padding:4px 0 0}
   }
 
   /* ---- the board ------------------------------------------------------
@@ -68,16 +99,62 @@
      machined surface above it keeps the eye. The header rule is the
      waterline: ours, therefore teal; the row rules below it are not. */
   #card.itab{background:transparent;border:0;border-radius:0;box-shadow:none}
-  #card thead th{background:var(--g0);border-bottom:1px solid rgba(45,212,167,.30)}
-  #card tbody td{border-bottom:1px solid var(--hair)}
-  .itab .pl{font:600 13px var(--sans);color:var(--ink);letter-spacing:-.01em}
-  .itab .pl .pl{display:inline-flex;align-items:center;gap:9px}
-  .pl-t{display:inline-flex;flex-direction:column;min-width:0}
-  .bp-who{display:inline-flex;align-items:center;gap:7px}
-  .mk2{display:block;font:500 10px var(--mono);color:var(--dim);
-    letter-spacing:.04em;text-transform:uppercase;margin-top:1px}
-  .itab .match{font:500 10.5px var(--mono);color:var(--dim)}
-  .itab .bk2{display:block;font:500 10px var(--mono);color:var(--dim)}
+  /* The shared sheet asks the thead to stick, and on this page it never could:
+     `.itab{overflow:hidden}` and `.scr{overflow-x:auto}` both make a scrollport,
+     and a sticky cell inside a scrollport that does not itself scroll simply
+     rides away with the rows. On a 143-row board that means ten unnamed columns
+     for the length of the scroll. The scrollport can only be opened where the
+     board already fits the page, and whether it does depends on the data — a
+     slate of long names needs more room than a short one — so it is measured
+     rather than guessed against a breakpoint: `.fits` is set below only while
+     the table's own content width fits, and dropped the instant it would push
+     the page sideways.
+     `--hdr-h` is the measured height of the sticky app shell, so the row
+     parks under it rather than behind it. */
+  #card thead th{background:var(--g0);border-bottom:1px solid rgba(45,212,167,.30);
+    font-size:11px;letter-spacing:.1em;top:var(--hdr-h,0px)}
+  @media (min-width:721px){
+    #card.fits{overflow:visible}
+    #card.fits .scr{overflow-x:visible}
+  }
+  /* the board is ordered by GAIN, and a column that decides the order should
+     say so rather than leave the reader to infer it from five rows */
+  #card thead th:last-child::after{content:"\25BE";margin-left:5px;color:var(--dim)}
+  #card tbody td{border-bottom:1px solid var(--hair);
+    font-variant-numeric:tabular-nums}
+
+  /* ---- the player cell -------------------------------------------------
+     A headshot is an aid to recognition, never the carrier of a fact, and
+     about one player in twenty-five has none. So the face is not an inline
+     image that pushes the name across when it exists and vanishes when it
+     does not — it is a fixed slot the row always reserves. The slot carries
+     the player's initials; a photograph, when we have one, is laid over them
+     in the same 30px circle. Nothing moves when the map lands late, nothing
+     moves between a row with a face and a row without, and a row with no
+     photograph reads as a monogram rather than as a hole.
+     (`.itab .pl .pl` — the old rule — matched nothing: there is one `.pl`,
+     not a nested pair, so the cell had no gap and no alignment at all.) */
+  .itab .pl{position:relative;display:block;min-height:30px;padding-left:40px;
+    font:600 13px/1.25 var(--sans);color:var(--ink);letter-spacing:-.01em}
+  .pl-t{display:block;min-width:0}
+  .bp-who,.itab .pl{--slot:30px}
+  .bp-who{--slot:22px}
+  .itab .pl::before,.bp-who::before{content:attr(data-ini);position:absolute;
+    left:0;width:var(--slot);height:var(--slot);box-sizing:border-box;
+    display:flex;align-items:center;justify-content:center;border-radius:50%;
+    font:600 11px/1 var(--mono);letter-spacing:.02em;color:var(--mut);
+    background:rgba(190,222,228,.05);border:1px solid rgba(190,222,228,.15)}
+  .itab .pl>img.face,.bp-who>img.face{position:absolute;left:0;margin:0;
+    width:var(--slot);height:var(--slot);vertical-align:baseline}
+  .itab .pl::before,.itab .pl>img.face{top:0}
+  .bp-who::before,.bp-who>img.face{top:-1px}
+
+  .mk2{display:block;font:500 11px/1.3 var(--mono);color:var(--mut);
+    letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+  .itab .match{font:500 11px/1.45 var(--mono);color:var(--mut);
+    font-variant-numeric:tabular-nums}
+  .itab .bk2{display:block;font:500 11px var(--mono);color:var(--mut);
+    letter-spacing:.03em;margin-top:2px}
   /* the book under a best price, tinted by the one hue — was still the old
      green (52,212,153) from before the palette moved to the promo's teal */
   .itab td .up .bk2{color:rgba(45,212,167,.72)}
@@ -86,6 +163,11 @@
   @media (min-width:721px){
     /* the row under the cursor is marked on its leading edge, not flooded */
     #card tbody tr:hover td:first-child{box-shadow:inset 2px 0 0 var(--brand)}
+  }
+  @media (max-width:720px){
+    /* the stacked card's field labels, at the page's floor of 11px */
+    #card tbody td::before{font-size:11px;letter-spacing:.1em}
+    #card tbody td{padding:7px 0}
   }
 
   /* Best prices — the same selection the alerts read, at the top of the page.
@@ -98,30 +180,38 @@
                0 18px 40px -22px rgba(0,0,0,.9),
                0 2px 8px -2px rgba(0,0,0,.55)}
   .bp-r{display:grid;grid-template-columns:22px minmax(0,1fr) auto;
-    gap:2px 14px;padding:11px 14px;border-bottom:1px solid var(--hair);
+    gap:4px 14px;padding:13px 14px;border-bottom:1px solid var(--hair);
     align-items:baseline;
     transition:background var(--t-hover) ease}
   .bp-r:last-child{border-bottom:0}
   .bp-r:hover{background:var(--g2)}
-  .bp-n{font:600 11px var(--mono);color:var(--dim);grid-row:span 2}
-  .bp-who{font:600 13.5px var(--sans);color:var(--ink);letter-spacing:-.01em;
+  .bp-n{font:600 11px var(--mono);color:var(--dim);grid-row:span 2;
+    font-variant-numeric:tabular-nums}
+  /* Block, not flex. As a flex row the name box took its baseline from the
+     headshot's bottom edge, so the player sat six pixels above the rank and
+     the price on every row of the list — the one place three columns have to
+     agree. A block baselines on its first line of type, which is the name. */
+  .bp-who{position:relative;display:block;min-height:22px;padding-left:31px;
+    font:600 13.5px/1.45 var(--sans);color:var(--ink);letter-spacing:-.01em;
     min-width:0;overflow-wrap:anywhere}
   .bp-who b{font-weight:700}
   .bp-side{font:600 11px var(--mono);color:var(--ink2);letter-spacing:.03em;
-    text-transform:uppercase}
+    text-transform:uppercase;white-space:nowrap;margin-left:7px}
   /* Default ink, not teal. Most rows on this list are the smallest amount of
      vig on the board, not a number that beats it, and the page says so two
      lines up. Only .beats — set from the same price_edge_pts the sentence is
      written from — gets the signal. */
-  .bp-px{font:700 15px var(--mono);color:var(--ink);text-align:right;
-    white-space:nowrap}
-  .bp-px .bk{display:block;font:500 10px var(--mono);color:var(--dim);
-    letter-spacing:.03em;margin-top:2px}
+  .bp-px{font:700 15px/1.45 var(--mono);color:var(--ink);text-align:right;
+    white-space:nowrap;font-variant-numeric:tabular-nums}
+  .bp-px .bk{display:block;font:500 11px var(--mono);color:var(--mut);
+    letter-spacing:.03em;margin-top:3px}
   .bp-r.beats .bp-px{color:var(--up)}
   .bp-r.beats .bp-px .bk{color:rgba(45,212,167,.72)}
   .bp-r.beats{box-shadow:inset 2px 0 0 var(--brand)}
-  .bp-meta{grid-column:2/4;font:500 11px var(--mono);color:var(--mut);
-    line-height:1.6;display:flex;flex-wrap:wrap;gap:3px 12px}
+  /* the second line hangs under the NAME, not under the headshot slot */
+  .bp-meta{grid-column:2/4;padding-left:31px;font:500 11px var(--mono);
+    color:var(--mut);line-height:1.6;font-variant-numeric:tabular-nums;
+    display:flex;flex-wrap:wrap;gap:3px 12px}
   .bp-meta .fair-up{color:var(--up)}
   .bp-meta .fair-dn{color:var(--mut)}
   .bp-meta .sep{color:var(--dim)}
@@ -130,10 +220,10 @@
      board reads exactly as dense as it did, one click for anyone who wants it.
      Quieter than it was — this is the same "?" affordance the header's GUIDE
      link uses, so it is findable without competing with the prices. */
-  .gloss{margin-top:8px}
-  .gloss summary{cursor:pointer;color:var(--mut);font:600 11.5px var(--sans);
-    list-style:none;display:inline-flex;align-items:center;gap:5px;
-    padding:3px 0;user-select:none;transition:color var(--t-hover) ease}
+  .gloss{margin:0 0 14px}
+  .gloss summary{cursor:pointer;color:var(--mut);font:600 12px var(--sans);
+    list-style:none;display:inline-flex;align-items:center;gap:6px;
+    padding:7px 0;user-select:none;transition:color var(--t-hover) ease}
   .gloss summary:hover,.gloss[open] summary{color:var(--brand)}
   .gloss summary::-webkit-details-marker{display:none}
   .gloss summary::before{content:"?";display:inline-block;width:13px;height:13px;
@@ -144,18 +234,60 @@
     color:var(--ink2)}
   .gloss p b{color:var(--ink);font-weight:600}
   .gloss p:last-child{margin-bottom:0}
+  /* the disclosure is a thumb target too */
+  @media (max-width:720px){
+    .gloss summary{padding:15px 0;font-size:13px}
+  }
   /* the reading above the list — how many of these actually beat fair. It is
      a finding, so it is set as one, not as helper text. */
-  .bp-state{padding:14px 14px 13px;font:500 12.5px var(--sans);color:var(--ink2);
-    line-height:1.6}
+  .bp-state{padding:15px 14px;font:500 12.5px/1.6 var(--sans);color:var(--ink2)}
+  .bp-state .tl{display:block;margin-bottom:7px;color:var(--mut)}
+  /* the measure belongs to the sentence; the rule under it belongs to the
+     surface and runs its full width */
+  .bp-state .say{display:block;max-width:78ch}
+
+  /* ---- loading -----------------------------------------------------------
+     Neither surface on this page had one: the list was a zero-height div and
+     the board was an empty <tbody>, so the first paint was a headline over
+     nothing and the content shoved the page down when it landed. The skeleton
+     is the real row's geometry — slot, name, price, meta — so the handoff
+     costs a fade rather than a jump. */
+  .bp-sk{display:grid;grid-template-columns:22px minmax(0,1fr) 58px;
+    gap:9px 14px;padding:13px 14px;border-bottom:1px solid var(--hair);
+    align-items:center;min-height:91px}
+  .bp-sk:last-child{border-bottom:0}
+  .bp-sk i{display:block;width:22px;height:22px;border-radius:50%;
+    background:var(--g2)}
+  .bp-sk .shimmer{margin:0;height:9px}
+  .bp-sk .nm{grid-column:2}
+  .bp-sk .px{grid-column:3}
+  .bp-sk .m{grid-column:2/4;height:8px}
+  /* the meta is one line wide and four lines tall, so the placeholder is too
+     — otherwise the reservation is right on a desktop and half a screen short
+     on a phone, which is where the shove would actually be felt */
+  .bp-sk .m2,.bp-sk .m3,.bp-sk .m4{display:none}
+  .state .shimmer{max-width:280px;margin:12px auto}
+
+  /* the way out of a filter that matches nothing */
+  .clearf{margin-top:14px;min-height:44px;padding:0 18px;cursor:pointer;
+    background:transparent;color:var(--ink2);border:1px solid var(--hair2);
+    border-radius:var(--r);font:600 11px var(--mono);letter-spacing:.12em;
+    text-transform:uppercase;
+    transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
+  .clearf:hover{color:var(--brand);border-color:rgba(45,212,167,.42)}
+
   @media (max-width:560px){
-    .bp-r{grid-template-columns:18px minmax(0,1fr);row-gap:4px}
-    .bp-px{grid-column:2;text-align:left;font-size:14px}
+    .bp-r{grid-template-columns:18px minmax(0,1fr);row-gap:5px}
+    .bp-px{grid-column:2;text-align:left;font-size:14px;padding-left:31px}
     .bp-px .bk{display:inline;margin-left:8px}
     /* Each fact takes its own line at this width, so the inline separators
        would strand a dot at the end of every one. Stack and drop them. */
-    .bp-meta{grid-column:2;flex-direction:column;gap:3px}
+    .bp-meta{grid-column:2;flex-direction:column;gap:4px}
     .bp-meta .sep{display:none}
+    .bp-sk{grid-template-columns:22px minmax(0,1fr);gap:11px 14px;min-height:165px}
+    .bp-sk .px{grid-column:2;width:58px}
+    .bp-sk .m{grid-column:2}
+    .bp-sk .m2,.bp-sk .m3,.bp-sk .m4{display:block}
   }
 </style>
 </head>
@@ -175,7 +307,7 @@
   are the last lines offered, kept for reference. Fresh props land automatically,
   usually by mid-morning.</span></p>
 
-  <div class="sec" style="border-top:0;padding-top:4px" aria-labelledby="bpH">
+  <div class="sec s-top" aria-labelledby="bpH">
     <div class="sec-h"><span class="tl" id="bpH">BEST PRICES</span>
       <span class="sub" id="bpSub">the widest gaps between the best available price and
       the de-vigged consensus. Selected on price, never on a forecast — our own prop
@@ -193,8 +325,17 @@
       predicting anything. <a href="/learn">The 60-second guide</a> covers the
       rest.</p></details>
     <!-- the page's one lit rim: the promo's single teal arc, on the surface
-         that carries the selection the alerts are written from -->
-    <div class="bp rimlit" id="bp" aria-live="polite"></div>
+         that carries the selection the alerts are written from.
+         Ships with its skeleton in the markup, so the first paint is the
+         shape of the list rather than a headline over nothing. -->
+    <div class="bp rimlit" id="bp" aria-live="polite" aria-busy="true">
+      <div class="bp-state"><span class="tl">BEST PRICES</span><span class="say">Reading the board…</span></div>
+      <div class="bp-sk" aria-hidden="true"><i></i><span class="shimmer nm" style="width:42%"></span><span class="shimmer px"></span><span class="shimmer m" style="width:66%"></span><span class="shimmer m m2" style="width:52%"></span><span class="shimmer m m3" style="width:60%"></span><span class="shimmer m m4" style="width:40%"></span></div>
+      <div class="bp-sk" aria-hidden="true"><i></i><span class="shimmer nm" style="width:36%"></span><span class="shimmer px"></span><span class="shimmer m" style="width:58%"></span><span class="shimmer m m2" style="width:44%"></span><span class="shimmer m m3" style="width:52%"></span><span class="shimmer m m4" style="width:32%"></span></div>
+      <div class="bp-sk" aria-hidden="true"><i></i><span class="shimmer nm" style="width:46%"></span><span class="shimmer px"></span><span class="shimmer m" style="width:62%"></span><span class="shimmer m m2" style="width:48%"></span><span class="shimmer m m3" style="width:56%"></span><span class="shimmer m m4" style="width:36%"></span></div>
+      <div class="bp-sk" aria-hidden="true"><i></i><span class="shimmer nm" style="width:34%"></span><span class="shimmer px"></span><span class="shimmer m" style="width:70%"></span><span class="shimmer m m2" style="width:56%"></span><span class="shimmer m m3" style="width:64%"></span><span class="shimmer m m4" style="width:44%"></span></div>
+      <div class="bp-sk" aria-hidden="true"><i></i><span class="shimmer nm" style="width:40%"></span><span class="shimmer px"></span><span class="shimmer m" style="width:54%"></span><span class="shimmer m m2" style="width:40%"></span><span class="shimmer m m3" style="width:48%"></span><span class="shimmer m m4" style="width:28%"></span></div>
+    </div>
   </div>
 
   <div class="bar">
@@ -204,8 +345,8 @@
     <span class="count tl" id="count" style="margin-left:auto" aria-live="polite"></span>
   </div>
 
-  <div class="sec" style="border-top:0;padding-top:4px">
-    <div class="sec-h"><span class="tl">PROPS BOARD</span>
+  <div class="sec s-board" aria-labelledby="pbH">
+    <div class="sec-h"><span class="tl" id="pbH">PROPS BOARD</span>
       <span class="sub">compared at the same line only — three or more books on both sides,
       or it is a price list, not a market. L10 is how often the player actually cleared
       this line in his last ten games. GAIN is what shopping saves you against the
@@ -229,7 +370,11 @@
         </tr></thead>
         <tbody id="tbody"></tbody>
       </table>
-      <div class="state" id="empty" style="display:none" aria-live="polite"></div>
+      <div class="state" id="empty" aria-live="polite">
+        <span class="tl">PROPS BOARD LOADING…</span>
+        <div class="shimmer" aria-hidden="true"></div>
+        <div class="shimmer" style="max-width:210px" aria-hidden="true"></div>
+      </div>
       </div>
     </div>
   </div>
@@ -251,9 +396,32 @@ D.mount("props");
 if(window.Crest&&window.Crest.loadPlayers) window.Crest.loadPlayers();
 function $(id){return document.getElementById(id);}
 
+/* Park the sticky column headers below the sticky app shell instead of behind
+   it. Measured, not guessed, so a shell that changes height stays correct. */
+function headerHeight(){
+  var hd=document.querySelector("header.hd");
+  if(!hd) return;
+  document.documentElement.style.setProperty("--hdr-h",hd.offsetHeight+"px");
+}
+/* Open the table's scrollport — and with it the sticky column headers — only
+   while the board actually fits the page. Measured in the open state, so the
+   answer is the table's real content width and never a guessed breakpoint;
+   the instant it would push the page sideways the scroller comes back. */
+function fitTable(){
+  var card=$("card"), t=card&&card.querySelector("table");
+  if(!t) return;
+  if(window.innerWidth<721){ card.classList.remove("fits"); return; }
+  card.classList.add("fits");
+  if(t.scrollWidth>card.clientWidth+1) card.classList.remove("fits");
+}
+function measure(){ headerHeight(); fitTable(); }
+measure();
+window.addEventListener("load",measure);
+window.addEventListener("resize",measure);
+
 Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
   var res=a[0];
-  if(!res.ok){ fail("<b>NO PROPS BOARD</b>The props engine has not published a snapshot. "
+  if(!res.ok){ fail("NO PROPS BOARD","The props engine has not published a snapshot. "
     +"Books post player props closer to game time."); return; }
   DOC=res.data; init(res);
 });
@@ -262,14 +430,40 @@ Promise.all([D.load("/data/props.json"),window.Crest.load()]).then(function(a){
 // drift into describing one selection two ways.
 Promise.all([D.load("/data/props_best_prices.json"),window.Crest.load()]).then(function(a){
   var res=a[0], el=$("bp");
-  if(!res.ok||!res.data||!(res.data.best_prices||[]).length){
-    el.innerHTML='<div class="bp-state">No prop has three or more books on both '
+  el.setAttribute("aria-busy","false");
+  // A feed that did not load and a board with nothing on it are different
+  // facts, and the second one is a claim about the market. Saying "nothing
+  // qualifies" when we simply failed to fetch the file would be the page
+  // reporting a market condition it never observed.
+  if(!res.ok){
+    el.innerHTML='<div class="bp-state err"><span class="tl">BEST PRICES DID NOT LOAD'
+      +'</span><span class="say">We could not read the best-price file, so this '
+      +'list is not a statement about the market — we just do not have it. The '
+      +'board below reads a different file and is unaffected. Reloading usually '
+      +'fixes it.</span></div>';
+    return;
+  }
+  if(!res.data||!(res.data.best_prices||[]).length){
+    el.innerHTML='<div class="bp-state"><span class="tl">NOTHING TO COMPARE YET</span>'
+      +'<span class="say">No prop has three or more books on both '
       +'sides right now, so there is nothing to compare. Books post player props '
-      +'closer to game time.</div>';
+      +'closer to game time.</span></div>';
     return;
   }
   el.innerHTML=bestPrices(res.data);
 });
+
+/* Initials for the headshot slot. Every row reserves the same circle whether
+   or not we have a photograph of the player, and an empty circle is a hole,
+   so the fallback is a monogram. Parenthetical disambiguators the feed
+   carries ("Max Muncy (2002)") and generational suffixes are not names. */
+function ini(name){
+  var t=String(name||"").replace(/\([^)]*\)/g," ").split(/[\s.]+/)
+    .filter(function(w){ return w && !/^(jr|sr|ii|iii|iv)$/i.test(w); });
+  if(!t.length) return "";
+  return ((t[0].charAt(0)||"")+(t.length>1?(t[t.length-1].charAt(0)||""):""))
+    .toUpperCase();
+}
 
 function edgeCell(pts){
   // The sign changes the claim, so it changes the sentence. A price under the
@@ -297,8 +491,8 @@ function bestPrices(d){
       ? "Every one of these is priced better than the consensus fair line."
       : beat+" of these "+ps.length+" beat consensus fair. The rest are where you "
         +"give up least.");
-  var html='<div class="bp-state" style="border-bottom:1px solid var(--hair);'
-    +'padding-bottom:12px">'+D.esc(sit)+'</div>';
+  var html='<div class="bp-state" style="border-bottom:1px solid var(--hair)">'
+    +'<span class="tl">THE READING</span><span class="say">'+D.esc(sit)+'</span></div>';
   ps.forEach(function(p,i){
     var meta=[edgeCell(p.price_edge_pts)];
     var f=formLine(p); if(f) meta.push(f);
@@ -313,7 +507,8 @@ function bestPrices(d){
     // that fails it is priced in plain ink; nothing about the number changes.
     html+='<div class="bp-r'+(p.price_edge_pts>0?" beats":"")+'">'
       +'<span class="bp-n">'+(i+1)+'</span>'
-      +'<span class="bp-who" data-face="'+D.esc(p.player)+'" data-size="22">'
+      +'<span class="bp-who" data-face="'+D.esc(p.player)+'" data-size="22"'
+        +' data-ini="'+D.esc(ini(p.player))+'">'
         +(window.Crest&&Crest.face?Crest.face(p.player,22):"")
         +'<b>'+D.esc(p.player)+'</b> '
         +'<span class="bp-side">'+D.esc(p.side)+' '+p.line+' '
@@ -323,10 +518,13 @@ function bestPrices(d){
       +'<span class="bp-meta">'+meta.join('<span class="sep">·</span>')+'</span>'
       +'</div>';
   });
+  if(window.Crest&&window.Crest.hydratePlayers)
+    setTimeout(function(){window.Crest.hydratePlayers($("bp"));},0);
   return html;
 }
-function fail(html){
-  $("empty").style.display="block"; $("empty").innerHTML=html;
+function fail(label,html){
+  $("empty").style.display="block";
+  $("empty").innerHTML='<span class="tl">'+label+'</span>'+html;
   $("pulse").className="pulse dead";
 }
 function init(res){
@@ -345,13 +543,18 @@ function init(res){
   $("stT").setAttribute("data-ago",DOC.generated_at);
   if(res.ageH>4) $("pulse").className="pulse stale";
   if(!DOC.boards.length){
-    fail("<b>NO PROPS IN THIS WINDOW</b>Books post player props closer to game time. "
+    fail("NO PROPS IN THIS WINDOW","Books post player props closer to game time. "
       +"The board refreshes automatically — check back near the next slate.");
     return;
   }
   selS.addEventListener("change",function(){fillMarkets();render();});
   $("market").addEventListener("change",render);
   $("q").addEventListener("input",render);
+  // Bound once, on the container, so it survives every rerender of the state.
+  $("empty").addEventListener("click",function(ev){
+    if(!ev.target||ev.target.id!=="clearf") return;
+    $("market").value=""; $("q").value=""; render(); $("q").focus();
+  });
   fillMarkets(); render();
 }
 /* Teal is the sooth signal, not a column style. Every best price used to be
@@ -396,7 +599,8 @@ function render(){
       +' title="last 5: '+p.hit.l5.over+'/'+p.hit.l5.n+' · season: '
       +p.hit.season.over+'/'+p.hit.season.n+'">'+p.hit.l10.over+'/'+p.hit.l10.n+'</span>'):"·";
     html+='<tr>'
-      +'<td class="l"><span class="pl" data-face="'+D.esc(p.player)+'" data-size="30">'
+      +'<td class="l"><span class="pl" data-face="'+D.esc(p.player)+'" data-size="30"'
+        +' data-ini="'+D.esc(ini(p.player))+'">'
         +(window.Crest&&Crest.face?Crest.face(p.player,30):"")
         +'<span class="pl-t">'+D.esc(p.player)
         +'<span class="mk2">'+D.esc(p.market_label)+'</span></span></span></td>'
@@ -418,8 +622,28 @@ function render(){
   });
   $("tbody").innerHTML=html;
   if(window.Crest&&window.Crest.hydratePlayers) window.Crest.hydratePlayers($("tbody"));
+  fitTable();
   $("empty").style.display=rows.length?"none":"block";
-  if(!rows.length) $("empty").innerHTML="<b>NOTHING MATCHES THAT FILTER</b>";
+  if(!rows.length){
+    // An empty state that only says "nothing" leaves the reader to work out
+    // whether the board is empty or their own filter is. Name the filter, and
+    // give them the way back out of it.
+    var sel=$("market"), mkOpt=sel.options[sel.selectedIndex];
+    var what=[];
+    if(mk&&mkOpt) what.push(mkOpt.textContent.toLowerCase());
+    if(q) what.push('the name "'+q+'"');
+    var lg=String(b.label||"").toUpperCase();
+    $("empty").innerHTML=what.length
+      ? '<span class="tl">NOTHING MATCHES THIS FILTER</span>'
+        +'The '+D.esc(lg)+' board has props priced right now — none of them for '
+        +D.esc(what.join(" and "))+'. Clearing the filter brings the rest back.'
+        +'<div><button type="button" class="clearf" id="clearf">Show the whole '
+        +'board</button></div>'
+      : '<span class="tl">NO PROPS ON THIS BOARD</span>'
+        +'Nothing in this sport has three or more books pricing both sides yet, '
+        +'which is the floor for a same-line comparison. Books post player props '
+        +'closer to game time.';
+  }
   $("count").textContent=rows.length+" SHOWN · "+b.label.toUpperCase();
   $("stN").textContent=rows.length;
   var mx=0; rows.forEach(function(r){

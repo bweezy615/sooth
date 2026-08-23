@@ -42,6 +42,10 @@
     --frost:#BFEAF2; --frost-rim:rgba(191,234,242,.30); --loss:#FF6B6B;
     --sans:'Archivo',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace;
     --glide:560ms cubic-bezier(.22,.8,.32,1);
+    /* ONE gutter for the whole desktop page. The wordmark, the strapline, the
+       workspace labels and the compliance footer were on 34 / 34 / (centred)
+       / 26 and read ragged down the left edge. */
+    --gut:34px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
@@ -49,13 +53,19 @@
     -webkit-font-smoothing:antialiased;overflow:hidden;
     display:flex;flex-direction:column;
     background:
-      radial-gradient(90% 46% at 50% 30%, rgba(45,212,167,.055), transparent 70%),
-      radial-gradient(140% 90% at 50% 118%, #0B1116 0%, transparent 55%),
+      radial-gradient(90% 46% at 50% 34%, rgba(45,212,167,.05), transparent 70%),
+      /* the floor is gone, so the light it used to bounce is carried by this
+         pool instead — it keeps the space below the panels from reading as a
+         dead black band without drawing a surface */
+      radial-gradient(150% 80% at 50% 106%, #0C1319 0%, transparent 62%),
       var(--bg)}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-  .tl{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  .tl{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
     color:var(--mut)}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  /* a real label that only the screen reader reads */
+  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   /* ---- editorial header, per the reference frame ----
@@ -64,27 +74,31 @@
      strapline. The "INFINITE DESK" title was removed — it named the mechanism
      rather than the product, and a visitor does not arrive looking for a
      desk. */
-  .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px 34px 0;flex:none}
+  .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px var(--gut) 0;flex:none}
   .brand-row .no{display:inline-flex;align-items:baseline;gap:9px}
   .brand-row .no .pip{width:8px;height:8px;border-radius:50%;background:var(--accent);
     align-self:center;flex:0 0 auto;box-shadow:0 0 10px rgba(45,212,167,.55)}
   .brand-row .no b{font:600 20px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);
     text-transform:none}
   .brand-row .no b i{font-style:normal;color:var(--accent)}
-  h1{font:600 21px/1 var(--mono);letter-spacing:.34em;color:var(--ink2);white-space:nowrap;
-    padding-left:22px;border-left:1px solid rgba(45,212,167,.32)}
-  .kicker{font:600 10px var(--mono);letter-spacing:.22em;color:var(--accent);
+  .kicker{font:600 11px var(--mono);letter-spacing:.2em;color:var(--accent);
     text-transform:uppercase;padding-bottom:2px}
-  .strap{padding:8px 34px 0;font:400 12.5px var(--sans);color:var(--mut);flex:none}
+  /* a real measure, not a 150-character line ruled across the whole screen */
+  .strap{padding:9px var(--gut) 0;font:400 13px/1.55 var(--sans);color:var(--ink2);
+    flex:none;max-width:calc(62ch + var(--gut))}
 
   /* ---- workspace labels ----
      These five ARE the promo's capability list. Same idiom: mono caps, wide
      tracking, a small teal triangle in front of each, lit up on the active one.
      The underline is the lit rim, not a slab of colour. */
+  /* Spans the same gutter as the wordmark and the strapline instead of being
+     centred inside a 1250px cap — at 1440 the cap left the first label 70px
+     inboard of the wordmark, which is the raggedness you saw down the left. */
   .ws-labels{display:flex;justify-content:space-between;flex:none;
-    max-width:1250px;width:94%;margin:10px auto 0;padding:0 8px}
+    width:100%;margin:16px 0 0;padding:0 var(--gut)}
   .ws-labels button{font:600 11px var(--mono);letter-spacing:.18em;color:var(--ink2);
     padding:8px 4px 10px 15px;position:relative;transition:color 120ms ease;opacity:.9}
+  .ws-labels button:last-child{padding-right:0}
   .ws-labels button::before{content:"";position:absolute;left:0;top:11px;
     border:4px solid transparent;border-left-color:var(--accent);opacity:.38;
     transition:opacity 120ms ease}
@@ -104,14 +118,23 @@
   #desk{position:absolute;inset:0;overflow:hidden;
     perspective:1500px;perspective-origin:50% 40%}
 
-  /* room vignette */
+  /* Room vignette. Its bright core used to sit at 12% — the top of the empty
+     stage — so the brightest part of the room was the void above the panels
+     and the panels themselves sat in the falloff. With the floor gone that
+     read as "small panels floating in a lit box". Centred on the panel band
+     instead, the emptiness above and below reads as dark room. */
   #desk::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:
-      radial-gradient(130% 96% at 50% 12%, transparent 54%, rgba(0,0,0,.62) 100%),
-      linear-gradient(0deg, rgba(0,0,0,.46), transparent 16%)}
+      radial-gradient(120% 78% at 50% 44%, transparent 42%, rgba(0,0,0,.58) 100%)}
 
   /* ---- monitors: thin glossy panels ---- */
-  .monitor{position:absolute;left:50%;top:40%;width:952px;height:760px;
+  /* top:38%, not 40%. Two things ride on this one number and 40% missed both:
+     a FOCUSED panel's bottom bezel hung 12px below the stage and got cut,
+     while 64px of headroom sat unused above it; and the OVERVIEW band ended
+     up a touch low. 38% centres the overview band in the stage and brings the
+     focused panel back inside it at 1280x800 and 1440x900. Position only —
+     none of the transforms in apply() are touched. */
+  .monitor{position:absolute;left:50%;top:38%;width:952px;height:760px;
     margin:-380px 0 0 -476px;transform-origin:50% 58%}
   .desk-ready .monitor{transition:transform var(--glide),opacity var(--glide)}
   .mon-label{display:none}
@@ -195,19 +218,23 @@
   #prev{left:4px} #next{right:4px}
 
   /* ---- caption + location rail ---- */
-  .caption{flex:none;text-align:center;padding:4px 0 2px;
-    font:500 10.5px var(--mono);letter-spacing:.16em;color:var(--dim);
-    text-transform:uppercase;line-height:1.8}
-  .rail{display:flex;justify-content:center;align-items:center;padding:4px 0 6px;flex:none}
-  .rail button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 20px}
+  /* The caption and the rail were 4px apart and glued to the footer rule, so
+     the bottom of the composition was a big void followed by a compressed
+     strip of chrome. Spaced out they read as the base of the desk and take up
+     some of the slack the floor used to. */
+  .caption{flex:none;text-align:center;padding:20px 0 0;
+    font:500 11px var(--mono);letter-spacing:.16em;color:var(--mut);
+    text-transform:uppercase;line-height:1.6}
+  .rail{display:flex;justify-content:center;align-items:center;padding:14px 0 20px;flex:none}
+  .rail button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 20px}
   .rail .dot{width:6px;height:6px;border-radius:50%;background:#1B242C;
     transition:background 200ms ease,box-shadow 200ms ease}
   .rail button:hover .dot{background:#2C3A43}
   .rail button[aria-current="true"] .dot{background:var(--accent);
     box-shadow:0 0 8px rgba(45,212,167,.55)}
-  .rail .tl{font-size:8.5px}
+  .rail .tl{font-size:11px;letter-spacing:.18em}
   .rail button[aria-current="true"] .tl{color:var(--accent)}
-  .rail .ln{width:40px;height:1px;background:var(--hair);margin-bottom:14px}
+  .rail .ln{width:40px;height:1px;background:var(--hair);margin-bottom:17px}
 
   /* ---- shimmer for the not-yet-loaded research screen ---- */
   .holding{position:absolute;inset:0;display:flex;flex-direction:column;
@@ -219,10 +246,13 @@
   @keyframes shim{to{background-position:-200% 0}}
 
   /* ---- footer ---- */
-  .ft{flex:none;padding:7px 26px 10px;color:#46525A;font-size:10px;line-height:1.5;
-    border-top:1px solid rgba(190,205,215,.07)}
-  .ft b{color:var(--dim)}
-  .ft a{color:var(--dim);text-decoration:none;transition:color 120ms ease}
+  /* The compliance line is the one paragraph on the page that must be read.
+     It was 10px at #46525A — under 3:1 on this ground and below the 11px
+     floor. Same words, legible. */
+  .ft{flex:none;padding:10px var(--gut) 12px;color:var(--mut);font-size:11px;
+    line-height:1.65;border-top:1px solid rgba(190,205,215,.07)}
+  .ft b{color:var(--ink2);font-weight:600}
+  .ft a{color:var(--mut);text-decoration:none;transition:color 120ms ease}
   .ft a:hover{color:var(--accent)}
 
   /* ---- mobile pager ---- */
@@ -241,129 +271,197 @@
     --g1:var(--hw1); --g2:var(--hw2); --hair2:rgba(190,222,228,.2);
     --brand:var(--accent); --ink2:#AEBDC2; --up:var(--accent);
     --t-hover:120ms; --r:0px;
+    /* ONE phone gutter and ONE section step. Everything below is on 16 / 24;
+       the block used to run 13 / 14 / 22 / 11 and nothing lined up. Also
+       keeps every element clear of the 12px edge zone. */
+    --pad:16px; --step:24px;
     display:none;
     /* the tab bar is fixed, so the page must end above it */
     padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
   #mob[hidden]{display:none}
-  #mob .state{padding:22px 14px;text-align:center;color:var(--mut);font-size:12.5px;
-    border:1px solid var(--hair);background:var(--g1)}
-  #mob .state .tl{display:block;margin-bottom:7px;color:var(--dim)}
+  /* Every surface here has one of these three. None of them is a bare blank:
+     a loading state names what is coming, an empty state says what would be
+     here and why it is not, an error state says the fetch failed and that
+     nothing is being withheld. */
+  #mob .state{padding:20px var(--pad);text-align:center;color:var(--mut);
+    font-size:13px;line-height:1.55;border:1px solid var(--hair);background:var(--g1)}
+  #mob .state .tl{display:block;margin-bottom:8px;color:var(--ink2)}
+  #mob .state.err .tl{color:var(--amber,#E2A94A)}
+  /* the same shimmer bar the desk's holding screens use, so "waiting" looks
+     the same on both halves of the site */
+  #mob .state.load::after{content:"";display:block;width:120px;height:2px;
+    margin:13px auto 0;
+    background:linear-gradient(90deg,var(--g2) 25%,rgba(45,212,167,.38) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
   #mob a{text-decoration:none;color:inherit}
 
   /* --- add to home screen --- */
-  .m-a2hs{display:flex;align-items:center;gap:11px;padding:11px 14px;
+  .m-a2hs{display:flex;align-items:center;gap:12px;padding:10px var(--pad);
     background:linear-gradient(180deg,rgba(45,212,167,.13),rgba(45,212,167,.05));
     border-bottom:1px solid rgba(45,212,167,.28)}
   .m-a2hs[hidden]{display:none}
-  .m-a2hs-i{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--hair2);
+  .m-a2hs-i{width:32px;height:32px;flex:0 0 auto;border:1px solid var(--hair2);
     background:var(--g1);position:relative}
   .m-a2hs-i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;
     margin:-4px 0 0 -4px;border-radius:50%;background:var(--accent);
     box-shadow:0 0 9px rgba(45,212,167,.7)}
   .m-a2hs-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
   .m-a2hs-t b{font:600 13px var(--sans);color:var(--ink)}
-  .m-a2hs-t i{font-style:normal;font:400 11px/1.35 var(--sans);color:var(--mut)}
+  .m-a2hs-t i{font-style:normal;font:400 11.5px/1.35 var(--sans);color:var(--ink2)}
+  /* both controls carry a 44px target. The dismiss × keeps its optical size
+     but its box is grown and pulled back into the gutter, so the glyph still
+     sits 16px in from the edge while the tappable area reaches 6px. */
   .m-a2hs #a2hsGo{font:700 11px var(--mono);letter-spacing:.1em;color:var(--bg);
-    background:var(--accent);padding:9px 14px;flex:0 0 auto}
-  .m-a2hs #a2hsNo{font-size:19px;line-height:1;color:var(--dim);padding:4px 2px;
-    flex:0 0 auto}
+    background:var(--accent);padding:0 15px;min-height:44px;flex:0 0 auto}
+  .m-a2hs #a2hsGo[hidden]{display:none}
+  .m-a2hs #a2hsNo{font-size:20px;line-height:1;color:var(--mut);flex:0 0 auto;
+    width:44px;height:44px;margin:-6px -10px -6px -6px}
 
-  .m-top{display:flex;align-items:center;gap:9px;padding:16px 14px 0}
+  .m-top{display:flex;align-items:center;gap:9px;padding:18px var(--pad) 0}
   .m-mark{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:var(--accent);
     box-shadow:0 0 10px rgba(45,212,167,.55)}
   .m-top b{font:600 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
   .m-top b i{font-style:normal;color:var(--accent)}
-  .m-sub{font:500 9.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
-    color:var(--dim);margin-left:auto;white-space:nowrap}
+  .m-sub{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    color:var(--mut);margin-left:auto;white-space:nowrap}
 
-  /* --- sport rail --- */
-  .m-sports{display:flex;gap:6px;padding:13px 14px 0;overflow-x:auto;
-    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  /* --- sport rail ---
+     Tiles are 44px tall so they are actually tappable, and the rail carries a
+     right-edge fade whenever there is more to scroll to (data-more), so the
+     affordance does not depend on a tile happening to be cut in half. */
+  .m-sports{display:flex;gap:7px;padding:16px var(--pad) 4px;overflow-x:auto;
+    scroll-snap-type:x proximity;scroll-padding-left:var(--pad);
+    min-height:64px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .m-sports::-webkit-scrollbar{display:none}
-  .m-sports button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
-    padding:9px 13px;border:1px solid var(--hair);background:var(--g1);
+  .m-sports[data-more="1"]{
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);
+    mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+  .m-sports button{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
+    min-height:44px;padding:0 14px;border:1px solid var(--hair);background:var(--g1);
+    scroll-snap-align:start;
     font:600 11px var(--mono);letter-spacing:.1em;color:var(--mut);
     transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
-  .m-sports button .d{width:5px;height:5px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 7px rgba(45,212,167,.6)}
+  .m-sports button .d{width:5px;height:5px;flex:0 0 auto;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 7px rgba(45,212,167,.6)}
   .m-sports button .d.off{background:#2A343C;box-shadow:none}
-  .m-sports button .c{font-size:9.5px;color:var(--dim)}
+  .m-sports button .c{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
   .m-sports button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
-  .m-sports button[disabled]{opacity:.42}
+  .m-sports button[aria-pressed="true"] .c{color:var(--mut)}
+  .m-sports button[disabled]{opacity:.55;cursor:default}
+  .m-sports[hidden]{display:none}
+  .m-sports .m-skel{flex:0 0 auto;width:82px;height:44px;border:1px solid var(--hair);
+    background:var(--g1);opacity:.5}
 
   /* --- the analyst prompt --- */
-  .m-ask{display:flex;align-items:center;gap:9px;margin:13px 14px 0;padding:0 12px;
-    border:1px solid var(--hair2);background:var(--g1)}
+  .m-ask{display:flex;align-items:center;gap:10px;margin:16px var(--pad) 0;
+    padding:0 6px 0 13px;border:1px solid var(--hair2);background:var(--g1)}
+  .m-ask:focus-within{border-color:var(--accent)}
   .m-ask-i{width:13px;height:11px;flex:0 0 auto;border:1.5px solid var(--accent);
     border-radius:2px;position:relative;opacity:.9}
   .m-ask-i::after{content:"";position:absolute;left:2px;right:2px;bottom:-4px;height:3px;
     border-left:3px solid transparent;border-right:3px solid transparent}
+  /* 16px is not a taste call: iOS Safari zooms the whole page on focus for
+     anything smaller, which throws the layout sideways mid-tap. */
   .m-ask input{flex:1;min-width:0;background:none;border:0;color:var(--ink);
-    font:14px var(--sans);padding:13px 0}
-  .m-ask input::placeholder{color:var(--dim)}
-  .m-ask button{font-size:17px;color:var(--accent);padding:11px 2px;flex:0 0 auto}
+    font:16px var(--sans);padding:14px 0;min-height:44px}
+  .m-ask input::placeholder{color:var(--mut)}
+  .m-ask button{font-size:18px;color:var(--accent);flex:0 0 auto;
+    width:44px;height:44px;display:flex;align-items:center;justify-content:center}
 
   /* --- section rails --- */
-  .m-sec{margin:22px 0 0}
-  .m-h{display:flex;align-items:baseline;gap:9px;padding:0 14px 9px;
-    border-bottom:1px solid rgba(45,212,167,.22);margin-bottom:11px}
-  .m-c{font:500 9.5px var(--mono);letter-spacing:.08em;color:var(--dim);
-    text-transform:uppercase}
-  .m-all{margin-left:auto;color:var(--accent)}
-  .m-rail{display:flex;gap:9px;overflow-x:auto;padding:0 14px 2px;
+  .m-sec{margin:var(--step) 0 0}
+  .m-h{display:flex;align-items:baseline;gap:9px;padding:0 var(--pad) 10px;
+    border-bottom:1px solid rgba(45,212,167,.22);margin-bottom:12px}
+  .m-h .tl{color:var(--ink2);flex:0 0 auto}
+  /* truncates rather than shoving SEE ALL off the right edge on a 320px phone */
+  .m-c{font:500 11px var(--mono);letter-spacing:.06em;color:var(--dim);
+    text-transform:uppercase;min-width:0;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;font-variant-numeric:tabular-nums}
+  /* a text link cannot carry 44px of visible padding inside a header rule
+     without wrecking it, so the target is extended past the glyphs instead */
+  .m-all{margin-left:auto;color:var(--accent);position:relative;flex:0 0 auto}
+  .m-all::after{content:"";position:absolute;top:-17px;right:-16px;bottom:-17px;left:-14px}
+  /* scroll-padding, not just padding: without it the snap point for the first
+     card lands under the gutter and the card sits half off-screen. */
+  .m-rail{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;
+    /* 6px of block padding is the focus ring's room: overflow-y is hidden so
+       the outline has nowhere else to go */
+    padding:6px var(--pad);scroll-padding-left:var(--pad);
     scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .m-rail::-webkit-scrollbar{display:none}
   .m-rail>*{scroll-snap-align:start}
-  .m-rail .state{flex:0 0 100%}
+  /* height is reserved so the loading state, the cards and the empty state all
+     occupy the same band — the page does not jump when the board lands */
+  .m-rail{min-height:188px}
+  .m-rail .state{flex:0 0 100%;display:flex;flex-direction:column;
+    justify-content:center;min-height:176px}
 
   /* --- one game, one card --- */
-  .m-g{flex:0 0 84%;display:block;border:1px solid var(--hair);padding:11px 12px;
+  .m-g{flex:0 0 84%;max-width:330px;display:flex;flex-direction:column;
+    border:1px solid var(--hair);padding:12px 13px;
     background:linear-gradient(180deg,#0E151B,#080D11);
     box-shadow:inset 0 1px 0 rgba(190,240,245,.07)}
   .m-g:active{border-color:var(--accent)}
-  .m-gh{display:flex;align-items:center;gap:7px;padding-bottom:8px;
+  .m-gh{display:flex;align-items:center;gap:8px;padding-bottom:9px;flex:0 0 auto;
     border-bottom:1px solid var(--hair)}
-  .m-gs{display:inline-flex;align-items:center;gap:5px;
-    font:600 9.5px var(--mono);letter-spacing:.1em;color:var(--mut)}
-  .m-gt{margin-left:auto;font:500 9.5px var(--mono);color:var(--dim);white-space:nowrap}
-  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:10px;
-    align-items:center;padding:9px 0;border-bottom:1px solid var(--hair)}
+  .m-gs{display:inline-flex;align-items:center;gap:6px;min-width:0;
+    font:600 11px var(--mono);letter-spacing:.08em;color:var(--mut)}
+  .m-gt{margin-left:auto;flex:0 0 auto;font:500 11px var(--mono);color:var(--mut);
+    white-space:nowrap}
+  /* flex:1 on the sides: every card in a rail is stretched to the tallest one,
+     and without this the slack piled up as dead space under the last row. */
+  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:9px;flex:1;
+    align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
   .m-side:last-child{border-bottom:0}
-  .m-nm{font:600 13px var(--sans);color:var(--ink);line-height:1.25;
-    display:grid;grid-template-columns:18px 1fr;column-gap:8px;align-items:center}
+  .m-nm{font:600 13.5px var(--sans);color:var(--ink);line-height:1.25;min-width:0;
+    display:grid;grid-template-columns:18px minmax(0,1fr);column-gap:8px;
+    align-items:center}
   .m-nm .crest{grid-column:1;grid-row:1/3;align-self:center;object-fit:contain}
   .m-nm .m-tn{grid-column:2;min-width:0;overflow-wrap:anywhere}
   .m-nm .m-bk{grid-column:2}
-  .m-bk{display:block;font:500 9.5px var(--mono);color:var(--dim);
-    letter-spacing:.05em;margin-top:2px}
+  .m-bk{display:block;font:500 11px var(--mono);color:var(--mut);letter-spacing:0;
+    margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-px,.m-fair,.m-seal .v{font-variant-numeric:tabular-nums}
   .m-px{font:700 16px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
-  .m-fair{font:500 10px var(--mono);color:var(--mut);text-align:right;min-width:8.5ch}
-  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:9px;
-    letter-spacing:.06em}
+  .m-fair{font:500 11px var(--mono);color:var(--mut);text-align:right;min-width:9ch}
+  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:11px;
+    letter-spacing:.02em;margin-top:3px}
   .m-fair i.m-gain{color:var(--accent)}
 
   /* --- the sealed slate card --- */
-  .m-seal{display:block;margin:0 14px;padding:13px 14px;
+  .m-seal{display:block;margin:0 var(--pad);padding:14px 15px;min-height:126px;
     border:1px solid var(--frost-rim);
     background:linear-gradient(126deg,rgba(191,234,242,.055) 0 22%,transparent 22% 41%,
       rgba(191,234,242,.035) 41% 52%,transparent 52%),
       linear-gradient(180deg,#101a20,#0A1116);
     box-shadow:inset 0 1px 0 rgba(220,248,255,.16)}
-  .m-seal .r{display:flex;align-items:baseline;gap:9px}
-  .m-seal .r+.r{margin-top:9px;padding-top:9px;border-top:1px solid var(--hair)}
-  .m-seal .k{font:600 9.5px var(--mono);letter-spacing:.11em;color:var(--dim);
-    text-transform:uppercase}
+  .m-seal .r{display:flex;align-items:baseline;gap:10px}
+  .m-seal .r+.r{margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
+  .m-seal .k{font:600 11px var(--mono);letter-spacing:.09em;color:var(--mut);
+    text-transform:uppercase;flex:0 0 auto}
   .m-seal .v{margin-left:auto;font:600 13px var(--mono);color:var(--ink);
-    text-align:right}
+    text-align:right;min-width:0;overflow-wrap:anywhere}
   .m-seal .v.frostv{color:var(--frost)}
-  .m-seal .melt{display:block;height:2px;margin-top:11px;
+  .m-seal .melt{display:block;height:2px;margin-top:12px;
     background:rgba(191,234,242,.08);position:relative;overflow:hidden}
   .m-seal .melt b{position:absolute;left:0;top:0;bottom:0;display:block;
     background:linear-gradient(90deg,rgba(191,234,242,.25),var(--frost))}
+  /* the seal card IS the surface, so its own states must not draw a second
+     box inside it */
+  #mob .m-seal .state{border:0;background:none;padding:6px 0 4px;text-align:left}
+  #mob .m-seal .state .tl{color:var(--frost)}
 
-  .m-fine{margin:22px 14px 6px;font-size:11px;line-height:1.65;color:var(--dim)}
-  .m-fine a{color:var(--mut)}
-  .m-fine b{color:var(--mut)}
+  /* The compliance line. Same words as ever; --mut rather than --dim because
+     this is the one paragraph on the phone that has to be readable. */
+  .m-fine{margin:var(--step) var(--pad) 0;font-size:11.5px;line-height:1.7;
+    color:var(--mut)}
+  .m-fine b{color:var(--ink2);font-weight:600}
+  .m-links{display:flex;flex-wrap:wrap;column-gap:18px;margin:6px var(--pad) 10px;
+    border-top:1px solid var(--hair);padding-top:4px}
+  #mob .m-links a{display:inline-flex;align-items:center;min-height:44px;
+    font:500 11.5px var(--sans);color:var(--ink2);
+    text-decoration:underline;text-decoration-color:rgba(174,189,194,.3);
+    text-underline-offset:4px}
 
   /* --- fixed tab bar --- */
   .m-tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;
@@ -376,7 +474,7 @@
      whole life indistinguishable from the other four. */
   #mob .m-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:5px;min-height:48px;padding:9px 2px 8px;
-    font:600 8.5px var(--mono);letter-spacing:.1em;
+    font:600 11px var(--mono);letter-spacing:.06em;
     /* --mut, not --dim: --dim on this ground is 3.2:1, under AA for text,
        and this is primary navigation rather than faint metadata. */
     color:var(--mut);transition:color var(--t-hover) ease}
@@ -403,12 +501,9 @@
     #mob{display:block}
     .brand-row,.strap,.ws-labels,#stagewrap,.caption,.rail{display:none}
     body>footer.ft{display:none}
-    .brand-row{padding:14px 16px 0;gap:12px}
-    .brand-row .no b{font-size:15px} h1{font-size:14px;letter-spacing:.24em;padding-left:12px}
-    .kicker{display:none} .strap{padding:6px 16px 0}
-    .ws-labels{overflow-x:auto;justify-content:flex-start;gap:14px;flex-wrap:nowrap;
-      scrollbar-width:none;width:auto;margin:8px 0 0;padding:0 12px}
-    .ws-labels button{white-space:nowrap}
+    /* The desk's own header used to have phone overrides here. They sat below
+       the display:none above them and could never apply, so they went with
+       the rest of the dead weight. */
     #desk{position:relative;perspective:none;display:flex;overflow-x:auto;
       scroll-snap-type:x mandatory;scrollbar-width:none;height:70vh}
     #desk::after{display:none}
@@ -453,45 +548,65 @@
   </header>
 
   <!-- Sport rail. Driven by the board, never hardcoded: a league with no
-       games shows as dark and unselectable rather than as a dead tab. -->
-  <nav class="m-sports" id="mSports" aria-label="Sports"></nav>
+       games shows as dark and unselectable rather than as a dead tab. The
+       skeleton tiles hold the rail's height so nothing below it jumps when
+       the board lands. -->
+  <nav class="m-sports" id="mSports" aria-label="Sports"><span class="m-skel"></span
+    ><span class="m-skel"></span><span class="m-skel"></span></nav>
 
   <!-- The analyst, always in reach. Free, no account — unlike the reference,
        which puts its prompt behind a signup. -->
   <form class="m-ask" id="mAsk" action="/ask" method="get">
     <span class="m-ask-i" aria-hidden="true"></span>
+    <label class="vh" for="mAskQ">Ask the analyst about tonight's board</label>
     <input name="q" id="mAskQ" type="text" autocomplete="off"
-      placeholder="Ask about tonight's board" aria-label="Ask the analyst">
+      placeholder="Ask about tonight's board">
     <button type="submit" aria-label="Ask">&rarr;</button>
   </form>
 
   <section class="m-sec" aria-labelledby="mBoardH">
     <div class="m-h"><span class="tl" id="mBoardH">NEXT UP</span>
-      <span class="m-c" id="mGames">—</span>
+      <span class="m-c" id="mGames">&nbsp;</span>
       <a class="tl m-all" href="/market">SEE ALL &rsaquo;</a></div>
-    <div class="m-rail" id="mBoard"><div class="state"><span class="tl">LOADING THE BOARD…</span></div></div>
+    <div class="m-rail" id="mBoard"><div class="state load"><span class="tl">LOADING THE BOARD</span>Every book&rsquo;s price on tonight&rsquo;s games, arriving now.</div></div>
   </section>
 
   <section class="m-sec" aria-labelledby="mGapH">
     <div class="m-h"><span class="tl" id="mGapH">BIGGEST GAPS</span>
       <span class="m-c">SHOPPING PAYS MOST</span>
       <a class="tl m-all" href="/edges">SEE ALL &rsaquo;</a></div>
-    <div class="m-rail" id="mGaps"></div>
+    <div class="m-rail" id="mGaps"><div class="state load"><span class="tl">RANKING THE GAPS</span>Where the best number beats the worst by the most.</div></div>
   </section>
 
   <section class="m-sec" aria-labelledby="mSealH">
     <div class="m-h"><span class="tl" id="mSealH">THE SEALED SLATE</span>
       <a class="tl m-all" href="/picks">OPEN &rsaquo;</a></div>
     <a class="m-seal" id="mSeal" href="/picks">
-      <div class="state"><span class="tl">CHECKING THE SEAL…</span></div></a>
+      <div class="state load"><span class="tl">CHECKING THE SEAL</span>Reading this week&rsquo;s commitment.</div></a>
   </section>
 
-  <p class="m-fine">Prices move — check the book before you bet. Entertainment and analysis
-    only; we do not accept wagers or hold funds. 21+ where lawful. Problem gambling:
-    <b>1-800-522-4700</b>.
-    <a href="/alerts">Alerts</a> · <a href="/learn">How it works</a> ·
-    <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
-    <a href="/disclaimers">Disclaimers</a></p>
+  <!-- THE COMPLIANCE FLOOR, VERBATIM. The shared footer.ft is display:none
+       below 859px, so on a phone this paragraph IS the floor — and the phone
+       homepage is the most-visited surface on the site. It previously carried
+       a REWORDED version that dropped "place, or facilitate" from the wagers
+       clause and omitted the past-performance sentence entirely. That language
+       is legally checked and is not ours to paraphrase for fit. Any edit here
+       must keep it byte-identical to footer() in assets/desk.js. -->
+  <p class="m-fine">Prices move — check the book before you bet.
+    <b>Entertainment and analysis only. We do not accept, place, or facilitate
+    wagers</b>, and we hold no customer funds. Not affiliated with any league or
+    sportsbook. Past performance does not indicate future results — our published
+    backtest shows a loss against the closing market. Nothing here is a
+    recommendation to bet. 21+, where lawful.</p>
+  <p class="m-fine">If gambling is causing harm, the National Problem Gambling
+    Helpline is <b>1-800-522-4700</b>, available 24/7.</p>
+
+  <!-- The same five links, lifted out of the compliance paragraph. Inline in
+       prose they were 26px tall and 4px apart — untappable, and they made the
+       one paragraph that has to be read look like a link farm. -->
+  <nav class="m-links" aria-label="More">
+    <a href="/alerts">Alerts</a><a href="/learn">How it works</a><a href="/record">Record</a><a href="/verify">Verify</a><a href="/disclaimers">Disclaimers</a>
+  </nav>
 
   <!-- Fixed tab bar: the one element that makes this read as an app. Five
        real surfaces, no invented ones. The other four screens grow the same
@@ -597,10 +712,13 @@ function gameCard(ev,sport){
        team-logos.json is keyed, so no sport hint is needed here. Crest fails
        silent: no map, no network, no match — the name still reads. */
     var mark=(window.Crest&&Crest.img?Crest.img(s.name,16):"");
+    /* "BEST · FANDUEL", not "BEST AT FANDUEL": at the 11px floor the longer
+       form ran past the name column on a 375px screen and either wrapped to a
+       second line or truncated. Same meaning, one word shorter. */
     return '<div class="m-side">'
       +'<span class="m-nm" data-crest="'+esc(s.name)+'" data-size="16">'+mark
         +'<span class="m-tn">'+esc(s.name)+'</span>'
-        +'<span class="m-bk">BEST AT '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
+        +'<span class="m-bk">BEST &middot; '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
       +'<span class="m-px">'+am(s.best_price)+'</span>'
       +'<span class="m-fair">FAIR '+am(s.fair_price)+gain+'</span>'
       +'</div>';
@@ -610,7 +728,7 @@ function gameCard(ev,sport){
       +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
       +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
       +esc(String(sport).toUpperCase())
-      +' &middot; '+esc(ev.n_books||0)+' BOOKS</span>'
+      +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')+'</span>'
     +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
     +sides+'</a>';
 }
@@ -658,60 +776,98 @@ function armInstall(){
 
 /* ---- sport rail ---- */
 var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+/* A rail only advertises that it scrolls while it actually has somewhere left
+   to go, so the fade is never a lie about the end of the list. */
+function syncMore(el){
+  if(!el) return;
+  el.dataset.more=(el.scrollLeft+el.clientWidth < el.scrollWidth-2)?"1":"0";
+}
 function drawSports(){
   var el=document.getElementById("mSports"); if(!el) return;
-  var counts={};
-  MOB.rows.forEach(function(r){ counts[r.sport]=(counts[r.sport]||0)+1; });
-  var keys=Object.keys(SPORT_LABEL).filter(function(k){return counts[k];});
-  var html='<button data-sp="all" aria-pressed="'+(MOB.sport==="all")+'">'
-    +'<span class="d"></span>ALL<span class="c">'+MOB.rows.length+'</span></button>';
+  /* Counts come from the SAME filter the rails use — upcoming games only.
+     They were counting every row in board.json, so a league whose games had
+     all started advertised a number and then opened an empty rail. */
+  var up=upcoming(MOB.rows), counts={};
+  up.forEach(function(r){ counts[r.sport]=(counts[r.sport]||0)+1; });
+  var keep=el.scrollLeft;
+  var html='<button type="button" data-sp="all" aria-pressed="'+(MOB.sport==="all")+'">'
+    +'<span class="d'+(up.length?"":" off")+'"></span>ALL'
+    +'<span class="c">'+up.length+'</span></button>';
   html+=Object.keys(SPORT_LABEL).map(function(k){
     var n=counts[k]||0;
     /* A league with no games is shown dark and disabled rather than hidden:
        "we cover this, nothing is on today" is information; a vanished tab is
        indistinguishable from a broken one. */
-    return '<button data-sp="'+k+'"'+(n?"":" disabled")
+    return '<button type="button" data-sp="'+k+'"'+(n?"":" disabled")
       +' aria-pressed="'+(MOB.sport===k)+'">'
       +'<span class="d'+(n?"":" off")+'"></span>'+SPORT_LABEL[k]
-      +'<span class="c">'+(n||"")+'</span></button>';
+      +'<span class="c">'+(n||"0")+'</span></button>';
   }).join("");
   el.innerHTML=html;
+  /* innerHTML resets scrollLeft, which threw the rail back to ALL every time
+     you picked a league at the far end of it. */
+  el.scrollLeft=keep;
+  syncMore(el);
   if(!el.dataset.armed){
     el.dataset.armed="1";
+    el.addEventListener("scroll",function(){ syncMore(el); },{passive:true});
+    addEventListener("resize",function(){ syncMore(el); });
     el.addEventListener("click",function(e){
       var b=e.target.closest("button[data-sp]");
-      if(!b||b.disabled) return;
+      if(!b||b.disabled||b.getAttribute("aria-pressed")==="true") return;
       MOB.sport=b.dataset.sp; drawSports(); drawRails();
+      /* bring the chosen league fully into view rather than leaving it clipped
+         against the edge you tapped it at */
+      var sel=el.querySelector('[aria-pressed="true"]');
+      if(sel&&sel.scrollIntoView) sel.scrollIntoView({block:"nearest",inline:"nearest",
+        behavior:"smooth"});
     });
   }
 }
 
-function visible(){
+/* every row whose kickoff is still ahead of us, sport filter not applied */
+function upcoming(rows){
   var now=Date.now();
-  return MOB.rows.filter(function(r){
-    if(MOB.sport!=="all"&&r.sport!==MOB.sport) return false;
+  return rows.filter(function(r){
     var t=Date.parse(r.e.starts); return !isNaN(t)&&t>now;
   });
 }
+function visible(){
+  return upcoming(MOB.rows).filter(function(r){
+    return MOB.sport==="all"||r.sport===MOB.sport;
+  });
+}
 function drawRails(){
+  var where=MOB.sport==="all"?"on the board":"in "+(SPORT_LABEL[MOB.sport]||MOB.sport);
   var soon=visible().slice().sort(function(a,b){
     return Date.parse(a.e.starts)-Date.parse(b.e.starts);});
-  fill("mBoard",soon.slice(0,8),"Every game on the board has already started.");
+  fill("mBoard",soon.slice(0,8),"NOTHING UPCOMING",
+    "Every game "+where+" has already started. The board refills as the next slate opens.");
   /* The gap rail ranks by what shopping is worth on that game — the one number
      this product exists to surface. Not a pick, and never sorted by our model. */
   var gaps=visible().slice().sort(function(a,b){
     return (b.e.max_gain_pts||0)-(a.e.max_gain_pts||0);})
     .filter(function(r){return (r.e.max_gain_pts||0)>=0.5;});
-  fill("mGaps",gaps.slice(0,8),"No game on the board is worth shopping right now.");
+  fill("mGaps",gaps.slice(0,8),"NO GAP WORTH SHOPPING",
+    "No game "+where+" has half a point of implied probability between the best and "
+    +"worst price right now. That is the market agreeing, not a missing figure.");
   var g=document.getElementById("mGames");
   if(g) g.textContent=soon.length+(soon.length===1?" GAME":" GAMES");
 }
-function fill(id,rows,emptyMsg){
+function fill(id,rows,emptyTitle,emptyMsg){
   var el=document.getElementById(id); if(!el) return;
   el.innerHTML=rows.length
     ? rows.map(function(r){return gameCard(r.e,r.sport);}).join("")
-    : '<div class="state"><span class="tl">NOTHING TO SHOW</span>'+esc(emptyMsg)+'</div>';
+    : '<div class="state"><span class="tl">'+esc(emptyTitle)+'</span>'+esc(emptyMsg)+'</div>';
+  el.scrollLeft=0;      /* a new filter starts at the first card, not mid-rail */
   if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
+}
+/* One honest failure message, used for every surface the fetch feeds. */
+function failRail(id,what){
+  var el=document.getElementById(id); if(!el) return;
+  el.innerHTML='<div class="state err"><span class="tl">'+esc(what)+' UNAVAILABLE</span>'
+    +'We could not load prices just now. Nothing is being hidden — pull down to '
+    +'refresh, or try again in a moment.</div>';
 }
 
 /* ---- the sealed slate card ---- */
@@ -719,7 +875,8 @@ function drawSeal(s){
   var el=document.getElementById("mSeal"); if(!el) return;
   if(!s||s.error){
     el.innerHTML='<div class="state"><span class="tl">NO SEALED SLATE YET</span>'
-      +'The next slate seals on Wednesday.</div>';
+      +'The next slate seals on Wednesday, and the hash goes public the moment '
+      +'it does. Tap to read how the seal works.</div>';
     return;
   }
   var kick=Date.parse(s.unlocks_at||s.earliest_kickoff||"");
@@ -769,10 +926,18 @@ function buildMobile(){
          the user as "we could not load prices" — a false statement about the
          network that also hides the real fault from us. */
       console.error("phone home failed:", err);
-      document.getElementById("mBoard").innerHTML=
-        '<div class="state"><span class="tl">BOARD UNAVAILABLE</span>'
-        +'We could not load prices just now. Nothing is being hidden — try again '
-        +'in a moment.</div>';
+      /* BOTH rails and the sport filter feed off this one fetch. Reporting the
+         failure on only the first of them left the gap rail spinning its
+         loading state for ever and the sport rail showing skeletons — three
+         surfaces telling three different stories about one event. */
+      failRail("mBoard","BOARD");
+      failRail("mGaps","GAPS");
+      /* the filter is hidden rather than emptied: an empty 64px rail is just
+         an orphaned gap where a control used to be */
+      var sp=document.getElementById("mSports");
+      if(sp){ sp.innerHTML=""; sp.hidden=true; }
+      var g=document.getElementById("mGames");
+      if(g) g.textContent="—";
     });
 }
 

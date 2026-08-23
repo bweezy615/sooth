@@ -112,7 +112,47 @@
   .gain span{font-size:11px; color:var(--muted)}
   .gain em{font-style:normal; display:block; font-family:var(--num); font-size:10px; color:var(--dim); margin-top:2px}
   .stamp{font-family:var(--num); font-size:11px; color:var(--dim); margin-top:14px}
-  .err{color:var(--dn); font-size:12.5px; font-family:var(--num)}
+  .stamp:empty{display:none}
+  .err{color:var(--dn); font-size:12.5px; font-family:var(--num); line-height:1.6}
+
+  /* ---- states -------------------------------------------------------------
+     Four panels on this page were empty boxes until a fetch landed, and then
+     grew by up to 380px at once — on a phone the reader is mid-sentence in the
+     paragraph above when the page jumps. Every figure block now ships a ghost
+     of itself: same tile, same label, a shimmering bar where the number will
+     be. The space is reserved, the labels are readable while you wait, and the
+     number arrives in the slot it was always going to occupy.
+
+     The labels are the only text here; no ghost carries a figure, so nothing
+     on this page can ever show a number that did not come out of the data. */
+  .skb{display:block;height:22px;width:76px;border-radius:2px;
+    background:linear-gradient(90deg,var(--g2) 25%,var(--g3) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+  .gain .skb{height:19px;width:88px}
+  .verdict .skb,.panel-sub .skb{height:13px;width:62%;margin-bottom:7px}
+  .verdict .skb+.skb,.panel-sub .skb+.skb{width:44%;margin-bottom:0}
+  .panel-sub .skb{width:88%}
+  [data-state="err"] .skb{animation:none;opacity:.4}
+
+  /* the charts already reserve their own height through the viewBox, but the
+     panel around them should say it is working rather than sit blank */
+  #chartbox[aria-busy="true"],#pebox[aria-busy="true"]{opacity:.45}
+
+  /* THE COMPLIANCE LINE MAY NOT BE COVERED.
+     This page sets its own body padding, which silently overrode the clearance
+     desk.css reserves for the fixed phone tab bar — so on a phone with a home
+     indicator the bar sat on top of the injected footer, and the footer is
+     where the helpline number lives. */
+  @media(max-width:859px){
+    body{padding:0 16px calc(66px + env(safe-area-inset-bottom,0px))}
+  }
+  @media(max-width:720px){
+    .page-head{padding:26px 0 6px}
+    h2{margin:32px 0 12px}
+    .card{padding:16px 15px}
+    .tiles{gap:8px;margin-bottom:14px}
+    .legend{gap:10px 16px;font-size:11.5px}
+  }
 </style>
 </head>
 <body data-page="trust">
@@ -161,18 +201,23 @@
   If a line stays under the 52.4% breakeven, betting it at −110 loses money. Ours does. So does
   a naive read of the market — which is the point: <b style="color:var(--ink)">nobody on this
   chart clears breakeven, and we publish that instead of hiding it.</b></p>
-  <div class="tiles" id="bt-tiles"></div>
+  <div class="tiles" id="bt-tiles" aria-busy="true">
+    <div class="tile"><b><span class="skb"></span></b><span>graded backtest games</span></div>
+    <div class="tile ours"><b><span class="skb"></span></b><span>Sooth model, ATS</span></div>
+    <div class="tile mkt"><b><span class="skb"></span></b><span>market close, ATS</span></div>
+    <div class="tile brk"><b><span class="skb"></span></b><span>breakeven at −110</span></div>
+  </div>
   <div class="legend" aria-hidden="true">
     <span><i style="background:var(--brand)"></i>Sooth model</span>
     <span><i style="background:var(--ser)"></i>Market (closing line)</span>
     <span class="dash"><i></i>Breakeven at −110 (52.4%)</span>
   </div>
-  <div id="chartbox">
+  <div id="chartbox" aria-busy="true">
     <svg id="btchart" viewBox="0 0 900 320" role="img"
       aria-label="Line chart of cumulative against-the-spread rate for the Sooth model versus the closing market, 2016 to 2025, both below the 52.4 percent breakeven line"></svg>
     <div class="tip" id="tip" aria-hidden="true"></div>
   </div>
-  <div class="verdict"><p id="verdict"></p></div>
+  <div class="verdict"><p id="verdict"><span class="skb"></span><span class="skb"></span></p></div>
   <p class="stamp" id="bt-stamp"></p>
 </div>
 
@@ -183,25 +228,36 @@
   measurable value — no prediction required. These figures are read live from
   <code style="font-family:var(--num);font-size:11px;color:var(--brand)">board.json</code>, the same
   file the public board renders.</p>
-  <div class="gains" id="gains"><span class="err" style="display:none" id="gains-err"></span></div>
+  <div class="gains" id="gains" aria-busy="true">
+    <div class="gain"><b><span class="skb"></span></b><span>avg best-vs-worst</span>
+      <em>reading the live board…</em></div>
+    <div class="gain"><b><span class="skb"></span></b><span>avg best-vs-worst</span>
+      <em>reading the live board…</em></div>
+  </div>
+  <span class="err" style="display:none" id="gains-err"></span>
   <p class="stamp" id="board-stamp"></p>
 </div>
 
 <h2>The edge in dollars — same bets, better price</h2>
 <div class="card">
-  <p class="panel-sub" id="pe-method"></p>
-  <div class="tiles" id="pe-tiles"></div>
+  <p class="panel-sub" id="pe-method"><span class="skb"></span><span class="skb"></span></p>
+  <div class="tiles" id="pe-tiles" aria-busy="true">
+    <div class="tile"><b><span class="skb"></span></b><span>identical bets</span></div>
+    <div class="tile"><b><span class="skb"></span></b><span>of stake recovered by shopping</span></div>
+    <div class="tile"><b><span class="skb"></span></b><span>saved on the same bets</span></div>
+    <div class="tile"><b><span class="skb"></span></b><span>games with outright arbitrage</span></div>
+  </div>
   <div class="legend" aria-hidden="true">
     <span><i style="background:var(--brand)"></i>Settled at best price</span>
     <span><i style="background:var(--dim)"></i>Settled at median price</span>
     <span><i style="background:rgba(45,212,167,.35)"></i>The price edge (gap)</span>
   </div>
-  <div id="pebox" style="position:relative">
+  <div id="pebox" style="position:relative" aria-busy="true">
     <svg id="pechart" viewBox="0 0 900 300" role="img"
       aria-label="Cumulative profit and loss of identical moneyline bets settled at the best available price versus the median price, 2023 to 2025; the widening gap between the lines is the value of line shopping"></svg>
     <div class="tip" id="petip" aria-hidden="true"></div>
   </div>
-  <div class="verdict"><p id="pe-verdict"></p></div>
+  <div class="verdict"><p id="pe-verdict"><span class="skb"></span><span class="skb"></span></p></div>
   <p class="stamp" id="pe-stamp"></p>
 </div>
 </main>
@@ -210,6 +266,12 @@
 const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const NS='http://www.w3.org/2000/svg';
 const pct=v=>(v*100).toFixed(1)+'%';
+/* a panel stops being "busy" whether it succeeded or failed — leaving the
+   ghosts shimmering forever is a worse lie than an error message */
+const settle=(...ids)=>ids.forEach(i=>{const e=document.getElementById(i);
+  if(e){e.removeAttribute('aria-busy');e.setAttribute('data-state','done');}});
+const failed=(...ids)=>ids.forEach(i=>{const e=document.getElementById(i);
+  if(e){e.removeAttribute('aria-busy');e.setAttribute('data-state','err');}});
 
 fetch('data/backtest_curve.json').then(r=>r.json()).then(bt=>{
   document.getElementById('bt-tiles').innerHTML=
@@ -223,9 +285,15 @@ fetch('data/backtest_curve.json').then(r=>r.json()).then(bt=>{
     `and neither clears breakeven. That measurement is why Sooth sells price transparency `+
     `instead of picks: the edge below survives; picks do not.`;
   document.getElementById('bt-stamp').textContent=(bt.warning||'')+' · source: data/backtest_curve.json';
+  settle('bt-tiles','chartbox');
   drawCurve(bt);
 }).catch(()=>{
-  document.getElementById('verdict').innerHTML='<span class="err">Could not load data/backtest_curve.json — is the server running from site/public?</span>';
+  failed('bt-tiles','chartbox');
+  document.getElementById('bt-tiles').innerHTML='';
+  document.getElementById('verdict').innerHTML='<span class="err">The walk-forward '
+    +'comparison did not load. It is not being withheld — every figure it draws is in '
+    +'<a href="/data/backtest_curve.json" style="color:var(--muted)">data/backtest_curve.json</a>, '
+    +'which you can read directly.</span>';
 });
 
 function drawCurve(bt){
@@ -290,9 +358,15 @@ fetch('data/priceedge.json').then(r=>r.json()).then(pe=>{
     `Shopping recovers <b>+${(pe.edge_pts*100).toFixed(2)}%</b> on every dollar before any prediction is made — `+
     `it halves the house edge, and it stacks with whatever skill a bettor brings.`;
   document.getElementById('pe-stamp').textContent=pe.warning+' · source: data/priceedge.json';
+  settle('pe-tiles','pebox');
   drawEdge(pe);
 }).catch(()=>{
-  document.getElementById('pe-verdict').innerHTML='<span class="err">Could not load data/priceedge.json</span>';
+  failed('pe-tiles','pebox');
+  document.getElementById('pe-tiles').innerHTML='';
+  document.getElementById('pe-method').textContent='';
+  document.getElementById('pe-verdict').innerHTML='<span class="err">The price-edge '
+    +'settlement did not load. The underlying figures are in '
+    +'<a href="/data/priceedge.json" style="color:var(--muted)">data/priceedge.json</a>.</span>';
 });
 
 function drawEdge(pe){
@@ -347,15 +421,25 @@ function drawEdge(pe){
 
 fetch('data/board.json').then(r=>r.json()).then(b=>{
   const g=document.getElementById('gains');
-  g.innerHTML=(b.boards||[]).map(s=>
+  settle('gains');
+  const rows=(b.boards||[]).map(s=>
     `<div class="gain"><b>+${s.avg_gain_pts.toFixed(2)} pts</b>`+
     `<span>${s.label} · avg best-vs-worst</span>`+
     `<em>${s.n_events} events · ${s.n_books} books · max +${s.max_gain_pts.toFixed(2)}</em></div>`).join('');
+  /* no sport priced yet is a real, ordinary state — say what belongs here */
+  g.innerHTML=rows||'<p class="panel-sub" style="margin:0">One figure per sport '
+    +'belongs here, measuring how far apart the books are on the same game. No '
+    +'sport is priced on the board at the moment, so there is no spread to measure '
+    +'yet; this fills the next time a slate is posted.</p>';
   document.getElementById('board-stamp').textContent=
     'board generated '+new Date(b.generated_at).toLocaleString()+' · sports live: '+(b.sports_live||[]).join(', ');
 }).catch(()=>{
+  failed('gains');
+  document.getElementById('gains').innerHTML='';
   const e=document.getElementById('gains-err');e.style.display='block';
-  e.textContent='Could not load data/board.json';
+  e.innerHTML='The live board did not load, so the best-vs-worst spread cannot be '
+    +'read right now. The file it renders from is '
+    +'<a href="/data/board.json" style="color:var(--muted)">data/board.json</a>.';
 });
 </script>
 <script src="/assets/desk.js"></script>
