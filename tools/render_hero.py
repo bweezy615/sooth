@@ -61,13 +61,40 @@ import random
 
 from mathutils import Euler, Vector
 
-OUT = os.path.join(os.getcwd(), "site/public/assets/hero.png")
+# TWO VIEWS OF ONE SCENE, not two scenes.
+#
+# /picks needs its own ice — it is the page the whole metaphor is ABOUT, the
+# actual sealed slate — and the obvious way to get it would be a second script.
+# That would be two lighting rigs to keep in step, and the moment they drifted
+# the two pages would be showing two different rooms. So the block, the floor,
+# the fractures, the bubbles, the shards and all three lamps are defined once,
+# and a view only moves the camera and the frame.
+#
+#     SOOTH_HERO_VIEW=seal /Applications/Blender.app/Contents/MacOS/Blender \
+#         --background --factory-startup --python tools/render_hero.py
+#
+#   hero — 2.17:1, the whole block standing in the room, right of centre with
+#          the left third dark for the headline. A band across the top of the
+#          landing page; wider than 16:9 because a 16:9 hero at full width
+#          would push the desk entirely off the bottom of the screen.
+#   seal — 3.91:1, close on the seal itself. A masthead strip for /picks, so
+#          it is read as one detail of the same object rather than as a second
+#          picture of the same thing.
+VIEWS = {
+    "hero": dict(out="hero.png", res=(2000, 920), samples=110,
+                 cam=(-0.60, -9.60, 1.50), lens=46, pitch=89.0, yaw=-7.0),
+    # Pulled back from the first attempt at (1.15,-4.70) / 52mm, which filled
+    # the strip with the disc and cropped it top and bottom — a close-up with
+    # no context and nowhere for the page's own heading to go. From here the
+    # block occupies roughly the right 45% and the left stays dark room.
+    "seal": dict(out="seal.png", res=(1800, 460), samples=110,
+                 cam=(1.15, -7.00, 1.45), lens=44, pitch=90.0, yaw=0.0),
+}
+VIEW = VIEWS[os.environ.get("SOOTH_HERO_VIEW", "hero")]
 
-# 2.17:1. Wider than 16:9 because this is a band across the top of the page,
-# not a picture in a frame — a 16:9 hero at full width would push the desk
-# entirely off the bottom of the screen.
-RES_X, RES_Y = 2000, 920
-SAMPLES = 110
+OUT = os.path.join(os.getcwd(), "site/public/assets", VIEW["out"])
+RES_X, RES_Y = VIEW["res"]
+SAMPLES = VIEW["samples"]
 
 # Composition knob. A full-quality pass is minutes of CPU, and every lighting
 # and framing decision above was found by iterating — so there is a cheap mode
@@ -574,12 +601,12 @@ def camera():
     which is where the reflection lives — the reflection is half of why the
     promos look wet.
     """
-    bpy.ops.object.camera_add(location=(-0.60, -9.60, 1.50))
+    bpy.ops.object.camera_add(location=VIEW["cam"])
     c = bpy.context.object
-    c.data.lens = 46
+    c.data.lens = VIEW["lens"]
     # Yawed right so the block lands off-centre without moving the block: this
     # is what opens the dark left third the headline sits in.
-    c.rotation_euler = (math.radians(89.0), 0, math.radians(-7.0))
+    c.rotation_euler = (math.radians(VIEW["pitch"]), 0, math.radians(VIEW["yaw"]))
     bpy.context.scene.camera = c
 
 

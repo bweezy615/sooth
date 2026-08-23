@@ -453,13 +453,42 @@
   .m-a2hs #a2hsNo{font-size:20px;line-height:1;color:var(--mut);flex:0 0 auto;
     width:44px;height:44px;margin:-6px -10px -6px -6px}
 
-  .m-top{display:flex;align-items:center;gap:9px;padding:18px var(--pad) 0}
+  /* THE PHONE'S ONE PIECE OF ICE.
+     The app shell had no imagery at all — the FROZEN MARKET idea reached it
+     only as a cyan border and a diamond bullet, which is a vocabulary rather
+     than a thing anyone can see. This is the same block, in the same room, in
+     the one place on a utility screen where a picture costs nothing: behind
+     the masthead, where the alternative was empty padding.
+
+     It is a SEPARATE, SMALLER asset (assets/hero-phone.jpg, 29KB, cut by
+     tools/phone_plate.py). Reusing the 2000px desktop plate here would have
+     undone the thing the landing page works to guarantee — that a phone never
+     requests it. #mob is display:none above 859px, so desktop never fetches
+     this one either. */
+  .m-top{position:relative;isolation:isolate;overflow:hidden;
+    display:flex;align-items:center;flex-wrap:wrap;gap:9px;
+    min-height:126px;padding:18px var(--pad) 15px}
+  .m-top::before{content:"";position:absolute;inset:0;z-index:-2;
+    background:var(--bg) 72% 58%/cover no-repeat;
+    background-image:url("/assets/hero-phone.jpg")}
+  /* Left-weighted so the wordmark has ground under it without dimming the
+     block, then hard down to --bg along the bottom so the masthead ENDS in the
+     page rather than on a visible horizon above the sport rail. */
+  .m-top::after{content:"";position:absolute;inset:0;z-index:-1;
+    background:
+      linear-gradient(96deg, rgba(6,8,10,.94) 0%, rgba(6,8,10,.74) 32%,
+        rgba(6,8,10,.24) 58%, transparent 78%),
+      linear-gradient(to bottom, rgba(6,8,10,.42) 0%, transparent 32%,
+        rgba(6,8,10,.88) 86%, var(--bg) 100%)}
   .m-mark{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:var(--accent);
     box-shadow:0 0 10px rgba(45,212,167,.55)}
   .m-top b{font:600 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
   .m-top b i{font-style:normal;color:var(--accent)}
+  /* Drops to its own line instead of the far right. On the right it sat over
+     the lit face of the block — small mono caps in --mut on ice, which is the
+     one combination the scrim cannot rescue. */
   .m-sub{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    color:var(--mut);margin-left:auto;white-space:nowrap}
+    color:var(--mut);flex:0 0 100%;margin-top:5px;white-space:nowrap}
 
   /* --- sport rail ---
      Tiles are 44px tall so they are actually tappable, and the rail carries a

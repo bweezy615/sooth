@@ -22,7 +22,54 @@
      8 / 14 / 22 / 32. Every margin and every gap on this page is one of those
      four numbers, so no pair of blocks is accidentally cramped and no gap is
      orphaned. Type runs 11 / 12 / 13 / 14 and nothing sets below 11. */
+  /* ---- THE SLATE'S OWN ICE ----------------------------------------------
+     This is the page the whole FROZEN MARKET idea is ABOUT — the actual
+     sealed slate — and until now the idea reached it only as a pale cyan
+     border and a diamond bullet. A vocabulary, not a thing anyone could see.
+
+     assets/seal.jpg is the same block in the same room as the landing hero,
+     from a second camera (SOOTH_HERO_VIEW=seal in tools/render_hero.py) that
+     comes in close on the seal itself. Second camera rather than second
+     scene, so the two pages cannot drift into showing two different rooms.
+
+     It is ABSOLUTELY POSITIONED and therefore costs the page no height: the
+     masthead type sits on it instead of being pushed below it. On a research
+     instrument the numbers do not move down the page to make room for a
+     picture.
+
+     left/right:0 rather than the usual width:100vw full-bleed trick — 100vw
+     includes the scrollbar, which is how full-bleed bands give a page a
+     horizontal scrollbar on desktop. */
+  .ice-band{position:absolute;top:0;left:0;right:0;height:330px;z-index:0;
+    pointer-events:none;
+    background:var(--g0) 68% 46%/cover no-repeat;
+    background-image:url("/assets/seal.jpg")}
+  .ice-band::after{content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(97deg, rgba(6,8,10,.95) 0%, rgba(6,8,10,.82) 30%,
+        rgba(6,8,10,.34) 56%, rgba(6,8,10,.06) 76%, transparent 88%),
+      linear-gradient(to bottom, rgba(6,8,10,.52) 0%, rgba(6,8,10,.16) 26%,
+        rgba(6,8,10,.84) 78%, var(--g0) 100%)}
+  main.wrap{position:relative;z-index:1}
+  /* ON A PHONE IT STOPS BEING A BACKDROP AND BECOMES A MASTHEAD.
+     Desktop has a wide dark left for the type to sit in. A phone does not —
+     the column is the full width, so the eyebrow and the h1 land on the lit
+     face of the block. Measured there: small mono caps in --mut over bright
+     ice is about 1.5:1, which is unreadable, and no scrim fixes it without
+     darkening the plate until there is no point having it.
+     So on a phone the plate takes its own 150px band under the nav and the
+     heading starts below it. That costs about 136px of scroll on the page
+     people came to for the slate, which is the price of the picture being
+     legible rather than a texture behind unreadable text. */
   .ph{padding:32px 0 0;max-width:88ch}
+  /* AFTER .ph, not before it. A media query adds no specificity, so the
+     `padding:32px 0 0` shorthand above will reset padding-top no matter what
+     the query says if the query comes first — which is exactly what happened
+     and why the phone layout did not move on the first attempt. */
+  @media (max-width:720px){
+    .ice-band{height:150px;background-position:70% 44%}
+    .ph{padding-top:168px}
+  }
   .ph h1{font:700 clamp(22px,3.2vw,29px)/1.15 var(--sans);letter-spacing:-.02em;margin:8px 0 0}
   .creed{color:var(--mut);font-size:13px;line-height:1.7;margin:14px 0 0;max-width:86ch}
   .creed b{color:var(--ink2)}
@@ -195,6 +242,10 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to the slate</a>
+<!-- Decorative only: the seal render behind the masthead. aria-hidden and
+     pointer-events:none, and it carries no information the type does not. -->
+<div class="ice-band" aria-hidden="true"></div>
+
 <main class="wrap" id="main">
 
   <div class="scr-strip"><span class="nm">PICK ENGINE</span>
@@ -648,6 +699,22 @@ fetch(SRC,{cache:"no-store"})
       +'slates seal Wednesdays in season.</div>';
     settled();
   });
+})();
+</script>
+<script>
+/* The masthead plate starts where the CONTENT starts, not where the page does.
+   The site header is sticky and its height is set by the breakpoint — one row
+   at desktop, three stacked rows on a phone — so any constant top is wrong
+   somewhere. Measured: 95px at 1440, about 350px at 375, where the whole 210px
+   band rendered entirely behind the nav and the page showed no ice at all.
+   Decoration only, and it fails safe: with scripting off the band sits at the
+   top of the page, which is where it already renders correctly on desktop. */
+(function(){
+  var band=document.querySelector(".ice-band"),hd=document.querySelector(".hd");
+  if(!band||!hd) return;
+  function place(){ band.style.top=hd.offsetHeight+"px"; }
+  place();
+  addEventListener("resize",place);
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
