@@ -23,8 +23,12 @@ at that size, and a crop costs seconds instead of ten minutes of CPU. The seal
 view in tools/render_hero.py is a real second camera because /picks shows it
 large; this does not.
 
-Output
-------
+Outputs
+-------
+`site/public/assets/env-phone.jpg` — 900x506, the room plate every page sits
+in, at a size a phone should pay for. Same reasoning as below: desk.css serves
+the 1920px env.jpg only above 860px.
+
 `site/public/assets/hero-phone.jpg` — 900x430, which covers a 390pt-wide band
 at just over 2x. Not 3x: at this size, in a band that is mostly dark room
 behind a scrim, the third pixel is bytes nobody sees.
@@ -49,6 +53,24 @@ OUT_W, OUT_H = 900, 430
 CROP = (560, 150, 2000, 838)          # left, top, right, bottom -> 1440x688
 
 
+# The room plate, for phones. No crop — env.jpg is already composed to be
+# filled with `cover` at any aspect, so the phone wants the same picture at a
+# size a phone should pay for, not a different framing of it.
+ENV_SRC = "site/public/assets/env.jpg"
+ENV_OUT = "site/public/assets/env-phone.jpg"
+ENV_W, ENV_H = 900, 506
+
+
+def env_plate():
+    if not os.path.exists(ENV_SRC):
+        print("skip: " + ENV_SRC + " not rendered yet (SOOTH_HERO_VIEW=env)")
+        return
+    im = Image.open(ENV_SRC).convert("RGB").resize((ENV_W, ENV_H), Image.LANCZOS)
+    im.save(ENV_OUT, "JPEG", quality=76, optimize=True, progressive=True)
+    print("WROTE %s  %dx%d  %.0fKB"
+          % (ENV_OUT, ENV_W, ENV_H, os.path.getsize(ENV_OUT) / 1024.0))
+
+
 def main():
     if not os.path.exists(SRC):
         raise SystemExit(
@@ -69,6 +91,7 @@ def main():
     im.save(OUT, "JPEG", quality=78, optimize=True, progressive=True)
     print("WROTE %s  %dx%d  %.0fKB"
           % (OUT, OUT_W, OUT_H, os.path.getsize(OUT) / 1024.0))
+    env_plate()
 
 
 main()

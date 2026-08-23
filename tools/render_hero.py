@@ -101,6 +101,40 @@ VIEWS = {
     # reflection is what carries it.
     "field": dict(out="field.png", res=(1800, 380), samples=110,
                   cam=(-1.60, -5.20, 0.30), lens=40, pitch=88.5, yaw=-10.0),
+    # env — 16:9, the room seen WHOLE from across it, and the only view meant
+    # to sit behind a live page rather than beside type.
+    #
+    # This exists because the cropped bands failed. A 330px band filled by
+    # `cover` from a 460px-tall plate is a 3x zoom into a photograph: what
+    # reached the page was the blown-out backlit face of the block with no
+    # silhouette and no context, which reads as a grey rectangle with a hard
+    # edge — the owner's words were "isn't 3D and doesn't render properly",
+    # and that is exactly what a zoomed fragment of a dark render looks like.
+    #
+    # From this distance the block is about a seventh of the frame, so it
+    # reads as an OBJECT IN A ROOM at any viewport, and `cover` crops context
+    # rather than magnifying a detail. The composition is deliberately
+    # bottom-weighted: everything above the horizon is close to black, because
+    # page text lives there, and the light is on the floor, where it does not.
+    "env": dict(out="env.png", res=(1920, 1080), samples=110,
+                cam=(-2.20, -13.50, 1.90), lens=35, pitch=88.0, yaw=-6.0,
+                # The rim lamp is sized for a close view. From across the room
+                # its pool on the floor enters frame as a hard white vertical
+                # streak that reads as a rendering artifact rather than light.
+                # Per-view override rather than a global change, because the
+                # other three plates are already rendered and committed and the
+                # script has to keep reproducing them.
+                # rim=0: the lamp is hidden from camera, but its REFLECTION in the
+                # wet floor is not, and from here that lands in frame as a hard
+                # white vertical streak at the right edge. The block is a
+                # seventh of the frame in this view and does not need a rim.
+                rim=0,
+                # An area lamp's reflection is a picture of the lamp. A
+                # RECTANGLE therefore prints a bright oblong WITH CORNERS on the
+                # floor — the same tell that had to be chased out of the hero,
+                # arriving the second time by reflection instead of directly.
+                # An ellipse has no corners, so it reflects as a soft pool.
+                teal_shape="ELLIPSE"),
 }
 VIEW = VIEWS[os.environ.get("SOOTH_HERO_VIEW", "hero")]
 
@@ -546,7 +580,7 @@ def seal(parent_loc):
     return parts[0][0]
 
 
-def lamp(loc, size, size_y, energy, color, rot):
+def lamp(loc, size, size_y, energy, color, rot, shape="RECTANGLE"):
     """An area light that lights the scene but is never photographed.
 
     `visible_camera = False` is not a nicety here. The first pass put a 9m
@@ -557,7 +591,7 @@ def lamp(loc, size, size_y, energy, color, rot):
     """
     bpy.ops.object.light_add(type="AREA", location=loc)
     o = bpy.context.object
-    o.data.shape = "RECTANGLE"
+    o.data.shape = shape
     o.data.size, o.data.size_y = size, size_y
     o.data.energy = energy
     o.data.color = color
@@ -574,7 +608,8 @@ def lights():
     # a hard-edged glowing oblong with four corners, which is the single most
     # obvious tell that a scene was lit by a CG area lamp. Now the direct pool
     # lands behind the block, where the block's own shadow cuts into it.
-    lamp((1.6, 5.2, 2.30), 4.4, 2.0, 320, TEAL, (-118, 0, -8))
+    lamp((1.6, 5.2, 2.30), 4.4, 2.0, 320, TEAL, (-118, 0, -8),
+         shape=VIEW.get("teal_shape", "RECTANGLE"))
 
     # The teal that reaches the empty left of the frame: the bounce a wet floor
     # would be throwing anyway, made explicit because a nearly black floor
@@ -602,7 +637,7 @@ def lights():
     # Narrow rim down the camera-right edge, the specular streak from the
     # promos. Deliberately weak: at full strength it competes with the teal
     # and the frame ends up with two subjects.
-    lamp((5.6, 0.4, 2.4), 0.5, 3.6, 60, (0.86, 0.95, 1.0), (90, 0, 96))
+    lamp((5.6, 0.4, 2.4), 0.5, 3.6, VIEW.get("rim", 60), (0.86, 0.95, 1.0), (90, 0, 96))
 
 
 def camera():

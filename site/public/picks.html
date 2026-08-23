@@ -22,17 +22,7 @@
      8 / 14 / 22 / 32. Every margin and every gap on this page is one of those
      four numbers, so no pair of blocks is accidentally cramped and no gap is
      orphaned. Type runs 11 / 12 / 13 / 14 and nothing sets below 11. */
-  /* The band itself lives in desk.css (.ice-band) — it is on three pages now.
-     This page supplies only its plate: assets/seal.jpg, the close view of the
-     seal, because this is the page the seal actually belongs to. */
-  .ice-band{background-image:url("/assets/seal.jpg")}
-
   .ph{padding:32px 0 0;max-width:88ch}
-  /* AFTER .ph, not before it. A media query adds no specificity, so the
-     `padding:32px 0 0` shorthand above resets padding-top no matter what the
-     query says if the query comes first — which is what happened first try.
-     desk.css sets the band's phone height; this is the clearance it needs. */
-  @media (max-width:720px){ .ph{padding-top:168px} }
   .ph h1{font:700 clamp(22px,3.2vw,29px)/1.15 var(--sans);letter-spacing:-.02em;margin:8px 0 0}
   .creed{color:var(--mut);font-size:13px;line-height:1.7;margin:14px 0 0;max-width:86ch}
   .creed b{color:var(--ink2)}
@@ -205,10 +195,6 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to the slate</a>
-<!-- Decorative only: the seal render behind the masthead. aria-hidden and
-     pointer-events:none, and it carries no information the type does not. -->
-<div class="ice-band" aria-hidden="true"></div>
-
 <main class="wrap" id="main">
 
   <div class="scr-strip"><span class="nm">PICK ENGINE</span>
