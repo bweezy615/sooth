@@ -115,8 +115,35 @@
 
   /* ---- the stage ---- */
   #stagewrap{position:relative;flex:1;min-height:0}
+  /* THE ROOM IS A RENDER TOO.
+     The panels were standing in flat black. In the brand promos the gloss does
+     not come from the hardware, it comes from the room: a wet floor throwing
+     reflections and ice catching one cold teal source. assets/room.jpg is that
+     room (tools/render_environment.py), sat behind the panels.
+
+     Positioned so its horizon line lands under the panel row and its floor
+     runs toward the viewer — the panels then read as standing ON something
+     rather than floating in a void. Held back with opacity because it is a
+     backdrop: the moment it competes with the numbers on the screens it has
+     failed at its job. */
   #desk{position:absolute;inset:0;overflow:hidden;
     perspective:1500px;perspective-origin:50% 40%}
+  /* Used as LIGHT, not as a picture.
+     Two placements failed as imagery: behind the panels the horizon was
+     occluded and only stray teal fragments showed; in front of them the ice
+     slabs read as glowing boxes stacked under the screens. The slabs are too
+     literal to sit at any scale on this page.
+     What the plate is actually good for is the thing the page was missing —
+     coloured bounce off a wet floor. Blurred past recognition it stops being
+     ice and becomes the glow the panels stand in, which is what the promos
+     read as anyway once the subject is in front of them. */
+  #desk::before{content:"";position:absolute;left:-10%;right:-10%;
+    top:46%;bottom:-18%;pointer-events:none;z-index:0;
+    background:url("/assets/room.jpg") center 30%/cover no-repeat;
+    opacity:.30;filter:blur(34px) saturate(.8);
+    -webkit-mask-image:radial-gradient(130% 105% at 50% 30%,#000 22%,transparent 78%);
+    mask-image:radial-gradient(130% 105% at 50% 30%,#000 22%,transparent 78%)}
+  .monitor{z-index:1}
 
   /* Room vignette. Its bright core used to sit at 12% — the top of the empty
      stage — so the brightest part of the room was the void above the panels
