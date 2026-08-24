@@ -17,7 +17,8 @@
       + "background:rgba(190,222,228,.06);border:1px solid rgba(190,222,228,.16)}"
       + ".pl-c{display:inline-flex;align-items:center;gap:8px}"
       + ".tm-c{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}"
-      + ".mu .tm-c,.match .tm-c,.radar-mu .tm-c{gap:4px}";
+      + ".mu .tm-c,.match .tm-c,.radar-mu .tm-c{gap:4px}"
+      + ".ws-head .tm-c{gap:9px}";
     var el = document.createElement("style");
     el.textContent = css;
     document.head.appendChild(el);
@@ -106,11 +107,19 @@
     // When the label is shortened the full name must stay recoverable. "BOS"
     // is obvious to someone who already follows the sport and opaque to the
     // person we are trying not to lose.
+    // opts.after puts the mark AFTER the label. /game leads with a mirrored
+    // two-team scoreboard, and marks on the outside of both names read as two
+    // unrelated rows; facing inward they read as one matchup. The flag is on
+    // the element rather than inferred, because hydrate() fills these slots
+    // later and has to place the image the same way this did.
+    var mark = img(name, opts.size, opts.sport);
+    var text = '<span>' + esc(label) + '</span>';
     return '<span class="tm-c" data-crest="' + esc(name) + '"'
       + (opts.size ? ' data-size="' + (opts.size | 0) + '"' : "")
       + (opts.sport ? ' data-sport="' + esc(opts.sport) + '"' : "")
+      + (opts.after ? ' data-crest-after="1"' : "")
       + (abbr ? ' title="' + esc(name) + '"' : "") + '>'
-      + img(name, opts.size, opts.sport) + '<span>' + esc(label) + '</span></span>';
+      + (opts.after ? text + mark : mark + text) + '</span>';
   }
 
   /* Pages render whenever their own data lands, which may be before or after
@@ -126,7 +135,8 @@
       var html = img(el.getAttribute("data-crest"),
                      parseInt(el.getAttribute("data-size"), 10) || 16,
                      el.getAttribute("data-sport") || "");
-      if (html) el.insertAdjacentHTML("afterbegin", html);
+      if (html) el.insertAdjacentHTML(
+        el.getAttribute("data-crest-after") ? "beforeend" : "afterbegin", html);
     }
   }
 

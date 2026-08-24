@@ -18,6 +18,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
+  /* THE ROOM, HELD BACK ON THIS PAGE ONLY.
+     Every other page is left-aligned, so env.jpg's block lands in the empty
+     right margin. This page centres a two-team scoreboard across the full
+     column, so the block sits directly behind the home crest and name.
+
+     Nothing is illegible — the stat grid paints its own opaque gradient, and
+     that was verified by toggling the layer off and comparing. It is busy,
+     not broken.
+
+     Shifting the framing was tried first and is IMPOSSIBLE at this aspect:
+     `cover` scales the 1920x1080 plate to exactly 1440 wide inside a 440px
+     band, so there is no horizontal overflow and background-position-x moves
+     nothing. It computes, it just does nothing. Only opacity is left, so the
+     room stays the same room and simply sits further back. */
+  body::before{opacity:.40}
   /* ======================================================================
      FROZEN MARKET — the single-game workspace.
      Same half of the metaphor as the board: this is liquid, one game deep.
@@ -163,6 +178,10 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<!-- The matchup workspace is the deepest surface on the site and the one
+     page that never loaded this: both team names rendered as bare text on
+     every sport, while the board row you arrived from had crests. -->
+<script src="/assets/crest.js"></script>
 <script>
 (function(){
 var D=window.Desk;
@@ -204,13 +223,22 @@ function render(hit,moves,research,timeline){
   /* header + instrument grid */
   var gh=document.getElementById("gameH");
   if(gh) gh.textContent=ev.away+" at "+ev.home;
+  /* Marks face inward, so the two sides read as one matchup rather than two
+     rows. Sport is passed explicitly: abbreviations collide across leagues
+     (ATL, MIA and PHI all exist in more than one), and an unscoped lookup
+     deliberately resolves to nothing rather than to a coin flip. */
+  function side(name){
+    return (window.Crest && Crest.team)
+      ? Crest.team(name,{size:24,sport:sp,after:name===ev.away})
+      : D.esc(name);
+  }
   var html='<div class="ws-head">'
-    +'<div class="side a"><div class="nm">'+D.esc(ev.away)+'</div>'
+    +'<div class="side a"><div class="nm">'+side(ev.away)+'</div>'
       +'<span class="rl">AWAY'+(rep&&rep.records[ev.away]?' · '+D.esc(rep.records[ev.away]):'')+'</span></div>'
     +'<div class="ws-mid"><div class="fair-big n">'+D.esc(fav.name.split(" ").pop())
       +' '+D.am(fav.fair_price)+'</div>'
       +'<span class="tl">CONSENSUS FAIR · MONEYLINE</span></div>'
-    +'<div class="side h"><div class="nm">'+D.esc(ev.home)+'</div>'
+    +'<div class="side h"><div class="nm">'+side(ev.home)+'</div>'
       +'<span class="rl">HOME'+(rep&&rep.records[ev.home]?' · '+D.esc(rep.records[ev.home]):'')+'</span></div>'
     +'</div>'
     +'<p class="tl" style="text-align:center">'+D.esc(SPORT_LABEL[sp]||sp)+' · '
