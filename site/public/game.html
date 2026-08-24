@@ -150,6 +150,15 @@
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
   <div class="ws-crumb"><a class="tl" href="/">← MARKET</a></div>
+  <!-- OUTSIDE #ws, deliberately. The visible masthead is a two-team diagram,
+       so there is no line of text to promote — making either side's name the
+       h1 would state the wrong thing about what this page is. This names the
+       matchup for a screen reader and a crawler instead.
+       It sits outside #ws because every render branch REPLACES ws.innerHTML,
+       including the two failure states, so an injected heading would vanish on
+       exactly the pages that still need to say what they are. Generic until
+       the board identifies the game; the renderer rewrites it in place. -->
+  <h1 class="vh" id="gameH">Game</h1>
   <div id="ws"></div>
 </main>
 
@@ -193,6 +202,8 @@ function render(hit,moves,research,timeline){
     return String(r.event_id)===String(ID);})[0])||null;
 
   /* header + instrument grid */
+  var gh=document.getElementById("gameH");
+  if(gh) gh.textContent=ev.away+" at "+ev.home;
   var html='<div class="ws-head">'
     +'<div class="side a"><div class="nm">'+D.esc(ev.away)+'</div>'
       +'<span class="rl">AWAY'+(rep&&rep.records[ev.away]?' · '+D.esc(rep.records[ev.away]):'')+'</span></div>'
