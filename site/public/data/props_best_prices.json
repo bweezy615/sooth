@@ -1,15 +1,36 @@
 {
- "generated_at": "2026-08-24T16:50:34.912749+00:00",
+ "generated_at": "2026-08-24T20:42:11.242353+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 266,
+ "n_considered": 268,
  "best_prices": [
   {
    "sport": "mlb",
    "matchup": "Tampa Bay Rays @ Detroit Tigers",
    "starts": "2026-08-24T22:41:00Z",
-   "player": "Jonathan Aranda",
+   "player": "Brett Callahan",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": -114,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": -124,
+   "price_edge_pts": 1.99,
+   "book_spread_pts": 7.2,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Jonny Deluca",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
@@ -17,80 +38,50 @@
    "best_price": 170,
    "best_book": "BetRivers",
    "n_books": 4,
-   "fair_price": 169,
-   "price_edge_pts": 0.15,
-   "book_spread_pts": 3.78,
+   "fair_price": 160,
+   "price_edge_pts": 1.49,
+   "book_spread_pts": 4.63,
    "hit_l5": {
     "n": 5,
-    "over": 0
+    "over": 1
    },
    "hit_l10": {
     "n": 10,
     "over": 2
    },
    "hit_season": {
-    "n": 127,
-    "over": 51
+    "n": 83,
+    "over": 29
    },
    "model_p_over": null,
    "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Boston Red Sox @ Miami Marlins",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
    "starts": "2026-08-24T22:41:00Z",
-   "player": "Nick Sogard",
+   "player": "Ryan Vilade",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 150,
-   "best_book": "BetMGM",
-   "n_books": 7,
-   "fair_price": 150,
-   "price_edge_pts": -0.07,
-   "book_spread_pts": 4.44,
-   "hit_l5": {
-    "n": 5,
-    "over": 4
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 35,
-    "over": 13
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Colorado Rockies @ Washington Nationals",
-   "starts": "2026-08-24T22:46:00Z",
-   "player": "Dylan Crews",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 135,
-   "best_book": "BetMGM",
+   "best_price": 160,
+   "best_book": "BetRivers",
    "n_books": 6,
-   "fair_price": 135,
-   "price_edge_pts": -0.07,
-   "book_spread_pts": 3.32,
+   "fair_price": 157,
+   "price_edge_pts": 0.41,
+   "book_spread_pts": 3.56,
    "hit_l5": {
     "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
     "over": 3
    },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
    "hit_season": {
-    "n": 80,
-    "over": 29
+    "n": 75,
+    "over": 24
    },
    "model_p_over": null,
    "model_version": null
@@ -99,58 +90,58 @@
    "sport": "mlb",
    "matchup": "Texas Rangers @ Chicago White Sox",
    "starts": "2026-08-24T23:41:00Z",
-   "player": "Jose Urquidy",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 3.5,
-   "side": "over",
-   "best_price": -135,
+   "player": "Ezequiel Duran",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "under",
+   "best_price": 155,
    "best_book": "BetMGM",
-   "n_books": 6,
-   "fair_price": -135,
-   "price_edge_pts": -0.08,
-   "book_spread_pts": 4.24,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 7,
-    "over": 1
-   },
-   "hit_season": {
-    "n": 7,
-    "over": 1
-   },
-   "model_p_over": 0.444,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Tampa Bay Rays @ Detroit Tigers",
-   "starts": "2026-08-24T22:41:00Z",
-   "player": "Yandy Diaz",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 120,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 121,
-   "price_edge_pts": -0.15,
-   "book_spread_pts": 3.81,
+   "n_books": 3,
+   "fair_price": 154,
+   "price_edge_pts": 0.11,
+   "book_spread_pts": 4.07,
    "hit_l5": {
     "n": 5,
     "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 6
+    "over": 5
    },
    "hit_season": {
-    "n": 125,
-    "over": 60
+    "n": 122,
+    "over": 76
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Jorge Mateo",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "under",
+   "best_price": 127,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": 127,
+   "price_edge_pts": -0.03,
+   "book_spread_pts": 5.95,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 71,
+    "over": 22
    },
    "model_p_over": null,
    "model_version": null
