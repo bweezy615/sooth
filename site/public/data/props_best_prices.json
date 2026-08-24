@@ -1,145 +1,25 @@
 {
- "generated_at": "2026-08-23T22:32:35.814795+00:00",
+ "generated_at": "2026-08-24T01:53:17.743094+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 68,
+ "n_considered": 30,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-23T23:11:00Z",
-   "player": "Ronald Acuna Jr.",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 192,
+   "matchup": "Boston Red Sox @ Miami Marlins",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Sandy Alcantara",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": -112,
    "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": 193,
-   "price_edge_pts": -0.09,
-   "book_spread_pts": 4.97,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 78,
-    "over": 50
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-23T23:11:00Z",
-   "player": "Matt Olson",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 138,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 140,
-   "price_edge_pts": -0.42,
-   "book_spread_pts": 2.83,
-   "hit_l5": {
-    "n": 5,
-    "over": 0
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 130,
-    "over": 67
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-23T23:11:00Z",
-   "player": "Ozzie Albies",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 180,
-   "best_book": "BetMGM",
    "n_books": 4,
-   "fair_price": 184,
-   "price_edge_pts": -0.45,
-   "book_spread_pts": 2.6,
-   "hit_l5": {
-    "n": 5,
-    "over": 4
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 130,
-    "over": 86
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-23T23:11:00Z",
-   "player": "Lane Thomas",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "over",
-   "best_price": -129,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": -126,
-   "price_edge_pts": -0.57,
-   "book_spread_pts": 3.99,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 110,
-    "over": 53
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Atlanta Braves @ Milwaukee Brewers",
-   "starts": "2026-08-23T23:11:00Z",
-   "player": "David Hamilton",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "over",
-   "best_price": 105,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": 108,
-   "price_edge_pts": -0.6,
-   "book_spread_pts": 3.6,
+   "fair_price": -113,
+   "price_edge_pts": 0.23,
+   "book_spread_pts": 3.69,
    "hit_l5": {
     "n": 5,
     "over": 3
@@ -149,8 +29,128 @@
     "over": 6
    },
    "hit_season": {
-    "n": 96,
-    "over": 45
+    "n": 27,
+    "over": 15
+   },
+   "model_p_over": 0.4238,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Boston Red Sox @ Miami Marlins",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Nick Sogard",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "under",
+   "best_price": -156,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": -152,
+   "price_edge_pts": -0.57,
+   "book_spread_pts": 4.58,
+   "hit_l5": {
+    "n": 5,
+    "over": 4
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 35,
+    "over": 13
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Drew Rasmussen",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "under",
+   "best_price": 126,
+   "best_book": "DraftKings",
+   "n_books": 4,
+   "fair_price": 129,
+   "price_edge_pts": -0.58,
+   "book_spread_pts": 2.48,
+   "hit_l5": {
+    "n": 5,
+    "over": 4
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 7
+   },
+   "hit_season": {
+    "n": 24,
+    "over": 17
+   },
+   "model_p_over": 0.7899,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Colorado Rockies @ Washington Nationals",
+   "starts": "2026-08-24T22:46:00Z",
+   "player": "Keibert Ruiz",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 145,
+   "best_book": "Bovada",
+   "n_books": 4,
+   "fair_price": 153,
+   "price_edge_pts": -1.37,
+   "book_spread_pts": 2.66,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 85,
+    "over": 34
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Colorado Rockies @ Washington Nationals",
+   "starts": "2026-08-24T22:46:00Z",
+   "player": "Dylan Crews",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 130,
+   "best_book": "Bovada",
+   "n_books": 3,
+   "fair_price": 143,
+   "price_edge_pts": -2.31,
+   "book_spread_pts": 1.16,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 80,
+    "over": 29
    },
    "model_p_over": null,
    "model_version": null
