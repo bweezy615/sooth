@@ -211,8 +211,9 @@ is called the <strong>Merkle root</strong>.</p>
 <p>The tree structure buys one useful property: we can prove that a single
 prediction was part of the committed slate without revealing the other
 predictions. That short list of hashes is called an <strong>inclusion proof</strong>. It
-matters for subscriber-only predictions, where we want to prove a pick was
-committed before kickoff without publishing it to everyone.</p>
+matters whenever one prediction travels on its own — quoted in a post, or sent
+in an alert email — and you want to test that single claim without fetching and
+re-hashing the whole slate.</p>
 <h3>The timestamp</h3>
 <p>A fingerprint published before kickoff only means something if you can tell it
 was published before kickoff. We commit the root to a public Git repository, so
@@ -330,9 +331,9 @@ is enough to break the match. There is no way for us to quietly improve the
 record after the fact.</p>
 <hr />
 <h2>Checking a single prediction: inclusion proofs</h2>
-<p>Sometimes you only want to check one pick, and sometimes we only publish one
-pick - for example a subscriber-only prediction where the rest of the slate is
-not public. An inclusion proof handles that case.</p>
+<p>Sometimes you only want to check one pick — one prediction quoted in a post,
+or carried in an alert email, away from the slate it came from. An inclusion
+proof handles that case.</p>
 <p>The proof is a short list of sibling fingerprints, one for each level of the
 tree. You start with the fingerprint of your prediction, combine it with the
 first sibling, combine that result with the second sibling, and keep going. If

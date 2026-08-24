@@ -655,8 +655,9 @@ impossible to create one by accident.</p>
 <p>Because it is a Merkle tree and not a flat hash, a single prediction can be
 proven to belong to a committed slate without revealing the rest of the slate.
 For our 16-game NFL Week 1 slate, an inclusion proof is four hashes long. This
-matters for the paid tier: we can prove a subscriber-only prediction was part of
-the pre-kickoff commitment without publishing the whole slate to non-subscribers.</p>
+is what lets one prediction be checked on its own — quoted in a post, or carried
+in an alert email — without anyone having to fetch and re-hash the entire slate
+to test a single claim.</p>
 <p>Step-by-step instructions for verifying all of this yourself, including a
 30-line script that does not use any of our code, are on the <a href="/verify">verification
 page</a>.</p>

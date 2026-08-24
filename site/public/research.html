@@ -320,8 +320,13 @@ function report(r){
     +'<div class="blk"><h3>AVAILABILITY</h3>'+injuries(r)+'</div>'
     +'<div class="blk"><h3>PRICE'+(charts?' &amp; HISTORY':'')+'</h3>'+odds(r)+charts+'</div>'
     +'</div>'
+    /* A placeholder is not an accessible name: it is not announced as a
+       label and it disappears the moment anyone types. Each row's field gets
+       the matchup in its own label, so a screen reader hears WHICH game it is
+       about — there is one of these per row. */
     +'<div class="an-in" style="max-width:640px"><input data-ask="'+D.esc(r.event_id)
-    +'" placeholder="Ask about this game — answers may only use these numbers" maxlength="500">'
+    +'" aria-label="Ask about '+D.esc(r.away)+' at '+D.esc(r.home)+'"'
+    +' placeholder="Ask about this game — answers may only use these numbers" maxlength="500">'
     +'<button data-go="'+D.esc(r.event_id)+'">ASK</button></div>'
     +'<div class="an-out" id="ans-'+D.esc(r.event_id)+'"></div>'
     +'</div></td></tr>';
