@@ -18,21 +18,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
 <style>
-  /* THE ROOM, HELD BACK ON THIS PAGE ONLY.
-     Every other page is left-aligned, so env.jpg's block lands in the empty
-     right margin. This page centres a two-team scoreboard across the full
-     column, so the block sits directly behind the home crest and name.
-
-     Nothing is illegible — the stat grid paints its own opaque gradient, and
-     that was verified by toggling the layer off and comparing. It is busy,
-     not broken.
-
-     Shifting the framing was tried first and is IMPOSSIBLE at this aspect:
-     `cover` scales the 1920x1080 plate to exactly 1440 wide inside a 440px
-     band, so there is no horizontal overflow and background-position-x moves
-     nothing. It computes, it just does nothing. Only opacity is left, so the
-     room stays the same room and simply sits further back. */
-  body::before{opacity:.40}
   /* ======================================================================
      FROZEN MARKET — the single-game workspace.
      Same half of the metaphor as the board: this is liquid, one game deep.

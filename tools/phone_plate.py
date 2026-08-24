@@ -62,6 +62,10 @@ ENV_W, ENV_H = 900, 506
 
 
 def env_plate():
+    """UNUSED SINCE 2026-08-23. desk.css no longer mounts a room behind pages —
+    see the REMOVED block in that file for why three attempts failed. Kept
+    because tools/render_hero.py still has an `env` view and this is what
+    downsizes it; nothing on the site loads either file today."""
     if not os.path.exists(ENV_SRC):
         print("skip: " + ENV_SRC + " not rendered yet (SOOTH_HERO_VIEW=env)")
         return

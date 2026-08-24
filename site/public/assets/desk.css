@@ -260,80 +260,35 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
              0 2px 8px -2px rgba(0,0,0,.55)}
 .radar-side{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05));}
 
-/* ============ THE ROOM — one masthead, every page ============
-   The site does not sit on a colour, it sits in a place: assets/env.jpg, the
-   same black room, wet floor and single teal source as the landing hero, seen
-   whole from across it. One plate, every page, so moving around the site never
-   leaves the room.
+/* ============ THE ROOM — REMOVED, and why ============
+   assets/env.jpg was mounted here as a masthead behind every page. It is gone,
+   and the reasoning is worth keeping so it is not reinvented a fourth time.
 
-   WHAT FAILED BEFORE, ACCURATELY. The first attempt gave each page its own
-   narrow strip of a DIFFERENT plate. I first blamed magnification, and that
-   was wrong — at 1440 the band scaled its 1800x460 source to 1440x368 and
-   cropped 38px. The real faults were the plate and the edges: seal.jpg carries
-   a large blown-out backlit face, which at masthead size is a grey mass with
-   no silhouette, and the band stopped on a hard rectangular boundary. "Isn't
-   3D and doesn't render properly" was a fair description of a bright grey
-   rectangle with a visible edge.
-   The second attempt over-corrected into a full-page fixed wash at low opacity,
-   which is the room.jpg mistake a third time: dimmed far enough to be safe
-   behind live data, a photograph stops being anything at all.
+   Three variants were shipped and all three failed the same way:
 
-   So: a real masthead, not a wash and not a strip. env.jpg is composed for it —
-   near-black above the horizon, the block right of centre at about a seventh
-   of frame so it reads as an OBJECT rather than a texture, the light low. It
-   is tall enough (440px) to show the block whole, and it does not END, it
-   dissolves: the mask runs to fully transparent, so there is no edge anywhere
-   for the eye to catch.
+     1. per-page cropped bands — each page showed a different slice of a
+        different plate, ending on a hard rectangular edge;
+     2. a full-page fixed wash — dimmed far enough to be safe behind live data,
+        a photograph stops being anything at all;
+     3. this masthead band — 440px measured from the header, on pages whose
+        content starts wherever it starts. On /gamelog the table begins around
+        175px and cut the plate flat across the middle; the ice read as a
+        rectangle floating over the filter row.
 
-   Absolute, not fixed. A fixed layer stays put while the page moves over it,
-   which reads as the content sliding across a photograph. */
-body{position:relative}
-body::before{content:"";position:absolute;top:var(--room-top,0px);left:0;right:0;height:440px;
-  z-index:-1;pointer-events:none;
-  background:var(--g0) center 40%/cover no-repeat;
-  background-image:url("/assets/env-phone.jpg");
-  /* The block occupies roughly y 117-288 of this 440px band at 1440 wide, so
-     the mask must stay SOLID past 288 (65%) or it fades the subject itself —
-     at 30% the block was being dissolved and read as washed-out grey. Fade
-     below the subject, never across it. */
-  opacity:.78;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 65%,
-    rgba(0,0,0,.42) 84%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 65%,
-    rgba(0,0,0,.42) 84%,transparent 100%)}
-@media (min-width:860px){
-  body::before{background-image:url("/assets/env.jpg")}
-}
-/* PHONES GET AN EXACT FIT, NOT A CROP.
-   env-phone.jpg is 900x506, so 506/900 = 56.2% of the viewport width is the
-   height at which `cover` crops nothing at all. At the desktop 440px on a
-   375px screen the same rule was a ~2.3x magnification into the middle of the
-   plate, which put the brightest part of the floor reflection directly under
-   the lede paragraph — body copy on lit ice. Sized this way the whole room is
-   visible, nothing is enlarged, and the band ends well above the text.
-   The scene is smaller on a phone as a result. That is the correct trade:
-   text that cannot be read is worse than ice that is small. */
-/* ...and on a phone it also has to OWN that space rather than sit under the
-   words. Desktop has a wide dark left for type because the plate is composed
-   that way; a phone column is full-bleed, so any visible imagery lands under
-   the headline — measured, the h1 and the lede were both crossing the lit
-   block. main is pushed down by exactly the band height, so the room is a
-   masthead the content begins after, not a picture behind it. */
-@media (max-width:859px){
-  /* main[class], not main. Every main on this site carries .wrap or
-     .wrap-page, and `.wrap{margin:0 auto}` is a class selector whose shorthand
-     resets margin-top — it beats a bare element selector no matter where it
-     sits in the file. The attribute selector matches any of them at class
-     specificity without hard-coding the class names. */
-  main[class]{margin-top:56.2vw}
-  body::before{height:56.2vw;
-    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 54%,transparent 100%);
-    mask-image:linear-gradient(to bottom,#000 0%,#000 54%,transparent 100%)}
-}
-/* Inside a desk monitor the page is one screen of a larger instrument that is
-   already a lit room of its own; a second room behind it is noise competing
-   with the numbers. */
-.embedded body::before{display:none}
+   The common cause is not tuning. It is that a photographic plate behind a
+   dense data page is sliced by boundaries that know nothing about it — an
+   opaque table, a control row, a section rule. It only ever looked right on
+   pages that happen to open with a tall left-hand masthead and empty space on
+   the right, which is a property of two or three pages, not of the site.
+
+   Ice still carries the identity, in the two places it can:
+     · the landing hero, which is COMPOSED around the render — the block sits
+       right of centre because the headline occupies the dark left third;
+     · the --frost tokens and the .frost / .frosted primitives below, which
+       mark the sealed state wherever it is genuinely true.
+
+   Putting a render on any other page means designing that page around it and
+   reserving the space, per page. It is not a stylesheet-level treatment. */
 
 /* ============ FROST — the sealed state ============
    Rule 2: committed-but-not-yet-revealed is rendered as ice. The chip below
