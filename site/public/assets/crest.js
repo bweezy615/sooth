@@ -103,7 +103,14 @@
     opts = opts || {};
     var t = get(name, opts.sport);
     var abbr = opts.abbr && t;
-    var label = abbr ? t.abbr : name;
+    /* opts.label lets the caller show text that is NOT the lookup key. The
+       game log needs exactly this: it is an archive back to 1999 and prints
+       the code that was current at the time, but OAK / SD / STL have no entry
+       in a map keyed on the teams that exist now. It looks the crest up under
+       the franchise's current code and keeps the historical one on screen, so
+       the row still says OAK rather than silently rewriting a 1999 game as a
+       Las Vegas one. */
+    var label = opts.label != null ? opts.label : (abbr ? t.abbr : name);
     // When the label is shortened the full name must stay recoverable. "BOS"
     // is obvious to someone who already follows the sport and opaque to the
     // person we are trying not to lose.
