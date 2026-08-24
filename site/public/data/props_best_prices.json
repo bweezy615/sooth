@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-24T04:56:10.040798+00:00",
+ "generated_at": "2026-08-24T08:59:12.663266+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
@@ -18,8 +18,8 @@
    "best_book": "DraftKings",
    "n_books": 4,
    "fair_price": 124,
-   "price_edge_pts": 0.52,
-   "book_spread_pts": 4.73,
+   "price_edge_pts": 0.53,
+   "book_spread_pts": 3.57,
    "hit_l5": {
     "n": 5,
     "over": 1
@@ -48,8 +48,8 @@
    "best_book": "DraftKings",
    "n_books": 4,
    "fair_price": 129,
-   "price_edge_pts": -0.58,
-   "book_spread_pts": 2.48,
+   "price_edge_pts": -0.64,
+   "book_spread_pts": 2.26,
    "hit_l5": {
     "n": 5,
     "over": 4
@@ -64,6 +64,36 @@
    },
    "model_p_over": 0.7899,
    "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Boston Red Sox @ Miami Marlins",
+   "starts": "2026-08-24T22:41:00Z",
+   "player": "Nick Sogard",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 133,
+   "best_book": "BetRivers",
+   "n_books": 5,
+   "fair_price": 137,
+   "price_edge_pts": -0.71,
+   "book_spread_pts": 3.59,
+   "hit_l5": {
+    "n": 5,
+    "over": 4
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 35,
+    "over": 13
+   },
+   "model_p_over": null,
+   "model_version": null
   },
   {
    "sport": "mlb",
@@ -97,63 +127,33 @@
   },
   {
    "sport": "mlb",
-   "matchup": "Boston Red Sox @ Miami Marlins",
-   "starts": "2026-08-24T22:41:00Z",
-   "player": "Nick Sogard",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
+   "matchup": "Texas Rangers @ Chicago White Sox",
+   "starts": "2026-08-24T23:41:00Z",
+   "player": "Kumar Rocker",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
    "side": "over",
-   "best_price": 128,
-   "best_book": "Caesars",
-   "n_books": 4,
-   "fair_price": 135,
-   "price_edge_pts": -1.38,
-   "book_spread_pts": 2.01,
+   "best_price": -105,
+   "best_book": "Fanatics",
+   "n_books": 3,
+   "fair_price": 101,
+   "price_edge_pts": -1.43,
+   "book_spread_pts": 3.33,
    "hit_l5": {
     "n": 5,
-    "over": 4
+    "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 6
+    "over": 7
    },
    "hit_season": {
-    "n": 35,
+    "n": 24,
     "over": 13
    },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Boston Red Sox @ Miami Marlins",
-   "starts": "2026-08-24T22:41:00Z",
-   "player": "Heriberto Hernandez",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 142,
-   "best_book": "Caesars",
-   "n_books": 3,
-   "fair_price": 152,
-   "price_edge_pts": -1.64,
-   "book_spread_pts": 1.23,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 99,
-    "over": 36
-   },
-   "model_p_over": null,
-   "model_version": null
+   "model_p_over": 0.5562,
+   "model_version": "kpoisson-v1"
   }
  ]
 }
