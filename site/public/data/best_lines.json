@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-24T19:35:09.900321+00:00",
+ "generated_at": "2026-08-24T20:38:07.635129+00:00",
  "slate_id": "2026-W01-nfl",
  "source": "the-odds-api, US books, moneyline",
  "note": "Best available price for the side our model prefers. Shopping the best number is +EV on its own, whatever the pick.",
@@ -13,10 +13,10 @@
    "our_prob": 0.5619,
    "best_price": -190,
    "best_book": "BetMGM",
-   "worst_price": -218,
-   "worst_book": "MyBookie",
-   "n_books": 9,
-   "edge_pts": 3.04,
+   "worst_price": -225,
+   "worst_book": "Bovada",
+   "n_books": 10,
+   "edge_pts": 3.71,
    "quotes": [
     {
      "book": "betmgm",
@@ -53,6 +53,10 @@
     {
      "book": "mybookieag",
      "price": -218
+    },
+    {
+     "book": "bovada",
+     "price": -225
     }
    ]
   },
@@ -63,13 +67,17 @@
    "kickoff": "2026-09-13T13:00:00+00:00",
    "pick": "BAL",
    "our_prob": 0.5664,
-   "best_price": -180,
-   "best_book": "DraftKings",
+   "best_price": -175,
+   "best_book": "Bovada",
    "worst_price": -200,
    "worst_book": "BetRivers",
-   "n_books": 9,
-   "edge_pts": 2.38,
+   "n_books": 10,
+   "edge_pts": 3.03,
    "quotes": [
+    {
+     "book": "bovada",
+     "price": -175
+    },
     {
      "book": "draftkings",
      "price": -180
@@ -119,7 +127,7 @@
    "best_book": "BetMGM",
    "worst_price": -204,
    "worst_book": "MyBookie",
-   "n_books": 9,
+   "n_books": 10,
    "edge_pts": 1.59,
    "quotes": [
     {
@@ -155,6 +163,10 @@
      "price": -200
     },
     {
+     "book": "bovada",
+     "price": -200
+    },
+    {
      "book": "mybookieag",
      "price": -204
     }
@@ -167,23 +179,27 @@
    "kickoff": "2026-09-13T13:00:00+00:00",
    "pick": "HOU",
    "our_prob": 0.5325,
-   "best_price": -102,
-   "best_book": "DraftKings",
+   "best_price": 100,
+   "best_book": "BetRivers",
    "worst_price": -120,
    "worst_book": "MyBookie",
-   "n_books": 6,
-   "edge_pts": 4.05,
+   "n_books": 7,
+   "edge_pts": 4.55,
    "quotes": [
+    {
+     "book": "betrivers",
+     "price": 100
+    },
     {
      "book": "draftkings",
      "price": -102
     },
     {
-     "book": "betrivers",
-     "price": -104
+     "book": "fanduel",
+     "price": -110
     },
     {
-     "book": "fanduel",
+     "book": "bovada",
      "price": -110
     },
     {
@@ -211,7 +227,7 @@
    "best_book": "BetUS",
    "worst_price": -461,
    "worst_book": "MyBookie",
-   "n_books": 9,
+   "n_books": 10,
    "edge_pts": 3.91,
    "quotes": [
     {
@@ -235,15 +251,19 @@
      "price": -390
     },
     {
+     "book": "betrivers",
+     "price": -400
+    },
+    {
      "book": "betmgm",
      "price": -400
     },
     {
-     "book": "fanduel",
-     "price": -420
+     "book": "bovada",
+     "price": -410
     },
     {
-     "book": "betrivers",
+     "book": "fanduel",
      "price": -420
     },
     {
@@ -263,7 +283,7 @@
    "best_book": "BetOnline",
    "worst_price": -172,
    "worst_book": "MyBookie",
-   "n_books": 9,
+   "n_books": 10,
    "edge_pts": 1.7,
    "quotes": [
     {
@@ -299,6 +319,10 @@
      "price": -170
     },
     {
+     "book": "bovada",
+     "price": -170
+    },
+    {
      "book": "mybookieag",
      "price": -172
     }
@@ -315,12 +339,16 @@
    "best_book": "DraftKings",
    "worst_price": -200,
    "worst_book": "BetRivers",
-   "n_books": 9,
+   "n_books": 10,
    "edge_pts": 2.38,
    "quotes": [
     {
      "book": "draftkings",
      "price": -180
+    },
+    {
+     "book": "bovada",
+     "price": -185
     },
     {
      "book": "williamhill_us",
@@ -364,24 +392,12 @@
    "pick": "CHI",
    "our_prob": 0.5787,
    "best_price": -145,
-   "best_book": "LowVig",
+   "best_book": "BetMGM",
    "worst_price": -157,
    "worst_book": "BetRivers",
-   "n_books": 9,
+   "n_books": 10,
    "edge_pts": 1.91,
    "quotes": [
-    {
-     "book": "lowvig",
-     "price": -145
-    },
-    {
-     "book": "betus",
-     "price": -145
-    },
-    {
-     "book": "betonlineag",
-     "price": -145
-    },
     {
      "book": "betmgm",
      "price": -145
@@ -393,6 +409,22 @@
     {
      "book": "williamhill_us",
      "price": -148
+    },
+    {
+     "book": "lowvig",
+     "price": -150
+    },
+    {
+     "book": "betus",
+     "price": -150
+    },
+    {
+     "book": "betonlineag",
+     "price": -150
+    },
+    {
+     "book": "bovada",
+     "price": -150
     },
     {
      "book": "fanduel",
@@ -409,7 +441,7 @@
    ]
   }
  ],
- "avg_edge_pts": 2.62,
- "max_edge_pts": 4.05,
- "n_books": 9
+ "avg_edge_pts": 2.85,
+ "max_edge_pts": 4.55,
+ "n_books": 10
 }
