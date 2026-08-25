@@ -178,8 +178,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .brand .sb{display:none}
   .hd-spacer{flex:1}
   .hd-links{order:3;flex:0 0 100%;width:100%;flex-wrap:wrap;
-    overflow:visible;justify-content:flex-start;gap:1px}
-  .hd-links a{padding:7px 9px}
+    overflow:visible;justify-content:flex-start}
+  /* gap and link padding for this breakpoint are set AFTER the base rules
+     below, not here — see the tap-target block at the end of the header
+     section for why they cannot live in this one. */
   .hd-links::-webkit-scrollbar{display:none}
   .hd-spacer{display:none}
 }
@@ -203,6 +205,27 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hd-links a:hover{color:var(--ink);background:var(--g2)}
 .hd-links a[aria-current]{color:var(--brand)}
 
+/* TAP TARGETS ON A PHONE.
+   This block sits AFTER the base rules deliberately. The @media block higher
+   up in this file carried `.hd-links a{padding:7px 9px}` and `gap:1px`, but
+   it is written BEFORE these base rules, so at equal specificity the desktop
+   padding won on every screen and those mobile values had never once applied.
+   Anything here that overrides a base declaration has to stay below it.
+
+   40px, not the 44 Apple asks for: this nav wraps to three rows on a phone,
+   so every extra pixel is spent three times over on chrome that is not the
+   product. 40 clears the WCAG 2.2 target-size floor of 24 with room to spare
+   and costs ~29px of header. The sport row and the wordmark are cheaper and
+   take what the row already allows. */
+@media (max-width:860px){
+  /* no row gap, so the targets tile with no dead strip between them; a small
+     column gap survives because side-by-side links still need a seam */
+  .hd-links{column-gap:2px;row-gap:0}
+  .hd-links a{padding:14px 9px}        /* 12px line + 28 = 40 */
+  .brand{padding:4px 0}                /* 20 -> 26, clears the WCAG floor */
+  /* .sp is handled after its own base rule further down, same reason. */
+}
+
 /* sport switcher — second shell row, horizontal, states carry data */
 .hd-r2{display:flex;align-items:center;gap:4px;height:42px;
   border-top:1px solid var(--hair);overflow-x:auto;scrollbar-width:none;
@@ -221,6 +244,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sp .d{width:5px;height:5px;border-radius:50%;background:var(--up)}
 .sp .d.off{background:var(--dim)}
 .sp .c{font-size:10px;color:var(--dim)}
+/* Tap target, and below .sp's base rule for the source-order reason spelled
+   out in the header block above. .hd-r2 is a fixed 42px row that scrolls
+   horizontally, so the tab can take the full height without moving anything. */
+@media (max-width:860px){.sp{padding:15px 12px}}   /* 12px line + 30 = 42 */
 .sp[aria-selected="true"] .c{color:var(--mut)}
 
 /* ============ status strip ============ */
@@ -667,6 +694,14 @@ details.more>*+*{margin-top:10px}
 .ft b{color:var(--ink2)}
 .ft a{color:var(--mut)} .ft a:hover{color:var(--ink)}
 .ft .links{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px}
+/* Tap target: 7px each side takes a 20px line to 34px, clearing the WCAG 2.2
+   floor of 24. These anchors are flex items of .ft .links, NOT inline, so
+   they are blockified and the padding does reserve space — the footer grows
+   about 28px. That is a footer, so it is a cheap place to spend it, but do
+   not repeat this trick somewhere the height matters and expect it to be
+   free. The 18px gap sits between the padded boxes, so no row can steal a
+   click from the one above it. */
+.ft .links a{padding:7px 0}
 
 /* The guide is an entry point, not a peer of the board sections. It reads
    quieter than a section until hovered, so it is findable by someone looking

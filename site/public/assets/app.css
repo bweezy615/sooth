@@ -1,0 +1,258 @@
+/* ============================================================
+   THE APP SHELL — sidebar + top bar + dashboard surfaces.
+   Layered ON TOP of desk.css: every colour, type face, radius and motion
+   token comes from there, and nothing here redefines one. Load order is
+   desk.css then app.css.
+
+   Why a second file rather than more desk.css: desk.css is the design system
+   the whole site shares. This is one LAYOUT that one section uses. Keeping it
+   separate means a page that never mounts the shell pays nothing for it, and
+   the system file does not grow a set of rules only /dashboard can trigger.
+   ============================================================ */
+
+:root{
+  --sb:212px;              /* sidebar width */
+  --topbar:64px;
+  --pulse-h:52px;          /* the bottom ticker */
+  --pad:26px;
+}
+
+/* ---- frame -------------------------------------------------------------
+   Grid, not fixed positioning. A fixed sidebar means every surface below it
+   needs a matching margin-left and they drift apart the first time one
+   changes; the grid keeps the two in step by construction. */
+.app{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}
+.app-main{min-width:0;display:flex;flex-direction:column}
+
+/* ---- sidebar ---- */
+.sb{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;
+  border-right:1px solid var(--hair);background:linear-gradient(180deg,#0A0E12,#070A0D);
+  z-index:40}
+.sb-mark{display:flex;align-items:center;gap:9px;height:var(--topbar);
+  padding:0 var(--pad);flex:none}
+.sb-mark .pip{width:8px;height:8px;border-radius:50%;background:var(--brand);
+  box-shadow:0 0 10px rgba(45,212,167,.55);flex:0 0 auto}
+.sb-mark b{font:600 19px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.sb-mark b i{font-style:normal;color:var(--brand)}
+
+.sb-nav{flex:1;overflow-y:auto;padding:14px 12px;display:flex;
+  flex-direction:column;gap:2px;scrollbar-width:thin}
+.sb-nav a{display:flex;align-items:center;gap:11px;padding:9px 13px;
+  border-radius:var(--r);color:var(--ink2);font:500 13.5px/1 var(--sans);
+  position:relative;transition:background var(--t-hover) ease,color var(--t-hover) ease}
+.sb-nav a:hover{background:rgba(190,222,228,.05);color:var(--ink)}
+.sb-nav a[aria-current="page"]{background:rgba(45,212,167,.10);color:var(--ink)}
+/* The lit rim from rule 3, as the active marker — a left edge that is a light
+   source rather than a filled tab. */
+.sb-nav a[aria-current="page"]::before{content:"";position:absolute;left:0;
+  top:7px;bottom:7px;width:2px;border-radius:2px;background:var(--brand);
+  box-shadow:0 0 8px rgba(45,212,167,.7)}
+.sb-nav a[aria-current="page"] .ic{color:var(--brand)}
+.sb-sec{font:600 9.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);padding:16px 13px 6px}
+
+/* Icons are 16px line-art in currentColor, drawn as CSS boxes rather than an
+   icon font or an SVG sprite: ten glyphs is not worth a network request, and a
+   font would arrive after first paint and shift the whole rail. */
+.ic{width:16px;height:16px;flex:0 0 auto;position:relative;color:var(--mut);
+  border:1.4px solid currentColor;border-radius:2px;transition:color var(--t-hover) ease}
+.ic::after{content:"";position:absolute;background:currentColor}
+.ic-grid::after{inset:3px;background:none;border-top:1.4px solid currentColor;
+  border-left:1.4px solid currentColor}
+.ic-live::after{left:2px;right:2px;bottom:2px;height:1.4px;
+  box-shadow:0 -4px 0 -0.5px currentColor,0 -8px 0 -0.5px currentColor}
+.ic-ai{border-radius:50%}
+.ic-ai::after{inset:4px;border-radius:50%}
+.ic-lab::after{left:3px;right:3px;top:6px;height:1.4px}
+.ic-engine{border-radius:50%}
+.ic-engine::after{left:6.5px;right:6.5px;top:2px;bottom:2px}
+.ic-grade::after{left:3px;top:3px;width:5px;height:5px}
+.ic-perf::after{left:2px;bottom:2px;width:3px;height:4px;
+  box-shadow:5px -3px 0 currentColor,10px -6px 0 currentColor}
+.ic-bell{border-radius:50% 50% 2px 2px}
+.ic-bell::after{left:5px;bottom:-3px;width:4px;height:2px}
+.ic-watch::after{inset:4px;border-radius:50%}
+.ic-set{border-radius:50%}
+.ic-set::after{inset:5px;border-radius:50%}
+
+.sb-foot{flex:none;padding:12px;border-top:1px solid var(--hair)}
+
+/* ---- top bar ---- */
+.tb{height:var(--topbar);flex:none;display:flex;align-items:center;gap:12px;
+  padding:0 var(--pad);border-bottom:1px solid var(--hair);
+  position:sticky;top:0;z-index:30;
+  background:rgba(6,8,10,.86);backdrop-filter:blur(10px)}
+.tb-sp{margin-left:auto}
+.tb-chip{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;
+  border:1px solid var(--hair2);border-radius:var(--r);color:var(--ink2);
+  font:500 13px/1 var(--sans);background:linear-gradient(180deg,#0E141A,#0A0F14);
+  transition:border-color var(--t-hover) ease,color var(--t-hover) ease}
+.tb-chip:hover{border-color:rgba(45,212,167,.4);color:var(--ink)}
+.tb-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);
+  box-shadow:0 0 8px rgba(45,212,167,.6)}
+.tb-icon{width:38px;height:38px;display:inline-flex;align-items:center;
+  justify-content:center;border:1px solid var(--hair2);border-radius:var(--r);
+  color:var(--mut);transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
+.tb-icon:hover{color:var(--ink);border-color:rgba(45,212,167,.4)}
+
+/* ---- content ---- */
+.app-body{flex:1;padding:var(--pad) var(--pad) calc(var(--pulse-h) + 28px);
+  min-width:0}
+
+/* ---- hero ---- */
+.dash-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  gap:32px;align-items:center;margin-bottom:26px}
+.dash-hero h1{font:700 clamp(30px,3.6vw,46px)/1.06 var(--sans);
+  letter-spacing:-.035em;text-transform:uppercase;margin:0 0 16px}
+.dash-hero h1 span{display:block;color:var(--brand)}
+.dash-hero .lede{color:var(--ink2);font:400 15px/1.6 var(--sans);max-width:46ch;
+  margin-bottom:22px}
+.dash-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.btn{display:inline-flex;align-items:center;gap:9px;height:46px;padding:0 22px;
+  border-radius:var(--r);font:600 14px/1 var(--sans);
+  transition:filter var(--t-hover) ease,border-color var(--t-hover) ease,
+    background var(--t-hover) ease}
+.btn-p{background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+  color:var(--g0);box-shadow:0 0 22px -8px rgba(45,212,167,.7)}
+.btn-p:hover{filter:brightness(1.07);color:var(--g0)}
+.btn-s{border:1px solid var(--hair2);color:var(--ink)}
+.btn-s:hover{border-color:rgba(45,212,167,.45)}
+.dash-trust{display:flex;align-items:flex-start;gap:11px;color:var(--ink2);
+  font:400 13px/1.55 var(--sans)}
+.dash-trust b{color:var(--ink);font-weight:600}
+.dash-shield{width:22px;height:22px;flex:0 0 auto;border:1.5px solid var(--brand);
+  border-radius:3px 3px 11px 11px;position:relative;margin-top:1px}
+.dash-shield::after{content:"";position:absolute;left:5px;top:6px;width:7px;
+  height:4px;border-left:1.5px solid var(--brand);border-bottom:1.5px solid var(--brand);
+  transform:rotate(-45deg)}
+.dash-art{border-radius:6px;overflow:hidden;border:1px solid var(--hair);
+  background:var(--g0) center/cover no-repeat;aspect-ratio:16/9;min-height:240px}
+
+/* ---- stat strip ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  border:1px solid var(--hair);border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(180deg,#0C1116,#080C10);margin-bottom:22px}
+.stat{padding:16px 20px;border-right:1px solid var(--hair);min-width:0}
+.stat:last-child{border-right:0}
+.stat .k{display:block;color:var(--mut);font:500 11.5px/1.3 var(--sans);
+  margin-bottom:7px}
+.stat .v{font:700 26px/1.05 var(--sans);letter-spacing:-.02em;color:var(--ink);
+  font-variant-numeric:tabular-nums;display:block}
+.stat .v.up{color:var(--brand)}
+.stat .v.dn{color:var(--dn)}
+.stat .sub{display:block;color:var(--dim);font:500 11px/1.4 var(--mono);
+  margin-top:6px;letter-spacing:.04em}
+.stat.pending .v{color:var(--dim)}
+
+/* ---- panels ---- */
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:18px;margin-bottom:22px}
+.panel{border:1px solid var(--hair);border-radius:var(--r);min-width:0;
+  background:linear-gradient(180deg,#0C1116,#080C10);
+  box-shadow:inset 0 1px 0 rgba(190,240,245,.05)}
+.panel-h{display:flex;align-items:center;gap:10px;padding:15px 18px;
+  border-bottom:1px solid var(--hair)}
+.panel-h h2{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink2);margin:0}
+.panel-h .more{margin-left:auto;font:600 11px/1 var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--brand)}
+.panel-h .more:hover{color:var(--brand-hi)}
+.panel-b{padding:16px 18px}
+
+/* rows inside a panel */
+.prow{display:flex;align-items:center;gap:12px;padding:11px 0;
+  border-bottom:1px solid var(--hair);min-width:0}
+.prow:last-child{border-bottom:0}
+.prow:first-child{padding-top:0}
+.prow .nm{min-width:0;flex:1}
+/* Wraps to a second line rather than clipping. With a crest beside each side
+   a matchup is wide, and an ellipsis mid-team-name ("Minnesota Timberwolves…")
+   removes the one piece of information the row exists to carry. Two lines is
+   cheaper than a truncated name. */
+.prow .nm b{display:block;font:600 13.5px/1.35 var(--sans);color:var(--ink);
+  overflow-wrap:anywhere}
+.prow .nm i{display:block;font-style:normal;color:var(--mut);
+  font:500 11px/1.4 var(--mono);letter-spacing:.04em;margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow .rt{text-align:right;flex:0 0 auto}
+.prow .rt b{display:block;font:700 14px/1.2 var(--mono);color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.prow .rt b.up{color:var(--brand)}
+.prow .rt b.dn{color:var(--dn)}
+.prow .rt i{display:block;font-style:normal;color:var(--dim);
+  font:500 10.5px/1.3 var(--mono);letter-spacing:.06em;margin-top:3px}
+
+/* metric bars — the calibration panel */
+.mrow{display:grid;grid-template-columns:1fr auto;gap:6px 12px;
+  align-items:baseline;padding:9px 0}
+.mrow .lb{color:var(--ink2);font:500 13px/1.4 var(--sans)}
+.mrow .vv{font:700 13px/1 var(--mono);color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.mrow .bar{grid-column:1/-1;height:4px;border-radius:2px;
+  background:rgba(190,222,228,.09);overflow:hidden}
+.mrow .bar i{display:block;height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--brand),var(--brand-hi))}
+.mrow .bar i.warn{background:linear-gradient(90deg,#8A6D2F,var(--amber))}
+.mrow .note{grid-column:1/-1;color:var(--dim);font:500 10.5px/1.45 var(--mono);
+  letter-spacing:.03em;margin-top:2px}
+
+/* ---- pulse ticker ---- */
+.pulse{position:fixed;left:var(--sb);right:0;bottom:0;height:var(--pulse-h);
+  display:flex;align-items:center;gap:16px;padding:0 var(--pad);z-index:35;
+  border-top:1px solid var(--hair);background:rgba(8,12,16,.92);
+  backdrop-filter:blur(10px)}
+.pulse-t{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;
+  color:var(--brand);font:600 11px/1 var(--mono);letter-spacing:.14em;
+  text-transform:uppercase}
+.pulse-t .wv{width:14px;height:9px;border-left:1.4px solid currentColor;
+  border-bottom:1.4px solid currentColor}
+/* The feed scrolls horizontally on purpose and the page never does: this is a
+   row of RECORDS, and the next record being off-screen is normal. No FIELD is
+   ever placed off-screen. */
+.pulse-f{flex:1;display:flex;gap:22px;overflow-x:auto;min-width:0;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.pulse-f::-webkit-scrollbar{display:none}
+.pulse-i{display:inline-flex;align-items:baseline;gap:9px;flex:0 0 auto;
+  color:var(--ink2);font:400 12.5px/1 var(--sans);white-space:nowrap}
+.pulse-i em{font-style:normal;color:var(--dim);font:500 10.5px/1 var(--mono);
+  letter-spacing:.06em}
+
+/* ---- states ---- */
+.pstate{padding:22px 0;text-align:center;color:var(--mut);
+  font:400 13px/1.6 var(--sans)}
+.pstate .tl{display:block;margin-bottom:6px}
+.sk{height:11px;border-radius:2px;background:rgba(190,222,228,.07);
+  animation:sk 1.4s ease-in-out infinite}
+@keyframes sk{50%{background:rgba(190,222,228,.13)}}
+
+/* ---- responsive ------------------------------------------------------
+   The rail collapses to a top row rather than a hamburger. Ten destinations
+   behind a toggle is a menu nobody opens; ten across a scrolling row is a
+   thing people swipe. Same reasoning as the sport rail on the board. */
+@media (max-width:1100px){
+  .dash-hero{grid-template-columns:1fr}
+  .dash-art{order:-1;min-height:200px}
+}
+@media (max-width:860px){
+  :root{--pad:15px}
+  .app{grid-template-columns:1fr}
+  /* Column, not row. Sharing one 375px line with the wordmark left the rail
+     251px wide for ten destinations — measured — so most of the nav was
+     off-screen behind a scroll nobody would guess was there. Stacked, the
+     wordmark keeps its line and the rail gets the full width. */
+  .sb{position:static;height:auto;border-right:0;
+    border-bottom:1px solid var(--hair);overflow:hidden}
+  .sb-mark{height:52px}
+  .sb-nav{flex-direction:row;overflow-x:auto;padding:8px 10px;gap:4px;
+    scrollbar-width:none}
+  .sb-nav::-webkit-scrollbar{display:none}
+  .sb-nav a{flex:0 0 auto;padding:9px 12px}
+  .sb-nav a[aria-current="page"]::before{top:auto;bottom:0;left:8px;right:8px;
+    width:auto;height:2px}
+  .sb-sec,.sb-foot{display:none}
+  .tb{position:static}
+  .pulse{left:0}
+  .dash-hero h1{font-size:clamp(26px,7vw,34px)}
+  .stat{border-right:0;border-bottom:1px solid var(--hair)}
+  .stat:last-child{border-bottom:0}
+}
