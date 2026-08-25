@@ -31,7 +31,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "site", "public", "data")
 CACHE = os.path.join(ROOT, "data", "cache", "art")
 
-POSTER = os.path.expanduser("~/worldcup-poster")
+POSTER = os.path.expanduser("~/sooth-poster")
 F_DISPLAY = os.path.join(POSTER, "assets", "fonts", "BebasNeue.ttf")
 F_BODY = "/System/Library/Fonts/HelveticaNeue.ttc"
 F_MONO = "/System/Library/Fonts/Menlo.ttc"

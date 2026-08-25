@@ -4,7 +4,7 @@
     python -m engine.xpost                  # render cards into the approval queue
     python -m engine.xpost --selfcheck      # offline, no feeds, no network
 
-This writes into the EXISTING queue that ~/worldcup-poster/approval_bot.py
+This writes into the EXISTING queue that ~/sooth-poster/approval_bot.py
 watches. It does not post. Nothing here can post: publishing is a Telegram
 button tap, and publisher.py is the only thing that talks to X. That gate is
 the reason this is safe to run on a schedule.
@@ -26,7 +26,7 @@ WHY IT RENDERS AN IMAGE
 publisher.py has no text-only path: it always uploads media and attaches it.
 That is also the right call for X, where a card carrying one big number
 outperforms the same sentence as plain text. The card uses ArchivoBlack, which
-is the site's own display face and already sits in the worldcup asset folder.
+is the site's own display face and already sits in the poster rig's asset folder.
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ from engine.xkit import BANNED, check_caption  # noqa: F401  (re-exported)
 # The queue belongs to the poster rig, which is a separate project on purpose:
 # it owns the credentials, the Telegram gate and the X client, and none of that
 # should be duplicated here.
-POSTER = os.path.expanduser("~/worldcup-poster")
+POSTER = os.path.expanduser("~/sooth-poster")
 QUEUE_PENDING = os.path.join(POSTER, "queue", "pending")
 FONT_DISPLAY = os.path.join(POSTER, "assets", "fonts", "ArchivoBlack.ttf")
 FONT_MONO = "/System/Library/Fonts/Menlo.ttc"

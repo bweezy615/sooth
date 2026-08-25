@@ -9,10 +9,10 @@ Code: `engine/xkit.py` (design kit) · `engine/xcards.py` (the ten layouts) ·
 
 ```bash
 # render to a folder, queue nothing
-~/worldcup-poster/.venv/bin/python -m engine.xpost --kind board --preview /tmp/cards
+~/sooth-poster/.venv/bin/python -m engine.xpost --kind board --preview /tmp/cards
 
 # queue for Telegram approval — a button tap is still the only thing that posts
-~/worldcup-poster/.venv/bin/python -m engine.xpost --kind board
+~/sooth-poster/.venv/bin/python -m engine.xpost --kind board
 ```
 
 `pick-engine`'s own venv has no Pillow; the poster venv does. Both projects stay
