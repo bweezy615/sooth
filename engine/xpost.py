@@ -116,8 +116,12 @@ def record_card(figures: dict) -> dict | None:
 
 # ---- copy -------------------------------------------------------------------
 
-def gap_caption(r: dict) -> tuple[str, str, str]:
-    """(headline, subline, caption) for a price-gap card."""
+def gap_caption(r: dict) -> tuple[str, str, str, str]:
+    """(headline, subline, tweet caption, card line).
+
+    The card line and the caption are deliberately different: the card carries
+    one short line under the figure, the tweet carries the full text. Passing
+    the caption to both produced a run-on card that nearly hit the wordmark."""
     book = r.get("book") or "A book"
     sel = r.get("selection") or "a side"
     pts = r.get("move_pts") or 0
@@ -126,6 +130,7 @@ def gap_caption(r: dict) -> tuple[str, str, str]:
     price = r.get("to_price")
     head = f"+{pts:.2f} PTS"
     sub = f"{book} vs the consensus"
+    card_line = f"{sport} · {game}"
     cap = (
         f"{book} is paying {pts:.2f} points more than the 5-book consensus on "
         f"{sel}"
@@ -134,15 +139,16 @@ def gap_caption(r: dict) -> tuple[str, str, str]:
         "That is a gap between books, not a view on the game. Prices move — "
         "check the book.\n\nEvery number: sooth.bet/edges"
     )
-    return head, sub, cap
+    return head, sub, cap, card_line
 
 
-def record_caption(c: dict) -> tuple[str, str, str]:
+def record_caption(c: dict) -> tuple[str, str, str, str]:
     acc = c["acc"] * 100
     ats = c["ats"] * 100
     be = c["be"] * 100
     head = f"{acc:.1f}%"
     sub = "straight-up accuracy"
+    card_line = f"{c['rec']} against the spread · {ats:.1f}% · break-even {be:.2f}%"
     cap = (
         f"Our model picks the winner {acc:.1f}% of the time.\n\n"
         f"It still loses. {c['rec']} against the spread — {ats:.1f}%, where "
@@ -150,7 +156,7 @@ def record_caption(c: dict) -> tuple[str, str, str]:
         "Picking winners and beating a spread are different problems. Both "
         "numbers have been public since day one.\n\nsooth.bet/record"
     )
-    return head, sub, cap
+    return head, sub, cap, card_line
 
 
 # ---- the card ---------------------------------------------------------------
@@ -178,10 +184,19 @@ def render_card(head: str, sub: str, foot: str, accent=BRAND):
     d.text((pad, pad + 150), head, font=f_head, fill=accent)
     d.text((pad, pad + 415), sub.upper(), font=f_sub, fill=INK2)
 
+
     # foot wraps by hand: PIL has no text box, and a caption that runs off the
     # right edge is the classic silent failure of generated cards.
+    #
+    # It is also CLIPPED to the space above the wordmark. The first card passed
+    # the whole tweet caption in and its last line ended a few pixels from
+    # "sooth.bet"; a longer game name would have run straight through it. The
+    # card carries one line, the tweet carries the rest.
     y = pad + 520
+    limit = CARD_H - pad - 110              # keep clear of the wordmark
     for line in wrap(foot, f_foot, CARD_W - pad * 2, d):
+        if y > limit:
+            break
         d.text((pad, y), line, font=f_foot, fill=DIM)
         y += 48
 
@@ -192,17 +207,29 @@ def render_card(head: str, sub: str, foot: str, accent=BRAND):
 
 
 def wrap(text: str, font, max_w: int, draw) -> list[str]:
-    out, line = [], ""
-    for word in text.split():
-        trial = (line + " " + word).strip()
-        if draw.textlength(trial, font=font) <= max_w:
-            line = trial
-        else:
-            if line:
-                out.append(line)
-            line = word
-    if line:
-        out.append(line)
+    """Wrap to a pixel width, PARAGRAPH BY PARAGRAPH.
+
+    text.split() flattens newlines into spaces, which ran the sentences
+    together on the first card printed: "...Jacksonville Jaguars That is a gap
+    between books..." with no break at all. Blank lines are structure here, not
+    whitespace.
+    """
+    out: list[str] = []
+    for para in text.split("\n"):
+        if not para.strip():
+            out.append("")                     # keep the blank line
+            continue
+        line = ""
+        for word in para.split():
+            trial = (line + " " + word).strip()
+            if draw.textlength(trial, font=font) <= max_w:
+                line = trial
+            else:
+                if line:
+                    out.append(line)
+                line = word
+        if line:
+            out.append(line)
     return out
 
 
@@ -264,14 +291,14 @@ def main() -> int:
         if not c:
             print("figures.json unreadable", file=sys.stderr)
             return 1
-        head, sub, cap = record_caption(c)
+        head, sub, cap, card_line = record_caption(c)
         key, title, accent = f"record-{stamp}", "The record", LOSS
     else:
         r = biggest_gap(load(MOVES))
         if not r:
             print("no divergence on the board right now", file=sys.stderr)
             return 0
-        head, sub, cap = gap_caption(r)
+        head, sub, cap, card_line = gap_caption(r)
         key = f"gap-{r.get('event_id','?')}-{round(r.get('move_pts') or 0, 2)}"
         title, accent = "Biggest gap on the board", BRAND
 
@@ -286,7 +313,7 @@ def main() -> int:
         return 0
 
     item_id = f"post_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{a.kind}"
-    enqueue(item_id, a.kind, key, title, cap, render_card(head, sub, cap, accent))
+    enqueue(item_id, a.kind, key, title, cap, render_card(head, sub, card_line, accent))
     sent[key] = datetime.now(timezone.utc).isoformat()
     save_sent(sent)
     print(f"queued {item_id} — approve it in Telegram to post", file=sys.stderr)
@@ -298,7 +325,7 @@ def _selfcheck() -> int:
     r = {"book": "FanDuel", "selection": "Miami Heat", "move_pts": 2.62,
          "sport": "nba", "home": "Miami Heat", "away": "Minnesota Timberwolves",
          "to_price": -108, "event_id": "abc"}
-    head, sub, cap = gap_caption(r)
+    head, sub, cap, card_line = gap_caption(r)
     assert "2.62" in head and "FanDuel" in cap
     assert "not a view on the game" in cap, cap
     check_caption(cap)
@@ -306,7 +333,7 @@ def _selfcheck() -> int:
     fig = {"breakeven_ats": 0.5238, "evaluation_a": {"results": {"independent": {
         "accuracy": 0.6372, "ats_pct": 0.495, "ats_record": "1291-1317-63", "n": 2671}}}}
     c = record_card(fig)
-    h2, s2, cap2 = record_caption(c)
+    h2, s2, cap2, card2 = record_caption(c)
     assert h2 == "63.7%" and "1291-1317-63" in cap2 and "49.5%" in cap2
     # the losing half must be present, or the card is a brag
     assert "still loses" in cap2.lower(), cap2
