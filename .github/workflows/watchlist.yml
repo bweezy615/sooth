@@ -72,7 +72,13 @@ jobs:
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add data/watchlist_sent.json
+          # The watermark is absent on any run that wrote nothing — every
+          # dry run, and every run before the first one that sends. `git add`
+          # on a path that does not exist is fatal, which turned the safe way
+          # to test this workflow into a permanently red job.
+          if [ -f data/watchlist_sent.json ]; then
+            git add data/watchlist_sent.json
+          fi
           if git diff --staged --quiet; then
             echo "no reminders sent"
           else
