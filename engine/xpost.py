@@ -38,6 +38,9 @@ import re
 import sys
 from datetime import datetime, timezone
 
+from engine.xcards import REGISTRY
+from engine.xkit import BANNED, check_caption  # noqa: F401  (re-exported)
+
 # ---- where things live ------------------------------------------------------
 # The queue belongs to the poster rig, which is a separate project on purpose:
 # it owns the credentials, the Telegram gate and the X client, and none of that
@@ -61,14 +64,6 @@ BRAND = (45, 212, 167)
 LOSS = (255, 107, 107)
 
 CARD_W, CARD_H = 1600, 900          # 16:9, the aspect X renders largest
-
-# Anything that turns a fact into advice. Checked against the rendered caption,
-# not against the template, so a value substituted in at runtime cannot smuggle
-# one past the gate.
-BANNED = ("prop of the day", "pick of the day", "lock", "best bet", "we like",
-          "take the", "hammer", "value play", "free play", "parlay", "bet on",
-          "guaranteed", "can't lose", "sure thing")
-
 
 # ---- selection --------------------------------------------------------------
 
@@ -235,14 +230,6 @@ def wrap(text: str, font, max_w: int, draw) -> list[str]:
 
 # ---- queue ------------------------------------------------------------------
 
-def check_caption(cap: str) -> None:
-    low = cap.lower()
-    for b in BANNED:
-        if b in low:
-            raise SystemExit(f"refusing to queue: caption contains {b!r} — "
-                             "this account states facts, it does not advise")
-
-
 def enqueue(item_id: str, kind: str, key: str, title: str, caption: str, img) -> str:
     os.makedirs(QUEUE_PENDING, exist_ok=True)
     name = f"{item_id}.jpg"
@@ -278,13 +265,45 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--selfcheck", action="store_true")
-    ap.add_argument("--kind", choices=("gap", "record"), default="gap")
+    ap.add_argument("--kind", default="gap",
+                    choices=("gap", "record") + tuple(sorted(REGISTRY)))
+    ap.add_argument("--preview", metavar="DIR",
+                    help="render to a folder instead of the approval queue")
     a = ap.parse_args()
     if a.selfcheck:
         return _selfcheck()
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
     sent = load_sent()
+
+    if a.kind in REGISTRY:
+        # the ten broadcast types live in engine/xcards.py; each returns None
+        # when its feed cannot support a card, which is a quiet day, not a bug
+        card = REGISTRY[a.kind]()
+        if not card:
+            print(f"no {a.kind} card today: the feed it reads has nothing that "
+                  "clears the bar", file=sys.stderr)
+            return 0
+        check_caption(card["caption"])
+        if a.preview:
+            os.makedirs(a.preview, exist_ok=True)
+            out = os.path.join(a.preview, f"{a.kind}.jpg")
+            card["img"].save(out, "JPEG", quality=93)
+            print(f"{out}\n---\n{card['caption']}\n")
+            return 0
+        if card["key"] in sent:
+            print(f"already queued: {card['key']}", file=sys.stderr)
+            return 0
+        if a.dry_run:
+            print(f"[dry-run] {card['title']}\n---\n{card['caption']}")
+            return 0
+        item_id = f"post_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{a.kind}"
+        enqueue(item_id, a.kind, card["key"], card["title"], card["caption"],
+                card["img"])
+        sent[card["key"]] = datetime.now(timezone.utc).isoformat()
+        save_sent(sent)
+        print(f"queued {item_id} — approve it in Telegram to post", file=sys.stderr)
+        return 0
 
     if a.kind == "record":
         c = record_card(load(FIGURES))
@@ -359,7 +378,22 @@ def _selfcheck() -> int:
     assert top["move_pts"] == 3.10, top
     assert len({(x.get("event_id")) for x in moves["divergence"]}) == 2
 
-    print("xpost.selfcheck: OK")
+    # every composer's RENDERED caption goes through the same gate. This is
+    # the check that keeps the guardrail true as the ten card types grow: a
+    # composer added later cannot quietly introduce advice.
+    built = 0
+    for name, fn in sorted(REGISTRY.items()):
+        card = fn()
+        if not card:
+            continue
+        for field in ("key", "title", "caption"):
+            assert card.get(field), f"{name}: empty {field}"
+        check_caption(card["caption"])
+        assert "sooth.bet" in card["caption"], f"{name}: no link home"
+        assert card["img"].size == (1600, 900), f"{name}: wrong size"
+        built += 1
+    assert built >= 6, f"only {built} of {len(REGISTRY)} card types could build"
+    print(f"xpost.selfcheck: OK ({built}/{len(REGISTRY)} card types built)")
     return 0
 
 
