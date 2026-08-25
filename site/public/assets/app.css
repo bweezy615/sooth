@@ -125,8 +125,54 @@
 .dash-shield::after{content:"";position:absolute;left:5px;top:6px;width:7px;
   height:4px;border-left:1.5px solid var(--brand);border-bottom:1.5px solid var(--brand);
   transform:rotate(-45deg)}
-.dash-art{border-radius:6px;overflow:hidden;border:1px solid var(--hair);
-  background:var(--g0) center/cover no-repeat;aspect-ratio:16/9;min-height:240px}
+/* ---- the hero render, with live text inside it ----------------------
+   assets/slab.jpg is the ice and the empty screen cavity; the copy on that
+   screen is real HTML laid over it. Nothing is baked in: baked type is soft on
+   a retina display, unselectable, invisible to a screen reader and a crawler,
+   and stale the moment a word changes — and the words on this screen are the
+   product's positioning, which has been rewritten twice already.
+
+   .dash-art carries the plate at the render's own 16:10. The aspect ratio is
+   load-bearing, not decoration: the overlay is positioned in PERCENTAGES of
+   this box, so if the box stops matching the render the text slides off the
+   glass. */
+.dash-art{position:relative;border-radius:6px;overflow:hidden;
+  border:1px solid var(--hair);background:var(--g0) center/cover no-repeat;
+  aspect-ratio:16/10;min-height:230px}
+
+/* THESE FOUR NUMBERS COME FROM THE RENDER, NOT FROM TASTE.
+   tools/render_slab.py projects the screen plane's corners through the camera
+   and prints SCREEN_RECT_PCT at the end of every run. Paste that line here.
+   Re-render with the camera moved and it reprints; hand-tuning these instead
+   is how the text ends up a few pixels off the cavity on one viewport and
+   badly off on another. */
+.hero-screen{position:absolute;left:25.74%;top:26.06%;
+  width:48.97%;height:44.53%;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:2.4% 3.2%;container-type:inline-size}
+/* Type scales with the plate, so the overlay holds at every width. cqw is a
+   percentage of THIS box, which is the only unit that stays locked to the
+   render as the column resizes. */
+.hero-screen .hs-mark{font:600 clamp(11px,7.2cqw,30px)/1 var(--sans);
+  letter-spacing:-.02em;color:var(--ink)}
+.hero-screen .hs-mark i{font-style:normal;color:var(--brand)}
+.hero-screen .hs-sub{font:600 clamp(6px,2.5cqw,11px)/1.4 var(--mono);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--frost);
+  opacity:.75;margin-top:2.5%}
+.hero-screen ul{list-style:none;margin:6% 0 0;display:flex;
+  flex-direction:column;gap:2.4%}
+.hero-screen li{display:flex;align-items:center;gap:2.6%;
+  font:500 clamp(6px,2.6cqw,12px)/1.25 var(--mono);letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink2)}
+.hero-screen li::before{content:"";width:clamp(3px,1.1cqw,5px);
+  height:clamp(3px,1.1cqw,5px);border-radius:50%;background:var(--brand);
+  flex:0 0 auto;box-shadow:0 0 6px rgba(45,212,167,.7)}
+
+/* Below the shell's breakpoint the plate is small enough that the overlay type
+   would be under 9px. The screen keeps its glow and the words move out. */
+@media (max-width:620px){
+  .hero-screen{display:none}
+}
 
 /* ---- stat strip ---- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));

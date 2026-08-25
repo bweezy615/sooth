@@ -4,1393 +4,375 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>sooth.bet — sports betting research and analysis</title>
-<meta name="description" content="The best sports betting research analyzer on the market. Ask about any game and get an answer built only from published numbers — prices with the vig stripped out, our model's full record, and a weekly slate sealed before kickoff. Analysis, never picks.">
+<meta name="description" content="Every figure on one surface: what the board is showing, where books disagree, and how the model actually measures — straight-up accuracy, calibration error, and its losing record against the spread.">
 <link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="sooth.bet — sports betting research and analysis">
-<meta property="og:description" content="Ask about any game. Every figure is computed from published data, our model's losing record included. Analysis, never picks.">
+<meta property="og:title" content="sooth.bet — dashboard">
+<meta property="og:description" content="The board, the movement, and the model's real measurements in one place. Analysis, never picks.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sooth.bet/">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
+<meta property="og:url" content="https://sooth.bet/">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#06080A">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<!-- The hero plate is the largest contentful paint on the desktop page, and it
-     is referenced from a stylesheet, so it is not discovered until the CSS is
-     parsed. The media query keeps phones — which render the app shell and
-     never draw it — from requesting it at all. -->
-<link rel="preload" as="image" href="/assets/hero.jpg" media="(min-width:860px)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<link rel="stylesheet" href="/assets/app.css">
 <style>
-  /* ============================================================
-     THE DESK — five glossy panels in a receding arc, lit from above in a
-     black room. The curved desk platform and the hardware props (mug,
-     console, notebook, clock) were REMOVED on 2026-08-22: at this scale they
-     rendered as flat grey rectangles along the bottom edge and read as
-     clutter rather than as a room. The panels and their reflections carry the
-     scene on their own.
-
-     FROZEN MARKET re-skin: this page does not load desk.css, so its own
-     hardware palette is retuned to the promo's — cold near-black ground,
-     one teal signal, cool-white ink. The names below are local (--hw*,
-     --screen, --accent) but the values are the shared tokens, so the desk
-     and the rest of the site are now literally the same colours.
-     ============================================================ */
-  :root{
-    /* the ground is cold and nearly black (rule 4) */
-    --bg:#06080A; --hw1:#0B0F13; --hw2:#111820; --hw3:#18222B;
-    --screen:#070B0F; --hair:rgba(190,205,215,.10);
-    --ink:#F0F5F6; --ink2:#AEBDC2; --mut:#7E8D93; --dim:#546268;
-    /* THE one hue. Teal is the signal and the chrome that belongs to us. */
-    --accent:#2DD4A7; --accent-hi:#5BF0D4; --accent-dim:rgba(45,212,167,.10);
-    --frost:#BFEAF2; --frost-rim:rgba(191,234,242,.30); --loss:#FF6B6B;
-    --sans:'Archivo',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace;
-    --glide:560ms cubic-bezier(.22,.8,.32,1);
-    /* ONE gutter for the whole desktop page. The wordmark, the strapline, the
-       workspace labels and the compliance footer were on 34 / 34 / (centred)
-       / 26 and read ragged down the left edge. */
-    --gut:34px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{height:100%}
-  /* THE PAGE SCROLLS NOW, AND ONLY JUST.
-     It used to be one locked viewport — body was a flex column with
-     overflow:hidden and the desk took whatever height was left over. The hero
-     render needs room that a single screen cannot give it without shrinking
-     the desk, so the page is now exactly two stops: the hero, then the desk
-     with its own full viewport. Nothing below the second screen except what
-     was already at the bottom of the first one.
-     The flex column moved down to .deskwrap, which is where #stagewrap's
-     flex:1 now resolves against. */
-  body{color:var(--ink);font:14px/1.5 var(--sans);
-    -webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden;
-    background:
-      radial-gradient(90% 46% at 50% 34%, rgba(45,212,167,.05), transparent 70%),
-      /* the floor is gone, so the light it used to bounce is carried by this
-         pool instead — it keeps the space below the panels from reading as a
-         dead black band without drawing a surface */
-      radial-gradient(150% 80% at 50% 106%, #0C1319 0%, transparent 62%),
-      var(--bg)}
-  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-  .tl{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-    color:var(--mut)}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  /* a real label that only the screen reader reads */
-  .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
-    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-  /* NO `html{scroll-behavior:smooth}` HERE, deliberately.
-     It looks like the tidy way to animate the hop from the hero to the desk,
-     and on this page it was measurably worse than nothing: with that property
-     set, EVERY scrolling API stopped moving the document in the engine this
-     was tested in — scrollIntoView, scrollTo, and even a plain
-     `scrollingElement.scrollTop = n` assignment, which is not supposed to be
-     affected at all. Remove the property and all three work again.
-     The smooth request is made in JS instead, where it can be checked and
-     landed by hand if the engine ignored it. See toDesk(). */
-
-  /* ---- editorial header, per the reference frame ----
-     The wordmark is the promo's: lowercase, tight, cool white, .bet in the one
-     hue, with the coin's small teal pip beside it, followed by the promo's own
-     strapline. The old title above this row was removed: it named the
-     mechanism rather than the product, and a visitor does not arrive looking
-     for a desk. */
-  .brand-row{display:flex;align-items:baseline;gap:22px;padding:22px var(--gut) 0;flex:none}
-  .brand-row .no{display:inline-flex;align-items:baseline;gap:9px}
-  .brand-row .no .pip{width:8px;height:8px;border-radius:50%;background:var(--accent);
-    align-self:center;flex:0 0 auto;box-shadow:0 0 10px rgba(45,212,167,.55)}
-  .brand-row .no b{font:600 20px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);
-    text-transform:none}
-  .brand-row .no b i{font-style:normal;color:var(--accent)}
-  .kicker{font:600 11px var(--mono);letter-spacing:.2em;color:var(--accent);
-    text-transform:uppercase;padding-bottom:2px}
-  /* a real measure, not a 150-character line ruled across the whole screen */
-  .strap{padding:9px var(--gut) 0;font:400 13px/1.55 var(--sans);color:var(--ink2);
-    flex:none;max-width:calc(62ch + var(--gut))}
-
-  /* ============================================================
-     THE HERO — assets/hero.jpg, from tools/render_hero.py.
-
-     Three passes of CSS could not make the top of this page stop looking
-     drawn, because it WAS drawn: gradients standing in for light. This is a
-     photograph of the product's own metaphor instead — the seal frozen in a
-     block of ice, one teal source behind it, wet black floor. It carries no
-     numbers, no dates and no teams, so it can never go stale.
-
-     The render was framed around this copy rather than the other way round:
-     the block sits right of centre and the left third of the plate is
-     deliberately its darkest, emptiest area. That is why the scrim below is
-     as light as it is — the image was built to be typed on.
-     ============================================================ */
-  .hero{position:relative;isolation:isolate;
-    height:min(82vh,860px);min-height:540px;
-    display:flex;flex-direction:column;padding-bottom:18px}
-  /* The plate. z-index:-2 rather than a wrapper div so the hero's children
-     need no stacking rules of their own. */
-  .hero::before{content:"";position:absolute;inset:0;z-index:-2;
-    background:var(--bg) center right/cover no-repeat}
-  /* Two jobs, one layer:
-       1. a LEFT-weighted scrim, so the copy has ground under it without
-          dimming the block on the right — a flat overlay would have taken
-          the render's contrast away to rescue text that is nowhere near it;
-       2. a fade to --bg at the bottom edge, so the plate ends in the page
-          rather than on a horizon line across the viewport. */
-  .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-    background:
-      linear-gradient(101deg, rgba(6,8,10,.94) 0%, rgba(6,8,10,.80) 26%,
-        rgba(6,8,10,.34) 50%, rgba(6,8,10,.05) 68%, transparent 80%),
-      linear-gradient(to bottom, transparent 58%, rgba(6,8,10,.72) 86%, var(--bg) 100%)}
-
-  .hero .brand-row{padding-top:26px}
-  .hero-copy{margin:auto 0;padding:0 var(--gut);max-width:700px}
-  .hero h1{font:600 clamp(31px,3.5vw,53px)/1.05 var(--sans);letter-spacing:-.028em;
-    color:var(--ink);text-wrap:balance;margin-bottom:16px}
-  /* The one phrase the positioning turns on gets the one hue. This page has
-     said the wrong thing about what the product IS twice; making the true
-     answer the brightest four words on it is deliberate. */
-  .hero h1 em{font-style:normal;color:var(--accent)}
-  .hero .strap{padding:0;max-width:58ch;font-size:14px;color:var(--ink2)}
-
-  /* The primary action, per PRODUCT.md: ask the analyzer about a game.
-     It is an ordinary GET form to /ask, so it works with scripting off and
-     the answer has a real URL. */
-  .hero-ask{display:flex;align-items:stretch;gap:0;margin-top:22px;max-width:520px;
-    background:rgba(10,15,20,.72);border:1px solid var(--hair);border-radius:3px;
-    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    transition:border-color 140ms ease,box-shadow 140ms ease}
-  .hero-ask:focus-within{border-color:rgba(45,212,167,.55);
-    box-shadow:0 0 0 3px rgba(45,212,167,.12)}
-  .hero-ask input{flex:1;min-width:0;background:none;border:0;color:var(--ink);
-    font:400 14px var(--sans);padding:13px 15px}
-  /* --mut, not --dim. --dim (#546268) on this ground is about 3:1, which is
-     under the 4.5:1 small-text floor — and a placeholder is the only label
-     this field has once it is on screen. */
-  .hero-ask input::placeholder{color:var(--mut)}
-  .hero-ask input:focus{outline:none}
-  .hero-ask button{flex:none;padding:0 18px;color:var(--accent);
-    font:600 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;
-    border-left:1px solid var(--hair);transition:background 140ms ease}
-  .hero-ask button:hover{background:rgba(45,212,167,.09)}
-  .hero-fine{margin-top:11px;font:600 10px var(--mono);letter-spacing:.16em;
-    text-transform:uppercase;color:var(--mut)}
-
-  /* Says the page continues, and is a real control rather than a decoration:
-     it scrolls the desk into view. Without it the desk reads as the whole
-     page having ended, because the hero fills the screen. */
-  .hero-cue{align-self:flex-start;margin-left:var(--gut);display:flex;
-    align-items:center;gap:10px;padding:6px 0;color:var(--mut);
-    transition:color 140ms ease}
-  .hero-cue:hover{color:var(--ink)}
-  .hero-cue .tl{color:inherit}
-  .hero-cue i{width:7px;height:7px;border-right:1px solid currentColor;
-    border-bottom:1px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);
-    animation:cue 2.4s ease-in-out infinite}
-  @keyframes cue{0%,100%{transform:rotate(45deg) translate(-2px,-2px)}
-    50%{transform:rotate(45deg) translate(1px,1px)}}
-
-  /* The desk keeps a full viewport to itself. This is the flex column body
-     used to be — #stagewrap's flex:1 resolves here now. */
-  .deskwrap{height:100vh;display:flex;flex-direction:column}
-
-  /* ---- workspace labels ----
-     These five ARE the promo's capability list. Same idiom: mono caps, wide
-     tracking, a small teal triangle in front of each, lit up on the active one.
-     The underline is the lit rim, not a slab of colour. */
-  /* Spans the same gutter as the wordmark and the strapline instead of being
-     centred inside a 1250px cap — at 1440 the cap left the first label 70px
-     inboard of the wordmark, which is the raggedness you saw down the left. */
-  .ws-labels{display:flex;justify-content:space-between;flex:none;
-    width:100%;margin:16px 0 0;padding:0 var(--gut)}
-  .ws-labels button{font:600 11px var(--mono);letter-spacing:.18em;color:var(--ink2);
-    padding:8px 4px 10px 15px;position:relative;transition:color 120ms ease;opacity:.9}
-  .ws-labels button:last-child{padding-right:0}
-  .ws-labels button::before{content:"";position:absolute;left:0;top:11px;
-    border:4px solid transparent;border-left-color:var(--accent);opacity:.38;
-    transition:opacity 120ms ease}
-  .ws-labels button:hover{color:var(--ink);opacity:1}
-  .ws-labels button:hover::before{opacity:1}
-  .ws-labels button::after{content:"";position:absolute;left:10%;right:10%;bottom:0;
-    height:1px;transform:scaleX(0);
-    background:linear-gradient(90deg,transparent,rgba(45,212,167,.55) 22%,
-      rgba(91,240,212,.85) 50%,rgba(45,212,167,.55) 78%,transparent);
-    transition:transform 200ms cubic-bezier(.165,.84,.44,1)}
-  .ws-labels button[aria-current="true"]{color:var(--accent);opacity:1}
-  .ws-labels button[aria-current="true"]::before{opacity:1}
-  .ws-labels button[aria-current="true"]::after{transform:scaleX(1)}
-
-  /* ---- the stage ---- */
-  #stagewrap{position:relative;flex:1;min-height:0}
-  /* THE ROOM IS A RENDER TOO.
-     The panels were standing in flat black. In the brand promos the gloss does
-     not come from the hardware, it comes from the room: a wet floor throwing
-     reflections and ice catching one cold teal source. assets/room.jpg is that
-     room (tools/render_environment.py), sat behind the panels.
-
-     Positioned so its horizon line lands under the panel row and its floor
-     runs toward the viewer — the panels then read as standing ON something
-     rather than floating in a void. Held back with opacity because it is a
-     backdrop: the moment it competes with the numbers on the screens it has
-     failed at its job. */
-  #desk{position:absolute;inset:0;overflow:hidden;
-    perspective:1500px;perspective-origin:50% 40%}
-  /* Used as LIGHT, not as a picture.
-     Two placements failed as imagery: behind the panels the horizon was
-     occluded and only stray teal fragments showed; in front of them the ice
-     slabs read as glowing boxes stacked under the screens. The slabs are too
-     literal to sit at any scale on this page.
-     What the plate is actually good for is the thing the page was missing —
-     coloured bounce off a wet floor. Blurred past recognition it stops being
-     ice and becomes the glow the panels stand in, which is what the promos
-     read as anyway once the subject is in front of them. */
-  #desk::before{content:"";position:absolute;left:-10%;right:-10%;
-    top:46%;bottom:-18%;pointer-events:none;z-index:0;
-    background:url("/assets/room.jpg") center 30%/cover no-repeat;
-    opacity:.30;filter:blur(34px) saturate(.8);
-    -webkit-mask-image:radial-gradient(130% 105% at 50% 30%,#000 22%,transparent 78%);
-    mask-image:radial-gradient(130% 105% at 50% 30%,#000 22%,transparent 78%)}
-  .monitor{z-index:1}
-
-  /* Room vignette. Its bright core used to sit at 12% — the top of the empty
-     stage — so the brightest part of the room was the void above the panels
-     and the panels themselves sat in the falloff. With the floor gone that
-     read as "small panels floating in a lit box". Centred on the panel band
-     instead, the emptiness above and below reads as dark room. */
-  #desk::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:
-      radial-gradient(120% 78% at 50% 44%, transparent 42%, rgba(0,0,0,.58) 100%)}
-
-  /* ---- monitors: thin glossy panels ---- */
-  /* top:38%, not 40%. Two things ride on this one number and 40% missed both:
-     a FOCUSED panel's bottom bezel hung 12px below the stage and got cut,
-     while 64px of headroom sat unused above it; and the OVERVIEW band ended
-     up a touch low. 38% centres the overview band in the stage and brings the
-     focused panel back inside it at 1280x800 and 1440x900. Position only —
-     none of the transforms in apply() are touched. */
-  .monitor{position:absolute;left:50%;top:38%;width:952px;height:760px;
-    margin:-380px 0 0 -476px;transform-origin:50% 58%}
-  .desk-ready .monitor{transition:transform var(--glide),opacity var(--glide)}
-  .mon-label{display:none}
-  /* Glass, not a card (rule 3). The panels used to sit at roughly the same
-     value as the room, so five of them read as five dark rectangles. Three
-     changes make them read as rendered objects instead:
-
-       1. a real bevel — the bezel is lit at the top and occluded at the
-          bottom, with a second inset hairline just inside the frame, so the
-          edge has thickness rather than being a 1px outline;
-       2. the screen is now DARKER than its frame and carries an inner
-          vignette, which is how a real display sits inside its housing;
-       3. the ambient light in the room falls off with distance, so unfocused
-          panels recede instead of competing with the one you are reading.
-
-     No blur, no filter, no extra compositing layers: all of it is background
-     and box-shadow on elements that already existed, so the 560ms glide keeps
-     running on transform and opacity alone. */
-  /* THE HOUSING IS A RENDER, NOT A GRADIENT.
-     It used to be linear-gradients plus box-shadows plus a skewed overlay
-     standing in for glass — which reads as exactly what it is, a stylesheet
-     drawing hardware. assets/panel.png is a real Cycles render (see
-     tools/render_panel.py): one bezel, orthographic and dead-on so the CSS 3D
-     transforms still supply all the perspective, with the screen aperture
-     rendered as ALPHA so the live page shows through it.
-
-     Padding is in PERCENT because it has to track the aperture baked into the
-     image (94.5% x 91.7% of the frame). Hard pixel padding would drift the
-     moment the render is regenerated at a different margin. */
-  .bezel{position:absolute;left:0;top:0;width:952px;height:712px;
-    padding:4.13% 2.75%;
-    background:url("/assets/panel.png") center/100% 100% no-repeat;
-    box-shadow:
-      0 60px 120px -40px rgba(0,0,0,.98),
-      0 18px 46px -14px rgba(0,0,0,.85),
-      0 3px 10px -3px rgba(0,0,0,.7)}
-  /* The teal rim is baked into the render, so the CSS one is gone. What stays
-     in CSS is the FOCUS response, which the image cannot do: the focused panel
-     lifts out of the room. */
-  .monitor.is-focused .bezel{filter:brightness(1.18) saturate(1.05)}
-  /* the screen sits INSIDE the housing: darker than the frame, with the
-     corners falling away — the single strongest cue that this is a display */
-  .screen{position:relative;width:100%;height:100%;background:#04070A;
-    border-radius:2px;overflow:hidden;
-    box-shadow:
-      inset 0 0 0 1px rgba(0,0,0,.9),
-      inset 0 1px 0 rgba(0,0,0,.9),
-      inset 0 0 60px rgba(0,0,0,.55),
-      inset 0 0 140px -40px rgba(0,0,0,.75)}
-  .screen iframe{width:100%;height:100%;border:0;display:block;background:var(--screen)}
-  /* wet glass: one cold diagonal sweep, strongest at the top corner. Sits
-     above the iframe but never takes the pointer. */
-  .glare{position:absolute;inset:0;pointer-events:none;border-radius:4px;z-index:1;
-    background:
-      linear-gradient(112deg, rgba(191,234,242,.085) 0%, rgba(191,234,242,.028) 24%,
-        transparent 38%),
-      radial-gradient(120% 60% at 50% -10%, rgba(191,234,242,.05), transparent 60%)}
-  .monitor:not(.is-focused) .screen iframe{pointer-events:none}
-  .monitor:not(.is-focused){cursor:pointer}
-  /* distance falloff: the room only lights what you are looking at. Applied to
-     the bezel, never to the screen, so the numbers inside never dim. */
-  .monitor{opacity:1}
-  .desk-focused .monitor:not(.is-focused) .bezel{filter:brightness(.62)}
-  .desk-focused .monitor:not(.is-focused) .reflect{opacity:.4}
-  .bezel,.reflect{transition:filter var(--glide),opacity var(--glide)}
-  .led{position:absolute;bottom:6px;left:50%;width:5px;height:5px;margin-left:-2.5px;
-    border-radius:50%;background:#1B242C;transition:background var(--glide),box-shadow var(--glide)}
-  .monitor.is-focused .led{background:var(--accent);box-shadow:0 0 8px rgba(45,212,167,.65)}
-  /* the panel's own reflection. The desk platform is gone, so this is now the
-     only thing standing the panels on a surface — it does the whole job of
-     grounding them, which is why it got taller and softer rather than
-     deleted along with the floor. */
-  .reflect{position:absolute;left:5%;right:5%;top:716px;height:170px;
-    background:linear-gradient(180deg, rgba(178,222,230,.14), rgba(178,222,230,.04) 45%,
-      transparent 82%);
-    filter:blur(11px);border-radius:6px;pointer-events:none}
-
-  /* ---- edge arrows ---- */
-  .arrow{position:absolute;top:42%;z-index:10;width:56px;height:90px;
-    font:300 40px/90px var(--sans);text-align:center;color:rgba(174,189,194,.6);
-    transition:color 120ms ease;user-select:none}
-  .arrow:hover{color:var(--accent)}
-  .arrow[hidden]{display:none}
-  #prev{left:4px} #next{right:4px}
-
-  /* ---- caption + location rail ---- */
-  /* The caption and the rail were 4px apart and glued to the footer rule, so
-     the bottom of the composition was a big void followed by a compressed
-     strip of chrome. Spaced out they read as the base of the desk and take up
-     some of the slack the floor used to. */
-  .caption{flex:none;text-align:center;padding:20px 0 0;
-    font:500 11px var(--mono);letter-spacing:.16em;color:var(--mut);
-    text-transform:uppercase;line-height:1.6}
-  .rail{display:flex;justify-content:center;align-items:center;padding:14px 0 20px;flex:none}
-  .rail button{display:flex;flex-direction:column;align-items:center;gap:7px;padding:6px 20px}
-  .rail .dot{width:6px;height:6px;border-radius:50%;background:#1B242C;
-    transition:background 200ms ease,box-shadow 200ms ease}
-  .rail button:hover .dot{background:#2C3A43}
-  .rail button[aria-current="true"] .dot{background:var(--accent);
-    box-shadow:0 0 8px rgba(45,212,167,.55)}
-  .rail .tl{font-size:11px;letter-spacing:.18em}
-  .rail button[aria-current="true"] .tl{color:var(--accent)}
-  .rail .ln{width:40px;height:1px;background:var(--hair);margin-bottom:17px}
-
-  /* ---- shimmer for the not-yet-loaded research screen ---- */
-  .holding{position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:14px}
-  .holding .tl{font-size:22px;letter-spacing:.3em;color:var(--ink2)}
-  .holding i{display:block;width:38%;height:14px;border-radius:2px;
-    background:linear-gradient(90deg,var(--hw1) 25%,rgba(45,212,167,.11) 50%,var(--hw1) 75%);
-    background-size:200% 100%;animation:shim 1.4s linear infinite}
-  @keyframes shim{to{background-position:-200% 0}}
-
-  /* ---- footer ---- */
-  /* The compliance line is the one paragraph on the page that must be read.
-     It was 10px at #46525A — under 3:1 on this ground and below the 11px
-     floor. Same words, legible. */
-  .ft{flex:none;padding:10px var(--gut) 12px;color:var(--mut);font-size:11px;
-    line-height:1.65;border-top:1px solid rgba(190,205,215,.07)}
-  .ft b{color:var(--ink2);font-weight:600}
-  .ft a{color:var(--mut);text-decoration:none;transition:color 120ms ease}
-  .ft a:hover{color:var(--accent)}
-
-  /* ---- mobile pager ---- */
-  /* ---- the phone app shell ------------------------------------------------
-     Layout modelled on lineterminal.com (see docs/DESIGN-mobile-app.md): a
-     fixed bottom tab bar, a sport rail, a persistent prompt, and section rails
-     of self-contained cards. Skinned to FROZEN MARKET, and deliberately NOT
-     carrying the reference's content model — nothing here is gated, blurred,
-     or sold, because that is the thing this product argues against.
-
-     On horizontal scrolling: a card carousel is fine because each card is
-     complete and the next one peeks, so the affordance is visible. A table
-     that hides columns is not, and tables still stack below 720px. Never put
-     a FIELD off-screen; the next RECORD off-screen is normal. */
-  #mob{
-    --g1:var(--hw1); --g2:var(--hw2); --hair2:rgba(190,222,228,.2);
-    --brand:var(--accent); --ink2:#AEBDC2; --up:var(--accent);
-    --t-hover:120ms; --r:0px;
-    /* ONE phone gutter and ONE section step. Everything below is on 16 / 24;
-       the block used to run 13 / 14 / 22 / 11 and nothing lined up. Also
-       keeps every element clear of the 12px edge zone. */
-    --pad:16px; --step:24px;
-    display:none;
-    /* the tab bar is fixed, so the page must end above it */
-    padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
-  #mob[hidden]{display:none}
-  /* Every surface here has one of these three. None of them is a bare blank:
-     a loading state names what is coming, an empty state says what would be
-     here and why it is not, an error state says the fetch failed and that
-     nothing is being withheld. */
-  #mob .state{padding:20px var(--pad);text-align:center;color:var(--mut);
-    font-size:13px;line-height:1.55;border:1px solid var(--hair);background:var(--g1)}
-  #mob .state .tl{display:block;margin-bottom:8px;color:var(--ink2)}
-  #mob .state.err .tl{color:var(--amber,#E2A94A)}
-  /* the same shimmer bar the desk's holding screens use, so "waiting" looks
-     the same on both halves of the site */
-  #mob .state.load::after{content:"";display:block;width:120px;height:2px;
-    margin:13px auto 0;
-    background:linear-gradient(90deg,var(--g2) 25%,rgba(45,212,167,.38) 50%,var(--g2) 75%);
-    background-size:200% 100%;animation:shim 1.4s linear infinite}
-  #mob a{text-decoration:none;color:inherit}
-
-  /* --- add to home screen --- */
-  .m-a2hs{display:flex;align-items:center;gap:12px;padding:10px var(--pad);
-    background:linear-gradient(180deg,rgba(45,212,167,.13),rgba(45,212,167,.05));
-    border-bottom:1px solid rgba(45,212,167,.28)}
-  .m-a2hs[hidden]{display:none}
-  .m-a2hs-i{width:32px;height:32px;flex:0 0 auto;border:1px solid var(--hair2);
-    background:var(--g1);position:relative}
-  .m-a2hs-i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;
-    margin:-4px 0 0 -4px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 9px rgba(45,212,167,.7)}
-  .m-a2hs-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-  .m-a2hs-t b{font:600 13px var(--sans);color:var(--ink)}
-  .m-a2hs-t i{font-style:normal;font:400 11.5px/1.35 var(--sans);color:var(--ink2)}
-  /* both controls carry a 44px target. The dismiss × keeps its optical size
-     but its box is grown and pulled back into the gutter, so the glyph still
-     sits 16px in from the edge while the tappable area reaches 6px. */
-  .m-a2hs #a2hsGo{font:700 11px var(--mono);letter-spacing:.1em;color:var(--bg);
-    background:var(--accent);padding:0 15px;min-height:44px;flex:0 0 auto}
-  .m-a2hs #a2hsGo[hidden]{display:none}
-  .m-a2hs #a2hsNo{font-size:20px;line-height:1;color:var(--mut);flex:0 0 auto;
-    width:44px;height:44px;margin:-6px -10px -6px -6px}
-
-  /* THE PHONE'S ONE PIECE OF ICE.
-     The app shell had no imagery at all — the FROZEN MARKET idea reached it
-     only as a cyan border and a diamond bullet, which is a vocabulary rather
-     than a thing anyone can see. This is the same block, in the same room, in
-     the one place on a utility screen where a picture costs nothing: behind
-     the masthead, where the alternative was empty padding.
-
-     It is a SEPARATE, SMALLER asset (assets/hero-phone.jpg, 29KB, cut by
-     tools/phone_plate.py). Reusing the 2000px desktop plate here would have
-     undone the thing the landing page works to guarantee — that a phone never
-     requests it. #mob is display:none above 859px, so desktop never fetches
-     this one either. */
-  .m-top{position:relative;isolation:isolate;overflow:hidden;
-    display:flex;align-items:center;flex-wrap:wrap;gap:9px;
-    min-height:126px;padding:18px var(--pad) 15px}
-  .m-top::before{content:"";position:absolute;inset:0;z-index:-2;
-    background:var(--bg) 72% 58%/cover no-repeat;
-    background-image:url("/assets/hero-phone.jpg")}
-  /* Left-weighted so the wordmark has ground under it without dimming the
-     block, then hard down to --bg along the bottom so the masthead ENDS in the
-     page rather than on a visible horizon above the sport rail. */
-  .m-top::after{content:"";position:absolute;inset:0;z-index:-1;
-    background:
-      linear-gradient(96deg, rgba(6,8,10,.94) 0%, rgba(6,8,10,.74) 32%,
-        rgba(6,8,10,.24) 58%, transparent 78%),
-      linear-gradient(to bottom, rgba(6,8,10,.42) 0%, transparent 32%,
-        rgba(6,8,10,.88) 86%, var(--bg) 100%)}
-  .m-mark{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 10px rgba(45,212,167,.55)}
-  .m-top b{font:600 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
-  .m-top b i{font-style:normal;color:var(--accent)}
-  /* Drops to its own line instead of the far right. On the right it sat over
-     the lit face of the block — small mono caps in --mut on ice, which is the
-     one combination the scrim cannot rescue. */
-  .m-sub{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    color:var(--mut);flex:0 0 100%;margin-top:5px;white-space:nowrap}
-
-  /* --- sport rail ---
-     Tiles are 44px tall so they are actually tappable, and the rail carries a
-     right-edge fade whenever there is more to scroll to (data-more), so the
-     affordance does not depend on a tile happening to be cut in half. */
-  .m-sports{display:flex;gap:7px;padding:16px var(--pad) 4px;overflow-x:auto;
-    scroll-snap-type:x proximity;scroll-padding-left:var(--pad);
-    min-height:64px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .m-sports::-webkit-scrollbar{display:none}
-  .m-sports[data-more="1"]{
-    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);
-    mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
-  .m-sports button{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
-    min-height:44px;padding:0 14px;border:1px solid var(--hair);background:var(--g1);
-    scroll-snap-align:start;
-    font:600 11px var(--mono);letter-spacing:.1em;color:var(--mut);
-    transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
-  .m-sports button .d{width:5px;height:5px;flex:0 0 auto;border-radius:50%;
-    background:var(--accent);box-shadow:0 0 7px rgba(45,212,167,.6)}
-  .m-sports button .d.off{background:#2A343C;box-shadow:none}
-  .m-sports button .c{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
-  .m-sports button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
-  .m-sports button[aria-pressed="true"] .c{color:var(--mut)}
-  .m-sports button[disabled]{opacity:.55;cursor:default}
-  .m-sports[hidden]{display:none}
-  .m-sports .m-skel{flex:0 0 auto;width:82px;height:44px;border:1px solid var(--hair);
-    background:var(--g1);opacity:.5}
-
-  /* --- the analyst prompt --- */
-  .m-ask{display:flex;align-items:center;gap:10px;margin:16px var(--pad) 0;
-    padding:0 6px 0 13px;border:1px solid var(--hair2);background:var(--g1)}
-  .m-ask:focus-within{border-color:var(--accent)}
-  .m-ask-i{width:13px;height:11px;flex:0 0 auto;border:1.5px solid var(--accent);
-    border-radius:2px;position:relative;opacity:.9}
-  .m-ask-i::after{content:"";position:absolute;left:2px;right:2px;bottom:-4px;height:3px;
-    border-left:3px solid transparent;border-right:3px solid transparent}
-  /* 16px is not a taste call: iOS Safari zooms the whole page on focus for
-     anything smaller, which throws the layout sideways mid-tap. */
-  .m-ask input{flex:1;min-width:0;background:none;border:0;color:var(--ink);
-    font:16px var(--sans);padding:14px 0;min-height:44px}
-  .m-ask input::placeholder{color:var(--mut)}
-  .m-ask button{font-size:18px;color:var(--accent);flex:0 0 auto;
-    width:44px;height:44px;display:flex;align-items:center;justify-content:center}
-
-  /* --- section rails --- */
-  .m-sec{margin:var(--step) 0 0}
-  .m-h{display:flex;align-items:baseline;gap:9px;padding:0 var(--pad) 10px;
-    border-bottom:1px solid rgba(45,212,167,.22);margin-bottom:12px}
-  .m-h .tl{color:var(--ink2);flex:0 0 auto}
-  /* truncates rather than shoving SEE ALL off the right edge on a 320px phone */
-  .m-c{font:500 11px var(--mono);letter-spacing:.06em;color:var(--dim);
-    text-transform:uppercase;min-width:0;overflow:hidden;text-overflow:ellipsis;
-    white-space:nowrap;font-variant-numeric:tabular-nums}
-  /* a text link cannot carry 44px of visible padding inside a header rule
-     without wrecking it, so the target is extended past the glyphs instead */
-  .m-all{margin-left:auto;color:var(--accent);position:relative;flex:0 0 auto}
-  .m-all::after{content:"";position:absolute;top:-17px;right:-16px;bottom:-17px;left:-14px}
-  /* scroll-padding, not just padding: without it the snap point for the first
-     card lands under the gutter and the card sits half off-screen. */
-  .m-rail{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;
-    /* 6px of block padding is the focus ring's room: overflow-y is hidden so
-       the outline has nowhere else to go */
-    padding:6px var(--pad);scroll-padding-left:var(--pad);
-    scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .m-rail::-webkit-scrollbar{display:none}
-  .m-rail>*{scroll-snap-align:start}
-  /* height is reserved so the loading state, the cards and the empty state all
-     occupy the same band — the page does not jump when the board lands */
-  .m-rail{min-height:188px}
-  .m-rail .state{flex:0 0 100%;display:flex;flex-direction:column;
-    justify-content:center;min-height:176px}
-
-  /* --- one game, one card --- */
-  .m-g{flex:0 0 84%;max-width:330px;display:flex;flex-direction:column;
-    border:1px solid var(--hair);padding:12px 13px;
-    background:linear-gradient(180deg,#0E151B,#080D11);
-    box-shadow:inset 0 1px 0 rgba(190,240,245,.07)}
-  .m-g:active{border-color:var(--accent)}
-  .m-gh{display:flex;align-items:center;gap:8px;padding-bottom:9px;flex:0 0 auto;
-    border-bottom:1px solid var(--hair)}
-  .m-gs{display:inline-flex;align-items:center;gap:6px;min-width:0;
-    font:600 11px var(--mono);letter-spacing:.08em;color:var(--mut)}
-  /* the season has not started: say so on the card, not just in the date */
-  .m-up{font-style:normal;color:var(--accent);letter-spacing:.1em}
-  .m-gt{margin-left:auto;flex:0 0 auto;font:500 11px var(--mono);color:var(--mut);
-    white-space:nowrap}
-  /* flex:1 on the sides: every card in a rail is stretched to the tallest one,
-     and without this the slack piled up as dead space under the last row. */
-  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:9px;flex:1;
-    align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
-  .m-side:last-child{border-bottom:0}
-  .m-nm{font:600 13.5px var(--sans);color:var(--ink);line-height:1.25;min-width:0;
-    display:grid;grid-template-columns:18px minmax(0,1fr);column-gap:8px;
-    align-items:center}
-  .m-nm .crest{grid-column:1;grid-row:1/3;align-self:center;object-fit:contain}
-  .m-nm .m-tn{grid-column:2;min-width:0;overflow-wrap:anywhere}
-  .m-nm .m-bk{grid-column:2}
-  .m-bk{display:block;font:500 11px var(--mono);color:var(--mut);letter-spacing:0;
-    margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .m-px,.m-fair,.m-seal .v{font-variant-numeric:tabular-nums}
-  .m-px{font:700 16px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
-  .m-fair{font:500 11px var(--mono);color:var(--mut);text-align:right;min-width:9ch}
-  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:11px;
-    letter-spacing:.02em;margin-top:3px}
-  .m-fair i.m-gain{color:var(--accent)}
-
-  /* --- the sealed slate card --- */
-  .m-seal{display:block;margin:0 var(--pad);padding:14px 15px;min-height:126px;
-    border:1px solid var(--frost-rim);
-    background:linear-gradient(126deg,rgba(191,234,242,.055) 0 22%,transparent 22% 41%,
-      rgba(191,234,242,.035) 41% 52%,transparent 52%),
-      linear-gradient(180deg,#101a20,#0A1116);
-    box-shadow:inset 0 1px 0 rgba(220,248,255,.16)}
-  .m-seal .r{display:flex;align-items:baseline;gap:10px}
-  .m-seal .r+.r{margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
-  .m-seal .k{font:600 11px var(--mono);letter-spacing:.09em;color:var(--mut);
-    text-transform:uppercase;flex:0 0 auto}
-  .m-seal .v{margin-left:auto;font:600 13px var(--mono);color:var(--ink);
-    text-align:right;min-width:0;overflow-wrap:anywhere}
-  .m-seal .v.frostv{color:var(--frost)}
-  .m-seal .melt{display:block;height:2px;margin-top:12px;
-    background:rgba(191,234,242,.08);position:relative;overflow:hidden}
-  .m-seal .melt b{position:absolute;left:0;top:0;bottom:0;display:block;
-    background:linear-gradient(90deg,rgba(191,234,242,.25),var(--frost))}
-  /* the seal card IS the surface, so its own states must not draw a second
-     box inside it */
-  #mob .m-seal .state{border:0;background:none;padding:6px 0 4px;text-align:left}
-  #mob .m-seal .state .tl{color:var(--frost)}
-
-  /* The compliance line. Same words as ever; --mut rather than --dim because
-     this is the one paragraph on the phone that has to be readable. */
-  .m-fine{margin:var(--step) var(--pad) 0;font-size:11.5px;line-height:1.7;
-    color:var(--mut)}
-  .m-fine b{color:var(--ink2);font-weight:600}
-  .m-links{display:flex;flex-wrap:wrap;column-gap:18px;margin:6px var(--pad) 10px;
-    border-top:1px solid var(--hair);padding-top:4px}
-  #mob .m-links a{display:inline-flex;align-items:center;min-height:44px;
-    font:500 11.5px var(--sans);color:var(--ink2);
-    text-decoration:underline;text-decoration-color:rgba(174,189,194,.3);
-    text-underline-offset:4px}
-
-  /* --- fixed tab bar --- */
-  .m-tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;
-    background:rgba(6,8,10,.94);backdrop-filter:blur(12px);
-    border-top:1px solid var(--hair2);
-    padding-bottom:env(safe-area-inset-bottom,0px)}
-  /* Scoped to #mob on purpose: "#mob a{color:inherit}" further up is an
-     ID-weighted blanket, so an unscoped .m-tabs rule loses to it and every
-     tab renders the same white — which is how the current tab spent its
-     whole life indistinguishable from the other four. */
-  #mob .m-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:5px;min-height:48px;padding:9px 2px 8px;
-    font:600 11px var(--mono);letter-spacing:.06em;
-    /* --mut, not --dim: --dim on this ground is 3.2:1, under AA for text,
-       and this is primary navigation rather than faint metadata. */
-    color:var(--mut);transition:color var(--t-hover) ease}
-  /* The current tab wears a lit rule as well as the hue. Colour alone would
-     be the only thing separating it, which is exactly the cue a colourblind
-     visitor does not get. */
-  #mob .m-tabs a[aria-current]{color:var(--accent);
-    box-shadow:inset 0 2px 0 var(--accent)}
-  .m-ti{width:16px;height:16px;border:1.5px solid currentColor;position:relative}
-  /* each glyph is drawn from the same square so the row stays optically even */
-  .m-ti[data-i="board"]{border-width:1.5px 1.5px 5px 1.5px}
-  .m-ti[data-i="picks"]{border-radius:50%}
-  .m-ti[data-i="picks"]::after{content:"";position:absolute;inset:3px;
-    border:1.5px solid currentColor;border-radius:50%}
-  .m-ti[data-i="ledger"]{border-width:1.5px;border-left-width:5px}
-  .m-ti[data-i="ask"]{border-radius:3px}
-  .m-ti[data-i="ask"]::after{content:"";position:absolute;left:3px;bottom:-4px;
-    border:3px solid transparent;border-top-color:currentColor}
-  .m-ti[data-i="alerts"]{border-radius:50% 50% 3px 3px;border-bottom-width:4px}
-
-  /* The plate is named ONLY here. Below 860px the hero is display:none and
-     the phone shell takes the page, so gating the URL behind the same
-     breakpoint means a phone never requests a 2000px render it will not draw
-     — belt and braces alongside display:none, which already suppresses the
-     fetch in every engine we support. */
-  @media (min-width:860px){
-    .hero::before{background-image:url("/assets/hero.jpg")}
-  }
-
-  @media (max-width:859px){
-    body{overflow:auto}
-    /* the desk and all its furniture stand down; the phone home takes over */
-    #mob{display:block}
-    /* Two elements now, because the desktop page is two sections. Hiding
-       .deskwrap is also what hides footer.ft — the compliance footer moved
-       inside it, so the old `body>footer.ft` selector stopped matching. That
-       matters more than it looks: #mob carries its own byte-identical copy of
-       that language, and a phone showing both would be the only surface on the
-       site with the disclaimer twice. */
-    .hero,.deskwrap{display:none}
-    /* The desk's own header used to have phone overrides here. They sat below
-       the display:none above them and could never apply, so they went with
-       the rest of the dead weight. */
-    #desk{position:relative;perspective:none;display:flex;overflow-x:auto;
-      scroll-snap-type:x mandatory;scrollbar-width:none;height:70vh}
-    #desk::after{display:none}
-    #stagewrap{flex:1}
-    .monitor{position:relative;left:auto;top:auto;margin:0;transform:none!important;
-      opacity:1!important;flex:0 0 100vw;width:100vw;height:100%;
-      scroll-snap-align:center;padding:8px 10px 0}
-    .bezel{position:relative;width:100%;height:100%;padding:8px;border-radius:4px}
-    .screen{width:100%;height:100%}
-    .screen iframe{pointer-events:auto!important}
-    .reflect,.led{display:none}
-    .arrow{display:none}
-    .caption{display:none}
-  }
+  /* This page mounts its own shell, so the shared room plate would sit behind
+     a full-height sidebar and a sticky top bar and never be seen. */
+  body::before{display:none}
+  body{background:var(--g0)}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- The phone home. Rendered instead of the desk below 860px — see the
-     #mob block in the stylesheet and the MOBILE branch in the boot script.
-     The desk is a five-monitor spatial metaphor navigated sideways; on a
-     phone that became a horizontal pager of iframes, each holding a table
-     that itself scrolled sideways. Two axes of hidden content on the one
-     device where people actually check a price. This replaces it with the
-     shortest route to each answer, stacked vertically. -->
-<div id="mob" hidden>
+<div class="app">
 
-  <!-- Add to home screen. Chrome/Android fires beforeinstallprompt and we
-       drive the native sheet; iOS Safari has no such event, so it gets the
-       manual instruction instead. Hidden entirely once already installed. -->
-  <div class="m-a2hs" id="a2hs" hidden>
-    <span class="m-a2hs-i" aria-hidden="true"></span>
-    <span class="m-a2hs-t"><b>Use the app</b><i id="a2hsHint">Add to home screen — no download</i></span>
-    <button type="button" id="a2hsGo">Install</button>
-    <button type="button" id="a2hsNo" aria-label="Dismiss">&times;</button>
+  <!-- ============ SIDEBAR ============
+       Ten destinations, every one of them a page that exists. The concept art
+       listed "AI Analysis", "Model Grades" and "Settings"; the first two name
+       surfaces we have under different names and the third does not exist at
+       all, and a rail that leads somewhere empty is worse than a shorter rail.
+       "AI Analysis" is "Analyst" here for a second reason — the analyzer is
+       computed from published numbers and never generated, which is the whole
+       claim, and calling it AI invites the opposite reading. -->
+  <aside class="sb">
+    <a class="sb-mark" href="/desk" aria-label="sooth.bet — the desk"><span class="pip"></span><b>sooth<i>.bet</i></b></a>
+    <nav class="sb-nav" aria-label="Sections">
+      <a href="/" aria-current="page"><span class="ic ic-grid"></span>Dashboard</a>
+      <a href="/market"><span class="ic ic-live"></span>Live Markets</a>
+      <a href="/ask"><span class="ic ic-ai"></span>Analyst</a>
+      <a href="/research"><span class="ic ic-lab"></span>Research</a>
+      <a href="/picks"><span class="ic ic-engine"></span>Pick Engine</a>
+      <span class="sb-sec">Measurement</span>
+      <a href="/record"><span class="ic ic-grade"></span>Record</a>
+      <a href="/ledger"><span class="ic ic-perf"></span>Proof Ledger</a>
+      <span class="sb-sec">Watch</span>
+      <a href="/edges"><span class="ic ic-perf"></span>Movement</a>
+      <a href="/props"><span class="ic ic-watch"></span>Props</a>
+      <a href="/alerts"><span class="ic ic-bell"></span>Alerts</a>
+    </nav>
+    <div class="sb-foot">
+      <a class="tb-chip" href="/learn" style="width:100%;justify-content:center">
+        <span class="dot"></span>How it works</a>
+    </div>
+  </aside>
+
+  <div class="app-main">
+
+    <!-- ============ TOP BAR ============
+         No "Premium" chip. The paid tier was deleted on 2026-08-22 and there
+         is nothing on this site to buy; an account badge implying a plan would
+         be selling something that does not exist. -->
+    <header class="tb">
+      <button class="tb-chip" id="sportBtn" type="button" aria-haspopup="listbox">
+        <span class="dot"></span><span id="sportLbl">Market: All</span>
+      </button>
+      <span class="tb-sp"></span>
+      <a class="tb-chip" href="/learn">Help</a>
+      <a class="tb-icon" href="/alerts" aria-label="Alerts"><span class="ic ic-bell"></span></a>
+      <a class="tb-chip" href="/verify">Verify the record</a>
+    </header>
+
+    <main class="app-body" id="main">
+
+      <!-- ============ HERO ============ -->
+      <section class="dash-hero">
+        <div>
+          <h1>Market intelligence.<span>Honest edge.</span></h1>
+          <p class="lede">Real prices from eleven books, the vig stripped out, and a
+            model whose full record — including the part where it loses — is published
+            and independently checkable.</p>
+          <div class="dash-cta">
+            <a class="btn btn-p" href="/market">View live markets <span aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-s" href="/picks">See the sealed slate</a>
+          </div>
+          <p class="dash-trust"><span class="dash-shield" aria-hidden="true"></span>
+            <span><b>Verifiable. Transparent. Backtested.</b><br>
+            No hype, just data — and the data says our model does not beat the close.</span></p>
+        </div>
+        <!-- The plate is decorative (aria-hidden); the words on the screen are
+             real text in the document, so they are selectable, scale to any DPI,
+             and are read out rather than described. -->
+        <div class="dash-art" aria-hidden="true">
+          <div class="hero-screen">
+            <span class="hs-mark">sooth<i>.bet</i></span>
+            <span class="hs-sub">Market intelligence &middot; Honest edge</span>
+            <ul>
+              <li>Live markets</li>
+              <li>Analyst</li>
+              <li>Research</li>
+              <li>Pick engine</li>
+              <li>Proof ledger</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STAT STRIP ============
+           Five figures, every one of them from a published file, and two of
+           them deliberately unflattering. The concept art carried "Avg. ROI
+           +12.4%", "Record 14,327-8,102" and "18,392 active users"; none of
+           the three exists in any feed, and the first two assert a winning
+           model directly above a compliance footer stating we lose to the
+           close. The one real number in that row was 63.7%, which is genuine
+           STRAIGHT-UP accuracy and is labelled as such here, because printed
+           bare it reads as profitability. -->
+      <section class="stats" id="stats" aria-label="Published figures">
+        <div class="stat pending"><span class="k">Games on the board</span>
+          <span class="v" id="sGames">·</span><span class="sub" id="sGamesSub">loading</span></div>
+        <div class="stat pending"><span class="k">Books compared</span>
+          <span class="v" id="sBooks">·</span><span class="sub" id="sBooksSub">every side, every game</span></div>
+        <div class="stat pending"><span class="k">Straight-up accuracy</span>
+          <span class="v" id="sAcc">·</span><span class="sub" id="sAccSub">picking winners</span></div>
+        <div class="stat pending"><span class="k">Against the spread</span>
+          <span class="v" id="sAts">·</span><span class="sub" id="sAtsSub">vs 52.38% break-even</span></div>
+        <div class="stat pending"><span class="k">Graded decisions</span>
+          <span class="v" id="sN">·</span><span class="sub" id="sNSub">walk-forward</span></div>
+      </section>
+
+      <!-- ============ PANELS ============ -->
+      <section class="panels">
+
+        <!-- Replaces "AI Model Confidence". The concept art's four sub-bars
+             were Data Consistency, Line Movement, Public % vs Sharp %, and
+             Injury Impact. We hold no public-vs-sharp money data at all — not
+             in any feed, not from any source we buy — and the other three had
+             no defined measure behind them. These four are the actual
+             published measurements of whether a probability model can be
+             trusted, which is what that panel was reaching for. -->
+        <div class="panel">
+          <div class="panel-h"><h2>Model calibration</h2>
+            <a class="more" href="/methodology">Method</a></div>
+          <div class="panel-b" id="calib">
+            <div class="pstate"><span class="tl">READING THE FIGURES</span>
+              Measured on the published walk-forward evaluation.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-h"><h2>Top market movers</h2>
+            <a class="more" href="/edges">All movement</a></div>
+          <div class="panel-b" id="movers">
+            <div class="pstate"><span class="tl">READING THE TAPE</span>
+              Books that have moved furthest since the last capture.</div>
+          </div>
+        </div>
+
+        <!-- Replaces "Today's Top Picks". This site does not publish picks
+             with a confidence score next to them — that is the position it was
+             corrected on twice. What it does publish is where one book is
+             paying more than the rest of the market, which is a fact about
+             prices rather than a claim about a game. -->
+        <div class="panel">
+          <div class="panel-h"><h2>Where books disagree</h2>
+            <a class="more" href="/edges">See all</a></div>
+          <div class="panel-b" id="diverge">
+            <div class="pstate"><span class="tl">COMPARING BOOKS</span>
+              Prices sitting above the de-vigged consensus.</div>
+          </div>
+        </div>
+
+      </section>
+
+      <p class="note" style="color:var(--dim);font:500 11px/1.6 var(--mono);
+         letter-spacing:.04em;max-width:96ch">
+        Entertainment and analysis only. We do not accept, place, or facilitate wagers.
+        Past performance does not indicate future results — our published backtest shows
+        a loss against the closing market. Nothing here is a recommendation to bet.
+        21+, where lawful. Problem gambling help: 1-800-522-4700, 24/7.
+      </p>
+
+    </main>
   </div>
-
-  <header class="m-top">
-    <span class="m-mark"></span>
-    <b>sooth<i>.bet</i></b>
-    <span class="m-sub">Market intelligence</span>
-  </header>
-
-  <!-- Sport rail. Driven by the board, never hardcoded: a league with no
-       games shows as dark and unselectable rather than as a dead tab. The
-       skeleton tiles hold the rail's height so nothing below it jumps when
-       the board lands. -->
-  <nav class="m-sports" id="mSports" aria-label="Sports"><span class="m-skel"></span
-    ><span class="m-skel"></span><span class="m-skel"></span></nav>
-
-  <!-- The analyst, always in reach. Free, no account — unlike the reference,
-       which puts its prompt behind a signup. -->
-  <form class="m-ask" id="mAsk" action="/ask" method="get">
-    <span class="m-ask-i" aria-hidden="true"></span>
-    <label class="vh" for="mAskQ">Ask the analyst about tonight's board</label>
-    <input name="q" id="mAskQ" type="text" autocomplete="off"
-      placeholder="Ask about tonight's board">
-    <button type="submit" aria-label="Ask">&rarr;</button>
-  </form>
-
-  <section class="m-sec" aria-labelledby="mBoardH">
-    <div class="m-h"><span class="tl" id="mBoardH">NEXT UP</span>
-      <span class="m-c" id="mGames">&nbsp;</span>
-      <a class="tl m-all" href="/market">SEE ALL &rsaquo;</a></div>
-    <div class="m-rail" id="mBoard"><div class="state load"><span class="tl">LOADING THE BOARD</span>Every book&rsquo;s price on tonight&rsquo;s games, arriving now.</div></div>
-  </section>
-
-  <section class="m-sec" aria-labelledby="mGapH">
-    <div class="m-h"><span class="tl" id="mGapH">BIGGEST GAPS</span>
-      <span class="m-c">SHOPPING PAYS MOST</span>
-      <a class="tl m-all" href="/edges">SEE ALL &rsaquo;</a></div>
-    <div class="m-rail" id="mGaps"><div class="state load"><span class="tl">RANKING THE GAPS</span>Where the best number beats the worst by the most.</div></div>
-  </section>
-
-  <section class="m-sec" aria-labelledby="mSealH">
-    <div class="m-h"><span class="tl" id="mSealH">THE SEALED SLATE</span>
-      <a class="tl m-all" href="/picks">OPEN &rsaquo;</a></div>
-    <a class="m-seal" id="mSeal" href="/picks">
-      <div class="state load"><span class="tl">CHECKING THE SEAL</span>Reading this week&rsquo;s commitment.</div></a>
-  </section>
-
-  <!-- THE COMPLIANCE FLOOR, VERBATIM. The shared footer.ft is display:none
-       below 859px, so on a phone this paragraph IS the floor — and the phone
-       homepage is the most-visited surface on the site. It previously carried
-       a REWORDED version that dropped "place, or facilitate" from the wagers
-       clause and omitted the past-performance sentence entirely. That language
-       is legally checked and is not ours to paraphrase for fit. Any edit here
-       must keep it byte-identical to footer() in assets/desk.js. -->
-  <p class="m-fine">Prices move — check the book before you bet.
-    <b>Entertainment and analysis only. We do not accept, place, or facilitate
-    wagers</b>, and we hold no customer funds. Not affiliated with any league or
-    sportsbook. Past performance does not indicate future results — our published
-    backtest shows a loss against the closing market. Nothing here is a
-    recommendation to bet. 21+, where lawful.</p>
-  <p class="m-fine">If gambling is causing harm, the National Problem Gambling
-    Helpline is <b>1-800-522-4700</b>, available 24/7.</p>
-
-  <!-- The same five links, lifted out of the compliance paragraph. Inline in
-       prose they were 26px tall and 4px apart — untappable, and they made the
-       one paragraph that has to be read look like a link farm. -->
-  <nav class="m-links" aria-label="More">
-    <a href="/alerts">Alerts</a><a href="/learn">How it works</a><a href="/record">Record</a><a href="/verify">Verify</a><a href="/disclaimers">Disclaimers</a>
-  </nav>
-
-  <!-- Fixed tab bar: the one element that makes this read as an app. Five
-       real surfaces, no invented ones. The other four screens grow the same
-       bar from desk.js + desk.css, which this page does not load; the rules
-       above are a deliberate second copy. Change one, change both. -->
-  <nav class="m-tabs" aria-label="Main">
-    <a href="/" aria-current="page"><span class="m-ti" data-i="board"></span>BOARD</a>
-    <a href="/picks"><span class="m-ti" data-i="picks"></span>PICKS</a>
-    <a href="/trust"><span class="m-ti" data-i="ledger"></span>LEDGER</a>
-    <a href="/ask"><span class="m-ti" data-i="ask"></span>ANALYST</a>
-    <a href="/alerts"><span class="m-ti" data-i="alerts"></span>ALERTS</a>
-  </nav>
 </div>
 
-<section class="hero">
-  <div class="brand-row">
-    <span class="no"><span class="pip"></span><b>sooth<i>.bet</i></b></span>
-    <span class="kicker">Market intelligence. Honest edge.</span>
+<!-- ============ PULSE ============ -->
+<div class="pulse" aria-label="Market pulse">
+  <span class="pulse-t"><span class="wv" aria-hidden="true"></span>Market pulse</span>
+  <div class="pulse-f" id="pulse">
+    <span class="pulse-i"><span class="sk" style="width:190px"></span></span>
   </div>
-
-  <div class="hero-copy">
-    <!-- The ratified line, the same one that heads /market. It has been
-         rewritten toward price comparison twice and corrected twice; it says
-         what the product IS, and the board, the vig-stripping and the eleven
-         books are evidence for it, not the claim itself. -->
-    <h1>The best sports betting <em>research analyzer</em> on the market.</h1>
-    <p class="strap">Ask about any game and get research built only from numbers you can check —
-      every price we track with the vig stripped out, and our own record, losses included.
-      Analysis, not picks.</p>
-
-    <form class="hero-ask" action="/ask" method="get">
-      <label class="vh" for="heroQ">Ask the analyst about a game</label>
-      <input name="q" id="heroQ" type="text" autocomplete="off"
-        placeholder="Ask about any game on tonight&rsquo;s board">
-      <button type="submit">Ask</button>
-    </form>
-    <p class="hero-fine">Free &middot; No account &middot; Nothing to buy</p>
-  </div>
-
-  <!-- NOT "the desk". The desk is the internal name for the five-panel
-       metaphor and it was explicitly struck from the visible copy; a visitor
-       did not come here looking for furniture. This says what is actually
-       below the fold: five real pages, running. -->
-  <button class="hero-cue" type="button" id="cue">
-    <span class="tl">See it live</span><i aria-hidden="true"></i>
-  </button>
-</section>
-
-<div class="deskwrap">
-<nav class="ws-labels" aria-label="Workspaces">
-  <button data-ws="0">MARKET BOARD</button>
-  <button data-ws="1">ANALYZER</button>
-  <button data-ws="2">RESEARCH</button>
-  <button data-ws="3">PICK ENGINE</button>
-  <button data-ws="4">PROOF LEDGER</button>
-</nav>
-
-<div id="stagewrap">
-  <button class="arrow" id="prev" aria-label="Previous workspace" hidden>‹</button>
-  <button class="arrow" id="next" aria-label="Next workspace" hidden>›</button>
-  <div id="desk" role="region" aria-label="The desk"></div>
+  <a class="tb-chip" href="/edges" style="flex:0 0 auto">View all</a>
 </div>
 
-<p class="caption">Click a screen &middot; arrow keys &middot; 1&ndash;5 &middot; Esc</p>
-<nav class="rail" aria-label="Workspace position">
-  <button data-ws="0"><span class="dot"></span><span class="tl">MKT</span></button>
-  <span class="ln"></span>
-  <button data-ws="1"><span class="dot"></span><span class="tl">ANL</span></button>
-  <span class="ln"></span>
-  <button data-ws="2"><span class="dot"></span><span class="tl">RES</span></button>
-  <span class="ln"></span>
-  <button data-ws="3"><span class="dot"></span><span class="tl">ENG</span></button>
-  <span class="ln"></span>
-  <button data-ws="4"><span class="dot"></span><span class="tl">LDG</span></button>
-</nav>
-
-<footer class="ft">
-  <b>Entertainment and analysis only. We do not accept, place, or facilitate wagers</b>,
-  and we hold no customer funds. Past performance does not indicate future results — our
-  published backtest shows a loss against the closing market. Nothing here is a
-  recommendation to bet. 21+, where lawful. Problem gambling help:
-  <b>1-800-522-4700</b>, 24/7. ·
-  <a href="/learn">How it works</a> · <a href="/methodology">Methodology</a> ·
-  <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
-  <a href="/disclaimers">Disclaimers</a>
-</footer>
-</div><!-- /.deskwrap -->
-
+<script src="/assets/desk.js"></script>
 <script src="/assets/crest.js"></script>
 <script>
 (function(){
-"use strict";
-/* the desk never renders inside a monitor — if framed, take the top */
-if(window.top!==window.self){ try{ window.top.location=window.self.location; }catch(e){} return; }
-
-/* ---- the five workspaces ---- */
-/* Vercel serves clean URLs; the local dev server serves files. */
-var EXT=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?".html":"";
-var WS=[
-  {hash:"market",  label:"MARKET BOARD", src:"/market"+EXT+"?embed=1"},
-  {hash:"ask",     label:"ANALYZER",     src:"/ask"+EXT+"?embed=1"},
-  {hash:"research",label:"RESEARCH",     src:"/research"+EXT+"?embed=1"},
-  {hash:"picks",   label:"PICK ENGINE",  src:"/picks"+EXT+"?embed=1"},
-  {hash:"ledger",  label:"PROOF LEDGER", src:"/trust"+EXT+"?embed=1"},
-];
-var desk=document.getElementById("desk");
-var MOBILE=window.matchMedia("(max-width:859px)");
-
-
-/* ---- the phone home, rendered from the same JSON the board page reads ----
-   Native DOM, not an iframe: the board is 79KB of JSON we already publish, and
-   rendering the next few games directly is cheaper and far more legible than
-   framing a page built for a 1280px screen. */
+var D=window.Desk, $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
-/* NOT named clock(): the desk's own clock() is declared later in this same
-   scope and hoisting silently overwrote this one, which is why every card
-   header rendered with an empty kickoff time. */
-function kickTime(iso){
-  var t=Date.parse(iso); if(isNaN(t)) return "";
-  return new Date(t).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"});
-}
-function gameCard(ev,sport){
-  var sides=(ev.sides||[]).slice(0,2).map(function(s){
-    /* gain_pts is the reason to shop: how many points of implied probability
-       the best number adds over the worst. Shown only when it is real. */
-    var gain=(s.gain_pts!=null&&s.gain_pts>=0.5)
-      ? '<i class="m-gain">+'+s.gain_pts.toFixed(1)+' PTS</i>' : '<i>FAIR</i>';
-    /* The crest sits with the team it belongs to, the way the board does it.
-       board.json publishes full team names, which is exactly how
-       team-logos.json is keyed, so no sport hint is needed here. Crest fails
-       silent: no map, no network, no match — the name still reads. */
-    var mark=(window.Crest&&Crest.img?Crest.img(s.name,16):"");
-    /* "BEST · FANDUEL", not "BEST AT FANDUEL": at the 11px floor the longer
-       form ran past the name column on a 375px screen and either wrapped to a
-       second line or truncated. Same meaning, one word shorter. */
-    return '<div class="m-side">'
-      +'<span class="m-nm" data-crest="'+esc(s.name)+'" data-size="16">'+mark
-        +'<span class="m-tn">'+esc(s.name)+'</span>'
-        +'<span class="m-bk">BEST &middot; '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
-      +'<span class="m-px">'+am(s.best_price)+'</span>'
-      +'<span class="m-fair">FAIR '+am(s.fair_price)+gain+'</span>'
-      +'</div>';
-  }).join("");
-  return '<a class="m-g" href="/market" aria-label="'+esc(ev.away+" at "+ev.home)+'">'
-    +'<div class="m-gh"><span class="m-gs">'
-      +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
-      +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
-      +esc(String(sport).toUpperCase())
-      +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')
-      +(ev.upcoming?' <i class="m-up">UPCOMING</i>':'')+'</span>'
-    +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
-    +sides+'</a>';
-}
-/* Declared here, but INITIALISED inside buildMobile(). The MOBILE branch near
-   the top of this IIFE calls buildMobile() and then returns, so execution never
-   reaches this line on a phone: `var` hoists the binding but not the
-   assignment, and MOB would stay undefined exactly where it is needed. */
-var MOB;
+function pct(x,d){return x==null?"·":(x*100).toFixed(d==null?1:d)+"%";}
+function num(n){return n==null?"·":Number(n).toLocaleString("en-US");}
 
-/* ---- add to home screen ----
-   Chrome/Android fires beforeinstallprompt; we must preventDefault and keep the
-   event, because prompt() can only be called from a user gesture later. iOS
-   Safari never fires it and has no programmatic install at all, so it gets the
-   Share-sheet instruction instead. Neither is shown once already installed. */
-function installed(){
-  return (window.matchMedia && matchMedia("(display-mode: standalone)").matches)
-    || navigator.standalone === true;
+/* Relative time, and it never rounds UP into a lie: 59 minutes is "59m ago",
+   not "1h ago". A staleness figure that flatters itself is the one number on
+   a market page that must not. */
+function ago(iso){
+  var t=Date.parse(iso); if(!t) return "";
+  var s=Math.max(0,(Date.now()-t)/1000);
+  if(s<90) return Math.floor(s)+"s ago";
+  if(s<5400) return Math.floor(s/60)+"m ago";
+  if(s<172800) return Math.floor(s/3600)+"h ago";
+  return Math.floor(s/86400)+"d ago";
 }
-function armInstall(){
-  var bar=document.getElementById("a2hs"), go=document.getElementById("a2hsGo"),
-      no=document.getElementById("a2hsNo"), hint=document.getElementById("a2hsHint");
-  if(!bar||installed()) return;
-  try{ if(localStorage.getItem("sooth_a2hs")==="off") return; }catch(e){}
-  var deferred=null;
-  no.addEventListener("click",function(){
-    bar.hidden=true; try{ localStorage.setItem("sooth_a2hs","off"); }catch(e){}
-  });
-  addEventListener("beforeinstallprompt",function(e){
-    e.preventDefault(); deferred=e; bar.hidden=false;
-  });
-  go.addEventListener("click",function(){
-    if(!deferred) return;
-    deferred.prompt();
-    deferred.userChoice.then(function(){ deferred=null; bar.hidden=true; });
-  });
-  /* iOS: no event will ever arrive, so offer the manual route instead of an
-     Install button that could not do anything. */
-  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  if(ios){
-    hint.textContent="Tap Share, then Add to Home Screen";
-    go.hidden=true; bar.hidden=false;
-  }
-  addEventListener("appinstalled",function(){ bar.hidden=true; });
+function crest(name,sport,size){
+  return (window.Crest&&Crest.team)
+    ? Crest.team(name,{size:size||15,sport:sport}) : esc(name);
+}
+function fail(el,what){
+  el.innerHTML='<div class="pstate"><span class="tl">'+esc(what)+' UNAVAILABLE</span>'
+    +'The feed could not be read. It rebuilds automatically — nothing here is '
+    +'estimated in the meantime.</div>';
 }
 
-/* ---- sport rail ---- */
-var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
-/* A rail only advertises that it scrolls while it actually has somewhere left
-   to go, so the fade is never a lie about the end of the list. */
-function syncMore(el){
+/* ---------- the hero plate ----------
+   Set from JS rather than CSS so the phone gets the small crop. The desktop
+   plate is 2000px wide and a phone has no use for it. */
+(function art(){
+  var el=document.querySelector(".dash-art");
   if(!el) return;
-  el.dataset.more=(el.scrollLeft+el.clientWidth < el.scrollWidth-2)?"1":"0";
-}
-function drawSports(){
-  var el=document.getElementById("mSports"); if(!el) return;
-  /* Counts come from the SAME filter the rails use — upcoming games only.
-     They were counting every row in board.json, so a league whose games had
-     all started advertised a number and then opened an empty rail. */
-  var up=upcoming(MOB.rows), counts={};
-  up.forEach(function(r){ counts[r.sport]=(counts[r.sport]||0)+1; });
-  var keep=el.scrollLeft;
-  var html='<button type="button" data-sp="all" aria-pressed="'+(MOB.sport==="all")+'">'
-    +'<span class="d'+(up.length?"":" off")+'"></span>ALL'
-    +'<span class="c">'+up.length+'</span></button>';
-  html+=Object.keys(SPORT_LABEL).map(function(k){
-    var n=counts[k]||0;
-    /* A league with no games is shown dark and disabled rather than hidden:
-       "we cover this, nothing is on today" is information; a vanished tab is
-       indistinguishable from a broken one. */
-    return '<button type="button" data-sp="'+k+'"'+(n?"":" disabled")
-      +' aria-pressed="'+(MOB.sport===k)+'">'
-      +'<span class="d'+(n?"":" off")+'"></span>'+SPORT_LABEL[k]
-      +'<span class="c">'+(n||"0")+'</span></button>';
-  }).join("");
-  el.innerHTML=html;
-  /* innerHTML resets scrollLeft, which threw the rail back to ALL every time
-     you picked a league at the far end of it. */
-  el.scrollLeft=keep;
-  syncMore(el);
-  if(!el.dataset.armed){
-    el.dataset.armed="1";
-    el.addEventListener("scroll",function(){ syncMore(el); },{passive:true});
-    addEventListener("resize",function(){ syncMore(el); });
-    el.addEventListener("click",function(e){
-      var b=e.target.closest("button[data-sp]");
-      if(!b||b.disabled||b.getAttribute("aria-pressed")==="true") return;
-      MOB.sport=b.dataset.sp; drawSports(); drawRails();
-      /* bring the chosen league fully into view rather than leaving it clipped
-         against the edge you tapped it at */
-      var sel=el.querySelector('[aria-pressed="true"]');
-      if(sel&&sel.scrollIntoView) sel.scrollIntoView({block:"nearest",inline:"nearest",
-        behavior:"smooth"});
+  /* slab.jpg is the landscape plate with the screen cavity the overlay sits
+     in. hero-phone.jpg is the portrait crop of the OTHER render and has no
+     cavity — which is why the overlay hides below 620px rather than trying to
+     land on a plate that has nowhere to put it. */
+  var small=window.matchMedia("(max-width:620px)").matches;
+  el.style.backgroundImage='url("/assets/'+(small?"hero-phone.jpg":"slab.jpg")+'")';
+})();
+
+/* ---------- stat strip ---------- */
+function lift(id){var s=$(id); if(s) s.closest(".stat").classList.remove("pending");}
+
+D.load("/data/board.json").then(function(r){
+  if(!r.ok) return;
+  var d=r.data, t=d.totals||{}, boards=d.boards||[];
+  var books=0; boards.forEach(function(b){ books=Math.max(books,b.n_books||0); });
+  $("sGames").textContent=num(t.events);
+  $("sGamesSub").textContent=boards.length+" league"+(boards.length===1?"":"s")+" live";
+  lift("sGames");
+  $("sBooks").textContent=num(books);
+  lift("sBooks");
+});
+
+D.load("/data/figures.json").then(function(r){
+  if(!r.ok){ fail($("calib"),"FIGURES"); return; }
+  var f=r.data, ev=(f.evaluation_a||{}), res=(ev.results||{}).independent||{};
+  var acc=res.accuracy, ats=res.ats_pct, be=f.breakeven_ats, n=res.n;
+
+  $("sAcc").textContent=pct(acc); $("sAcc").className="v up";
+  $("sAccSub").textContent="picking winners, not spreads";
+  lift("sAcc");
+
+  $("sAts").textContent=pct(ats); $("sAts").className="v dn";
+  $("sAtsSub").textContent="below the "+pct(be,2)+" break-even";
+  lift("sAts");
+
+  $("sN").textContent=num(n);
+  $("sNSub").textContent=esc(res.ats_record||"")+" ATS";
+  lift("sN");
+
+  /* Calibration, drawn honestly: two of these four are BAD and are drawn in
+     amber rather than quietly omitted. A dashboard that only renders the
+     flattering half of a published evaluation is the thing this product
+     exists in opposition to. */
+  function bar(label,val,width,good,note){
+    return '<div class="mrow"><span class="lb">'+esc(label)+'</span>'
+      +'<span class="vv">'+esc(val)+'</span>'
+      +'<span class="bar"><i class="'+(good?"":"warn")
+      +'" style="width:'+Math.max(2,Math.min(100,width)).toFixed(1)+'%"></i></span>'
+      +(note?'<span class="note">'+esc(note)+'</span>':'')+'</div>';
+  }
+  var html="";
+  html+=bar("Straight-up accuracy",pct(acc),acc*100,true,
+            "How often the favoured side actually won.");
+  html+=bar("Against the spread",pct(ats),ats*100,false,
+            "Break-even is "+pct(be,2)+". We are under it.");
+  if(res.ece!=null)
+    html+=bar("Calibration error",pct(res.ece,2),Math.max(0,100-res.ece*1000),true,
+              "Lower is better — how far stated confidence drifts from outcomes.");
+  if(res.brier!=null)
+    html+=bar("Brier score",res.brier.toFixed(3),Math.max(0,(0.25-res.brier)/0.25*100),true,
+              "Lower is better. 0.25 is a coin flip.");
+  html+='<div class="mrow"><span class="note" style="margin-top:8px">'
+    +esc(ev.label||"")+' · '+num(n)+' graded games.</span></div>';
+  $("calib").innerHTML=html;
+});
+
+/* ---------- movers + divergence + pulse ---------- */
+D.load("/data/moves.json").then(function(r){
+  if(!r.ok){ fail($("movers"),"TAPE"); fail($("diverge"),"BOOKS"); return; }
+  var d=r.data, drift=(d.drift||[]).slice(), div=(d.divergence||[]).slice();
+
+  /* ONE ROW PER EVENT. Both feeds are keyed by (event, book), so a single
+     bout that four books all repriced arrives as four rows — and sorted by
+     size, the panel filled with the same matchup three times over. That reads
+     as a rendering bug and it also overstates how much of the board is
+     moving. Strongest move per event wins; the rest are one click away on
+     /edges, which is the page that shows every observation. */
+  function byEvent(list, score){
+    var best={};
+    list.forEach(function(x){
+      var k=x.event_id||(x.home+"|"+x.away+"|"+x.selection);
+      if(!best[k]||score(x)>score(best[k])) best[k]=x;
     });
+    return Object.keys(best).map(function(k){return best[k];});
   }
-}
+  var mag=function(x){return Math.abs(x.move_pts||0);};
+  var pos=function(x){return x.move_pts||0;};
+  drift=byEvent(drift,mag).sort(function(a,b){return mag(b)-mag(a);});
+  div=byEvent(div,pos).sort(function(a,b){return pos(b)-pos(a);});
 
-/* every row whose kickoff is still ahead of us, sport filter not applied */
-function upcoming(rows){
-  var now=Date.now();
-  return rows.filter(function(r){
-    var t=Date.parse(r.e.starts); return !isNaN(t)&&t>now;
-  });
-}
-function visible(){
-  return upcoming(MOB.rows).filter(function(r){
-    return MOB.sport==="all"||r.sport===MOB.sport;
-  });
-}
-function drawRails(){
-  var where=MOB.sport==="all"?"on the board":"in "+(SPORT_LABEL[MOB.sport]||MOB.sport);
-  var soon=visible().slice().sort(function(a,b){
-    return Date.parse(a.e.starts)-Date.parse(b.e.starts);});
-  fill("mBoard",soon.slice(0,8),"NOTHING UPCOMING",
-    "Every game "+where+" has already started. The board refills as the next slate opens.");
-  /* The gap rail ranks by what shopping is worth on that game — the one number
-     this product exists to surface. Not a pick, and never sorted by our model. */
-  var gaps=visible().slice().sort(function(a,b){
-    return (b.e.max_gain_pts||0)-(a.e.max_gain_pts||0);})
-    .filter(function(r){return (r.e.max_gain_pts||0)>=0.5;});
-  fill("mGaps",gaps.slice(0,8),"NO GAP WORTH SHOPPING",
-    "No game "+where+" has half a point of implied probability between the best and "
-    +"worst price right now. That is the market agreeing, not a missing figure.");
-  var g=document.getElementById("mGames");
-  if(g) g.textContent=soon.length+(soon.length===1?" GAME":" GAMES");
-}
-function fill(id,rows,emptyTitle,emptyMsg){
-  var el=document.getElementById(id); if(!el) return;
-  el.innerHTML=rows.length
-    ? rows.map(function(r){return gameCard(r.e,r.sport);}).join("")
-    : '<div class="state"><span class="tl">'+esc(emptyTitle)+'</span>'+esc(emptyMsg)+'</div>';
-  el.scrollLeft=0;      /* a new filter starts at the first card, not mid-rail */
-  if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
-}
-/* One honest failure message, used for every surface the fetch feeds. */
-function failRail(id,what){
-  var el=document.getElementById(id); if(!el) return;
-  el.innerHTML='<div class="state err"><span class="tl">'+esc(what)+' UNAVAILABLE</span>'
-    +'We could not load prices just now. Nothing is being hidden — pull down to '
-    +'refresh, or try again in a moment.</div>';
-}
-
-/* ---- the sealed slate card ---- */
-function drawSeal(s){
-  var el=document.getElementById("mSeal"); if(!el) return;
-  if(!s||s.error){
-    el.innerHTML='<div class="state"><span class="tl">NO SEALED SLATE YET</span>'
-      +'The next slate seals on Wednesday, and the hash goes public the moment '
-      +'it does. Tap to read how the seal works.</div>';
-    return;
-  }
-  var kick=Date.parse(s.unlocks_at||s.earliest_kickoff||"");
-  var seal=Date.parse(s.sealed_at||s.committed_at||"");
-  var ms=kick-Date.now();
-  var open=!s.locked||ms<=0;
-  var left=ms>0?(ms>=864e5?Math.round(ms/864e5)+"d":Math.round(ms/36e5)+"h"):"open";
-  var html='<div class="r"><span class="k">Slate</span>'
-    +'<span class="v">'+esc(s.slate_id||"—")+'</span></div>'
-    +'<div class="r"><span class="k">Games sealed</span>'
-    +'<span class="v">'+esc(s.game_count!=null?s.game_count:"—")+'</span></div>'
-    +'<div class="r"><span class="k">'+(open?"Status":"Thaw")+'</span>'
-    +'<span class="v'+(open?"":" frostv")+'">'+esc(open?"OPEN — every game":left)+'</span></div>';
-  /* Same rule as /picks: the melt bar is only drawn when both ends of the
-     sealed window are known, otherwise it would sit full and imply that no
-     time had passed. */
-  if(!open&&!isNaN(seal)&&kick>seal){
-    var frac=Math.max(0,Math.min(1,ms/(kick-seal)));
-    html+='<span class="melt"><b style="width:'+(frac*100).toFixed(2)+'%"></b></span>';
-  }
-  el.innerHTML=html;
-}
-
-function buildMobile(){
-  MOB={rows:[],sport:"all",books:11};
-  armInstall();
-
-  var q=document.getElementById("mAskQ");
-  if(q) q.setAttribute("enterkeyhint","search");
-
-  fetch("/api/picks",{cache:"no-store"}).then(function(r){return r.json();})
-    .then(drawSeal).catch(function(){ drawSeal(null); });
-
-  fetch("/data/board.json",{cache:"no-store"}).then(function(r){return r.json();})
-    .then(function(b){
-      var rows=[];
-      (b.boards||[]).forEach(function(bd){
-        (bd.events||[]).forEach(function(e){ rows.push({e:e,sport:bd.sport}); });
-      });
-      MOB.rows=rows;
-      MOB.books=(b.boards&&b.boards[0]&&b.boards[0].n_books)||11;
-      drawSports(); drawRails();
-    })
-    .catch(function(err){
-      /* Log it. A .catch on a then-chain swallows RENDER errors as well as
-         fetch failures, so a bug in drawRails() would otherwise be reported to
-         the user as "we could not load prices" — a false statement about the
-         network that also hides the real fault from us. */
-      console.error("phone home failed:", err);
-      /* BOTH rails and the sport filter feed off this one fetch. Reporting the
-         failure on only the first of them left the gap rail spinning its
-         loading state for ever and the sport rail showing skeletons — three
-         surfaces telling three different stories about one event. */
-      failRail("mBoard","BOARD");
-      failRail("mGaps","GAPS");
-      /* the filter is hidden rather than emptied: an empty 64px rail is just
-         an orphaned gap where a control used to be */
-      var sp=document.getElementById("mSports");
-      if(sp){ sp.innerHTML=""; sp.hidden=true; }
-      var g=document.getElementById("mGames");
-      if(g) g.textContent="—";
-    });
-}
-
-/* ---- phone home ----
-   Placed HERE, not up beside `var MOBILE`, and that position is load-bearing:
-   this branch calls buildMobile() and then returns out of the IIFE, so every
-   `var x = {...}` declared below it would be hoisted-but-unassigned. MOB and
-   SPORT_LABEL were both undefined at first render because of exactly that.
-   Take this branch and stop. Building the desk anyway would load five
-   same-origin iframes — the whole site, five times — on the connection least
-   able to afford it, to render something the stylesheet then hides. */
-if(MOBILE.matches){
-  document.getElementById("mob").hidden=false;
-  buildMobile();
-  /* A rotation into landscape on a tablet crosses the breakpoint. Reload
-     rather than try to hand off state between two different page models. */
-  MOBILE.addEventListener?MOBILE.addEventListener("change",function(){location.reload();})
-    :MOBILE.addListener(function(){location.reload();});
-  return;
-}
-
-/* ---- build the monitors ---- */
-desk.innerHTML=WS.map(function(w,i){
-  return '<article class="monitor" data-i="'+i+'" role="button" tabindex="0" '
-    +'aria-label="Open '+w.label+'">'
-    +'<div class="bezel"><div class="screen" id="scr-'+i+'">'
-    +'<div class="holding"><span class="tl">'+w.label+'</span><i></i><i style="width:24%"></i></div>'
-    +'</div><div class="glare"></div><span class="led"></span></div>'
-    +'<div class="reflect"></div>'
-    +'</article>';
-}).join("");
-var MONS=[].slice.call(desk.querySelectorAll(".monitor"));
-
-/* ---- iframe loading tiers ---- */
-var loaded=[];
-function loadFrame(i){
-  if(loaded[i]) return;
-  loaded[i]=true;
-  var scr=document.getElementById("scr-"+i);
-  var f=document.createElement("iframe");
-  f.src=WS[i].src;
-  f.title=WS[i].label;
-  f.addEventListener("load",function(){
-    var h=scr.querySelector(".holding"); if(h) h.remove();
-  });
-  scr.appendChild(f);
-}
-loadFrame(0);                                   /* the hero, eager */
-function idleLoads(){
-  [1,3,4,2].forEach(function(i,k){
-    setTimeout(function(){ loadFrame(i); }, 260*(k+1));
-  });
-}
-/* research's page loads with the others (real chrome in the center panel);
-   its 1.5MB data fetch waits for this wake on first focus */
-var woke=false;
-function wakeResearch(){
-  if(woke) return;
-  var f=document.querySelector("#scr-2 iframe");
-  if(f&&f.contentWindow){ woke=true;
-    f.contentWindow.postMessage({soothWake:1},location.origin); }
-}
-/* setTimeout is the GUARANTEE; requestIdleCallback is only an accelerator.
-   rIC does not fire in a backgrounded tab — same trap as requestAnimationFrame
-   — so a visitor who opens sooth.bet in a background tab, or any capture that
-   is not compositing, would find four of the five panels still showing their
-   holding label. On a landing page that reads as broken rather than as
-   lazy. Whichever fires first wins; idleLoads is guarded so it runs once. */
-var idleRan=false;
-function idleOnce(){ if(idleRan) return; idleRan=true; idleLoads(); }
-setTimeout(idleOnce,900);
-if("requestIdleCallback" in window) requestIdleCallback(idleOnce,{timeout:900});
-/* research (1.5MB payload) waits for first focus — its shimmer is honest chrome */
-
-/* ---- camera: one state, per-monitor inline transforms ---- */
-var focus=-1;
-function apply(){
-  if(MOBILE.matches){
-    if(focus>=0){
-      loadFrame(focus);
-      MONS[focus].scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+  function rows(list,host,valFn,subFn,empty){
+    if(!list.length){
+      host.innerHTML='<div class="pstate"><span class="tl">NOTHING RIGHT NOW</span>'
+        +esc(empty)+'</div>';
+      return;
     }
-    paintChrome();
-    return;
+    host.innerHTML=list.slice(0,4).map(function(x){
+      var v=valFn(x);
+      return '<div class="prow"><div class="nm">'
+        +'<b>'+crest(x.away,x.sport,14)+' <span style="color:var(--dim)">at</span> '
+        +crest(x.home,x.sport,14)+'</b>'
+        +'<i>'+esc(String(x.sport||"").toUpperCase())+' · '+esc(x.selection||"")+'</i></div>'
+        +'<div class="rt"><b class="'+v.cls+'">'+esc(v.txt)+'</b>'
+        +'<i>'+esc(subFn(x))+'</i></div></div>';
+    }).join("");
+    if(window.Crest&&Crest.hydrate) Crest.hydrate(host);
   }
-  var stageH=desk.clientHeight||700;
-  var fit=Math.min(1,(stageH-20)/764);      /* focused monitor must fit the stage */
-  desk.classList.toggle("desk-focused",focus>=0);
-  MONS.forEach(function(m,i){
-    var d, t, op, z;
-    if(focus<0){
-      /* the reference arc: big panels, tight spacing, receding outward */
-      d=i-2;
-      var ad=Math.abs(d);
-      t="translateX("+(d*285)+"px) translateY(0px) translateZ("+(-60-ad*110)+"px) "
-       +"scale(0.30) rotateY("+(d*-7)+"deg)";
-      op=1; z=3-ad;
-    }else{
-      d=i-focus;
-      var ad2=Math.abs(d), sg=d<0?-1:1;
-      /* overview anchors the row at 34% for the desk composition; a focused
-         monitor must CENTER in the stage or its top clips off. */
-      var ty=Math.round(stageH*0.16);
-      if(d===0){ t="translateX(0) translateY("+ty+"px) translateZ(0) scale("+fit+") rotateY(0deg)"; op=1; z=5; }
-      else if(ad2===1){ t="translateX("+(sg*680)+"px) translateY("+ty+"px) translateZ(-160px) scale("+(fit*0.5)+") rotateY("+(sg*-16)+"deg)"; op=.55; z=3; }
-      else if(ad2===2){ t="translateX("+(sg*1040)+"px) translateY("+ty+"px) translateZ(-260px) scale("+(fit*0.42)+") rotateY("+(sg*-20)+"deg)"; op=.2; z=2; }
-      else{ t="translateX("+(sg*1500)+"px) translateY("+ty+"px) translateZ(-300px) scale(0.4) rotateY(0deg)"; op=0; z=1; }
-    }
-    m.style.transform=t; m.style.opacity=op; m.style.zIndex=z;
-    m.classList.toggle("is-focused", i===focus);
-  });
-  if(focus>=0) loadFrame(focus);
-  if(focus===2) wakeResearch();
-  paintChrome();
-}
-function paintChrome(){
-  [].forEach.call(document.querySelectorAll("[data-ws]"),function(b){
-    b.setAttribute("aria-current", String(+b.dataset.ws===focus));
-  });
-  document.getElementById("prev").hidden=!(focus>0);
-  document.getElementById("next").hidden=!(focus>=0&&focus<4);
-  /* The overview title must say what the product IS, not name the furniture.
-     The <title> tag was already corrected; this line was quietly overwriting
-     it on every route, so the tab still read "The Desk". */
-  document.title= focus<0 ? "sooth.bet — sports betting research and analysis"
-    : "sooth.bet — "+WS[focus].label.charAt(0)+WS[focus].label.slice(1).toLowerCase();
-}
 
-/* ---- routing: the hash is the single source of truth ---- */
-function toHash(f){
-  if(f<0) history.pushState("",document.title,location.pathname+location.search);
-  else location.hash=WS[f].hash;
-  if(f<0) route();                 /* pushState fires no hashchange */
-}
-/* The desk is a screen further down now, so anything that focuses a workspace
-   has to bring it into view or the click appears to do nothing at all: the
-   label is in the hero, the panel that moves is below the fold.
-   `booted` keeps the very first application instant — a direct load of
-   /#picks should ARRIVE at the desk, not animate down to it. */
-var booted=false;
-/* Ask for a smooth scroll, then MAKE SURE IT HAPPENED.
-   Smooth scrolling is the kind of thing that is either beautiful or silently
-   absent, and there is no feature test for it: engines accept
-   {behavior:"smooth"} and then decline to move. Measured here, the request
-   moved the document zero pixels while {behavior:"auto"} moved it the full
-   738. A navigation control that does nothing is the worst outcome available,
-   so the animation is requested optimistically and, if the document has not
-   begun moving one frame-ish later, it is simply put where it belongs. */
-function toDesk(instant){
-  var wrap=document.querySelector(".deskwrap");
-  if(!wrap) return;
-  var se=document.scrollingElement||document.documentElement;
-  var from=se.scrollTop;
-  var target=Math.round(wrap.getBoundingClientRect().top+from);
-  if(Math.abs(from-target)<4) return;               /* already parked there */
-  if(instant||matchMedia("(prefers-reduced-motion:reduce)").matches){
-    se.scrollTop=target; return;
-  }
-  wrap.scrollIntoView({behavior:"smooth",block:"start"});
-  setTimeout(function(){
-    if(Math.abs(se.scrollTop-from)<2) se.scrollTop=target;
-  },90);
-}
-function reveal(){
-  if(MOBILE.matches) return;
-  /* A direct load of /#picks should ARRIVE at the desk, not animate down to
-     it from a hero the visitor never asked to see. */
-  toDesk(!booted);
-}
-function route(){
-  var h=location.hash.replace("#","");
-  var f=-1;
-  WS.forEach(function(w,i){ if(w.hash===h) f=i; });
-  focus=f; apply();
-  if(f>=0) reveal();
-}
-addEventListener("hashchange",route);
-addEventListener("popstate",route);
+  rows(drift,$("movers"),
+    function(x){var m=x.move_pts||0;
+      return {txt:(m>0?"+":"")+m.toFixed(2)+" pts",cls:m>0?"up":"dn"};},
+    function(x){return (x.book||"")+" · "+ago(x.observed_at);},
+    "No book has moved more than 1.5 points since the last capture.");
 
-/* ---- inputs ---- */
-desk.addEventListener("click",function(e){
-  var m=e.target.closest(".monitor");
-  if(!m){ if(focus>=0) toHash(-1); return; }  /* the dark stage is the way out */
-  var i=+m.dataset.i;
-  if(i!==focus) toHash(i);
-});
-desk.addEventListener("keydown",function(e){
-  if(e.key!=="Enter"&&e.key!==" ") return;
-  var m=e.target.closest(".monitor"); if(!m) return;
-  e.preventDefault(); toHash(+m.dataset.i);
-});
-document.addEventListener("click",function(e){
-  var b=e.target.closest("button[data-ws]");
-  if(b) toHash(+b.dataset.ws);
-  if(e.target.id==="prev"&&focus>0) toHash(focus-1);
-  if(e.target.id==="next"&&focus<4) toHash(focus+1);
-});
-function key(k){
-  if(k==="Escape") toHash(-1);
-  else if(k==="ArrowLeft"&&focus>0) toHash(focus-1);
-  else if(k==="ArrowLeft"&&focus<0) toHash(0);
-  else if(k==="ArrowRight"&&focus>=0&&focus<4) toHash(focus+1);
-  else if(k==="ArrowRight"&&focus<0) toHash(0);
-  else if(/^[1-5]$/.test(k)) toHash(+k-1);
-}
-addEventListener("keydown",function(e){
-  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
-  key(e.key);
-});
-/* embedded pages relay their keys up (desk.js embed branch) */
-addEventListener("message",function(e){
-  if(e.origin!==location.origin) return;
-  if(e.data&&e.data.soothDesk) key(e.data.soothDesk);
+  rows(div,$("diverge"),
+    function(x){return {txt:"+"+(x.move_pts||0).toFixed(2)+" pts",cls:"up"};},
+    function(x){return (x.book||"")+" over consensus";},
+    "Every book is inside the consensus right now.");
+
+  /* The pulse takes the freshest observations of both kinds, newest first, and
+     quotes the detail line the engine already wrote — so the ticker can never
+     say something the /edges page does not. */
+  var all=drift.concat(div).filter(function(x){return x.detail;});
+  all.sort(function(a,b){return Date.parse(b.observed_at||0)-Date.parse(a.observed_at||0);});
+  $("pulse").innerHTML=all.slice(0,10).map(function(x){
+    return '<span class="pulse-i">'+esc(x.detail)+'<em>'+esc(ago(x.observed_at))+'</em></span>';
+  }).join("") || '<span class="pulse-i">Nothing has moved since the last capture.</span>';
 });
 
-/* mobile pager: keep the rail honest while swiping */
-var scrollT=null;
-desk.addEventListener("scroll",function(){
-  if(!MOBILE.matches) return;
-  clearTimeout(scrollT);
-  scrollT=setTimeout(function(){
-    var i=Math.round(desk.scrollLeft/desk.clientWidth);
-    i=Math.max(0,Math.min(4,i));
-    if(i!==focus){ focus=i; loadFrame(i); loadFrame(Math.min(4,i+1)); paintChrome();
-      history.replaceState("",document.title,"#"+WS[i].hash); }
-  },120);
-});
-
-
-/* The cue is a button, not an anchor to #deskwrap: every hash on this page is
-   a workspace route, so an anchor would have handed route() a hash it does not
-   know and dropped the desk back to overview on the way down. */
-var cue=document.getElementById("cue");
-if(cue) cue.addEventListener("click",function(){ toDesk(false); });
-
-/* ---- first paint: apply state from the URL, THEN enable the glide ---- */
-route();
-booted=true;
-if(MOBILE.matches&&focus<0){ focus=0; paintChrome(); loadFrame(1); }
-requestAnimationFrame(function(){
-  requestAnimationFrame(function(){ document.body.classList.add("desk-ready"); });
-});
+/* ---------- sport filter ----------
+   Cycles the label only; the board is one page away and already filters. A
+   control that looks like a filter and does nothing is worse than no control,
+   so this navigates rather than pretending. */
+(function(){
+  var b=$("sportBtn"); if(!b) return;
+  b.addEventListener("click",function(){ location.href="/market"; });
+})();
 })();
 </script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
