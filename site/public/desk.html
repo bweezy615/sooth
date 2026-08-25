@@ -1270,12 +1270,18 @@ function paintChrome(){
   });
   document.getElementById("prev").hidden=!(focus>0);
   document.getElementById("next").hidden=!(focus>=0&&focus<4);
-  /* The overview title must say what the product IS, not name the furniture.
-     The <title> tag was already corrected; this line was quietly overwriting
-     it on every route, so the tab still read "The Desk". */
-  document.title= focus<0 ? "sooth.bet — sports betting research and analysis"
+  /* The overview title is READ from the <title> tag, not written out a second
+     time here. It was hardcoded, and that copy went stale the moment this page
+     moved to /desk: the string it set — "sooth.bet — sports betting research
+     and analysis" — is the DASHBOARD's title now, so the desk's tab claimed to
+     be the landing page. This is the second time this line has drifted from
+     the tag above it; taking the tag as the source is what stops a third. */
+  document.title= focus<0 ? BASE_TITLE
     : "sooth.bet — "+WS[focus].label.charAt(0)+WS[focus].label.slice(1).toLowerCase();
 }
+
+/* Captured at parse time, before the first route() can overwrite it. */
+var BASE_TITLE=document.title;
 
 /* ---- routing: the hash is the single source of truth ---- */
 function toHash(f){
