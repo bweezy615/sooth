@@ -1,5 +1,5 @@
 // Offline self-check for the read-time best-price join on /picks.
-//   node site/public/assets/picks.selfcheck.js
+//   node tests/frontend/picks.selfcheck.js
 // BEST PRICE and EDGE PTS come from best_lines.json, not from the sealed
 // slate — a slate seals weeks before the books post, so those fields freeze
 // as nulls and have to be filled at read time. The thing that can silently
@@ -12,8 +12,8 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const page = fs.readFileSync(
-  path.join(__dirname, "..", "picks.html"), "utf8");
+const SITE = path.join(__dirname, "..", "..", "site", "public");
+const page = fs.readFileSync(path.join(SITE, "picks.html"), "utf8");
 
 const fn = page.match(/function fillBestPrices\(s\)\{[\s\S]*?\n\}/);
 assert.ok(fn, "fillBestPrices not found in picks.html — did it get renamed?");

@@ -24,10 +24,386 @@
      a full-height sidebar and a sticky top bar and never be seen. */
   body::before{display:none}
   body{background:var(--g0)}
+
+  /* ============ THE PHONE HOME ============
+     Moved here from desk.html when the dashboard became `/`. On a phone
+     this shell REPLACES the dashboard: the tab bar, the sport rail and the
+     add-to-home-screen prompt are the app, and they were stranded at /desk
+     where nobody would find them. One URL, two page models, chosen by
+     width — which is what this file did before the swap. */
+  #mob{
+    /* --g1/--g2/--brand/--ink2/--up are NOT remapped here. In desk.html this
+       rule aliased that page's local --hw1/--hw2/--accent into the shared
+       names; those tokens do not exist on this page, so `--g1:var(--hw1)`
+       would resolve to invalid and override desk.css's real --g1 for
+       everything inside #mob. desk.css defines all of them already, with the
+       same values. Only the genuine overrides survive. */
+    --hair2:rgba(190,222,228,.2);
+    --t-hover:120ms; --r:0px;
+    /* ONE phone gutter and ONE section step. Everything below is on 16 / 24;
+       the block used to run 13 / 14 / 22 / 11 and nothing lined up. Also
+       keeps every element clear of the 12px edge zone. */
+    --pad:16px; --step:24px;
+    display:none;
+    /* the tab bar is fixed, so the page must end above it */
+    padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  #mob[hidden]{display:none}
+  /* Every surface here has one of these three. None of them is a bare blank:
+     a loading state names what is coming, an empty state says what would be
+     here and why it is not, an error state says the fetch failed and that
+     nothing is being withheld. */
+  #mob .state{padding:20px var(--pad);text-align:center;color:var(--mut);
+    font-size:13px;line-height:1.55;border:1px solid var(--hair);background:var(--g1)}
+  #mob .state .tl{display:block;margin-bottom:8px;color:var(--ink2)}
+  #mob .state.err .tl{color:var(--amber,#E2A94A)}
+  /* the same shimmer bar the desk's holding screens use, so "waiting" looks
+     the same on both halves of the site */
+  #mob .state.load::after{content:"";display:block;width:120px;height:2px;
+    margin:13px auto 0;
+    background:linear-gradient(90deg,var(--g2) 25%,rgba(45,212,167,.38) 50%,var(--g2) 75%);
+    background-size:200% 100%;animation:shim 1.4s linear infinite}
+  #mob a{text-decoration:none;color:inherit}
+
+  /* --- add to home screen --- */
+  .m-a2hs{display:flex;align-items:center;gap:12px;padding:10px var(--pad);
+    background:linear-gradient(180deg,rgba(45,212,167,.13),rgba(45,212,167,.05));
+    border-bottom:1px solid rgba(45,212,167,.28)}
+  .m-a2hs[hidden]{display:none}
+  .m-a2hs-i{width:32px;height:32px;flex:0 0 auto;border:1px solid var(--hair2);
+    background:var(--g1);position:relative}
+  .m-a2hs-i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;
+    margin:-4px 0 0 -4px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 9px rgba(45,212,167,.7)}
+  .m-a2hs-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+  .m-a2hs-t b{font:600 13px var(--sans);color:var(--ink)}
+  .m-a2hs-t i{font-style:normal;font:400 11.5px/1.35 var(--sans);color:var(--ink2)}
+  /* both controls carry a 44px target. The dismiss × keeps its optical size
+     but its box is grown and pulled back into the gutter, so the glyph still
+     sits 16px in from the edge while the tappable area reaches 6px. */
+  .m-a2hs #a2hsGo{font:700 11px var(--mono);letter-spacing:.1em;color:var(--bg);
+    background:var(--accent);padding:0 15px;min-height:44px;flex:0 0 auto}
+  .m-a2hs #a2hsGo[hidden]{display:none}
+  .m-a2hs #a2hsNo{font-size:20px;line-height:1;color:var(--mut);flex:0 0 auto;
+    width:44px;height:44px;margin:-6px -10px -6px -6px}
+
+  /* THE PHONE'S ONE PIECE OF ICE.
+     The app shell had no imagery at all — the FROZEN MARKET idea reached it
+     only as a cyan border and a diamond bullet, which is a vocabulary rather
+     than a thing anyone can see. This is the same block, in the same room, in
+     the one place on a utility screen where a picture costs nothing: behind
+     the masthead, where the alternative was empty padding.
+
+     It is a SEPARATE, SMALLER asset (assets/hero-phone.jpg, 29KB, cut by
+     tools/phone_plate.py). Reusing the 2000px desktop plate here would have
+     undone the thing the landing page works to guarantee — that a phone never
+     requests it. #mob is display:none above 859px, so desktop never fetches
+     this one either. */
+  .m-top{position:relative;isolation:isolate;overflow:hidden;
+    display:flex;align-items:center;flex-wrap:wrap;gap:9px;
+    min-height:126px;padding:18px var(--pad) 15px}
+  .m-top::before{content:"";position:absolute;inset:0;z-index:-2;
+    background:var(--bg) 72% 58%/cover no-repeat;
+    background-image:url("/assets/hero-phone.jpg")}
+  /* Left-weighted so the wordmark has ground under it without dimming the
+     block, then hard down to --bg along the bottom so the masthead ENDS in the
+     page rather than on a visible horizon above the sport rail. */
+  .m-top::after{content:"";position:absolute;inset:0;z-index:-1;
+    background:
+      linear-gradient(96deg, rgba(6,8,10,.94) 0%, rgba(6,8,10,.74) 32%,
+        rgba(6,8,10,.24) 58%, transparent 78%),
+      linear-gradient(to bottom, rgba(6,8,10,.42) 0%, transparent 32%,
+        rgba(6,8,10,.88) 86%, var(--bg) 100%)}
+  .m-mark{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 10px rgba(45,212,167,.55)}
+  .m-top b{font:600 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+  .m-top b i{font-style:normal;color:var(--accent)}
+  /* Drops to its own line instead of the far right. On the right it sat over
+     the lit face of the block — small mono caps in --mut on ice, which is the
+     one combination the scrim cannot rescue. */
+  .m-sub{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+    color:var(--mut);flex:0 0 100%;margin-top:5px;white-space:nowrap}
+
+  /* --- sport rail ---
+     Tiles are 44px tall so they are actually tappable, and the rail carries a
+     right-edge fade whenever there is more to scroll to (data-more), so the
+     affordance does not depend on a tile happening to be cut in half. */
+  .m-sports{display:flex;gap:7px;padding:16px var(--pad) 4px;overflow-x:auto;
+    scroll-snap-type:x proximity;scroll-padding-left:var(--pad);
+    min-height:64px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .m-sports::-webkit-scrollbar{display:none}
+  .m-sports[data-more="1"]{
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);
+    mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+  .m-sports button{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;
+    min-height:44px;padding:0 14px;border:1px solid var(--hair);background:var(--g1);
+    scroll-snap-align:start;
+    font:600 11px var(--mono);letter-spacing:.1em;color:var(--mut);
+    transition:color var(--t-hover) ease,border-color var(--t-hover) ease}
+  .m-sports button .d{width:5px;height:5px;flex:0 0 auto;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 7px rgba(45,212,167,.6)}
+  .m-sports button .d.off{background:#2A343C;box-shadow:none}
+  .m-sports button .c{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .m-sports button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
+  .m-sports button[aria-pressed="true"] .c{color:var(--mut)}
+  .m-sports button[disabled]{opacity:.55;cursor:default}
+  .m-sports[hidden]{display:none}
+  .m-sports .m-skel{flex:0 0 auto;width:82px;height:44px;border:1px solid var(--hair);
+    background:var(--g1);opacity:.5}
+
+  /* --- the analyst prompt --- */
+  .m-ask{display:flex;align-items:center;gap:10px;margin:16px var(--pad) 0;
+    padding:0 6px 0 13px;border:1px solid var(--hair2);background:var(--g1)}
+  .m-ask:focus-within{border-color:var(--accent)}
+  .m-ask-i{width:13px;height:11px;flex:0 0 auto;border:1.5px solid var(--accent);
+    border-radius:2px;position:relative;opacity:.9}
+  .m-ask-i::after{content:"";position:absolute;left:2px;right:2px;bottom:-4px;height:3px;
+    border-left:3px solid transparent;border-right:3px solid transparent}
+  /* 16px is not a taste call: iOS Safari zooms the whole page on focus for
+     anything smaller, which throws the layout sideways mid-tap. */
+  .m-ask input{flex:1;min-width:0;background:none;border:0;color:var(--ink);
+    font:16px var(--sans);padding:14px 0;min-height:44px}
+  .m-ask input::placeholder{color:var(--mut)}
+  .m-ask button{font-size:18px;color:var(--accent);flex:0 0 auto;
+    width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+
+  /* --- section rails --- */
+  .m-sec{margin:var(--step) 0 0}
+  .m-h{display:flex;align-items:baseline;gap:9px;padding:0 var(--pad) 10px;
+    border-bottom:1px solid rgba(45,212,167,.22);margin-bottom:12px}
+  .m-h .tl{color:var(--ink2);flex:0 0 auto}
+  /* truncates rather than shoving SEE ALL off the right edge on a 320px phone */
+  .m-c{font:500 11px var(--mono);letter-spacing:.06em;color:var(--dim);
+    text-transform:uppercase;min-width:0;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;font-variant-numeric:tabular-nums}
+  /* a text link cannot carry 44px of visible padding inside a header rule
+     without wrecking it, so the target is extended past the glyphs instead */
+  .m-all{margin-left:auto;color:var(--accent);position:relative;flex:0 0 auto}
+  .m-all::after{content:"";position:absolute;top:-17px;right:-16px;bottom:-17px;left:-14px}
+  /* scroll-padding, not just padding: without it the snap point for the first
+     card lands under the gutter and the card sits half off-screen. */
+  .m-rail{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;
+    /* 6px of block padding is the focus ring's room: overflow-y is hidden so
+       the outline has nowhere else to go */
+    padding:6px var(--pad);scroll-padding-left:var(--pad);
+    scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .m-rail::-webkit-scrollbar{display:none}
+  .m-rail>*{scroll-snap-align:start}
+  /* height is reserved so the loading state, the cards and the empty state all
+     occupy the same band — the page does not jump when the board lands */
+  .m-rail{min-height:188px}
+  .m-rail .state{flex:0 0 100%;display:flex;flex-direction:column;
+    justify-content:center;min-height:176px}
+
+  /* --- one game, one card --- */
+  .m-g{flex:0 0 84%;max-width:330px;display:flex;flex-direction:column;
+    border:1px solid var(--hair);padding:12px 13px;
+    background:linear-gradient(180deg,#0E151B,#080D11);
+    box-shadow:inset 0 1px 0 rgba(190,240,245,.07)}
+  .m-g:active{border-color:var(--accent)}
+  .m-gh{display:flex;align-items:center;gap:8px;padding-bottom:9px;flex:0 0 auto;
+    border-bottom:1px solid var(--hair)}
+  .m-gs{display:inline-flex;align-items:center;gap:6px;min-width:0;
+    font:600 11px var(--mono);letter-spacing:.08em;color:var(--mut)}
+  /* the season has not started: say so on the card, not just in the date */
+  .m-up{font-style:normal;color:var(--accent);letter-spacing:.1em}
+  .m-gt{margin-left:auto;flex:0 0 auto;font:500 11px var(--mono);color:var(--mut);
+    white-space:nowrap}
+  /* flex:1 on the sides: every card in a rail is stretched to the tallest one,
+     and without this the slack piled up as dead space under the last row. */
+  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:9px;flex:1;
+    align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+  .m-side:last-child{border-bottom:0}
+  .m-nm{font:600 13.5px var(--sans);color:var(--ink);line-height:1.25;min-width:0;
+    display:grid;grid-template-columns:18px minmax(0,1fr);column-gap:8px;
+    align-items:center}
+  .m-nm .crest{grid-column:1;grid-row:1/3;align-self:center;object-fit:contain}
+  .m-nm .m-tn{grid-column:2;min-width:0;overflow-wrap:anywhere}
+  .m-nm .m-bk{grid-column:2}
+  .m-bk{display:block;font:500 11px var(--mono);color:var(--mut);letter-spacing:0;
+    margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-px,.m-fair,.m-seal .v{font-variant-numeric:tabular-nums}
+  .m-px{font:700 16px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
+  .m-fair{font:500 11px var(--mono);color:var(--mut);text-align:right;min-width:9ch}
+  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:11px;
+    letter-spacing:.02em;margin-top:3px}
+  .m-fair i.m-gain{color:var(--accent)}
+
+  /* --- the sealed slate card --- */
+  .m-seal{display:block;margin:0 var(--pad);padding:14px 15px;min-height:126px;
+    border:1px solid var(--frost-rim);
+    background:linear-gradient(126deg,rgba(191,234,242,.055) 0 22%,transparent 22% 41%,
+      rgba(191,234,242,.035) 41% 52%,transparent 52%),
+      linear-gradient(180deg,#101a20,#0A1116);
+    box-shadow:inset 0 1px 0 rgba(220,248,255,.16)}
+  .m-seal .r{display:flex;align-items:baseline;gap:10px}
+  .m-seal .r+.r{margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
+  .m-seal .k{font:600 11px var(--mono);letter-spacing:.09em;color:var(--mut);
+    text-transform:uppercase;flex:0 0 auto}
+  .m-seal .v{margin-left:auto;font:600 13px var(--mono);color:var(--ink);
+    text-align:right;min-width:0;overflow-wrap:anywhere}
+  .m-seal .v.frostv{color:var(--frost)}
+  .m-seal .melt{display:block;height:2px;margin-top:12px;
+    background:rgba(191,234,242,.08);position:relative;overflow:hidden}
+  .m-seal .melt b{position:absolute;left:0;top:0;bottom:0;display:block;
+    background:linear-gradient(90deg,rgba(191,234,242,.25),var(--frost))}
+  /* the seal card IS the surface, so its own states must not draw a second
+     box inside it */
+  #mob .m-seal .state{border:0;background:none;padding:6px 0 4px;text-align:left}
+  #mob .m-seal .state .tl{color:var(--frost)}
+
+  /* The compliance line. Same words as ever; --mut rather than --dim because
+     this is the one paragraph on the phone that has to be readable. */
+  .m-fine{margin:var(--step) var(--pad) 0;font-size:11.5px;line-height:1.7;
+    color:var(--mut)}
+  .m-fine b{color:var(--ink2);font-weight:600}
+  .m-links{display:flex;flex-wrap:wrap;column-gap:18px;margin:6px var(--pad) 10px;
+    border-top:1px solid var(--hair);padding-top:4px}
+  #mob .m-links a{display:inline-flex;align-items:center;min-height:44px;
+    font:500 11.5px var(--sans);color:var(--ink2);
+    text-decoration:underline;text-decoration-color:rgba(174,189,194,.3);
+    text-underline-offset:4px}
+
+  /* --- fixed tab bar --- */
+  .m-tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;
+    background:rgba(6,8,10,.94);backdrop-filter:blur(12px);
+    border-top:1px solid var(--hair2);
+    padding-bottom:env(safe-area-inset-bottom,0px)}
+  /* Scoped to #mob on purpose: "#mob a{color:inherit}" further up is an
+     ID-weighted blanket, so an unscoped .m-tabs rule loses to it and every
+     tab renders the same white — which is how the current tab spent its
+     whole life indistinguishable from the other four. */
+  #mob .m-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:5px;min-height:48px;padding:9px 2px 8px;
+    font:600 11px var(--mono);letter-spacing:.06em;
+    /* --mut, not --dim: --dim on this ground is 3.2:1, under AA for text,
+       and this is primary navigation rather than faint metadata. */
+    color:var(--mut);transition:color var(--t-hover) ease}
+  /* The current tab wears a lit rule as well as the hue. Colour alone would
+     be the only thing separating it, which is exactly the cue a colourblind
+     visitor does not get. */
+  #mob .m-tabs a[aria-current]{color:var(--accent);
+    box-shadow:inset 0 2px 0 var(--accent)}
+  .m-ti{width:16px;height:16px;border:1.5px solid currentColor;position:relative}
+  /* each glyph is drawn from the same square so the row stays optically even */
+  .m-ti[data-i="board"]{border-width:1.5px 1.5px 5px 1.5px}
+  .m-ti[data-i="picks"]{border-radius:50%}
+  .m-ti[data-i="picks"]::after{content:"";position:absolute;inset:3px;
+    border:1.5px solid currentColor;border-radius:50%}
+  .m-ti[data-i="ledger"]{border-width:1.5px;border-left-width:5px}
+  .m-ti[data-i="ask"]{border-radius:3px}
+  .m-ti[data-i="ask"]::after{content:"";position:absolute;left:3px;bottom:-4px;
+    border:3px solid transparent;border-top-color:currentColor}
+  .m-ti[data-i="alerts"]{border-radius:50% 50% 3px 3px;border-bottom-width:4px}
+
+  /* ---- which page model a phone gets ----
+     The dashboard and the phone shell are two different pages sharing one
+     URL. This is the switch, and it is CSS rather than the hidden attribute
+     because `.app{display:grid}` in app.css is a class selector and outranks
+     `[hidden]{display:none}` from the UA sheet — setting app.hidden=true left
+     the whole dashboard on screen underneath the shell.
+     In a media query it also means a phone never paints the dashboard at all,
+     so there is no flash of the wrong model before the script runs.
+     #mob[hidden] above still holds it back until buildMobile() has content. */
+  @media (max-width:859px){
+    .app,.pulse{display:none}
+    #mob{display:block}
+  }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+
+<div id="mob" hidden>
+
+  <!-- Add to home screen. Chrome/Android fires beforeinstallprompt and we
+       drive the native sheet; iOS Safari has no such event, so it gets the
+       manual instruction instead. Hidden entirely once already installed. -->
+  <div class="m-a2hs" id="a2hs" hidden>
+    <span class="m-a2hs-i" aria-hidden="true"></span>
+    <span class="m-a2hs-t"><b>Use the app</b><i id="a2hsHint">Add to home screen — no download</i></span>
+    <button type="button" id="a2hsGo">Install</button>
+    <button type="button" id="a2hsNo" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <header class="m-top">
+    <span class="m-mark"></span>
+    <b>sooth<i>.bet</i></b>
+    <span class="m-sub">Market intelligence</span>
+  </header>
+
+  <!-- Sport rail. Driven by the board, never hardcoded: a league with no
+       games shows as dark and unselectable rather than as a dead tab. The
+       skeleton tiles hold the rail's height so nothing below it jumps when
+       the board lands. -->
+  <nav class="m-sports" id="mSports" aria-label="Sports"><span class="m-skel"></span
+    ><span class="m-skel"></span><span class="m-skel"></span></nav>
+
+  <!-- The analyst, always in reach. Free, no account — unlike the reference,
+       which puts its prompt behind a signup. -->
+  <form class="m-ask" id="mAsk" action="/ask" method="get">
+    <span class="m-ask-i" aria-hidden="true"></span>
+    <label class="vh" for="mAskQ">Ask the analyst about tonight's board</label>
+    <input name="q" id="mAskQ" type="text" autocomplete="off"
+      placeholder="Ask about tonight's board">
+    <button type="submit" aria-label="Ask">&rarr;</button>
+  </form>
+
+  <section class="m-sec" aria-labelledby="mBoardH">
+    <div class="m-h"><span class="tl" id="mBoardH">NEXT UP</span>
+      <span class="m-c" id="mGames">&nbsp;</span>
+      <a class="tl m-all" href="/market">SEE ALL &rsaquo;</a></div>
+    <div class="m-rail" id="mBoard"><div class="state load"><span class="tl">LOADING THE BOARD</span>Every book&rsquo;s price on tonight&rsquo;s games, arriving now.</div></div>
+  </section>
+
+  <section class="m-sec" aria-labelledby="mGapH">
+    <div class="m-h"><span class="tl" id="mGapH">BIGGEST GAPS</span>
+      <span class="m-c">SHOPPING PAYS MOST</span>
+      <a class="tl m-all" href="/edges">SEE ALL &rsaquo;</a></div>
+    <div class="m-rail" id="mGaps"><div class="state load"><span class="tl">RANKING THE GAPS</span>Where the best number beats the worst by the most.</div></div>
+  </section>
+
+  <section class="m-sec" aria-labelledby="mSealH">
+    <div class="m-h"><span class="tl" id="mSealH">THE SEALED SLATE</span>
+      <a class="tl m-all" href="/picks">OPEN &rsaquo;</a></div>
+    <a class="m-seal" id="mSeal" href="/picks">
+      <div class="state load"><span class="tl">CHECKING THE SEAL</span>Reading this week&rsquo;s commitment.</div></a>
+  </section>
+
+  <!-- THE COMPLIANCE FLOOR, VERBATIM. The shared footer.ft is display:none
+       below 859px, so on a phone this paragraph IS the floor — and the phone
+       homepage is the most-visited surface on the site. It previously carried
+       a REWORDED version that dropped "place, or facilitate" from the wagers
+       clause and omitted the past-performance sentence entirely. That language
+       is legally checked and is not ours to paraphrase for fit. Any edit here
+       must keep it byte-identical to footer() in assets/desk.js. -->
+  <p class="m-fine">Prices move — check the book before you bet.
+    <b>Entertainment and analysis only. We do not accept, place, or facilitate
+    wagers</b>, and we hold no customer funds. Not affiliated with any league or
+    sportsbook. Past performance does not indicate future results — our published
+    backtest shows a loss against the closing market. Nothing here is a
+    recommendation to bet. 21+, where lawful.</p>
+  <p class="m-fine">If gambling is causing harm, the National Problem Gambling
+    Helpline is <b>1-800-522-4700</b>, available 24/7.</p>
+
+  <!-- The same five links, lifted out of the compliance paragraph. Inline in
+       prose they were 26px tall and 4px apart — untappable, and they made the
+       one paragraph that has to be read look like a link farm. -->
+  <nav class="m-links" aria-label="More">
+    <a href="/alerts">Alerts</a><a href="/learn">How it works</a><a href="/record">Record</a><a href="/verify">Verify</a><a href="/disclaimers">Disclaimers</a>
+  </nav>
+
+  <!-- Fixed tab bar: the one element that makes this read as an app. Five
+       real surfaces, no invented ones. The other four screens grow the same
+       bar from desk.js + desk.css, which this page does not load; the rules
+       above are a deliberate second copy. Change one, change both. -->
+  <nav class="m-tabs" aria-label="Main">
+    <a href="/desk" aria-current="page"><span class="m-ti" data-i="board"></span>BOARD</a>
+    <a href="/picks"><span class="m-ti" data-i="picks"></span>PICKS</a>
+    <a href="/trust"><span class="m-ti" data-i="ledger"></span>LEDGER</a>
+    <a href="/ask"><span class="m-ti" data-i="ask"></span>ANALYST</a>
+    <a href="/alerts"><span class="m-ti" data-i="alerts"></span>ALERTS</a>
+  </nav>
+</div>
 
 <div class="app">
 
@@ -199,10 +575,283 @@
   <a class="tb-chip" href="/edges" style="flex:0 0 auto">View all</a>
 </div>
 
+<script src="/assets/crest.js"></script>
+<script>
+/* The phone home. Its own IIFE — this page already declares esc() in the
+   dashboard script below, and sharing a scope is how desk.html ended up with
+   two clock() declarations where hoisting silently picked the wrong one. */
+(function(){
+var MOBILE=window.matchMedia("(max-width:859px)");
+if(!MOBILE.matches) return;
+var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
+/* NOT named clock(): the desk's own clock() is declared later in this same
+   scope and hoisting silently overwrote this one, which is why every card
+   header rendered with an empty kickoff time. */
+function kickTime(iso){
+  var t=Date.parse(iso); if(isNaN(t)) return "";
+  return new Date(t).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"});
+}
+function gameCard(ev,sport){
+  var sides=(ev.sides||[]).slice(0,2).map(function(s){
+    /* gain_pts is the reason to shop: how many points of implied probability
+       the best number adds over the worst. Shown only when it is real. */
+    var gain=(s.gain_pts!=null&&s.gain_pts>=0.5)
+      ? '<i class="m-gain">+'+s.gain_pts.toFixed(1)+' PTS</i>' : '<i>FAIR</i>';
+    /* The crest sits with the team it belongs to, the way the board does it.
+       board.json publishes full team names, which is exactly how
+       team-logos.json is keyed, so no sport hint is needed here. Crest fails
+       silent: no map, no network, no match — the name still reads. */
+    var mark=(window.Crest&&Crest.img?Crest.img(s.name,16):"");
+    /* "BEST · FANDUEL", not "BEST AT FANDUEL": at the 11px floor the longer
+       form ran past the name column on a 375px screen and either wrapped to a
+       second line or truncated. Same meaning, one word shorter. */
+    return '<div class="m-side">'
+      +'<span class="m-nm" data-crest="'+esc(s.name)+'" data-size="16">'+mark
+        +'<span class="m-tn">'+esc(s.name)+'</span>'
+        +'<span class="m-bk">BEST &middot; '+esc((s.best_book||"—").toUpperCase())+'</span></span>'
+      +'<span class="m-px">'+am(s.best_price)+'</span>'
+      +'<span class="m-fair">FAIR '+am(s.fair_price)+gain+'</span>'
+      +'</div>';
+  }).join("");
+  return '<a class="m-g" href="/market" aria-label="'+esc(ev.away+" at "+ev.home)+'">'
+    +'<div class="m-gh"><span class="m-gs">'
+      +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
+      +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
+      +esc(String(sport).toUpperCase())
+      +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')
+      +(ev.upcoming?' <i class="m-up">UPCOMING</i>':'')+'</span>'
+    +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
+    +sides+'</a>';
+}
+/* Declared here, but INITIALISED inside buildMobile(). The MOBILE branch near
+   the top of this IIFE calls buildMobile() and then returns, so execution never
+   reaches this line on a phone: `var` hoists the binding but not the
+   assignment, and MOB would stay undefined exactly where it is needed. */
+var MOB;
+
+/* ---- add to home screen ----
+   Chrome/Android fires beforeinstallprompt; we must preventDefault and keep the
+   event, because prompt() can only be called from a user gesture later. iOS
+   Safari never fires it and has no programmatic install at all, so it gets the
+   Share-sheet instruction instead. Neither is shown once already installed. */
+function installed(){
+  return (window.matchMedia && matchMedia("(display-mode: standalone)").matches)
+    || navigator.standalone === true;
+}
+function armInstall(){
+  var bar=document.getElementById("a2hs"), go=document.getElementById("a2hsGo"),
+      no=document.getElementById("a2hsNo"), hint=document.getElementById("a2hsHint");
+  if(!bar||installed()) return;
+  try{ if(localStorage.getItem("sooth_a2hs")==="off") return; }catch(e){}
+  var deferred=null;
+  no.addEventListener("click",function(){
+    bar.hidden=true; try{ localStorage.setItem("sooth_a2hs","off"); }catch(e){}
+  });
+  addEventListener("beforeinstallprompt",function(e){
+    e.preventDefault(); deferred=e; bar.hidden=false;
+  });
+  go.addEventListener("click",function(){
+    if(!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function(){ deferred=null; bar.hidden=true; });
+  });
+  /* iOS: no event will ever arrive, so offer the manual route instead of an
+     Install button that could not do anything. */
+  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(ios){
+    hint.textContent="Tap Share, then Add to Home Screen";
+    go.hidden=true; bar.hidden=false;
+  }
+  addEventListener("appinstalled",function(){ bar.hidden=true; });
+}
+
+/* ---- sport rail ---- */
+var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+/* A rail only advertises that it scrolls while it actually has somewhere left
+   to go, so the fade is never a lie about the end of the list. */
+function syncMore(el){
+  if(!el) return;
+  el.dataset.more=(el.scrollLeft+el.clientWidth < el.scrollWidth-2)?"1":"0";
+}
+function drawSports(){
+  var el=document.getElementById("mSports"); if(!el) return;
+  /* Counts come from the SAME filter the rails use — upcoming games only.
+     They were counting every row in board.json, so a league whose games had
+     all started advertised a number and then opened an empty rail. */
+  var up=upcoming(MOB.rows), counts={};
+  up.forEach(function(r){ counts[r.sport]=(counts[r.sport]||0)+1; });
+  var keep=el.scrollLeft;
+  var html='<button type="button" data-sp="all" aria-pressed="'+(MOB.sport==="all")+'">'
+    +'<span class="d'+(up.length?"":" off")+'"></span>ALL'
+    +'<span class="c">'+up.length+'</span></button>';
+  html+=Object.keys(SPORT_LABEL).map(function(k){
+    var n=counts[k]||0;
+    /* A league with no games is shown dark and disabled rather than hidden:
+       "we cover this, nothing is on today" is information; a vanished tab is
+       indistinguishable from a broken one. */
+    return '<button type="button" data-sp="'+k+'"'+(n?"":" disabled")
+      +' aria-pressed="'+(MOB.sport===k)+'">'
+      +'<span class="d'+(n?"":" off")+'"></span>'+SPORT_LABEL[k]
+      +'<span class="c">'+(n||"0")+'</span></button>';
+  }).join("");
+  el.innerHTML=html;
+  /* innerHTML resets scrollLeft, which threw the rail back to ALL every time
+     you picked a league at the far end of it. */
+  el.scrollLeft=keep;
+  syncMore(el);
+  if(!el.dataset.armed){
+    el.dataset.armed="1";
+    el.addEventListener("scroll",function(){ syncMore(el); },{passive:true});
+    addEventListener("resize",function(){ syncMore(el); });
+    el.addEventListener("click",function(e){
+      var b=e.target.closest("button[data-sp]");
+      if(!b||b.disabled||b.getAttribute("aria-pressed")==="true") return;
+      MOB.sport=b.dataset.sp; drawSports(); drawRails();
+      /* bring the chosen league fully into view rather than leaving it clipped
+         against the edge you tapped it at */
+      var sel=el.querySelector('[aria-pressed="true"]');
+      if(sel&&sel.scrollIntoView) sel.scrollIntoView({block:"nearest",inline:"nearest",
+        behavior:"smooth"});
+    });
+  }
+}
+
+/* every row whose kickoff is still ahead of us, sport filter not applied */
+function upcoming(rows){
+  var now=Date.now();
+  return rows.filter(function(r){
+    var t=Date.parse(r.e.starts); return !isNaN(t)&&t>now;
+  });
+}
+function visible(){
+  return upcoming(MOB.rows).filter(function(r){
+    return MOB.sport==="all"||r.sport===MOB.sport;
+  });
+}
+function drawRails(){
+  var where=MOB.sport==="all"?"on the board":"in "+(SPORT_LABEL[MOB.sport]||MOB.sport);
+  var soon=visible().slice().sort(function(a,b){
+    return Date.parse(a.e.starts)-Date.parse(b.e.starts);});
+  fill("mBoard",soon.slice(0,8),"NOTHING UPCOMING",
+    "Every game "+where+" has already started. The board refills as the next slate opens.");
+  /* The gap rail ranks by what shopping is worth on that game — the one number
+     this product exists to surface. Not a pick, and never sorted by our model. */
+  var gaps=visible().slice().sort(function(a,b){
+    return (b.e.max_gain_pts||0)-(a.e.max_gain_pts||0);})
+    .filter(function(r){return (r.e.max_gain_pts||0)>=0.5;});
+  fill("mGaps",gaps.slice(0,8),"NO GAP WORTH SHOPPING",
+    "No game "+where+" has half a point of implied probability between the best and "
+    +"worst price right now. That is the market agreeing, not a missing figure.");
+  var g=document.getElementById("mGames");
+  if(g) g.textContent=soon.length+(soon.length===1?" GAME":" GAMES");
+}
+function fill(id,rows,emptyTitle,emptyMsg){
+  var el=document.getElementById(id); if(!el) return;
+  el.innerHTML=rows.length
+    ? rows.map(function(r){return gameCard(r.e,r.sport);}).join("")
+    : '<div class="state"><span class="tl">'+esc(emptyTitle)+'</span>'+esc(emptyMsg)+'</div>';
+  el.scrollLeft=0;      /* a new filter starts at the first card, not mid-rail */
+  if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
+}
+/* One honest failure message, used for every surface the fetch feeds. */
+function failRail(id,what){
+  var el=document.getElementById(id); if(!el) return;
+  el.innerHTML='<div class="state err"><span class="tl">'+esc(what)+' UNAVAILABLE</span>'
+    +'We could not load prices just now. Nothing is being hidden — pull down to '
+    +'refresh, or try again in a moment.</div>';
+}
+
+/* ---- the sealed slate card ---- */
+function drawSeal(s){
+  var el=document.getElementById("mSeal"); if(!el) return;
+  if(!s||s.error){
+    el.innerHTML='<div class="state"><span class="tl">NO SEALED SLATE YET</span>'
+      +'The next slate seals on Wednesday, and the hash goes public the moment '
+      +'it does. Tap to read how the seal works.</div>';
+    return;
+  }
+  var kick=Date.parse(s.unlocks_at||s.earliest_kickoff||"");
+  var seal=Date.parse(s.sealed_at||s.committed_at||"");
+  var ms=kick-Date.now();
+  var open=!s.locked||ms<=0;
+  var left=ms>0?(ms>=864e5?Math.round(ms/864e5)+"d":Math.round(ms/36e5)+"h"):"open";
+  var html='<div class="r"><span class="k">Slate</span>'
+    +'<span class="v">'+esc(s.slate_id||"—")+'</span></div>'
+    +'<div class="r"><span class="k">Games sealed</span>'
+    +'<span class="v">'+esc(s.game_count!=null?s.game_count:"—")+'</span></div>'
+    +'<div class="r"><span class="k">'+(open?"Status":"Thaw")+'</span>'
+    +'<span class="v'+(open?"":" frostv")+'">'+esc(open?"OPEN — every game":left)+'</span></div>';
+  /* Same rule as /picks: the melt bar is only drawn when both ends of the
+     sealed window are known, otherwise it would sit full and imply that no
+     time had passed. */
+  if(!open&&!isNaN(seal)&&kick>seal){
+    var frac=Math.max(0,Math.min(1,ms/(kick-seal)));
+    html+='<span class="melt"><b style="width:'+(frac*100).toFixed(2)+'%"></b></span>';
+  }
+  el.innerHTML=html;
+}
+
+function buildMobile(){
+  MOB={rows:[],sport:"all",books:11};
+  armInstall();
+
+  var q=document.getElementById("mAskQ");
+  if(q) q.setAttribute("enterkeyhint","search");
+
+  fetch("/api/picks",{cache:"no-store"}).then(function(r){return r.json();})
+    .then(drawSeal).catch(function(){ drawSeal(null); });
+
+  fetch("/data/board.json",{cache:"no-store"}).then(function(r){return r.json();})
+    .then(function(b){
+      var rows=[];
+      (b.boards||[]).forEach(function(bd){
+        (bd.events||[]).forEach(function(e){ rows.push({e:e,sport:bd.sport}); });
+      });
+      MOB.rows=rows;
+      MOB.books=(b.boards&&b.boards[0]&&b.boards[0].n_books)||11;
+      drawSports(); drawRails();
+    })
+    .catch(function(err){
+      /* Log it. A .catch on a then-chain swallows RENDER errors as well as
+         fetch failures, so a bug in drawRails() would otherwise be reported to
+         the user as "we could not load prices" — a false statement about the
+         network that also hides the real fault from us. */
+      console.error("phone home failed:", err);
+      /* BOTH rails and the sport filter feed off this one fetch. Reporting the
+         failure on only the first of them left the gap rail spinning its
+         loading state for ever and the sport rail showing skeletons — three
+         surfaces telling three different stories about one event. */
+      failRail("mBoard","BOARD");
+      failRail("mGaps","GAPS");
+      /* the filter is hidden rather than emptied: an empty 64px rail is just
+         an orphaned gap where a control used to be */
+      var sp=document.getElementById("mSports");
+      if(sp){ sp.innerHTML=""; sp.hidden=true; }
+      var g=document.getElementById("mGames");
+      if(g) g.textContent="—";
+    });
+}
+/* The stylesheet has already stood the dashboard down at this width; all
+   that is left is to reveal the shell once it has something in it. */
+document.getElementById("mob").hidden=false;
+buildMobile();
+/* Rotating a tablet into landscape crosses the breakpoint. Reload rather
+   than hand state between two different page models. */
+MOBILE.addEventListener?MOBILE.addEventListener("change",function(){location.reload();})
+  :MOBILE.addListener(function(){location.reload();});
+})();
+</script>
 <script src="/assets/desk.js"></script>
 <script src="/assets/crest.js"></script>
 <script>
 (function(){
+/* Phone shell territory: it replaces this page wholesale, so the
+   dashboard must not also fetch the board, the figures and the moves
+   feed on the connection least able to afford it. */
+if(window.matchMedia("(max-width:859px)").matches) return;
 var D=window.Desk, $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}

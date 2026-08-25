@@ -1,5 +1,5 @@
 // Offline self-check for the phone tab bar's you-are-here logic.
-//   node site/public/assets/desk.selfcheck.js
+//   node tests/frontend/desk.selfcheck.js
 // The bar is injected on every non-embedded screen, so the one thing that can
 // silently rot is which tab lights up: a wrong or missing aria-current is
 // invisible to a build and obvious to a visitor. desk.js is a browser file
@@ -11,7 +11,8 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const src = fs.readFileSync(path.join(__dirname, "desk.js"), "utf8");
+const SITE = path.join(__dirname, "..", "..", "site", "public");
+const src = fs.readFileSync(path.join(SITE, "assets", "desk.js"), "utf8");
 
 function tabsAt(pathname) {
   const sandbox = {
