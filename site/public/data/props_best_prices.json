@@ -1,147 +1,138 @@
 {
- "generated_at": "2026-08-25T08:54:08.888276+00:00",
+ "generated_at": "2026-08-25T13:06:09.724712+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 64,
+ "n_considered": 242,
  "best_prices": [
   {
    "sport": "mlb",
    "matchup": "Tampa Bay Rays @ Detroit Tigers",
    "starts": "2026-08-25T22:41:00Z",
-   "player": "Jackson Jobe",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 3.5,
-   "side": "over",
-   "best_price": 116,
-   "best_book": "DraftKings",
-   "n_books": 4,
-   "fair_price": 115,
-   "price_edge_pts": 0.21,
-   "book_spread_pts": 3.7,
+   "player": "Eduardo Valencia",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 0.5,
+   "side": "under",
+   "best_price": 130,
+   "best_book": "BetMGM",
+   "n_books": 3,
+   "fair_price": 119,
+   "price_edge_pts": 2.17,
+   "book_spread_pts": 6.52,
    "hit_l5": null,
    "hit_l10": null,
    "hit_season": null,
-   "model_p_over": 0.3917,
-   "model_version": "kpoisson-v1"
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-25T22:41:00Z",
+   "player": "Dillon Dingler",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 170,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": 156,
+   "price_edge_pts": 2.02,
+   "book_spread_pts": 5.52,
+   "hit_l5": {
+    "n": 5,
+    "over": 0
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 1
+   },
+   "hit_season": {
+    "n": 121,
+    "over": 49
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-25T22:41:00Z",
+   "player": "Eduardo Valencia",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": -117,
+   "best_book": "DraftKings",
+   "n_books": 4,
+   "fair_price": -122,
+   "price_edge_pts": 1.07,
+   "book_spread_pts": 6.87,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Houston Astros @ New York Yankees",
+   "starts": "2026-08-25T23:06:00Z",
+   "player": "LaMonte Wade Jr.",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": 102,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": -102,
+   "price_edge_pts": 1.06,
+   "book_spread_pts": 5.04,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 37,
+    "over": 15
+   },
+   "model_p_over": null,
+   "model_version": null
   },
   {
    "sport": "mlb",
    "matchup": "Boston Red Sox @ Miami Marlins",
    "starts": "2026-08-25T22:40:00Z",
-   "player": "Payton Tolle",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "under",
-   "best_price": -137,
-   "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": -134,
-   "price_edge_pts": -0.53,
-   "book_spread_pts": 3.73,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 21,
-    "over": 10
-   },
-   "model_p_over": 0.545,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Kansas City Royals @ Toronto Blue Jays",
-   "starts": "2026-08-25T23:08:00Z",
-   "player": "Vinnie Pasquantino",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 139,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 146,
-   "price_edge_pts": -1.25,
-   "book_spread_pts": 1.83,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 86,
-    "over": 34
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Kansas City Royals @ Toronto Blue Jays",
-   "starts": "2026-08-25T23:08:00Z",
-   "player": "Isaac Collins",
+   "player": "Ceddanne Rafaela",
    "market": "batter_hits",
    "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 125,
-   "best_book": "Fanatics",
-   "n_books": 3,
-   "fair_price": 132,
-   "price_edge_pts": -1.26,
-   "book_spread_pts": 1.85,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 118,
-    "over": 67
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Kansas City Royals @ Toronto Blue Jays",
-   "starts": "2026-08-25T23:08:00Z",
-   "player": "Salvador Perez",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 146,
-   "best_book": "BetOnline",
+   "best_price": 200,
+   "best_book": "BetRivers",
    "n_books": 4,
-   "fair_price": 155,
-   "price_edge_pts": -1.38,
-   "book_spread_pts": 2.27,
+   "fair_price": 192,
+   "price_edge_pts": 0.91,
+   "book_spread_pts": 3.3,
    "hit_l5": {
     "n": 5,
-    "over": 4
+    "over": 2
    },
    "hit_l10": {
     "n": 10,
     "over": 4
    },
    "hit_season": {
-    "n": 122,
-    "over": 42
+    "n": 126,
+    "over": 39
    },
    "model_p_over": null,
    "model_version": null
