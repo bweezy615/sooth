@@ -203,6 +203,117 @@ const mails = () => calls.filter((c) => c.url.indexOf("api.resend.com") >= 0);
   assert.strictEqual(r.statusCode, 400);
   assert.ok(/expired/.test(r.body.error), "expired prefs link explains itself");
 
+  // ---- the watchlist --------------------------------------------------------
+
+  // sport-scoped keys only; case is repaired, everything else is dropped
+  assert.deepStrictEqual(V.cleanTeams(["nba:nyk", "NFL:buf"]), ["nba:NYK", "nfl:BUF"]);
+  assert.deepStrictEqual(V.cleanTeams("nba:NYK,nba:NYK"), ["nba:NYK"], "deduped");
+  assert.deepStrictEqual(V.cleanTeams(["NYK"]), [], "bare abbr collides across leagues");
+  assert.deepStrictEqual(V.cleanTeams(["nba:"]), [], "no team named");
+  assert.deepStrictEqual(V.cleanTeams(["nba:TOOLONG"]), [], "not an abbreviation");
+  assert.deepStrictEqual(V.cleanTeams(["basketball:NYK"]), [], "sport too long");
+  assert.deepStrictEqual(V.cleanTeams(["nba:N Y"]), [], "no spaces in an abbr");
+  assert.deepStrictEqual(V.cleanTeams(["nfl:BUF", "nba:NYK"]), ["nba:NYK", "nfl:BUF"],
+    "sorted, so truncation is deterministic across writes");
+
+  // null vs [] is the difference between "said nothing" and "clear my list"
+  assert.strictEqual(V.cleanTeams(undefined), null, "omitted -> leave stored list alone");
+  assert.strictEqual(V.cleanTeams(null), null);
+  assert.deepStrictEqual(V.cleanTeams([]), [], "explicitly empty -> clear it");
+
+  // Stripe caps a metadata value at 500 bytes, so the list truncates rather
+  // than erroring — and truncates from a SORTED list, so the same watchlist
+  // always stores the same subset instead of a new arbitrary one each write.
+  const many = [];
+  for (let i = 0; i < 90; i++) many.push("nba:T" + String(100 + i));
+  const capped = V.cleanTeams(many);
+  assert.ok(capped.join(",").length <= V.TEAMS_MAX_BYTES, "fits Stripe's cap");
+  assert.ok(capped.length > 40 && capped.length < 90, "truncated, not emptied");
+  assert.deepStrictEqual(capped, many.slice().sort().slice(0, capped.length),
+    "keeps the sorted prefix");
+
+  // game alerts with nobody to follow would match no game and send nothing
+  r = await call("POST", "/api/alerts",
+                 { email: "a@b.co", kinds: ["game"], teams: [] });
+  assert.strictEqual(r.statusCode, 400);
+  assert.ok(/at least one team/.test(r.body.error), r.body.error);
+  assert.strictEqual(mails().length, 0, "a subscription to nothing is never mailed");
+
+  r = await call("POST", "/api/alerts", { email: "a@b.co", kinds: ["game"] });
+  assert.strictEqual(r.statusCode, 400, "teams omitted entirely is also refused");
+
+  // ...but a watchlist rides along fine with game alerts off
+  r = await call("POST", "/api/alerts",
+                 { email: "a@b.co", kinds: ["seal"], teams: ["nba:NYK"] });
+  assert.strictEqual(r.statusCode, 200);
+
+  // signup: the watchlist rides in the token, and still nothing is stored
+  r = await call("POST", "/api/alerts",
+                 { email: "fan@x.com", kinds: ["game"], teams: ["nfl:BUF", "nba:nyk"] });
+  assert.strictEqual(r.statusCode, 200, JSON.stringify(r.body));
+  assert.strictEqual(stripeWrites().length, 0,
+    "DOUBLE OPT-IN holds for the watchlist too");
+  const fanMail = JSON.parse(mails()[0].body);
+  const fanTok = decodeURIComponent(/confirm=([^"&\s]+)/.exec(fanMail.text)[1]);
+  assert.strictEqual(auth.verify(fanTok).w, "nba:NYK,nfl:BUF", "sorted into the token");
+  // the email states the size of the list back, not the raw keys
+  assert.ok(fanMail.text.indexOf("2 teams on your watchlist") >= 0, fanMail.text);
+  assert.ok(fanMail.text.indexOf("nba:NYK") < 0, "no internal keys in an email");
+
+  // confirm writes the watchlist onto the customer
+  customers = [];
+  r = await call("GET", "/api/alerts?confirm=" + encodeURIComponent(fanTok));
+  assert.strictEqual(r.headers.location, "/alerts?state=on");
+  w = stripeWrites();
+  assert.ok(w[0].body.indexOf("sooth_teams%5D=nba%3ANYK%2Cnfl%3ABUF") >= 0,
+    "watchlist stored: " + w[0].body);
+
+  // ---- ?load: the prefs form edits instead of overwriting -------------------
+
+  const lt = auth.sign({ t: "p", e: "fan@x.com", exp: Date.now() + 3600e3 });
+  customers = [{ id: "cus_f", email: "fan@x.com", metadata: {
+    sooth_alerts: "1", sooth_kinds: "seal,game", sooth_min_pts: "4",
+    sooth_teams: "nba:NYK,nfl:BUF" } }];
+  r = await call("GET", "/api/alerts?load=" + encodeURIComponent(lt));
+  assert.strictEqual(r.statusCode, 200);
+  assert.deepStrictEqual(r.body, { email: "fan@x.com", kinds: ["seal", "game"],
+    min_pts: 4, teams: ["nba:NYK", "nfl:BUF"], subscribed: true });
+  assert.strictEqual(r.headers["cache-control"], "no-store",
+    "someone's watchlist must not sit in a shared cache");
+  assert.strictEqual(stripeWrites().length, 0, "a read must not write");
+
+  // no record yet is a legitimate answer, not a 404
+  customers = [];
+  r = await call("GET", "/api/alerts?load=" + encodeURIComponent(lt));
+  assert.strictEqual(r.statusCode, 200);
+  assert.deepStrictEqual(r.body.teams, []);
+  assert.strictEqual(r.body.subscribed, false);
+
+  // ?load is gated by the same signature as everything else
+  for (const [label, tok] of [
+    ["tampered", lt.slice(0, -3) + "aaa"],
+    ["unsub token", auth.sign({ t: "u", e: "fan@x.com", exp: Date.now() + 3600e3 })],
+    ["expired", auth.sign({ t: "p", e: "fan@x.com", exp: Date.now() - 1 })],
+  ]) {
+    r = await call("GET", "/api/alerts?load=" + encodeURIComponent(tok));
+    assert.strictEqual(r.statusCode, 400, label + " must not read a watchlist");
+  }
+
+  // THE REGRESSION THIS ROUTE EXISTS FOR: a stale copy of the page that
+  // predates the watchlist posts no teams field, and must not empty the list.
+  customers = [{ id: "cus_f", email: "fan@x.com", metadata: {
+    sooth_alerts: "1", sooth_teams: "nba:NYK,nfl:BUF" } }];
+  r = await call("POST", "/api/alerts", { token: lt, kinds: ["seal"], min_pts: 2.5 });
+  assert.strictEqual(r.statusCode, 200);
+  assert.ok(stripeWrites()[0].body.indexOf("sooth_teams") < 0,
+    "omitting teams leaves the stored watchlist untouched");
+
+  // and clearing it is still possible, explicitly
+  r = await call("POST", "/api/alerts", { token: lt, kinds: ["seal"], teams: [] });
+  assert.ok(stripeWrites()[0].body.indexOf("sooth_teams%5D=&") >= 0 ||
+            /sooth_teams%5D=$/.test(stripeWrites()[0].body),
+    "an explicit empty list clears it: " + stripeWrites()[0].body);
+
   // ---- unsubscribe ----------------------------------------------------------
 
   const ut = auth.sign({ t: "u", e: "old@x.com", exp: Date.now() + LINK_YEARS() });

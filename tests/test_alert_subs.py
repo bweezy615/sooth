@@ -247,3 +247,66 @@ def test_node_verifies_a_link_python_just_minted():
     except (FileNotFoundError, subprocess.SubprocessError) as e:
         pytest.skip(f"node unavailable: {e}")
     assert json.loads(out) == {"t": "u", "e": "live@x.com", "exp": 4102444800000}
+
+
+# ---------------------------------------------------------------------------
+# The watchlist format has two implementations — engine/subscribers.py writes
+# and reads it, api/alerts.js writes it from the browser — and they must agree
+# forever. A drift here does not throw: it silently drops teams from somebody's
+# list, and the only symptom is an email that never arrives.
+
+TEAM_VECTORS = [
+    "nba:NYK,nfl:BUF",
+    "nba:nyk,NFL:buf",          # case is repaired, not rejected
+    "nba:NYK,nba:NYK",          # deduped
+    "NYK",                      # unscoped: which league's NYK?
+    "nba:",                     # no team named
+    "nba:TOOLONG",              # not an abbreviation
+    "basketball:NYK",           # sport too long
+    "nba:N Y",                  # spaces are not abbreviations
+    " nfl:BUF , nba:NYK ",      # whitespace around entries
+    "",
+    ",,,",
+    "nba:NYK,junk,nfl:BUF",     # one bad entry does not poison the rest
+    ",".join(f"nba:T{100 + i}" for i in range(90)),   # past Stripe's 500 cap
+]
+
+
+def test_python_and_node_agree_on_the_watchlist_format():
+    root = Path(__file__).resolve().parents[1]
+    script = (
+        'const V=require(%s)._internals;'
+        'process.stdout.write(JSON.stringify('
+        '  %s.map(s => V.cleanTeams(s).join(","))));'
+        % (json.dumps(str(root / "api" / "alerts.js")), json.dumps(TEAM_VECTORS))
+    )
+    try:
+        out = subprocess.run(["node", "-e", script], capture_output=True,
+                             text=True, timeout=30, check=True).stdout
+    except (FileNotFoundError, subprocess.SubprocessError) as e:
+        pytest.skip(f"node unavailable: {e}")
+    node = json.loads(out)
+    py = [subscribers.serialise_teams(subscribers.parse_teams(v))
+          for v in TEAM_VECTORS]
+    assert node == py
+
+
+def test_a_watchlist_never_exceeds_the_stripe_metadata_cap():
+    big = [f"nba:T{100 + i}" for i in range(200)]
+    stored = subscribers.serialise_teams(big)
+    assert len(stored) <= subscribers.TEAMS_MAX_BYTES
+    # truncation is from the SORTED list, so the same watchlist always stores
+    # the same subset rather than a new arbitrary one on every write
+    kept = stored.split(",")
+    assert kept == sorted(big)[:len(kept)]
+    assert subscribers.parse_teams(stored) == frozenset(kept)
+
+
+def test_game_alerts_need_somebody_to_follow():
+    s = subscribers.Subscriber("a@b.com", frozenset({"game"}), 2.5, frozenset())
+    assert not s.wants("game"), "an empty watchlist matches nothing, not everything"
+    assert not s.watches("nba:NYK")
+    t = subscribers.Subscriber("a@b.com", frozenset({"game"}), 2.5,
+                               frozenset({"nba:NYK"}))
+    assert t.wants("game") and t.watches("nfl:BUF", "nba:NYK")
+    assert not t.watches("nfl:BUF"), "only the teams they actually picked"

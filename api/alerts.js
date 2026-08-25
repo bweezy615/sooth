@@ -3,10 +3,17 @@
 // A Vercel Node serverless function, zero deps. Three
 // jobs behind one path, because they are one resource:
 //
-//   POST /api/alerts            {email, kinds[], min_pts}  -> mails a confirm link
-//   POST /api/alerts            {token, kinds[], min_pts}  -> updates prefs in place
-//   GET  /api/alerts?confirm=T                             -> joins the list
+//   POST /api/alerts            {email, kinds[], min_pts, teams[]} -> confirm link
+//   POST /api/alerts            {token, kinds[], min_pts, teams[]} -> prefs in place
+//   GET  /api/alerts?load=T                                 -> current settings
+//   GET  /api/alerts?confirm=T                              -> joins the list
 //   GET  /api/alerts?unsub=T    (also POST, for one-click)  -> leaves the list
+//
+// ?load exists because the preferences form OVERWRITES. It posts the whole
+// settings object, so a form that opened on defaults would silently wipe a
+// watchlist the reader spent real effort building — and they would only find
+// out weeks later, by not being emailed. The page reads current settings back
+// through this route first and edits from there.
 //
 // NOTHING IS STORED UNTIL THE CONFIRM LINK IS CLICKED. That is the whole point
 // of double opt-in and it doubles as the abuse control on this endpoint: a
@@ -20,7 +27,13 @@
 // unsubscribe links minted by the Actions sender verify here.
 const auth = require("./_auth.js");
 
-const KINDS = ["seal", "graded", "price"];
+const KINDS = ["seal", "graded", "price", "game"];
+
+// The watchlist, mirroring engine/subscribers.py exactly. Sport-scoped because
+// bare abbreviations collide across leagues (MIA, PHI, ATL and a dozen more),
+// and an unscoped key would mail somebody about the wrong sport's game.
+const TEAM_RE = /^[a-z]{2,6}:[A-Z0-9]{2,4}$/;
+const TEAMS_MAX_BYTES = 500;   // Stripe's hard cap on one metadata value
 const MIN_FLOOR = 1.5, MIN_CEIL = 10.0, MIN_DEFAULT = 2.5;
 const CONFIRM_TTL_MS = 48 * 3600 * 1000;
 const LINK_TTL_MS = 730 * 24 * 3600 * 1000;
@@ -30,7 +43,7 @@ const UA = "sooth-alerts/1.0";
 // Metadata keys — must match engine/subscribers.py exactly.
 const K_ON = "sooth_alerts", K_KINDS = "sooth_kinds",
       K_MIN = "sooth_min_pts", K_AT = "sooth_confirmed_at",
-      K_SRC = "sooth_source";
+      K_TEAMS = "sooth_teams", K_SRC = "sooth_source";
 
 const FOOTER =
   "You are receiving this because someone entered this address at sooth.bet/alerts. " +
@@ -54,6 +67,36 @@ function cleanKinds(v) {
   const out = want.map((k) => String(k).trim().toLowerCase())
                   .filter((k) => KINDS.indexOf(k) >= 0);
   return KINDS.filter((k) => out.indexOf(k) >= 0); // stable order, deduped
+}
+
+// null means "the caller said nothing about teams, leave the stored list
+// alone"; [] means "clear it". The distinction is load-bearing: a stale cached
+// copy of the page that predates the watchlist posts no teams field at all,
+// and it must not be able to empty somebody's list by omission.
+function cleanTeams(v) {
+  if (v === undefined || v === null) return null;
+  const want = Array.isArray(v) ? v : String(v).split(",");
+  const seen = {};
+  want.forEach((raw) => {
+    const s = String(raw).trim();
+    const i = s.indexOf(":");
+    if (i < 0) return;
+    // Repairing case is safe — it cannot change WHICH team is meant. Anything
+    // else malformed is dropped rather than guessed at.
+    const k = s.slice(0, i).trim().toLowerCase() + ":" + s.slice(i + 1).trim().toUpperCase();
+    if (TEAM_RE.test(k)) seen[k] = 1;
+  });
+  // Sorted before truncation so the same watchlist always stores the same 60
+  // teams rather than a different arbitrary subset on each write.
+  const out = [];
+  let used = 0;
+  Object.keys(seen).sort().forEach((k) => {
+    const add = k.length + (out.length ? 1 : 0);
+    if (used + add > TEAMS_MAX_BYTES) return;
+    out.push(k);
+    used += add;
+  });
+  return out;
 }
 
 function clampMin(v) {
@@ -105,11 +148,12 @@ async function findCustomer(email, key) {
          rows[0] || null;
 }
 
-async function upsert(email, kinds, minPts, key) {
+async function upsert(email, kinds, minPts, teams, key) {
   const form = new URLSearchParams();
   form.set("metadata[" + K_ON + "]", "1");
   form.set("metadata[" + K_KINDS + "]", kinds.join(","));
   form.set("metadata[" + K_MIN + "]", String(minPts));
+  if (teams) form.set("metadata[" + K_TEAMS + "]", teams.join(","));
   form.set("metadata[" + K_AT + "]", new Date().toISOString());
   form.set("metadata[" + K_SRC + "]", "alerts-page");
   const existing = await findCustomer(email, key);
@@ -130,21 +174,47 @@ async function optOut(email, key) {
   return stripe("customers/" + existing.id, key, form);
 }
 
+// Current settings for an address the token already proved. Returns defaults
+// rather than 404 for someone who has no record: the honest answer to "what am
+// I signed up for" when the answer is nothing.
+async function current(email, key) {
+  const cust = await findCustomer(email, key);
+  const meta = (cust && cust.metadata) || {};
+  return {
+    email: email,
+    kinds: cleanKinds(meta[K_KINDS]),
+    min_pts: clampMin(meta[K_MIN]),
+    teams: cleanTeams(meta[K_TEAMS]) || [],
+    subscribed: String(meta[K_ON] || "") === "1",
+  };
+}
+
 // ---- the confirmation email -------------------------------------------------
 
 function kindLabel(k) {
   return { seal: "Slate sealed", graded: "Week graded",
-           price: "Price divergence" }[k] || k;
+           price: "Price divergence", game: "A game you follow" }[k] || k;
 }
 
-function confirmEmail(link, kinds, minPts) {
-  const rows = kinds.map((k) =>
-    '<tr><td style="padding:7px 0;color:#E8EAED;font:14px/1.5 ui-sans-serif,system-ui">' +
-    "&middot; " + esc(kindLabel(k)) +
-    (k === "price"
-      ? ' <span style="color:#8A919D">at ' + esc(minPts.toFixed(1)) +
-        "+ points</span>"
-      : "") + "</td></tr>").join("");
+function qualifier(k, minPts, teams) {
+  if (k === "price") return "at " + minPts.toFixed(1) + "+ points";
+  // Count, not the roster. Sixty "nba:NYK" strings in a confirmation email is
+  // a wall of jargon, and the reader already knows who they picked.
+  if (k === "game") {
+    const n = (teams || []).length;
+    return n ? n + " team" + (n === 1 ? "" : "s") + " on your watchlist" : "";
+  }
+  return "";
+}
+
+function confirmEmail(link, kinds, minPts, teams) {
+  const rows = kinds.map((k) => {
+    const q = qualifier(k, minPts, teams);
+    return '<tr><td style="padding:7px 0;color:#E8EAED;font:14px/1.5 ui-sans-serif,system-ui">' +
+      "&middot; " + esc(kindLabel(k)) +
+      (q ? ' <span style="color:#8A919D">' + esc(q) + "</span>" : "") +
+      "</td></tr>";
+  }).join("");
 
   const html =
     '<div style="max-width:560px;margin:0 auto;background:#0A0B0D;' +
@@ -168,8 +238,10 @@ function confirmEmail(link, kinds, minPts) {
 
   const text =
     "One click and you are on the list.\n\nYou asked for:\n" +
-    kinds.map((k) => "  - " + kindLabel(k) +
-      (k === "price" ? " at " + minPts.toFixed(1) + "+ points" : "")).join("\n") +
+    kinds.map((k) => {
+      const q = qualifier(k, minPts, teams);
+      return "  - " + kindLabel(k) + (q ? " " + q : "");
+    }).join("\n") +
     "\n\nConfirm this address:\n" + link +
     "\n\nThis link expires in 48 hours.\n\n" + FOOTER + "\n\nsooth.bet";
 
@@ -236,6 +308,22 @@ module.exports = async function handler(req, res) {
                                  : bounce(res, "?state=off");
   }
 
+  // --- read current settings, so the prefs form edits instead of overwrites ---
+  const load = url.searchParams.get("load");
+  if (load) {
+    const p = auth.verify(load);
+    if (!p || (p.t !== "p" && p.t !== "c") || !p.e) {
+      return json(res, 400, { error: "expired" });
+    }
+    if (!stripeKey) return json(res, 500, { error: "not configured" });
+    try {
+      return json(res, 200, await current(p.e, stripeKey));
+    } catch (e) {
+      console.error("load failed", e && e.message);
+      return json(res, 502, { error: "unavailable" });
+    }
+  }
+
   // --- join the list: the confirm link from the double opt-in email ---
   const confirm = url.searchParams.get("confirm");
   if (confirm) {
@@ -243,7 +331,7 @@ module.exports = async function handler(req, res) {
     if (!p || p.t !== "c" || !p.e) return bounce(res, "?state=badlink");
     if (!stripeKey) return bounce(res, "?state=error");
     try {
-      await upsert(p.e, cleanKinds(p.k), clampMin(p.m), stripeKey);
+      await upsert(p.e, cleanKinds(p.k), clampMin(p.m), cleanTeams(p.w), stripeKey);
     } catch (e) {
       console.error("upsert failed", e && e.message);
       return bounce(res, "?state=error");
@@ -260,8 +348,17 @@ module.exports = async function handler(req, res) {
   const body = await readJson(req);
   const kinds = cleanKinds(body.kinds);
   const minPts = clampMin(body.min_pts);
+  const teams = cleanTeams(body.teams);
   if (!kinds.length) {
     return json(res, 400, { error: "Pick at least one thing to be told about." });
+  }
+  // Game alerts with an empty watchlist match no game and would send nothing
+  // at all. Silently accepting that is worse than refusing it: the reader
+  // waits for emails that were never going to arrive.
+  if (kinds.indexOf("game") >= 0 && (!teams || !teams.length)) {
+    return json(res, 400, {
+      error: "Pick at least one team to follow, or turn off game reminders.",
+    });
   }
 
   // --- change prefs in place. The token already proves this address. ---
@@ -272,7 +369,7 @@ module.exports = async function handler(req, res) {
     }
     if (!stripeKey) return json(res, 500, { error: "Alerts are not configured yet." });
     try {
-      await upsert(p.e, kinds, minPts, stripeKey);
+      await upsert(p.e, kinds, minPts, teams, stripeKey);
     } catch (e) {
       console.error("prefs upsert failed", e && e.message);
       return json(res, 500, { error: "Could not save that. Try again in a minute." });
@@ -288,13 +385,18 @@ module.exports = async function handler(req, res) {
   if (!resendKey || !process.env.AUTH_SECRET) {
     return json(res, 500, { error: "Alerts are not configured yet." });
   }
+  // The watchlist rides in the token rather than in a pending record: still
+  // NOTHING IS STORED until the link is clicked, which is what stops this
+  // endpoint being a subscription-bombing tool. 500 bytes of teams is ~700
+  // base64 characters, comfortably inside any URL limit.
   const token = auth.sign({
     t: "c", e: email, k: kinds.join(","), m: minPts,
+    w: (teams || []).join(","),
     exp: Date.now() + CONFIRM_TTL_MS,
   });
   const link = base + "/api/alerts?confirm=" + encodeURIComponent(token);
   try {
-    await sendConfirm(email, confirmEmail(link, kinds, minPts), resendKey);
+    await sendConfirm(email, confirmEmail(link, kinds, minPts, teams), resendKey);
   } catch (e) {
     console.error("confirm send failed", e && e.message);
     return json(res, 502, { error: "We couldn't send the confirmation email. Try again in a minute." });
@@ -305,6 +407,7 @@ module.exports = async function handler(req, res) {
 // Exported for api/alerts.selfcheck.js — the pure parts, checkable with no
 // network and no keys.
 module.exports._internals = {
-  validEmail, cleanKinds, clampMin, confirmEmail, kindLabel,
-  KINDS, MIN_FLOOR, MIN_CEIL, MIN_DEFAULT, LINK_TTL_MS,
+  validEmail, cleanKinds, clampMin, cleanTeams, confirmEmail, kindLabel,
+  qualifier, KINDS, MIN_FLOOR, MIN_CEIL, MIN_DEFAULT, LINK_TTL_MS,
+  TEAM_RE, TEAMS_MAX_BYTES,
 };

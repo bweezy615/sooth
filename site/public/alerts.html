@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Alerts</title>
-<meta name="description" content="Three emails, only when something actually happens: a slate is sealed, a week is graded, or a book prices away from the market. Free, opt-in, and never a pick.">
+<meta name="description" content="Email only when something actually happens: a slate is sealed, a week is graded, a book prices away from the market, or a team you follow is about to play. Free, opt-in, and never a pick.">
 <meta property="og:title" content="Sooth — Alerts">
 <meta property="og:description" content="We'll tell you when something happened. Never what to do about it.">
 <meta property="og:type" content="website">
@@ -21,7 +21,7 @@
   /* FROZEN MARKET — the sign-up surface.
      The slab face in promo 2 reads in one order: a small label, a teal
      hairline rule, then a ▸ capability list in mono caps. That is exactly
-     what this fieldset is — three named things the desk can tell you about,
+     what this fieldset is — four named things the desk can tell you about,
      with a switch on each — so it is drawn that way rather than as a stack of
      sentences with tick-boxes.
 
@@ -124,8 +124,80 @@
   .band .bd{display:block;font-size:12.5px;color:var(--mut);line-height:1.55;
     margin:4px 0 0;max-width:56ch}
 
+  /* The watchlist, revealed only when game reminders are on. Same rail as the
+     threshold bands: it is a branch of the switch above it, not a new section.
+
+     124 teams is too many to read as a list and too few to need a server-side
+     search, so it is one scrolling well with a filter over it, and the teams
+     you have already picked are lifted OUT of the well into chips above it.
+     Otherwise your own choices scroll away and the only way to audit the list
+     is to scrub through all four leagues looking for lit checkboxes. */
+  .teams{margin:2px 0 6px 15px;padding:12px 0 2px 16px;
+    border-left:1px solid var(--hair2)}
+  .teams[hidden]{display:none}
+
+  /* chips: what you have picked, always visible, each one its own way out */
+  .picked{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+  .picked[hidden]{display:none}
+  .chip{display:inline-flex;align-items:center;gap:6px;min-height:28px;
+    padding:4px 6px 4px 8px;background:var(--g1);
+    border:1px solid rgba(45,212,167,.34);border-radius:var(--r);
+    font:600 11px/1 var(--mono);letter-spacing:.06em;color:var(--ink);
+    cursor:pointer;transition:border-color var(--t-hover) ease}
+  .chip:hover{border-color:rgba(45,212,167,.7)}
+  .chip img{width:14px;height:14px;object-fit:contain}
+  /* the × is the whole point of a chip — it must be a real 24px target */
+  .chip b{display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;font:400 14px/1 var(--sans);color:var(--mut)}
+  .chip:hover b{color:var(--ink)}
+
+  .teamq{width:100%;min-height:40px;margin:0 0 8px;
+    background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(190,222,228,.03));
+    border:1px solid var(--hair2);border-radius:var(--r);color:var(--ink);
+    font:13px var(--sans);padding:9px 12px;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.55);
+    transition:border-color var(--t-hover) ease}
+  .teamq::placeholder{color:var(--mut)}
+  .teamq:focus{border-color:rgba(45,212,167,.55)}
+
+  /* A fixed well rather than a growing list: without a ceiling the form runs
+     to 3000px on a phone and the submit key is nowhere near the choices. */
+  .tlist{max-height:280px;overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--hair);border-radius:var(--r);background:rgba(0,0,0,.22)}
+  .tsport{position:sticky;top:0;z-index:1;padding:7px 11px;
+    background:var(--g1);border-bottom:1px solid var(--hair);
+    font:600 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+    color:var(--mut)}
+  .team{display:grid;grid-template-columns:13px 18px 1fr auto;gap:10px;
+    align-items:center;min-height:40px;padding:7px 11px;cursor:pointer;
+    border-bottom:1px solid var(--hair)}
+  .team:last-child{border-bottom:0}
+  .team:hover{background:rgba(190,222,228,.035)}
+  .team[hidden]{display:none}
+  .team input{-webkit-appearance:none;appearance:none;width:13px;height:13px;
+    margin:0;cursor:pointer;border:1px solid var(--hair2);border-radius:2px;
+    background:linear-gradient(180deg,rgba(190,222,228,.06),rgba(0,0,0,.35));
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+    transition:background var(--t-hover) ease,border-color var(--t-hover) ease}
+  .team input:checked{border-color:var(--brand);
+    background:linear-gradient(180deg,var(--brand-hi),var(--brand));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 9px rgba(45,212,167,.3)}
+  .team img{width:18px;height:18px;object-fit:contain}
+  .team .tn{font-size:13px;color:var(--ink2);line-height:1.3;min-width:0}
+  .team input:checked~.tn{color:var(--ink)}
+  .team .ta{font:600 11px var(--mono);letter-spacing:.06em;color:var(--mut)}
+  .team:focus-within{background:rgba(190,222,228,.05)}
+
+  .tnote{margin:0;padding:16px 12px;font-size:13px;color:var(--mut);
+    line-height:1.55;text-align:center}
+  /* The count is the only place the empty state of the watchlist is visible,
+     so it carries the caution rather than waiting for a failed submit. */
+  .tcount{margin:9px 0 2px;font:600 11px/1.45 var(--mono);letter-spacing:.11em;
+    text-transform:uppercase;color:var(--mut)}
+  .tcount.warn{color:var(--amber)}
+
   @media (forced-colors:active){
-    .opt input,.band input{-webkit-appearance:auto;appearance:auto}}
+    .opt input,.band input,.team input{-webkit-appearance:auto;appearance:auto}}
 
   /* the address row: a labelled field and the one key that commits. Bottom
      aligned, so the key sits on the field's baseline rather than stretching
@@ -230,9 +302,10 @@
   <div class="page-head" style="padding:26px 0 0">
     <h1>We'll tell you when something happened.<br>Never what to do about it.</h1>
     <p class="sub">
-      Three things are worth an email, and none of them is a tip. A slate got sealed before
+      Four things are worth an email, and none of them is a tip. A slate got sealed before
       kickoff. A week got graded, win or lose. A book is pricing away from the rest of the
-      market right now. Everything here is free — alerts are not the paid tier and never were.</p>
+      market right now. A team you follow is about to play. Everything here is free — alerts
+      are not the paid tier and never were.</p>
   </div>
 
   <div class="msg" id="banner" hidden role="status" aria-live="polite"></div>
@@ -299,10 +372,38 @@
                 competing on that side.</span></span>
           </label>
         </div>
+        <label class="opt">
+          <input type="checkbox" name="kind" value="game" id="kGame">
+          <span>
+            <span class="nm">A game you follow starts soon</span>
+            <span class="ds">A team on your watchlist plays within the day. The email
+              carries the two numbers already on the board for that game — the de-vigged
+              fair price and the best number anyone is posting — and nothing else. It is a
+              reminder that the game exists, not a read on who wins it.</span>
+            <span class="fq">Up to a day before each game · as often as your teams play</span>
+          </span>
+        </label>
+
+        <div class="teams" id="teams" hidden role="group" aria-labelledby="teamsLb">
+          <div class="tl" id="teamsLb" style="margin-bottom:8px">WHICH TEAMS DO YOU FOLLOW</div>
+
+          <div class="picked" id="picked" hidden></div>
+
+          <label class="vh" for="teamq">Search teams</label>
+          <input type="search" class="teamq" id="teamq" autocomplete="off"
+            spellcheck="false" placeholder="Search a team, city, or league…"
+            aria-describedby="tcount">
+
+          <div class="tlist" id="tlist">
+            <p class="tnote" id="tnote">Loading the league list…</p>
+          </div>
+
+          <p class="tcount" id="tcount" aria-live="polite">No teams picked yet</p>
+        </div>
       </fieldset>
 
       <p class="none" id="none" hidden aria-live="polite"><b>Nothing is selected.</b>
-        With all three switches off there is no email for us to send, so pick at least
+        With every switch off there is no email for us to send, so pick at least
         one of them.</p>
 
       <div class="row">
@@ -370,6 +471,13 @@
   var form = document.getElementById("form"),
       bands = document.getElementById("bands"),
       kPrice = document.getElementById("kPrice"),
+      kGame = document.getElementById("kGame"),
+      teams = document.getElementById("teams"),
+      picked = document.getElementById("picked"),
+      teamq = document.getElementById("teamq"),
+      tlist = document.getElementById("tlist"),
+      tnote = document.getElementById("tnote"),
+      tcount = document.getElementById("tcount"),
       email = document.getElementById("email"),
       go = document.getElementById("go"),
       msg = document.getElementById("msg"),
@@ -392,12 +500,180 @@
     return r ? parseFloat(r.value) : 2.5;
   }
   function syncBands(){ bands.hidden = !kPrice.checked; }
+
+  // ---- the watchlist --------------------------------------------------------
+  //
+  // The roster comes from /data/team-logos.json, the same file the board reads
+  // its crests out of and the same file engine/watchlist.py resolves names
+  // against. One table, so the picker cannot offer a team the sender is unable
+  // to match, and a team added there shows up here with no second edit.
+  //
+  // Keys are sport-scoped ("nba:NYK") for the reason the backend is: bare
+  // abbreviations collide across leagues, and MIA alone cannot be resolved.
+
+  var SPORTS = ["nfl", "nba", "mlb", "nhl"];   // by how much of the year they own
+  var roster = [];        // [{key, name, abbr, sport, logo}]
+  var chosen = {};        // key -> true
+  var built = false, loadFailed = false;
+
+  function teamCount(){ return Object.keys(chosen).length; }
+
+  function syncTeams(){
+    var n = teamCount();
+    // Chips, so your own picks never scroll out of sight inside the well.
+    picked.innerHTML = "";
+    picked.hidden = n === 0;
+    roster.forEach(function(t){
+      if (!chosen[t.key]) return;
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.setAttribute("aria-label", "Stop following " + t.name);
+      b.innerHTML = '<img src="' + t.logo + '" alt="" width="14" height="14">' +
+                    "<span></span><b aria-hidden=\"true\">&times;</b>";
+      b.querySelector("span").textContent = t.abbr;
+      b.addEventListener("click", function(){ toggle(t.key, false); });
+      picked.appendChild(b);
+    });
+
+    Array.prototype.forEach.call(tlist.querySelectorAll("input"), function(i){
+      i.checked = !!chosen[i.value];
+    });
+
+    if (loadFailed) {
+      tcount.textContent = "Team list unavailable";
+      tcount.className = "tcount warn";
+    } else if (n === 0) {
+      // Said here, at the moment the box is empty, rather than by a failed
+      // submit later: game reminders with nobody to follow send nothing at all.
+      tcount.textContent = kGame.checked
+        ? "Pick at least one team — otherwise there is no game to remind you about"
+        : "No teams picked yet";
+      tcount.className = "tcount" + (kGame.checked ? " warn" : "");
+    } else {
+      tcount.textContent = n + (n === 1 ? " team followed" : " teams followed");
+      tcount.className = "tcount";
+    }
+  }
+
+  function toggle(key, on){
+    if (on) chosen[key] = true; else delete chosen[key];
+    syncTeams();
+  }
+
+  function buildList(){
+    if (built || !roster.length) return;
+    built = true;
+    var frag = document.createDocumentFragment(), sport = null;
+    roster.forEach(function(t){
+      if (t.sport !== sport) {
+        sport = t.sport;
+        var h = document.createElement("div");
+        h.className = "tsport";
+        h.textContent = sport.toUpperCase();
+        frag.appendChild(h);
+      }
+      var l = document.createElement("label");
+      l.className = "team";
+      l.dataset.hay = (t.name + " " + t.abbr + " " + t.sport).toLowerCase();
+      // Crests are remote and there are 124 of them, so they load lazily and
+      // only once the panel has actually been opened.
+      l.innerHTML =
+        '<input type="checkbox" value="' + t.key + '">' +
+        '<img src="' + t.logo + '" alt="" width="18" height="18" loading="lazy">' +
+        '<span class="tn"></span><span class="ta"></span>';
+      l.querySelector(".tn").textContent = t.name;
+      l.querySelector(".ta").textContent = t.abbr;
+      var cb = l.querySelector("input");
+      cb.checked = !!chosen[t.key];
+      cb.addEventListener("change", function(){ toggle(t.key, cb.checked); });
+      frag.appendChild(l);
+    });
+    tlist.innerHTML = "";
+    tlist.appendChild(frag);
+    filterList();
+  }
+
+  function filterList(){
+    var q = teamq.value.trim().toLowerCase();
+    var shown = 0;
+    Array.prototype.forEach.call(tlist.querySelectorAll(".team"), function(l){
+      var hit = !q || l.dataset.hay.indexOf(q) >= 0;
+      l.hidden = !hit;
+      if (hit) shown++;
+    });
+    // A league heading with nothing under it is a lie about what is in the well.
+    Array.prototype.forEach.call(tlist.querySelectorAll(".tsport"), function(h){
+      var n = h.nextElementSibling, any = false;
+      while (n && !n.classList.contains("tsport")) {
+        if (!n.hidden) { any = true; break; }
+        n = n.nextElementSibling;
+      }
+      h.hidden = !any;
+    });
+    var miss = tlist.querySelector(".tnote");
+    if (!shown && q) {
+      if (!miss) {
+        miss = document.createElement("p");
+        miss.className = "tnote";
+        tlist.appendChild(miss);
+      }
+      miss.textContent = "No team matches \u201c" + teamq.value.trim() + "\u201d.";
+      miss.hidden = false;
+    } else if (miss) {
+      miss.hidden = true;
+    }
+  }
+
+  function loadRoster(){
+    return fetch("/data/team-logos.json", { cache: "no-cache" })
+      .then(function(r){ if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then(function(d){
+        var t = (d && d.teams) || {};
+        roster = Object.keys(t).map(function(k){
+          var v = t[k];
+          return { key: String(v.sport).toLowerCase() + ":" + String(v.abbr).toUpperCase(),
+                   name: v.name, abbr: String(v.abbr).toUpperCase(),
+                   sport: String(v.sport).toLowerCase(), logo: v.logo };
+        }).filter(function(x){ return x.name && x.abbr && x.sport; });
+        roster.sort(function(a, b){
+          var d1 = SPORTS.indexOf(a.sport) - SPORTS.indexOf(b.sport);
+          return d1 || a.name.localeCompare(b.name);
+        });
+      })
+      .catch(function(e){
+        // Fail loudly. Silently offering an empty picker would let somebody
+        // switch game reminders on and wait forever for an email.
+        loadFailed = true;
+        tnote.textContent = "We could not load the league list. Reload the page to " +
+          "try again — the other alerts still work.";
+        kGame.checked = false;
+        kGame.disabled = true;
+        syncKinds();
+        throw e;
+      });
+  }
+
+  function syncGame(){
+    teams.hidden = !kGame.checked;
+    if (kGame.checked) {
+      if (!roster.length && !loadFailed) loadRoster().then(buildList).catch(function(){});
+      else buildList();
+    }
+    syncTeams();
+  }
   // The empty state of the fieldset, kept live: turning the last switch off
   // says what that means at the moment it is done, not on submit.
   function syncKinds(){ none.hidden = kinds().length > 0; }
   kPrice.addEventListener("change", syncBands);
-  form.addEventListener("change", syncKinds);
-  syncBands(); syncKinds();
+  kGame.addEventListener("change", syncGame);
+  teamq.addEventListener("input", filterList);
+  // The picker's own checkboxes live inside the form, so keep them out of the
+  // "which alert kinds are on" question — they answer a different one.
+  form.addEventListener("change", function(e){
+    if (e.target && e.target.name === "kind") syncKinds();
+  });
+  syncBands(); syncGame(); syncKinds();
 
   // A preferences link from an email proves the address, so the form updates
   // in place instead of asking someone to re-confirm an address they are
@@ -409,7 +685,46 @@
     go.textContent = "Save these settings";
     form.insertBefore(go, msg);
     go.style.marginTop = "18px";
-    say("Editing the settings for the address this link was sent to.", "", banner);
+    say("Reading your current settings…", "", banner);
+
+    // THIS FORM OVERWRITES. It posts the whole settings object, so opening it
+    // on defaults would quietly wipe a watchlist somebody spent real effort
+    // building — and they would only find out weeks later, by not being
+    // emailed. So the current settings are read back first and edited from
+    // there, and if that read fails we refuse to save rather than guess.
+    go.disabled = true;
+    fetch("/api/alerts?load=" + encodeURIComponent(prefsToken))
+      .then(function(r){ if (!r.ok) throw new Error("http " + r.status); return r.json(); })
+      .then(function(cur){
+        Array.prototype.forEach.call(
+          form.querySelectorAll("input[name=kind]"), function(i){
+            i.checked = cur.kinds.indexOf(i.value) >= 0;
+          });
+        var band = form.querySelector('input[name=min][value="' + cur.min_pts + '"]');
+        if (band) band.checked = true;
+        chosen = {};
+        (cur.teams || []).forEach(function(k){ chosen[k] = true; });
+
+        go.disabled = false;
+        syncBands(); syncKinds();
+        // Loads the roster when game alerts are already on, so the chips can
+        // show real crests and names rather than raw keys.
+        return kGame.checked && !roster.length ? loadRoster() : null;
+      })
+      .then(function(){
+        if (kGame.checked) buildList();
+        syncGame();
+        say("Editing the settings for the address this link was sent to. " +
+            "Changes take effect from the next alert on.", "", banner);
+      })
+      .catch(function(){
+        // Not a cosmetic failure: saving now would replace settings we never
+        // managed to read.
+        go.disabled = true;
+        say("We couldn\u2019t read your current settings, so saving now would replace " +
+            "them with whatever is on screen. Reload the page in a minute and try again.",
+            "bad", banner);
+      });
   }
 
   // Outcome of a confirm / unsubscribe round-trip through /api/alerts. These
@@ -440,10 +755,17 @@
 
   form.addEventListener("submit", function(e){
     e.preventDefault();
-    var picked = kinds();
-    if (!picked.length) return reject("Pick at least one thing to be told about.",
+    var chosenKinds = kinds();
+    if (!chosenKinds.length) return reject("Pick at least one thing to be told about.",
       form.querySelector('input[name=kind]'));
-    var body = { kinds: picked, min_pts: minPts() };
+    // Mirrors the API's refusal rather than letting the round-trip explain it:
+    // game reminders with an empty watchlist match no game and send nothing.
+    if (kGame.checked && !teamCount()) {
+      teams.hidden = false;
+      return reject("Pick at least one team to follow, or turn off game reminders.", teamq);
+    }
+    var body = { kinds: chosenKinds, min_pts: minPts(),
+                 teams: Object.keys(chosen).sort() };
     if (prefsToken) body.token = prefsToken;
     else {
       var addr = email.value.trim();
@@ -469,7 +791,7 @@
       if (res.j.saved) return say("Saved. These settings are live from the next alert on.", "ok");
       say("Check your inbox — we sent a confirmation link to " + (body.email || "that address") +
           ". Nothing is stored until you click it, and the link is good for 48 hours.", "ok");
-      form.reset(); syncBands(); syncKinds();
+      form.reset(); chosen = {}; syncBands(); syncGame(); syncKinds();
     }).catch(function(){
       go.disabled = false;
       form.removeAttribute("aria-busy");
