@@ -1,0 +1,82 @@
+name: watchlist-reminders
+
+# Email people that a game they follow is about to start.
+#
+# Selection is engine.watchlist, delivery is engine.watch_email — the same
+# split as the price alerts, so selection stays testable with no keys and no
+# network (python -m engine.watchlist --selfcheck).
+#
+# WHAT THIS SENDS: a reminder plus the two numbers already published on the
+# board for that game — the de-vigged fair price and the best number posted.
+# It does not forecast, rank or recommend, and the sender's selfcheck fails the
+# build if recommendation language appears in the body.
+#
+# The watermark, data/watchlist_sent.json, holds GAME IDS ONLY and is committed
+# here. It must never key on a recipient: this repository is public, and a
+# per-person record in git history is a subscriber list by another name. The
+# cost is that a game is reminded once, to whoever is watching at that moment.
+#
+# Hourly, because the window is a day wide and a game only needs finding once
+# inside it — a tighter cadence would spend Actions minutes to no effect.
+# Needs STRIPE_SECRET_KEY (the list), RESEND_API_KEY (the sender) and
+# AUTH_SECRET (signs the unsubscribe link; the sender refuses to run without
+# it). Nobody subscribed => it records-and-skips rather than backfilling the
+# whole board at the first person who signs up.
+
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch:
+    inputs:
+      hours:
+        description: "How far ahead to look"
+        default: "24"
+      dry_run:
+        description: "Print recipients instead of sending"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: watchlist-reminders
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Selection selfcheck
+        run: |
+          python -m engine.watchlist --selfcheck
+          python -m engine.watch_email --selfcheck
+
+      - name: Remind watchers
+        run: |
+          python -m engine.watch_email \
+            --hours "${{ github.event.inputs.hours || '24' }}" \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
+      - name: Commit the sent-watermark
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/watchlist_sent.json
+          if git diff --staged --quiet; then
+            echo "no reminders sent"
+          else
+            git commit -m "watchlist: reminded $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
