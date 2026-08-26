@@ -54,6 +54,11 @@ PUSH    = (150, 160, 166)
 CARD_W, CARD_H = 1600, 900
 PAD = 84
 
+# X renders 16:9 largest; Instagram's feed gives a 4:5 post roughly two and a
+# half times the screen height of a landscape one. Same design language, two
+# canvases — a card built for one and cropped for the other loses its margins.
+SIZES = {"feed": (1600, 900, 84), "portrait": (1080, 1350, 64)}
+
 # Anything that turns a fact into advice. Checked against the RENDERED caption,
 # not the template, so a value substituted at runtime cannot smuggle one past.
 BANNED = ("prop of the day", "pick of the day", "lock", "best bet", "we like",
@@ -176,29 +181,33 @@ def headshot(name: str) -> str | None:
 class Card:
     """A 16:9 ground with Sooth's furniture on it and nothing else decided."""
 
-    def __init__(self, eyebrow: str, stamp: bool = True):
+    def __init__(self, eyebrow: str, stamp: bool = True, size: str = "feed"):
         from PIL import Image, ImageDraw
-        self.img = Image.new("RGB", (CARD_W, CARD_H), BG)
+        w, h, pad = SIZES.get(size, SIZES["feed"])
+        self.img = Image.new("RGB", (w, h), BG)
         self.d = ImageDraw.Draw(self.img)
-        self.w, self.h, self.pad = CARD_W, CARD_H, PAD
+        self.w, self.h, self.pad = w, h, pad
+        self.size = size
         # nothing a composer draws may cross this line: below it is the
         # wordmark's air. Several cards printed straight through it before the
         # rule existed.
-        self.floor = CARD_H - PAD - 40
+        self.floor = h - pad - 40
         self._furniture(eyebrow, stamp)
 
     def _furniture(self, eyebrow: str, stamp: bool) -> None:
         p = self.pad
-        self.d.rectangle([p, p, p + 46, p + 5], fill=BRAND)          # the lit edge
-        self.tracked((p + 66, p - 6), eyebrow.upper(), mono(23, True), BRAND, 3)
+        wide = self.size == "feed"
+        self.d.rectangle([p, p, p + (46 if wide else 36), p + 5], fill=BRAND)
+        self.tracked((p + (66 if wide else 52), p - 6), eyebrow.upper(),
+                     mono(23 if wide else 20, True), BRAND, 3)
         if stamp:
             s = "SOOTH // " + datetime.now(timezone.utc).strftime("%b %d").upper()
-            f = mono(21)
+            f = mono(21 if wide else 18)
             self.tracked((self.w - p - self.track_w(s, f, 3), p - 4), s, f, DIM, 3)
         self.d.line([p, p + 42, self.w - p, p + 42], fill=STROKE, width=1)
 
     def wordmark(self) -> None:
-        f = display(42)
+        f = display(42 if self.size == "feed" else 38)
         t = "SOOTH.BET"
         w = self.track_w(t, f, 4)
         self.tracked((self.w - self.pad - w, self.h - self.pad - 34), t, f, INK, 4)

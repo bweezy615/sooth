@@ -147,6 +147,75 @@ def board():
             "img": c.done()}
 
 
+# ------------------------------------------------ 01b — THE BOARD, PORTRAIT
+
+def board_portrait():
+    """The board again, built for a 4:5 feed rather than cropped into one.
+
+    A wide table does not survive the trip: at 4:5 the columns either collapse
+    or the type drops below thumb-legible. So each game becomes a stacked block
+    — fixture and shop gap on one line, clock and both prices under it — which
+    is what a table turns into when you take its width away.
+    """
+    d = load("board.json")
+    rows = []
+    for b in d.get("boards") or []:
+        for e in b.get("events") or []:
+            sides = e.get("sides") or []
+            if len(sides) < 2:
+                continue
+            rows.append({"sport": b.get("sport", ""), "away": e.get("away", ""),
+                         "home": e.get("home", ""), "starts": e.get("starts", ""),
+                         "sides": sides,
+                         "gain": max((s.get("gain_pts") or 0) for s in sides)})
+    if len(rows) < 3:
+        return None
+    rows.sort(key=lambda r: r["gain"], reverse=True)
+    rows = rows[:6]
+    tot = d.get("totals") or {}
+
+    c = Card("the board", size="portrait")
+    p = c.pad
+    c.d.text((p - 3, p + 66), "TODAY'S", font=display(96), fill=INK)
+    c.d.text((p - 3, p + 152), "BOARD", font=display(96), fill=INK)
+    c.label((p, p + 264), f"{tot.get('events', 0)} events · "
+                          f"{len(d.get('boards') or [])} sports", DIM, 20)
+    c.label((p, p + 296), "best available price, both sides", DIM, 20)
+
+    y = p + 340
+    c.rule(p, y, c.w - p)
+    for r in rows:
+        gain = f"{r['gain']:.2f}"
+        gw = c.d.textlength(gain, font=mono(30, True))
+        c.d.text((c.w - p - gw - 46, y + 20), gain, font=mono(30, True), fill=BRAND)
+        c.d.text((c.w - p - 40, y + 26), "PTS", font=mono(18), fill=DIM)
+        c.d.text((p, y + 18), abbr(r["away"], 24), font=body(28, "medium"), fill=INK)
+        c.d.text((p, y + 50), f"{'vs' if r['sport'] in COMBAT else 'at'} "
+                              f"{abbr(r['home'], 24)}", font=body(26), fill=INK2)
+        c.d.text((p, y + 90), clock(r["starts"]), font=mono(20), fill=DIM)
+        x = p + 190
+        for sd in r["sides"][:2]:
+            c.d.text((x, y + 88), am(sd.get("best_price")), font=mono(23, True), fill=INK)
+            # 9 chars clipped DraftKings to "DraftKing", which reads as a typo
+            c.d.text((x + 74, y + 90), book(sd.get("best_book", ""))[:10],
+                     font=mono(17), fill=DIM)
+            x += 250
+        y += 132
+        c.rule(p, y, c.w - p, (20, 23, 27))
+
+    top = rows[0]
+    cap = (f"Today's board: {tot.get('events', 0)} events across "
+           f"{len(d.get('boards') or [])} sports, priced at every US book we read.\n\n"
+           f"Widest shop gap right now — {fixture(top['sport'], top['away'], top['home'])}, "
+           f"{top['gain']:.2f} points of implied probability between the best and "
+           f"worst price on the same side.\n\n"
+           "No sides here. Just what the market says.\n\n"
+           "Every number, free, at sooth.bet/board")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+    return {"key": f"board-ig-{stamp}", "title": "Today's board (4:5)",
+            "caption": cap, "img": c.done()}
+
+
 # ---- shared selection for the two model-vs-price cards ----------------------
 
 def _disagreements() -> list[tuple[float, dict, float]]:
@@ -751,7 +820,7 @@ def recap():
             "caption": "\n".join(parts), "img": c.done()}
 
 
-REGISTRY = {"board": board, "signal": signal, "matchup": matchup,
+REGISTRY = {"board": board, "board-ig": board_portrait, "signal": signal, "matchup": matchup,
             "onestat": onestat, "market": marketwatch, "prop": proplab,
             "mvm": modelvmarket, "receipt": receipt, "sees": modelsees,
             "recap": recap}

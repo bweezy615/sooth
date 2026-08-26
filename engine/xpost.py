@@ -390,7 +390,7 @@ def _selfcheck() -> int:
             assert card.get(field), f"{name}: empty {field}"
         check_caption(card["caption"])
         assert "sooth.bet" in card["caption"], f"{name}: no link home"
-        assert card["img"].size == (1600, 900), f"{name}: wrong size"
+        assert card["img"].size in ((1600, 900), (1080, 1350)), f"{name}: wrong size"
         built += 1
     assert built >= 6, f"only {built} of {len(REGISTRY)} card types could build"
     print(f"xpost.selfcheck: OK ({built}/{len(REGISTRY)} card types built)")
