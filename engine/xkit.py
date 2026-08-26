@@ -41,6 +41,7 @@ BODY_IDX = {"regular": 0, "bold": 1, "medium": 10, "light": 7, "thin": 12}
 # lands in a feed and the click lands on sooth.bet, and two teals a few degrees
 # apart read as an off-brand repost. One constant to change if that is wrong.
 BG      = (6, 8, 10)
+PANEL_BG = (11, 13, 16)   # inside the outer frame — one step off the ground
 PANEL   = (15, 17, 20)
 PANEL2  = (28, 31, 36)
 STROKE  = (42, 45, 51)
@@ -165,6 +166,13 @@ def fetch(url: str) -> str | None:
         return None
 
 
+def team_abbr(name: str, sport: str = "") -> str:
+    """Club short code, from the same index the crests come from."""
+    idx = _team_index()
+    t = idx.get(_slug(name)) or idx.get(f"{sport}:{name}".lower())
+    return (t or {}).get("abbr") or (name or "")[:3].upper()
+
+
 def crest(name: str, sport: str = "") -> str | None:
     idx = _team_index()
     t = idx.get(_slug(name)) or idx.get(f"{sport}:{name}".lower())
@@ -181,17 +189,30 @@ def headshot(name: str) -> str | None:
 class Card:
     """A 16:9 ground with Sooth's furniture on it and nothing else decided."""
 
-    def __init__(self, eyebrow: str, stamp: bool = True, size: str = "feed"):
+    def __init__(self, eyebrow: str, stamp: bool = True, size: str = "feed",
+                 framed: bool = False):
         from PIL import Image, ImageDraw
         w, h, pad = SIZES.get(size, SIZES["feed"])
         self.img = Image.new("RGB", (w, h), BG)
         self.d = ImageDraw.Draw(self.img)
-        self.w, self.h, self.pad = w, h, pad
-        self.size = size
+        self.w, self.h, self.size = w, h, size
+        self.framed = framed
+        if framed:
+            # The reference sheet's defining move: every post is a bordered
+            # container on the ground, not content floating on it. Without the
+            # frame the same content reads as terminal output — which is
+            # exactly what the first pass looked like.
+            m = 22 if size == "feed" else 18
+            self.frame = (m, m, w - m, h - m)
+            self.d.rounded_rectangle(self.frame, radius=12, fill=PANEL_BG,
+                                     outline=STROKE, width=1)
+            self.pad = m + (42 if size == "feed" else 30)
+        else:
+            self.pad = pad
         # nothing a composer draws may cross this line: below it is the
         # wordmark's air. Several cards printed straight through it before the
         # rule existed.
-        self.floor = h - pad - 40
+        self.floor = (self.frame[3] - 34) if framed else (h - pad - 40)
         self._furniture(eyebrow, stamp)
 
     def _furniture(self, eyebrow: str, stamp: bool) -> None:

@@ -31,7 +31,8 @@ import os
 from datetime import datetime, timezone
 
 from engine.xkit import (BG, BRAND, DIM, INK, INK2, LOSS, PANEL, PANEL2, PUSH,
-                         STROKE, Card, body, crest, display, headshot, load, mono)
+                         STROKE, Card, body, crest, display, headshot, load, mono,
+                         team_abbr)
 
 BOOKS = {"williamhill_us": "Caesars", "betmgm": "BetMGM", "draftkings": "DraftKings",
          "fanduel": "FanDuel", "betrivers": "BetRivers", "bovada": "Bovada",
@@ -144,6 +145,122 @@ def board():
            "No sides here. Just what the market says.\n\nsooth.bet/board")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
     return {"key": f"board-{stamp}", "title": "Today's board", "caption": cap,
+            "img": c.done()}
+
+
+# ====================================== 01 — THE BOARD, against the reference
+
+def board_ref():
+    """Today's board the way the reference sheet draws it.
+
+    The differences from the first pass are all deliberate and all came from
+    the sheet: the whole post sits in a bordered container; the matchup column
+    is two CRESTS rather than two team names, which is what makes the table
+    scannable at thumbnail size; and the columns are SPREAD / TOTAL /
+    MONEYLINE, which is how football is actually discussed, instead of the
+    shop-gap arithmetic the first version led with.
+
+    Reads engine/nflboard.py's feed, so the spread and total are our own
+    hourly ESPN capture and the moneyline is the multi-book de-vigged number
+    wherever more than one book quoted.
+    """
+    d = load("nflboard.json")
+    games = [g for g in (d.get("games") or []) if g.get("spread") and g.get("total")]
+    if len(games) < 4:
+        return None
+    games.sort(key=lambda g: g["kickoff"])
+    shown = games[:5]
+
+    # the games worth a second look are the ones the market changed its mind
+    # about, which is a fact about the market rather than an opinion about them
+    movers = sorted((g for g in games if (g.get("spread") or {}).get("move_pts")),
+                    key=lambda g: -abs(g["spread"]["move_pts"]))[:3]
+
+    c = Card("01 the board", framed=True)
+    p = c.pad
+    right = c.frame[2] - 42
+
+    c.d.text((p - 3, p + 44), "TODAY'S BOARD", font=display(80), fill=INK)
+    c.label((p, p + 150), f"week {shown[0].get('week', '')} · "
+                          f"{len(games)} games priced · spread & total: "
+                          f"{shown[0]['spread'].get('book', '')}", DIM, 19)
+
+    COLS = (p, 470, 640, 860, 1030)
+    y = p + 202
+    for lab, x in zip(("matchup", "start", "spread", "total", "moneyline"), COLS):
+        c.label((x, y), lab, DIM, 18)
+    y += 28
+    c.rule(p, y, right)
+
+    for g in shown:
+        sp, to = g["spread"], g["total"]
+        ml = (g.get("moneyline") or {}).get("sides") or {}
+        aw, hm = g["away"], g["home"]
+        aab, hab = team_abbr(aw, "nfl"), team_abbr(hm, "nfl")
+
+        # crest pair — the reference's matchup column carries no team text
+        c.paste(crest(aw, "nfl"), (p, y + 20, 54, 54))
+        c.d.text((p + 68, y + 30), "@", font=display(38), fill=DIM)
+        c.paste(crest(hm, "nfl"), (p + 108, y + 20, 54, 54))
+        c.d.text((p + 178, y + 24), aab, font=body(23, "medium"), fill=INK2)
+        c.d.text((p + 178, y + 52), hab, font=body(23, "medium"), fill=INK2)
+
+        c.d.text((COLS[1], y + 36), clock(g["kickoff"]), font=mono(21), fill=INK2)
+
+        fav = team_abbr(sp.get("favourite", ""), "nfl")
+        c.d.text((COLS[2], y + 32), f"{fav} {sp.get('favourite_line')}",
+                 font=mono(26, True), fill=INK)
+        mv = sp.get("move_pts")
+        if mv:
+            c.d.text((COLS[2], y + 62), f"open {sp.get('open_home')}",
+                     font=mono(17), fill=DIM)
+
+        c.d.text((COLS[3], y + 32), f"{to.get('line')}", font=mono(26, True), fill=INK)
+        c.d.text((COLS[3], y + 62), "o/u", font=mono(17), fill=DIM)
+
+        for i, (name, ab) in enumerate(((aw, aab), (hm, hab))):
+            side = ml.get(name) or {}
+            c.d.text((COLS[4], y + 22 + i * 30), ab, font=mono(20), fill=DIM)
+            c.d.text((COLS[4] + 62, y + 22 + i * 30), am(side.get("best_price")),
+                     font=mono(21, True), fill=INK if side.get("best_price") else DIM)
+        # best-of-N is the claim; naming the book for each side as well made the
+        # cell three columns deep and the reference's is two
+        n = (g.get("moneyline") or {}).get("n_books") or 0
+        c.d.text((COLS[4] + 168, y + 36), f"best of {n}" if n > 1 else "1 book",
+                 font=mono(18), fill=DIM)
+
+        y += 96
+        c.rule(p, y, right, (20, 23, 27))
+
+    # the chip strip, straight off the sheet
+    cy = y + 30
+    lab = "THE MARKET MOVED ON"
+    c.tracked((p, cy + 12), lab, mono(18), DIM, 3)
+    cx = p + c.track_w(lab, mono(18), 3) + 34      # measured, not guessed
+    for g in movers:
+        sp = g["spread"]
+        txt = (f"{team_abbr(g['away'], 'nfl')} @ {team_abbr(g['home'], 'nfl')}  "
+               f"{sp['move_pts']:+.1f}")
+        w = c.d.textlength(txt, font=mono(20, True)) + 44
+        c.d.rounded_rectangle([cx, cy, cx + w, cy + 44], radius=5,
+                              fill=PANEL, outline=STROKE)
+        c.d.text((cx + 22, cy + 10), txt, font=mono(20, True), fill=BRAND)
+        cx += w + 16
+
+    top = movers[0] if movers else shown[0]
+    sp = top["spread"]
+    if movers:
+        line = (f"{top['away']} at {top['home']} opened "
+                f"{team_abbr(top['home'], 'nfl')} {sp['open_home']} and is "
+                f"{team_abbr(top['home'], 'nfl')} {sp['home']} now.")
+    else:
+        line = (f"{sp['favourite']} {sp['favourite_line']}, "
+                f"total {top['total']['line']}.")
+    cap = (f"Week {shown[0].get('week', '')} is on the board — {len(games)} games, "
+           f"spread and total from our own hourly capture.\n\n"
+           f"{line}\n\nsooth.bet/board")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+    return {"key": f"boardref-{stamp}", "title": "Today's board", "caption": cap,
             "img": c.done()}
 
 
@@ -820,7 +937,7 @@ def recap():
             "caption": "\n".join(parts), "img": c.done()}
 
 
-REGISTRY = {"board": board, "board-ig": board_portrait, "signal": signal, "matchup": matchup,
+REGISTRY = {"board": board, "board2": board_ref, "board-ig": board_portrait, "signal": signal, "matchup": matchup,
             "onestat": onestat, "market": marketwatch, "prop": proplab,
             "mvm": modelvmarket, "receipt": receipt, "sees": modelsees,
             "recap": recap}
