@@ -23,16 +23,22 @@ and the publisher, and none of that belongs in this repo.
 
 | `--kind`  | Post            | Reads                  | Needs |
 |-----------|-----------------|------------------------|-------|
-| `board`   | Today's Board   | `board.json`           | 3+ priced events |
-| `signal`  | Sooth Signal    | `best_lines.json` + `teamstats-nfl.json` | an NFL slate |
+| `board`   | Today's Board   | `nflboard.json`        | 4+ games with spread + total |
+| `board-ig`| Today's Board, 4:5 | `board.json`        | the Instagram canvas |
+| `signal`  | Sooth Signal    | `nflboard.json` + `best_lines.json` | spread **and** our number |
 | `matchup` | Matchup Intelligence | `research.json`   | nflverse team rates |
-| `onestat` | One Stat        | `board.json`           | a priced board |
-| `market`  | Market Watch    | `timeline.json`        | 8+ readings, 5+ books, a liquid league |
+| `onestat` | One Stat        | `nflboard.json`        | one line that moved |
+| `market`  | Market Watch    | `nflboard.json` + `timeline.json` | one line that moved |
 | `prop`    | Player Prop Lab | `props.json`           | MLB game logs |
-| `mvm`     | Model vs Market | `best_lines.json`      | an NFL slate |
+| `mvm`     | Model vs Market | `nflboard.json` + `best_lines.json` | spread **and** our number |
 | `receipt` | Result Receipt  | `*.graded.json`        | a settled slate |
-| `sees`    | What the Model Sees | `timeline.json`    | one move ≥ 1 pt |
+| `sees`    | What the Model Sees | `nflboard.json`    | one line that moved |
 | `recap`   | Slate Recap     | `*.graded.json`        | a settled slate |
+
+Everything NFL-shaped now runs off `engine/nflboard.py`, which is why the cards
+talk in spread points rather than implied-probability points: the sport is
+argued in the former and the first pass led with the latter, which is most of
+why it read as market plumbing.
 
 A composer returns nothing when its feed cannot support a card. A quiet day
 produces fewer posts, not softer ones.
@@ -65,11 +71,19 @@ switches itself off.
   template, and raises on recommendation language. `--selfcheck` builds all ten
   types and pushes every caption through it, so a card type added later cannot
   quietly introduce a pick.
-- **No invented numbers.** Three things the reference sheet asks for do not
-  exist in our data and are therefore not on the cards: spreads and totals on
-  the board (we capture moneyline), final scores on the receipt (the ledger
-  stores outcomes and prices), and a projection on the prop card (only
-  strikeouts have a model). Hit rates are labelled as history, not forecast.
+- **No invented numbers.** What the reference sheet asks for and we do not
+  hold: team W-L records, L10 and home/away splits; pace; a prop projection
+  outside strikeouts; final scores on the receipt. None of it is on a card.
+  Spreads and totals ARE on the board now — they were always in the capture,
+  and the earlier note claiming otherwise was wrong about everything but
+  `board.json`. Hit rates stay labelled as history, not forecast.
+- **One book is not a consensus.** ESPN publishes a single provider, so every
+  spread and total on a card names DraftKings. Only the moneyline, quoted
+  across several books, carries a de-vigged fair price — "best of 11" where
+  eleven quoted, "1 book" where one did.
+- **Sides.** `side_a` is the HOME team (`engine/capture.py`). Backwards, every
+  spread inverts and still looks plausible; `engine.nflboard --selfcheck`
+  asserts it, including the road-favourite case.
 - **Losses look like wins.** `receipt` samples evenly across the confidence
   range instead of taking the top N, so the shakiest call is on the card by
   construction. The first version showed six calls and all six had won.

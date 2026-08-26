@@ -110,6 +110,7 @@ def build(rows: list[dict], now: datetime | None = None) -> list[dict]:
     # rows are sorted oldest-first, so a plain overwrite leaves the latest —
     # except for the open block, where the FIRST sighting is the honest one
     live: dict[tuple, dict] = {}
+    series: dict[tuple, list] = {}
     opens: dict[tuple, dict] = {}
     ml_books: dict[tuple, dict] = {}
     meta: dict[tuple, dict] = {}
@@ -128,6 +129,11 @@ def build(rows: list[dict], now: datetime | None = None) -> list[dict]:
         prov = r.get("provenance")
         if prov == LIVE:
             live[(gk, mk, sel)] = r
+            if mk == "spread" and sel == HOME_SIDE and r.get("line") is not None:
+                # the home number over time. A spread series is what a line
+                # move actually looks like; implied probability is the same
+                # fact in a unit nobody argues in.
+                series.setdefault(gk, []).append([r["observed_at"], r["line"]])
             # the multi-book moneyline rows name the team instead of a side
             if mk == "moneyline" and sel not in (HOME_SIDE, AWAY_SIDE):
                 ml_books[(gk, sel, r.get("book"))] = r
@@ -162,6 +168,7 @@ def build(rows: list[dict], now: datetime | None = None) -> list[dict]:
                 "move_pts": (round(home_line - op["line"], 1)
                              if op.get("line") is not None else None),
                 "observed_at": sp_h.get("observed_at"),
+                "history": _thin(series.get(gk) or []),
             }
 
         tot = live.get((gk, "total", "over"))
@@ -189,6 +196,15 @@ def build(rows: list[dict], now: datetime | None = None) -> list[dict]:
 
     out.sort(key=lambda g: g["kickoff"])
     return out
+
+
+def _thin(points: list, cap: int = 72) -> list:
+    """Keep the shape, drop the volume. Evenly spaced so the first and last
+    readings — the ones the card prints as open and current — always survive."""
+    if len(points) <= cap:
+        return points
+    step = (len(points) - 1) / (cap - 1)
+    return [points[round(i * step)] for i in range(cap)]
 
 
 def _moneyline(gk, m, ml_books, live) -> dict | None:
@@ -323,6 +339,8 @@ def _selfcheck() -> int:
     assert sp["favourite"] == "Cincinnati Bengals", sp
     assert sp["open_home"] == -3.5 and sp["move_pts"] == -3.0, sp
     assert sp["favourite_line"] == -6.5, sp
+    # the series carries every live reading, oldest first, ends on the current one
+    assert [pt[1] for pt in sp["history"]] == [-9.5, -6.5], sp["history"]
 
     # a ROAD favourite: home line is positive, so the favourite is the away team
     # and its own number is the negative one. This is the case that reads

@@ -84,70 +84,6 @@ def abbr(name: str, cap: int = 20) -> str:
     return name if len(name) <= cap else name[:cap - 1] + "."
 
 
-# ============================================================ 01 — THE BOARD
-
-def board():
-    """A slate at a glance. A table, because a slate IS a table."""
-    d = load("board.json")
-    rows = []
-    for b in d.get("boards") or []:
-        for e in b.get("events") or []:
-            sides = e.get("sides") or []
-            if len(sides) < 2:
-                continue
-            rows.append({"sport": b.get("sport", ""), "away": e.get("away", ""),
-                         "home": e.get("home", ""), "starts": e.get("starts", ""),
-                         "sides": sides,
-                         "gain": max((s.get("gain_pts") or 0) for s in sides)})
-    if len(rows) < 3:
-        return None
-    rows.sort(key=lambda r: r["gain"], reverse=True)
-    rows = rows[:5]
-    tot = d.get("totals") or {}
-
-    c = Card("the board")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "TODAY'S BOARD", font=display(94), fill=INK)
-    c.label((p, p + 182), f"{tot.get('events', 0)} events priced · "
-                          f"{len(d.get('boards') or [])} sports · "
-                          f"best available price, both sides", DIM, 21)
-
-    cols = (p, 560, 750, 1010, 1300)
-    y = p + 216
-    c.label((cols[0], y), "matchup", DIM, 18)
-    c.label((cols[1], y), "start", DIM, 18)
-    c.label((cols[2], y), "away", DIM, 18)
-    c.label((cols[3], y), "home", DIM, 18)
-    c.label((cols[4], y), "shop gain", DIM, 18)
-    y += 30
-    c.rule(p, y, c.w - p)
-
-    for r in rows:
-        c.d.text((cols[0], y + 14), abbr(r["away"], 22), font=body(27, "medium"), fill=INK)
-        c.d.text((cols[0] + 4, y + 46), f"{'vs' if r['sport'] in COMBAT else 'at'} "
-                                        f"{abbr(r['home'], 22)}", font=body(23), fill=INK2)
-        c.d.text((cols[1], y + 26), clock(r["starts"]), font=mono(22), fill=INK2)
-        for i, s in enumerate(r["sides"][:2]):
-            x = cols[2 + i]
-            c.d.text((x, y + 20), am(s.get("best_price")), font=mono(28, True), fill=INK)
-            c.d.text((x, y + 50), book(s.get("best_book", "")), font=mono(17), fill=DIM)
-        c.d.text((cols[4] + 46, y + 22), f"{r['gain']:.2f}", font=mono(28, True), fill=BRAND)
-        c.d.text((cols[4] + 132, y + 28), "PTS", font=mono(18), fill=DIM)
-        y += 84
-        c.rule(p, y, c.w - p, (20, 23, 27))
-
-    top = rows[0]
-    cap = (f"Today's board: {tot.get('events', 0)} events across "
-           f"{len(d.get('boards') or [])} sports, priced at every US book we read.\n\n"
-           f"Widest shop gap right now — {fixture(top['sport'], top['away'], top['home'])}, "
-           f"{top['gain']:.2f} points of implied probability between the best and "
-           f"worst price on the same side.\n\n"
-           "No sides here. Just what the market says.\n\nsooth.bet/board")
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
-    return {"key": f"board-{stamp}", "title": "Today's board", "caption": cap,
-            "img": c.done()}
-
-
 # ====================================== 01 — THE BOARD, against the reference
 
 def board_ref():
@@ -333,98 +269,189 @@ def board_portrait():
             "caption": cap, "img": c.done()}
 
 
-# ---- shared selection for the two model-vs-price cards ----------------------
 
-def _disagreements() -> list[tuple[float, dict, float]]:
-    """Every game where our number and the best price differ, widest first."""
+def prob_to_spread(p_home: float, sd: float = 13.86) -> float:
+    """A win probability expressed as a point spread.
+
+    Margin of victory in the NFL is roughly normal about the spread with a
+    standard deviation near 13.9 points — the figure every published
+    spread-to-moneyline table is built on. Inverting it turns our model's
+    probability into the unit the sport is actually discussed in.
+
+    It is a CONVERSION, not a second model, and the cards say so. Negative
+    means the home team is favoured, matching the board's own convention.
+    """
+    from statistics import NormalDist
+    p = min(max(p_home, 0.001), 0.999)
+    return -NormalDist().inv_cdf(p) * sd
+
+
+def _nfl_join() -> list[dict]:
+    """Games where we hold both the market's spread and our own number.
+
+    nflboard.json names teams in full, best_lines.json in abbreviations, so the
+    join goes through the same club index the crests come from rather than a
+    hand-kept mapping that would rot the first time a team moved city.
+    """
+    board = load("nflboard.json").get("games") or []
+    ours = {}
+    for g in load("best_lines.json").get("games") or []:
+        if g.get("our_prob") and g.get("home") and g.get("away"):
+            ours[(g["away"], g["home"])] = g
+
     out = []
-    for g in (load("best_lines.json").get("games") or []):
-        imp = implied(g.get("best_price"))
-        if imp is None or not g.get("our_prob"):
+    for b in board:
+        sp = b.get("spread") or {}
+        if sp.get("home") is None:
             continue
-        out.append((abs(g["our_prob"] - imp), g, imp))
-    out.sort(key=lambda t: t[0], reverse=True)
+        key = (team_abbr(b["away"], "nfl"), team_abbr(b["home"], "nfl"))
+        o = ours.get(key)
+        if not o:
+            continue
+        p_home = o["our_prob"] if o.get("pick") == key[1] else 1 - o["our_prob"]
+        model = prob_to_spread(p_home)
+        out.append({**b, "model_home": round(model, 1), "p_home": p_home,
+                    "edge_pts": round(sp["home"] - model, 1)})
+    out.sort(key=lambda g: -abs(g["edge_pts"]))
     return out
+
+
+def _game_strip(c, g, y):
+    """A bordered strip carrying the rest of the game's market.
+
+    Three cards told their story by roughly two thirds of the frame and left
+    the last band empty, which is the gap between a graphic and a slide. The
+    remaining markets are the obvious thing to put there: real, already on the
+    feed, and the context a reader wants next.
+    """
+    p, right = c.pad, c.frame[2] - 42
+    to = g.get("total") or {}
+    ml = (g.get("moneyline") or {}).get("sides") or {}
+    n = (g.get("moneyline") or {}).get("n_books") or 0
+    hab, aab = team_abbr(g["home"], "nfl"), team_abbr(g["away"], "nfl")
+
+    # stop short of the bottom-right corner: the wordmark lives there, and a
+    # full-width strip ending eight pixels above it reads as a collision even
+    # when the boxes do not actually touch
+    right = right - 200
+    c.panel((p, y, right, y + 96))
+    cells = [("TOTAL", f"{to.get('line', '—')}")]
+    for name, ab in ((g["away"], aab), (g["home"], hab)):
+        side = ml.get(name) or {}
+        cells.append((f"{ab} MONEYLINE", am(side.get("best_price"))))
+    if to.get("move_pts"):
+        cells.append(("TOTAL MOVED", f"{to['move_pts']:+g}"))
+    cells.append(("QUOTED BY", f"{n} book{'s' if n != 1 else ''}"))
+
+    step = (right - p) / len(cells)
+    for i, (lab, val) in enumerate(cells):
+        x = p + 30 + i * step
+        c.label((x, y + 24), lab, DIM, 17)
+        c.d.text((x - 2, y + 46), val, font=mono(30, True), fill=INK)
 
 
 # ========================================================= 02 — SOOTH SIGNAL
 
 def signal():
-    """One disagreement, with the ratings that caused it.
+    """One game where our number and the market's number disagree, in POINTS.
 
-    Deliberately takes the SECOND widest, because MODEL VS MARKET takes the
-    widest. Two cards about the same game on the same day reads as one card
-    posted twice.
+    The reference sheet states this card in spread points (BUF -2.5 market,
+    -4.1 model) and it is right to: implied-probability points, which the first
+    pass led with, are the same fact in a unit nobody argues in.
     """
-    d = _disagreements()
-    if not d:
+    games = _nfl_join()
+    if not games:
         return None
-    _, g, imp = d[1] if len(d) > 1 else d[0]
-    delta = (g["our_prob"] - imp) * 100
-    away, home = g.get("away", ""), g.get("home", "")
+    g = games[1] if len(games) > 1 else games[0]      # MODEL VS MARKET takes the widest
+    sp = g["spread"]
+    aw, hm = g["away"], g["home"]
+    aab, hab = team_abbr(aw, "nfl"), team_abbr(hm, "nfl")
+    mkt_fav, mkt_line = (hab, sp["home"]) if sp["home"] < 0 else (aab, -sp["home"])
+    mdl_fav, mdl_line = ((hab, g["model_home"]) if g["model_home"] < 0
+                         else (aab, -g["model_home"]))
+    diff = abs(g["edge_pts"])
 
-    c = Card("sooth signal")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "SOOTH SIGNAL", font=display(94), fill=INK)
+    c = Card("02 sooth signal", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "SOOTH SIGNAL", font=display(80), fill=INK)
 
-    c.paste(crest(away, "nfl"), (p, p + 178, 92, 92))
-    c.d.text((p + 108, p + 196), "@", font=display(54), fill=DIM)
-    c.paste(crest(home, "nfl"), (p + 158, p + 178, 92, 92))
-    c.d.text((p, p + 292), f"{away} @ {home}", font=body(34, "medium"), fill=INK)
-    c.label((p, p + 340), f"{clock(g.get('kickoff', ''))} · {g.get('n_books', 0)} books",
-            DIM, 20)
+    c.paste(crest(aw, "nfl"), (p, p + 142, 68, 68))
+    c.d.text((p + 84, p + 156), "@", font=display(44), fill=DIM)
+    c.paste(crest(hm, "nfl"), (p + 134, p + 142, 68, 68))
+    c.d.text((p + 224, p + 152), f"{aab} @ {hab}", font=display(54), fill=INK)
+    c.label((p + 226, p + 210), clock(g["kickoff"]), DIM, 19)
 
-    px, py, pw = p, p + 392, 640
-    c.panel((px, py, px + pw, py + 250))
-    rows = [("MARKET IMPLIED", f"{imp * 100:.1f}%",
-             f"{am(g['best_price'])} at {book(g.get('best_book', ''))}", INK),
-            ("SOOTH MODEL", f"{g['our_prob'] * 100:.1f}%",
-             "independent · never sees the line", INK),
-            ("DIFFERENCE", f"{delta:+.1f} PTS", "of implied probability",
-             BRAND if delta > 0 else LOSS)]
-    ry = py + 24
-    for i, (lab, val, note, col) in enumerate(rows):
-        c.label((px + 28, ry + 4), lab, DIM, 18)
-        vw = c.d.textlength(val, font=mono(38, True))
-        c.d.text((px + pw - 28 - vw, ry - 8), val, font=mono(38, True), fill=col)
-        c.d.text((px + 28, ry + 30), note, font=body(20), fill=DIM)
+    px, py, pw = p, p + 262, 660
+    c.panel((px, py, px + pw, py + 258))
+    rows = ((f"MARKET  {sp.get('book', '')}", f"{mkt_fav} {mkt_line}", INK),
+            ("SOOTH MODEL", f"{mdl_fav} {mdl_line}", INK),
+            ("DIFFERENCE", f"{diff:.1f} PTS", BRAND))
+    ry = py + 26
+    for i, (lab, val, col) in enumerate(rows):
+        c.label((px + 30, ry + 12), lab, DIM, 18)
+        vw = c.d.textlength(val, font=display(52))
+        c.d.text((px + pw - 30 - vw, ry - 4), val, font=display(52), fill=col)
         ry += 78
         if i < 2:
-            c.rule(px + 28, ry - 14, px + pw - 28, (26, 29, 34))
+            c.rule(px + 30, ry - 12, px + pw - 30, (26, 29, 34))
 
     rx = 790
-    c.label((rx, p + 180), "what the ratings say", BRAND, 20)
-    c.para((rx, p + 224), _why_nfl(load("teamstats-nfl.json").get("teams") or {},
-                                   away, home),
-           body(26), INK2, max_w=c.w - rx - p, lead=41, limit=c.floor - 40)
-    c.label((rx, c.floor - 22), "nflverse team ratings · walk-forward", DIM, 18)
+    c.label((rx, p + 146), "what the ratings say", BRAND, 20)
+    ts = load("teamstats-nfl.json").get("teams") or {}
+    c.para((rx, p + 186), _why_nfl(ts, aab, hab, aw, hm),
+           body(26), INK2, max_w=right - rx, lead=40, limit=p + 372)
 
-    cap = (f"{away} @ {home}.\n\n"
-           f"Best price on {g.get('pick', '')} is {am(g['best_price'])} at "
-           f"{book(g.get('best_book', ''))} — {imp * 100:.1f}% implied. Our "
-           f"independent model, which never sees the line, has it at "
-           f"{g['our_prob'] * 100:.1f}%. A {delta:+.1f} point disagreement.\n\n"
-           "A disagreement is a reason to research a game, not a reason to back "
-           "a side. The model is wrong plenty — the record is public.\n\n"
-           "sooth.bet/edges")
-    return {"key": f"signal-{g.get('game_id')}-{round(delta, 1)}",
-            "title": "Sooth Signal", "caption": cap, "img": c.done()}
+    # the market's own price history, so the right column carries evidence
+    # rather than one paragraph and a lot of ground
+    pts = _ml_series(aw, hm)
+    sx, sy, sw, sh = rx, p + 400, right - rx, 148
+    c.panel((sx - 24, sy - 30, right, sy + sh + 56))
+    if len(set(pts[-40:])) >= 3:
+        c.sparkline((sx, sy, sw, sh), pts[-40:], BRAND)
+        c.label((sx, sy + sh + 20), f"{hab} moneyline · {len(pts[-40:])} hourly "
+                                    f"readings · our own capture", DIM, 17)
+    else:
+        c.label((sx, sy + 20), "our win probability converted to a spread at", DIM, 18)
+        c.label((sx, sy + 48), "13.9 points of margin — the standard", DIM, 18)
+        c.label((sx, sy + 76), "conversion, not a second model", DIM, 18)
+        c.label((sx, sy + sh + 20), "it never sees the line", BRAND, 17)
+
+    _game_strip(c, g, p + 626)
+
+    cap = (f"{aab} @ {hab}.\n\n"
+           f"{sp.get('book', 'The book')} has {mkt_fav} {mkt_line}. "
+           f"Our model, which never sees the line, has {mdl_fav} {mdl_line}. "
+           f"A {diff:.1f} point disagreement.\n\nsooth.bet/edges")
+    return {"key": f"signal-{g['event_id']}-{diff}", "title": "Sooth Signal",
+            "caption": cap, "img": c.done()}
 
 
-def _why_nfl(ts: dict, away: str, home: str) -> str:
+def _ml_series(away: str, home: str) -> list:
+    for e in load("timeline.json").get("events") or []:
+        if e.get("away") == away and e.get("home") == home:
+            return [v for _, v in ((e.get("markets") or {}).get("moneyline") or {}
+                                   ).get("consensus") or []
+                    if isinstance(v, (int, float))]
+    return []
+
+
+def _why_nfl(ts: dict, away: str, home: str, away_full: str = "",
+             home_full: str = "") -> str:
+    """teamstats-nfl.json is keyed by ABBREVIATION (BUF), not by club name."""
     a, h = ts.get(away) or {}, ts.get(home) or {}
     ra, rh = (a.get("rating") or {}), (h.get("rating") or {})
     if not ra or not rh:
         return ("The model reads walk-forward team ratings and the market's own "
                 "price history. It has no ratings for this pairing yet.")
     na, nh = ra.get("net", 0), rh.get("net", 0)
-    lead, trail = (home, away) if nh > na else (away, home)
+    an, hn = away_full or away, home_full or home
+    lead, trail = (hn, an) if nh > na else (an, hn)
     hi, lo = max(nh, na), min(nh, na)
-    return (f"{lead} rates {hi:+.3f} net EPA per play against {trail}'s {lo:+.3f}, "
-            f"walk-forward — built only from games played before the one being "
-            f"priced.\n\n"
-            f"That gap is most of the model's number here. It carries no injury "
-            f"news and no line movement.")
+    return (f"{lead} rates {hi:+.3f} net EPA per play against {trail}'s "
+            f"{lo:+.3f}, walk-forward — built only from games played before "
+            f"the one being priced.\n\n"
+            f"That gap is most of the model's number here. It carries no "
+            f"injury news and no line movement.")
 
 
 # ================================================ 03 — MATCHUP INTELLIGENCE
@@ -434,7 +461,7 @@ KEYS = ("off_epa_pp", "def_epa_pp", "yards_pp", "first_down_rate",
 
 
 def matchup():
-    """Two teams, six measures, mirrored bars. The one card that is a diagram."""
+    """Two teams, six measures, mirrored bars — the one card that is a diagram."""
     reports = [r for r in (load("research.json").get("reports") or [])
                if ((r.get("stats") or {}).get("home") or {}).get("season")
                and ((r.get("stats") or {}).get("away") or {}).get("season")]
@@ -449,46 +476,45 @@ def matchup():
         return None
     home, away = r.get("home", ""), r.get("away", "")
 
-    c = Card("matchup intelligence")
-    p = c.pad
-    c.d.text((p - 4, p + 68), "MATCHUP INTELLIGENCE", font=display(84), fill=INK)
+    c = Card("03 matchup intelligence", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    mid = (p + right) // 2
+    c.d.text((p - 3, p + 40), "MATCHUP INTELLIGENCE", font=display(74), fill=INK)
 
-    mid = c.w // 2
-    c.paste(crest(away, "nfl"), (p, p + 172, 78, 78))
-    c.d.text((p + 96, p + 186), st["away"].get("abbr", ""), font=display(56), fill=INK)
+    # crests at reference scale — they are the identity of the card, not garnish
+    c.paste(crest(away, "nfl"), (p, p + 128, 96, 96))
+    c.d.text((p + 118, p + 148), st["away"].get("abbr", ""), font=display(66), fill=INK)
     hab = st["home"].get("abbr", "")
-    hw = c.d.textlength(hab, font=display(56))
-    c.paste(crest(home, "nfl"), (c.w - p - 78, p + 172, 78, 78))
-    c.d.text((c.w - p - 96 - hw, p + 186), hab, font=display(56), fill=INK)
-    c.d.text((mid - 24, p + 196), "VS", font=display(40), fill=DIM)
+    hw = c.d.textlength(hab, font=display(66))
+    c.paste(crest(home, "nfl"), (right - 96, p + 128, 96, 96))
+    c.d.text((right - 118 - hw, p + 148), hab, font=display(66), fill=INK)
+    c.d.text((mid - 26, p + 160), "VS", font=display(44), fill=DIM)
 
-    # each side gets a number gutter OUTSIDE its bar; the first cut printed the
-    # values on top of the bars they described
-    y = p + 292
+    y = p + 268
     for k in keys:
         m = metrics.get(k, {"label": k, "better": "high", "dp": 3})
         av, hv = as_.get(k), hs.get(k)
         fa, fh = _pair(av, hv, m.get("better"))
         dp = m.get("dp", 3)
         at, ht = f"{av:.{dp}f}", f"{hv:.{dp}f}"
-        aw = c.d.textlength(at, font=mono(24, True))
-        c.d.text((250 - aw, y - 5), at, font=mono(24, True), fill=INK2)
-        c.hbar(272, y, 348, 15, fa, BRAND if fa >= fh else LOSS, rtl=True)
+        aw_ = c.d.textlength(at, font=mono(25, True))
+        c.d.text((p + 150 - aw_, y - 5), at, font=mono(25, True), fill=INK2)
+        c.hbar(p + 174, y, 330, 18, fa, BRAND if fa >= fh else LOSS, rtl=True)
         lab = m.get("label", k).upper()
         lw = c.track_w(lab, mono(19), 3)
-        c.tracked((mid - lw / 2, y - 4), lab, mono(19), DIM, 3)
-        c.hbar(980, y, 348, 15, fh, BRAND if fh > fa else LOSS)
-        c.d.text((1350, y - 5), ht, font=mono(24, True), fill=INK2)
-        y += 64
+        c.tracked((mid - lw / 2, y - 3), lab, mono(19), DIM, 3)
+        c.hbar(right - 504, y, 330, 18, fh, BRAND if fh > fa else LOSS)
+        c.d.text((right - 150, y - 5), ht, font=mono(25, True), fill=INK2)
+        y += 66
 
-    c.label((p, c.floor - 6), f"season {st.get('basis_season', '')} · nflverse "
-                              f"play-by-play · teal = better of the two", DIM, 18)
+    c.rule(p, y + 12, right, (26, 29, 34))
+    c.label((p, y + 34), f"season {st.get('basis_season', '')} · nflverse "
+                         f"play-by-play · teal is the better of the two", DIM, 18)
 
-    cap = (f"{away} at {home} — six measures, both sides, same scale.\n\n"
-           f"Season {st.get('basis_season', '')} rates on nflverse play-by-play. "
-           "Teal is the better of the pair on that measure; the numbers are "
-           "printed so you can check the bar against them.\n\n"
-           "No side, no number to back. Research first.\n\nsooth.bet/research")
+    cap = (f"{team_abbr(away, 'nfl')} at {team_abbr(home, 'nfl')}, six measures, "
+           f"same scale.\n\nSeason {st.get('basis_season', '')} on nflverse "
+           f"play-by-play. The numbers are printed so you can check the bars "
+           f"against them.\n\nsooth.bet/research")
     return {"key": f"matchup-{r.get('event_id')}", "title": "Matchup intelligence",
             "caption": cap, "img": c.done()}
 
@@ -506,112 +532,141 @@ def _pair(a, b, better) -> tuple[float, float]:
             0.32 + 0.68 * (gb - lo) / (hi - lo))
 
 
+# ---- the games the market changed its mind about ---------------------------
+
+def _movers() -> list[dict]:
+    g = [x for x in (load("nflboard.json").get("games") or [])
+         if (x.get("spread") or {}).get("move_pts")]
+    g.sort(key=lambda x: -abs(x["spread"]["move_pts"]))
+    return g
+
+
 # ============================================================= 04 — ONE STAT
 
 def onestat():
     """One number, big enough to read at thumbnail size. Nothing else."""
-    b = load("board.json")
-    tot = b.get("totals") or {}
-    if not tot.get("max_gain_pts"):
+    mv = _movers()
+    if not mv:
         return None
-    fig = f"{tot['max_gain_pts']:.2f}"
+    g = mv[0]
+    sp = g["spread"]
+    aw, hm = g["away"], g["home"]
+    hab, aab = team_abbr(hm, "nfl"), team_abbr(aw, "nfl")
+    moved = abs(sp["move_pts"])
+    toward = (hm if sp["move_pts"] < 0 else aw).split()[-1]
 
-    c = Card("one stat")
+    c = Card("04 one stat", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    mid = (p + right) // 2
+
+    fig = f"{moved:.1f}"
     f = display(300)
-    w = c.d.textlength(fig, font=f)
-    unit_w = c.d.textlength("PTS", font=display(80))
-    x0 = (c.w - (w + 24 + unit_w)) / 2
-    c.d.text((x0, 206), fig, font=f, fill=BRAND)
-    c.d.text((x0 + w + 24, 300), "PTS", font=display(80), fill=DIM)
+    fw = c.d.textlength(fig, font=f)
+    uw = c.d.textlength("PTS", font=display(84))
+    x0 = mid - (fw + 26 + uw) / 2
+    c.d.text((x0, p + 116), fig, font=f, fill=BRAND)
+    c.d.text((x0 + fw + 26, p + 210), "PTS", font=display(84), fill=DIM)
 
-    y = 552
-    for ln in ("POINTS BETWEEN THE BEST AND WORST PRICE",
-               "ON THE SAME SIDE OF THE SAME GAME"):
-        lw = c.track_w(ln, body(30, "medium"), 2)
-        c.tracked(((c.w - lw) / 2, y), ln, body(30, "medium"), INK, 2)
-        y += 46
-    c.rule(c.w / 2 - 90, y + 32, c.w / 2 + 90, STROKE)
-    src = (f"across {tot.get('events', 0)} events and "
-           f"{len(b.get('boards') or [])} sports today · average gap "
-           f"{tot.get('avg_gain_pts', 0):.2f} pts · us books").upper()
+    for i, ln in enumerate((f"THE MARKET HAS MOVED {moved:.1f} POINTS TOWARD "
+                            f"{toward.upper()}", "SINCE THIS LINE OPENED")):
+        lw = c.track_w(ln, body(31, "medium"), 2)
+        c.tracked((mid - lw / 2, p + 420 + i * 48), ln, body(31, "medium"), INK, 2)
+
+    # the fixture, with its crests, under the statement
+    label = f"{aab} @ {hab}"
+    lw = c.d.textlength(label, font=display(50))
+    c.d.text((mid - lw / 2, p + 540), label, font=display(50), fill=INK2)
+    c.paste(crest(aw, "nfl"), (mid - lw / 2 - 96, p + 528, 66, 66))
+    c.paste(crest(hm, "nfl"), (mid + lw / 2 + 30, p + 528, 66, 66))
+
+    c.rule(mid - 110, p + 624, mid + 110, STROKE)
+    src = (f"open {sp['open_home']} · now {sp['home']} · {sp.get('book', '')} "
+           f"· our own hourly capture").upper()
     sw = c.track_w(src, mono(19), 3)
-    c.tracked(((c.w - sw) / 2, y + 58), src, mono(19), DIM, 3)
+    c.tracked((mid - sw / 2, p + 650), src, mono(19), DIM, 3)
 
-    cap = (f"{fig} points.\n\n"
-           f"That is the widest gap between the best and the worst price on the "
-           f"same side of the same game on today's board — across "
-           f"{tot.get('events', 0)} events. The average gap is "
-           f"{tot.get('avg_gain_pts', 0):.2f} points.\n\n"
-           "Same wager. Different price. The book you use is a bigger edge than "
-           "most models are.\n\nsooth.bet/board")
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
-    return {"key": f"onestat-{stamp}", "title": "One stat", "caption": cap,
-            "img": c.done()}
+    cap = (f"{moved:.1f} points.\n\n"
+           f"That is how far the market has moved toward {toward} in "
+           f"{aab} @ {hab} since the line opened — {hab} {sp['open_home']} "
+           f"then, {hab} {sp['home']} now.\n\nsooth.bet/board")
+    return {"key": f"onestat-{g['event_id']}-{moved}", "title": "One stat",
+            "caption": cap, "img": c.done()}
 
 
 # ========================================================= 05 — MARKET WATCH
 
 def marketwatch():
-    """A price that moved, with its own history under it."""
-    best = None
-    for e in load("timeline.json").get("events") or []:
-        ml = (e.get("markets") or {}).get("moneyline") or {}
-        pts = [v for _, v in (ml.get("consensus") or []) if isinstance(v, (int, float))]
-        # liquidity gate: a three-book market drifting is a bookkeeping event,
-        # not a market event, and the first render led with a prelim UFC fight
-        if len(pts) < 8 or (ml.get("n_books") or 0) < 5:
-            continue
-        if str(e.get("sport", "")).lower() not in LIQUID:
-            continue
-        move = pts[-1] - pts[0]
-        if best is None or abs(move) > abs(best[0]):
-            best = (move, e, ml, pts)
-    if not best or abs(best[0]) < 0.8:
+    """A line that moved, with the shape of the move beside it."""
+    mv = _movers()
+    if not mv:
         return None
-    move, e, ml, pts = best
-    side = e.get("home") if ml.get("ref") == "home" else e.get("away")
-    sport = str(e.get("sport", "")).lower()
+    # prefer a game whose moneyline series actually varies, so the chart has a
+    # shape; every NFL spread we hold is flat inside our own window because the
+    # move happened before we started polling that event
+    series = {}
+    for e in load("timeline.json").get("events") or []:
+        pts = [v for _, v in ((e.get("markets") or {}).get("moneyline") or {}).get(
+            "consensus") or [] if isinstance(v, (int, float))]
+        if len(pts) >= 8:
+            series[(e.get("away"), e.get("home"))] = pts
+    # the headline is the move, so the biggest mover wins outright; the chart
+    # falls back to a two-point slope when that game's series is flat
+    g = mv[0]
+    pts = series.get((g["away"], g["home"]), [])
+    sp = g["spread"]
+    hab, aab = team_abbr(g["home"], "nfl"), team_abbr(g["away"], "nfl")
 
-    c = Card("market watch")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "MARKET WATCH", font=display(94), fill=INK)
-    c.d.text((p, p + 186), fixture(sport, e.get("away", ""), e.get("home", "")),
-             font=body(31, "medium"), fill=INK2)
-    c.label((p, p + 234), f"{sport.upper()} · {side} · {ml.get('n_books', 0)} books",
-            DIM, 20)
+    c = Card("05 market watch", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "MARKET WATCH", font=display(80), fill=INK)
+    c.paste(crest(g["away"], "nfl"), (p, p + 142, 56, 56))
+    c.d.text((p + 72, p + 150), f"{aab} @ {hab}", font=display(46), fill=INK2)
+    c.paste(crest(g["home"], "nfl"),
+            (p + 92 + c.d.textlength(f"{aab} @ {hab}", font=display(46)), p + 142, 56, 56))
 
-    col = BRAND if move > 0 else LOSS
-    y = p + 306
-    # "earliest", not "open": this is the start of OUR capture window, which is
-    # not the same thing as the market's opening price and must not claim to be
-    for lab, val, colr in (("EARLIEST READ", f"{pts[0]:.1f}%", INK2),
-                           ("LATEST", f"{pts[-1]:.1f}%", INK),
-                           ("MOVE", f"{move:+.1f} PTS", col)):
-        c.label((p, y), lab, DIM, 19)
-        c.d.text((p, y + 28), val, font=display(72), fill=colr)
-        y += 124
+    col = BRAND if sp["move_pts"] < 0 else LOSS
+    y = p + 234
+    for lab, val, colr in (("OPENED", f"{hab} {sp['open_home']}", INK2),
+                           ("NOW", f"{hab} {sp['home']}", INK),
+                           ("MOVE", f"{sp['move_pts']:+.1f} PTS", col)):
+        c.panel((p, y, p + 400, y + 118))
+        c.label((p + 26, y + 22), lab, DIM, 18)
+        c.d.text((p + 22, y + 48), val, font=display(56), fill=colr)
+        y += 134
 
-    cx, cy, cw, ch = 700, p + 286, c.w - 700 - p, 330
-    c.panel((cx - 26, cy - 36, cx + cw + 26, cy + ch + 66))
-    c.sparkline((cx, cy, cw, ch), pts, col)
-    c.label((cx, cy + ch + 24), f"{len(pts)} hourly observations · our own capture",
-            DIM, 18)
+    cx, cy, cw, ch = 560, p + 250, right - 560, 300
+    c.panel((cx - 28, cy - 40, right, cy + ch + 76))
+    if len(set(pts[-40:])) >= 3:
+        c.sparkline((cx, cy, cw, ch), pts[-40:], BRAND)
+        note = (f"moneyline, {len(pts[-40:])} hourly readings, our own capture")
+    else:
+        # two real points beat a flat line pretending to be a chart
+        x1, x2 = cx + 40, cx + cw - 60
+        up = sp["move_pts"] < 0
+        y1, y2 = (cy + ch - 60, cy + 60) if up else (cy + 60, cy + ch - 60)
+        c.d.line([x1, y1, x2, y2], fill=STROKE, width=3)
+        for lab, xx, yy, val, cc in (("OPEN", x1, y1, str(sp["open_home"]), INK2),
+                                     ("NOW", x2, y2, str(sp["home"]), BRAND)):
+            c.d.ellipse([xx - 14, yy - 14, xx + 14, yy + 14], fill=cc)
+            c.label((xx - 28, yy - 84), lab, DIM, 18)
+            c.d.text((xx - 28, yy - 56), val, font=display(44), fill=cc)
+        note = f"{hab} spread, open to now, {sp.get('book', '')}"
+    c.label((cx, cy + ch + 34), note, DIM, 18)
 
-    cap = (f"{fixture(sport, e.get('away', ''), e.get('home', ''))} — the market moved.\n\n"
-           f"{side} was at {pts[0]:.1f}% implied across {ml.get('n_books', 0)} books "
-           f"at the earliest reading in our capture window, and sits at "
-           f"{pts[-1]:.1f}% now. A {move:+.1f} point move over {len(pts)} hourly "
-           f"observations.\n\n"
-           "We log what moved. We do not claim to know why — that is usually a "
-           "story told after the fact.\n\nsooth.bet/timeline")
-    return {"key": f"move-{e.get('event_id')}-{round(move, 1)}",
+    _game_strip(c, g, p + 634)
+
+    cap = (f"{aab} @ {hab} — the line moved.\n\n"
+           f"{hab} opened {sp['open_home']} and is {sp['home']} now, a "
+           f"{sp['move_pts']:+.1f} point move at {sp.get('book', 'the book')}.\n\n"
+           f"We log what moved. We do not claim to know why.\n\nsooth.bet/timeline")
+    return {"key": f"move-{g['event_id']}-{sp['move_pts']}",
             "title": "Market watch", "caption": cap, "img": c.done()}
 
 
 # ======================================================== 06 — PLAYER PROP LAB
 
 def proplab():
-    """One player, one line, the game log behind it. Portrait left, panel right."""
+    """One player, one line, the game log behind it."""
     cand = []
     for b in load("props.json").get("boards") or []:
         for e in b.get("events") or []:
@@ -624,53 +679,54 @@ def proplab():
     hit, player = pp["hit"], pp.get("player", "")
     s = hit["season"]
 
-    c = Card("player prop lab")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "PLAYER PROP LAB", font=display(90), fill=INK)
+    c = Card("06 player prop lab", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "PLAYER PROP LAB", font=display(80), fill=INK)
 
-    px, py, pw, ph = p, p + 196, 452, 452
+    px, py, pw, ph = p, p + 152, 430, 520
     c.panel((px, py, px + pw, py + ph))
-    if not c.paste(headshot(player), (px + 40, py + 24, pw - 80, ph - 140)):
+    if not c.paste(headshot(player), (px + 34, py + 22, pw - 68, ph - 152)):
         ini = "".join(w[0] for w in player.split()[:2])
-        iw = c.d.textlength(ini, font=display(150))
-        c.d.text((px + (pw - iw) / 2, py + 120), ini, font=display(150), fill=PANEL2)
-    c.d.text((px + 30, py + ph - 96), abbr(player, 24), font=body(30, "medium"), fill=INK)
-    # club names only: the full fixture ran out of its own panel, and an
-    # ellipsis in the middle of a team name reads as a rendering bug
+        iw = c.d.textlength(ini, font=display(170))
+        c.d.text((px + (pw - iw) / 2, py + 130), ini, font=display(170), fill=PANEL2)
+    c.d.text((px + 30, py + ph - 108), abbr(player, 22), font=body(31, "medium"), fill=INK)
     nick = lambda n: (n or "").split()[-1]
-    c.label((px + 30, py + ph - 50),
+    c.label((px + 30, py + ph - 62),
             f"{b.get('label', '')} · {nick(e.get('away'))} at {nick(e.get('home'))}",
-            DIM, 17)
+            DIM, 18)
 
-    rx = px + pw + 46
-    c.label((rx, p + 200), pp.get("market_label", pp.get("market", "")), BRAND, 22)
-    c.d.text((rx, p + 234), f"OVER {pp.get('line')}", font=display(82), fill=INK)
+    rx = px + pw + 54
+    c.label((rx, p + 156), pp.get("market_label", pp.get("market", "")), BRAND, 22)
+    c.d.text((rx - 3, p + 188), f"OVER {pp.get('line')}", font=display(96), fill=INK)
 
     rows = [("BEST PRICE", f"{am(pp['over'].get('best_price'))}  "
-                           f"{book(pp['over'].get('best_book', ''))}"),
-            ("DE-VIGGED FAIR", am(pp["over"].get("fair_price"))),
-            ("LAST 5", f"{hit['l5']['over']} of {hit['l5']['n']}"),
-            ("LAST 10", f"{hit['l10']['over']} of {hit['l10']['n']}"),
-            ("SEASON", f"{s['over']} of {s['n']}  ({s['over'] / s['n'] * 100:.0f}%)")]
-    y = p + 346
-    for lab, val in rows:
-        c.label((rx, y + 6), lab, DIM, 19)
-        vw = c.d.textlength(val, font=mono(27, True))
-        c.d.text((c.w - p - vw, y - 2), val, font=mono(27, True), fill=INK)
-        y += 58
-        c.rule(rx, y - 16, c.w - p, (24, 27, 32))
-    c.label((rx, y + 10), f"game log: statsapi.mlb.com · shop gain "
-                          f"{pp.get('gain_pts', 0):.2f} pts", DIM, 18)
+                           f"{book(pp['over'].get('best_book', ''))}", INK),
+            ("DE-VIGGED FAIR", am(pp["over"].get("fair_price")), INK2),
+            ("LAST 5", f"{hit['l5']['over']} of {hit['l5']['n']}", INK),
+            ("LAST 10", f"{hit['l10']['over']} of {hit['l10']['n']}", INK),
+            ("SEASON", f"{s['over']} of {s['n']}", INK)]
+    y = p + 316
+    for lab, val, col in rows:
+        c.label((rx, y + 8), lab, DIM, 19)
+        vw = c.d.textlength(val, font=mono(28, True))
+        c.d.text((right - vw, y - 2), val, font=mono(28, True), fill=col)
+        y += 62
+        c.rule(rx, y - 16, right, (26, 29, 34))
+
+    pct = s["over"] / s["n"] * 100
+    c.panel((rx, y + 12, right, y + 108), PANEL, STROKE)
+    c.label((rx + 26, y + 36), "season hit rate", DIM, 18)
+    pw_ = c.d.textlength(f"{pct:.0f}%", font=display(56))
+    c.d.text((right - 30 - pw_, y + 30), f"{pct:.0f}%", font=display(56), fill=BRAND)
+    c.label((p, c.floor - 4), "game log: statsapi.mlb.com · a hit rate is history, "
+                              "not a projection", DIM, 18)
 
     cap = (f"{player} — {pp.get('market_label', '')} {pp.get('line')}.\n\n"
-           f"Over has hit {s['over']} of {s['n']} this season "
-           f"({s['over'] / s['n'] * 100:.0f}%), {hit['l10']['over']} of "
-           f"{hit['l10']['n']} in the last ten. Best available price is "
-           f"{am(pp['over'].get('best_price'))} at "
-           f"{book(pp['over'].get('best_book', ''))}; de-vigged fair is "
-           f"{am(pp['over'].get('fair_price'))}.\n\n"
-           "A hit rate is history, not a projection. Here is the log — draw "
-           "your own conclusion.\n\nsooth.bet/props")
+           f"Over has hit {s['over']} of {s['n']} this season ({pct:.0f}%), "
+           f"{hit['l10']['over']} of {hit['l10']['n']} in the last ten. Best "
+           f"price {am(pp['over'].get('best_price'))} at "
+           f"{book(pp['over'].get('best_book', ''))}, de-vigged fair "
+           f"{am(pp['over'].get('fair_price'))}.\n\nsooth.bet/props")
     return {"key": f"prop-{player}-{pp.get('market')}-{pp.get('line')}",
             "title": "Player prop lab", "caption": cap, "img": c.done()}
 
@@ -678,61 +734,75 @@ def proplab():
 # ====================================================== 07 — MODEL VS MARKET
 
 def modelvmarket():
-    """Two plates, one delta. The account's signature recurring post."""
-    d = _disagreements()
-    if not d:
+    """Two plates, one delta. Stated in probability, where SIGNAL uses points."""
+    games = _nfl_join()
+    if not games:
         return None
-    _, g, imp = d[0]
-    delta = (g["our_prob"] - imp) * 100
-    away, home = g.get("away", ""), g.get("home", "")
+    g = games[0]
+    sp = g["spread"]
+    mkt_p = 1 - implied_from_spread(sp["home"])
+    ours = g["p_home"]
+    delta = (ours - mkt_p) * 100
+    aw, hm = g["away"], g["home"]
+    aab, hab = team_abbr(aw, "nfl"), team_abbr(hm, "nfl")
 
-    c = Card("model vs market")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "MODEL VS MARKET", font=display(94), fill=INK)
-    c.paste(crest(away, "nfl"), (p, p + 180, 72, 72))
-    label = f"{away} @ {home}"
-    c.d.text((p + 90, p + 192), label, font=body(34, "medium"), fill=INK2)
-    c.paste(crest(home, "nfl"),
-            (p + 106 + c.d.textlength(label, font=body(34, "medium")), p + 180, 72, 72))
+    c = Card("07 model vs market", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "MODEL VS MARKET", font=display(80), fill=INK)
 
-    plates = [("MARKET IMPLIED", f"{imp * 100:.1f}%", INK,
-               f"{am(g['best_price'])} · {book(g.get('best_book', ''))}"),
-              ("SOOTH MODEL", f"{g['our_prob'] * 100:.1f}%", BRAND,
-               "independent · never sees the line")]
-    x, pw = p, 560
-    for lab, val, col, note in plates:
-        c.panel((x, p + 290, x + pw, p + 512))
-        c.label((x + 32, p + 320), lab, DIM, 20)
-        c.d.text((x + 28, p + 352), val, font=display(112), fill=col)
-        c.d.text((x + 32, p + 468), note, font=body(21), fill=DIM)
-        x += pw + 60
+    c.paste(crest(aw, "nfl"), (p, p + 142, 62, 62))
+    lab = f"{aab} @ {hab}"
+    c.d.text((p + 80, p + 148), lab, font=display(50), fill=INK2)
+    c.paste(crest(hm, "nfl"),
+            (p + 100 + c.d.textlength(lab, font=display(50)), p + 142, 62, 62))
+    c.label((p, p + 226), f"{hab} to win · converted from {hab} "
+                          f"{sp['home']:+g} at {sp.get('book', '')}", DIM, 19)
+
+    plates = (("MARKET IMPLIED", f"{mkt_p * 100:.1f}%", INK,
+               f"{hab} {sp['home']} at {sp.get('book', '')}"),
+              ("SOOTH MODEL", f"{ours * 100:.1f}%", BRAND,
+               "independent · never sees the line"))
+    x, pw = p, 700
+    for l, v, col, note in plates:
+        c.panel((x, p + 270, x + pw, p + 470))
+        c.label((x + 30, p + 296), l, DIM, 19)
+        c.d.text((x + 26, p + 324), v, font=display(104), fill=col)
+        c.d.text((x + 30, p + 428), note, font=body(21), fill=DIM)
+        x += pw + 72
 
     dcol = BRAND if delta > 0 else LOSS
-    c.label((p, p + 556), "delta", DIM, 22)
-    c.d.text((p, p + 588), f"{delta:+.1f}%", font=display(112), fill=dcol)
-    c.para((p + 400, p + 536), "Points of implied probability between our number "
-                               "and the best price on the market.\n\n"
-                               "Not an instruction — a place to look.",
-           body(24), DIM, max_w=680, lead=34, limit=c.floor)
+    c.label((p, p + 492), "delta", DIM, 22)
+    c.d.text((p - 3, p + 520), f"{delta:+.1f}%", font=display(104), fill=dcol)
+    c.para((p + 440, p + 530), "Percentage points between our number and the "
+                               "market's, on the same side of the same game.",
+           body(25), DIM, max_w=right - p - 440, lead=38, limit=c.floor)
 
-    cap = (f"{away} @ {home}.\n\n"
-           f"Market implied: {imp * 100:.1f}% ({am(g['best_price'])} at "
-           f"{book(g.get('best_book', ''))}, vig included).\n"
-           f"Sooth model: {g['our_prob'] * 100:.1f}%.\n"
-           f"Delta: {delta:+.1f} points.\n\n"
-           "The model is independent — it never sees the line before it prices "
-           "a game. When it disagrees this much, one of the two is wrong, and "
-           "it is often us. The record is public.\n\nsooth.bet/record")
-    return {"key": f"mvm-{g.get('game_id')}-{round(delta, 1)}",
+    _game_strip(c, g, p + 634)
+
+    cap = (f"{aab} @ {hab}.\n\n"
+           f"Market implied {mkt_p * 100:.1f}% for {hab}, from the {sp['home']} "
+           f"spread. Our model has {ours * 100:.1f}%. Delta {delta:+.1f} points.\n\n"
+           f"The model never sees the line before it prices a game. When it "
+           f"disagrees this much, one of the two is wrong.\n\nsooth.bet/record")
+    return {"key": f"mvm-{g['event_id']}-{round(delta, 1)}",
             "title": "Model vs market", "caption": cap, "img": c.done()}
+
+
+def implied_from_spread(home_line: float, sd: float = 13.86) -> float:
+    """The away team's win probability implied by a home spread.
+
+    The inverse of prob_to_spread, and the reason MODEL VS MARKET can put a
+    spread and a probability on the same card without quoting a vig-loaded
+    moneyline as if it were fair.
+    """
+    from statistics import NormalDist
+    return NormalDist().cdf(home_line / sd)
 
 
 # ======================================================= 08 — RESULT RECEIPT
 
 def _graded() -> dict | None:
-    """The most recent graded slate. Replays are used and LABELLED as replays —
-    week one has not been played yet, and a replay presented as a live result is
-    exactly the dishonesty this account exists to be the opposite of."""
+    """The most recent graded slate. Replays are used and LABELLED as replays."""
     import glob
     from engine.xkit import DATA
     files = sorted(glob.glob(os.path.join(DATA, "*.graded.json")))
@@ -743,8 +813,7 @@ def _sample(picks: list, n: int) -> list:
     """An evenly spaced slice of the confidence range.
 
     Taking the top N by probability is how a receipt becomes a highlight reel:
-    the first render showed six calls and all six had won. Spanning the range
-    puts the shakiest call on the card by construction.
+    the first render showed six calls and all six had won.
     """
     ordered = sorted(picks, key=lambda x: -(x.get("prob") or 0))
     n = min(n, len(ordered))
@@ -754,61 +823,60 @@ def _sample(picks: list, n: int) -> list:
     return [ordered[round(i * step)] for i in range(n)]
 
 
+INDEPENDENT = "elo+epa-v1"
+
+
 def receipt():
     """Graded calls, wins and losses in the same weight. The identity card."""
     d = _graded()
-    all_picks = [x for x in ((d or {}).get("picks") or [])
-                 if x.get("model") == INDEPENDENT] or ((d or {}).get("picks") or [])
-    if len(all_picks) < 4:
+    picks = [x for x in ((d or {}).get("picks") or [])
+             if x.get("model") == INDEPENDENT] or ((d or {}).get("picks") or [])
+    if len(picks) < 4:
         return None
     slate = d.get("slate_id", "")
     replay = slate.upper().startswith("REPLAY")
-    won = sum(1 for x in all_picks if x.get("won"))
-    shown = _sample(all_picks, 6)
+    won = sum(1 for x in picks if x.get("won"))
+    shown = _sample(picks, 6)
 
-    c = Card("result receipt")
-    p = c.pad
-    c.d.text((p - 4, p + 66), "RESULT RECEIPT", font=display(92), fill=INK)
-    c.label((p, p + 180), f"{slate} · {INDEPENDENT} · {won}-{len(all_picks) - won} "
-                          f"on the full slate", DIM, 20)
+    c = Card("08 result receipt", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "RESULT RECEIPT", font=display(80), fill=INK)
+    c.label((p, p + 146), f"{slate} · {INDEPENDENT} · {won}-{len(picks) - won} "
+                          f"on the full slate", DIM, 19)
     if replay:
-        c.label((p, p + 212), "replayed on sealed historical data — not a live slate",
+        c.label((p, p + 176), "replayed on sealed historical data — not a live slate",
                 LOSS, 18)
 
-    cols = (p, 520, 760, 990, 1240)
-    y = p + 252
-    for lab, x in zip(("matchup", "call", "model", "ref price", "result"), cols):
+    COLS = (p, 520, 800, 1030, 1290)
+    y = p + 224
+    for lab, x in zip(("matchup", "call", "model", "ref price", "result"), COLS):
         c.label((x, y), lab, DIM, 18)
-    y += 30
-    c.rule(p, y, c.w - p)
+    y += 28
+    c.rule(p, y, right)
 
     for x in shown:
-        c.d.text((cols[0], y + 16), x.get("matchup", ""), font=body(26), fill=INK2)
-        c.d.text((cols[1], y + 16), x.get("pick", ""), font=body(26, "medium"), fill=INK)
-        c.d.text((cols[2], y + 18), f"{(x.get('prob') or 0) * 100:.1f}%",
-                 font=mono(24), fill=INK2)
-        c.d.text((cols[3], y + 18), am(x.get("reference_price")), font=mono(24), fill=INK2)
+        c.d.text((COLS[0], y + 18), x.get("matchup", ""), font=body(27), fill=INK2)
+        c.d.text((COLS[1], y + 18), x.get("pick", ""), font=body(27, "medium"), fill=INK)
+        c.d.text((COLS[2], y + 20), f"{(x.get('prob') or 0) * 100:.1f}%",
+                 font=mono(25), fill=INK2)
+        c.d.text((COLS[3], y + 20), am(x.get("reference_price")), font=mono(25), fill=INK2)
         w = x.get("won")
         col = BRAND if w else LOSS
-        c.d.rounded_rectangle([cols[4], y + 8, cols[4] + 116, y + 48], radius=4,
+        c.d.rounded_rectangle([COLS[4], y + 10, COLS[4] + 132, y + 54], radius=5,
                               fill=(10, 30, 26) if w else (38, 14, 16), outline=col)
-        c.tracked((cols[4] + 22 if w else cols[4] + 18, y + 13),
-                  "WIN" if w else "LOSS", mono(21, True), col, 3)
-        y += 62
-        c.rule(p, y, c.w - p, (20, 23, 27))
+        c.tracked((COLS[4] + 26, y + 17), "WIN" if w else "LOSS", mono(22, True), col, 3)
+        y += 70
+        c.rule(p, y, right, (20, 23, 27))
 
-    c.label((p, c.floor - 6), "we show the wins. we show the losses. that's sooth.",
+    c.label((p, y + 26), "we show the wins. we show the losses. that's sooth.",
             INK2, 20)
 
-    cap = (f"Graded calls from {slate} — {INDEPENDENT}, the model that never "
-           f"sees the line.\n\n"
-           f"{won}-{len(all_picks) - won} on the full slate. The six on the card "
-           f"are spread across the confidence range, most confident to least, so "
-           f"this is not a highlight reel.\n\n"
-           + ("This is a replay on sealed historical data, labelled as one — not "
-              "a live slate.\n\n" if replay else "")
-           + "Losses get the same graphic as wins. Every one is still on the "
-             "site.\n\nsooth.bet/verify")
+    cap = (f"{slate}, graded — {INDEPENDENT}, the model that never sees the line.\n\n"
+           f"{won}-{len(picks) - won} on the full slate. The six here are spread "
+           f"across the confidence range, most confident to least, so this is not "
+           f"a highlight reel.\n\n"
+           + ("A replay on sealed historical data, labelled as one.\n\n" if replay else "")
+           + "sooth.bet/verify")
     return {"key": f"receipt-{slate}", "title": "Result receipt", "caption": cap,
             "img": c.done()}
 
@@ -816,54 +884,48 @@ def receipt():
 # ================================================== 09 — WHAT THE MODEL SEES
 
 def modelsees():
-    """The teaching card. Uses a real observed move as its diagram."""
-    ex = None
-    for e in load("timeline.json").get("events") or []:
-        ml = (e.get("markets") or {}).get("moneyline") or {}
-        pts = [v for _, v in (ml.get("consensus") or []) if isinstance(v, (int, float))]
-        if len(pts) >= 8 and (ml.get("n_books") or 0) >= 5 and abs(pts[-1] - pts[0]) >= 1.0:
-            ex = (e, pts, ml)
-            break
-    if not ex:
+    """The teaching card, drawn on a line that really moved."""
+    mv = _movers()
+    if not mv:
         return None
-    e, pts, ml = ex
+    g = mv[0]
+    sp = g["spread"]
+    hab, aab = team_abbr(g["home"], "nfl"), team_abbr(g["away"], "nfl")
 
-    c = Card("what the model sees")
-    p = c.pad
-    c.d.text((p - 4, p + 62), "WHY CLOSING", font=display(92), fill=INK)
-    c.d.text((p - 4, p + 152), "LINE VALUE MATTERS", font=display(92), fill=INK)
+    c = Card("09 what the model sees", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 36), "WHY CLOSING", font=display(84), fill=INK)
+    c.d.text((p - 3, p + 118), "LINE VALUE MATTERS", font=display(84), fill=INK)
 
-    y, x1, x2 = p + 316, p + 46, 720
-    up = pts[-1] >= pts[0]
-    y1, y2 = (y + 56, y + 6) if up else (y + 6, y + 56)
+    bx, by, bw, bh = p, p + 248, right - p, 244
+    c.panel((bx, by, bx + bw, by + bh))
+    x1, x2 = bx + 150, bx + bw - 210
+    up = sp["move_pts"] < 0
+    y1, y2 = (by + bh - 74, by + 74) if up else (by + 74, by + bh - 74)
     c.d.line([x1, y1, x2, y2], fill=STROKE, width=3)
-    for lab, xx, yy, val, col in (("EARLIEST", x1, y1, f"{pts[0]:.1f}%", INK2),
-                                  ("LATEST", x2, y2, f"{pts[-1]:.1f}%", BRAND)):
-        c.d.ellipse([xx - 13, yy - 13, xx + 13, yy + 13], fill=col)
-        c.label((xx - 26, yy - 78), lab, DIM, 19)
-        c.d.text((xx - 26, yy - 50), val, font=mono(27, True), fill=col)
-    c.label((x1 - 46, y + 114), f"{fixture(str(e.get('sport', '')), e.get('away', ''), e.get('home', ''))} "
-                                f"· {len(pts)} hourly readings · our own capture", DIM, 18)
+    for lab, xx, yy, val, col in (("OPENED", x1, y1, f"{hab} {sp['open_home']}", INK2),
+                                  ("NOW", x2, y2, f"{hab} {sp['home']}", BRAND)):
+        c.d.ellipse([xx - 15, yy - 15, xx + 15, yy + 15], fill=col)
+        c.label((xx - 30, yy - 86), lab, DIM, 18)
+        c.d.text((xx - 30, yy - 58), val, font=display(48), fill=col)
+    c.label((bx + 26, by + bh - 36), f"{aab} @ {hab} · {sp.get('book', '')} "
+                                     f"· our own hourly capture", DIM, 17)
 
-    c.para((p, p + 500), "If you take a price and the market then moves past you, "
+    c.para((p, p + 538), "If you take a price and the market then moves past you, "
                          "you got the better of it — whatever the game does. That "
                          "is closing line value, and over a season it predicts a "
                          "bettor's results better than their win rate does.\n\n"
-                         "It is also why we seal every prediction before kickoff "
-                         "and publish the reference price. A number that can move "
-                         "after the fact proves nothing.",
-           body(27), INK2, max_w=1080, lead=42, limit=c.floor)
+                         "It is why we seal every prediction before kickoff and "
+                         "publish the reference price.",
+           body(27), INK2, max_w=1180, lead=42, limit=c.floor)
 
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
     cap = ("Closing line value, in one graphic.\n\n"
-           f"{fixture(str(e.get('sport', '')), e.get('away', ''), e.get('home', ''))} "
-           f"was at {pts[0]:.1f}% implied at the earliest reading in our capture "
-           f"window and sits at {pts[-1]:.1f}% now — {len(pts)} hourly readings. "
-           "Anyone who priced it early got the better of the market, whatever the "
-           "game does.\n\n"
-           "Over a season, CLV predicts a bettor's results better than their win "
-           "rate does. It is why we seal predictions before kickoff and publish "
-           "the reference price.\n\nsooth.bet/verify")
+           f"{hab} opened {sp['open_home']} and is {sp['home']} now. Anyone who "
+           f"took the opening number got the better of the market, whatever the "
+           f"game does.\n\nOver a season that predicts results better than a win "
+           f"rate does. It is why we seal predictions before kickoff.\n\n"
+           "sooth.bet/verify")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
     return {"key": f"sees-clv-{stamp}", "title": "What the model sees",
             "caption": cap, "img": c.done()}
 
@@ -883,44 +945,49 @@ def recap():
     hit = max(wins, key=lambda x: x.get("prob") or 0) if wins else None
     miss = max(losses, key=lambda x: x.get("prob") or 0) if losses else None
 
-    c = Card("slate recap")
-    p = c.pad
-    c.d.text((p - 4, p + 70), "SLATE RECAP", font=display(94), fill=INK)
-    c.label((p, p + 186), f"{slate} · {d.get('n_settled', 0)} settled", DIM, 20)
+    c = Card("10 slate recap", framed=True)
+    p, right = c.pad, c.frame[2] - 42
+    c.d.text((p - 3, p + 44), "SLATE RECAP", font=display(80), fill=INK)
+    c.label((p, p + 148), f"{slate} · {d.get('n_settled', 0)} settled · "
+                          f"sealed before kickoff", DIM, 19)
 
     cells = [("PREDICTIONS", str(d.get("n_predictions", 0)), INK),
              ("SETTLED", str(d.get("n_settled", 0)), INK)]
     for name, m in list(models.items())[:2]:
         cells.append((name.upper()[:18], str(m.get("record", "—")),
                       BRAND if (m.get("win_pct") or 0) >= 0.5 else LOSS))
-    x = p
+    x, cw = p, 344
     for lab, val, col in cells[:4]:
-        c.panel((x, p + 240, x + 320, p + 388))
-        c.label((x + 26, p + 268), lab, DIM, 18)
-        c.d.text((x + 22, p + 296), val, font=display(70), fill=col)
-        x += 340
+        c.panel((x, p + 196, x + cw, p + 344))
+        c.label((x + 26, p + 222), lab, DIM, 18)
+        c.d.text((x + 22, p + 250), val, font=display(74), fill=col)
+        x += cw + 32
 
     briers = [m.get("brier") for m in models.values() if m.get("brier")]
     if briers:
-        c.label((p, p + 436), "mean brier · lower is better", DIM, 19)
-        c.d.text((p, p + 466), f"{sum(briers) / len(briers):.3f}",
+        c.panel((p, p + 380, p + cw, p + 528))
+        c.label((p + 26, p + 406), "mean brier", DIM, 18)
+        c.d.text((p + 22, p + 434), f"{sum(briers) / len(briers):.3f}",
                  font=display(74), fill=INK2)
-        c.label((p, p + 556), f"{len(wins)} won · {len(losses)} lost", DIM, 19)
+    c.panel((p + cw + 32, p + 380, p + 2 * cw + 32, p + 528))
+    c.label((p + cw + 58, p + 406), "won / lost", DIM, 18)
+    c.d.text((p + cw + 54, p + 434), f"{len(wins)}-{len(losses)}",
+             font=display(74), fill=INK)
 
-    for lab, x_, col, item in (("BIGGEST HIT", 700, BRAND, hit),
-                               ("BIGGEST MISS", 1080, LOSS, miss)):
+    for lab, x_, col, item in (("BIGGEST HIT", p + 2 * (cw + 32), BRAND, hit),
+                               ("BIGGEST MISS", p + 3 * (cw + 32), LOSS, miss)):
         if not item:
             continue
-        c.panel((x_, p + 428, x_ + 350, p + 632), PANEL, col)
-        c.label((x_ + 24, p + 456), lab, col, 19)
-        c.d.text((x_ + 22, p + 486), f"{(item.get('prob') or 0) * 100:.1f}%",
-                 font=display(64), fill=col)
-        c.para((x_ + 24, p + 566), f"{item.get('matchup', '')} · "
-                                   f"{item.get('pick', '')}",
-               body(21), INK2, max_w=302, lead=28, limit=p + 626)
+        c.panel((x_, p + 380, x_ + cw, p + 528), PANEL, col)
+        c.label((x_ + 26, p + 406), lab, col, 18)
+        c.d.text((x_ + 22, p + 432), f"{(item.get('prob') or 0) * 100:.1f}%",
+                 font=display(66), fill=col)
+        c.label((x_ + 26, p + 504), f"{item.get('matchup', '')} · "
+                                    f"{item.get('pick', '')}", INK2, 17)
 
-    c.label((p, c.floor - 6), "sealed before kickoff · graded in public · "
-                              "the miss is the point", DIM, 19)
+    c.rule(p, p + 576, right, (26, 29, 34))
+    c.label((p, p + 600), "every prediction sealed before kickoff, graded in "
+                          "public, and still published — including the miss", DIM, 19)
 
     parts = [f"{slate} — graded.", ""]
     for name, m in list(models.items())[:2]:
@@ -931,13 +998,12 @@ def recap():
         parts += ["", f"Biggest miss: {miss.get('matchup', '')} · "
                       f"{miss.get('pick', '')} at "
                       f"{(miss.get('prob') or 0) * 100:.1f}%. It lost."]
-    parts += ["", "Every prediction was sealed before kickoff and every one is "
-                  "still published, including that one.", "", "sooth.bet/verify"]
+    parts += ["", "Sealed before kickoff. Still published.", "", "sooth.bet/verify"]
     return {"key": f"recap-{slate}", "title": "Slate recap",
             "caption": "\n".join(parts), "img": c.done()}
 
 
-REGISTRY = {"board": board, "board2": board_ref, "board-ig": board_portrait, "signal": signal, "matchup": matchup,
-            "onestat": onestat, "market": marketwatch, "prop": proplab,
-            "mvm": modelvmarket, "receipt": receipt, "sees": modelsees,
-            "recap": recap}
+REGISTRY = {"board": board_ref, "board-ig": board_portrait, "signal": signal,
+            "matchup": matchup, "onestat": onestat, "market": marketwatch,
+            "prop": proplab, "mvm": modelvmarket, "receipt": receipt,
+            "sees": modelsees, "recap": recap}
