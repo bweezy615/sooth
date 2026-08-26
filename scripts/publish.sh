@@ -29,6 +29,12 @@ else
   echo "$(date -u +%FT%TZ) BOARD fresh (age ${AGE_H}h) — skipping paid refresh" >>"$LOG"
 fi
 
+# NFL spread + total board, rebuilt from our own ESPN capture. Free — it reads
+# JSONL already on disk — so it runs every cycle regardless of the paid budget
+# above, and stays fresh even on the cycles where board.json is skipped.
+"$REPO/.venv/bin/python" -m engine.nflboard >>"$LOG" 2>&1 \
+  || echo "$(date -u +%FT%TZ) NFLBOARD FAILED — keeping previous spread board" >>"$LOG"
+
 # Player props: attempt every cycle so the board picks up new slates within
 # ~3h of books posting them. Cheap when books have nothing up: the engine
 # bails after two empty events (~6 credits) and keeps the previous snapshot.
