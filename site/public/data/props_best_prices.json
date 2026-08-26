@@ -1,25 +1,85 @@
 {
- "generated_at": "2026-08-26T10:47:15.817999+00:00",
+ "generated_at": "2026-08-26T14:56:29.131980+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 88,
+ "n_considered": 272,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Cincinnati Reds @ San Francisco Giants",
-   "starts": "2026-08-26T19:46:00Z",
-   "player": "Hector Rodriguez",
-   "market": "batter_hits",
-   "market_label": "Hits",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-26T17:11:00Z",
+   "player": "Chandler Simpson",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 175,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 156,
+   "price_edge_pts": 2.63,
+   "book_spread_pts": 7.11,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 124,
+    "over": 49
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-26T17:11:00Z",
+   "player": "Jonathan Aranda",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 155,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 140,
+   "price_edge_pts": 2.43,
+   "book_spread_pts": 7.3,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 2
+   },
+   "hit_season": {
+    "n": 129,
+    "over": 52
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-26T17:11:00Z",
+   "player": "Max Clark",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
    "line": 0.5,
    "side": "under",
-   "best_price": 135,
-   "best_book": "BetMGM",
+   "best_price": 134,
+   "best_book": "BetOnline",
    "n_books": 3,
-   "fair_price": 124,
-   "price_edge_pts": 2.11,
-   "book_spread_pts": 6.95,
+   "fair_price": 125,
+   "price_edge_pts": 1.68,
+   "book_spread_pts": 7.26,
    "hit_l5": null,
    "hit_l10": null,
    "hit_season": null,
@@ -28,123 +88,54 @@
   },
   {
    "sport": "mlb",
-   "matchup": "Cincinnati Reds @ San Francisco Giants",
-   "starts": "2026-08-26T19:46:00Z",
-   "player": "Nick Lodolo",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": 110,
-   "best_book": "BetMGM",
-   "n_books": 6,
-   "fair_price": 109,
-   "price_edge_pts": 0.17,
-   "book_spread_pts": 4.76,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 15,
-    "over": 5
-   },
-   "model_p_over": 0.2427,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Cleveland Guardians @ Los Angeles Angels",
-   "starts": "2026-08-26T20:08:00Z",
-   "player": "Grayson Rodriguez",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": -140,
-   "best_book": "BetMGM",
-   "n_books": 4,
-   "fair_price": -140,
-   "price_edge_pts": -0.01,
-   "book_spread_pts": 4.63,
-   "hit_l5": {
-    "n": 5,
-    "over": 5
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 14,
-    "over": 8
-   },
-   "model_p_over": 0.6339,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Chicago Cubs @ Arizona Diamondbacks",
-   "starts": "2026-08-26T19:41:00Z",
-   "player": "Ildemaro Vargas",
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-26T17:11:00Z",
+   "player": "Kevin McGonigle",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 120,
-   "best_book": "BetMGM",
-   "n_books": 5,
-   "fair_price": 120,
-   "price_edge_pts": -0.08,
-   "book_spread_pts": 4.3,
+   "best_price": 160,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 151,
+   "price_edge_pts": 1.36,
+   "book_spread_pts": 6.99,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 3
+    "over": 5
    },
    "hit_season": {
-    "n": 117,
-    "over": 35
+    "n": 128,
+    "over": 52
    },
    "model_p_over": null,
    "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Chicago Cubs @ Arizona Diamondbacks",
-   "starts": "2026-08-26T19:41:00Z",
-   "player": "Matthew Boyd",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 3.5,
-   "side": "under",
-   "best_price": 103,
-   "best_book": "DraftKings",
-   "n_books": 6,
-   "fair_price": 104,
-   "price_edge_pts": -0.27,
-   "book_spread_pts": 3.12,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 16,
-    "over": 10
-   },
-   "model_p_over": 0.4349,
-   "model_version": "kpoisson-v1"
+   "matchup": "Tampa Bay Rays @ Detroit Tigers",
+   "starts": "2026-08-26T17:11:00Z",
+   "player": "Brett Callahan",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": -133,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": -136,
+   "price_edge_pts": 0.63,
+   "book_spread_pts": 6.55,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": null,
+   "model_version": null
   }
  ]
 }
