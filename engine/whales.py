@@ -1,0 +1,285 @@
+"""Capture checkable Polymarket sports-futures positions and trades.
+
+    python -m engine.whales
+    python -m engine.whales --selfcheck
+
+The output reports public ledger activity. It does not interpret that activity
+or identify the people behind public wallet addresses.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+import re
+import tempfile
+from pathlib import Path
+from typing import Any
+
+import requests
+
+GAMMA = "https://gamma-api.polymarket.com"
+DATA = "https://data-api.polymarket.com"
+SPORTS = ("nfl", "nba", "mlb", "nhl", "sports")
+LIMIT = 100
+WHALE_MIN_USD = 10_000.0
+OUT = Path("site/public/data/whales.json")
+
+READER_COPY = (
+    "Public Polymarket sports-futures positions and trades.",
+    "Current value is shares multiplied by the latest outcome price.",
+)
+BANNED = re.compile(
+    r"\b(?:back(?:ing)?|fad(?:e|ing)|smart money|bet on|tail me|lock|"
+    r"guaranteed|risk-free|insider|sure thing|value play)\b", re.I
+)
+
+
+def _number(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _list(value: Any) -> list:
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+            return parsed if isinstance(parsed, list) else []
+        except (TypeError, ValueError):
+            return []
+    return []
+
+
+def _display(row: dict) -> str:
+    return str(row.get("name") or row.get("pseudonym") or "").strip()
+
+
+def _wallet(row: dict) -> str:
+    return str(row.get("proxyWallet") or "").strip()
+
+
+def _get(session: requests.Session, url: str, **params: Any) -> Any:
+    response = session.get(url, params=params, timeout=45,
+                           headers={"accept": "application/json"})
+    response.raise_for_status()
+    return response.json()
+
+
+def discover(session: requests.Session, gamma_base: str = GAMMA,
+             threshold: float = WHALE_MIN_USD) -> list[dict]:
+    """Discover and deduplicate recent open markets; explicit tags win."""
+    found: dict[str, dict] = {}
+    for sport in SPORTS:
+        # ponytail: bounded discovery; paginate if the product needs archives.
+        events = _get(session, f"{gamma_base}/events", closed="false",
+                      tag_slug=sport, limit=LIMIT, order="volume24hr",
+                      ascending="false")
+        if not isinstance(events, list):
+            raise ValueError(f"Gamma returned malformed {sport} events")
+        for event in events:
+            for market in event.get("markets") or []:
+                condition_id = str(market.get("conditionId") or "").strip()
+                volume = _number(market.get("volumeNum") or market.get("volume"))
+                if (not condition_id or market.get("closed") is True
+                        or market.get("sportsMarketType") or volume < threshold):
+                    continue
+                candidate = {
+                    **market,
+                    "conditionId": condition_id,
+                    "eventSlug": market.get("eventSlug") or event.get("slug"),
+                    "_sport": sport,
+                }
+                previous = found.get(condition_id)
+                if previous is None or previous["_sport"] == "sports":
+                    found[condition_id] = candidate
+    return [found[key] for key in sorted(found)]
+
+
+def normalize_market(market: dict, holders: Any, oi: Any, trades: Any,
+                     threshold: float = WHALE_MIN_USD) -> dict | None:
+    """Normalize one market and retain only threshold-meeting public records."""
+    outcomes = [str(v) for v in _list(market.get("outcomes"))]
+    prices = [_number(v) for v in _list(market.get("outcomePrices"))]
+    if not outcomes or len(outcomes) != len(prices):
+        raise ValueError(f"missing outcome prices for {market.get('conditionId')}")
+    if holders is None:
+        holders = []
+    if not isinstance(holders, list) or not isinstance(trades, list):
+        raise ValueError("malformed holders or trades response")
+
+    by_index: dict[int, list[dict]] = {i: [] for i in range(len(outcomes))}
+    for token in holders:
+        for row in token.get("holders") or []:
+            index = int(_number(row.get("outcomeIndex"), -1))
+            if index not in by_index:
+                continue
+            shares = _number(row.get("amount"))
+            current_value = shares * prices[index]
+            wallet = _wallet(row)
+            if wallet and current_value >= threshold:
+                by_index[index].append({
+                    "wallet": wallet,
+                    "display": _display(row),
+                    "shares": round(shares, 6),
+                    "current_value_usd": round(current_value, 2),
+                })
+
+    recent = []
+    for row in trades:
+        size, price = _number(row.get("size")), _number(row.get("price"))
+        wallet = _wallet(row)
+        notional = size * price
+        if wallet and notional >= threshold:
+            recent.append({
+                "wallet": wallet,
+                "display": _display(row),
+                "side": str(row.get("side") or ""),
+                "size": round(size, 6),
+                "price": round(price, 6),
+                "notional_usd": round(notional, 2),
+                "outcome": str(row.get("outcome") or ""),
+                "ts": int(_number(row.get("timestamp"))),
+            })
+    recent.sort(key=lambda row: (-row["ts"], row["wallet"]))
+
+    normalized_outcomes = []
+    for index, outcome in enumerate(outcomes):
+        top = sorted(by_index[index],
+                     key=lambda row: (-row["current_value_usd"], row["wallet"]))
+        normalized_outcomes.append({
+            "outcome": outcome,
+            "index": index,
+            "price": round(prices[index], 6),
+            "top_holders": top,
+        })
+
+    if oi is None:
+        oi = []
+    if not isinstance(oi, list):
+        raise ValueError("malformed open-interest response")
+    if not recent and not any(row["top_holders"] for row in normalized_outcomes):
+        return None
+    return {
+        "condition_id": market["conditionId"],
+        "title": str(market.get("question") or market.get("title") or ""),
+        "event_slug": str(market.get("eventSlug") or ""),
+        "sport": market["_sport"],
+        "open_interest": round(_number(oi[0].get("value")), 2) if oi else 0.0,
+        "outcomes": normalized_outcomes,
+        "recent": recent,
+    }
+
+
+def capture(session: requests.Session | None = None, gamma_base: str = GAMMA,
+            data_base: str = DATA, threshold: float = WHALE_MIN_USD) -> dict:
+    session = session or requests.Session()
+    markets = []
+    for market in discover(session, gamma_base, threshold):
+        condition_id = market["conditionId"]
+        normalized = normalize_market(
+            market,
+            _get(session, f"{data_base}/holders", market=condition_id, limit=LIMIT),
+            _get(session, f"{data_base}/oi", market=condition_id),
+            _get(session, f"{data_base}/trades", market=condition_id, limit=LIMIT),
+            threshold,
+        )
+        if normalized:
+            markets.append(normalized)
+    markets.sort(key=lambda row: (row["sport"], -row["open_interest"],
+                                  row["condition_id"]))
+    return {
+        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "whale_min_usd": threshold,
+        "discovery_limit_per_tag": LIMIT,
+        "valuation": "holder shares multiplied by current outcome price",
+        "markets": markets,
+    }
+
+
+def publish(path: Path = OUT, **capture_args: Any) -> dict:
+    """Replace the public snapshot only after the complete capture succeeds."""
+    payload = capture(**capture_args)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+    return payload
+
+
+def _selfcheck() -> int:
+    market = {
+        "conditionId": "0x1", "question": "Will New York win?",
+        "eventSlug": "season", "_sport": "mlb",
+        "volumeNum": 50000,
+        "outcomes": '["Yes", "No"]', "outcomePrices": '["0.40", "0.60"]',
+    }
+    holders = [{"holders": [
+        {"proxyWallet": "0xlarge", "amount": 30000, "name": "PublicName",
+         "outcomeIndex": 0, "email": "must-not-escape@example.com"},
+        {"proxyWallet": "0xsmall", "amount": 10, "outcomeIndex": 1},
+    ]}]
+    trades = [{"proxyWallet": "0xtrade", "size": 25000, "price": 0.5,
+               "side": "BUY", "outcome": "Yes", "timestamp": 2,
+               "pseudonym": "PublicAlias", "email": "private@example.com"}]
+    got = normalize_market(market, holders, [{"value": 12345.678}], trades)
+    assert got and got["sport"] == "mlb" and got["open_interest"] == 12345.68
+    assert got["outcomes"][0]["price"] == 0.4
+    assert got["outcomes"][0]["top_holders"][0]["current_value_usd"] == 12000
+    assert got["recent"][0]["notional_usd"] == 12500
+    assert "email" not in json.dumps(got).lower()
+
+    class Response:
+        def __init__(self, body): self.body = body
+        def raise_for_status(self): return None
+        def json(self): return self.body
+
+    class Session:
+        def get(self, url, **kwargs):
+            sport = kwargs["params"].get("tag_slug")
+            body = [{"markets": [market]}] if sport in ("sports", "mlb") else []
+            return Response(body)
+
+    class FailedSession(Session):
+        def get(self, url, **kwargs):
+            if url.endswith("/events"):
+                return super().get(url, **kwargs)
+            raise requests.ConnectionError("forced selfcheck failure")
+
+    deduped = discover(Session(), "https://fixture")
+    assert len(deduped) == 1 and deduped[0]["_sport"] == "mlb", deduped
+    page = Path("site/public/whales.html").read_text(encoding="utf-8")
+    assert not BANNED.search(" ".join(READER_COPY) + " " + page)
+
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "whales.json"
+        path.write_bytes(b"previous-complete-snapshot")
+        try:
+            publish(path, session=FailedSession(), data_base="https://fixture")
+        except (KeyError, requests.RequestException, ValueError):
+            pass
+        assert path.read_bytes() == b"previous-complete-snapshot"
+
+    print("whales.selfcheck: OK")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--selfcheck", action="store_true")
+    args = parser.parse_args()
+    if args.selfcheck:
+        return _selfcheck()
+    payload = publish(args.out)
+    print(f"{len(payload['markets'])} qualifying markets -> {args.out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

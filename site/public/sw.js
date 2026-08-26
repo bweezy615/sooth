@@ -4,9 +4,9 @@
 // v4: new type + palette, stacked mobile tables, phone home. A returning
 // visitor holds the old shell until this string changes — bump it with any
 // change to desk.css / desk.js or they keep the previous design.
-const CACHE = 'sooth-v21';
+const CACHE = 'sooth-v22';
 const SHELL = ['/', '/props', '/edges', '/research', '/trust',
-               '/tools', '/engine', '/gamelog', '/ledger', '/methodology'];
+               '/tools', '/engine', '/gamelog', '/ledger', '/methodology', '/whales'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

@@ -1,0 +1,41 @@
+name: capture-polymarket-whales
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-polymarket-whales
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependency
+        run: pip install --quiet requests
+
+      - name: Capture public Polymarket sports-futures activity
+        run: python -m engine.whales
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add site/public/data/whales.json
+          if git diff --staged --quiet; then
+            echo "no whale snapshot change"
+          else
+            git commit -m "capture: polymarket whales $(date -u +%FT%TZ)"
+            git pull --rebase origin main
+            git push
+          fi

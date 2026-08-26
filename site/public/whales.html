@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sooth ? Public Polymarket Positions</title>
+<meta name="description" content="Analyze public Polymarket sports-futures positions, trades, prices, timestamps, and open interest from one checkable snapshot.">
+<meta property="og:title" content="Sooth ? Public Polymarket Positions">
+<meta property="og:description" content="Public sports-futures positions and trades, reported without interpretation.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://sooth.bet/og.jpg">
+<meta property="og:url" content="https://sooth.bet/whales">
+<link rel="canonical" href="https://sooth.bet/whales">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/desk.css">
+<style>
+  .market{margin-top:18px}
+  .market-h{display:flex;align-items:baseline;gap:12px;justify-content:space-between;
+    margin-bottom:8px}
+  .market-h h2{font:600 14px/1.4 var(--sans);margin:0;min-width:0}
+  .market-h .oi{flex:0 0 auto;color:var(--mut);font:500 11px/1 var(--mono)}
+  .itab table{min-width:680px}
+  .itab td.wallet{max-width:180px;overflow:hidden;text-overflow:ellipsis}
+  .state{text-align:left}
+  @media(max-width:560px){
+    .market-h{align-items:flex-start;flex-direction:column;gap:5px}
+    .itab td.wallet{max-width:none;overflow-wrap:anywhere}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<main id="main" class="wrap">
+  <div class="ph">
+    <span class="tl">PUBLIC LEDGER ? POLYMARKET SPORTS FUTURES</span>
+    <h1>Public money, already committed.</h1>
+    <p class="lede">Positions and recent trades reported from Polymarket's public data:
+      wallet, outcome, price, size, timestamp, and open interest. <b>No record is
+      interpreted as advice.</b></p>
+  </div>
+
+  <div class="status" aria-live="polite">
+    <span class="stat"><span class="v n" id="stMarkets">?</span><span class="tl">MARKETS</span></span>
+    <span class="stat"><span class="v n" id="stPositions">?</span><span class="tl">POSITIONS</span></span>
+    <span class="stat"><span class="v n" id="stTrades">?</span><span class="tl">RECENT TRADES</span></span>
+    <span class="live"><span class="pulse on" id="pulse"></span><span class="tl">SNAPSHOT </span>
+      <span class="tl" id="stTime">?</span></span>
+  </div>
+
+  <section class="sec" style="border-top:0" aria-labelledby="feedH">
+    <div class="sec-h"><span class="tl" id="feedH">QUALIFYING ACTIVITY</span>
+      <span class="sub" id="threshold">current position value or trade notional</span></div>
+    <div id="feed"></div>
+  </section>
+</main>
+
+<script src="/assets/desk.js"></script>
+<script src="/assets/crest.js"></script>
+<script>
+(function(){
+var D=window.Desk, C=window.Crest, feed=document.getElementById("feed");
+D.mount("whales");
+D.connecting(feed,"PUBLIC LEDGER");
+
+function money(n){return "$"+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,
+  maximumFractionDigits:2});}
+function number(n){return Number(n||0).toLocaleString(undefined,{maximumFractionDigits:6});}
+function person(row){
+  var wallet=String(row.wallet||"");
+  return D.esc(row.display||wallet.slice(0,8)+"?"+wallet.slice(-4));
+}
+function teamFrom(title){
+  var match=/^Will (?:the )?(.+?) (?:win|make|finish|become|qualify)/i.exec(title||"");
+  return match?match[1]:"";
+}
+function market(m){
+  var rows=[];
+  (m.outcomes||[]).forEach(function(outcome){
+    (outcome.top_holders||[]).forEach(function(row){
+      rows.push('<tr><td data-l="RECORD">HELD</td><td data-l="PUBLIC WALLET" class="l wallet">'
+        +person(row)+'</td><td data-l="OUTCOME" class="l">'+D.esc(outcome.outcome)
+        +'</td><td data-l="PRICE" class="n">'+Number(outcome.price).toFixed(3)
+        +'</td><td data-l="SHARES" class="n">'+number(row.shares)
+        +'</td><td data-l="CURRENT VALUE" class="n">'+money(row.current_value_usd)
+        +'</td><td data-l="TIME" class="dim">?</td></tr>');
+    });
+  });
+  (m.recent||[]).forEach(function(row){
+    rows.push('<tr><td data-l="RECORD">'+D.esc(row.side||"TRADE")
+      +'</td><td data-l="PUBLIC WALLET" class="l wallet">'+person(row)
+      +'</td><td data-l="OUTCOME" class="l">'+D.esc(row.outcome)
+      +'</td><td data-l="PRICE" class="n">'+Number(row.price).toFixed(3)
+      +'</td><td data-l="SHARES" class="n">'+number(row.size)
+      +'</td><td data-l="TRADE NOTIONAL" class="n">'+money(row.notional_usd)
+      +'</td><td data-l="TIME" class="dim">'+new Date(row.ts*1000).toLocaleString()
+      +'</td></tr>');
+  });
+  var team=teamFrom(m.title), crest=team?C.team(team,{sport:m.sport,size:14})+" ":"";
+  return '<article class="market"><div class="market-h"><h2>'+crest+D.esc(m.title)
+    +'</h2><span class="oi">OPEN INTEREST '+money(m.open_interest)+'</span></div>'
+    +'<div class="itab"><div class="scr"><table><thead><tr><th>RECORD</th>'
+    +'<th class="l">PUBLIC WALLET</th><th class="l">OUTCOME</th><th>PRICE</th>'
+    +'<th>SHARES</th><th>USD VALUE</th><th>TIME</th></tr></thead><tbody>'
+    +rows.join("")+'</tbody></table></div></div></article>';
+}
+
+D.load("/data/whales.json").then(function(result){
+  if(!result.ok){
+    document.getElementById("pulse").className="pulse dead";
+    feed.innerHTML='<div class="state"><span class="tl">SNAPSHOT UNAVAILABLE</span>'
+      +'The public data file could not be read. No claim about market activity is made.</div>';
+    return;
+  }
+  var data=result.data, markets=data.markets||[], positions=0, trades=0;
+  markets.forEach(function(m){
+    (m.outcomes||[]).forEach(function(o){positions+=(o.top_holders||[]).length;});
+    trades+=(m.recent||[]).length;
+  });
+  document.getElementById("stMarkets").textContent=markets.length;
+  document.getElementById("stPositions").textContent=positions;
+  document.getElementById("stTrades").textContent=trades;
+  document.getElementById("stTime").textContent=D.ago(data.generated_at);
+  document.getElementById("stTime").setAttribute("data-ago",data.generated_at);
+  document.getElementById("threshold").textContent="$"+Number(data.whale_min_usd).toLocaleString()
+    +" minimum current position value or trade notional ? captured "+D.when(data.generated_at);
+  if(result.ageH>1) document.getElementById("pulse").className="pulse stale";
+  feed.innerHTML=markets.length?markets.map(market).join(""):
+    '<div class="state"><span class="tl">NO QUALIFYING ACTIVITY</span>'
+    +'The completed snapshot found no public record meeting the stated threshold.</div>';
+});
+})();
+</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>
