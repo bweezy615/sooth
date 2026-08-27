@@ -45,6 +45,7 @@ var NAV=[
   {href:"/picks",       key:"picks",   label:"PICKS"},
   {href:"/props",       key:"props",   label:"PROPS"},
   {href:"/edges",       key:"movement",label:"MOVEMENT"},
+  {href:"/whales",      key:"whales",  label:"WHALES"},
   {href:"/research",    key:"research",label:"RESEARCH"},
   {href:"/ask",         key:"ask",     label:"ANALYST"},
   {href:"/trust",       key:"ledger",  label:"LEDGER"},
@@ -244,7 +245,7 @@ function mount(page){
    pages the phone shell can actually reach through that tab are listed —
    /learn, /record and the rest hang off the fine print, belong to no tab,
    and correctly light nothing. */
-var TABS=[["/","board","BOARD",["/market","/edges","/game"]],
+var TABS=[["/","board","BOARD",["/market","/edges","/game","/whales"]],
           ["/picks","picks","PICKS",[]],
           ["/trust","ledger","LEDGER",[]],
           ["/ask","ask","ANALYST",[]],
