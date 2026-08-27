@@ -24,6 +24,15 @@ jobs:
       - name: Install dependency
         run: pip install --quiet requests
 
+      # Convention from watchlist.yml: prove the selection and the copy guard
+      # offline before touching the network. engine/whales.py ships a real
+      # selfcheck -- it asserts the advice regex does not match the page copy,
+      # that no `email` field escapes into public JSON, and that a mid-capture
+      # failure leaves the previous snapshot intact -- and nothing was running
+      # it, so none of those guarantees were being enforced.
+      - name: Selfcheck (offline)
+        run: python -m engine.whales --selfcheck
+
       - name: Capture public Polymarket sports-futures activity
         run: python -m engine.whales
 
