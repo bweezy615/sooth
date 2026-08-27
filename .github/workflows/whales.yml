@@ -40,11 +40,28 @@ jobs:
         run: |
           git config user.name "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add site/public/data/whales.json
-          if git diff --staged --quiet; then
-            echo "no whale snapshot change"
-          else
+          # whales.json is a whole-file snapshot, not an append-only log, so a
+          # rebase against a snapshot another run pushed mid-capture can only
+          # ever conflict -- which is exactly how the 03:18 run died after a
+          # clean capture. There is no merge to attempt: the newest complete
+          # capture is authoritative by construction. So rebuild the commit on
+          # top of whatever main is now, and retry if main moves again while we
+          # are pushing (ten other workflows commit to this branch).
+          for attempt in 1 2 3; do
+            cp site/public/data/whales.json "$RUNNER_TEMP/whales.json"
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/whales.json" site/public/data/whales.json
+            git add site/public/data/whales.json
+            if git diff --staged --quiet; then
+              echo "no whale snapshot change"
+              exit 0
+            fi
             git commit -m "capture: polymarket whales $(date -u +%FT%TZ)"
-            git pull --rebase origin main
-            git push
-          fi
+            if git push; then
+              exit 0
+            fi
+            echo "main moved while pushing; rebuilding (attempt $attempt)"
+          done
+          echo "::error::could not push the whale snapshot after 3 attempts"
+          exit 1
