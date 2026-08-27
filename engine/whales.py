@@ -39,17 +39,20 @@ BACKOFF = 3.0
 # 400 -- is a fact about the request and retrying it just wastes the run.
 RETRY_STATUS = {408, 425, 429}
 
-# Deepest the capture will look. Discovery finds ~640 qualifying markets and
-# each costs three calls, so the uncapped run was ~1,900 requests against an
-# undocumented free API -- two of three runs died mid-flight before the retry
-# logic existed.
+# How deep the capture looks. 0 means every qualifying market.
 #
-# The cut is a real trade, not free. Whale money is NOT concentrated in the
-# busiest markets: measured against a full snapshot, the top 200 by 24h volume
-# hold 70% of the qualifying value and 51% of the rows, the top 60 only 30%.
-# Ranking by open interest is worse (top 60 = 22%), so volume it is. Raise this
-# to look deeper and pay for it in requests; the page reports the depth.
-MARKET_CAP = 200
+# Uncapped, because the measurement said capping costs more than it saves.
+# Whale money is NOT concentrated in the busiest markets: against a full
+# snapshot the top 200 by 24h volume hold only 70% of the qualifying value and
+# 51% of the rows, and the top 60 just 30%. Ranking by open interest is worse
+# still (top 60 = 22%). The distribution is flat, so any cut throws away a
+# proportional slice of the exact thing this page exists to show.
+#
+# ~640 markets at three calls each is ~1,900 requests and about eleven minutes
+# at the pacing above, which the retry logic now carries reliably -- a full run
+# succeeded at 03:09 before the cap existed. Set --top N to trade coverage for
+# time; the page reports whichever depth it got.
+MARKET_CAP = 0
 OUT = Path("site/public/data/whales.json")
 
 READER_COPY = (
@@ -243,7 +246,8 @@ def capture(session: requests.Session | None = None, gamma_base: str = GAMMA,
             cap: int = MARKET_CAP) -> dict:
     session = session or requests.Session()
     markets = []
-    for market in discover(session, gamma_base, threshold, cap):
+    discovered = discover(session, gamma_base, threshold, cap)
+    for market in discovered:
         condition_id = market["conditionId"]
         normalized = normalize_market(
             market,
@@ -260,9 +264,13 @@ def capture(session: requests.Session | None = None, gamma_base: str = GAMMA,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "whale_min_usd": threshold,
         "discovery_limit_per_tag": LIMIT,
-        "markets_examined": cap,
-        "depth_note": ("the busiest markets by 24h volume are examined, not "
-                       "every open market"),
+        # the real count, not the cap: with MARKET_CAP = 0 a cap of 0 would
+        # otherwise publish "top 0 markets" on the page
+        "markets_examined": len(discovered),
+        "market_cap": cap or None,
+        "depth_note": (("the busiest markets by 24h volume are examined, not "
+                        "every open market") if cap else
+                       "every qualifying open market is examined"),
         "valuation": "holder shares multiplied by current outcome price",
         "markets": markets,
     }
