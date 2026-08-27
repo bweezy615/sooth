@@ -38,6 +38,18 @@ BACKOFF = 3.0
 # slow down, 429 we asked too fast, 5xx it broke. Everything else -- a 404, a
 # 400 -- is a fact about the request and retrying it just wastes the run.
 RETRY_STATUS = {408, 425, 429}
+
+# Deepest the capture will look. Discovery finds ~640 qualifying markets and
+# each costs three calls, so the uncapped run was ~1,900 requests against an
+# undocumented free API -- two of three runs died mid-flight before the retry
+# logic existed.
+#
+# The cut is a real trade, not free. Whale money is NOT concentrated in the
+# busiest markets: measured against a full snapshot, the top 200 by 24h volume
+# hold 70% of the qualifying value and 51% of the rows, the top 60 only 30%.
+# Ranking by open interest is worse (top 60 = 22%), so volume it is. Raise this
+# to look deeper and pay for it in requests; the page reports the depth.
+MARKET_CAP = 200
 OUT = Path("site/public/data/whales.json")
 
 READER_COPY = (
@@ -113,8 +125,12 @@ def _get(session: requests.Session, url: str, **params: Any) -> Any:
 
 
 def discover(session: requests.Session, gamma_base: str = GAMMA,
-             threshold: float = WHALE_MIN_USD) -> list[dict]:
-    """Discover and deduplicate recent open markets; explicit tags win."""
+             threshold: float = WHALE_MIN_USD, cap: int = MARKET_CAP) -> list[dict]:
+    """Discover and deduplicate recent open markets; explicit tags win.
+
+    Returns at most `cap` markets, the busiest first by 24h volume, then sorted
+    by condition id so the published file stays diff-stable run to run.
+    """
     found: dict[str, dict] = {}
     for sport in SPORTS:
         # ponytail: bounded discovery; paginate if the product needs archives.
@@ -135,11 +151,16 @@ def discover(session: requests.Session, gamma_base: str = GAMMA,
                     "conditionId": condition_id,
                     "eventSlug": market.get("eventSlug") or event.get("slug"),
                     "_sport": sport,
+                    "_volume": volume,
                 }
                 previous = found.get(condition_id)
                 if previous is None or previous["_sport"] == "sports":
                     found[condition_id] = candidate
-    return [found[key] for key in sorted(found)]
+    keys = sorted(found, key=lambda k: (-found[k]["_volume"], k))
+    if cap and cap > 0:
+        keys = keys[:cap]
+    # back to id order: the ranking decides WHICH markets, not their file order
+    return [found[key] for key in sorted(keys)]
 
 
 def normalize_market(market: dict, holders: Any, oi: Any, trades: Any,
@@ -218,10 +239,11 @@ def normalize_market(market: dict, holders: Any, oi: Any, trades: Any,
 
 
 def capture(session: requests.Session | None = None, gamma_base: str = GAMMA,
-            data_base: str = DATA, threshold: float = WHALE_MIN_USD) -> dict:
+            data_base: str = DATA, threshold: float = WHALE_MIN_USD,
+            cap: int = MARKET_CAP) -> dict:
     session = session or requests.Session()
     markets = []
-    for market in discover(session, gamma_base, threshold):
+    for market in discover(session, gamma_base, threshold, cap):
         condition_id = market["conditionId"]
         normalized = normalize_market(
             market,
@@ -238,6 +260,9 @@ def capture(session: requests.Session | None = None, gamma_base: str = GAMMA,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "whale_min_usd": threshold,
         "discovery_limit_per_tag": LIMIT,
+        "markets_examined": cap,
+        "depth_note": ("the busiest markets by 24h volume are examined, not "
+                       "every open market"),
         "valuation": "holder shares multiplied by current outcome price",
         "markets": markets,
     }
@@ -362,6 +387,21 @@ def _run_selfcheck() -> int:
 
     deduped = discover(Session(), "https://fixture")
     assert len(deduped) == 1 and deduped[0]["_sport"] == "mlb", deduped
+
+    class Many:
+        """three markets, ascending volume, ids deliberately anti-correlated"""
+        def get(self, url, **kwargs):
+            if kwargs["params"].get("tag_slug") != "mlb":
+                return Response([])
+            return Response([{"markets": [
+                dict(market, conditionId="0xc", volumeNum=90000),
+                dict(market, conditionId="0xb", volumeNum=70000),
+                dict(market, conditionId="0xa", volumeNum=50000),
+            ]}])
+
+    top2 = discover(Many(), "https://fixture", cap=2)
+    assert [m["conditionId"] for m in top2] == ["0xb", "0xc"], top2
+    assert discover(Many(), "https://fixture", cap=0).__len__() == 3
     page = Path("site/public/whales.html").read_text(encoding="utf-8")
     assert not BANNED.search(" ".join(READER_COPY) + " " + page)
 
@@ -381,11 +421,13 @@ def _run_selfcheck() -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--top", type=int, default=MARKET_CAP,
+                        help="how many markets to examine, busiest first")
     parser.add_argument("--selfcheck", action="store_true")
     args = parser.parse_args()
     if args.selfcheck:
         return _selfcheck()
-    payload = publish(args.out)
+    payload = publish(args.out, cap=args.top)
     print(f"{len(payload['markets'])} qualifying markets -> {args.out}")
     return 0
 

@@ -126,8 +126,11 @@ D.load("/data/whales.json").then(function(result){
   document.getElementById("stTrades").textContent=trades;
   document.getElementById("stTime").textContent=D.ago(data.generated_at);
   document.getElementById("stTime").setAttribute("data-ago",data.generated_at);
+  var depth=data.markets_examined?" \u00b7 top "+data.markets_examined
+    +" markets by 24h volume":"";
   document.getElementById("threshold").textContent="$"+Number(data.whale_min_usd).toLocaleString()
-    +" minimum current position value or trade notional — captured "+D.when(data.generated_at);
+    +" minimum current position value or trade notional"+depth
+    +" \u2014 captured "+D.when(data.generated_at);
   if(result.ageH>1) document.getElementById("pulse").className="pulse stale";
   feed.innerHTML=markets.length?markets.map(market).join(""):
     '<div class="state"><span class="tl">NO QUALIFYING ACTIVITY</span>'
