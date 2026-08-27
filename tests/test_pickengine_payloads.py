@@ -97,3 +97,39 @@ def test_ciphertext_never_leaks_a_pick(tmp_path):
     meta = json.loads((tmp_path / "data/pro/latest.meta.json").read_text())
     assert meta["game_count"] == 2
     assert "prob" not in json.dumps(meta)
+
+
+def test_only_qualified_games_are_ranked_as_plays(tmp_path):
+    """`ats_rank` is not `divergence_rank` with a new name.
+
+    Divergence ranks within the slate and therefore always crowns something.
+    The play rank exists only for games whose predicted margin sits at least
+    EDGE_THRESHOLD points off the posted number, so a slate can legitimately
+    contain none — and the counts published beside it must say so.
+    """
+    kick = datetime.now(timezone.utc) + timedelta(days=2)
+    p = _payload(kick)
+    p["games"][0]["ats"] = {"pred_margin": 9.5, "edge": 6.0, "pick": "SEA",
+                            "underdog": False, "qualified": True}
+    p["games"][1]["ats"] = {"pred_margin": -6.0, "edge": 1.0, "pick": "DET",
+                            "underdog": False, "qualified": False}
+    pub = _pickengine_payloads(tmp_path, p)
+    by_id = {g["game_id"]: g for g in pub["games"]}
+    assert by_id["g1"]["ats_rank"] == 1
+    assert by_id["g2"]["ats_rank"] is None
+    # g2 still outranks g1 on divergence — the two orderings are independent
+    assert by_id["g2"]["divergence_rank"] == 1
+    meta = json.loads((tmp_path / "data/pro/latest.meta.json").read_text())
+    assert meta["qualified_plays"] == 1
+
+
+def test_a_slate_with_no_qualifying_play_publishes_zero(tmp_path):
+    kick = datetime.now(timezone.utc) + timedelta(days=2)
+    p = _payload(kick)
+    for g in p["games"]:
+        g["ats"] = {"pred_margin": 1.0, "edge": 0.5, "pick": g["home"],
+                    "underdog": False, "qualified": False}
+    pub = _pickengine_payloads(tmp_path, p)
+    assert all(g["ats_rank"] is None for g in pub["games"])
+    meta = json.loads((tmp_path / "data/pro/latest.meta.json").read_text())
+    assert meta["qualified_plays"] == 0

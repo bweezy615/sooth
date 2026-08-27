@@ -40,8 +40,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from sklearn.linear_model import Ridge
+
 from engine.calibrate import expected_calibration_error, reliability
 from engine.closing import compare_to_nflverse, consensus, load_backfill
+from engine.models.ensemble import EDGE_THRESHOLD, _ats, _logit, selectivity
 from engine.models.ensemble import run as ensemble_run
 from engine.adapters.nfl import NFLAdapter
 
@@ -52,28 +55,42 @@ BREAKEVEN = 0.5238  # -110 both sides
 EPS = 1e-6
 
 MODELS = [
-    ("elo", "elo_p", "Elo + margin-of-victory. The transparent baseline."),
-    ("independent", "p_ensemble", "Elo + opponent-aware EPA + rest. Never sees the line."),
-    ("consensus", "p_anchored", "The above plus the de-vigged market price."),
+    ("elo", "elo_p", "elo_spread",
+     "Elo + margin-of-victory. The transparent baseline."),
+    ("independent", "p_ensemble", "m_ensemble",
+     "Elo + opponent-aware EPA + rest. Never sees the line."),
+    ("consensus", "p_anchored", "m_anchored",
+     "The above plus the de-vigged market price."),
 ]
 
 
-def _ats(frame: pd.DataFrame, prob, spread_col: str):
-    p = np.clip(np.asarray(prob, dtype=float), EPS, 1 - EPS)
-    implied_margin = np.log(p / (1 - p)) * (400 / np.log(10)) / 25.0
-    spread = frame[spread_col].to_numpy(float)
-    pick_home = implied_margin > spread
-    cover = frame["margin"].to_numpy(float) - spread
-    win = ((cover > 0) == pick_home) & (cover != 0)
-    push = cover == 0
-    return int(win.sum()), int((~win & ~push).sum()), int(push.sum())
+def _market_margin(frame: pd.DataFrame, prob_col: str) -> pd.Series:
+    """The market's own points estimate, fitted rather than assumed.
+
+    Until 2026-08 this script converted a win probability into a margin with
+    ``logit(p) * 400/ln(10) / 25`` — an Elo scale constant applied to numbers
+    that were never on the Elo scale. The models now predict margin directly
+    (see ``engine.models.ensemble._wf_margin``); only the benchmark row still
+    needs a conversion, because a market moneyline is all we have for it.
+
+    Fitting one slope in-sample cannot manufacture an edge here: this row is
+    the market's moneyline graded against the market's own spread, so it sits
+    at coin-flip by construction. The fit only puts it on the right scale
+    instead of an invented one.
+    """
+    d = frame.dropna(subset=[prob_col, "margin"])
+    reg = Ridge(alpha=1.0).fit(_logit(d[prob_col]).reshape(-1, 1), d["margin"])
+    out = pd.Series(np.nan, index=frame.index, dtype=float)
+    ok = frame[prob_col].notna()
+    out.loc[ok] = reg.predict(_logit(frame.loc[ok, prob_col]).reshape(-1, 1))
+    return out
 
 
-def _score(frame: pd.DataFrame, prob_col: str, spread_col: str,
-           market_col: str) -> dict:
+def _score(frame: pd.DataFrame, prob_col: str, margin_col: str,
+           spread_col: str) -> dict:
     y = frame["home_won"].to_numpy(float)
     p = frame[prob_col].to_numpy(float)
-    w, l, push = _ats(frame, p, spread_col)
+    w, l, push = _ats(frame, margin_col, spread_col)
     played = w + l
     return {
         "n": int(len(frame)),
@@ -96,17 +113,30 @@ def main() -> None:
 
     # ---- Evaluation A: nflverse lines, full sample -----------------------
     a_frame = frame.dropna(subset=["spread_line", "market_p"]).copy()
-    eval_a = {name: _score(a_frame, col, "spread_line", "market_p")
-              for name, col, _ in MODELS}
-    eval_a["market"] = _score(a_frame, "market_p", "spread_line", "market_p")
+    a_frame["m_benchmark"] = _market_margin(a_frame, "market_p")
+    eval_a = {name: _score(a_frame, col, mcol, "spread_line")
+              for name, col, mcol, _ in MODELS}
+    eval_a["market"] = _score(a_frame, "market_p", "m_benchmark", "spread_line")
 
     # ---- Evaluation B: real consensus closes ------------------------------
     cons = consensus(load_backfill())
     b_frame = frame.merge(cons, on=["season", "home_team", "away_team"],
                           how="inner").dropna(subset=["close_spread", "close_p_home"])
-    eval_b = {name: _score(b_frame, col, "close_spread", "close_p_home")
-              for name, col, _ in MODELS}
-    eval_b["market"] = _score(b_frame, "close_p_home", "close_spread", "close_p_home")
+    b_frame["m_benchmark"] = _market_margin(b_frame, "close_p_home")
+    eval_b = {name: _score(b_frame, col, mcol, "close_spread")
+              for name, col, mcol, _ in MODELS}
+    eval_b["market"] = _score(b_frame, "close_p_home", "m_benchmark",
+                              "close_spread")
+
+    # ---- What selectivity buys, on both line sources ----------------------
+    # The engine's shipped decision rule is a threshold, so the threshold must
+    # be a measurement in this file like every other number the site quotes.
+    # Both evaluations get one: A for sample size, B for provenance.
+    sel = {
+        "rule_threshold_pts": EDGE_THRESHOLD,
+        "evaluation_a": selectivity(a_frame, "m_ensemble", "spread_line"),
+        "evaluation_b": selectivity(b_frame, "m_ensemble", "close_spread"),
+    }
 
     # ---- Line-provenance comparison ---------------------------------------
     prov = compare_to_nflverse(cons, NFLAdapter().games)
@@ -135,9 +165,10 @@ def main() -> None:
             "seasons": "2023-2025",
             "results": eval_b,
         },
+        "selectivity": sel,
         "line_provenance": prov,
         "reliability_independent": rel.to_dict(orient="records"),
-        "models": {name: desc for name, _, desc in MODELS},
+        "models": {name: desc for name, _, _, desc in MODELS},
     }
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -162,6 +193,27 @@ def main() -> None:
     print(f"## B. real consensus closes ({figures['evaluation_b']['seasons']})")
     print(table(eval_b, "close_spread"))
     print()
+    print(f"## selectivity — independent model, edge >= {EDGE_THRESHOLD} pts")
+    for ev in ("evaluation_a", "evaluation_b"):
+        s = sel[ev]
+        print(f"### {ev}")
+        print("| edge | all | underdog | favourite |")
+        print("|---|---|---|---|")
+        for t in s["thresholds"]:
+            def cell(r):
+                return "-" if r["pct"] is None else f"{r['record']} ({r['pct']:.4f})"
+            print(f"| {t['edge']} | {cell(t['all'])} | {cell(t['underdog'])} "
+                  f"| {cell(t['favourite'])} |")
+        live = s["live"]
+        print(f"\nrule: {s['rule']}")
+        print(f"  {live['record']}  {live['pct']}  95% CI {live['ci95']}  "
+              f"~{live['per_season']} plays/season")
+        beats = live["ci95"] and live["ci95"][0] > BREAKEVEN
+        print(f"  interval clears {BREAKEVEN} break-even: "
+              f"{'YES' if beats else 'NO — cannot be claimed as an edge'}")
+        print("  per season: " + ", ".join(
+            f"{k} {v['record']}" for k, v in sorted(s["by_season"].items())))
+        print()
     print("## line provenance")
     for k, v in prov.items():
         print(f"  {k}: {v}")

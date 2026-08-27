@@ -63,6 +63,11 @@ function teaser(meta) {
     merkle_root: meta.merkle_root,
     unlocks_at: meta.earliest_kickoff,
     top_divergence_matchup: meta.top_divergence_matchup || null,
+    // How many games cleared the engine's edge bar — a count, never a side.
+    // Zero is a real and publishable answer, so `null` means the sidecar
+    // predates the field rather than "no plays"; the two must not collapse.
+    qualified_plays:
+      typeof meta.qualified_plays === "number" ? meta.qualified_plays : null,
     // No `upgrade` field any more: the checkout was removed on 2026-08-22 and
     // there is nothing to sell. The lock is the proof mechanism, not a price.
     // This note now renders ONLY when the slate cannot be decrypted — there

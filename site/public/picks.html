@@ -73,6 +73,15 @@
   .confbar i{position:absolute;left:0;top:0;height:100%;display:block;
     background:linear-gradient(180deg,#C7CDD8,#8A919D)}
   .rk{color:var(--dim);margin-right:1px}
+  /* A qualified play is marked by a rail on the row, not by a coloured
+     number. The distance from the number is the same measurement whichever
+     side it lands on, and painting the ones we like green would be scoring
+     our own opinion before the game has been played — which is the habit this
+     whole page exists to argue against. The rail says "we said something
+     here", nothing more. */
+  #board tr.g.q>td:first-child{box-shadow:inset 2px 0 0 var(--brand)}
+  .play{font:500 12px var(--mono);color:var(--ink2);white-space:nowrap}
+  .play b{color:var(--ink);font-weight:600}
   .pick{font:600 13px var(--sans);color:var(--ink)}
   .pick .m{font:500 11px var(--mono);color:var(--mut);margin-left:7px}
   tr.dt>td{padding:0;background:var(--g0);border-bottom:1px solid var(--hair2)}
@@ -199,7 +208,7 @@
 
   <div class="scr-strip"><span class="nm">PICK ENGINE</span>
     <span class="tl">EVERY GAME · <b>NO SELECTION RULE</b> · TIMESTAMPED BY GITHUB</span>
-    <span class="tl" style="margin-left:auto">MODEL RECORD: LOSES TO THE CLOSE — <a href="/record" style="color:var(--mut)">49.5% ATS</a></span></div>
+    <span class="tl" style="margin-left:auto">MODEL RECORD: LOSES TO THE CLOSE — <a href="/record" style="color:var(--mut)">49.8% ATS</a></span></div>
   <!-- "opens to everyone at first kickoff" was true of a time gate that was
        removed with the paid tier on 2026-08-22. The slate is published the
        moment it is sealed. What makes it a commitment is that the root is
@@ -210,12 +219,15 @@
     free and open the moment it is sealed. Not advice; nothing here claims to win.</p>
   <div class="ph">
     <span class="tl">PICK ENGINE — SEALED WEEKLY · GRADED IN PUBLIC</span>
-    <h1>Every game on the slate. No selection rule.</h1>
+    <h1>Every game sealed. The filter published with it.</h1>
     <p class="lede">Every honest record in this market is a <b>selected subset</b> — filtered
-      by star tier, an edge threshold, or a card that plays a third of the games. Ours is
-      not. And our model <b>loses to the closing market</b>: 49.5% ATS on 2,608 decided
-      walk-forward games, below the 52.38% break-even. <a href="/record">See every
-      population &rarr;</a></p>
+      by star tier, an edge threshold, or a card that plays a third of the games. We filter
+      too. The difference is that ours is <b>published, and applied before the seal</b>: the
+      bar is four points of disagreement with the number, and the unfiltered record is
+      printed beside the filtered one. That unfiltered record <b>loses to the closing
+      market</b>: 49.8% ATS on 2,608 decided walk-forward games, under the 52.38%
+      break-even. The games clearing the bar ran 53.2%, on an interval that still contains
+      break-even. <a href="/record">See every population &rarr;</a></p>
     <details class="more">
       <summary>How the seal works, and what this isn't</summary>
       <p class="creed">The whole slate is committed <b>unfiltered</b>, under a Merkle root
@@ -269,9 +281,18 @@ var D=window.Desk;
 D.mount("picks");
 var OPEN=null;
 
-/* Below this bar the model barely disagrees with the market anywhere, and an
-   honest engine says so instead of manufacturing conviction. */
-var NOPLAY_DIVERGENCE=0.05;
+/* The bar the engine must clear before it will name a side: how far our
+   predicted margin sits from the posted number, in points.
+
+   Measured, never chosen — scripts/published_figures.py emits it under
+   `selectivity` and engine/models/ensemble.py enforces it. Ten seasons of
+   walk-forward grading: an engine with an opinion on all sixteen games runs
+   49.8% against the spread, and the games clearing this bar run 53.2%. Below
+   it the disagreement is inside the model's own error bar, and an honest
+   engine says nothing instead of manufacturing conviction.
+
+   Some weeks that means zero plays. That is the feature. */
+var EDGE_BAR=4;
 
 function $(id){return document.getElementById(id);}
 function pcts(x){return x==null?"·":(x*100).toFixed(1)+"%";}
@@ -358,7 +379,7 @@ function strip(s,locked){
     +'<span class="tl">AT <b><span data-ago="'+D.esc(s.sealed_at||s.committed_at||"")+'">'
       +D.ago(s.sealed_at||s.committed_at||"")+'</span></b></span>'
     +'<span class="count">'+(s.game_count!=null?s.game_count:(s.games||[]).length)
-      +' GAMES · BOTH MODELS · NO CHERRY-PICKING</span>'
+      +' GAMES · BOTH MODELS · EVERY ONE GRADED</span>'
     /* Sealed is frost, not amber: a committed slate is not a warning about
        anything, and the code below already reserves amber for the last five
        minutes. The melt bar only exists while there is ice to melt, and it is
@@ -419,6 +440,20 @@ function lockedTable(games){
     +'<th>OUR PICK</th><th>DISAGREEMENT</th></tr></thead><tbody>'
     +lockedRows(games)+'</tbody></table></div>';
 }
+/* Sealed, the honest teaser is a COUNT: how many games the engine was willing
+   to speak on. It gives away no side, and zero is a real answer rather than a
+   missing one — so a sidecar that predates the field (null) must not render as
+   "no plays this week". */
+function playCount(t){
+  if(t.qualified_plays==null) return "";
+  if(!t.qualified_plays)
+    return '<b style="color:var(--ink2)">No game on this slate cleared the '
+      +EDGE_BAR+'-point bar</b>, so the sealed slate contains no play at all. '
+      +'That is committed too, and it will grade as it stands. ';
+  return '<b style="color:var(--ink2)">'+t.qualified_plays+' of '
+    +(t.game_count||"?")+' games</b> cleared the engine’s '+EDGE_BAR
+    +'-point bar. How many is public; which side is not. ';
+}
 function lockedView(t){
   strip(t,true);
   /* Sixteen games committed and not yet revealed: the whole slate is one
@@ -470,7 +505,8 @@ function lockedView(t){
     +'<p class="note" style="margin-top:14px">Everything above is public: the games, '
     +'the line, and what the market gives the home side. What is sealed is which side '
     +'we took and how strongly — already written, already hashed into the root above, '
-    +'already timestamped by a GitHub commit rather than by us. <b style="color:var(--ink2)">'
+    +'already timestamped by a GitHub commit rather than by us. '
+    +playCount(t)+'<b style="color:var(--ink2)">'
     +'DISAGREEMENT</b> ranks how far our model sits from the market on each game, '
     +'biggest first; the direction stays sealed. Nothing unlocks it early and there is '
     +'nothing to buy. Verify the root now, '
@@ -479,10 +515,26 @@ function lockedView(t){
 }
 
 /* ---------- open/pro: the full instrument ---------- */
+/* The spread opinion, and whether the engine will stand behind it.
+
+   `ats.edge` is our predicted margin minus the posted number, in points, on
+   the home basis. A qualified play gets the side and the size; everything
+   below the bar reads as a dash, because "we do not have one here" is the
+   answer for most of the board most weeks. */
+function play(g){
+  var a=g.ats;
+  if(!a||a.edge==null) return '<span class="dim">·</span>';
+  if(!a.qualified)
+    return '<span class="dim" title="inside the model\'s error bar">'
+      +D.pts(Math.abs(a.edge),1)+'</span>';
+  return '<span class="play">'+D.esc(a.pick)+' <b>'
+    +D.pts(Math.abs(a.edge),1)+'</b></span>';
+}
 function row(g){
   var ind=g.independent||{}, con=g.consensus||{};
   var confPct=Math.round((ind.prob||0)*100);
-  return '<tr class="g" data-id="'+D.esc(g.game_id)+'" tabindex="0"'
+  var q=g.ats&&g.ats.qualified?" q":"";
+  return '<tr class="g'+q+'" data-id="'+D.esc(g.game_id)+'" tabindex="0"'
     +' aria-expanded="'+(OPEN===g.game_id?"true":"false")+'">'
     +'<td class="l"><span class="pick">'+D.esc(ind.pick||"·")
       /* sport:"nfl" is REQUIRED, not decoration. The slate speaks in schedule
@@ -493,6 +545,7 @@ function row(g){
          missing argument. */
       +'<span class="m">'+window.Crest.team(g.away,{size:14,sport:"nfl"})+' AT '
         +window.Crest.team(g.home,{size:14,sport:"nfl"})+'</span></span></td>'
+    +'<td>'+play(g)+'</td>'
     +'<td class="l dim">'+D.esc(D.when(g.kickoff))+'</td>'
     /* the bar leads and the number closes the cell, so every stated chance in
        the column ends on the same right edge instead of being shunted around
@@ -522,7 +575,7 @@ function detail(g){
       +D.spectrum({quotes:g.quotes,fairProb:ind.prob,fairPrice:ind.fair_odds,
         label:"Every book against our fair price for "+side})+'</div>';
   }
-  return '<tr class="dt"><td colspan="8"><div class="dtin"><div class="dt-grid">'
+  return '<tr class="dt"><td colspan="9"><div class="dtin"><div class="dt-grid">'
     +'<div>'
     +kv("INDEPENDENT — OUR OPINION",D.esc(ind.pick||"·")+" · "+pcts(ind.prob)
       +" · FAIR "+D.am(ind.fair_odds))
@@ -532,6 +585,12 @@ function detail(g){
     +kv("DIVERGENCE",g.divergence==null?"·":g.divergence.toFixed(3)
       +(g.models_disagree?' · <span style="color:var(--amber)">MODELS DISAGREE</span>':""))
     +kv("SPREAD",g.spread_line==null?"·":(g.spread_line>0?"+":"")+g.spread_line)
+    +kv("OUR MARGIN vs THE NUMBER",(!g.ats||g.ats.edge==null)?"·"
+      :D.pts(g.ats.pred_margin,1)+" vs "+D.pts(g.spread_line,1)+" &middot; "
+        +(g.ats.qualified
+          ? "<b>PLAY "+D.esc(g.ats.pick)+"</b> by "+D.pts(Math.abs(g.ats.edge),1)
+          : '<span class="dim">'+D.pts(Math.abs(g.ats.edge),1)+" &mdash; under the "
+            +EDGE_BAR+"pt bar, no play</span>"))
     +'</div>'+spec+'</div>'
     +'<p class="note" style="margin-top:10px">The independent model never sees the '
     +'betting line — it is our actual opinion, and it is measurably worse than the '
@@ -543,18 +602,42 @@ function openView(s){
   strip(s,false);
   /* thawed: the ice comes off the surface with the seal */
   $("board").className="itab";
-  var games=s.games||[];
-  var maxDiv=games.reduce(function(m,g){return Math.max(m,g.divergence||0);},0);
-  if(maxDiv<NOPLAY_DIVERGENCE&&games.length){
-    $("noplay").innerHTML='<p class="noplay"><b>Nothing on this slate clears our '
-      +'disagreement bar</b> (max divergence '+maxDiv.toFixed(3)+' &lt; '+NOPLAY_DIVERGENCE
-      +'). The model and the market see this week the same way. That is a finding, '
-      +'not a gap — an engine that always has a hot pick is selling you noise.</p>';
+  /* The qualified plays lead the board. Everything else is still published in
+     full underneath — the slate is sealed as a whole and no row is hidden —
+     but the ordering answers the question the reader came with instead of
+     making them scan sixteen rows for it. */
+  var games=(s.games||[]).slice().sort(function(a,b){
+    var qa=a.ats&&a.ats.qualified?1:0, qb=b.ats&&b.ats.qualified?1:0;
+    if(qa!==qb) return qb-qa;
+    if(qa) return (a.ats_rank||99)-(b.ats_rank||99);
+    return (a.divergence_rank||99)-(b.divergence_rank||99);
+  });
+  var plays=games.filter(function(g){return g.ats&&g.ats.qualified;});
+  var maxEdge=games.reduce(function(m,g){
+    return Math.max(m,(g.ats&&g.ats.edge!=null)?Math.abs(g.ats.edge):0);},0);
+  if(!plays.length&&games.length){
+    $("noplay").innerHTML='<p class="noplay"><b>No play on this slate.</b> Nothing '
+      +'here sits '+EDGE_BAR+' points off the posted number — the furthest we get is '
+      +maxEdge.toFixed(1)+'. The model and the market read this week the same way, '
+      +'and inside that gap our disagreement is smaller than our own error bar. '
+      +'That is a finding, not a gap in the service. An engine that always has a hot '
+      +'pick is selling you noise, and ours grades out at 49.8% when it is made to '
+      +'have an opinion on every game. <a href="/methodology">The measurement '
+      +'&rarr;</a></p>';
+  } else if(plays.length){
+    $("noplay").innerHTML='<p class="noplay"><b>'+plays.length+' play'
+      +(plays.length===1?"":"s")+' on this slate</b> of '+games.length+' games. '
+      +'A play is a game where our predicted margin sits at least '+EDGE_BAR
+      +' points off the posted number. Over ten seasons of walk-forward grading '
+      +'those games ran 53.2% against the spread and the whole board ran 49.8%; '
+      +'the interval on 53.2% still crosses the 52.38% break-even, so this is the '
+      +'better half of a losing model, not a winning one. '
+      +'<a href="/methodology">Every season, wins and losses &rarr;</a></p>';
   }
   var html='<div class="scr"><table><thead><tr>'
-    +'<th class="l">PICK · MATCHUP</th><th class="l">KICKOFF</th>'
+    +'<th class="l">PICK · MATCHUP</th><th>SPREAD PLAY</th><th class="l">KICKOFF</th>'
     +'<th>INDEPENDENT</th><th>MARKET</th><th>DIVERGENCE</th>'
-    +'<th>BEST PRICE</th><th>OUR FAIR</th><th>EDGE PTS</th></tr></thead><tbody>';
+    +'<th>BEST PRICE</th><th>OUR FAIR</th><th>PRICE EDGE</th></tr></thead><tbody>';
   games.forEach(function(g){
     html+=row(g);
     if(OPEN===g.game_id) html+=detail(g);

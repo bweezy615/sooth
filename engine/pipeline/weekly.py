@@ -34,13 +34,14 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Ridge
 
 from ..adapters.nfl import NFLAdapter
 from ..calibrate import Calibrator
 from ..commit import commit_slate
 from ..features import attach_carry_forward, build_team_ratings, load_team_weeks
-from ..models.ensemble import BASE_FEATURES, MARKET_FEATURE, build_frame, _logit
+from ..models.ensemble import (BASE_FEATURES, EDGE_THRESHOLD, MARKET_FEATURE,
+                               build_frame, _logit)
 from ..models.elo import EloConfig, EloModel
 from ..schema import (Market, Prediction, Sport, american_to_prob, devig,
                       prob_to_american)
@@ -54,16 +55,25 @@ MODEL_CONSENSUS = "elo+epa+market-v1+iso"
 
 
 def _fit_models(hist: pd.DataFrame):
-    """Fit both models and their calibrators on all completed history."""
+    """Fit both models and their calibrators on all completed history.
+
+    A third fit rides along and answers a different question. The two
+    classifiers above predict WHO WINS; a spread asks BY HOW MUCH, and the
+    margin regression answers that directly instead of pushing a probability
+    through a conversion constant. It is the only thing that decides a play
+    against a number — see docs/plans/pick-engine-selectivity.md.
+    """
     ind_feats, con_feats = BASE_FEATURES, BASE_FEATURES + [MARKET_FEATURE]
 
     ind_train = hist.dropna(subset=ind_feats + ["home_won"])
     con_train = hist.dropna(subset=con_feats + ["home_won"])
+    mar_train = hist.dropna(subset=ind_feats + ["margin"])
 
     ind = LogisticRegression(max_iter=2000).fit(
         ind_train[ind_feats], ind_train["home_won"])
     con = LogisticRegression(max_iter=2000).fit(
         con_train[con_feats], con_train["home_won"])
+    mar = Ridge(alpha=1.0).fit(mar_train[ind_feats], mar_train["margin"])
 
     # Calibrators fitted on in-sample fits are optimistic, but the walk-forward
     # backtest already established the honest calibration numbers we publish.
@@ -74,7 +84,7 @@ def _fit_models(hist: pd.DataFrame):
         con.predict_proba(con_train[con_feats])[:, 1],
         con_train["home_won"].to_numpy(float), through_season=0)
 
-    return (ind, ind_cal, ind_feats), (con, con_cal, con_feats)
+    return (ind, ind_cal, ind_feats), (con, con_cal, con_feats), mar
 
 
 def _elo_through(adapter: NFLAdapter, season: int, week: int) -> EloModel:
@@ -171,6 +181,17 @@ def _pickengine_payloads(root: Path, payload: dict) -> dict:
         pro_games, key=lambda g: rank_of[g["game_id"]])
     pro_doc["reveal"] = f"/data/{slate_id}.reveal.json"
 
+    # Qualified plays are ranked among THEMSELVES, by how far the model sits
+    # from the number. This is the difference from `divergence_rank`, which
+    # ranks within the slate and therefore always crowns something — even in a
+    # week where the model agrees with the market on all sixteen games. Ranked
+    # top-N by within-week divergence graded 50.2-52.3% over ten seasons; an
+    # absolute threshold that is allowed to return nothing graded 53.2%.
+    qualified = sorted(
+        (g for g in pro_doc["games"] if (g.get("ats") or {}).get("qualified")),
+        key=lambda g: -abs(g["ats"]["edge"]))
+    ats_rank_of = {g["game_id"]: i + 1 for i, g in enumerate(qualified)}
+
     # The ledger repo is public (that IS the timestamp anchor), so the Pro
     # payload lands as AES-256-GCM ciphertext — the committed blob is itself a
     # timestamped commitment to the Pro slate. A plaintext sidecar carries
@@ -185,6 +206,9 @@ def _pickengine_payloads(root: Path, payload: dict) -> dict:
     (pro_dir / "latest.meta.json").write_text(json.dumps({
         "slate_id": slate_id,
         "game_count": len(pro_doc["games"]),
+        # A count, never a side: how many games cleared the threshold. Zero is
+        # a legitimate and publishable answer.
+        "qualified_plays": len(qualified),
         "sealed_at": payload["committed_at"],
         "merkle_root": payload["merkle_root"],
         "earliest_kickoff": payload["earliest_kickoff"],
@@ -198,6 +222,7 @@ def _pickengine_payloads(root: Path, payload: dict) -> dict:
     for g in pro_doc["games"]:
         g = dict(g)
         g["divergence_rank"] = rank_of[g["game_id"]]
+        g["ats_rank"] = ats_rank_of.get(g["game_id"])
         public_games.append(g)
     return {"locked": False, "unlocks_at": payload["earliest_kickoff"],
             "games": public_games}
@@ -209,7 +234,7 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     adapter.fetch(force=True)
 
     hist = build_frame(1999, season - 1 if week == 1 else season)
-    (ind, ind_cal, ind_feats), (con, con_cal, con_feats) = _fit_models(hist)
+    (ind, ind_cal, ind_feats), (con, con_cal, con_feats), mar = _fit_models(hist)
 
     ratings = build_team_ratings(load_team_weeks(1999, season))
     elo = _elo_through(adapter, season, week)
@@ -280,6 +305,30 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
 
         ip, cp = min(max(p_ind, 1 - CONFIDENCE_CAP), CONFIDENCE_CAP), \
                  min(max(p_con, 1 - CONFIDENCE_CAP), CONFIDENCE_CAP)
+
+        # --- the spread opinion, and whether it is worth stating -----------
+        # `spread_line` is on the home basis and positive when the home side
+        # lays points, so a positive edge means we like the home side and its
+        # size is the distance from the number in points. Below the threshold
+        # the disagreement is inside the model's own error bar and the engine
+        # says nothing: on ten seasons, having an opinion on every game grades
+        # out at 49.8% while these qualified plays grade at 53.2%.
+        pm = float(mar.predict(X[ind_feats])[0])
+        sl = float(r["spread_line"]) if pd.notna(r.get("spread_line")) else None
+        if sl is None:
+            ats = {"pred_margin": round(pm, 2), "edge": None, "pick": None,
+                   "underdog": None, "qualified": False}
+        else:
+            edge = pm - sl
+            picks_home = edge > 0
+            ats = {
+                "pred_margin": round(pm, 2),
+                "edge": round(edge, 2),
+                "pick": home if picks_home else away,
+                "underdog": bool(sl < 0 if picks_home else sl > 0),
+                "qualified": bool(abs(edge) >= EDGE_THRESHOLD),
+            }
+
         display.append({
             "game_id": eid, "kickoff": kickoff.isoformat(),
             "home": home, "away": away,
@@ -293,10 +342,10 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
                 "prob": round(max(cp, 1 - cp), 4),
                 "fair_odds": prob_to_american(round(max(cp, 1 - cp), 4)),
             },
+            "ats": ats,
             "market_prob": (None if pd.isna(mkt_home)
                             else round(float(mkt_home), 4)),
-            "spread_line": (float(r["spread_line"])
-                            if pd.notna(r.get("spread_line")) else None),
+            "spread_line": sl,
             "models_disagree": (ip >= 0.5) != (cp >= 0.5),
             "independent_vs_market": (
                 None if pd.isna(mkt_home) else bool((mkt_home >= 0.5) != (ip >= 0.5))),
@@ -389,15 +438,26 @@ def main() -> None:
     print(f"predictions : {p['n_predictions']} (2 models x {len(p['games'])} games)")
     print(f"merkle root : {p['merkle_root']}")
     print()
-    hdr = f"{'matchup':<12} {'independent':<18} {'consensus':<18} {'mkt':>6}"
+    hdr = (f"{'matchup':<12} {'independent':<18} {'consensus':<18} {'mkt':>6} "
+           f"{'edge':>7}")
     print(hdr); print("-" * len(hdr))
     for g in p["games"]:
         i, c = g["independent"], g["consensus"]
+        a = g.get("ats") or {}
         mp = "  n/a" if g["market_prob"] is None else f"{g['market_prob']:.3f}"
+        eg = "    n/a" if a.get("edge") is None else f"{a['edge']:+7.2f}"
         flag = "  <-- models differ" if g["models_disagree"] else ""
+        if a.get("qualified"):
+            flag = f"  <== PLAY {a['pick']}" + flag
         print(f"{g['away']+' @ '+g['home']:<12} "
               f"{i['pick']+' '+format(i['prob'],'.3f'):<18} "
-              f"{c['pick']+' '+format(c['prob'],'.3f'):<18} {mp:>6}{flag}")
+              f"{c['pick']+' '+format(c['prob'],'.3f'):<18} {mp:>6} {eg}{flag}")
+    n = sum(1 for g in p["games"] if (g.get("ats") or {}).get("qualified"))
+    print()
+    print(f"qualified plays: {n} of {len(p['games'])} "
+          f"(edge >= {EDGE_THRESHOLD} pts against the posted number)")
+    if not n:
+        print("  nothing clears the bar this week. That is an answer.")
 
 
 if __name__ == "__main__":

@@ -69,5 +69,48 @@ function run(games, { ok = true, body = BEST } = {}) {
                  { body: null }))[0];
   assert.strictEqual(g.best_price, null, "null payload should leave it empty");
 
-  console.log("picks selfcheck OK");
+  
+// ---- the spread play cell ------------------------------------------------
+// play() is what the page says when asked "do you have an opinion here". Its
+// three branches are the whole product decision: no number to compare against,
+// a disagreement too small to state, and a stated side. Getting the middle one
+// wrong turns "we have nothing" into a pick, which is the failure this change
+// exists to prevent, and a build would never notice.
+const pf = page.match(/function play\(g\)\{[\s\S]*?\n\}/);
+assert.ok(pf, "play() not found in picks.html — did it get renamed?");
+
+function playCell(ats) {
+  const box = {
+    D: {
+      esc: (x) => String(x),
+      pts: (x, dp) => (x > 0 ? "+" : "") + Number(x).toFixed(dp == null ? 2 : dp),
+    },
+  };
+  vm.createContext(box);
+  vm.runInContext(pf[0] + "\n;__out = play(__g);",
+    Object.assign(box, { __g: { ats } }), { filename: "picks.html" });
+  return box.__out;
+}
+
+// no spread posted yet: say nothing, invent nothing
+assert.ok(!/PLAY|\d/.test(playCell(null)), "invented a play with no ats block");
+assert.ok(!/\d/.test(playCell({ edge: null, qualified: false })),
+  "invented a play with no edge");
+
+// under the bar: the distance is shown, but dimmed and with NO side named
+const under = playCell({ edge: 1.4, pick: "SEA", qualified: false });
+assert.ok(under.includes("dim"), "sub-threshold edge is not dimmed");
+assert.ok(!under.includes("SEA"), "named a side for a game under the bar");
+assert.ok(under.includes("1.4"), "sub-threshold edge lost its magnitude");
+
+// over the bar: the side is named and the magnitude is unsigned, because the
+// direction is carried by the team name and a signed number would read as a
+// second, contradictory claim
+const over = playCell({ edge: -6.25, pick: "NE", qualified: true });
+assert.ok(over.includes("NE"), "qualified play did not name its side");
+assert.ok(over.includes("+6.2") || over.includes("+6.3"),
+  "qualified play lost its magnitude: " + over);
+assert.ok(!over.includes("-6"), "showed a negative edge beside a named side");
+
+console.log("picks selfcheck OK");
 })().catch((e) => { console.error(e.message); process.exit(1); });

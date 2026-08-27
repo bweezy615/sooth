@@ -151,7 +151,7 @@ SHELL = """<!doctype html>
 <meta property="og:title" content="{title} — {brand}">
 <meta property="og:description" content="{description}">
 <meta property="og:type" content="article">
-<meta property="og:image" content="https://sooth.bet/og.png">
+<meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="{domain}/{slug}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
