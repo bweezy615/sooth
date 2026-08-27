@@ -50,6 +50,12 @@ from engine.adapters.nfl import NFLAdapter
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "site/content/_figures.json"
+# desk.js fetches this one at runtime for the populations block on /record and
+# /trust. It used to be a manual copy of OUT and went 19 days stale, so /record
+# and /trust quoted a different ATS record than /methodology did — the site
+# disagreeing with itself about its own record. Written here so there is no
+# copy step to forget; tests/test_figures_published.py holds the two together.
+PUBLIC_OUT = ROOT / "site/public/data/figures.json"
 
 BREAKEVEN = 0.5238  # -110 both sides
 EPS = 1e-6
@@ -171,8 +177,11 @@ def main() -> None:
         "models": {name: desc for name, _, _, desc in MODELS},
     }
 
+    payload = json.dumps(figures, indent=2)
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(figures, indent=2))
+    OUT.write_text(payload)
+    PUBLIC_OUT.parent.mkdir(parents=True, exist_ok=True)
+    PUBLIC_OUT.write_text(payload)
 
     # ---- human-readable summary -------------------------------------------
     def table(ev, spread_label):
@@ -219,6 +228,7 @@ def main() -> None:
         print(f"  {k}: {v}")
     print()
     print(f"written: {OUT.relative_to(ROOT)}")
+    print(f"written: {PUBLIC_OUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

@@ -628,9 +628,11 @@ function populations(el){
     el.innerHTML='<div class="itab"><div class="scr">'+html+'</div></div>'
       +'<p class="note">Three different samples, three different denominators. '
       +'Break-even is '+be+'; no sample clears it. The backtests are historical '
-      +'and were never wagered; the live slates are pre-committed and unfiltered '
-      +'— every game on the slate, no star tier, no edge threshold, no betting '
-      +'card. Ask any service showing you a record which bets are in their '
+      +'and were never wagered; the live slates are pre-committed and graded in '
+      +'full — every game on the slate, no star tier, no betting card. The '
+      +'engine does mark which games clear its edge bar, and that bar was '
+      +'published before the slate sealed; the record above is every game '
+      +'regardless. Ask any service showing you a record which bets are in their '
       +'tracker but not in their published picks, and when that filter was chosen.</p>';
   }).catch(function(){ el.innerHTML='<p class="note">Figures unavailable.</p>'; });
 }
