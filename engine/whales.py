@@ -34,6 +34,10 @@ WHALE_MIN_USD = 10_000.0
 PAUSE = 0.2
 RETRIES = 4
 BACKOFF = 3.0
+# Transient by definition: 408 the server gave up waiting, 425 it wants us to
+# slow down, 429 we asked too fast, 5xx it broke. Everything else -- a 404, a
+# 400 -- is a fact about the request and retrying it just wastes the run.
+RETRY_STATUS = {408, 425, 429}
 OUT = Path("site/public/data/whales.json")
 
 READER_COPY = (
@@ -85,9 +89,18 @@ def _get(session: requests.Session, url: str, **params: Any) -> Any:
     delay = BACKOFF
     for attempt in range(RETRIES + 1):
         time.sleep(PAUSE)
-        response = session.get(url, params=params, timeout=45,
-                               headers={"accept": "application/json"})
-        if response.status_code == 429 or response.status_code >= 500:
+        try:
+            response = session.get(url, params=params, timeout=45,
+                                   headers={"accept": "application/json"})
+        except (requests.Timeout, requests.ConnectionError):
+            # over a thousand calls a run, a dropped connection is a certainty
+            # eventually; it should cost one retry, not the whole capture
+            if attempt == RETRIES:
+                raise
+            time.sleep(delay)
+            delay *= 2
+            continue
+        if response.status_code in RETRY_STATUS or response.status_code >= 500:
             if attempt == RETRIES:
                 response.raise_for_status()
             wait = _number(response.headers.get("Retry-After"), 0.0) or delay
@@ -241,6 +254,15 @@ def publish(path: Path = OUT, **capture_args: Any) -> dict:
 
 
 def _selfcheck() -> int:
+    # the retry paths below are asserted for behaviour, not for wall-clock
+    real_sleep, time.sleep = time.sleep, lambda _s: None
+    try:
+        return _run_selfcheck()
+    finally:
+        time.sleep = real_sleep
+
+
+def _run_selfcheck() -> int:
     market = {
         "conditionId": "0x1", "question": "Will New York win?",
         "eventSlug": "season", "_sport": "mlb",
@@ -302,6 +324,32 @@ def _selfcheck() -> int:
         def get(self, url, **kwargs):
             self.calls += 1
             return Response(None, status=404)
+
+    class Flaky:
+        """408 then 200 — the second failure the live capture actually hit."""
+        def __init__(self): self.calls = 0
+        def get(self, url, **kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                return Response(None, status=408)
+            return Response([{"markets": [market]}])
+
+    flaky = Flaky()
+    assert _get(flaky, "https://fixture/events") == [{"markets": [market]}]
+    assert flaky.calls == 2, flaky.calls
+
+    class Dropped:
+        """a dropped connection costs one retry, not the capture"""
+        def __init__(self): self.calls = 0
+        def get(self, url, **kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                raise requests.ConnectionError("reset by peer")
+            return Response([{"markets": [market]}])
+
+    dropped = Dropped()
+    assert _get(dropped, "https://fixture/events") == [{"markets": [market]}]
+    assert dropped.calls == 2, dropped.calls
 
     gone = Gone()
     try:
