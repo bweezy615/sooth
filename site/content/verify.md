@@ -54,8 +54,9 @@ is called the **Merkle root**.
 The tree structure buys one useful property: we can prove that a single
 prediction was part of the committed slate without revealing the other
 predictions. That short list of hashes is called an **inclusion proof**. It
-matters for subscriber-only predictions, where we want to prove a pick was
-committed before kickoff without publishing it to everyone.
+matters whenever one prediction travels on its own — quoted in a post, or sent
+in an alert email — and you want to test that single claim without fetching and
+re-hashing the whole slate.
 
 ### The timestamp
 
@@ -74,7 +75,7 @@ Two files, both plain JSON.
 contains only the root fingerprint and the counts. For NFL Week 1 of 2026 it
 reads:
 
-```json
+``` {.json .frosted}
 {
   "algorithm": "sha256-merkle-v1",
   "committed_at": "2026-08-06T05:36:17.176614+00:00",
@@ -173,7 +174,7 @@ python3 verify.py 2026-W01-nfl.commitment.json 2026-W01-nfl.reveal.json
 
 Output for NFL Week 1 of 2026:
 
-```
+``` {.frosted}
 predictions revealed : 32
 predictions committed: 32
 committed at         : 2026-08-03T02:50:37.265208+00:00
@@ -206,9 +207,9 @@ record after the fact.
 
 ## Checking a single prediction: inclusion proofs
 
-Sometimes you only want to check one pick, and sometimes we only publish one
-pick - for example a subscriber-only prediction where the rest of the slate is
-not public. An inclusion proof handles that case.
+Sometimes you only want to check one pick — one prediction quoted in a post,
+or carried in an alert email, away from the slate it came from. An inclusion
+proof handles that case.
 
 The proof is a short list of sibling fingerprints, one for each level of the
 tree. You start with the fingerprint of your prediction, combine it with the
@@ -224,19 +225,19 @@ eight becomes four, four becomes two, two becomes one.
 The first prediction in the Week 1 slate, in canonical form, is this exact
 string of 281 characters:
 
-```
+``` {.frosted}
 {"created_at":"2026-09-09T20:20:00+00:00","event_id":"2026_01_NE_SEA","line":null,"market":"moneyline","model_version":"elo+epa-v1+iso","probability":0.6615,"rationale":"elo 1692 vs 1604, rest diff +0","reference_line":3.5,"reference_price":-198,"selection":"side_a","sport":"nfl"}
 ```
 
 Its leaf fingerprint is:
 
-```
+``` {.frosted}
 2ee7fb4740fafe6bbadab1e45bd2f3e9ce0578ced2f1628a82cba5d4b8b2f5bc
 ```
 
 And its inclusion proof, four steps, is:
 
-```json
+``` {.json .frosted}
 [
   {"side": "right", "hash": "4d433651a9f54a1fdf0ee279a08911cd66ad0b1f35dcf309eb45e68af3beccaa"},
   {"side": "right", "hash": "259bd611b859eb91d815444c743cf6129d0e122116e79285f18f5a8f7b79c2c8"},

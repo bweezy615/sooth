@@ -42,9 +42,9 @@ margin-of-victory update, augmented with opponent-aware expected-points-added
 form and rest, then convert those ratings into probabilities and correct them
 with isotonic regression refit each season on prior seasons only. Across 2,671
 out-of-sample games from 2016 through 2025, the published model recorded a
-Brier score of 0.22148 against the de-vigged closing market's 0.21038,
-straight-up accuracy of 63.72% against the market's 66.64%, and an
-against-the-spread record of 1291-1317-63, or 49.50% of decided games, against
+Brier score of 0.22151 against the de-vigged closing market's 0.21038,
+straight-up accuracy of 63.53% against the market's 66.64%, and an
+against-the-spread record of 1298-1310-63, or 49.77% of decided games, against
 a breakeven of 52.38% at standard -110 pricing. **The model does not beat the
 closing market.** Our probabilities are reasonably calibrated, which is a
 different and smaller claim, and it is the only claim we make.
@@ -58,7 +58,7 @@ We claim exactly two things:
 1. **Our published probabilities are calibrated.** When we publish 70%, events
    in that band have historically occurred about 70% of the time in our
    out-of-sample testing. The measured expected calibration error of the
-   published model is 0.03122; the de-vigged market's is 0.01913. The market
+   published model is 0.03074; the de-vigged market's is 0.01913. The market
    is better calibrated than we are, and we say so.
 2. **Our record is tamper-evident.** Every prediction is hashed and committed to
    a public Merkle root before the first kickoff of its slate. We cannot delete
@@ -418,8 +418,9 @@ impossible to create one by accident.
 Because it is a Merkle tree and not a flat hash, a single prediction can be
 proven to belong to a committed slate without revealing the rest of the slate.
 For our 16-game NFL Week 1 slate, an inclusion proof is four hashes long. This
-matters for the paid tier: we can prove a subscriber-only prediction was part of
-the pre-kickoff commitment without publishing the whole slate to non-subscribers.
+is what lets one prediction be checked on its own — quoted in a post, or carried
+in an alert email — without anyone having to fetch and re-hash the entire slate
+to test a single claim.
 
 Step-by-step instructions for verifying all of this yourself, including a
 30-line script that does not use any of our code, are on the [verification

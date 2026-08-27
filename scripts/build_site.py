@@ -46,60 +46,55 @@ PAGES = [
      "and make no performance claims."),
 ]
 
-# ⚠ DRIFT WARNING — read before running this script.
+# The stylesheets below are the ones actually serving on sooth.bet.
+# tests/test_build_site.py rebuilds the site into a temp root and fails if this
+# file and site/public/ disagree, so a hand edit to either side that is not
+# mirrored in the other cannot land. That test is the guard the old "diff
+# before running" comment here was trying, and failing, to be. A comment is not
+# a check. See docs/plans/build-site-drift.md.
 #
-# build_ledger() and friends REGENERATE site/public/{ledger,methodology,verify,
-# disclaimers}.html from this constant plus an f-string body. Those four files
-# were hand-re-skinned to the FROZEN MARKET concept on 2026-08-22
-# (docs/DESIGN-frozen-market.md), and verify.html in particular gained frost
-# treatment on its commitment blocks that this generator knows nothing about.
-#
-# The palette below has been ported so a rebuild no longer reverts the colours
-# and type. It will still discard any hand-edit to the four pages' STRUCTURE.
-# Before running: diff the generated output against what is on disk, or port
-# the structural change up into here first.
-CSS = """
-:root{--bg:#06080A;--panel:#0B0F13;--panel-2:#18222B;--line:rgba(190,222,228,.085);
---line-2:rgba(190,222,228,.17);
---ink:#F0F5F6;--muted:#7E8D93;--dim:#546268;--accent:#2DD4A7;--warn:#E2A94A;
---bad:#FF6B6B;--link:#2DD4A7;--frost:#BFEAF2;--frost-rim:rgba(191,234,242,.34);
---mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+# CSS_PROSE serves /methodology and /disclaimers. /verify is CSS_PROSE with the
+# frost rules spliced in ahead of the long-form block, where they sit on disk.
+# /ledger has its own sheet: that page is the frozen artifact itself.
+CSS_PROSE = """/* FROZEN MARKET — the long-form pages carry their own stylesheet. The legacy
+   token names these rules were written against now resolve onto the desk
+   system instead of a second, warmer palette, so the article and the shell it
+   is mounted inside are one cold surface rather than two that meet awkwardly
+   at the header. Nothing below redefines a shared token. */
+:root{--bg:var(--g0);--panel:var(--g1);--panel-2:var(--g3);
+--line:var(--hair);--line-2:var(--hair2);--muted:var(--mut);
+--accent:var(--brand);--warn:var(--amber);--bad:var(--dn);--link:var(--brand)}
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);
-font:15px/1.7 Archivo,system-ui,-apple-system,sans-serif;
--webkit-font-smoothing:antialiased;
-background:radial-gradient(1100px 480px at 50% -180px,rgba(45,212,167,.055),transparent 72%),var(--bg)}
-.wrap{max-width:860px;margin:0 auto;padding:0 24px}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline;text-underline-offset:2px}
-header{border-bottom:1px solid var(--line);position:sticky;top:0;
-background:rgba(6,8,10,.86);backdrop-filter:blur(10px);z-index:10}
-nav{display:flex;align-items:center;gap:18px;height:52px;
-max-width:1360px;margin:0 auto;padding:0 28px}
-.brand{font:600 17px/1 Archivo,sans-serif;letter-spacing:-.02em;text-transform:none;
-text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
-.brand:hover{text-decoration:none}
-.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);
-box-shadow:0 0 10px rgba(45,212,167,.55)}
-.brand i{font-style:normal;color:var(--accent)}
-nav .spacer{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font:600 11.5px/1 Archivo,sans-serif;
-letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:3px}
-nav a.l:hover{color:var(--ink);background:var(--panel);text-decoration:none}
-.prose{padding:40px 0 60px}
-.prose h1{font-size:clamp(24px,3.6vw,32px);line-height:1.15;
-letter-spacing:-.02em;margin:0 0 24px;font-weight:760}
-.prose h2{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-color:var(--muted);margin:42px 0 14px;padding-top:22px;border-top:1px solid var(--line)}
+body{margin:0;color:var(--ink);font:15px/1.7 var(--sans);
+-webkit-font-smoothing:antialiased}
+/* The shell is the shell. .wrap used to be redefined to 860px here, which
+   quietly shrank the injected header and footer on these three pages alone —
+   and the bare `nav{}` rule below it was landing on the shell's own nav. Both
+   are gone; only the measure of the prose is narrow now. */
+.prose{max-width:812px;margin:0 auto;padding:44px 0 60px}
+.prose a{color:var(--link);text-decoration:none}
+.prose a:hover{text-decoration:underline;text-underline-offset:2px}
+.prose h1{font:700 clamp(24px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.025em;
+margin:0 0 24px;color:var(--ink)}
+/* Section heads take the promo's teal triangle — the same mark .caps uses for
+   a capability list. One hue, one bullet, on every surface that names a part. */
+.prose h2{display:flex;align-items:flex-start;gap:9px;
+font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--muted);margin:42px 0 14px;padding-top:22px;
+border-top:1px solid var(--line)}
+.prose h2::before{content:"";flex:0 0 auto;margin-top:2px;
+border:4px solid transparent;border-left-color:var(--brand)}
 .prose h3{font-size:15px;margin:26px 0 8px;font-weight:650;color:var(--ink)}
-.prose p{margin:0 0 15px;color:#B4BAC4}
-.prose li{margin:0 0 7px;color:#B4BAC4}
+.prose p{margin:0 0 15px;color:var(--ink2)}
+.prose li{margin:0 0 7px;color:var(--ink2)}
 .prose strong{font-weight:650;color:var(--ink)}
 .prose code{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);
-border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;color:var(--ink)}
-.prose pre{background:var(--panel);border:1px solid var(--line);
-border-radius:3px;padding:15px 17px;overflow-x:auto;font-size:12px;
-line-height:1.55;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+border:1px solid var(--line-2);border-radius:var(--r);padding:1px 5px;color:var(--ink)}
+/* A code block is a slab of dark glass lit along its top edge — rule 3. */
+.prose pre{background:linear-gradient(180deg,#0E141A 0%,#0A0F14 100%);
+border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;
+overflow-x:auto;font-size:12px;line-height:1.55;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.09),inset 0 -1px 0 rgba(0,0,0,.5)}
 .prose pre code{background:none;border:0;padding:0;font-size:12px}
 .prose table{width:100%;border-collapse:collapse;font-size:13px;margin:18px 0;
 display:block;overflow-x:auto;font-family:var(--mono);
@@ -107,32 +102,211 @@ font-variant-numeric:tabular-nums}
 .prose th{text-align:left;font-weight:600;color:var(--dim);font-size:9.5px;
 text-transform:uppercase;letter-spacing:.12em;padding:0 12px 9px;
 border-bottom:1px solid var(--line-2);white-space:nowrap;font-family:var(--mono)}
-.prose td{padding:9px 12px;border-bottom:1px solid var(--line);color:#B4BAC4}
+.prose td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--ink2)}
+/* Below 720px a table stops being a table, exactly as .itab already does on
+   the board: each row becomes a labelled card, using the data-l attributes
+   Desk.stack() already writes onto every table on the site. A six-column
+   backtest table was otherwise a sideways scroller that hid every number to
+   the right of the model name — which on this page is the whole argument. */
+@media (max-width:720px){
+  .prose table{display:block;overflow-x:visible}
+  .prose tbody,.prose tr,.prose td{display:block;width:auto}
+  .prose thead{display:none}
+  .prose tr{border:1px solid var(--line);background:var(--panel);
+    padding:11px 13px 3px;margin:0 0 8px}
+  .prose td{padding:6px 0;text-align:right;white-space:normal;
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .prose td::before{content:attr(data-l);flex:0 0 auto;text-align:left;
+    font:600 9.5px var(--mono);letter-spacing:.11em;text-transform:uppercase;
+    color:var(--dim)}
+  .prose td:not([data-l]){display:block;text-align:left;padding-bottom:9px;
+    color:var(--ink)}
+  .prose td:not([data-l])::before{content:none}
+  .prose tr td:last-child{border-bottom:0}
+}
 .prose blockquote{margin:18px 0;padding:14px 18px;background:var(--panel);
-border-left:2px solid var(--warn);border-radius:0 3px 3px 0}
+border-left:2px solid var(--warn);border-radius:0 var(--r) var(--r) 0}
 .prose blockquote p{margin:0}
 .prose hr{border:0;border-top:1px solid var(--line);margin:34px 0}
-footer{border-top:1px solid var(--line);padding:26px 0 44px;
-color:var(--dim);font-size:11.5px;line-height:1.7}
 footer p{max-width:86ch;margin:0 0 9px}
-footer b,footer strong{color:var(--muted)}
-footer a{color:var(--muted)}
 .mono{font-family:var(--mono)}
-.hash{font-family:var(--mono);font-size:11.5px;color:var(--accent);
+.hash{font-family:var(--mono);font-size:11.5px;color:var(--frost);
 word-break:break-all}
 .badge{display:inline-block;font:700 9.5px/1 var(--mono);
-letter-spacing:.08em;padding:3px 7px;border-radius:4px;
+letter-spacing:.08em;padding:3px 7px;border-radius:var(--r);
 border:1px solid var(--line-2);color:var(--muted);vertical-align:2px}
-.badge.sealed{color:var(--warn);border-color:var(--warn)}
-.badge.revealed{color:var(--accent);border-color:var(--accent)}
-.card{background:linear-gradient(180deg,#15181D 0%,#101216 55%,#0D0F12 100%);
-border:1px solid var(--line);border-radius:3px;padding:17px 19px;margin:0 0 13px;
-box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.5),
-0 12px 30px -20px rgba(0,0,0,.85)}
+/* Rule 2: frost means sealed. A SEALED badge is ice, not a caution colour. */
+.badge.sealed{color:var(--frost);border-color:var(--frost-rim)}
+.badge.revealed{color:var(--brand);border-color:var(--brand)}
+.card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+border:1px solid var(--line);border-radius:var(--r);padding:17px 19px;margin:0 0 13px;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
+0 18px 40px -22px rgba(0,0,0,.9)}
 .card .row{display:flex;gap:13px;padding:4px 0;flex-wrap:wrap;font-size:12.5px}
 .card .k{color:var(--dim);min-width:118px;font-family:var(--mono);font-size:10.5px;
 letter-spacing:.06em;text-transform:uppercase;padding-top:2px}
+
+/* ---- long-form rhythm ----------------------------------------------------
+   Three typographic repairs, no colour and no new primitive.
+
+   1. MEASURE. The column ran the full 812px — roughly 100 characters at
+      15px Archivo, past the point where the eye reliably finds the start of
+      the next line. Running text is capped at 72ch; headings, tables and code
+      keep the whole column, so a six-column table still has room to breathe.
+
+   2. LIST MARKERS. desk.css's reset zeroes padding on every element, so every
+      <ul> and <ol> here inherited padding-left:0 and hung its bullets and its
+      numbers outside the measure. At 375px they were clipped off the left of
+      the screen: the numbered specification read "Canonical JSON… Leaf hash…"
+      with no numbers at all. 22px puts the markers back on the text's grid.
+
+   3. THE DOUBLED RULE. The markdown these pages are generated from writes
+      `---` before most `##`, and .prose h2 draws its own border-top — so every
+      section opened with two hairlines 42px apart and nothing between them.
+      A heading that already has an <hr> above it drops its own rule. */
+.prose p,.prose li{max-width:72ch}
+.prose ul,.prose ol{margin:0 0 15px;padding-left:22px}
+.prose li>ul,.prose li>ol{margin:7px 0 0}
+.prose li::marker{color:var(--mut)}
+.prose hr+h2{border-top:0;padding-top:0;margin-top:26px}
+.prose h2+h3{margin-top:16px}
+.prose h3+p,.prose h3+ul,.prose h3+ol{margin-top:0}
+@media (max-width:720px){
+  .prose{padding:28px 0 44px}
+  .prose h1{margin-bottom:18px}
+  .prose h2{margin:34px 0 12px;padding-top:18px}
+  .prose hr{margin:26px 0}
+  .prose ul,.prose ol{padding-left:20px}
+  .prose pre{padding:13px 14px}
+}"""
+
+# Frost means sealed. On every other page that is a metaphor; /verify is where
+# someone recomputes the root and finds out whether the ice is real, so there
+# it is load-bearing markup and needs rules the prose pages never use.
+CSS_VERIFY_FROST = """/* ============ THIS PAGE IS THE ICE BEING CHECKED ============
+   Rule 2 says frost means sealed. On every other page that is a metaphor.
+   Here it is literal: this is the page where someone recomputes the root and
+   finds out whether the ice is real, so the frost does the arguing.
+
+   The division is the argument. The artefacts WE sealed — the commitment
+   file, the canonical prediction, its leaf fingerprint, the inclusion proof,
+   and the run that recomputes the root — are under ice, using the shared
+   .frosted surface. The blocks that are YOUR tools for breaking that seal —
+   curl, verify.py, check_proof — stay plain dark glass, because nothing about
+   them is committed and you are meant to read, edit and distrust them.
+   Sealed vs. yours, drawn rather than said. */
+.prose pre.frosted{overflow-x:auto}
+.prose pre.frosted code{color:var(--ink)}
+/* the two roots and the leaf: the values the whole page exists to compare */
+.prose .ice{color:var(--frost)}
+/* the verdict line, in the one hue */
+.prose .ok{color:var(--brand);font-weight:600}
+/* The article itself carries the shared .rimlit hairline (see the markup):
+   one lit teal edge across the top of the block, the single edge-light moment
+   in the promo, spent on the page that carries the proof. */
+
 """
+
+_ANCHOR = "/* ---- long-form rhythm"
+assert _ANCHOR in CSS_PROSE, "long-form anchor lost; the frost rules would move"
+CSS_VERIFY = CSS_PROSE.replace(_ANCHOR, CSS_VERIFY_FROST + _ANCHOR, 1)
+
+CSS_LEDGER = """/* FROZEN MARKET — this page is the frozen artifact itself.
+   A sealed slate is a commitment nobody can edit afterwards, so the seal chip
+   and the published root are the two things rendered as ice (rule 2), and
+   nothing else on the page carries a hue.
+
+   The page used to carry its own warm palette and redefine --ink, --dim and
+   --mono on :root. Those tokens belong to the shell: the header and footer
+   desk.js injects were reading them, so the wordmark and the compliance floor
+   rendered in a different colour here than on every other page. The local
+   palette is gone and everything below is expressed in desk.css tokens.
+
+   The header/nav/.brand/footer rules went with it. They were not merely dead:
+   .brand was declared here, after desk.css and at equal specificity, with
+   text-transform:uppercase — it was rendering the lowercase sooth.bet
+   wordmark in caps on this page alone — and bare nav{} was giving the
+   injected .hd-links its own height, max-width and 28px padding. */
+*{box-sizing:border-box}
+/* The generator (scripts/build_site.py) writes one inline `color:var(--muted)`
+   into the "superseded" row, and defines --muted in its own CSS constant. This
+   page dropped that constant when it was re-skinned, so the token resolved to
+   nothing and the longest, least important sentence on the page rendered at
+   full body brightness — louder than the roots above it. Aliasing the legacy
+   name onto the desk token fixes it here and survives the next rebuild. */
+:root{--muted:var(--mut)}
+/* only the prose column is 860px; the shell's own .wrap stays site-width */
+body>.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+@media (max-width:720px){body>.wrap{padding:0 14px}}
+.prose{padding:40px 0 60px;font:15px/1.7 var(--sans);color:var(--ink2)}
+.prose a{color:var(--brand)}
+.prose a:hover{text-decoration:underline;text-underline-offset:2px}
+.prose h1{font:760 clamp(24px,3.6vw,32px)/1.15 var(--sans);letter-spacing:-.02em;
+margin:0 0 24px;color:var(--ink)}
+.prose h2{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+color:var(--mut);margin:42px 0 14px;padding-top:22px;border-top:1px solid var(--hair)}
+.prose h3{font:650 15px/1.4 var(--sans);margin:26px 0 8px;color:var(--ink)}
+.prose p{margin:0 0 15px;color:var(--ink2)}
+.prose li{margin:0 0 7px;color:var(--ink2)}
+.prose strong{font-weight:650;color:var(--ink)}
+.prose code{font-family:var(--mono);font-size:12.5px;background:var(--g2);
+border:1px solid var(--hair2);border-radius:var(--r);padding:1px 5px;color:var(--ink)}
+.prose pre{background:var(--g1);border:1px solid var(--hair);
+border-radius:var(--r);padding:15px 17px;overflow-x:auto;font-size:12px;
+line-height:1.55;box-shadow:inset 0 1px 0 rgba(190,240,245,.08)}
+.prose pre code{background:none;border:0;padding:0;font-size:12px}
+/* a table here wraps rather than scrolling sideways: the column is already
+   narrow enough to read on a phone, and a scroller hides the numbers */
+.prose table{width:100%;border-collapse:collapse;font-size:13px;margin:18px 0;
+font-family:var(--mono);font-variant-numeric:tabular-nums}
+.prose th{text-align:left;font:600 9.5px var(--mono);color:var(--dim);
+text-transform:uppercase;letter-spacing:.12em;padding:0 12px 9px;
+border-bottom:1px solid var(--hair2)}
+.prose td{padding:9px 12px;border-bottom:1px solid var(--hair);color:var(--ink2)}
+.prose blockquote{margin:18px 0;padding:14px 18px;background:var(--g1);
+border-left:2px solid var(--amber);border-radius:0 var(--r) var(--r) 0}
+.prose blockquote p{margin:0}
+.prose hr{border:0;border-top:1px solid var(--hair);margin:34px 0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* the published root — the one artifact on this site that is genuinely
+   frozen, so it is the one thing set in ice */
+.hash{font:500 11.5px/1.55 var(--mono);color:var(--frost);letter-spacing:.02em;
+word-break:break-all}
+/* SEALED is the shared .frost chip (see the markup below). .badge survives for
+   any other state the builder emits: REVEALED has thawed and is verifiable, so
+   it takes the one hue. */
+.prose .frost{vertical-align:1px}
+.badge{display:inline-block;font:600 9.5px/1 var(--mono);letter-spacing:.14em;
+text-transform:uppercase;padding:4px 8px;
+border:1px solid var(--hair2);color:var(--mut);vertical-align:2px}
+.badge.sealed{color:var(--frost);border-color:var(--frost-rim);
+background:var(--frost-dim)}
+.badge.revealed{color:var(--brand);border-color:rgba(45,212,167,.35)}
+/* one slate, one slab of dark glass, lit along its top edge — the shared
+   instrument recipe, so the light source matches the rest of the site */
+.card{background:linear-gradient(180deg,#141B22 0%,#0E141A 55%,#0A0F14 100%);
+border:1px solid var(--hair);border-radius:var(--r);padding:17px 19px;margin:0 0 13px;
+box-shadow:inset 0 1px 0 rgba(190,240,245,.10),inset 0 -1px 0 rgba(0,0,0,.55),
+0 18px 40px -22px rgba(0,0,0,.9)}
+.card .row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:13px;
+padding:5px 0;font-size:12.5px;color:var(--ink2);align-items:baseline}
+.card .k{color:var(--dim);font:600 10px/1.5 var(--mono);
+letter-spacing:.14em;text-transform:uppercase}
+/* A flex row with a 118px minimum on the key wrapped unpredictably: some
+   values sat beside their label, a 64-character hash dropped to its own line,
+   and the rows came out 29px, 57px, 72px and 121px tall in the same card. A
+   two-column grid puts every label on one rail and every value on another, so
+   the card reads down a single edge. Below 560px there is not room for two
+   rails, so the label stacks above its value instead of squeezing it. */
+@media (max-width:560px){
+  .card .row{grid-template-columns:minmax(0,1fr);gap:3px;padding:7px 0}
+  .card{padding:15px 14px}
+}
+/* the prose column is generated markdown; give its lists their markers back
+   (desk.css's reset zeroes padding on everything) */
+.prose ul,.prose ol{margin:0 0 15px;padding-left:22px}
+.prose li::marker{color:var(--mut)}
+.prose p,.prose li{max-width:72ch}"""
 
 SHELL = """<!doctype html>
 <html lang="en">
@@ -159,10 +333,12 @@ SHELL = """<!doctype html>
 <!-- desk.css first so this page's own rules below still win on any clash;
      it is here for the shared header and footer that desk.js injects. -->
 <link rel="stylesheet" href="/assets/desk.css">
-<style>{css}</style>
+<style>
+{css}
+</style>
 </head>
 <body>
-<div class="wrap"><div class="prose">
+<div class="wrap"><div class="prose{prose_class}">
 {body}
 </div></div>
 <script src="/assets/desk.js"></script>
@@ -173,11 +349,58 @@ SHELL = """<!doctype html>
 """
 
 
+# Keyed on slug rather than threaded through PAGES so the ledger page, which is
+# not built from markdown and never appears in PAGES, resolves the same way.
+SHEETS = {"verify": CSS_VERIFY, "ledger": CSS_LEDGER}
+
+# One lit teal edge across the top of the article. It is the single edge-light
+# moment on the long-form pages, and it is spent on the one carrying the proof.
+PROSE_CLASS = {"verify": " rimlit"}
+
+
 def render(slug: str, title: str, description: str, body: str) -> str:
     return SHELL.format(
         title=title, brand=BRAND, description=description, domain=DOMAIN,
-        slug=slug, css=CSS, body=body,
+        slug=slug, css=SHEETS.get(slug, CSS_PROSE), body=body,
+        prose_class=PROSE_CLASS.get(slug, ""),
     )
+
+
+_HEX64 = re.compile(r"\b[0-9a-f]{64}\b")
+_FROSTED_BLOCK = re.compile(
+    r'(<pre class="frosted"><code[^>]*>)(.*?)(</code></pre>)', re.S)
+
+
+def frost(html: str) -> str:
+    """Ice the values a sealed artefact exists to be checked against.
+
+    /verify divides its code blocks: the artefacts WE sealed are under frost,
+    the tools YOU use to break the seal stay plain dark glass. Which is which
+    is declared in the markdown — ``` {.frosted}``` — because that is an
+    editorial call and belongs next to the prose making it.
+
+    Inside a frosted block two values take the ice colour: a fingerprint on a
+    line that names a root, and a fingerprint standing alone as the whole line.
+    That is exactly the published root, the recomputed root, and the leaf being
+    proven — the numbers the page asks you to compare. Deliberately NOT iced:
+    the `supersedes` hash (a pointer to an older seal, not a value under test)
+    and the inclusion proof's four siblings (working material, not the claim).
+    Markdown escapes raw HTML inside a fence, so this cannot live in the source.
+    """
+    html = html.replace('<pre><code class="language-frosted">',
+                        '<pre class="frosted"><code>')
+
+    def ice(line: str) -> str:
+        if line.strip() == "VERIFIED":
+            return '<span class="ok">VERIFIED</span>'
+        if _HEX64.fullmatch(line.strip()) or "root" in line.lower():
+            return _HEX64.sub(lambda m: f'<span class="ice">{m.group(0)}</span>',
+                              line)
+        return line
+
+    return _FROSTED_BLOCK.sub(
+        lambda m: m.group(1) + "\n".join(ice(ln) for ln in m.group(2).split("\n"))
+        + m.group(3), html)
 
 
 def build_markdown_pages() -> list[str]:
@@ -196,7 +419,7 @@ def build_markdown_pages() -> list[str]:
             end = text.find("\n---\n", 4)
             if end != -1:
                 text = text[end + 5:]
-        html = md.convert(text)
+        html = frost(md.convert(text))
         (PUBLIC / f"{slug}.html").write_text(render(slug, title, desc, html), encoding="utf-8")
         built.append(slug)
         print(f"  built /{slug}")
@@ -224,8 +447,13 @@ def build_ledger() -> None:
 
     rows = []
     for s in sorted(slates, key=lambda x: x["slate_id"], reverse=True):
-        badge = "revealed" if s["state"] == "revealed" else "sealed"
-        label = "REVEALED" if s["state"] == "revealed" else "SEALED"
+        # Frost means sealed, so a SEALED slate takes the shared .frost chip
+        # rather than a generic badge. REVEALED has thawed — it is graded and
+        # checkable — and keeps .badge, which is the only state left using it.
+        if s["state"] == "revealed":
+            chip = '<span class="badge revealed">REVEALED</span>'
+        else:
+            chip = '<span class="frost">SEALED</span>'
         hist = s.get("history", [])
         superseded = ""
         if len(hist) > 1:
@@ -244,10 +472,10 @@ def build_ledger() -> None:
                 f'</span></div>{items}'
             )
         rows.append(f"""
-<div class="card">
+<div class="card rimlit">
   <div class="row"><span class="k">slate</span>
     <span><strong>{s['slate_id']}</strong>
-    <span class="badge {badge}">{label}</span></span></div>
+    {chip}</span></div>
   <div class="row"><span class="k">predictions</span><span>{s['n_predictions']}</span></div>
   <div class="row"><span class="k">merkle root</span><span class="hash">{s['merkle_root']}</span></div>
   <div class="row"><span class="k">sealed at</span><span class="mono">{s['committed_at']}</span></div>
@@ -260,7 +488,7 @@ def build_ledger() -> None:
 
     body = f"""
 <h1>Ledger</h1>
-<p>Every slate we have ever committed, newest first. A <span class="badge sealed">SEALED</span>
+<p>Every slate we have ever committed, newest first. A <span class="frost">SEALED</span>
 slate has had its Merkle root published before kickoff; its predictions are
 published alongside it, and the root proves they cannot be altered afterwards.
 A <span class="badge revealed">REVEALED</span> slate has been graded after the
