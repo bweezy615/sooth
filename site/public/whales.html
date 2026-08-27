@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth ? Public Polymarket Positions</title>
+<title>Sooth — Public Polymarket Positions</title>
 <meta name="description" content="Analyze public Polymarket sports-futures positions, trades, prices, timestamps, and open interest from one checkable snapshot.">
-<meta property="og:title" content="Sooth ? Public Polymarket Positions">
+<meta property="og:title" content="Sooth — Public Polymarket Positions">
 <meta property="og:description" content="Public sports-futures positions and trades, reported without interpretation.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
@@ -36,7 +36,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
   <div class="ph">
-    <span class="tl">PUBLIC LEDGER ? POLYMARKET SPORTS FUTURES</span>
+    <span class="tl">PUBLIC LEDGER — POLYMARKET SPORTS FUTURES</span>
     <h1>Public money, already committed.</h1>
     <p class="lede">Positions and recent trades reported from Polymarket's public data:
       wallet, outcome, price, size, timestamp, and open interest. <b>No record is
@@ -56,6 +56,17 @@
       <span class="sub" id="threshold">current position value or trade notional</span></div>
     <div id="feed"></div>
   </section>
+
+<footer class="ft">
+  <b>Entertainment and analysis only. We do not accept, place, or facilitate wagers</b>,
+  and we hold no customer funds. Past performance does not indicate future results — our
+  published backtest shows a loss against the closing market. Nothing here is a
+  recommendation to bet. 21+, where lawful. Problem gambling help:
+  <b>1-800-522-4700</b>, 24/7. ·
+  <a href="/learn">How it works</a> · <a href="/methodology">Methodology</a> ·
+  <a href="/record">Record</a> · <a href="/verify">Verify</a> ·
+  <a href="/disclaimers">Disclaimers</a>
+</footer>
 </main>
 
 <script src="/assets/desk.js"></script>
@@ -71,7 +82,7 @@ function money(n){return "$"+Number(n||0).toLocaleString(undefined,{minimumFract
 function number(n){return Number(n||0).toLocaleString(undefined,{maximumFractionDigits:6});}
 function person(row){
   var wallet=String(row.wallet||"");
-  return D.esc(row.display||wallet.slice(0,8)+"?"+wallet.slice(-4));
+  return D.esc(row.display||wallet.slice(0,8)+"\u2026"+wallet.slice(-4));
 }
 function teamFrom(title){
   var match=/^Will (?:the )?(.+?) (?:win|make|finish|become|qualify)/i.exec(title||"");
@@ -86,7 +97,7 @@ function market(m){
         +'</td><td data-l="PRICE" class="n">'+Number(outcome.price).toFixed(3)
         +'</td><td data-l="SHARES" class="n">'+number(row.shares)
         +'</td><td data-l="CURRENT VALUE" class="n">'+money(row.current_value_usd)
-        +'</td><td data-l="TIME" class="dim">?</td></tr>');
+        +'</td><td data-l="TIME" class="dim">\u2014</td></tr>');
     });
   });
   (m.recent||[]).forEach(function(row){
@@ -126,7 +137,7 @@ D.load("/data/whales.json").then(function(result){
   document.getElementById("stTime").textContent=D.ago(data.generated_at);
   document.getElementById("stTime").setAttribute("data-ago",data.generated_at);
   document.getElementById("threshold").textContent="$"+Number(data.whale_min_usd).toLocaleString()
-    +" minimum current position value or trade notional ? captured "+D.when(data.generated_at);
+    +" minimum current position value or trade notional — captured "+D.when(data.generated_at);
   if(result.ageH>1) document.getElementById("pulse").className="pulse stale";
   feed.innerHTML=markets.length?markets.map(market).join(""):
     '<div class="state"><span class="tl">NO QUALIFYING ACTIVITY</span>'
