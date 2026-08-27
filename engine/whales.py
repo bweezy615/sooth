@@ -15,6 +15,7 @@ import json
 import os
 import re
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +26,14 @@ DATA = "https://data-api.polymarket.com"
 SPORTS = ("nfl", "nba", "mlb", "nhl", "sports")
 LIMIT = 100
 WHALE_MIN_USD = 10_000.0
+
+# One capture is three calls per market across a few hundred markets, and the
+# first unpaced run came back 429 Too Many Requests partway through. Polymarket
+# publishes no rate limit, so this follows engine/capture.py: pace every call,
+# and back off rather than abandoning a run that is most of the way done.
+PAUSE = 0.2
+RETRIES = 4
+BACKOFF = 3.0
 OUT = Path("site/public/data/whales.json")
 
 READER_COPY = (
@@ -65,10 +74,29 @@ def _wallet(row: dict) -> str:
 
 
 def _get(session: requests.Session, url: str, **params: Any) -> Any:
-    response = session.get(url, params=params, timeout=45,
-                           headers={"accept": "application/json"})
-    response.raise_for_status()
-    return response.json()
+    """One paced request, retried on rate limits and transient server errors.
+
+    A 429 halfway through means the whole capture is thrown away and the page
+    keeps a stale snapshot, so being a slow guest beats being a rejected one.
+    Retry-After is honoured when the server sends it; otherwise the wait grows
+    geometrically. Anything that is not 429/5xx still raises immediately —
+    a 404 is not going to fix itself.
+    """
+    delay = BACKOFF
+    for attempt in range(RETRIES + 1):
+        time.sleep(PAUSE)
+        response = session.get(url, params=params, timeout=45,
+                               headers={"accept": "application/json"})
+        if response.status_code == 429 or response.status_code >= 500:
+            if attempt == RETRIES:
+                response.raise_for_status()
+            wait = _number(response.headers.get("Retry-After"), 0.0) or delay
+            time.sleep(min(wait, 60.0))
+            delay *= 2
+            continue
+        response.raise_for_status()
+        return response.json()
+    raise RuntimeError("unreachable")
 
 
 def discover(session: requests.Session, gamma_base: str = GAMMA,
@@ -235,8 +263,12 @@ def _selfcheck() -> int:
     assert "email" not in json.dumps(got).lower()
 
     class Response:
-        def __init__(self, body): self.body = body
-        def raise_for_status(self): return None
+        def __init__(self, body, status=200, headers=None):
+            self.body, self.status_code = body, status
+            self.headers = headers or {}
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise requests.HTTPError(f"{self.status_code}", response=self)
         def json(self): return self.body
 
     class Session:
@@ -250,6 +282,35 @@ def _selfcheck() -> int:
             if url.endswith("/events"):
                 return super().get(url, **kwargs)
             raise requests.ConnectionError("forced selfcheck failure")
+
+    class Throttled:
+        """429 twice, then answer — the shape the live capture actually hit."""
+        def __init__(self): self.calls = 0
+        def get(self, url, **kwargs):
+            self.calls += 1
+            if self.calls <= 2:
+                return Response([], status=429, headers={"Retry-After": "0"})
+            return Response([{"markets": [market]}])
+
+    throttled = Throttled()
+    assert _get(throttled, "https://fixture/events") == [{"markets": [market]}]
+    assert throttled.calls == 3, throttled.calls
+
+    class Gone:
+        """a 404 is not transient and must not burn four retries"""
+        def __init__(self): self.calls = 0
+        def get(self, url, **kwargs):
+            self.calls += 1
+            return Response(None, status=404)
+
+    gone = Gone()
+    try:
+        _get(gone, "https://fixture/holders")
+    except requests.HTTPError:
+        pass
+    else:
+        raise AssertionError("404 should raise")
+    assert gone.calls == 1, gone.calls
 
     deduped = discover(Session(), "https://fixture")
     assert len(deduped) == 1 and deduped[0]["_sport"] == "mlb", deduped
