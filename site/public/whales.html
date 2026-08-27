@@ -23,7 +23,11 @@
     margin-bottom:8px}
   .market-h h2{font:600 14px/1.4 var(--sans);margin:0;min-width:0}
   .market-h .oi{flex:0 0 auto;color:var(--mut);font:500 11px/1 var(--mono)}
-  .itab table{min-width:680px}
+  /* Scoped above the card breakpoint on purpose. desk.css turns .itab into
+     stacked cards below 720px with min-width:0; an unscoped floor here loads
+     after that stylesheet, wins on equal specificity, and strands half the
+     columns off-screen in a container that does not scroll. */
+  @media(min-width:721px){ .itab table{min-width:680px} }
   .itab td.wallet{max-width:180px;overflow:hidden;text-overflow:ellipsis}
   .state{text-align:left}
   @media(max-width:560px){
