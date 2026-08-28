@@ -2,8 +2,17 @@
 
 Written 2026-08-27. Week 1 kicks off 2026-08-29.
 
-**Status.** Phase 1 steps 1, 2 and 4 shipped 2026-08-28 (capture). Steps 3 and
-5 pending. Phase 2 and 3 not started.
+**Status.** Phase 1 shipped and live 2026-08-28, all five steps. Phase 2 shipped
+except team art. Phase 3 not started and should not be started until November.
+
+| | |
+|---|---|
+| Phase 1 capture | live; `data/capture/ncaaf/` accumulating, CI verified |
+| Phase 1 board feed | live; CFB on `board.json`, UFC swapped out |
+| Phase 2 pickers | live; rail, mobile rail, /market order, /edges labels |
+| Phase 2 spreads/totals | not done, and not a defect: every sport on /market is moneyline and every card says so. `nflboard.json` (the only spread/total feed) is read by `engine/xcards.py` alone, never by a page |
+| Phase 2 team art | not done; `team_logos.py` has no FBS entries, and `crest.js` degrades to plain team names by design. Verified in-browser |
+| Phase 3 model | not started. Do not start it before November |
 
 **Endpoint claims in this document were unverified when it was written.** They
 were checked against the live ESPN core API on 2026-08-28 and two were wrong or
@@ -112,6 +121,14 @@ Goal: our own timestamped price series for CFB starts accumulating this week.
 5. `engine/timeline.py` — `--sports nfl,mlb,nhl,nba,ufc`; add `ncaaf` once
    capture rows exist, not before, or it publishes an empty series.
 
+   Done 2026-08-28, after step 2 had written rows. Both the module default and
+   the workflow step now read `nfl,ncaaf,mlb,nhl,nba`.
+
+   **Also found while doing this:** `data/capture` is append-only, so retiring
+   UFC left its history on disk and `engine/alerts.py` kept reading it — /edges
+   was publishing 232 UFC "moves" from prices nobody was refreshing any more.
+   `load_observations()` now reads only the sports `lines.SPORTS` fetches.
+
 Acceptance: a real (non-dry-run) capture writes CFB rows for this week's
 games, with `provenance: own_capture`, and `bash scripts/check.sh` is green.
 
@@ -139,6 +156,12 @@ Find the others rather than assuming that is the only one.
 
 Acceptance: /market and /edges show CFB with real prices, verified in a browser
 at desktop and mobile widths, and nothing NFL regressed.
+
+**Met 2026-08-28**, minus team art. CFB renders on the desktop rail and the
+mobile rail with live prices from 9 books; no UFC appears anywhere in the
+rendered page; NFL is unchanged. Live-verified after deploy by fetching
+`sooth.bet/assets/desk.js`, `/data/board.json`, `/data/moves.json` and
+`/methodology`.
 
 ## Phase 3 — the model (only after 1 and 2 are shipped and green)
 
