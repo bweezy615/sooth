@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T13:55:35.231452+00:00",
+  "generated_at": "2026-08-28T08:17:59.888199+00:00",
   "command": "python scripts/published_figures.py",
   "breakeven_ats": 0.5238,
   "confidence_cap": 0.85,
@@ -61,8 +61,8 @@
         "log_loss": 0.63628,
         "accuracy": 0.637,
         "ece": 0.03265,
-        "ats_record": "402-431-21",
-        "ats_pct": 0.4826,
+        "ats_record": "398-435-21",
+        "ats_pct": 0.4778,
         "beats_breakeven": false
       },
       "independent": {
@@ -71,8 +71,8 @@
         "log_loss": 0.63404,
         "accuracy": 0.6347,
         "ece": 0.03356,
-        "ats_record": "404-429-21",
-        "ats_pct": 0.485,
+        "ats_record": "401-432-21",
+        "ats_pct": 0.4814,
         "beats_breakeven": false
       },
       "consensus": {
@@ -81,18 +81,18 @@
         "log_loss": 0.61651,
         "accuracy": 0.6745,
         "ece": 0.04186,
-        "ats_record": "414-419-21",
-        "ats_pct": 0.497,
+        "ats_record": "411-422-21",
+        "ats_pct": 0.4934,
         "beats_breakeven": false
       },
       "market": {
         "n": 854,
-        "brier": 0.21061,
-        "log_loss": 0.60869,
-        "accuracy": 0.6815,
-        "ece": 0.02396,
-        "ats_record": "414-419-21",
-        "ats_pct": 0.497,
+        "brier": 0.21008,
+        "log_loss": 0.60754,
+        "accuracy": 0.6838,
+        "ece": 0.02598,
+        "ats_record": "416-417-21",
+        "ats_pct": 0.4994,
         "beats_breakeven": false
       }
     }
@@ -387,122 +387,122 @@
           "edge": 0.0,
           "all": {
             "n": 854,
-            "record": "404-429-21",
-            "pct": 0.485,
+            "record": "401-432-21",
+            "pct": 0.4814,
             "ci95": [
-              0.4512,
-              0.5189
+              0.4476,
+              0.5153
             ],
             "per_season": 277.7
           },
           "underdog": {
-            "n": 522,
-            "record": "241-268-13",
-            "pct": 0.4735,
+            "n": 526,
+            "record": "241-272-13",
+            "pct": 0.4698,
             "ci95": [
-              0.4305,
-              0.5169
+              0.427,
+              0.513
             ],
-            "per_season": 169.7
+            "per_season": 171.0
           },
           "favourite": {
-            "n": 332,
-            "record": "163-161-8",
-            "pct": 0.5031,
+            "n": 328,
+            "record": "160-160-8",
+            "pct": 0.5,
             "ci95": [
-              0.4489,
-              0.5572
+              0.4455,
+              0.5545
             ],
-            "per_season": 108.0
+            "per_season": 106.7
           }
         },
         {
           "edge": 2.0,
           "all": {
-            "n": 408,
-            "record": "193-205-10",
-            "pct": 0.4849,
+            "n": 406,
+            "record": "189-207-10",
+            "pct": 0.4773,
             "ci95": [
-              0.4362,
-              0.5339
+              0.4285,
+              0.5265
             ],
-            "per_season": 132.7
+            "per_season": 132.0
           },
           "underdog": {
-            "n": 256,
-            "record": "118-131-7",
-            "pct": 0.4739,
+            "n": 259,
+            "record": "118-134-7",
+            "pct": 0.4683,
             "ci95": [
-              0.4127,
-              0.5358
+              0.4076,
+              0.5299
             ],
-            "per_season": 83.0
+            "per_season": 84.0
           },
           "favourite": {
-            "n": 152,
-            "record": "75-74-3",
-            "pct": 0.5034,
+            "n": 147,
+            "record": "71-73-3",
+            "pct": 0.4931,
             "ci95": [
-              0.424,
-              0.5825
+              0.4126,
+              0.5738
             ],
-            "per_season": 49.7
+            "per_season": 48.0
           }
         },
         {
           "edge": 3.0,
           "all": {
             "n": 258,
-            "record": "127-125-6",
-            "pct": 0.504,
+            "record": "125-127-6",
+            "pct": 0.496,
             "ci95": [
-              0.4426,
-              0.5652
+              0.4348,
+              0.5574
             ],
             "per_season": 84.0
           },
           "underdog": {
-            "n": 168,
-            "record": "81-83-4",
-            "pct": 0.4939,
+            "n": 170,
+            "record": "81-85-4",
+            "pct": 0.488,
             "ci95": [
-              0.4184,
-              0.5697
+              0.413,
+              0.5634
             ],
-            "per_season": 54.7
+            "per_season": 55.3
           },
           "favourite": {
-            "n": 90,
-            "record": "46-42-2",
-            "pct": 0.5227,
+            "n": 88,
+            "record": "44-42-2",
+            "pct": 0.5116,
             "ci95": [
-              0.4196,
-              0.6239
+              0.4078,
+              0.6145
             ],
-            "per_season": 29.3
+            "per_season": 28.7
           }
         },
         {
           "edge": 4.0,
           "all": {
-            "n": 154,
-            "record": "82-71-1",
-            "pct": 0.5359,
+            "n": 153,
+            "record": "80-72-1",
+            "pct": 0.5263,
             "ci95": [
-              0.457,
-              0.6131
+              0.4473,
+              0.6041
             ],
-            "per_season": 51.0
+            "per_season": 50.7
           },
           "underdog": {
-            "n": 104,
-            "record": "54-49-1",
-            "pct": 0.5243,
+            "n": 103,
+            "record": "52-50-1",
+            "pct": 0.5098,
             "ci95": [
-              0.4287,
-              0.6181
+              0.4142,
+              0.6047
             ],
-            "per_season": 34.3
+            "per_season": 34.0
           },
           "favourite": {
             "n": 50,
@@ -518,24 +518,24 @@
         {
           "edge": 5.0,
           "all": {
-            "n": 90,
-            "record": "47-42-1",
-            "pct": 0.5281,
+            "n": 88,
+            "record": "45-42-1",
+            "pct": 0.5172,
             "ci95": [
-              0.4254,
-              0.6285
+              0.4137,
+              0.6193
             ],
-            "per_season": 29.7
+            "per_season": 29.0
           },
           "underdog": {
-            "n": 67,
-            "record": "35-31-1",
-            "pct": 0.5303,
+            "n": 65,
+            "record": "33-31-1",
+            "pct": 0.5156,
             "ci95": [
-              0.4116,
-              0.6457
+              0.3958,
+              0.6337
             ],
-            "per_season": 22.0
+            "per_season": 21.3
           },
           "favourite": {
             "n": 23,
@@ -551,14 +551,14 @@
       ],
       "by_season": {
         "2023": {
-          "n": 45,
-          "record": "24-21-0",
-          "pct": 0.5333,
+          "n": 44,
+          "record": "23-21-0",
+          "pct": 0.5227,
           "ci95": [
-            0.3908,
-            0.6707
+            0.3794,
+            0.6625
           ],
-          "per_season": 45.0
+          "per_season": 44.0
         },
         "2024": {
           "n": 62,
@@ -572,35 +572,35 @@
         },
         "2025": {
           "n": 47,
-          "record": "22-25-0",
-          "pct": 0.4681,
+          "record": "21-26-0",
+          "pct": 0.4468,
           "ci95": [
-            0.3333,
-            0.6077
+            0.3141,
+            0.5875
           ],
           "per_season": 47.0
         }
       },
       "rule": "absolute edge >= 4.0 points",
       "live": {
-        "n": 154,
-        "record": "82-71-1",
-        "pct": 0.5359,
+        "n": 153,
+        "record": "80-72-1",
+        "pct": 0.5263,
         "ci95": [
-          0.457,
-          0.6131
+          0.4473,
+          0.6041
         ],
-        "per_season": 51.0
+        "per_season": 50.7
       }
     }
   },
   "line_provenance": {
     "matched_games": 855,
-    "mean_abs_spread_delta": 0.217,
+    "mean_abs_spread_delta": 0.18,
     "median_abs_spread_delta": 0.0,
-    "pct_spread_differs": 0.3287,
-    "pct_spread_differs_by_half_pt_or_more": 0.2982,
-    "pct_spread_differs_by_full_pt_or_more": 0.055
+    "pct_spread_differs": 0.3146,
+    "pct_spread_differs_by_half_pt_or_more": 0.2854,
+    "pct_spread_differs_by_full_pt_or_more": 0.0444
   },
   "reliability_independent": [
     {

@@ -65,15 +65,39 @@ def load_backfill(pattern: str = "data/backfill/nfl_*.jsonl") -> pd.DataFrame:
     return df
 
 
+# The columns that identify one GAME everywhere downstream. Not a matchup:
+# see consensus() below for what that cost.
+GAME_KEY = ["season", "week", "home_team", "away_team"]
+
+
 def consensus(df: pd.DataFrame) -> pd.DataFrame:
-    """One consensus closing row per game."""
-    key = ["season", "home_abbr", "away_abbr"]
+    """One consensus closing row per game.
+
+    Grouped on ``event_id``, which is one game. It used to be grouped on
+    ``["season", "home_abbr", "away_abbr"]``, which is a MATCHUP - so when two
+    teams met twice in a season, the regular-season game and the playoff
+    rematch fell into one group and this function took the median closing price
+    across both of them. 855 games came back as 841 rows; the 14 missing were
+    not dropped, they were blended. In 2025 that averaged SF at SEA week 1
+    (+112 home) with the week-20 rematch (-300 home) - two games with different
+    favourites - and returned a price that was never anybody's close.
+
+    It then reached the site twice, because both consumers merged on the same
+    non-unique key and fanned out: the /methodology line-provenance figure
+    (32.9% of spreads differ, mean 0.217 pts - really 31.5% and 0.180) and
+    every ATS record in Evaluation B. Both errors ran in the direction that
+    flattered us. `matched_games` stayed at 855 through all of it, because the
+    fan-out restores exactly the count the blending removed, which is why no
+    count on the page ever looked wrong. See
+    docs/plans/rematch-consensus-close.md.
+    """
     out = []
 
-    for k, g in df.groupby(key, sort=False):
-        season, home, away = k
-        rec = {"season": season, "home_team": home, "away_team": away,
-               "n_books": g["book"].nunique()}
+    for _, g in df.groupby("event_id", sort=False):
+        season, week = int(g["season"].iloc[0]), int(g["week"].iloc[0])
+        home, away = g["home_abbr"].iloc[0], g["away_abbr"].iloc[0]
+        rec = {"season": season, "week": week, "home_team": home,
+               "away_team": away, "n_books": g["book"].nunique()}
 
         # Spread, stated from the home side. side_a line is the home handicap;
         # nflverse states spread_line as "home favoured by", so flip the sign.
@@ -97,16 +121,32 @@ def consensus(df: pd.DataFrame) -> pd.DataFrame:
 
         out.append(rec)
 
-    return pd.DataFrame(out)
+    cons = pd.DataFrame(out)
+    # Everything downstream merges on GAME_KEY. If it is ever not unique the
+    # merge fans out silently and the figures go wrong without a single count
+    # changing - which is exactly how the matchup bug survived. Fail here.
+    if not cons.empty:
+        dupes = cons[cons.duplicated(GAME_KEY, keep=False)]
+        if not dupes.empty:
+            raise RuntimeError(
+                "backfill event_ids do not map 1:1 onto (season, week, home, "
+                f"away); {len(dupes)} rows share a key, e.g. "
+                f"{dupes[GAME_KEY].head(2).to_dict('records')}")
+    return cons
 
 
 def compare_to_nflverse(cons: pd.DataFrame, games: pd.DataFrame) -> dict:
-    """Quantify how far nflverse's spread_line sits from the real close."""
+    """Quantify how far nflverse's spread_line sits from the real close.
+
+    Merged on GAME_KEY, week included. Without the week both sides of a
+    rematch match every row on the other side and the comparison silently
+    doubles up on 28 games while reporting the same total.
+    """
     g = games[games["home_score"].notna()].copy()
     m = cons.merge(
-        g[["season", "home_team", "away_team", "spread_line", "total_line",
-           "home_moneyline", "away_moneyline", "home_score", "away_score"]],
-        on=["season", "home_team", "away_team"], how="inner",
+        g[GAME_KEY + ["spread_line", "total_line", "home_moneyline",
+                      "away_moneyline", "home_score", "away_score"]],
+        on=GAME_KEY, how="inner",
     )
     m["margin"] = m["home_score"] - m["away_score"]
     m["spread_delta"] = m["spread_line"] - m["close_spread"]

@@ -43,7 +43,8 @@ import pandas as pd
 from sklearn.linear_model import Ridge
 
 from engine.calibrate import expected_calibration_error, reliability
-from engine.closing import compare_to_nflverse, consensus, load_backfill
+from engine.closing import (GAME_KEY, compare_to_nflverse, consensus,
+                            load_backfill)
 from engine.models.ensemble import EDGE_THRESHOLD, _ats, _logit, selectivity
 from engine.models.ensemble import run as ensemble_run
 from engine.adapters.nfl import NFLAdapter
@@ -126,8 +127,11 @@ def main() -> None:
 
     # ---- Evaluation B: real consensus closes ------------------------------
     cons = consensus(load_backfill())
-    b_frame = frame.merge(cons, on=["season", "home_team", "away_team"],
-                          how="inner").dropna(subset=["close_spread", "close_p_home"])
+    # Merged on the game, week included. On season+home+away alone a rematch
+    # matches both of its own rows and 28 games were graded against a close
+    # that was the median of two different games - which moved every ATS record
+    # in this table. See docs/plans/rematch-consensus-close.md.
+    b_frame = frame.merge(cons, on=GAME_KEY, how="inner")                    .dropna(subset=["close_spread", "close_p_home"])
     b_frame["m_benchmark"] = _market_margin(b_frame, "close_p_home")
     eval_b = {name: _score(b_frame, col, mcol, "close_spread")
               for name, col, mcol, _ in MODELS}
