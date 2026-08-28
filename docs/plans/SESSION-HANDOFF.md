@@ -62,6 +62,36 @@ own capture step as redundancy against dropped schedule events.
 
 ## Next action
 
-Jargon pass beyond the landing page: ECE on 12 pages, de-vig on 11, Merkle
-on 7, CLV on 6. Scope was deliberately desktop-matching-mobile first, so
-these are untouched.
+Jargon pass beyond the landing page. Scope was deliberately
+desktop-matching-mobile first, so these are untouched.
+
+**The counts above were measured wrong** (2026-08-28, later the same day).
+They came from substring greps, so `ECE` was matching RE*CE*IPTS, PIE*CE*
+and tra*de*s, and `vig` was matching na*vig*ation. Word-boundary counts over
+user-visible pages and `site/content/*.md` only:
+
+| term | claimed | actual |
+| --- | --- | --- |
+| ECE | 12 pages | **2** — `record.html`, `methodology` |
+| de-vig | 11 | **14** (understated; 3 already glossed) |
+| Merkle | 7 | **7** |
+| CLV | 6 | **6** |
+
+So ECE is nearly done: `record.html:211-212` prints the bare labels
+`Consensus ECE (A / B)` / `Market ECE (A / B)` while the definition already
+sits three lines below at :215. Move it up, or label the stats in words.
+`record.html:308` defines ECE in a `title=` tooltip, which is invisible on
+touch and not reachable by keyboard — that is not a definition.
+
+**de-vig is the real work, and it wants replacing rather than glossing.**
+The site already has its own plain word for the concept — *fair price* —
+used on `/tools` ("No-vig fair price"), `/game` and the FAIR label defined
+in phase 3. Replacing "the de-vigged consensus" with "the fair price" costs
+nothing and drops the term entirely at most sites of use. Already glossed
+and fine as-is: `engine.html:167,192`, `record.html:179`.
+
+Remember `/methodology`, `/verify`, `/disclaimers` and `/ledger` are
+generated — edit `site/content/*.md`, never the HTML. `Merkle root` is
+load-bearing on `/verify` (you recompute it by name) and cannot be replaced
+there. `site/content/seo-plan.md` is an internal doc, not a built page, and
+its jargon is deliberate keyword targeting — leave it alone.
