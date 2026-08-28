@@ -309,3 +309,14 @@
 .d-rail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}
 .d-rail #sportRail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   position:relative;min-width:0}
+
+/* One-line glossary above the board. Quiet enough that a returning visitor
+   reads past it, present enough that a first-time one is not guessing.
+   --mut, not --dim: measured against --g1, --dim is 3.04:1 and --mut is
+   5.60:1. This is the one paragraph on the page a newcomer has to read, so
+   setting it in the site's quietest colour would have failed the people it
+   exists for - and 4.5:1 is the AA floor for body text. The three terms take
+   --ink because they are what the eye should land on. */
+.legend{margin:0 0 16px;max-width:92ch;color:var(--mut);
+  font:400 12.5px/1.7 var(--sans)}
+.legend b{color:var(--ink);font:600 11px/1 var(--mono);letter-spacing:.08em}
