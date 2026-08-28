@@ -289,6 +289,12 @@ module.exports = async function handler(req, res) {
   var eventId = body && body.event_id ? String(body.event_id) : "";
 
   var prompt;
+  // When the numbers in the answer were captured. The board rebuilds when
+  // capture.yml runs, which is not continuous, so an answer that quotes a
+  // price without saying how old it is is a price presented as current when
+  // it may be hours stale. Claude is told as_of in the prompt but cannot be
+  // relied on to repeat it, so the page stamps the answer from this.
+  var asOf = null;
   if (mode === "matchup") {
     var research = await fetchJSON(base, "/data/research.json");
     var report = findReport(research, eventId);
@@ -298,6 +304,7 @@ module.exports = async function handler(req, res) {
         error: "No research report for that game. Reports cover upcoming games only.",
       }));
     }
+    asOf = (research && research.generated_at) || null;
     prompt = buildMatchupPrompt(report, question);
   } else {
     var board = await fetchJSON(base, "/data/board.json");
@@ -310,6 +317,7 @@ module.exports = async function handler(req, res) {
     var betText = (url && process.env.FIRECRAWL_API_KEY)
       ? await scrapeBet(url, process.env.FIRECRAWL_API_KEY)
       : null;
+    asOf = (board && board.generated_at) || null;
     prompt = buildPrompt(board, props, question, betText);
   }
 
@@ -337,7 +345,7 @@ module.exports = async function handler(req, res) {
     res.statusCode = 200;
     res.setHeader("content-type", "application/json");
     if (askCookie) res.setHeader("Set-Cookie", askCookie);
-    return res.end(JSON.stringify({ answer: answer }));
+    return res.end(JSON.stringify({ answer: answer, as_of: asOf }));
   } catch (e) {
     res.statusCode = 502;
     return res.end(JSON.stringify({ error: "The read is unavailable right now." }));

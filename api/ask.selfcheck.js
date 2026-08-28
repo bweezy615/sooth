@@ -39,6 +39,18 @@ const bigPrompt = ask.buildPrompt(big, null, "what is on the board?");
 assert(bigPrompt.includes("A39 at H39"), "the LAST event must survive into the prompt");
 assert(ask.compactBoard(big).n_events === 40, "compactBoard must keep every event");
 
+// The answer has to be datable. /ask quotes prices, the board rebuilds when
+// capture.yml runs (about three times a day through late August 2026), and a
+// price shown without its age is a stale price presented as current. The
+// handler returns as_of and the page stamps the answer from it; if the board
+// ever stops carrying generated_at into the context, the stamp goes silently
+// missing rather than wrong, so it is asserted here.
+assert(ask.compactBoard(big).as_of === "2026-01-01T00:00:00Z",
+  "compactBoard must carry the board's generated_at through as as_of");
+assert(ask.compactBoard({ boards: [] }).as_of === undefined ||
+       ask.compactBoard({ boards: [] }).as_of === null,
+  "an undated board must not invent a timestamp");
+
 // Superlatives are arithmetic, not reading comprehension: the leaders block
 // must rank correctly so the model quotes instead of scanning.
 const ranked = { generated_at: "x", boards: [{ sport: "mlb", events: [

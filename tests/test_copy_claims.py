@@ -153,13 +153,24 @@ def test_no_page_promises_live_prices_in_static_copy():
     page's own status strip read DELAYED directly beneath a label promising
     LIVE. The strip is the honest surface because it is computed from
     generated_at; the label is a promise nothing checks.
+
+    Extended on the same day to "LIVE BOARD", which /edges and /ask were both
+    stamping across their chrome and /ask across its meta description, while
+    /ask showed no timestamp of any kind. Its answers quote a price to the
+    point; they now carry the age of the board they read.
     """
     offenders = []
     for page in sorted((ROOT / "site/public").glob("*.html")):
         for i, line in enumerate(page.read_text(encoding="utf-8").splitlines(), 1):
             if line.lstrip().startswith(("<!--", "*", "/*")):
                 continue                      # commentary about the rule itself
-            if re.search(r"LIVE\s+(PRICING|PRICES|ODDS)", line, re.I):
+            # Uppercase is the site's own chrome - the .tl labels and the meta
+            # descriptions - making a claim. Lowercase "the live board" in
+            # prose, a loading state or an error string is the artifact's name
+            # rather than a promise about its age, and is left alone.
+            if re.search(r"LIVE (PRICING|PRICES|ODDS|BOARD)", line):
+                offenders.append(f"{page.name}:{i}: {line.strip()[:90]}")
+            if re.search(r"content=\"[^\"]*live board", line, re.I):
                 offenders.append(f"{page.name}:{i}: {line.strip()[:90]}")
     assert not offenders, (
         "a page states in static copy that its prices are live. The board "

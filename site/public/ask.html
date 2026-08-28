@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — Analyst</title>
-<meta name="description" content="Run a bet past the live board: the fair price, which book has the best number, and the shopping gain in points. Reads the math, not the winner.">
+<meta name="description" content="Run a bet past the published board: the fair price, which book has the best number, and the shopping gain in points. Every answer is stamped with when the prices were captured.">
 <meta property="og:title" content="Sooth — Analyst">
-<meta property="og:description" content="Run a bet past the live board. Reads the math, not the winner.">
+<meta property="og:description" content="Run a bet past the published board. Reads the math, not the winner.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="https://sooth.bet/ask">
@@ -133,6 +133,14 @@
   /* the compliance floor is separated from the instrument by a hairline, the
      way every other surface on the site is separated from the one above it */
   p.ft{border-top:1px solid var(--hair);margin:28px 0 0;padding:20px 0 0}
+
+  /* when the prices in the answer were captured. Quiet when the board is
+     fresh, amber when it is past the three-hour line, because a stale price
+     read as current is the one way this page can cost somebody money. */
+  .an-out p.asof{margin:14px 0 0;padding:9px 0 0;border-top:1px solid var(--hair);
+    color:var(--dim);max-width:none}
+  /* .tl carries its own colour, so the late state has to reach the spans */
+  .an-out p.asof.late,.an-out p.asof.late .tl{color:var(--amber)}
 </style>
 </head>
 <body>
@@ -140,12 +148,16 @@
 <main class="wrap" style="max-width:880px">
 
   <div class="scr-strip"><span class="nm">AI ANALYZER</span>
-    <span class="tl">ANSWERS USE ONLY THE LIVE BOARD — IT WILL NOT PICK A SIDE</span>
+    <!-- Not "THE LIVE BOARD". The board rebuilds when capture.yml runs, which
+         through late August 2026 was landing about three times a day; desk.js
+         calls a feed stale past three hours. Every answer is now stamped with
+         the age of the prices it read, from the API's as_of. -->
+    <span class="tl">ANSWERS USE ONLY THE PUBLISHED BOARD — IT WILL NOT PICK A SIDE</span>
     <span class="tl" style="margin-left:auto">FREE · NO SIGNUP</span></div>
   <div class="page-head" style="padding:30px 0 0" id="ask" tabindex="-1">
     <h1>Sooth Analyst</h1>
     <p class="sub">
-      Paste a bet or a bet-slip link and get a read from the live board: the fair price with
+      Paste a bet or a bet-slip link and get a read from the board as we last captured it: the fair price with
       the book's margin stripped out, which book has the best number, and the points you gain
       by taking it. <b>It reads the math, not the winner — and it
       will not pick a side.</b></p>
@@ -157,7 +169,7 @@
       placeholder="e.g. Is Skubal over 6.5 strikeouts at -110 a fair number? — or paste your bet-slip link"></textarea>
     <div class="an-chips" id="examples" role="group" aria-label="Example questions"></div>
     <div class="ask-row">
-      <span class="tl">READS THE LIVE BOARD &amp; PROPS · NOT ADVICE</span>
+      <span class="tl">READS THE PUBLISHED BOARD &amp; PROPS · NOT ADVICE</span>
       <span class="keys" style="display:flex;align-items:center;gap:12px">
         <span class="tl cnt" id="cntWrap"><b id="cnt">0</b>/500</span>
         <button type="button" id="go" class="an-in-btn"
@@ -206,12 +218,28 @@ function setCount(){
 }
 /* The three states of the read-out share one slot, so the page height does not
    move underneath the reader between them. */
-function render(text,isErr){
+/* An answer quotes prices. Prices have an age, and this one's is whatever the
+   board was when the API read it - which is not "now" and can be hours. The
+   stamp is built from as_of, never from the clock, and says DELAYED past the
+   same three hours desk.js uses everywhere else. An answer we cannot date
+   carries no stamp rather than an invented one. */
+function stamp(asOf){
+  if(!asOf) return "";
+  var ageH=(Date.now()-Date.parse(asOf))/36e5;
+  if(!isFinite(ageH)) return "";
+  var late=ageH>3;
+  return '<p class="asof'+(late?" late":"")+'"><span class="tl">'
+    +(late?"DELAYED · PRICES FROM ":"PRICES FROM ")+'</span>'
+    +'<span class="tl" data-ago="'+D.esc(asOf)+'">'+D.ago(asOf)+'</span>'
+    +(late?'<span class="tl"> · THE BOARD MAY HAVE MOVED</span>':'')+'</p>';
+}
+function render(text,isErr,asOf){
   var out=$("out");
   out.classList.remove("is-idle");
   out.removeAttribute("aria-busy");
   out.style.borderLeftColor=isErr?"var(--amber)":"var(--brand)";
-  out.innerHTML=D.answer(text);
+  out.innerHTML=D.answer(text)+(isErr?"":stamp(asOf));
+  D.tick();
 }
 function pending(){
   var out=$("out");
@@ -235,7 +263,7 @@ function ask(){
     body:JSON.stringify({question:q})})
     .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
     .then(function(res){
-      if(res.ok&&res.j.answer){ render(res.j.answer,false); }
+      if(res.ok&&res.j.answer){ render(res.j.answer,false,res.j.as_of); }
       else{ render(res.j.error||"The read is unavailable right now. Nothing was lost — press the key again in a moment.",true); }
     })
     .catch(function(){ render("Could not reach the read service. Check your connection and try again — your question is still in the field.",true); })
