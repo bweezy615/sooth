@@ -146,6 +146,20 @@ def _expected(fig: dict) -> dict[str, list[tuple[str, str]]]:
             (f"{fig['confidence_cap'] * 100:.0f}%", "confidence cap"),
         ],
         "learn.html": [(be1, "break-even at -110")],
+        # /predictor quotes the same four numbers /trust does, in prose, and
+        # was the one page doing it unpinned. It had not drifted when this was
+        # added on 2026-08-28 - but neither had methodology.md the day before
+        # it did.
+        "predictor.html": [
+            (_pct(ind["ats_pct"], 1), "our ATS%"),
+            (decided, "decided games"),
+            (n, "graded walk-forward games"),
+            (pushes, "pushes"),
+            (be2, "break-even"),
+        ],
+        # The stat tile's own subtitle. The number beside it is filled from
+        # figures.json at runtime; this half was typed.
+        "index.html": [(be2, "break-even")],
     }
 
 
