@@ -810,14 +810,19 @@ different and much rarer property in this industry.</p>
   starting quarterback is not reflected in our probability until the team has
   played and been re-rated, which means our early-season and post-injury numbers
   are systematically worse than the market's.</li>
-<li><strong>No play-level information.</strong> The model does not use expected points added,
-  success rate, or any drive-level data. It knows who played whom and by how
-  much.</li>
+<li><strong>No play-by-play information.</strong> The model does use expected points added,
+  but only as a team-week average from nflverse's weekly totals — offensive
+  and defensive EPA per play, made opponent-aware. It never reads an
+  individual play. No success rate, no drive-level data, no down and distance,
+  no personnel.</li>
 <li><strong>Small samples at the extremes.</strong> As noted, the outer probability bands hold
   too few games to draw conclusions from.</li>
-<li><strong>One sport is Live.</strong> NFL only. The other eight sports on this site are
-  labelled "in calibration" or "deferred" and are not graded against verified
-  closing lines yet. A sport is never marked Live without confirmed free
+<li><strong>One sport is graded.</strong> NFL only, and only NFL predictions are sealed in
+  the ledger before kickoff. The other four sports here — MLB, NBA, NHL and
+  UFC — carry price shopping; MLB also carries a strikeout prop model, which
+  we graded against board prices, found no edge in, and published in full at
+  <a href="/props-model">/props-model</a>. Nothing outside NFL is graded against verified
+  closing lines, and a sport is never graded that way without confirmed free
   closing-odds history, because without it we cannot grade ourselves honestly.</li>
 <li><strong>No published CLV.</strong> See the leakage section.</li>
 <li><strong>Backtests are not forecasts.</strong> Ten seasons of out-of-sample results are a
@@ -852,7 +857,7 @@ always be traced to the exact model that made it.</p>
 wagers, hold funds, or pay prizes. We are not affiliated with the NFL, any
 league, team, or sportsbook. Full disclaimers, including responsible-gambling
 resources, are at <a href="/disclaimers">/disclaimers</a>.</p>
-<p><em>Last updated 2026-08-06. Model versions <code>elo+epa-v1+iso</code> (independent) and <code>elo+epa+market-v1+iso</code> (consensus).</em></p>
+<p><em>Figures on this page regenerated 2026-08-27 by <code>python scripts/published_figures.py</code>. Model versions <code>elo+epa-v1+iso</code> (independent) and <code>elo+epa+market-v1+iso</code> (consensus).</em></p>
 </div></div>
 <script src="/assets/desk.js"></script>
 <script>window.Desk.mount("");</script>

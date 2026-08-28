@@ -430,14 +430,19 @@ We would rather state these than have them found.
   starting quarterback is not reflected in our probability until the team has
   played and been re-rated, which means our early-season and post-injury numbers
   are systematically worse than the market's.
-- **No play-level information.** The model does not use expected points added,
-  success rate, or any drive-level data. It knows who played whom and by how
-  much.
+- **No play-by-play information.** The model does use expected points added,
+  but only as a team-week average from nflverse's weekly totals — offensive
+  and defensive EPA per play, made opponent-aware. It never reads an
+  individual play. No success rate, no drive-level data, no down and distance,
+  no personnel.
 - **Small samples at the extremes.** As noted, the outer probability bands hold
   too few games to draw conclusions from.
-- **One sport is Live.** NFL only. The other eight sports on this site are
-  labelled "in calibration" or "deferred" and are not graded against verified
-  closing lines yet. A sport is never marked Live without confirmed free
+- **One sport is graded.** NFL only, and only NFL predictions are sealed in
+  the ledger before kickoff. The other four sports here — MLB, NBA, NHL and
+  UFC — carry price shopping; MLB also carries a strikeout prop model, which
+  we graded against board prices, found no edge in, and published in full at
+  [/props-model](/props-model). Nothing outside NFL is graded against verified
+  closing lines, and a sport is never graded that way without confirmed free
   closing-odds history, because without it we cannot grade ourselves honestly.
 - **No published CLV.** See the leakage section.
 - **Backtests are not forecasts.** Ten seasons of out-of-sample results are a
@@ -478,4 +483,4 @@ wagers, hold funds, or pay prizes. We are not affiliated with the NFL, any
 league, team, or sportsbook. Full disclaimers, including responsible-gambling
 resources, are at [/disclaimers](/disclaimers).
 
-*Last updated 2026-08-06. Model versions `elo+epa-v1+iso` (independent) and `elo+epa+market-v1+iso` (consensus).*
+*Figures on this page regenerated {{fig:generated_at|date}} by `{{fig:command}}`. Model versions `elo+epa-v1+iso` (independent) and `elo+epa+market-v1+iso` (consensus).*

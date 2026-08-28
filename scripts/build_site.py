@@ -449,6 +449,8 @@ def _fmt(value, spec, token):
             return f"{int(value):,}"
         if spec == "round0":                                 # 260.8 -> "261"
             return f"{round(float(value))}"
+        if spec == "date":                                   # ISO stamp -> 2026-08-27
+            return str(value)[:10]
         if spec.endswith("f") and spec[:-1].isdigit():        # 2f, 4f, 5f
             return f"{float(value):.{int(spec[:-1])}f}"
         if spec.startswith("pct") and spec[3:].isdigit():     # pct1, pct2

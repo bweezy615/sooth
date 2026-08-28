@@ -221,4 +221,4 @@ misleading - including anything on this page - tell us and we will correct it
 and publish the correction. A site whose entire proposition is verifiability has
 no defensible reason to leave an error standing.
 
-*Last updated 2026-08-02.*
+*Last updated 2026-08-27.*
