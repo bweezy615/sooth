@@ -106,3 +106,73 @@ marked stale.
 
 `index.html` and `game.html` also read `moves.json` and do not have this
 problem: both label every row with its own `observed_at`.
+
+---
+
+# Addendum, 2026-08-29: what option 3 costs, now that the balance is known
+
+Section 2 calls the external `workflow_dispatch` pinger "the interesting one"
+that "would probably fix it outright". It is, and it would. It also has a price
+tag that was not attached to it, and the price is paid in the one budget that
+has a deadline.
+
+The overlap with `capture-cadence.md` is noted above under the *first* option
+only. It belongs hardest on the third, because the third is the one that
+restores the schedules in full.
+
+## The arithmetic
+
+Paid workflows, at the cadence their crons actually ask for, priced at the
+credits each one measurably spends per run (`credits_spent`, read from the
+committed payloads):
+
+| workflow | cron | runs/day | credits/run | credits/day |
+|---|---|---|---|---|
+| `capture.yml` (`engine.lines`) | `*/30` | 48 | 5 | 240 |
+| `edges.yml` (`engine.middles`) | `15 */2` | 12 | 10 | 120 |
+| `props-live.yml` (`engine.props`) | `10 */2` | 12 | 12 | 144 |
+| | | | | **504/day** |
+
+That is a floor: `capture-props.yml` runs 12 times a day on top of it with a
+`--max-credits 20` ceiling, and is not counted here because its per-run spend
+is not recorded anywhere.
+
+Measured burn today, with GitHub dropping most scheduled runs, is **219/day**.
+So the schedules being honoured is not a small increase. It is at least 2.3x.
+
+## What that does to the deadline
+
+```
+balance 2026-08-28 06:04                    3,008 credits
+  at 219/day (today, throttled)   13.7 days  -> empty ~2026-09-11
+  at 504/day (crons honoured)      6.0 days  -> empty ~2026-09-03
+NFL week 1 kicks off                            2026-09-09
+```
+
+**Fixing the scheduler without first fixing the credit budget does not just
+shorten the fuse — it moves the account's exhaustion to before the season
+starts rather than two days into it.** The site would be at its most reliable
+for a week and then have no prices at all for the event it is built for.
+
+This is the same conclusion `capture-cadence.md` reaches ("the GitHub
+throttling is currently the only thing keeping the account alive"), arrived at
+from the other end and with the date attached. Neither memo changes a cron and
+neither is asking to.
+
+## What this does and does not say
+
+It does **not** say don't fix the scheduler. The dropped-run problem is real,
+it is costing college football week 1 observations that cannot be bought back,
+and the free evidence half has already been split onto its own workflow
+(`capture-evidence.yml`) precisely so it can be fixed independently of this.
+
+It says the two decisions are one decision, and option 3 is safe to take **only
+together with** a cut in credits per run or a larger plan — `capture-cadence.md`
+option D, or more credits. Taken alone it is the most expensive option on the
+list, not the cheapest.
+
+**Still unknown, and it moves this number more than anything else here:** the
+plan's reset date. If the pool refills on 2026-09-01 both dates above are
+wrong and the whole constraint dissolves. See "there are two keys" in
+`capture-cadence.md` for what to check and for the instrument now recording it
+automatically.
