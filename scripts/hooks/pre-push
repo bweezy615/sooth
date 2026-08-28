@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# The green gate, enforced by git rather than by remembering.
+#
+# Pushing this repo deploys sooth.bet. The rule has always been "never push a
+# red gate", and on 2026-08-27 it was broken anyway — not by deciding to, but
+# by running `bash scripts/check.sh 2>&1 | tail -2 && git push`. A pipeline
+# exits with the status of its LAST command, so `tail` returned 0, the `&&`
+# was satisfied, and the push went out under a gate that had just printed
+# "NOT GREEN - do not push". The words were right there on screen.
+#
+# A rule you can defeat by piping is not a rule. So the check moved here,
+# where git runs it and the exit status is the only thing that matters.
+#
+# Install (once per clone):
+#     git config core.hooksPath scripts/hooks
+#
+# --no-verify skips this. Do not.
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "pre-push: running the green gate (bash scripts/check.sh)"
+if bash scripts/check.sh; then
+  exit 0
+fi
+
+cat >&2 <<'MSG'
+
+pre-push: REFUSED. The gate is red and pushing deploys to sooth.bet.
+
+Fix it, or revert your own work back to green and leave the tree clean.
+Never push a workaround; never reach for --no-verify.
+MSG
+exit 1
