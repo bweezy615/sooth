@@ -128,3 +128,49 @@ deadline attached.
 The agent did not change any cron, did not add a workflow, and did not spend a
 credit beyond one board rebuild needed to verify the UFC→CFB swap. Widening
 capture was named as Branden's call and this memo exists instead of a commit.
+
+---
+
+# Addendum, 2026-08-28: the balance is measurable, and it runs out during NFL week 1
+
+Option A shipped. The board half is still open, and this is the number it was
+missing. Nobody had to buy anything to get it: `engine/props.py` already reads
+the Odds API's `x-requests-remaining` header and writes it into
+`site/public/data/props.json`, which is committed on every run. Fourteen days
+of git history is therefore fourteen days of balance readings.
+
+```
+2026-08-14 05:43   6,071 remaining
+2026-08-28 06:04   3,008 remaining
+                   ------
+  14.0 days, 80 samples, 3,063 used  =  219 credits a day
+```
+
+At 219 a day, **3,008 credits is about 14 more days and empties around
+2026-09-11.** No reset appears anywhere in the fourteen days, so this reads as
+a fixed pool rather than a monthly allowance — worth confirming against the
+account, because it changes the answer completely.
+
+**NFL week 1 kicks off 2026-09-09.** On the current burn the credits run out
+inside the first weekend of the season the site is built for. That is the
+deadline this decision actually has, and it is two weeks away, not abstract.
+
+Two things follow that were not obvious before:
+
+- **The GitHub throttling is currently the only thing keeping the account
+  alive.** `capture.yml` is written for `*/30` and reasons about ~192 credits a
+  day; measured burn across all paid workflows is 219. If the scheduler ever
+  started honouring the crons, the burn would go up, not down. Fixing the
+  throttling (see `scheduled-runs-and-silent-green.md`) without first fixing
+  the credit budget would empty the account in days.
+- **Option D is worth more than it looked.** Cutting credits per run is the
+  only option that buys time without spending money, and there are now two
+  weeks in which it could.
+
+Recorded, not decided. Nothing here changes a cron, a plan or a spend.
+
+One reporting gap, small: `engine/lines.py` reads `x-requests-last` and records
+`credits_spent` in board.json, but ignores `x-requests-remaining` even though
+the header is in the same response. `engine/props.py` records both. Adding it
+to `lines.py` is three lines and would put the balance on the board build too,
+but it cannot be verified without spending a credit, so it was left.
