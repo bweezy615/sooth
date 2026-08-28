@@ -410,10 +410,218 @@ def frost(html: str) -> str:
         + m.group(3), html)
 
 
+# ---------------------------------------------------------------------------
+# Figure substitution.
+#
+# Hard rule 1: no published number is hand-typed. methodology.md used to type
+# all of its in, pasted from published_figures.py's stdout, and on 2026-08-27
+# the reliability table had drifted a generation behind: /record renders that
+# table from figures.json at runtime, so the two pages showed different
+# calibration numbers for the same 2,671 games, and the prose reading the table
+# was stale with it.
+#
+# So the markdown carries tokens and this resolves them at build time:
+#
+#   {{fig:evaluation_a.results.independent.ats_pct|pct2}}   ->  49.77%
+#   {{table:reliability}}                                   ->  the whole table
+#
+# An unresolved or misspelled token raises. Rendering a literal "{{fig:...}}"
+# to a visitor would be worse than the hand-typed number it replaced.
+# See docs/plans/methodology-figures.md.
+# ---------------------------------------------------------------------------
+
+FIGURES = CONTENT / "_figures.json"
+
+_TOKEN = re.compile(r"\{\{(fig|table):([a-zA-Z0-9_.]+)(?:\|([a-zA-Z0-9_]+))?\}\}")
+
+
+class FigureError(RuntimeError):
+    """A token the published figures cannot answer. Never rendered, always raised."""
+
+
+def _fmt(value, spec, token):
+    try:
+        if spec is None:
+            return str(value)
+        if spec == "int":
+            return str(int(value))
+        if spec == "comma":
+            return f"{int(value):,}"
+        if spec == "round0":                                 # 260.8 -> "261"
+            return f"{round(float(value))}"
+        if spec.endswith("f") and spec[:-1].isdigit():        # 2f, 4f, 5f
+            return f"{float(value):.{int(spec[:-1])}f}"
+        if spec.startswith("pct") and spec[3:].isdigit():     # pct1, pct2
+            return f"{float(value) * 100:.{int(spec[3:])}f}%"
+        if spec.startswith("pts") and spec[3:].isdigit():     # pts2 -> "+2.68 pts"
+            return f"{float(value) * 100:+.{int(spec[3:])}f} pts"
+        # ..._bare: the same scaling with no sign and no unit, for prose that
+        # supplies its own ("between 1.7 and 5.1 percentage points").
+        if spec.startswith("pts") and spec.endswith("_bare") and spec[3:-5].isdigit():
+            return f"{abs(float(value)) * 100:.{int(spec[3:-5])}f}"
+    except (TypeError, ValueError) as e:
+        raise FigureError(f"{token}: cannot format {value!r} as {spec}") from e
+    raise FigureError(f"{token}: unknown format '{spec}'")
+
+
+def _lookup(figures, path, token):
+    node = figures
+    for part in path.split("."):
+        try:
+            # a numeric segment indexes a list: reliability_independent.0.n,
+            # selectivity.evaluation_a.live.ci95.1
+            node = node[int(part)] if isinstance(node, list) else node[part]
+        except (KeyError, TypeError, IndexError, ValueError) as e:
+            raise FigureError(
+                f"{token}: no such figure - _figures.json has nothing at "
+                f"'{part}' in '{path}'. Rerun scripts/published_figures.py if "
+                f"the shape changed.") from e
+    return node
+
+
+def _row(cells):
+    return "| " + " | ".join(str(c) for c in cells) + " |"
+
+
+_BACKTEST_LABELS = {"elo": "Elo baseline", "independent": "Independent (ours)",
+                    "consensus": "Consensus (+market)", "market": "Closing market"}
+
+
+def _model_table(ev):
+    rows = ["| model | n | Brier | ECE | ATS record | ATS% |",
+            "|---|---|---|---|---|---|"]
+    for key, label in _BACKTEST_LABELS.items():
+        r = ev["results"][key]
+        rows.append(_row([label, r["n"], f"{r['brier']:.5f}", f"{r['ece']:.5f}",
+                          r["ats_record"], f"{r['ats_pct']:.4f}"]))
+    return "\n".join(rows)
+
+
+def _tbl_backtest_a(f):
+    return _model_table(f["evaluation_a"])
+
+
+def _tbl_backtest_b(f):
+    return _model_table(f["evaluation_b"])
+
+
+def _tbl_ece(f):
+    res = f["evaluation_a"]["results"]
+    return "\n".join([
+        "| model | ECE | Brier |", "|---|---|---|",
+        _row(["Elo baseline", f"{res['elo']['ece']:.5f}",
+              f"{res['elo']['brier']:.5f}"]),
+        _row(["Elo + EPA + rest, isotonic (published)",
+              f"**{res['independent']['ece']:.5f}**",
+              f"{res['independent']['brier']:.5f}"]),
+        _row(["de-vigged market", f"{res['market']['ece']:.5f}",
+              f"{res['market']['brier']:.5f}"]),
+    ])
+
+
+def _tbl_reliability(f):
+    rows = ["| predicted band | n | mean predicted | actual frequency | gap |",
+            "|---|---|---|---|---|"]
+    for r in f["reliability_independent"]:
+        rows.append(_row([r["bucket"], r["n"], f"{r['predicted'] * 100:.2f}%",
+                          f"{r['actual'] * 100:.2f}%",
+                          f"{r['gap'] * 100:+.2f} pts"]))
+    return "\n".join(rows)
+
+
+def _tbl_selectivity(f):
+    """Every edge bar we measured, on both line sources, shipped bar in bold.
+
+    The bold row follows selectivity.rule_threshold_pts rather than being
+    hardcoded, so moving the bar moves the emphasis with it.
+    """
+    a = f["selectivity"]["evaluation_a"]
+    b = f["selectivity"]["evaluation_b"]
+    ship = float(f["selectivity"]["rule_threshold_pts"])
+    rows = ["| edge bar | A: nflverse 2016-2025 | B: real closes 2023-2025 |",
+            "|---|---|---|"]
+    for ta, tb in zip(a["thresholds"], b["thresholds"]):
+        if ta["edge"] != tb["edge"]:
+            raise FigureError("the two samples measured different edge bars")
+        edge = ta["edge"]
+        label = "every game" if edge == 0 else f"\u2265 {edge:g} points"
+        cells = [label] + [f"{t['all']['record']} ({t['all']['pct'] * 100:.2f}%)"
+                           for t in (ta, tb)]
+        if edge == ship:
+            cells = [f"**{c}**" for c in cells]
+        rows.append(_row(cells))
+    return "\n".join(rows)
+
+
+def _record(entry):
+    """A season with no pushes prints W-L, not W-L-0."""
+    rec = entry["record"]
+    return rec[:-2] if rec.endswith("-0") else rec
+
+
+def _tbl_by_season(f):
+    """Two columns of five seasons, losers included - the point of the table."""
+    seasons = sorted(f["selectivity"]["evaluation_a"]["by_season"].items())
+    half = (len(seasons) + 1) // 2
+    rows = ["| season | record | | season | record |", "|---|---|---|---|---|"]
+    for (ly, lv), (ry, rv) in zip(seasons[:half], seasons[half:]):
+        rows.append(_row([ly, _record(lv), "", ry, _record(rv)]))
+    return "\n".join(rows)
+
+
+TABLES = {"backtest_a": _tbl_backtest_a, "backtest_b": _tbl_backtest_b,
+          "ece": _tbl_ece, "reliability": _tbl_reliability,
+          "selectivity": _tbl_selectivity, "by_season": _tbl_by_season}
+
+
+# The middle bands, which the prose about the reliability table reads. Derived
+# here rather than typed into the prose, and derived FROM the published figures
+# rather than measured again — nothing new is computed, the rows are just
+# summed. Named as its own block so a reader of the markdown can see that
+# "2,290 of the 2,671" is a sum of the table directly above it.
+_MID_BANDS = ("0.3-0.4", "0.4-0.5", "0.5-0.6", "0.6-0.7", "0.7-0.8")
+
+
+def _derive(figures):
+    # Absent entirely: leave it out, and any {{fig:reliability_mid...}} token
+    # then fails as an unknown figure, which is the right failure. Present but
+    # incomplete is the dangerous case and is caught below.
+    if "reliability_independent" not in figures:
+        return figures
+    mid = [r for r in figures["reliability_independent"]
+           if r["bucket"] in _MID_BANDS]
+    if len(mid) != len(_MID_BANDS):
+        raise FigureError(
+            f"reliability_independent is missing middle bands: expected "
+            f"{list(_MID_BANDS)}, found {[r['bucket'] for r in mid]}")
+    gaps = [r["gap"] for r in mid]
+    return dict(figures, reliability_mid={
+        "n": sum(r["n"] for r in mid),
+        "min_gap": min(gaps), "max_gap": max(gaps),
+    })
+
+
+def substitute(text, figures):
+    """Resolve every {{fig:}} and {{table:}} token, or raise FigureError."""
+    figures = _derive(figures)
+    def one(m):
+        kind, name, spec, token = m.group(1), m.group(2), m.group(3), m.group(0)
+        if kind == "table":
+            if spec is not None:
+                raise FigureError(f"{token}: a table takes no format")
+            if name not in TABLES:
+                raise FigureError(f"{token}: unknown table. Known: {sorted(TABLES)}")
+            return TABLES[name](figures)
+        return _fmt(_lookup(figures, name, token), spec, token)
+
+    return _TOKEN.sub(one, text)
+
+
 def build_markdown_pages() -> list[str]:
     md = markdown.Markdown(
         extensions=["tables", "fenced_code", "sane_lists", "attr_list"]
     )
+    figures = json.loads(FIGURES.read_text(encoding="utf-8"))
     built = []
     for slug, src, title, desc in PAGES:
         path = CONTENT / src
@@ -426,6 +634,7 @@ def build_markdown_pages() -> list[str]:
             end = text.find("\n---\n", 4)
             if end != -1:
                 text = text[end + 5:]
+        text = substitute(text, figures)
         html = frost(md.convert(text))
         (PUBLIC / f"{slug}.html").write_text(render(slug, title, desc, html), encoding="utf-8")
         built.append(slug)

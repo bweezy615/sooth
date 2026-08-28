@@ -40,12 +40,16 @@ use the tool.
 We predict NFL game outcomes with an Elo rating system that uses a damped
 margin-of-victory update, augmented with opponent-aware expected-points-added
 form and rest, then convert those ratings into probabilities and correct them
-with isotonic regression refit each season on prior seasons only. Across 2,671
+with isotonic regression refit each season on prior seasons only. Across
+{{fig:evaluation_a.results.independent.n|comma}}
 out-of-sample games from 2016 through 2025, the published model recorded a
-Brier score of 0.22151 against the de-vigged closing market's 0.21038,
-straight-up accuracy of 63.53% against the market's 66.64%, and an
-against-the-spread record of 1298-1310-63, or 49.77% of decided games, against
-a breakeven of 52.38% at standard -110 pricing. **The model does not beat the
+Brier score of {{fig:evaluation_a.results.independent.brier|5f}} against the
+de-vigged closing market's {{fig:evaluation_a.results.market.brier|5f}},
+straight-up accuracy of {{fig:evaluation_a.results.independent.accuracy|pct2}}
+against the market's {{fig:evaluation_a.results.market.accuracy|pct2}}, and an
+against-the-spread record of {{fig:evaluation_a.results.independent.ats_record}},
+or {{fig:evaluation_a.results.independent.ats_pct|pct2}} of decided games,
+against a breakeven of {{fig:breakeven_ats|pct2}} at standard -110 pricing. **The model does not beat the
 closing market.** Our probabilities are reasonably calibrated, which is a
 different and smaller claim, and it is the only claim we make.
 
@@ -58,7 +62,8 @@ We claim exactly two things:
 1. **Our published probabilities are calibrated.** When we publish 70%, events
    in that band have historically occurred about 70% of the time in our
    out-of-sample testing. The measured expected calibration error of the
-   published model is 0.03074; the de-vigged market's is 0.01913. The market
+   published model is {{fig:evaluation_a.results.independent.ece|5f}}; the
+   de-vigged market's is {{fig:evaluation_a.results.market.ece|5f}}. The market
    is better calibrated than we are, and we say so.
 2. **Our record is tamper-evident.** Every prediction is hashed and committed to
    a public Merkle root before the first kickoff of its slate. We cannot delete
@@ -164,33 +169,24 @@ If a number on this site cannot be produced by that command, it should not be
 on this site. We publish **two** evaluations of the same models rather than
 choosing the flattering one.
 
-### A. nflverse lines — 2016-2025, n=2671
+### A. nflverse lines — {{fig:evaluation_a.seasons}}, n={{fig:evaluation_a.results.independent.n|int}}
 
 Larger sample, weaker provenance. nflverse's `spread_line` is an undocumented
 periodic snapshot rather than a documented close.
 
-| model | n | Brier | ECE | ATS record | ATS% |
-|---|---|---|---|---|---|
-| Elo baseline | 2671 | 0.22217 | 0.02698 | 1287-1321-63 | 0.4935 |
-| Independent (ours) | 2671 | 0.22151 | 0.03074 | 1298-1310-63 | 0.4977 |
-| Consensus (+market) | 2671 | 0.21439 | 0.03221 | 1316-1292-63 | 0.5046 |
-| Closing market | 2671 | 0.21038 | 0.01913 | 1296-1312-63 | 0.4969 |
+{{table:backtest_a}}
 
-### B. Real consensus closing lines — 2023-2025, n=854
+### B. Real consensus closing lines — {{fig:evaluation_b.seasons}}, n={{fig:evaluation_b.results.independent.n|int}}
 
 Smaller sample, far better provenance: the median across books, captured
 5–28 minutes before each kickoff, from odds we paid for and hold ourselves.
 
-| model | n | Brier | ECE | ATS record | ATS% |
-|---|---|---|---|---|---|
-| Elo baseline | 854 | 0.22246 | 0.03265 | 402-431-21 | 0.4826 |
-| Independent (ours) | 854 | 0.22176 | 0.03356 | 404-429-21 | 0.4850 |
-| Consensus (+market) | 854 | 0.21395 | 0.04186 | 414-419-21 | 0.4970 |
-| Closing market | 854 | 0.21061 | 0.02396 | 414-419-21 | 0.4970 |
+{{table:backtest_b}}
 
-### Break-even is 0.5238
+### Break-even is {{fig:breakeven_ats|4f}}
 
-At −110 on both sides a bettor needs 52.38% against the spread to break even.
+At −110 on both sides a bettor needs {{fig:breakeven_ats|pct2}} against the
+spread to break even.
 **No model in either table clears it.** Neither does the closing market
 against its own number — which is the sanity check that the test is
 well-formed rather than flattering us.
@@ -204,60 +200,58 @@ publishes.
 A spread is a question about margin, so the decision against a number comes
 from a regression that predicts margin directly, and the distance between our
 predicted margin and the posted number — in points — is the only quantity that
-decides whether we say anything at all. Below four points we do not. Some weeks
-that means no play on the whole slate.
+decides whether we say anything at all. Below
+{{fig:selectivity.rule_threshold_pts|int}} points we do not. Some weeks that
+means no play on the whole slate.
 
 The threshold was chosen by measurement, and here is the measurement, on both
 line sources:
 
-| edge bar | A: nflverse 2016-2025 | B: real closes 2023-2025 |
-|---|---|---|
-| every game | 1298-1310-63 (49.77%) | 404-429-21 (48.50%) |
-| ≥ 2 points | 657-631-30 (51.01%) | 193-205-10 (48.49%) |
-| ≥ 3 points | 438-409-16 (51.71%) | 127-125-6 (50.40%) |
-| **≥ 4 points** | **278-245-7 (53.15%)** | **82-71-1 (53.59%)** |
-| ≥ 5 points | 169-140-4 (54.69%) | 47-42-1 (52.81%) |
+{{table:selectivity}}
 
-At the shipped bar that is about 52 plays a season out of roughly 261 games —
-one game in five.
+At the shipped bar that is about
+{{fig:selectivity.evaluation_a.live.per_season|round0}} plays a season out of
+roughly {{fig:selectivity.evaluation_a.thresholds.0.all.per_season|round0}} games
+— one game in five.
 
 **This is not an edge, and we will not describe it as one.** The 95% interval
-on 53.15% runs from 48.87% to 57.39%, and on the better-provenance sample from
-45.70% to 61.31%. Both intervals contain the 52.38% break-even and both
-contain 50%. The threshold was also found by searching thresholds, which
+on {{fig:selectivity.evaluation_a.live.pct|pct2}} runs from
+{{fig:selectivity.evaluation_a.live.ci95.0|pct2}} to
+{{fig:selectivity.evaluation_a.live.ci95.1|pct2}}, and on the
+better-provenance sample from {{fig:selectivity.evaluation_b.live.ci95.0|pct2}}
+to {{fig:selectivity.evaluation_b.live.ci95.1|pct2}}. Both intervals contain
+the {{fig:breakeven_ats|pct2}} break-even and both contain 50%. The threshold was also found by searching thresholds, which
 weakens it further than the interval alone suggests. The honest statement is
 that selection makes a losing model less bad by an amount we cannot
 distinguish from noise.
 
 Every season of the shipped rule on the larger sample, losers included:
 
-| season | record | | season | record |
-|---|---|---|---|---|
-| 2016 | 26-22 | | 2021 | 33-25-1 |
-| 2017 | 24-26 | | 2022 | 31-23-4 |
-| 2018 | 28-30-1 | | 2023 | 23-22 |
-| 2019 | 29-21-1 | | 2024 | 38-27 |
-| 2020 | 23-24 | | 2025 | 23-25 |
+{{table:by_season}}
 
 Four of ten seasons are losing seasons.
 
 ### What we tested and did not ship
 
-At the four-point bar on nflverse lines, the underdog side ran 54.83% and the
-favourite side 48.57% — a large split, and a tempting second filter. On the
-real captured closes the same split reverses: 52.43% dog against 56.00%
-favourite. A split that changes sign when the line provenance improves is a
+At the four-point bar on nflverse lines, the underdog side ran
+{{fig:selectivity.evaluation_a.thresholds.3.underdog.pct|pct2}} and the
+favourite side {{fig:selectivity.evaluation_a.thresholds.3.favourite.pct|pct2}}
+— a large split, and a tempting second filter. On the real captured closes
+the same split reverses:
+{{fig:selectivity.evaluation_b.thresholds.3.underdog.pct|pct2}} dog against
+{{fig:selectivity.evaluation_b.thresholds.3.favourite.pct|pct2}} favourite. A split that changes sign when the line provenance improves is a
 property of the line source rather than of football, so the underdog flag is
 reported on each game and is not used to select. The threshold itself holds on
 both sources, which is why the threshold is the part that ships.
 
 ### How far apart are the two line sources?
 
-32.9% of spreads differ between nflverse and the real
-consensus close, but the typical difference is small: mean
-0.217 points, median 0.0,
-and only 5.5% differ by a full
-point or more. The weaker source was precise enough for the conclusion and not
+{{fig:line_provenance.pct_spread_differs|pct1}} of spreads differ between
+nflverse and the real consensus close, but the typical difference is small:
+mean {{fig:line_provenance.mean_abs_spread_delta}} points, median
+{{fig:line_provenance.median_abs_spread_delta}}, and only
+{{fig:line_provenance.pct_spread_differs_by_full_pt_or_more|pct1}} differ by a
+full point or more. The weaker source was precise enough for the conclusion and not
 precise enough to publish closing-line value from, which is why we bought the
 better one.
 
@@ -273,11 +267,7 @@ Expected calibration error (ECE) is the sample-weighted mean absolute gap
 between predicted and observed frequency across ten probability bands. Lower is
 better.
 
-| model | ECE | Brier |
-|---|---|---|
-| Elo baseline | 0.02698 | 0.22217 |
-| Elo + EPA + rest, isotonic (published) | **0.03074** | 0.22151 |
-| de-vigged market | 0.01913 | 0.21038 |
+{{table:ece}}
 
 Two honest notes on that table. First, adding EPA form and rest improves the
 Brier score over the Elo baseline but slightly **worsens** measured ECE. Extra
@@ -286,39 +276,33 @@ numbers because reporting only the one that improved would be the same
 selective disclosure we are criticising. Second, the market is better
 calibrated than we are — on this test, meaningfully so.
 
-### Reliability table, published model, 2,671 games
+### Reliability table, published model, {{fig:evaluation_a.results.independent.n|comma}} games
 
-| predicted band | n | mean predicted | actual frequency | gap |
-|---|---|---|---|---|
-| 0.1-0.2 | 26 | 16.70% | 26.92% | -10.22 pts |
-| 0.2-0.3 | 152 | 26.16% | 28.95% | -2.79 pts |
-| 0.3-0.4 | 270 | 36.02% | 33.70% | +2.32 pts |
-| 0.4-0.5 | 419 | 45.37% | 41.29% | +4.08 pts |
-| 0.5-0.6 | 569 | 54.99% | 50.26% | +4.73 pts |
-| 0.6-0.7 | 593 | 64.97% | 62.39% | +2.58 pts |
-| 0.7-0.8 | 440 | 74.86% | 72.95% | +1.91 pts |
-| 0.8-0.9 | 190 | 83.93% | 85.26% | -1.33 pts |
-| 0.9-1.0 | 12 | 91.13% | 91.67% | -0.54 pts |
+{{table:reliability}}
 
 A positive gap means we were overconfident: we predicted the event more often
 than it happened.
 
-Read the extremes with care. The 0.1-0.2 and 0.9-1.0 bands hold 26 and 12
-games respectively; at those sample sizes a handful of results moves the
-observed frequency by tens of points and the gap is mostly noise. The bands
-that carry real weight are 0.3 through 0.8, which hold 2,291 of the 2,671
-games, and in those bands the model runs overconfident by between 1.9 and 4.7
-percentage points.
+Read the extremes with care. The 0.1-0.2 and 0.9-1.0 bands hold
+{{fig:reliability_independent.0.n|int}} and
+{{fig:reliability_independent.8.n|int}} games respectively; at those sample
+sizes a handful of results moves the observed frequency by tens of points and
+the gap is mostly noise. The bands that carry real weight are 0.3 through 0.8,
+which hold {{fig:reliability_mid.n|comma}} of the
+{{fig:evaluation_a.results.independent.n|comma}} games, and in those bands the
+model runs overconfident by between {{fig:reliability_mid.min_gap|pts1_bare}}
+and {{fig:reliability_mid.max_gap|pts1_bare}} percentage points.
 
 ---
 
-## Why we cap published confidence at 85%
+## Why we cap published confidence at {{fig:confidence_cap|pct0}}
 
-**We do not publish any probability above 0.85, regardless of what the model
-outputs.**
+**We do not publish any probability above {{fig:confidence_cap}}, regardless
+of what the model outputs.**
 
 The honest reason is sample size. In the current out-of-sample record the
-0.9-1.0 band holds twelve games — far too few to demonstrate that the model
+0.9-1.0 band holds {{fig:reliability_independent.8.n|int}} games — far too few
+to demonstrate that the model
 deserves that much confidence. An earlier, larger evaluation of the raw Elo
 baseline showed the opposite problem: roughly eight points of overconfidence
 at the top of the range. Between a band too thin to trust and a history of

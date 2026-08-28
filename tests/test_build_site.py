@@ -89,3 +89,111 @@ def test_only_the_sealed_artefacts_are_frosted(rebuilt):
                             "# verify.py - independently", "def check_proof("]
                if tool in body}
     assert frosted == {False}, "a reader's tool was rendered as a sealed artefact"
+
+
+class TestFigureSubstitution:
+    """methodology.md carries {{fig:}} tokens instead of typed numbers.
+
+    Before this, its figures were pasted in from published_figures.py's stdout,
+    and on 2026-08-27 the reliability table was found a generation stale while
+    /record — which renders the same table from figures.json at runtime — showed
+    the current one. Two pages, two calibration tables, same 2,671 games.
+    """
+
+    # One module instance: _build_site() re-executes the file, and a second
+    # execution defines a *different* FigureError class, so pytest.raises would
+    # never match the one actually raised.
+    _MODULE = None
+
+    @classmethod
+    def _bs(cls):
+        if cls._MODULE is None:
+            cls._MODULE = _build_site()
+        return cls._MODULE
+
+    FIG = {
+        "breakeven_ats": 0.5238,
+        "confidence_cap": 0.85,
+        "evaluation_a": {"results": {"independent": {
+            "n": 2671, "brier": 0.22151, "ece": 0.03074,
+            "ats_record": "1298-1310-63", "ats_pct": 0.4977}}},
+        "reliability_independent": [
+            {"bucket": b, "n": 100, "predicted": 0.5, "actual": 0.45,
+             "gap": g}
+            for b, g in [("0.3-0.4", 0.0268), ("0.4-0.5", 0.0305),
+                         ("0.5-0.6", 0.0512), ("0.6-0.7", 0.0273),
+                         ("0.7-0.8", 0.0168)]
+        ],
+    }
+
+    def sub(self, text):
+        return self._bs().substitute(text, self.FIG)
+
+    def test_formats(self):
+        cases = {
+            "{{fig:breakeven_ats}}": "0.5238",
+            "{{fig:breakeven_ats|4f}}": "0.5238",
+            "{{fig:breakeven_ats|pct2}}": "52.38%",
+            "{{fig:confidence_cap|pct0}}": "85%",
+            "{{fig:evaluation_a.results.independent.n|comma}}": "2,671",
+            "{{fig:evaluation_a.results.independent.n|int}}": "2671",
+            "{{fig:evaluation_a.results.independent.brier|5f}}": "0.22151",
+            "{{fig:evaluation_a.results.independent.ats_record}}": "1298-1310-63",
+            "{{fig:evaluation_a.results.independent.ats_pct|pct2}}": "49.77%",
+            "{{fig:reliability_independent.0.gap|pts2}}": "+2.68 pts",
+            "{{fig:reliability_independent.0.gap|pts1_bare}}": "2.7",
+        }
+        for token, want in cases.items():
+            assert self.sub(token) == want, token
+
+    def test_a_list_is_indexed_by_a_numeric_segment(self):
+        assert self.sub("{{fig:reliability_independent.2.bucket}}") == "0.5-0.6"
+
+    def test_an_unknown_figure_raises_rather_than_rendering(self):
+        """A page showing a literal {{fig:typo}} to a visitor would be worse
+        than the hand-typed number it replaced. Fail the build instead."""
+        bs = self._bs()
+        with pytest.raises(bs.FigureError, match="no such figure"):
+            self.sub("{{fig:evaluation_a.results.nosuchmodel.brier}}")
+
+    def test_an_unknown_format_raises(self):
+        bs = self._bs()
+        with pytest.raises(bs.FigureError, match="unknown format"):
+            self.sub("{{fig:breakeven_ats|furlongs}}")
+
+    def test_an_unknown_table_raises(self):
+        bs = self._bs()
+        with pytest.raises(bs.FigureError, match="unknown table"):
+            self.sub("{{table:nonesuch}}")
+
+    def test_the_derived_middle_bands_are_a_sum_not_a_new_measurement(self):
+        """reliability_mid exists so the prose under the reliability table can
+        say "2,290 of the 2,671" without typing it. It must only add up rows
+        that are already published."""
+        out = self.sub("{{fig:reliability_mid.n|comma}} "
+                       "{{fig:reliability_mid.min_gap|pts1_bare}} "
+                       "{{fig:reliability_mid.max_gap|pts1_bare}}")
+        assert out == "500 1.7 5.1"
+
+    def test_a_missing_middle_band_raises(self):
+        bs = self._bs()
+        fig = dict(self.FIG,
+                   reliability_independent=self.FIG["reliability_independent"][:2])
+        with pytest.raises(bs.FigureError, match="missing middle bands"):
+            bs.substitute("{{fig:reliability_mid.n}}", fig)
+
+    def test_the_shipped_edge_bar_is_bolded_from_the_data(self):
+        """Moving the bar must move the emphasis, not leave it on 4 points."""
+        bs = self._bs()
+        def row(pct, record, n):
+            return {"record": record, "pct": pct, "n": n, "ci95": [0, 1],
+                    "per_season": 1}
+        ev = {"thresholds": [{"edge": e, "all": row(0.5, "1-1-0", 2),
+                              "underdog": row(0.5, "1-1-0", 2),
+                              "favourite": row(0.5, "1-1-0", 2)}
+                             for e in (0.0, 2.0, 3.0)]}
+        fig = {"selectivity": {"rule_threshold_pts": 3.0,
+                               "evaluation_a": ev, "evaluation_b": ev}}
+        out = bs.substitute("{{table:selectivity}}", fig)
+        bold = [ln for ln in out.split("\n") if "**" in ln]
+        assert len(bold) == 1 and "3 points" in bold[0]
