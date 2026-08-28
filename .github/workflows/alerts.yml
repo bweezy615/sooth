@@ -55,13 +55,23 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
-      - name: Commit the sent-watermark
+      # /alerts tells a visitor how much mail to expect, and that sentence has
+      # to stay a measurement. It is a replay of the committed capture history
+      # through the same detector this job just ran, so it belongs here rather
+      # than on a schedule of its own: regenerated wherever the sender runs,
+      # and it cannot go stale by anyone forgetting to rerun a script.
+      - name: Re-measure how often alerts actually fire
+        run: python scripts/alert_frequency.py
+        env:
+          PYTHONPATH: .
+
+      - name: Commit the sent-watermark and the measured frequency
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
-          git add data/alerts_sent.json
+          git add data/alerts_sent.json site/public/data/alert-frequency.json
           if git diff --staged --quiet; then
-            echo "no new alerts emailed"
+            echo "nothing changed"
           else
             git commit -m "alerts: sent-watermark $(date -u +%FT%TZ)"
             git pull --rebase --autostash origin main || true

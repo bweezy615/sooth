@@ -289,6 +289,10 @@
     padding:14px 18px;margin-top:18px}
   .measured p{color:var(--ink2);font-size:13px;line-height:1.65;margin:0}
   .measured .n{font-family:var(--mono);color:var(--ink)}
+  .measured .q{color:var(--mut)}
+  /* the measured rate for one band, rendered beside its own radio */
+  .band .bm{font-family:var(--mono);font-size:11.5px;color:var(--mut);
+    letter-spacing:.02em;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -358,18 +362,18 @@
             <input type="radio" name="min" value="1.5">
             <span><span class="bn">1.5+ points</span>
               <span class="bd">Everything the detector fires on. In a busy stretch this is
-                many emails a day.</span></span>
+                many emails a day. <span class="bm" data-band="1.5"></span></span></span>
           </label>
           <label class="band">
             <input type="radio" name="min" value="2.5" checked>
             <span><span class="bn">2.5+ points</span>
-              <span class="bd">Clearer gaps only. The default, and still not quiet.</span></span>
+              <span class="bd">Clearer gaps only. The default, and still not quiet. <span class="bm" data-band="2.5"></span></span></span>
           </label>
           <label class="band">
             <input type="radio" name="min" value="4">
             <span><span class="bn">4+ points</span>
               <span class="bd">Rare. Mostly a stale line or a book that has stopped
-                competing on that side.</span></span>
+                competing on that side. <span class="bm" data-band="4"></span></span></span>
           </label>
         </div>
         <label class="opt">
@@ -445,14 +449,17 @@
         </ul>
       </div>
 
+      <!-- The frequency is REPLAYED, never remembered. This block was hand-typed
+           prose until 2026-08-28 ("160 divergences ... about 13 a day"); by then
+           the detector had been fixed three times and the same window replayed
+           to 114, about 8.8 a day, with nobody able to tell. There are no digits
+           in this markup on purpose - scripts/alert_frequency.py writes
+           /data/alert-frequency.json and this paragraph is built from it, so a
+           stale generator shows a stale WINDOW rather than a wrong number, and a
+           missing one shows no claim at all. -->
       <div class="measured">
-        <p><b style="color:var(--ink)">The frequency, measured rather than promised.</b>
-          Between <span class="n">Aug 10</span> and <span class="n">Aug 22, 2026</span> our own
-          capture history recorded <span class="n">160</span> divergences clearing
-          <span class="n">2.0</span> points across MLB game lines and player props — about
-          <span class="n">13</span> a day. Alerts are batched per run, not one email per
-          alert, and an NFL-only week is far quieter. If that is more mail than you want,
-          take the <span class="n">4+</span> band or leave price alerts off entirely.</p>
+        <p id="freq"><b style="color:var(--ink)">The frequency, measured rather than
+          promised.</b> <span class="dim">measuring…</span></p>
       </div>
 
       <p class="fine">There is no paid tier on this site and nothing here is an upsell —
@@ -467,6 +474,7 @@
 <script>
 (function(){
   window.Desk.mount("alerts");
+  var D = window.Desk;
 
   var form = document.getElementById("form"),
       bands = document.getElementById("bands"),
@@ -500,6 +508,69 @@
     return r ? parseFloat(r.value) : 2.5;
   }
   function syncBands(){ bands.hidden = !kPrice.checked; }
+
+  // ---- how much mail, measured -------------------------------------------
+  //
+  // Every figure in this block comes out of /data/alert-frequency.json, which
+  // scripts/alert_frequency.py writes by replaying the committed capture
+  // history through the same detector and the same dedup rule the sender uses.
+  // Nothing here is remembered: the previous version of this paragraph was
+  // hand-typed, went stale silently when the detector was fixed, and quoted a
+  // threshold (2.0) that is not one of the bands below.
+  //
+  // It follows the band the visitor has actually chosen, so the sentence is
+  // about the mail THEY would get rather than about a default.
+  var FREQ = null;
+  function bandKey(v){ return String(parseFloat(v)); }   // "4" not "4.0"
+  function list(xs){
+    if (xs.length < 2) return xs.join("");
+    return xs.slice(0, -1).join(", ") + " and " + xs[xs.length - 1];
+  }
+  function renderFreq(){
+    var el = document.getElementById("freq");
+    if (!el) return;
+    var lead = '<b style="color:var(--ink)">The frequency, measured rather than '
+             + 'promised.</b> ';
+    if (!FREQ){
+      el.innerHTML = lead + '<span class="q">The measurement is unavailable right '
+        + 'now — rather than quote one from memory, this says nothing.</span>';
+      return;
+    }
+    var b = FREQ.bands[bandKey(minPts())];
+    if (!b){ el.innerHTML = lead + '<span class="q">No measurement for that '
+      + 'threshold.</span>'; return; }
+    var sports = (FREQ.sports_watched || []).map(function(s){
+      return D.sportLabel ? D.sportLabel(s) : s.toUpperCase(); });
+    var quiet = FREQ.bands[bandKey(4)];
+    el.innerHTML = lead
+      + 'Replaying our own capture history over the <span class="n">'
+      + FREQ.days + '</span> days to <span class="n">' + D.esc(FREQ.window_end)
+      + '</span>, through the same detector that sends these emails, gives '
+      + '<span class="n">' + b.alerts + '</span> divergences clearing '
+      + '<span class="n">' + b.min_pts + '</span> points — about '
+      + '<span class="n">' + b.per_day_mean + '</span> a day at the threshold '
+      + 'you have selected, across ' + D.esc(list(sports)) + ' game lines. '
+      + 'Player props are not eligible for alerts. Alerts are batched per run, '
+      + 'not one email per alert, and a quiet slate is quieter. '
+      + (quiet && b !== quiet
+          ? 'If that is more mail than you want, take the <span class="n">4+</span> '
+            + 'band (<span class="n">' + quiet.per_day_mean + '</span> a day over '
+            + 'the same window) or leave price alerts off entirely.'
+          : 'That is the quietest band offered; if it is still more mail than you '
+            + 'want, leave price alerts off entirely.');
+  }
+  function renderBandRates(){
+    [].forEach.call(document.querySelectorAll(".band .bm"), function(el){
+      var b = FREQ && FREQ.bands[bandKey(el.getAttribute("data-band"))];
+      el.textContent = b ? "· measured " + b.per_day_mean + "/day over the last "
+        + FREQ.days + " days" : "";
+    });
+  }
+  D.load("/data/alert-frequency.json").then(function(res){
+    FREQ = res.ok ? res.data : null;
+    renderFreq(); renderBandRates();
+  });
+  renderFreq();
 
   // ---- the watchlist --------------------------------------------------------
   //
@@ -678,6 +749,9 @@
   // "which alert kinds are on" question — they answer a different one.
   form.addEventListener("change", function(e){
     if (e.target && e.target.name === "kind") syncKinds();
+    // The measured-frequency paragraph is about the band you picked, so it
+    // follows the radio rather than quoting a fixed default at everyone.
+    if (e.target && e.target.name === "min") renderFreq();
   });
   syncBands(); syncGame(); syncKinds();
 
@@ -712,7 +786,7 @@
         (cur.teams || []).forEach(function(k){ chosen[k] = true; });
 
         go.disabled = false;
-        syncBands(); syncKinds();
+        syncBands(); syncKinds(); renderFreq();
         // Loads the roster when game alerts are already on, so the chips can
         // show real crests and names rather than raw keys.
         return kGame.checked && !roster.length ? loadRoster() : null;

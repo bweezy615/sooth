@@ -163,18 +163,26 @@ def _series(rows: Iterable[dict],
     return out
 
 
-def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False) -> list[Alert]:
+def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False,
+               now: "datetime | None" = None) -> list[Alert]:
     """A book's own price moved between consecutive observations.
 
     Compares each observation to the one before it on the same series, so a
     slow walk across many small steps raises an alert on the step that crosses
     the threshold rather than never raising one at all.
+
+    ``now`` exists so history can be replayed. Both detectors are "as of now"
+    by construction - they read the newest price and drop games that have
+    started - so with the wall clock hardcoded there was no way to ask what
+    they would have said last Tuesday, and therefore no way to reproduce a
+    published frequency. It defaults to the wall clock; every caller in
+    production passes nothing.
     """
     # Same rule as divergence: a move on a game that has already started is
     # history, not an opportunity, and it inflates the "alerts fired in 48h"
     # count the Pro card sells against. Measured 2026-08-11: 1,798 of 1,971
     # drift alerts were for games already played.
-    now = datetime.now(timezone.utc)
+    now = now or datetime.now(timezone.utc)
     rows = [r for r in rows if not_started(r, now)]
 
     alerts: list[Alert] = []
@@ -203,7 +211,8 @@ def find_drift(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: 
     return sorted(alerts, key=lambda a: -abs(a.move_pts))
 
 
-def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False) -> list[Alert]:
+def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_player: bool = False,
+                    now: "datetime | None" = None) -> list[Alert]:
     """A book's latest price sits away from the cross-book consensus.
 
     Consensus is the median across books on the same selection at the latest
@@ -211,7 +220,7 @@ def find_divergence(rows: list[dict], min_move: float = DEFAULT_MIN_MOVE, by_pla
     drag the reference it is being measured against.
     """
     from datetime import datetime, timedelta, timezone
-    now = datetime.now(timezone.utc)
+    now = now or datetime.now(timezone.utc)
 
     latest: dict[tuple, dict] = {}
     for r in rows:
@@ -301,10 +310,11 @@ def not_started(row: dict, now: "datetime | None" = None) -> bool:
 
 def scan(pattern: str = "data/capture/*/*.jsonl",
          min_move: float = DEFAULT_MIN_MOVE,
-         include_props: bool = False) -> dict[str, Any]:
+         include_props: bool = False,
+         now: "datetime | None" = None) -> dict[str, Any]:
     rows = load_observations(pattern, include_props=include_props)
-    drift = find_drift(rows, min_move, by_player=include_props)
-    div = find_divergence(rows, min_move, by_player=include_props)
+    drift = find_drift(rows, min_move, by_player=include_props, now=now)
+    div = find_divergence(rows, min_move, by_player=include_props, now=now)
     return {
         # Every other published feed carries generated_at and the page stamps
         # itself from them; moves.json was the one exception, so 2,000+ drift
