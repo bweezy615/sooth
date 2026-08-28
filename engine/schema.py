@@ -5,8 +5,8 @@ into these structures and nothing downstream knows what sport it is looking at.
 
 Design notes
 ------------
-Two-sided contests (NFL, NBA, MLB, NHL, EPL, UFC, tennis) map directly onto
-``side_a``/``side_b``. Field events (F1) are expanded by their adapter into
+Two-sided contests (NFL, NCAAF, NBA, MLB, NHL, EPL, UFC, tennis) map directly
+onto ``side_a``/``side_b``. Field events (F1) are expanded by their adapter into
 one row per entrant against the field, so the same probability machinery and
 the same grading code apply without special-casing.
 
@@ -24,6 +24,7 @@ from typing import Any
 
 class Sport(str, Enum):
     NFL = "nfl"
+    NCAAF = "ncaaf"
     NBA = "nba"
     MLB = "mlb"
     NHL = "nhl"

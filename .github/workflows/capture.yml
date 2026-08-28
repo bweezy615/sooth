@@ -8,6 +8,8 @@ name: capture-odds
 #
 # Two steps, mirroring capture-props:
 #   1. engine.capture  - free ESPN game lines, appended to data/capture/*.jsonl.
+#      Run twice: NFL, and (from 2026-08-28) college football, whose week 1
+#      kicks off 2026-08-29. Free either way - this is ESPN, not the Odds API.
 #   2. engine.lines    - the multi-sport board build. This one hits the Odds API
 #      and spends ~4 credits/run (see board.json "credits_spent"). At */30 that
 #      is ~192 credits/day (~5.8k/mo). --max-credits 40 is a hard per-run floor
@@ -60,7 +62,21 @@ jobs:
         run: python -m engine.timeline --sports nfl,mlb,nhl,nba,ufc
         continue-on-error: true
 
+      # Deliberately last, and deliberately NOT continue-on-error. The step
+      # exits non-zero when ESPN declares more events in a week than we managed
+      # to list, which is the one failure that must never pass quietly - but it
+      # exits AFTER writing, and everything above it has already run, so a red
+      # college-football step costs a visible failure and no data.
+      #
+      # ~99 FBS events in week 1 at two requests each: about 75s.
+      - name: Capture free ESPN college football lines
+        run: python -m engine.capture --sport ncaaf --season 2026 --weeks 2
+
+      # always(): the capture steps write to disk and then may fail. Without
+      # this, a failing step throws away odds we already hold and can never
+      # re-acquire - the exact loss this workflow exists to prevent.
       - name: Commit captured odds + board
+        if: always()
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
