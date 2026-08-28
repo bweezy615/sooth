@@ -40,6 +40,17 @@ from .schema import canonical_book
 # Only prices we watched ourselves may raise an alert.
 ALERT_PROVENANCE = frozenset({"own_capture"})
 
+# ...and only for sports we are still watching. data/capture is append-only and
+# we never delete evidence, so when UFC came off the board on 2026-08-28 its
+# history stayed on disk - and /edges went on publishing 232 UFC "moves" from
+# prices nobody was refreshing any more, for a sport the site no longer says it
+# covers. Frozen movement presented as current movement is the worst kind of
+# wrong number here. Derived from engine.lines.SPORTS so it cannot drift from
+# what the board actually fetches.
+def published_sports() -> frozenset[str]:
+    from .lines import SPORTS
+    return frozenset(meta["slug"] for meta in SPORTS.values())
+
 # Points of implied probability. A typical two-sided market carries 4-5 points
 # of vig in total, so 1.5 points is a real move rather than a tick.
 DEFAULT_MIN_MOVE = 1.5
@@ -74,7 +85,8 @@ class Alert:
 
 
 def load_observations(pattern: str = "data/capture/*/*.jsonl",
-                      include_props: bool = False) -> list[dict]:
+                      include_props: bool = False,
+                      sports: "frozenset[str] | None" = None) -> list[dict]:
     """Every price we watched ourselves, oldest first.
 
     Player props are EXCLUDED BY DEFAULT and that default is deliberate. The
@@ -85,10 +97,16 @@ def load_observations(pattern: str = "data/capture/*/*.jsonl",
     _series keys on player — but the fix is opt-in rather than automatic so no
     existing caller changes behaviour by inheriting it. engine.alert_email and
     the published moves.json both take the default and are untouched.
+
+    ``sports`` defaults to the sports the board currently fetches; pass an
+    explicit set (or the full one) to read retired history for analysis.
     """
+    keep = published_sports() if sports is None else sports
     rows: list[dict] = []
     for path in sorted(glob.glob(pattern)):
         if not include_props and Path(path).parent.name.endswith("-props"):
+            continue
+        if keep and Path(path).parent.name not in keep:
             continue
         with open(path) as fh:
             for line in fh:

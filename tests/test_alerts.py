@@ -197,3 +197,45 @@ def test_only_our_own_captures_can_raise_an_alert(tmp_path):
     rows = load_observations(str(tmp_path / "*" / "*.jsonl"))
     assert rows == []
     assert scan(str(tmp_path / "*" / "*.jsonl"))["drift"] == []
+
+
+# --- retired sports stop being published, without their evidence being deleted
+
+
+def test_only_sports_the_board_still_fetches_are_published():
+    """UFC came off the board on 2026-08-28 and its capture history stayed on
+    disk, as evidence always does. /edges kept publishing 232 UFC "moves"
+    computed from prices nobody was refreshing any more - frozen movement
+    presented as current movement, for a sport the site no longer claims."""
+    from engine.alerts import published_sports
+    from engine.lines import SPORTS
+
+    assert published_sports() == {m["slug"] for m in SPORTS.values()}
+    assert "ufc" not in published_sports()
+    assert "ncaaf" in published_sports()
+
+
+def test_a_retired_sports_rows_are_skipped(tmp_path):
+    from engine.alerts import load_observations
+
+    def write(sport, price):
+        d = tmp_path / sport
+        d.mkdir()
+        row = {"observed_at": "2026-08-28T00:00:00+00:00", "event_id": "1",
+               "sport": sport, "kickoff": "2099-01-01T00:00:00+00:00",
+               "home": "A", "away": "B", "book": "DraftKings",
+               "market": "moneyline", "selection": "A", "line": None,
+               "price": price, "provenance": "own_capture"}
+        (d / "2026-08-28.jsonl").write_text(json.dumps(row) + "\n")
+
+    write("nfl", -110)
+    write("ufc", -120)
+    pattern = str(tmp_path / "*" / "*.jsonl")
+
+    kept = load_observations(pattern)
+    assert {r["sport"] for r in kept} == {"nfl"}
+
+    # ...but the rows are still readable on request. We stopped publishing the
+    # sport; we did not lose it.
+    both = load_observations(pattern, sports=frozenset({"nfl", "ufc"}))
+    assert {r["sport"] for r in both} == {"nfl", "ufc"}

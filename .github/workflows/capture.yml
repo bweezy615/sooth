@@ -59,7 +59,7 @@ jobs:
       # rows this very run just appended. Riding this job's existing commit
       # means it costs zero extra deploys against the 100/day cap.
       - name: Publish the price-history timeline (zero credits)
-        run: python -m engine.timeline --sports nfl,mlb,nhl,nba,ufc
+        run: python -m engine.timeline --sports nfl,ncaaf,mlb,nhl,nba
         continue-on-error: true
 
       # Deliberately last, and deliberately NOT continue-on-error. The step

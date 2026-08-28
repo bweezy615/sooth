@@ -85,8 +85,16 @@ function footer(){
 }
 /* sport rail: every sport we cover, with an honest live/offseason state.
    Data decides the dot — sports_live from the board, never a hardcoded list. */
-var SPORTS=[{k:"nfl",l:"NFL"},{k:"mlb",l:"MLB"},{k:"nba",l:"NBA"},
-            {k:"nhl",l:"NHL"},{k:"ufc",l:"UFC"}];
+var SPORTS=[{k:"nfl",l:"NFL"},{k:"ncaaf",l:"CFB"},{k:"mlb",l:"MLB"},
+            {k:"nba",l:"NBA"},{k:"nhl",l:"NHL"}];
+/* One name per sport, taken from the same list the rail is built from. Before
+   this existed /edges rendered String(sport).toUpperCase(), so the board said
+   "CFB" and the edges feed said "NCAAF" for the same league on the same site. */
+function sportLabel(k){
+  var s=String(k==null?"":k);
+  for(var i=0;i<SPORTS.length;i++){ if(SPORTS[i].k===s) return SPORTS[i].l; }
+  return s.toUpperCase();
+}
 function sportRail(board,active,onpick){
   var live={}; var counts={};
   ((board&&board.boards)||[]).forEach(function(b){
@@ -647,6 +655,6 @@ setInterval(function(){
 },15000);
 
 window.Desk={tabs:tabs,esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
-  bk:bk,mount:mount,header:header,footer:footer,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
+  bk:bk,mount:mount,header:header,footer:footer,stack:stack,sportRail:sportRail,sportLabel:sportLabel,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

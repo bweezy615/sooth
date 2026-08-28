@@ -168,7 +168,7 @@ def build(sports: list[str], root: Path, out_dir: Path, dry_run=False) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--sports", default="nfl,mlb,nhl,nba,ufc")
+    ap.add_argument("--sports", default="nfl,ncaaf,mlb,nhl,nba")
     ap.add_argument("--root", default=".")
     ap.add_argument("--out-dir", default="site/public/data")
     ap.add_argument("--dry-run", action="store_true")

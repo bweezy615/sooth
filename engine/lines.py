@@ -52,12 +52,17 @@ REGIONS = "us"
 # schedule dump.
 LOOKAHEAD_EVENTS = 8
 
+# Branden's call, 2026-08-27: college football replaces UFC rather than being
+# added alongside it. Both this module and engine/middles.py iterate this dict
+# and pay per sport, so a swap is credit-neutral where a sixth entry would not
+# have been. UFC capture history stays on disk under data/capture/ufc/ - we
+# stopped publishing it, we did not delete it.
 SPORTS = {
-    "americanfootball_nfl": {"label": "NFL", "slug": "nfl"},
-    "baseball_mlb":         {"label": "MLB", "slug": "mlb"},
-    "icehockey_nhl":        {"label": "NHL", "slug": "nhl"},
-    "basketball_nba":       {"label": "NBA", "slug": "nba"},
-    "mma_mixed_martial_arts": {"label": "UFC", "slug": "ufc"},
+    "americanfootball_nfl":   {"label": "NFL", "slug": "nfl"},
+    "americanfootball_ncaaf": {"label": "CFB", "slug": "ncaaf"},
+    "baseball_mlb":           {"label": "MLB", "slug": "mlb"},
+    "icehockey_nhl":          {"label": "NHL", "slug": "nhl"},
+    "basketball_nba":         {"label": "NBA", "slug": "nba"},
 }
 
 BOOK_NAMES = {

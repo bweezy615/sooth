@@ -279,7 +279,7 @@ D.mount("market");
 function sideName(a,txt){
   return String(txt).replace(/side_a/g,a.home).replace(/side_b/g,a.away);
 }
-var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+var SPORT_LABEL={nfl:"NFL",ncaaf:"CFB",mlb:"MLB",nba:"NBA",nhl:"NHL"};
 
 function boardFor(sp){
   return ((BOARD&&BOARD.boards)||[]).filter(function(b){return b.sport===sp;})[0]||null;
@@ -288,7 +288,7 @@ function started(ev){return Date.parse(ev.starts)<=Date.now();}
 
 /* pick the sport with a live board for the default view */
 function defaultSport(){
-  var order=["nfl","mlb","nba","nhl","ufc"];
+  var order=["nfl","ncaaf","mlb","nba","nhl"];
   for(var i=0;i<order.length;i++){
     var b=boardFor(order[i]);
     if(b&&b.events.some(function(e){return !started(e);})) return order[i];

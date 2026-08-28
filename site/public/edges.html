@@ -307,7 +307,7 @@ Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
         +'<span class="pts n '+cls+'">'+D.pts(a.move_pts,2)+' PTS</span>',
         D.esc(name(a,a.detail)),
         '<span data-ago="'+D.esc(a.observed_at)+'">'+D.ago(a.observed_at)+'</span><br>'
-        +String(a.sport).toUpperCase()+" · "+String(a.market).toUpperCase(),
+        +D.sportLabel(a.sport)+" · "+String(a.market).toUpperCase(),
         "/game?e="+encodeURIComponent(a.event_id)+"&s="+a.sport);}).join(""));
     // Divergence (a book out of line with the pack) and drift (one book
     // moving on its own) are different observations sharing one feed. The

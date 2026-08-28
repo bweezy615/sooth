@@ -39,6 +39,42 @@ def _sports() -> set[str]:
     return set(re.findall(r'k:"([a-z]+)"', rail.group(1)))
 
 
+def _sport_label_maps() -> dict[str, list[tuple[str, str]]]:
+    """Every hand-written `var SPORT_LABEL={...}` in the shipped pages."""
+    out: dict[str, list[tuple[str, str]]] = {}
+    for page in ("index.html", "game.html", "market.html"):
+        text = (ROOT / "site/public" / page).read_text(encoding="utf-8")
+        for body in re.findall(r"var SPORT_LABEL=\{(.*?)\};", text, re.S):
+            out.setdefault(page, []).append(
+                tuple(re.findall(r'(\w+):"([^"]+)"', body)))  # type: ignore[arg-type]
+    return out
+
+
+def test_every_page_calls_each_sport_by_the_same_name():
+    """A trust site must not call one league two names.
+
+    The rail in desk.js is the list of what we cover; three pages repeat it as
+    a hand-written SPORT_LABEL map. Hand-kept copies of a list go stale - this
+    repo has already paid for that once with figures.json - so the copies are
+    checked against the original rather than trusted.
+    """
+    rail = re.search(r"var SPORTS=\[(.*?)\];",
+                     DESK_JS.read_text(encoding="utf-8"), re.S)
+    assert rail
+    want = dict(re.findall(r'k:"([a-z]+)",l:"([A-Z]+)"',
+                           re.sub(r"\s+", "", rail.group(1))))
+    assert want, "desk.js SPORTS no longer parses - update this test"
+
+    maps = _sport_label_maps()
+    assert maps, "no SPORT_LABEL maps found - update this test"
+    for page, occurrences in maps.items():
+        for pairs in occurrences:
+            got = dict(pairs)
+            assert got == want, (
+                f"{page}'s SPORT_LABEL disagrees with the sport rail in "
+                f"desk.js. rail={want} {page}={got}")
+
+
 def test_the_sport_rail_and_the_board_agree_on_what_we_cover():
     board = json.loads(BOARD.read_text(encoding="utf-8"))
     assert {b["sport"] for b in board["boards"]} <= _sports(), (

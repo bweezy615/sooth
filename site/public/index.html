@@ -583,7 +583,7 @@
 (function(){
 var MOBILE=window.matchMedia("(max-width:859px)");
 if(!MOBILE.matches) return;
-var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+var SPORT_LABEL={nfl:"NFL",ncaaf:"CFB",mlb:"MLB",nba:"NBA",nhl:"NHL"};
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
@@ -669,7 +669,7 @@ function armInstall(){
 }
 
 /* ---- sport rail ---- */
-var SPORT_LABEL={nfl:"NFL",mlb:"MLB",nba:"NBA",nhl:"NHL",ufc:"UFC"};
+var SPORT_LABEL={nfl:"NFL",ncaaf:"CFB",mlb:"MLB",nba:"NBA",nhl:"NHL"};
 /* A rail only advertises that it scrolls while it actually has somewhere left
    to go, so the fade is never a lie about the end of the list. */
 function syncMore(el){

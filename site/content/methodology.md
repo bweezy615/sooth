@@ -438,8 +438,10 @@ We would rather state these than have them found.
 - **Small samples at the extremes.** As noted, the outer probability bands hold
   too few games to draw conclusions from.
 - **One sport is graded.** NFL only, and only NFL predictions are sealed in
-  the ledger before kickoff. The other four sports here — MLB, NBA, NHL and
-  UFC — carry price shopping; MLB also carries a strikeout prop model, which
+  the ledger before kickoff. The other four sports here — college football,
+  MLB, NBA and NHL — carry price shopping only, which is arithmetic over
+  quoted prices and claims no forecast; MLB also carries a strikeout prop
+  model, which
   we graded against board prices, found no edge in, and published in full at
   [/props-model](/props-model). Nothing outside NFL is graded against verified
   closing lines, and a sport is never graded that way without confirmed free
