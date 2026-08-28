@@ -41,6 +41,31 @@ own capture step as redundancy against dropped schedule events.
 3. **`/disclaimers` §7 CLV wording** — rewritten because the old sentence
    was false for 22 days; the replacement phrasing is Branden's to approve.
 
+## 3D is closed — do not reopen it
+
+Decided 2026-08-28 by Branden: **remove the whole 3D idea completely.** Done.
+Deleted `drafts/flow-3d-draft.html`, the vendored `drafts/vendor/three.module.min.js`,
+both 3D concept prototypes, the concept plan and research memo, and the
+`sooth-3d-concept` agent. Nothing on the live site ever referenced any of it.
+
+If it comes up again, the exploration already ran and concluded against it, on
+two grounds worth not re-deriving: rotating the best 3D chart we could build to
+its most readable angle produced a plain 2D bar chart, and only 3 of 116 events
+in `timeline.json` carry enough book-movement and sample depth to justify a
+third axis — the rest would render a flat plane while implying resolution the
+capture does not have.
+
+`drafts/concept-c-price-rail.html` survived the deletion **because it contains
+no 3D** — it is a flat SVG rail of every book's price on one scale, no
+dependencies. It is unreviewed and orphaned now that its plan doc is gone.
+Branden has not said whether to keep it; delete it if the answer is no.
+
+One finding from that work is worth re-deriving properly, because it is free and
+checkable and the site has never said it: on a single board snapshot, the
+cheapest and dearest book on the *same* game at the *same* minute were holding
+margins that differed by more than 3x. Any number published from this must come
+out of `published_figures.py`, not out of this note.
+
 ## Landmines
 
 - **Do not change the capture crons.** The dropped-schedule throttling is
