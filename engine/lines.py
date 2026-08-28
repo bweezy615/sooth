@@ -192,31 +192,53 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
             "n_books": max((s["n_books"] for s in sides), default=0),
         })
 
-    # A sport whose season has not started yet used to vanish from the board.
-    # The window is 36h and the NFL runs weekly, so on 2026-08-22 the next NFL
-    # kickoff was 430 hours out, the NHL 907 and the NBA 1409 — three of the
-    # five sports we cover were dark, and the phone's sport rail had nothing to
-    # offer for any of them.
-    #
-    # The odds request is not time-filtered (it returns the sport's whole
-    # schedule and we filter here), so carrying the soonest few games for an
-    # otherwise-empty sport costs NOTHING extra in credits. Books post NFL
-    # Week 1 prices months ahead and they are genuinely shoppable — comparing
-    # them is exactly what this board is for.
-    #
-    # In-window games always win; the look-ahead only fills a sport that would
-    # otherwise show nothing at all. Every card carries its own kickoff time,
-    # so "18 days out" is never presented as "tonight".
-    live_now = [e for e in out if e.get("in_window")]
-    if live_now:
-        chosen = live_now
-    else:
-        chosen = sorted(out, key=lambda e: e["starts"])[:LOOKAHEAD_EVENTS]
-    for e in chosen:
-        e["upcoming"] = not e.pop("in_window", False)
-    for e in out:
-        e.pop("in_window", None)
+    chosen = _choose(out)
     return chosen, spent
+
+
+def _choose(events: list[dict]) -> list[dict]:
+    """Which of a sport's events reach the board.
+
+    A sport whose season has not started yet used to vanish entirely. The
+    window is 36h and the NFL runs weekly, so on 2026-08-22 the next NFL
+    kickoff was 430 hours out, the NHL 907 and the NBA 1409 — three of the five
+    sports we cover were dark, and the phone's sport rail had nothing to offer
+    for any of them.
+
+    The odds request is not time-filtered (it returns the sport's whole
+    schedule and we filter here), so carrying the soonest few games for a thin
+    sport costs NOTHING extra in credits. Books post Week 1 prices months ahead
+    and they are genuinely shoppable — comparing them is exactly what this
+    board is for.
+
+    The look-ahead used to be all-or-nothing: any in-window game at all
+    suppressed it completely. That fails precisely at a season opening, where
+    the first game to come inside 36h is the *only* one. Measured on
+    2026-08-28, the eve of college football week 1: our own capture held 107
+    CFB events and the API listed the whole slate, one of them (UNC at TCU) was
+    33 hours out, and the board therefore published exactly one college
+    football game while the sport rail read "CFB 1". The day before, with none
+    in window, it had published eight.
+
+    So the look-ahead tops the board up to LOOKAHEAD_EVENTS instead of
+    replacing it. In-window games still come first and are never displaced;
+    every card carries its own kickoff time and an ``upcoming`` flag, so "18
+    days out" is never presented as "tonight".
+    """
+    live_now = [e for e in events if e.get("in_window")]
+    chosen = list(live_now)
+    if len(chosen) < LOOKAHEAD_EVENTS:
+        have = {id(e) for e in chosen}
+        for e in sorted(events, key=lambda e: e["starts"]):
+            if len(chosen) >= LOOKAHEAD_EVENTS:
+                break
+            if id(e) not in have:
+                chosen.append(e)
+    for e in chosen:
+        e["upcoming"] = not e.get("in_window", False)
+    for e in events:
+        e.pop("in_window", None)
+    return chosen
 
 
 
