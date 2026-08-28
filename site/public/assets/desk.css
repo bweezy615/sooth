@@ -168,7 +168,16 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   animation:hd-in var(--t-view) var(--e-out)}
 @keyframes hd-in{from{opacity:0}}
 .hd-r1{display:flex;align-items:center;gap:20px;height:52px}
-@media (max-width:860px){
+/* 1024, not the 860 this used to be. The single-row nav needs about 995px of
+   viewport once the wordmark is beside it, so between 861px and 1023px the
+   wrap had not kicked in and the row did not fit: EVERY page on the site
+   carried a horizontal scrollbar, ~110px of it, across a band that covers a
+   13-inch laptop, a tablet in landscape and any half-screen window. Measured
+   2026-08-28 on /verify at 870, 880, 940 and 1000px; clean at 1024 and above.
+   The phone tap-target block further down deliberately stays at 860, so a
+   laptop in this band gets the wrapped nav at desktop padding rather than
+   40px rows it does not need. */
+@media (max-width:1024px){
   /* The nav shared one row with the brand and the CTA, which left it about
      190px and pushed everything after MOVEMENT behind a horizontal scroll.
      GUIDE is last, so the one link written for a newcomer was the one they
