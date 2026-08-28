@@ -15,8 +15,11 @@ Two rules carry this module and both have already been got wrong once:
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from engine.alerts import _series
-from engine.research import (_line_group, build_facts, movement, price_block,
+from engine.research import (_line_group, build_facts, price_block,
                              upcoming_events)
 
 FUTURE = "2099-01-01T00:00:00+00:00"
@@ -114,25 +117,43 @@ class TestReportHygiene:
         now = dt.datetime.now(dt.timezone.utc)
         assert upcoming_events(past, now) == {}
 
-    def test_movement_needs_two_observations(self):
-        rows = [obs("DraftKings", -110, "2026-08-20T10:00:00+00:00"),
-                obs("DraftKings", -110, "2026-08-20T10:00:00+00:00",
-                    sel="side_b", line=3.5)]
-        assert movement(_series(rows), "E1", "spread") is None
 
-    def test_movement_never_mixes_two_lines(self):
-        """A line move must start a new series, not read as a price move."""
-        rows = [obs("DraftKings", -110, "2026-08-20T10:00:00+00:00"),
-                obs("DraftKings", -110, "2026-08-20T10:00:00+00:00",
-                    sel="side_b", line=3.5),
-                obs("DraftKings", -110, "2026-08-20T11:00:00+00:00"),
-                obs("DraftKings", -110, "2026-08-20T11:00:00+00:00",
-                    sel="side_b", line=3.5),
-                # The number moved. These rows belong to a different bet.
-                obs("DraftKings", -160, "2026-08-20T12:00:00+00:00", line=-6.5),
-                obs("DraftKings", +140, "2026-08-20T12:00:00+00:00",
-                    sel="side_b", line=6.5)]
-        mv = movement(_series(rows), "E1", "spread")
-        assert mv["line"] == -3.5                     # the dominant line wins
-        # -160 belongs to the 6.5 series and must not appear on this chart.
-        assert all(abs(p["side_a"] - 52.38) < 0.01 for p in mv["points"])
+
+class TestPublishedPayload:
+    """What ships in site/public/data/research.json.
+
+    Every visitor to /research and /game downloads and parses this file whole.
+    """
+
+    PATH = Path(__file__).resolve().parents[1] / "site/public/data/research.json"
+
+    def _reports(self):
+        return json.loads(self.PATH.read_text(encoding="utf-8"))["reports"]
+
+    def test_movement_carries_only_line_history(self):
+        """The consensus point series does not come back.
+
+        It was 46% of the payload — 40 hourly points per market, each point
+        re-keyed by the full team name — and no code on the site read it. The
+        only subscripts of `movement` anywhere are `{market}_line`. The series
+        itself is published by engine/timeline.py, for more events and in a
+        tighter encoding, and both pages that fetch research.json already fetch
+        timeline.json beside it. Size is the symptom; publishing a second copy
+        of something nobody reads is the defect.
+        """
+        stray = sorted({k for r in self._reports()
+                        for k in (r.get("movement") or {})
+                        if not k.endswith("_line")})
+        assert not stray, (
+            f"research.json is publishing movement series nothing reads: "
+            f"{stray}. See docs/plans/research-payload-size.md."
+        )
+
+    def test_the_fields_the_pages_read_are_still_there(self):
+        """The other half of the same change: nothing the UI reads was cut."""
+        for r in self._reports():
+            for k in ("event_id", "home", "away", "kickoff", "season", "week",
+                      "records", "stats", "injuries", "odds", "facts",
+                      "movement"):
+                assert k in r, f"report {r.get('event_id')} lost {k}"
+            assert "n_out" in r["injuries"]["home"]

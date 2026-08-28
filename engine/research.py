@@ -210,64 +210,14 @@ def price_block(series: dict[tuple, list[dict]], event_id: str,
     }
 
 
-def movement(series: dict[tuple, list[dict]], event_id: str, market: str,
-             max_points: int = 40) -> dict | None:
-    """Consensus implied probability over time for one market's dominant line.
-
-    Every book's own series is kept separate by ``_series``; this averages
-    across books per observation window so the page can draw one line instead
-    of eleven. Windowed to the hour, which is roughly our capture cadence.
-    """
-    buckets: dict[str, dict[str, list[float]]] = {}
-    line_seen: dict[str, int] = {}
-    for (ev, mk, sel, line, _book), rows in series.items():
-        if ev != event_id or mk != market:
-            continue
-        g = _line_group(market, line)
-        line_seen[g] = line_seen.get(g, 0) + len(rows)
-    if not line_seen:
-        return None
-    line = max(line_seen, key=lambda ln: line_seen[ln])
-
-    # The group key is unsigned so the two sides pair; the number a reader
-    # needs is the signed one the home side is actually laying. Reporting the
-    # key would print a home -3.5 favourite as "+3.5".
-    headline: str | None = None
-    for (ev, mk, sel, ln, _book), rows in series.items():
-        if ev != event_id or mk != market or _line_group(market, ln) != line:
-            continue
-        if sel in ("side_a", "over") and headline is None:
-            headline = ln
-        for r in rows:
-            ts = _parse(r.get("observed_at"))
-            if not ts or r.get("price") is None:
-                continue
-            key = ts.replace(minute=0, second=0, microsecond=0).isoformat()
-            buckets.setdefault(key, {}).setdefault(sel, []).append(
-                american_to_prob(int(r["price"])))
-
-    points = []
-    for ts in sorted(buckets)[-max_points:]:
-        entry = {"t": ts}
-        for sel, probs in buckets[ts].items():
-            entry[sel] = round(statistics.median(probs) * PTS, 2)
-        points.append(entry)
-    if len(points) < 2:
-        return None
-    quoted = headline if headline is not None else line
-    return {"market": market,
-            "line": None if quoted in (None, "None") else float(quoted),
-            "unit": "implied probability, points", "points": points}
-
-
 def line_history(series: dict[tuple, list[dict]], event_id: str,
                  market: str) -> dict | None:
     """Where the number itself opened and where it sits now.
 
-    Distinct from ``movement``, which holds the line fixed and watches the
-    juice. This watches the line. Both are real and they are not the same
-    event: a total going 46.5 -> 47.5 is the market moving; -110 -> -120 at
-    46.5 is the book charging more for the same bet.
+    This watches the line. Watching the juice instead — the price history at a
+    fixed line — is a different and equally real event, and it is published by
+    engine/timeline.py: a total going 46.5 -> 47.5 is the market moving;
+    -110 -> -120 at 46.5 is the book charging more for the same bet.
     """
     seen: list[tuple[str, float]] = []
     for (ev, mk, sel, ln, _book), rows in series.items():
@@ -484,11 +434,15 @@ def build(sport: str, data_dir: Path, root: Path, limit: int | None = None,
         if not odds:
             continue
 
+        # Only the line history. A per-market consensus point series used to be
+        # published here too and was 46% of research.json, read by nothing:
+        # every subscript of `movement` in this repo is `{market}_line`. The
+        # series it duplicated is published properly by engine/timeline.py, for
+        # more events and in a tighter encoding, and both pages that load
+        # research.json already load timeline.json beside it.
+        # See docs/plans/research-payload-size.md.
         moves = {}
         for m in odds:
-            mv = movement(series, ev["event_id"], m)
-            if mv:
-                moves[m] = mv
             lh = line_history(series, ev["event_id"], m)
             if lh:
                 moves[f"{m}_line"] = lh
