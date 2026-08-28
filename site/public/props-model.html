@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sooth — The prop model that didn't work</title>
-<meta name="description" content="We built a strikeout model, measured it on the props books actually post, and found it has no edge there. The full result, including the three explanations we got wrong first.">
+<meta name="description" content="We built a strikeout model, measured it on the props books actually post, and found it has no edge there. The full result, including the explanations we got wrong first and the correction this page has since published against itself.">
 <meta property="og:title" content="Sooth — The prop model that didn't work">
-<meta property="og:description" content="Our model knows things about pitchers. It knows nothing about the pitchers books post. We published it anyway.">
+<meta property="og:description" content="Our model disagrees with the prices books post by eleven points on average, and wins fewer than half of those arguments. We published it anyway.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="https://sooth.bet/props-model">
@@ -26,10 +26,16 @@
      There is no such figure on this page — that IS the finding — so the only
      teal here is chrome that belongs to us: the hairline beside the position,
      the rule under the kicker, and one lit rim on the result we are standing
-     behind. Every number that *looks* good (0.48, 2.7 pts, the better Brier)
-     is a trap the page then dismantles two paragraphs later, so none of them
-     is allowed to wear the signal colour and pre-approve itself. The numbers
-     that are bad stay red, exactly where they already were.
+     behind. Every number that *looks* good (the information figure on the
+     unfair benchmark, the recalibrated model's calibration error, its better
+     Brier) is a trap the page then dismantles two paragraphs later, so none of
+     them is allowed to wear the signal colour and pre-approve itself. The
+     numbers that are bad stay red, exactly where they already were.
+
+     No digit in this file is authored here. Every figure lives in an element
+     carrying data-f="<key>" and is written by scripts/props_model_note.py from
+     the capture committed in this repo; tests/test_props_model_note.py fails
+     if the page and the payload disagree. Edit the script, not the markup.
 
      Sober, not apologetic. Nothing is greyed down, hedged or set smaller than
      it was: the figures move UP to full ink and mono, because on this page the
@@ -98,11 +104,12 @@
   .fig td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);
     white-space:normal;line-height:1.45}
   .fig tr:last-child td{border-bottom:0}
-  /* .hi was teal. It sits on 11.5 pts (the size of the disagreement that
-     kills the model), on 0.48 (real information, on a population no book
-     makes a market in) and on 2.7 pts (the recalibrated model, which is a
-     constant wearing a model's clothes). Not one of those beats a market.
-     They keep their emphasis — full ink, heavier — and lose the signal. */
+  /* .hi was teal. It sits on the average disagreement (the size of the claim
+     that kills the model), on the information figure measured against a line
+     that does not know who is pitching, and on the recalibrated model's
+     calibration error (a constant wearing a model's clothes). Not one of those
+     beats a market. They keep their emphasis — full ink, heavier — and lose
+     the signal. */
   .fig .hi{color:var(--ink);font-weight:600}
   .fig .bad{color:var(--dn);font-weight:600}
   .cap{font-size:11.5px;color:var(--mut);line-height:1.6;padding:11px 14px;
@@ -141,15 +148,18 @@
     <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:78ch;line-height:1.6;margin:0">
       We built a strikeout model, graded it against the props books actually post,
       and found it has no edge there. This is the whole result — including the three
-      explanations we got wrong before we got it right.</p>
+      explanations we got wrong on the way, and the one this page itself got wrong
+      and has since corrected.</p>
   </div>
 
   <div class="stance">
-    <p><b>Our model knows things about pitchers. It knows nothing about the pitchers
-    books post.</b> Across <span class="n">194</span> real prop lines it disagreed with
-    the market by <span class="n">11.5</span> points on average and its side won
-    <span class="n">48.1%</span> of the time. We are not selling it, and this page
-    exists because the measurement is worth more than the model was.</p>
+    <p><b>Our model disagrees loudly with the prices books actually post, and it is
+    wrong about as often as a coin.</b> Across <span class="n" data-f="board.n">286</span>
+    real prop lines it disagreed with the market by
+    <span class="n" data-f="board.mean_delta_bare">11.2</span> points on average and its
+    side won <span class="n" data-f="board.won_pct">44.8%</span> of the time. We are not
+    selling it, and this page exists because the measurement is worth more than the
+    model was.</p>
   </div>
 
   <section class="sec" style="border-top:0" aria-labelledby="h1a">
@@ -176,42 +186,47 @@
     <div class="sec-h"><span class="tl" id="h2a">THE RESULT</span></div>
     <div class="prose">
       <p>We reconstructed every strikeout prop our capture actually saw between
-      5 and 21 August 2026 — real lines, real prices from multiple books, outcomes
-      known. That is <span class="n">194</span> props with a gradeable result.</p>
+      <span data-f="window.first">8 August 2026</span> and
+      <span data-f="window.last">26 August 2026</span> — real lines, real
+      prices from three or more books on both sides, outcomes known. That is
+      <span class="n" data-f="board.n">286</span> props with a gradeable result.</p>
 
       <!-- the one lit rim on the page. .rimlit is the promo's single teal arc,
            and it belongs on the surface carrying the result we published. -->
       <div class="fig rimlit">
         <table>
-          <tr><th scope="col">On 194 real board props</th><th scope="col">Model</th><th scope="col">Market</th></tr>
-          <tr><td>Predicted the over</td><td>46.4%</td><td>48.6%</td></tr>
-          <tr><td>Actually went over</td><td>43.3%</td><td>43.3%</td></tr>
-          <tr><td>Average disagreement with the price</td><td class="hi">11.5 pts</td><td>—</td></tr>
-          <tr><td>Props where we disagreed by 3+ points</td><td>156 of 194</td><td>—</td></tr>
-          <tr><td>Our side won those</td><td class="bad">48.1%</td><td>—</td></tr>
+          <tr><th scope="col">On the real board props</th><th scope="col">Model</th><th scope="col">Market</th></tr>
+          <tr><td>Predicted the over</td><td data-f="board.model_over">47.0%</td><td data-f="board.market_over">49.1%</td></tr>
+          <tr><td>Actually went over</td><td data-f="board.actual_over">43.7%</td><td data-f="board.actual_over">43.7%</td></tr>
+          <tr><td>Average disagreement with the price</td><td class="hi" data-f="board.mean_delta">11.2 pts</td><td>—</td></tr>
+          <tr><td>Props where we disagreed by 3+ points</td><td data-f="board.disagree_of">230 of 286</td><td>—</td></tr>
+          <tr><td>Our side won those</td><td class="bad" data-f="board.won_pct">44.8%</td><td>—</td></tr>
         </table>
         <p class="cap">A coin flip is 50%. Breaking even at standard prop pricing needs
         more than that.</p>
       </div>
 
       <p>The size of the disagreement is what kills it. The model was not quietly
-      hedging near the market and losing narrowly — it was claiming an
-      <em>eleven-point</em> edge, on 8 out of every 10 props, and then winning fewer
-      than half of them. An edge that large would be unmissable if it were real.</p>
+      hedging near the market and losing narrowly. It was claiming an
+      <em>eleven-point</em> edge, on <span class="n" data-f="board.disagree_share">80%</span>
+      of the props it saw, and then winning fewer than half of them. An edge that large
+      would be unmissable if it were real.</p>
 
-      <p>Stated honestly, because it matters: with 156 decisions the margin of error is
-      about 4 points, so <span class="n">48.1%</span> is statistically indistinguishable
-      from a coin flip. We cannot claim the model is actively bad. What this sample
-      does rule out is the large edge the model was advertising.</p>
+      <p>Stated honestly, because it matters: with
+      <span class="n" data-f="board.n_disagree">230</span> decisions the margin of error
+      is about <span class="n" data-f="board.se">3.3</span> points, so
+      <span class="n" data-f="board.won_pct">44.8%</span> is close enough to a coin flip
+      that we cannot claim the model is actively bad. What this sample does rule out is
+      the large edge the model was advertising.</p>
     </div>
   </section>
 
   <section class="sec" aria-labelledby="h3a">
     <div class="sec-h"><span class="tl" id="h3a">WHY — AND THIS IS THE PART THAT GENERALISES</span></div>
     <div class="prose">
-      <p>The model is not useless. Measured across <em>every</em> start by every
-      pitcher in our sample, it carries real predictive information. Measured on the
-      subset of games where a book actually hung a prop, that information is gone.</p>
+      <p>The model is not useless in the abstract. Graded against one league-average
+      line applied to every pitcher alike, it carries real predictive information.
+      Graded against the line a book actually posted, that information is gone.</p>
 
       <p>One statistic captures it. Fit the model's own output against what happened,
       and ask how much weight the answer deserves. A value of 1.0 means the model's
@@ -220,29 +235,46 @@
 
       <div class="fig">
         <table>
-          <tr><th scope="col">Population</th><th scope="col">Sample</th><th scope="col">Information in the model</th></tr>
-          <tr><td>All pitcher-starts</td><td>1,482</td><td class="hi">0.48</td></tr>
-          <tr><td>Only games books posted a prop on</td><td>194</td><td class="bad">−0.07</td></tr>
+          <tr><th scope="col">What the model was graded against</th><th scope="col">Sample</th><th scope="col">Information in the model</th></tr>
+          <tr><td>Every start, one league-median line for every pitcher</td><td data-f="slope.flat_n">2,499</td><td class="hi" data-f="slope.flat">+0.50</td></tr>
+          <tr><td>Every start, the line that pitcher usually gets</td><td data-f="slope.typical_n">2,472</td><td data-f="slope.typical">+0.20</td></tr>
+          <tr><td>Only games books posted a prop on, at the price they hung</td><td data-f="slope.board_n">286</td><td class="bad" data-f="slope.board">-0.11</td></tr>
         </table>
-        <p class="cap">95% confidence interval on the second figure is −0.50 to 0.35.
-        Wide, because 194 is not many — but it excludes the values the model would need
-        to be worth publishing.</p>
+        <p class="cap">95% interval on the last figure is
+        <span data-f="slope.board_ci">-0.46 to +0.24</span>. Wide, because
+        <span data-f="board.n">286</span> is not many, but it excludes the values the
+        model would need to be worth publishing.</p>
       </div>
 
-      <p>Books do not hang props uniformly. They post the marquee starter, the
-      nationally televised game, the pitcher with a story attached. Our own board
-      filter compounds it: a prop only reaches us when at least three books
-      independently chose to price both sides of it. So the props we see are precisely
-      the ones the market has thought hardest about.</p>
+      <p>The drop that is real is the first one, and it is not about which games books
+      choose to hang. It is about what a posted line already contains. Most of what
+      looked like the model's information was knowing that different pitchers strike
+      out at different rates, and the number a book hangs is built around exactly that.
+      Withhold that from the line and hand it only to the model, and the model looks
+      informed. Give it to both and four fifths of the effect disappears. That single
+      step is worth <span class="n" data-f="slope.z_line">4.7</span> standard errors.</p>
 
-      <p><em>Our edge existed where no market existed.</em> The moment enough books
-      cared to make a line, the advantage was gone.</p>
+      <p>The rest of the fall is not established. Holding the line rule fixed and
+      comparing the games books posted a prop on
+      (<span class="n" data-f="slope.board_typical">+0.09</span> on
+      <span class="n" data-f="slope.board_typical_n">282</span> of them) against every
+      other start moves the figure by <span class="n" data-f="slope.z_select">0.6</span>
+      standard errors. Swapping that pitcher's usual line for the exact price the book
+      actually hung moves it by another
+      <span class="n" data-f="slope.z_posted">0.8</span>. At
+      <span class="n" data-f="board.n">286</span> props neither of those is a finding,
+      and we are not going to present them as one.</p>
 
-      <p>The same effect shows up in accuracy. Before we rebuilt the test around real
-      board props, our worst calibration error looked like
-      <span class="n">2.6</span> points. On the props that actually reach a board it is
-      <span class="n">18.5</span>. Every number we had quoted to ourselves before that
-      point was measured on an easier sample than the real one.</p>
+      <p><em>Our edge existed where no market existed.</em> What we got wrong for eight
+      days was what "no market" meant. It does not mean a game the books ignored. It
+      means a line that does not know who is pitching — and no real line is ever
+      that.</p>
+
+      <p>The generalisable warning survives the correction, and it is not the one we
+      first wrote down: <em>a model validated against a benchmark weaker than the one
+      it will face is measuring the benchmark, not itself.</em> Every figure we quoted
+      before rebuilding this test around real board prices was measured on an easier
+      sample than the real one.</p>
     </div>
   </section>
 
@@ -258,18 +290,25 @@
 
       <div class="fig">
         <table>
-          <tr><th scope="col"></th><th scope="col">Worst error</th><th scope="col">Brier score</th></tr>
-          <tr><td>The model as built</td><td class="bad">22.4 pts</td><td>0.2800</td></tr>
-          <tr><td>After recalibration</td><td class="hi">2.7 pts</td><td>0.2480</td></tr>
-          <tr><td>The market itself</td><td>4.1 pts</td><td>0.2439</td></tr>
+          <tr><th scope="col"></th><th scope="col">Calibration error</th><th scope="col">Brier score</th></tr>
+          <tr><td>The model as built</td><td class="bad" data-f="salvage.raw_ece">15.8 pts</td><td data-f="salvage.raw_brier">0.2750</td></tr>
+          <tr><td>After recalibration</td><td class="hi" data-f="salvage.recal_ece">4.2 pts</td><td data-f="salvage.recal_brier">0.2470</td></tr>
+          <tr><td>The market itself</td><td data-f="salvage.market_ece">8.3 pts</td><td data-f="salvage.market_brier">0.2454</td></tr>
         </table>
-        <p class="cap">Lower Brier is better. The recalibrated model looks excellent.</p>
+        <p class="cap">Lower is better on both. Scored out of sample, in
+        <span data-f="salvage.folds">5</span> folds, so no prop is graded by a
+        correction fitted on itself. The recalibrated model looks excellent.</p>
       </div>
 
-      <p>The corrected model compresses every input to roughly the same answer — near
-      <span class="n">42%</span> on essentially every prop. It scores well because
-      predicting the base rate always scores well. It is a constant wearing a model's
-      clothes, and publishing it would be publishing the base rate with extra steps.</p>
+      <p>The correction the fit chooses is to stop listening. Across the folds the
+      weight it puts on the model's own opinion lands between
+      <span class="n" data-f="salvage.fit_slopes">-0.19 and -0.04</span>: nought, to
+      within the noise. What comes out the other side sits between
+      <span class="n" data-f="salvage.band">37% and 54%</span> on every prop, averaging
+      <span class="n" data-f="salvage.mean">43.7%</span>, which is the base rate. It
+      scores well because predicting the base rate always scores well. It is a constant
+      wearing a model's clothes, and publishing it would be publishing the base rate
+      with extra steps.</p>
 
       <p>This is worth stating plainly because it is the trap most people never check:
       <em>calibration and information are different properties.</em> The Brier score
@@ -282,17 +321,20 @@
     <div class="prose">
       <p>Each of these was stated confidently before it was tested, and each was
       abandoned because a measurement contradicted it. They are here because the
-      revisions are the honest part of the record.</p>
+      revisions are the honest part of the record. Unlike everything above, these three
+      are summaries of one-off diagnostics from August 2026 rather than figures this
+      page regenerates, so they are described and not quantified.</p>
 
       <h3>1. "Per-player error swamps the signal."</h3>
       <p>Measured in-sample and over-read. Separating out the noise you would expect
       from small samples, per-player deviation in both models is entirely consistent
-      with chance. At 15–25 starts per pitcher this simply cannot be measured. Withdrawn.</p>
+      with chance. At <span class="n" data-f="cover.starts">8–27</span> starts per
+      pitcher this simply cannot be measured. Withdrawn.</p>
 
       <h3>2. "The probabilities are too extreme because we ignore uncertainty."</h3>
       <p>The fix would have been a wider distribution. We fitted one, and there was
-      almost nothing to widen — strikeouts per start are very close to the simple
-      distribution we already assumed. Worst error moved from 16.9 to 15.8 points. The
+      almost nothing to widen: strikeouts per start are very close to the simple
+      distribution we already assumed, and the calibration error barely moved. The
       story was wrong.</p>
 
       <h3>3. "Shrink each pitcher's rate toward league average by sample size."</h3>
@@ -321,8 +363,8 @@
       <p>So the daily post will tell you where the best number is, and what a player
       has actually done in his last five, last ten and season starts. It will not tell
       you a prop is mispriced, because we measured our ability to know that and it came
-      back at <span class="n">48.1%</span>. Where our model probability appears it is
-      labelled as context, not as a forecast.</p>
+      back at <span class="n" data-f="board.won_pct">44.8%</span>. Where our model
+      probability appears it is labelled as context, not as a forecast.</p>
 
       <p>Worth being blunt about what a price edge is and is not: the vig means the
       best available price is usually still worse than the consensus fair price. Picking
@@ -330,17 +372,19 @@
       into a winning one, and we are not going to imply otherwise.</p>
 
       <p>This is the second time we have published our own model failing. Our NFL
-      prediction model hit <span class="n">49.8%</span> against the spread across
-      <span class="n">2,608</span> decided walk-forward games, where breakeven is
-      <span class="n">52.4%</span>. That measurement is why this site sells price
-      transparency rather than picks — and it is why the rest of the numbers here are
-      worth something. Results that flatter us and results that do not get published
-      the same way.</p>
+      prediction model hit <span class="n" data-f="nfl.ats">49.8%</span> against the
+      spread across <span class="n" data-f="nfl.decided">2,608</span> decided
+      walk-forward games, where breakeven is
+      <span class="n" data-f="nfl.breakeven">52.4%</span>. That measurement is why this
+      site sells price transparency rather than picks, and it is why the rest of the
+      numbers here are worth something. Results that flatter us and results that do not
+      get published the same way.</p>
 
       <p>If you want the bar for reopening this: a model would have to show real
-      information on the population books actually post, on a sample larger than 194.
-      That number is now written down, so nobody — including us — gets to move it
-      quietly.</p>
+      information against the prices books actually post, on a sample larger than
+      <span class="n" data-f="board.n">286</span>. That is the current sample, it is
+      written down, and it moves only when this page is regenerated from the capture,
+      so nobody — including us — gets to move it quietly.</p>
     </div>
   </section>
 
@@ -348,14 +392,73 @@
     <div class="sec-h"><span class="tl" id="h7a">TWO THINGS WE DID NOT FIND</span></div>
     <div class="prose">
       <p>Recorded so they are not later rediscovered as news.</p>
-      <p>The market itself predicted <span class="n">48.6%</span> against a
-      <span class="n">43.3%</span> actual on this sample. That looks like a bias toward
-      the under. At 194 props it is about 1.5 standard deviations — noise, not a finding,
-      and we are not trading on it.</p>
+      <p>The market itself predicted
+      <span class="n" data-f="board.market_over">49.1%</span> against a
+      <span class="n" data-f="board.actual_over">43.7%</span> actual on this sample.
+      That looks like a bias toward the under. At
+      <span class="n" data-f="board.n">286</span> props it is about
+      <span class="n" data-f="board.market_sigma">1.9</span> standard deviations: noise,
+      not a finding, and we are not trading on it.</p>
       <p>We built a total-bases model too, and it points the same way, but it was never
-      tested on a board population — we had 160 captured quotes for it against 3,207 for
-      strikeouts. Its exclusion rests on weaker evidence than the strikeout case and
-      should not inherit the strikeout case's certainty.</p>
+      tested on a board population. We captured
+      <span class="n" data-f="cover.tb_quotes">160</span> total-bases rows against
+      <span class="n" data-f="cover.k_quotes">3,807</span> for strikeouts. Its exclusion
+      rests on weaker evidence than the strikeout case and should not inherit the
+      strikeout case's certainty.</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h8a">
+    <div class="sec-h"><span class="tl" id="h8a">WHERE THESE NUMBERS COME FROM, AND WHAT CHANGED</span></div>
+    <div class="prose">
+      <p>Until 28 August 2026 every figure above was typed into this page by hand, from
+      an analysis that existed once and was then thrown away. On a site whose whole
+      position is that its numbers are checkable, that made this the least checkable
+      page we had — and it is the page most worth checking, because it is the one
+      arguing we are honest about a failure.</p>
+
+      <p>It is now regenerated by <em>scripts/props_model_note.py</em> from two files
+      committed in this repository: our own append-only prop capture, and a cached copy
+      of the free MLB game logs. Anyone who clones it reproduces every number offline.
+      The script also writes the figures into this page, so no digit here is authored
+      in the markup, and a test fails the build if page and payload ever disagree. The
+      payload itself is at <a href="/data/props_model_note.json">props_model_note.json</a>.</p>
+
+      <p>Regenerating it moved things, and the moves are the reason this section
+      exists rather than a quiet edit.</p>
+
+      <!-- data-was marks a figure this page USED to publish. It is quoted from
+           the superseded copy, it can never be regenerated, and it must never
+           change; git history is its provenance. The test allows a bare number
+           only inside data-f (generated) or data-was (superseded). -->
+      <p><em>The sample grew and the result got slightly worse.</em> The original run
+      graded <span class="n" data-was>194</span> props and reported our side winning
+      <span class="n" data-was>48.1%</span> of its disagreements. This
+      one grades <span class="n" data-f="board.n">286</span> and reports
+      <span class="n" data-f="board.won_pct">44.8%</span>. Part of the difference is
+      five more days of capture; part is that the original could not resolve about a
+      dozen pitchers whose names are shared with another player, so working starters
+      were silently dropped. The conclusion is unchanged.</p>
+
+      <p><em>One claim did not survive at all.</em> This page used to report that the
+      model carries information across all pitcher-starts
+      (<span class="n" data-was>0.48</span>) and none on the games books post a prop on
+      (<span class="n" data-was>−0.07</span>), and it blamed books for choosing which
+      games to hang. Regenerating showed that figure was measured against a single
+      league-median line applied to every pitcher alike. Let the line know which
+      pitcher is on the mound — which every real line does — and most of that
+      information is gone before books select anything. The selection effect we
+      described is not measurable at this sample size. The section above now says so.</p>
+
+      <p><em>One statistic was replaced.</em> The salvage table used to quote the worst
+      of ten calibration buckets. On a few hundred props the worst bucket often holds
+      two of them, and the number swings tens of points between runs. It now quotes
+      calibration error across five equal-sized buckets, which is stable, and is scored
+      out of sample.</p>
+
+      <p>Nothing here was reconciled by hand. Where the new run disagreed with what was
+      published, the new run is what is published, and the disagreement is written
+      above.</p>
     </div>
   </section>
 

@@ -1,0 +1,145 @@
+{
+ "figures": {
+  "window.first": "8 August 2026",
+  "window.last": "26 August 2026",
+  "board.n": "286",
+  "board.model_over": "47.0%",
+  "board.market_over": "49.1%",
+  "board.actual_over": "43.7%",
+  "board.mean_delta": "11.2 pts",
+  "board.mean_delta_bare": "11.2",
+  "board.n_disagree": "230",
+  "board.disagree_of": "230 of 286",
+  "board.disagree_share": "80%",
+  "board.won_pct": "44.8%",
+  "board.se": "3.3",
+  "board.market_bias": "5.4 pts",
+  "board.market_sigma": "1.9",
+  "slope.flat_n": "2,499",
+  "slope.flat": "+0.50",
+  "slope.typical_n": "2,472",
+  "slope.typical": "+0.20",
+  "slope.board_n": "286",
+  "slope.board": "-0.11",
+  "slope.board_ci": "-0.46 to +0.24",
+  "slope.board_typical": "+0.09",
+  "slope.board_typical_n": "282",
+  "slope.z_line": "4.7",
+  "slope.z_select": "0.6",
+  "slope.z_posted": "0.8",
+  "salvage.folds": "5",
+  "salvage.raw_ece": "15.8 pts",
+  "salvage.raw_brier": "0.2750",
+  "salvage.recal_ece": "4.2 pts",
+  "salvage.recal_brier": "0.2470",
+  "salvage.market_ece": "8.3 pts",
+  "salvage.market_brier": "0.2454",
+  "salvage.band": "37% and 54%",
+  "salvage.mean": "43.7%",
+  "salvage.fit_slopes": "-0.19 and -0.04",
+  "cover.pitchers": "152",
+  "cover.starts": "8\u201327",
+  "cover.k_quotes": "3,807",
+  "cover.tb_quotes": "160",
+  "cover.league_line": "4.5",
+  "nfl.ats": "49.8%",
+  "nfl.decided": "2,608",
+  "nfl.breakeven": "52.4%"
+ },
+ "detail": {
+  "generated_at": "2026-08-28T09:21:50-05:00",
+  "method": {
+   "board_filter": "3+ books pricing both sides",
+   "walk_forward": "projection uses only appearances before the game",
+   "opponent_factor": "off - as-of opposing-team K% is not available",
+   "window_through": "2026-08-26",
+   "calibration_statistic": "expected calibration error (ECE)",
+   "league_line": 4.5
+  },
+  "window": {
+   "first": "2026-08-08",
+   "last": "2026-08-26"
+  },
+  "board": {
+   "n": 286,
+   "ungradeable": 17,
+   "n_props_seen": 303,
+   "model_over": 0.4695900808347219,
+   "market_over": 0.4914437301553016,
+   "actual_over": 0.4370629370629371,
+   "mean_abs_delta_pts": 11.222644990791752,
+   "n_disagree": 230,
+   "won": 103,
+   "won_pct": 0.44782608695652176,
+   "se_pts": 3.296902366978935,
+   "slope": -0.11001491368464084,
+   "slope_se": 0.1762274980383228,
+   "brier_model": 0.2750056939994348,
+   "brier_market": 0.24540289962844627,
+   "ece_model": 15.791272947452198,
+   "ece_market": 8.318007370699911,
+   "market_bias_pts": 5.438079309236449,
+   "market_bias_sigma": 1.8540722004748718
+  },
+  "slopes": {
+   "flat_line": {
+    "n": 2499,
+    "slope": 0.4954422138044607,
+    "se": 0.0405341373020306,
+    "ece": 6.372541172556429
+   },
+   "typical_line": {
+    "n": 2472,
+    "slope": 0.19563269264937383,
+    "se": 0.04949444598960796,
+    "ece": 11.376210792138815
+   },
+   "board_typical_line": {
+    "n": 282,
+    "slope": 0.08950804588592044,
+    "se": 0.1797596772228309
+   },
+   "board_posted_line": {
+    "n": 286,
+    "slope": -0.11001491368464084,
+    "se": 0.1762274980383228
+   },
+   "z_line_specification": 4.686402555345261,
+   "z_game_selection": 0.5691885085787298,
+   "z_posted_line": 0.7925964930944965
+  },
+  "salvage": {
+   "folds": 5,
+   "n_test": 286,
+   "fit_slope_min": -0.19092498376796824,
+   "fit_slope_max": -0.044115500576939824,
+   "raw": {
+    "ece": 15.791272947452198,
+    "brier": 0.2750056939994348
+   },
+   "recalibrated": {
+    "ece": 4.224922647688195,
+    "brier": 0.2470110447338883,
+    "min": 0.36876812530519143,
+    "max": 0.5416128567613085,
+    "mean": 0.4372313501825395
+   },
+   "market": {
+    "ece": 8.318007370699911,
+    "brier": 0.24540289962844627
+   }
+  },
+  "coverage": {
+   "pitchers": 152,
+   "starts_p10": 8,
+   "starts_p90": 27,
+   "quotes_strikeouts": 3807,
+   "quotes_total_bases": 160
+  },
+  "nfl": {
+   "ats_pct": 0.4977,
+   "decided": 2608,
+   "breakeven": 0.5238
+  }
+ }
+}
