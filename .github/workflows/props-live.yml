@@ -115,6 +115,7 @@ jobs:
           PY
 
       - name: Refresh the live props board (Odds API)
+        id: refresh
         if: steps.gate.outputs.refresh == 'true'
         run: |
           echo "published board age: ${{ steps.gate.outputs.age_h }}h"
@@ -173,3 +174,17 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push
           fi
+
+      # The refresh above is the whole job, and it carries continue-on-error so
+      # that a half-written board still reaches the commit step. The cost of
+      # that, unguarded, is that engine.props can fail on every single run --
+      # a bad key, a missing dep, an API change -- and this workflow reports
+      # success every time while the board freezes. Same defect capture-evidence
+      # shipped with on 2026-08-28. Skipped runs are not failures, so this only
+      # fires when we decided to spend credits and got nothing for them.
+      - name: Fail if the board refresh did not run
+        if: always() && steps.refresh.outcome == 'failure'
+        run: |
+          echo "engine.props failed - the live props board was not refreshed."
+          echo "Credits may have been spent; /props is serving the old board."
+          exit 1

@@ -49,6 +49,20 @@
   .sec-h .tl{display:inline-block;padding-left:12px;line-height:1.4;
     border-left:1px solid rgba(45,212,167,.42);color:var(--mut)}
 
+  /* ---- one age per feed -------------------------------------------------
+     The SNAPSHOT reading in the status bar was board.json's timestamp, and
+     this page renders four payloads on three very different schedules: the
+     board every half hour, middles gated to six, moves on the two-hourly
+     edges cron. On any normal day that put "15M AGO" above a middles table
+     built from prices six hours older, and the lede promises the opposite
+     ("the timestamp is part of the data, not a footnote on it").
+     So each section states the age of the payload IT renders, and the status
+     reading is now the OLDEST of the four rather than the freshest. No
+     border, no hue: this is metadata about the surface, not a signal. */
+  .sec-h .age{margin-left:auto;padding-left:0;border-left:0;color:var(--dim);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .sec-h .age.stale{color:var(--amber)}
+
   /* the one lit rim, on the one feed that is about our signal */
   #ev.rimlit::after{z-index:2}
 
@@ -103,7 +117,9 @@
     /* a header on a phone is a label plus a sentence; in one non-wrapping row
        the sentence gets crushed into a column against the label. It wraps. */
     .sec-h{flex-wrap:wrap;row-gap:7px}
-    .sec-h .sub{flex:0 0 100%;line-height:1.5}
+    /* the age belongs on the label's line, right-ranged, not alone on a third
+       one — so the sentence is the thing that moves down, not the reading */
+    .sec-h .sub{flex:0 0 100%;line-height:1.5;order:1}
     /* the freshness line was pinned to the right by margin-left:auto and then
        wrapped onto a line of its own, leaving a 34px dead band above a single
        right-ranged phrase. It sits with the counters it describes. */
@@ -165,21 +181,21 @@
   <section class="sec" style="border-top:0" aria-labelledby="evH">
     <div class="sec-h"><span class="tl" id="evH">BEATING FAIR</span>
       <span class="sub">best available price above the de-vigged consensus, games and props,
-      ranked by edge — these close fast, the timestamp is part of the data</span></div>
+      ranked by edge — these close fast, the timestamp is part of the data</span><span class="tl age" id="evAge"></span></div>
     <div class="feed rimlit" id="ev"></div>
   </section>
 
   <section class="sec" aria-labelledby="arbH">
     <div class="sec-h"><span class="tl" id="arbH">ARBS &amp; MIDDLE WINDOWS</span>
       <span class="sub">two books far enough apart that both sides pay — implied under 100%,
-      or a gap in the numbers where both bets land</span></div>
+      or a gap in the numbers where both bets land</span><span class="tl age" id="arbAge"></span></div>
     <div class="feed" id="arb"></div>
   </section>
 
   <section class="sec" aria-labelledby="mvH">
     <div class="sec-h"><span class="tl" id="mvH">DETECTED MOVEMENT</span>
       <span class="sub">divergence from the pack, then the largest single-book drifts,
-      last 48 hours, points of implied probability</span></div>
+      last 48 hours, points of implied probability</span><span class="tl age" id="mvAge"></span></div>
     <div class="feed" id="mv"></div>
   </section>
 
@@ -210,12 +226,34 @@ function fill(el,html){$(el).classList.remove("ld"); $(el).innerHTML=html;}
 Promise.all([D.load("/data/board.json"),D.load("/data/props.json"),
              D.load("/data/middles.json"),D.load("/data/moves.json")]).then(function(rs){
   var b=rs[0],p=rs[1],m=rs[2],mv=rs[3];
-  if(b.ok){
-    $("stT").textContent=D.ago(b.data.generated_at);
-    $("stT").setAttribute("data-ago",b.data.generated_at);
-    if(b.ageH>3) $("pulse").className="pulse stale";
-    D.sportRail(b.data,"",function(){location.href="/";});
-  } else $("pulse").className="pulse dead";
+
+  /* ---- freshness, per feed ------------------------------------------------
+     This used to read board.json's timestamp and present it as THE snapshot
+     time for the whole page. The four payloads here refresh on three
+     different schedules, so on a normal day that headline said "15M AGO"
+     while the middles below it were six hours old. The page's own lede makes
+     freshness a promise ("the timestamp is part of the data"), so:
+       - each section shows the age of the payload it actually renders;
+       - a section fed by two payloads shows the OLDER of them;
+       - the status reading is the oldest on the page, never the freshest.
+     A feed that failed to load shows no age at all rather than inheriting
+     another feed's. */
+  function stamp(id, sources){
+    var el=$(id); if(!el) return null;
+    var live=sources.filter(function(r){return r.ok && r.ts;});
+    if(!live.length){ el.textContent=""; return null; }
+    var oldest=live.reduce(function(a,c){return c.ageH>a.ageH?c:a;});
+    el.textContent=D.ago(oldest.ts);
+    el.setAttribute("data-ago",oldest.ts);
+    if(oldest.ageH>3) el.classList.add("stale");
+    return oldest;
+  }
+  stamp("evAge",[b,p]); stamp("arbAge",[m]); stamp("mvAge",[mv]);
+  var oldest=stamp("stT",[b,p,m,mv]);
+  if(!oldest){ $("stT").textContent="—"; $("pulse").className="pulse dead"; }
+  else if(oldest.ageH>3) $("pulse").className="pulse stale";
+  if(b.ok) D.sportRail(b.data,"",function(){location.href="/";});
+  else $("pulse").className="pulse dead";
 
   /* ---- beating fair ---- */
   var evs=[];

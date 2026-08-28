@@ -78,6 +78,7 @@ jobs:
       # Free: reads data/capture/*.jsonl, which capture-odds refreshes every
       # 30 min. No API call, so there is no reason to gate this one.
       - name: Rebuild line-movement scan (zero credits)
+        id: moves
         run: python -m engine.alerts --out site/public/data/moves.json
         continue-on-error: true
 
@@ -127,3 +128,21 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push
           fi
+
+      # capture-evidence.yml paid for this lesson on 2026-08-28: with
+      # continue-on-error on every meaningful step, a run where NOTHING worked
+      # still reports success, and a green tick over an unchanged artifact is
+      # worse than a red one because nobody goes looking.
+      #
+      # Both steps above keep continue-on-error, because a transient Odds API
+      # failure must not cost the other artifact. But the moves rebuild spends
+      # no credits and reads only committed capture, so there is no legitimate
+      # reason for it to fail: if it does, this run produced nothing and has to
+      # say so. Deliberately after the commit, so whatever was written is saved
+      # before the job goes red.
+      - name: Fail if the zero-credit rebuild did not run
+        if: always() && steps.moves.outcome == 'failure'
+        run: |
+          echo "engine.alerts failed - moves.json was not rebuilt this run."
+          echo "The Edges tab is now serving whatever it served last time."
+          exit 1

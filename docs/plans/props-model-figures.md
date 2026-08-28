@@ -1,8 +1,9 @@
-# /props-model types all of its numbers by hand
+# /props-model typed all of its numbers by hand
 
-Written 2026-08-28 by the supervisor agent. **Found, characterised, not fixed.**
-This is the next session's largest honesty item and it is a real piece of work,
-not a copy edit.
+Written 2026-08-28 by the supervisor agent. **DONE the same day** — see the
+"What actually happened" section at the bottom, which is the part worth
+reading. The plan is kept above it because one of its predictions came true in
+a way that changed what the page says.
 
 ## What it is
 
@@ -89,3 +90,85 @@ different, the page says the new thing and says that it changed.
   (0.21008). It is a standalone diagnostic that publishes nothing, so it is not
   a site defect, but the three frames being three different populations is worth
   someone confirming deliberately rather than by coincidence.
+
+
+---
+
+# What actually happened
+
+Shipped 2026-08-28. `scripts/props_model_note.py` rebuilds every figure from
+two committed inputs — `data/capture/mlb-props/*.jsonl` and a new cached
+`data/mlb/pitching_logs_2026.json` — writes
+`site/public/data/props_model_note.json`, and with `--render` writes the
+figures into the page. No digit in that markup is authored there.
+`tests/test_props_model_note.py` fails if the page, the payload, or a fresh
+recomputation disagree, if the conclusion the page argues stops following from
+the payload, or if a bare number appears in the prose.
+
+## Step 2 of the plan happened, and it was worth the warning
+
+**The sample grew and the result got worse.** 194 props became 286; the model's
+win rate on its own disagreements went 48.1% → 44.8%. Two causes, one of them
+a defect: five more days of capture, and `hitrates.find_player` refusing every
+duplicate name outright, which silently dropped about a dozen working starters
+(Hunter Brown, Luis Castillo) from the original sample. The script resolves
+those by preferring the single active pitcher; the engine still does not, which
+is noted below.
+
+**One claim did not survive.** The page reported information of 0.48 across all
+pitcher-starts against −0.07 on board props, and blamed books for choosing
+which games to hang. That 0.48 turns out to be measured against a single
+league-median line applied to every pitcher alike:
+
+| what the model was graded against | n | slope |
+|---|---:|---:|
+| every start, one league-median line for everyone | 2,499 | +0.50 |
+| every start, the line that pitcher usually gets | 2,472 | +0.20 |
+| board games, the pitcher's usual line | 282 | +0.09 |
+| board games, the line books actually posted | 286 | −0.11 |
+
+Line specification is worth 4.7 standard errors. Game selection, holding the
+line rule fixed, is worth 0.6. The exact posted price is worth 0.8. **The
+selection effect the page published as "the part that generalises" is not
+measurable at this sample size.** The conclusion — no edge on real props — is
+unchanged and slightly stronger. The page now carries a section saying all of
+this in its own words, with the superseded figures quoted and marked `data-was`.
+
+**A statistic was replaced.** Worst-of-ten calibration buckets is a
+two-observation artifact at this sample size. Now expected calibration error
+over five equal-count buckets, scored out of fold rather than on one 50/50
+split (the single split drew a 49.7% half against a 37.8% half and mostly
+measured that).
+
+## Deliberate debt, logged rather than hidden
+
+- **The window is pinned** to games through 2026-08-26. Without it every
+  `capture: mlb props snapshot` commit would change a published figure and
+  redden the gate on work nobody did. A pin is exactly how the CLV disclaimer
+  went 22 days stale, so a test fails once capture runs 30 days past it, with
+  the command to extend it in the failure message.
+- **`engine/hitrates.find_player` still refuses duplicate names.** For the live
+  `/props` page that is arguably right — publishing the wrong man's splits is
+  worse than publishing none — but it currently costs one prop of eighteen its
+  hit rates, and it cost this analysis a dozen pitchers. The resolver in
+  `scripts/props_model_note.py` shows the safe version: prefer the single
+  *active pitcher* among exact matches, still refuse when two remain. Moving it
+  into the engine would change what `/props` publishes, so it was left alone.
+- **`props-live.yml`'s annotate step swallows four sub-failures** with
+  `|| echo`. Each is individually justified in the comments, but a permanent
+  `engine.hitrates` failure would be invisible. Not the total-failure pattern,
+  so not fixed with the two workflows in
+  `scheduled-runs-and-silent-green.md`.
+- **Three withdrawn explanations are still described, not regenerated.** They
+  were one-off diagnostics in August 2026 and the analysis no longer exists.
+  Their figures were removed from the prose rather than left hand-typed, and
+  the page says why.
+
+## Still open from the original note
+
+- `/market`'s "best sports betting research analyzer" headline. Untouched,
+  Branden's call.
+- `site/public/data/nflboard.json`, 55 hours stale, read by `engine/xcards.py`
+  alone and fetched by no page.
+- `scripts/verify_core.py`'s market Brier of 0.21061 matching neither published
+  evaluation. Standalone diagnostic; publishes nothing.
