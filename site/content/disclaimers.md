@@ -132,11 +132,14 @@ and our own testing says that model does not beat the market.
 Additional limits on what our record shows:
 
 - Predictions are graded against the sources named on the methodology page.
-- **We do not currently publish a closing-line-value figure.** Our historical
-  line data comes from a source that overwrites line values in place as the
-  market moves, which makes any CLV number computed from it unreliable. We will
-  publish CLV when we can validate it against an independent source with
-  explicit opening and closing records, and not before.
+- **Closing-line value is computed only against closes we hold ourselves.**
+  Our free historical line data overwrites its line values in place as the
+  market moves, so no CLV figure is ever computed from it. A CLV number appears
+  only where the close came from our own timestamped capture or from the
+  historical closing snapshots we purchased; where it did not, the prediction
+  publishes no CLV and records the reason in its place. The
+  [CLV checker](/tools) compares a price you enter against those same purchased
+  closes.
 - Only NFL is graded against verified closing lines. Every other sport on this
   site carries a status label of "in calibration" or "deferred" and its
   predictions are explicitly unproven.
@@ -221,4 +224,4 @@ misleading - including anything on this page - tell us and we will correct it
 and publish the correction. A site whose entire proposition is verifiability has
 no defensible reason to leave an error standing.
 
-*Last updated 2026-08-27.*
+*Last updated 2026-08-28.*

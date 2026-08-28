@@ -119,9 +119,13 @@
 
 <div class="card">
   <h2>CLV checker — NFL moneylines</h2>
+  <!-- No book range typed here. It used to read "across 10-16 books"; the real
+       moneyline range in the archive is 7-16, and the count differs game by
+       game, so each game now states its own from the data. -->
   <p class="how">Did your bet beat the <b>closing line</b> (the final price just before kickoff,
-  the sharpest read of the market)? Pick any 2023–25 NFL game, enter the price you
-  got, and compare it against the consensus close across 10–16 books.</p>
+  the sharpest read of the market)? Pick a game, enter the price you got, and
+  compare it against the consensus close across every book we hold for it.
+  <span id="clv-scope"></span></p>
   <div class="duo">
     <div><label for="clv-season">Season</label><select id="clv-season" aria-describedby="clv-out" disabled><option>Loading…</option></select></div>
     <div><label for="clv-week">Week</label><select id="clv-week" aria-describedby="clv-out" disabled><option>Loading…</option></select></div>
@@ -203,8 +207,11 @@ $('cv-ip').addEventListener('input',fromIp);
 /* CLV checker */
 let CLV=null;
 const CLV_SELECTS=['clv-season','clv-week','clv-game','clv-side'];
-fetch('data/clv-nfl.json').then(r=>r.json()).then(d=>{
+fetch('data/clv-nfl.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
   CLV=d.games;
+  const ss=[...new Set(CLV.map(g=>g.s))].sort();
+  $('clv-scope').textContent=`Every NFL game from ${ss[0]} to ${ss[ss.length-1]}, `
+    +`${d.n_games} of them, from the closes we captured and hold.`;
   const seasons=[...new Set(CLV.map(g=>g.s))].sort((a,b)=>b-a);
   $('clv-season').innerHTML=seasons.map(s=>`<option>${s}</option>`).join('');
   CLV_SELECTS.forEach(id=>$(id).disabled=false);
@@ -246,7 +253,8 @@ function clv(){
   const clvPts=(implied(closePrice)-implied(mine))*100;
   const beat=clvPts>0;
   out.innerHTML=
-    `Consensus close: <b>${amStr(closePrice)}</b> · fair ${(fair*100).toFixed(1)}%<br>`+
+    `Consensus close: <b>${amStr(closePrice)}</b> · fair ${(fair*100).toFixed(1)}%`+
+    (g.nb?` · median of <b>${g.nb}</b> books`:``)+`<br>`+
     `Your ${amStr(mine)} vs close: <b class="${beat?'g':'r'}">${beat?'+':''}${clvPts.toFixed(2)} pts</b> — `+
     `you ${beat?'beat':'lost to'} the close.<br>`+
     `<span class="hint">Beating the closing line consistently is the skill sportsbooks limit you for.</span>`;
