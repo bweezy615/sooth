@@ -34,15 +34,26 @@ done
 # The generated pages must already match what the generator produces. This is
 # also covered by tests/test_build_site.py, but running the real builder catches
 # anything that only shows up outside the test's temp root.
+#
+# Compared against the tree as it was a moment ago, NOT against git HEAD. The
+# first version of this step used `git diff --quiet -- site/public/`, which
+# cannot tell "the builder rewrote a page" from "you edited a page and have not
+# committed yet" — so the gate went red on every legitimate uncommitted change
+# to site/public/, i.e. on most real work, and would only pass if you committed
+# first. A gate you have to commit past is not a gate.
 printf '%-46s' "site build is reproducible"
+fingerprint() { find site/public -type f -exec sha256sum {} + | sort; }
+before=$(fingerprint)
 python scripts/build_site.py >/dev/null 2>&1
-if git diff --quiet -- site/public/; then
+after=$(fingerprint)
+if [ "$before" = "$after" ]; then
   echo "OK"
 else
   echo "FAIL"
-  echo "    scripts/build_site.py changed site/public/ - the generator and the"
-  echo "    site disagree. Decide which side is right before rebuilding over it:"
-  git diff --stat -- site/public/ | sed 's/^/    /'
+  echo "    scripts/build_site.py rewrote site/public/ - the generator and the"
+  echo "    site disagree. Decide which side is right before rebuilding over it"
+  echo "    (git diff will show what the builder just did):"
+  diff <(echo "$before") <(echo "$after") | grep -o 'site/public/[^ ]*'     | sort -u | sed 's/^/    /'
   fail=1
 fi
 
