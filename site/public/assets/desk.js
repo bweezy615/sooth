@@ -48,7 +48,7 @@ var NAV=[
   {href:"/whales",      key:"whales",  label:"WHALES"},
   {href:"/research",    key:"research",label:"RESEARCH"},
   {href:"/ask",         key:"ask",     label:"ANALYST"},
-  {href:"/trust",       key:"ledger",  label:"LEDGER"},
+  {href:"/trust",       key:"proof",   label:"PROOF"},
   {href:"/alerts",      key:"alerts",  label:"ALERTS"},
   {href:"/learn",       key:"learn",   label:"GUIDE", newcomer:true}
 ];
@@ -247,7 +247,7 @@ function mount(page){
    and correctly light nothing. */
 var TABS=[["/","board","BOARD",["/market","/edges","/game","/whales"]],
           ["/picks","picks","PICKS",[]],
-          ["/trust","ledger","LEDGER",[]],
+          ["/trust","proof","PROOF",[]],
           ["/ask","ask","ANALYST",[]],
           ["/alerts","alerts","ALERTS",[]]];
 function tabs(){
@@ -647,6 +647,6 @@ setInterval(function(){
 },15000);
 
 window.Desk={tabs:tabs,esc:esc,timeline:timeline,answer:answer,eventCard:eventCard,me:me,populations:populations,clvChip:clvChip,reduced:reduced,land:land,swap:swap,go:go,embedded:EMBEDDED,am:am,implied:implied,pct:pct,pts:pts,ago:ago,when:when,
-  bk:bk,mount:mount,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
+  bk:bk,mount:mount,header:header,footer:footer,stack:stack,sportRail:sportRail,load:load,feedState:feedState,
   connecting:connecting,spectrum:spectrum,feedRow:feedRow,tick:tick};
 })();

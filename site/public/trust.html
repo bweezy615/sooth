@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Ledger</title>
+<title>Proof — Sooth</title>
 <meta name="description" content="Every figure on this site can be recomputed from published data — including the ones that argue against us. The index of the receipts.">
-<meta property="og:title" content="Sooth — Ledger">
+<meta property="og:title" content="Proof — Sooth">
 <meta property="og:description" content="We publish our own model losing. The index of the receipts.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
@@ -141,7 +141,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
 
-  <div class="scr-strip"><span class="nm">PROOF LEDGER</span>
+  <div class="scr-strip"><span class="nm">PROOF</span>
     <span class="tl">SEALED → REVEALED → GRADED · LOSSES PUBLISH LIKE WINS</span>
     <span class="tl" style="margin-left:auto"><a href="/verify" style="color:var(--mut)">VERIFY THE ROOT →</a></span></div>
 
@@ -160,7 +160,7 @@
 
   <div class="page-head" style="padding:30px 0 0">
     <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 6px">
-      The ledger, and why you can audit it.</h1>
+      Every number we publish, and where to check it.</h1>
     <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:78ch;line-height:1.6;margin:0">
       Every figure on this site can be recomputed from published data — including the
       ones that argue against us. This page is the index of the receipts.</p>
@@ -198,13 +198,13 @@
 <script>
 (function(){
 var D=window.Desk;
-D.mount("ledger");
+D.mount("proof");
 if(!D.embedded){ /* the rail lives in the site header; embedded, neither exists */
   D.load("/data/board.json").then(function(r){
     D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
 }
 var R=[
-  ["PUBLIC LEDGER","Board snapshots hash-committed before kickoff, revealed and graded after. Nothing can be quietly edited later.","THE RECEIPTS →","/ledger"],
+  ["THE SEALED LEDGER","Board snapshots hash-committed before kickoff, revealed and graded after. Nothing can be quietly edited later.","THE RECEIPTS →","/ledger"],
   ["VERIFY INDEPENDENTLY","Recompute our Merkle root yourself with a standard-library script. If a number cannot be regenerated from published data, treat it as an error and tell us.","RUN THE CHECK →","/verify"],
   ["THE RECORD","Every graded sample, ours and the market's, on one page — the file we would hand a regulator or a journalist.","READ IT →","/record"],
   ["METHODOLOGY","The full model spec, the walk-forward backtest, the calibration table, the leakage controls.","THE METHOD →","/methodology"],

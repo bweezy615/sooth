@@ -342,7 +342,7 @@ SHELL = """<!doctype html>
 {body}
 </div></div>
 <script src="/assets/desk.js"></script>
-<script>window.Desk.mount("");</script>
+<script>window.Desk.mount("{mount}");</script>
 <script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js");</script>
 </body>
 </html>
@@ -357,12 +357,19 @@ SHEETS = {"verify": CSS_VERIFY, "ledger": CSS_LEDGER}
 # moment on the long-form pages, and it is spent on the one carrying the proof.
 PROSE_CLASS = {"verify": " rimlit"}
 
+# Which header-nav entry a generated page lights. /ledger is the sealed-slate
+# artifact the PROOF entry exists to lead to, so standing on it must not leave
+# the nav dark — that was half of why two pages both called themselves "Ledger"
+# went unnoticed. The prose pages hang off the footer, belong to no section,
+# and correctly light nothing. See docs/plans/ledger-nav-collision.md.
+MOUNT = {"ledger": "proof"}
+
 
 def render(slug: str, title: str, description: str, body: str) -> str:
     return SHELL.format(
         title=title, brand=BRAND, description=description, domain=DOMAIN,
         slug=slug, css=SHEETS.get(slug, CSS_PROSE), body=body,
-        prose_class=PROSE_CLASS.get(slug, ""),
+        prose_class=PROSE_CLASS.get(slug, ""), mount=MOUNT.get(slug, ""),
     )
 
 

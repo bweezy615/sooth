@@ -37,7 +37,7 @@ function lit(html) {
 
 // 1. Each tab's own route lights that tab and nothing else.
 for (const [route, label] of [["/", "BOARD"], ["/picks", "PICKS"],
-                              ["/trust", "LEDGER"], ["/ask", "ANALYST"],
+                              ["/trust", "PROOF"], ["/ask", "ANALYST"],
                               ["/alerts", "ALERTS"]]) {
   const html = tabsAt(route);
   assert.strictEqual(lit(html), label, `${route} should light ${label}`);
@@ -83,8 +83,47 @@ for (const route of ["/learn", "/record", "/verify", "/disclaimers"]) {
 {
   const html = tabsAt("/");
   const order = (html.match(/>([A-Z]+)</g) || []).map(s => s.slice(1, -1));
-  assert.deepStrictEqual(order, ["BOARD", "PICKS", "LEDGER", "ANALYST", "ALERTS"]);
+  assert.deepStrictEqual(order, ["BOARD", "PICKS", "PROOF", "ANALYST", "ALERTS"]);
   assert.ok(/aria-label="Main"/.test(html), "nav needs its landmark label");
+}
+
+// 7. One label, one destination. `/trust` was titled "Sooth — Ledger" and sat
+//    behind the header's LEDGER link, while the footer's "Ledger" went to
+//    /ledger — the actual sealed-slate page — and the homepage sidebar called
+//    that same page "Proof Ledger". A reader following a label had no way to
+//    know which of three pages they would land on. Every visible label in the
+//    shell must now resolve to exactly one href.
+{
+  const sandbox = {
+    location: { pathname: "/", search: "", origin: "https://sooth.bet" },
+    document: { querySelector: () => null, addEventListener: () => {} },
+    navigator: { userAgent: "selfcheck" },
+    addEventListener: () => {}, setTimeout: () => {}, setInterval: () => {},
+    MutationObserver: null,
+  };
+  sandbox.window = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(src, sandbox, { filename: "desk.js" });
+  const D = sandbox.window.Desk;
+  const shell = D.header("") + D.footer() + D.tabs();
+
+  const dest = new Map();
+  for (const [, href, label] of
+       shell.matchAll(/<a [^>]*href="([^"]+)"[^>]*>(?:<[^>]+>)*([^<]+)</g)) {
+    const key = label.trim().toLowerCase();
+    if (!key || href.charAt(0) !== "/") continue;
+    if (dest.has(key) && dest.get(key) !== href) {
+      assert.fail(`"${label.trim()}" points at both ${dest.get(key)} and ` +
+        `${href} in the shell — one label, one destination`);
+    }
+    dest.set(key, href);
+  }
+
+  // and the ledger keeps its own name: nothing else in the shell claims it
+  assert.strictEqual(dest.get("ledger"), "/ledger",
+    "the label 'Ledger' must lead to /ledger, the sealed-slate page");
+  assert.strictEqual(dest.get("proof"), "/trust",
+    "the label 'Proof' must lead to /trust, the index of the receipts");
 }
 
 console.log("desk selfcheck OK");
