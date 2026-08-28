@@ -24,8 +24,11 @@ deliberate:
   that the free half stops being rationed by the paid half's budget. Changing
   both at once would have made a bad Saturday impossible to diagnose.
 
-**Still open, and still Branden's:** the Odds API plan is 500 credits/month and
-the board build spends 5 a run. This split does nothing about that, by design -
+**Still open, and still Branden's:** the board build spends 5 credits a run.
+(This sentence used to open "the Odds API plan is 500 credits/month". That was
+wrong — it was a reading of a *different key* than the one CI uses. See
+"Correction, 2026-08-28: there are two keys" at the foot of this memo. The
+question stays open; the number it was framed with does not.) This split does nothing about that, by design -
 it stops the *evidence* depending on it. Options B, C and D below remain live
 questions about the board. C's copy half is already done: `/market` no longer
 says "LIVE PRICING".
@@ -37,8 +40,12 @@ not caused an outage yet.
 
 1. `.github/workflows/capture.yml` asks for a run every 30 minutes. It is
    getting about three a day.
-2. The Odds API plan is 500 credits a month. The board build spends 5 per run.
-   Three runs a day is 450 a month — almost exactly the plan.
+2. ~~The Odds API plan is 500 credits a month. The board build spends 5 per run.
+   Three runs a day is 450 a month — almost exactly the plan.~~
+   **Wrong, corrected 2026-08-28.** That 500 belongs to a key CI does not
+   use. The account the site actually runs on had 3,008 credits left the
+   same morning. See the correction at the foot of this memo. Problem 1
+   (the scheduler) is real and unaffected; problem 2 as stated is not.
 
 So the schedule is broken, and the budget can only afford a broken schedule.
 Fix either one alone and the other breaks loudly.
@@ -64,7 +71,10 @@ documents as best-effort and which it does hardest on the `:00`/`:30` minutes
 that a `*/30` cron lands on.
 
 Odds API, same morning: `x-requests-used: 387`, `x-requests-remaining: 113`.
-A 500/month allowance, and 22 board builds left this cycle.
+A 500-credit allowance with 22 board builds left — **on the key that shell
+had loaded, which is not the key CI runs on.** Reading corrected 2026-08-28;
+see the foot of this memo. The scheduler collapse measured above stands on its
+own evidence and does not depend on this.
 
 ## Why this matters more than it looks
 
@@ -174,3 +184,119 @@ One reporting gap, small: `engine/lines.py` reads `x-requests-last` and records
 the header is in the same response. `engine/props.py` records both. Adding it
 to `lines.py` is three lines and would put the balance on the board build too,
 but it cannot be verified without spending a credit, so it was left.
+
+---
+
+# Correction, 2026-08-28: there are two keys, and this memo was reading both
+
+This memo contradicted itself. It opened by stating the Odds API plan is **500
+credits a month**, and closed, a hundred lines later, with a measured balance of
+**3,008 credits remaining**. Those cannot both describe one account. The
+contradiction sat in one document for a day without either half being doubted,
+because each half arrived from a different place and neither was ever put next
+to the other.
+
+Both readings were true. They are different API keys.
+
+## The evidence
+
+**One.** Every balance in `props.json` is written by CI, which runs
+`engine/props.py` with `secrets.ODDS_API_KEY`. That series is continuous and
+monotonic across 22 days of git history — 7,363 on 2026-08-06 down to 3,008 on
+2026-08-28 — with no reset and no discontinuity anywhere in it. A 3,008 reading
+is arithmetically impossible on a 500-credit plan.
+
+**Two.** The 500 readings all came from a shell, not from CI. Taken in sequence
+they are internally consistent and unmistakably one small account:
+
+| when | used | remaining | sum |
+|---|---|---|---|
+| `college-football.md` | 380 | 120 | 500 |
+| `capture-cadence.md` (above) | 387 | 113 | 500 |
+| this session | 391 | 109 | 500 |
+
+Used ticks up, remaining ticks down, the pair always sums to 500. That is the
+Odds API free tier.
+
+**Three.** The last row is a live reading taken during this session with the key
+this machine's shell has loaded, against `/v4/sports/` — the endpoint
+`engine/lines.py` already documents as free (`active_sports`: *"This call is
+free."*). It returned `x-requests-last: 0`, confirming it cost nothing. So the
+shell key is on a 500 plan **right now**, on the same morning CI recorded 3,008.
+
+Two accounts. Not one account read two ways, and not a per-endpoint sub-quota.
+
+**A precision note.** The pair "used 380, remaining 113" sums to 493 and looks
+incoherent. It is — it does not exist. It is one half of each of the first two
+rows above, accidentally combined. Each real reading sums to exactly 500.
+
+## What this changes, and what it does not
+
+**The fuse is real and the addendum above stands.** The site runs on
+`secrets.ODDS_API_KEY` — every workflow in `.github/workflows` uses it and
+nothing uses anything else. That is the 3,008 account, burning 219 a day,
+empty around **2026-09-11**, two days into NFL week 1. Nothing here relaxes
+that. The 3,008 figure was the right number attached to the right key all
+along.
+
+**The throttling caution stands too, unchanged.** GitHub dropping scheduled
+runs is still the only thing holding burn at 219/day, and honouring the crons
+would still empty the account faster. Correcting the plan size does not buy a
+single credit. **This is not a reason to loosen a cron.**
+
+**Two statements elsewhere were wrong and are now corrected.** They are marked
+in place above, and one more lives in `college-football.md`: that the 500
+allowance "is why the live board is refreshing a few times a day". It is not.
+This memo's own measurement found the cause — GitHub dropping `schedule`
+events — and the board build was never budget-limited at three runs a day
+anyway. That sentence asserted a cause the evidence in the same repo already
+contradicted.
+
+## What is still not known, and how to settle it
+
+The plan **size** and **reset date** of the CI account. The evidence narrows it
+but does not close it:
+
+- On 2026-08-04 a reading of 7,535 remaining against 12,465 used summed to
+  **20,000**, and `props.json` recorded 7,363 two days later. Those line up, so
+  the CI account was a 20,000-credit plan at the start of August.
+- Whether that pool refills monthly, and on what date, cannot be recovered from
+  git: the balance series runs 2026-08-06 to 2026-08-28 and contains no month
+  boundary. 12,465 credits were used by August 4th, which at today's ~220/day
+  would take two months — so either the cycle does not start on the 1st, or
+  early-August burn was far higher (`engine/backfill.py` spends 10 credits a
+  call on historical odds, which would do it).
+
+**This matters, because it changes the answer completely.** If the pool refills
+on 2026-09-01 there is no crisis: the account refills before NFL week 1 and the
+9/11 date is a prediction of a drought that will not happen. If it is a fixed
+pool, or renews mid-month, the fuse is exactly as described.
+
+**For Branden — the one thing to look at.** Log in at
+`the-odds-api.com/account`. It shows the plan's monthly quota and the date the
+usage counter resets. Two numbers, and they close this permanently:
+
+1. **Monthly quota** — expected 20,000. If it says 500, then CI is running on
+   the free key too and the situation is far worse than this memo says.
+2. **Usage resets on** — if that date falls before 2026-09-09, the week 1
+   deadline disappears and options B/C/D can be decided at leisure. If it falls
+   after, the deadline is real and it is 12 days away.
+
+**And it may answer itself for free.** `engine/lines.py` now records
+`credits_remaining` *and* `credits_used` into `board.json` on every board build,
+from headers that ride along on a call already paid for. The next scheduled run
+writes the pair, and remaining + used **is** the plan size. A reset then shows
+up as `credits_used` falling to near zero, which dates the anniversary without
+anyone logging in anywhere. This was the "one reporting gap, small" noted at the
+end of the addendum above; it is closed, and it was the gap that let a 26x
+discrepancy hide in the first place.
+
+## The lesson, which is the site's own
+
+A wrong number in a planning doc is the same defect class this repo spends its
+time fixing on the public pages. It got in the same way, too: a figure read once
+in one context, written down as a general fact, and never put beside the other
+figure that would have contradicted it. The repo already knows the fix, from
+`figures.json` — **if two artifacts must agree, one command writes both.** The
+balance now comes from one place, on every paid run, with the denominator
+attached.

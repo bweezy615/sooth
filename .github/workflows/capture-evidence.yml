@@ -11,10 +11,17 @@ name: capture-evidence
 # rationed by the paid half's budget for no reason.
 #
 # It mattered because the two problems were hiding each other. On 2026-08-28
-# the Odds API plan was 500 credits/month with 113 left, and the */30 cron in
-# capture.yml was delivering about three runs a day rather than 48. Three runs
-# a day at 5 credits is 450 a month - almost exactly the plan. Fix either alone
-# and the other breaks loudly. See docs/plans/capture-cadence.md.
+# the */30 cron in capture.yml was delivering about three runs a day rather
+# than 48, and the paid board build was competing with the free ESPN read for
+# that handful of runs.
+#
+# CORRECTED 2026-08-29: this comment used to add "the Odds API plan was 500
+# credits/month with 113 left". That was a reading of a different API key than
+# the one CI uses; the account this repo actually builds against had 3,008
+# credits left the same morning. The separation below is right regardless -
+# arguably more so, since the paid half has a real deadline (empty around
+# 2026-09-11, inside NFL week 1) and the free half must not inherit it.
+# See docs/plans/capture-cadence.md, "there are two keys".
 #
 # ESPN deletes a game's odds block when the game ends and there is no backfill
 # anywhere, so a run that does not happen before kickoff is evidence that

@@ -110,12 +110,23 @@ Goal: our own timestamped price series for CFB starts accumulating this week.
    `SPORT_LABEL` maps in `index.html`/`game.html`/`market.html`, and any copy
    claiming UFC coverage.
 
-   **Separately, and needing Branden's attention:** on 2026-08-28 the Odds API
-   account reported `x-requests-remaining: 120` against `x-requests-used: 380`.
-   That is a 500-credit allowance, not the ~7.2k/month the `*/30` cron implies,
-   and it is why the live board is refreshing a few times a day rather than
-   every 30 minutes. The swap does not make this worse, but it does not fix it
-   either. See the session report.
+   **Separately, and needing Branden's attention** — *corrected 2026-08-28,
+   see the "two keys" addendum in `capture-cadence.md`:* a shell reading that
+   day reported `x-requests-remaining: 120` against `x-requests-used: 380`, a
+   500-credit allowance. **That is a different key from the one CI runs on.**
+   The account the board actually builds against had 3,008 credits left the
+   same morning.
+
+   The original of this paragraph went on to say the 500 allowance "is why the
+   live board is refreshing a few times a day rather than every 30 minutes."
+   That was wrong twice over: wrong key, and wrong cause. `capture-cadence.md`
+   measured the real cause the same day — GitHub drops `schedule` events, and
+   every other scheduled workflow in the repo collapsed identically. At three
+   runs a day the board build was nowhere near a credit ceiling on either key.
+
+   What survives is the deadline, on the right account: 3,008 credits at 219 a
+   day empties around 2026-09-11, inside NFL week 1. The swap does not make
+   that worse and does not fix it. See the session report.
 4. `.github/workflows/capture.yml` — capture CFB alongside NFL. One extra step,
    same commit, no extra deploy.
 5. `engine/timeline.py` — `--sports nfl,mlb,nhl,nba,ufc`; add `ncaaf` once
