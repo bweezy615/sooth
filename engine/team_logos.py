@@ -14,6 +14,13 @@ Sources, both official or long-stable public CDNs:
         come from data/teamstats-nfl.json, which the research page already
         publishes, so no new source of truth.
   NBA   https://a.espncdn.com/i/teamlogos/nba/500/{abbr}.png
+  NCAAF https://a.espncdn.com/i/teamlogos/ncaa/500/{teamId}.png — addressed by
+        ESPN's own numeric team id, not an abbreviation. This one is NOT a
+        table: FBS is ~136 teams and its membership changes every year, so a
+        hand table would be stale by November. ESPN's group-80 roster
+        (group 80 is FBS, the same filter engine/capture.py uses and for the
+        same reason) is one request for the roster plus one per team, run
+        offline like the rest of this script.
   NHL   https://a.espncdn.com/i/teamlogos/nhl/500/{abbr}.png — same CDN. ESPN's
         JSON teams API (site.api.espn.com) answers 403 to server-side callers,
         so the name -> abbreviation bridge is a table here rather than a fetch.
@@ -37,6 +44,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import unicodedata
 import re
 from pathlib import Path
@@ -50,6 +58,11 @@ NFL_STATS = "site/public/data/teamstats-nfl.json"
 MLB_LOGO = "https://www.mlbstatic.com/team-logos/{id}.svg"
 NFL_LOGO = "https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png"
 ESPN_LOGO = "https://a.espncdn.com/i/teamlogos/{league}/500/{abbr}.png"
+NCAAF_LOGO = "https://a.espncdn.com/i/teamlogos/ncaa/500/{id}.png"
+NCAAF_ROSTER = ("http://sports.core.api.espn.com/v2/sports/football/leagues/"
+                "college-football/seasons/{season}/types/2/groups/80/teams"
+                "?limit=400")
+PAUSE = 0.2  # polite guest on an undocumented free endpoint, as in capture.py
 
 # Full name -> ESPN abbreviation. The name side must match what the odds feed
 # returns, because that is the key the board looks up.
@@ -152,6 +165,42 @@ def espn_league(session: requests.Session, league: str, table: dict) -> dict:
     return out
 
 
+def ncaaf(session: requests.Session, season: int = 2026) -> dict:
+    """FBS crests, read from ESPN's roster rather than typed into this file.
+
+    Returns {} on any failure rather than raising: a crest is an aid to
+    scanning and never carries a fact, so the worst case is the board we
+    already ship, with college teams named in text.
+    """
+    try:
+        r = session.get(NCAAF_ROSTER.format(season=season), timeout=25)
+        r.raise_for_status()
+        items = r.json().get("items") or []
+    except (requests.RequestException, ValueError):
+        return {}
+
+    out: dict = {}
+    for item in items:
+        ref = str(item.get("$ref") or "")
+        if not ref:
+            continue
+        try:
+            t = session.get(ref, timeout=20).json()
+        except (requests.RequestException, ValueError):
+            continue
+        time.sleep(PAUSE)
+        name, tid = t.get("displayName"), t.get("id")
+        if not name or not tid:
+            continue
+        url = NCAAF_LOGO.format(id=tid)
+        if not ok(session, url):
+            continue
+        out[norm(name)] = {"sport": "ncaaf", "name": name,
+                           "abbr": str(t.get("abbreviation") or "").upper(),
+                           "logo": url}
+    return out
+
+
 def nba(session: requests.Session) -> dict:
     return espn_league(session, "nba", NBA_TEAMS)
 
@@ -164,7 +213,8 @@ def main() -> None:
     session = requests.Session()
     session.headers["User-Agent"] = "sooth-site/1.0 (+https://sooth.bet)"
     teams = {}
-    for label, fn in (("mlb", mlb), ("nfl", nfl), ("nba", nba), ("nhl", nhl)):
+    for label, fn in (("mlb", mlb), ("nfl", nfl), ("nba", nba), ("nhl", nhl),
+                      ("ncaaf", ncaaf)):
         got = fn(session)
         print(f"{label}: {len(got)} crests verified")
         teams.update(got)

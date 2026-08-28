@@ -65,7 +65,18 @@
   function load() {
     if (MAP) return Promise.resolve(MAP);
     if (PENDING) return PENDING;
-    PENDING = fetch("/data/team-logos.json", { cache: "force-cache" })
+    /* "default", NOT "force-cache". force-cache returns any cached copy,
+       fresh or stale, indefinitely - it overrides the server's policy rather
+       than trusting it, and the server's policy here is already right:
+       Cache-Control public, max-age=300 with an ETag, so "default" costs one
+       conditional request every five minutes and a 304 with no body.
+
+       Measured 2026-08-28 on a page whose cache held the previous map: the
+       forced fetch served 124 teams while the origin was serving 262. The 138
+       college crests added that day could never have reached a returning
+       visitor. Every earlier edit to this map had the same problem silently,
+       because a missing crest looks exactly like a crest we never had. */
+    PENDING = fetch("/data/team-logos.json", { cache: "default" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) { MAP = (d && d.teams) || {}; indexAbbrs(); hydrate(); return MAP; })
       .catch(function () { MAP = {}; ABBR = {}; return MAP; });
@@ -169,7 +180,7 @@
   function loadPlayers() {
     if (PMAP) return Promise.resolve(PMAP);
     if (PPENDING) return PPENDING;
-    PPENDING = fetch("/data/player-headshots.json", { cache: "force-cache" })
+    PPENDING = fetch("/data/player-headshots.json", { cache: "default" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) { PMAP = (d && d.players) || {}; hydratePlayers(); return PMAP; })
       .catch(function () { PMAP = {}; return PMAP; });
@@ -211,8 +222,8 @@
      This file used to sweep exactly three times: when the map resolved, on
      DOMContentLoaded, and on window.load. Every one of those fires before a
      board page has its DATA. board.json is ~100KB and the rows are written
-     from its .then(); team-logos.json is 20KB and served with force-cache, so
-     in production it resolves first, all three sweeps run against an empty
+     from its .then(); team-logos.json is 20KB and usually cached, so in
+     production it resolves first, all three sweeps run against an empty
      table, and every row written afterwards keeps its data-crest placeholder
      for the life of the page. Live, the whole board rendered with ZERO images
      — not one crest on any sport.

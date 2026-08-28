@@ -620,7 +620,9 @@ function gameCard(ev,sport){
     +'<div class="m-gh"><span class="m-gs">'
       +(window.Crest&&Crest.img?Crest.img(ev.away,13):"")
       +(window.Crest&&Crest.img?Crest.img(ev.home,13):"")
-      +esc(String(sport).toUpperCase())
+      /* SPORT_LABEL, not the raw slug: the phone card sat directly under a
+         rail tab reading "CFB" while the card itself read "NCAAF". */
+      +esc(SPORT_LABEL[sport]||String(sport).toUpperCase())
       +' &middot; '+esc(ev.n_books||0)+(ev.n_books===1?' BOOK':' BOOKS')
       +(ev.upcoming?' <i class="m-up">UPCOMING</i>':'')+'</span>'
     +'<span class="m-gt">'+esc(kickTime(ev.starts))+'</span></div>'
@@ -986,7 +988,7 @@ D.load("/data/moves.json").then(function(r){
       return '<div class="prow"><div class="nm">'
         +'<b>'+crest(x.away,x.sport,14)+' <span style="color:var(--dim)">at</span> '
         +crest(x.home,x.sport,14)+'</b>'
-        +'<i>'+esc(String(x.sport||"").toUpperCase())+' · '+esc(x.selection||"")+'</i></div>'
+        +'<i>'+esc(D.sportLabel(x.sport))+' · '+esc(x.selection||"")+'</i></div>'
         +'<div class="rt"><b class="'+v.cls+'">'+esc(v.txt)+'</b>'
         +'<i>'+esc(subFn(x))+'</i></div></div>';
     }).join("");

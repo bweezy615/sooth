@@ -511,7 +511,10 @@
   // Keys are sport-scoped ("nba:NYK") for the reason the backend is: bare
   // abbreviations collide across leagues, and MIA alone cannot be resolved.
 
-  var SPORTS = ["nfl", "nba", "mlb", "nhl"];   // by how much of the year they own
+  var SPORTS = ["nfl", "ncaaf", "nba", "mlb", "nhl"];  // by how much of the year they own
+  // A sport missing from that list sorts to -1, i.e. ABOVE the NFL. When
+  // college football was added to the crest map its 138 teams landed at the
+  // top of the picker for that reason alone.
   var roster = [];        // [{key, name, abbr, sport, logo}]
   var chosen = {};        // key -> true
   var built = false, loadFailed = false;
@@ -570,14 +573,17 @@
         sport = t.sport;
         var h = document.createElement("div");
         h.className = "tsport";
-        h.textContent = sport.toUpperCase();
+        // The same name the rail and the board use. The raw slug reads
+        // "NCAAF" under a tab that says "CFB".
+        h.textContent = (window.Desk && window.Desk.sportLabel)
+          ? window.Desk.sportLabel(sport) : sport.toUpperCase();
         frag.appendChild(h);
       }
       var l = document.createElement("label");
       l.className = "team";
       l.dataset.hay = (t.name + " " + t.abbr + " " + t.sport).toLowerCase();
-      // Crests are remote and there are 124 of them, so they load lazily and
-      // only once the panel has actually been opened.
+      // Crests are remote and there are a few hundred of them, so they load
+      // lazily and only once the panel has actually been opened.
       l.innerHTML =
         '<input type="checkbox" value="' + t.key + '">' +
         '<img src="' + t.logo + '" alt="" width="18" height="18" loading="lazy">' +

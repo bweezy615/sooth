@@ -75,6 +75,36 @@ def test_every_page_calls_each_sport_by_the_same_name():
                 f"desk.js. rail={want} {page}={got}")
 
 
+def test_no_page_renders_a_raw_sport_slug():
+    """One league, one name, on every surface that shows a league.
+
+    The slugs are internal keys, not display names. Uppercasing one puts
+    "NCAAF" on a card sitting directly under a rail tab that says "CFB" - which
+    is what /edges, the phone board card, the desktop movement rows and the
+    /alerts team picker were all doing on 2026-08-28. Every one of them was a
+    separate line of code that had never needed a display name before college
+    football arrived with a slug that is not its name.
+    """
+    offenders = []
+    for page in sorted((ROOT / "site/public").glob("*.html")):
+        for i, line in enumerate(page.read_text(encoding="utf-8").splitlines(), 1):
+            for m in re.finditer(r"[.]toUpperCase[(][)]", line):
+                # Judge the RECEIVER, not the line. Plenty of lines mention
+                # a sport while upper-casing something else entirely: a book
+                # abbreviation, or board.json's own `label` field, which is
+                # already the display name we want.
+                recv = line[max(0, m.start() - 40):m.start()].lower()
+                if "sport" not in recv:
+                    continue
+                if "label" in recv or "abbr" in recv:
+                    continue
+                offenders.append(f"{page.name}:{i}: {line.strip()[:90]}")
+    assert not offenders, (
+        "a page is rendering the raw sport slug instead of its display "
+        "name; use Desk.sportLabel() or the page SPORT_LABEL map: "
+        + "; ".join(offenders))
+
+
 def test_the_sport_rail_and_the_board_agree_on_what_we_cover():
     board = json.loads(BOARD.read_text(encoding="utf-8"))
     assert {b["sport"] for b in board["boards"]} <= _sports(), (
