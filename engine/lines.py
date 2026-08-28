@@ -120,15 +120,35 @@ def _fair_prices(quotes: dict[str, list[dict]]) -> dict[str, float]:
     return {side: p / total for side, p in med.items()}
 
 
+def _balance(headers) -> tuple[int, int]:
+    """Account balance from a response we already paid for.
+
+    `x-requests-remaining` rides along on every odds call, so recording it
+    costs nothing extra. `x-requests-used` comes with it, and the pair matters
+    more than either half: remaining alone cannot tell you the plan size, so it
+    cannot tell you whether a falling balance is a month draining or a pool
+    that never refills. remaining + used can. Missing headers read as -1 rather
+    than 0, so "not reported" can never be mistaken for "empty".
+    """
+    def _n(name: str) -> int:
+        try:
+            return int(float(headers.get(name, -1) or -1))
+        except (TypeError, ValueError):
+            return -1
+    return _n("x-requests-remaining"), _n("x-requests-used")
+
+
 def _one_sport(sport_key: str, key: str, session: requests.Session,
-               window: timedelta, now: datetime) -> tuple[list[dict], int]:
-    """Return (events, credits_spent) for one sport."""
+               window: timedelta, now: datetime,
+               ) -> tuple[list[dict], int, tuple[int, int]]:
+    """Return (events, credits_spent, (balance_remaining, balance_used))."""
     r = session.get(f"{API}/sports/{sport_key}/odds", params={
         "apiKey": key, "regions": REGIONS, "markets": MARKETS,
         "oddsFormat": "american"}, timeout=35)
     spent = int(r.headers.get("x-requests-last", 0) or 0)
+    balance = _balance(r.headers)
     if r.status_code != 200:
-        return [], spent
+        return [], spent, balance
 
     out = []
     for g in r.json():
@@ -193,7 +213,7 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
         })
 
     chosen = _choose(out)
-    return chosen, spent
+    return chosen, spent, balance
 
 
 def _choose(events: list[dict]) -> list[dict]:
@@ -287,6 +307,7 @@ def collect(window_hours: float = 36, max_credits: int = 60,
 
     live = active_sports(key, session)   # free call
     spent = 0
+    bal = (-1, -1)
     boards = []
 
     for sport_key, meta in SPORTS.items():
@@ -294,8 +315,10 @@ def collect(window_hours: float = 36, max_credits: int = 60,
             continue
         if spent + len(MARKETS.split(",")) > max_credits:
             break
-        events, used = _one_sport(sport_key, key, session, window, now)
+        events, used, balance = _one_sport(sport_key, key, session, window, now)
         spent += used
+        if balance[0] >= 0:
+            bal = balance
         if not events:
             continue
         events.sort(key=lambda e: -e["max_gain_pts"])
@@ -313,6 +336,8 @@ def collect(window_hours: float = 36, max_credits: int = 60,
         "generated_at": now.isoformat(),
         "window_hours": window_hours,
         "credits_spent": spent,
+        "credits_remaining": bal[0],
+        "credits_used": bal[1],
         # What we actually published a board for, not what the API lists as
         # active. The API counts a sport as active whenever any market exists
         # (NBA and NHL futures trade all summer), so this read
@@ -382,6 +407,9 @@ def main() -> None:
     a = ap.parse_args()
     d = collect(a.window_hours, a.max_credits, a.out, a.dry_run)
     print(f"credits spent : {d['credits_spent']}")
+    if d["credits_remaining"] >= 0:
+        print(f"credits left  : {d['credits_remaining']} "
+              f"(of {d['credits_remaining'] + d['credits_used']} this cycle)")
     print(f"sports live   : {', '.join(d['sports_live']) or 'none'}")
     print(f"events        : {d['totals']['events']}")
     print(f"avg gain      : {d['totals']['avg_gain_pts']} pts")
