@@ -1,0 +1,84 @@
+name: capture-evidence
+
+# The free half of odds capture, on its own schedule.
+#
+# WHY THIS IS SEPARATE FROM capture.yml
+# -------------------------------------
+# capture.yml does two unrelated jobs that happen to have been written
+# together: engine.capture reads ESPN and spends nothing, and engine.lines
+# buys the multi-sport board from the Odds API at ~5 credits a run. Sharing one
+# workflow meant sharing one schedule, so the free, irreplaceable half was
+# rationed by the paid half's budget for no reason.
+#
+# It mattered because the two problems were hiding each other. On 2026-08-28
+# the Odds API plan was 500 credits/month with 113 left, and the */30 cron in
+# capture.yml was delivering about three runs a day rather than 48. Three runs
+# a day at 5 credits is 450 a month - almost exactly the plan. Fix either alone
+# and the other breaks loudly. See docs/plans/capture-cadence.md.
+#
+# ESPN deletes a game's odds block when the game ends and there is no backfill
+# anywhere, so a run that does not happen before kickoff is evidence that
+# cannot be bought back afterwards. This workflow exists so that never depends
+# on a credit balance.
+#
+# :13 and :43 rather than */30 on purpose. GitHub documents `schedule` as
+# best-effort and drops it hardest on the round minutes that every other
+# repo's cron also lands on. The odd offset is the cheapest available
+# mitigation for the dropped-run problem measured in the memo.
+#
+# The concurrency group is deliberately the same string as capture.yml's.
+# Both workflows commit and push to main, and a shared group is what stops
+# them racing each other's rebase.
+
+on:
+  schedule:
+    - cron: "13,43 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-odds
+  cancel-in-progress: false
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # engine.capture's only dependency. Deliberately not the full board
+      # install - nothing here touches pandas, numpy or the Odds API.
+      - name: Install deps
+        run: pip install --quiet requests
+
+      # Each sport is continue-on-error so one league's endpoint having a bad
+      # morning cannot cost us the other league's evidence. capture exits
+      # non-zero on a short page AFTER writing its rows, so a partial slate is
+      # still committed and still reported as partial.
+      - name: Capture NFL game lines (free, ESPN)
+        run: python -m engine.capture --season 2026 --weeks 3
+        continue-on-error: true
+
+      - name: Capture college football game lines (free, ESPN)
+        run: python -m engine.capture --sport ncaaf --season 2026 --weeks 2
+        continue-on-error: true
+
+      - name: Commit captured odds
+        if: always()
+        run: |
+          git config user.name  "sooth-capture"
+          git config user.email "capture@users.noreply.github.com"
+          git add data/capture
+          if git diff --staged --quiet; then
+            echo "no new observations"
+          else
+            git commit -m "capture: evidence snapshot $(date -u +%FT%TZ)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi

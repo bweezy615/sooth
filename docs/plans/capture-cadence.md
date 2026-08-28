@@ -1,7 +1,34 @@
 # Capture cadence and the Odds API budget
 
-Written 2026-08-28 by the supervisor agent. **This memo asks for a decision and
-makes none.** Cadence and spend were both reserved to Branden.
+Written 2026-08-28 by the supervisor agent. **This memo asked for a decision
+and made none.** Cadence and spend were both reserved to Branden.
+
+## DECIDED 2026-08-28 by Branden: option A
+
+Split the free half onto its own workflow. Shipped the same day, the night
+before college football week 1, as `.github/workflows/capture-evidence.yml`:
+`engine.capture` for `nfl` and `ncaaf` on `13,43 * * * *`, committing only
+`data/capture`, sharing capture.yml's `capture-odds` concurrency group so the
+two can never race each other's rebase.
+
+Two things about the shipped form differ from the sketch below, both
+deliberate:
+
+- **`capture.yml` keeps its own ESPN capture step.** Removing it would have
+  been the tidier diff and the wrong one. GitHub drops `schedule` events, which
+  is half of what this memo is about, so two independent schedules writing the
+  same append-only series is redundancy, not waste: a run dropped on one is
+  covered by the other. Duplicate observations are harmless here - the file is
+  a time series keyed by `observed_at`, and more observations is the goal.
+- **The paid board build was not touched at all.** Option A's whole point is
+  that the free half stops being rationed by the paid half's budget. Changing
+  both at once would have made a bad Saturday impossible to diagnose.
+
+**Still open, and still Branden's:** the Odds API plan is 500 credits/month and
+the board build spends 5 a run. This split does nothing about that, by design -
+it stops the *evidence* depending on it. Options B, C and D below remain live
+questions about the board. C's copy half is already done: `/market` no longer
+says "LIVE PRICING".
 
 ## The short version
 
