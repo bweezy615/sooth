@@ -40,12 +40,21 @@ function bk(name){return BOOK[name]||String(name).slice(0,4).toUpperCase();}
    A newcomer was landing on a dense board with no visible route to the guide
    written for them, and the analyst was effectively hidden. Both are now
    addressable from anywhere on the site. */
+/* ONE NAME PER DESTINATION. Three navigations used to describe this site and
+   all three disagreed: this bar called "/" MARKET, the dashboard sidebar
+   called it Dashboard, and the phone tab bar called it BOARD. /picks was
+   PICKS here and "Pick Engine" there. A visitor moving between two pages met
+   a different vocabulary for the same rooms.
+   Labels are also plainer where the old word named the machinery rather than
+   what a reader gets: MOVEMENT -> MOVES, WHALES -> BIG BETS. Kept short on
+   purpose - this bar is horizontal and needs ~995px already, and lengthening
+   it is how the 861-1023px scrollbar came back once. */
 var NAV=[
-  {href:"/",            key:"market",  label:"MARKET"},
+  {href:"/",            key:"market",  label:"BOARD"},
   {href:"/picks",       key:"picks",   label:"PICKS"},
   {href:"/props",       key:"props",   label:"PROPS"},
-  {href:"/edges",       key:"movement",label:"MOVEMENT"},
-  {href:"/whales",      key:"whales",  label:"WHALES"},
+  {href:"/edges",       key:"movement",label:"MOVES"},
+  {href:"/whales",      key:"whales",  label:"BIG BETS"},
   {href:"/research",    key:"research",label:"RESEARCH"},
   {href:"/ask",         key:"ask",     label:"ANALYST"},
   {href:"/trust",       key:"proof",   label:"PROOF"},
