@@ -12,14 +12,24 @@ cd "$(dirname "$0")/.."
 export PYTHONPATH=.
 
 fail=0
+# A red run has to leave something behind. On 2026-08-27 this gate went red
+# once, was green on the next seven runs at the same tree, and there was
+# nothing left to look at - the later runs had overwritten pytest's lastfailed
+# and the console output was gone. An intermittent failure you cannot read is
+# indistinguishable from one that never happened. .tmp/ is gitignored.
+LOG=".tmp/check-$(date -u +%Y%m%dT%H%M%SZ).log"
+mkdir -p .tmp
+
 step() {
   printf '%-46s' "$1"
+  local name="$1"
   shift
   if out=$("$@" 2>&1); then
     echo "OK"
   else
     echo "FAIL"
     echo "$out" | tail -25 | sed 's/^/    /'
+    { echo "=== FAILED: $name"; echo "\$ $*"; echo "$out"; echo; } >>"$LOG"
     fail=1
   fi
 }
@@ -54,6 +64,8 @@ else
   echo "    site disagree. Decide which side is right before rebuilding over it"
   echo "    (git diff will show what the builder just did):"
   diff <(echo "$before") <(echo "$after") | grep -o 'site/public/[^ ]*'     | sort -u | sed 's/^/    /'
+  { echo "=== FAILED: site build is reproducible"
+    diff <(echo "$before") <(echo "$after"); echo; } >>"$LOG"
   fail=1
 fi
 
@@ -61,5 +73,6 @@ if [ "$fail" -eq 0 ]; then
   echo "green"
 else
   echo "NOT GREEN - do not push"
+  echo "full output kept at $LOG"
 fi
 exit "$fail"
