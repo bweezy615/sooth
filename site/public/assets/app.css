@@ -302,3 +302,10 @@
   .stat{border-right:0;border-bottom:1px solid var(--hair)}
   .stat:last-child{border-bottom:0}
 }
+
+/* Dashboard sport filter: the ALL pill and desk.js's league rail read as one
+   control, so they share a row. #sportRail is the shared component and is left
+   entirely alone; only the row around it belongs to this page. */
+.d-rail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.d-rail #sportRail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  position:relative;min-width:0}

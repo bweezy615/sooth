@@ -458,13 +458,13 @@
       <!-- ============ HERO ============ -->
       <section class="dash-hero">
         <div>
-          <h1>Market intelligence.<span>Honest edge.</span></h1>
-          <p class="lede">Real prices from eleven books, the vig stripped out, and a
-            model whose full record — including the part where it loses — is published
-            and independently checkable.</p>
+          <h1>Tonight&rsquo;s games.<span>Every book&rsquo;s price.</span></h1>
+          <p class="lede">We check eleven sportsbooks on every game and show you which one
+            is paying the most. Same bet, better number, more money back — and it doesn&rsquo;t
+            depend on anyone predicting the game correctly. Free, no account.</p>
           <div class="dash-cta">
-            <a class="btn btn-p" href="/market">View live markets <span aria-hidden="true">&rarr;</span></a>
-            <a class="btn btn-s" href="/picks">See the sealed slate</a>
+            <a class="btn btn-p" href="#dBoardH">See tonight&rsquo;s board <span aria-hidden="true">&darr;</span></a>
+            <a class="btn btn-s" href="/learn">How it works</a>
           </div>
           <p class="dash-trust"><span class="dash-shield" aria-hidden="true"></span>
             <span><b>Verifiable. Transparent. Backtested.</b><br>
@@ -488,29 +488,53 @@
         </div>
       </section>
 
-      <!-- ============ STAT STRIP ============
-           Five figures, every one of them from a published file, and two of
-           them deliberately unflattering. The concept art carried "Avg. ROI
-           +12.4%", "Record 14,327-8,102" and "18,392 active users"; none of
-           the three exists in any feed, and the first two assert a winning
-           model directly above a compliance footer stating we lose to the
-           close. The one real number in that row was 63.7%, which is genuine
-           STRAIGHT-UP accuracy and is labelled as such here, because printed
-           bare it reads as profitability. -->
-      <section class="stats" id="stats" aria-label="Published figures">
-        <div class="stat pending"><span class="k">Games on the board</span>
-          <span class="v" id="sGames">·</span><span class="sub" id="sGamesSub">loading</span></div>
-        <div class="stat pending"><span class="k">Books compared</span>
-          <span class="v" id="sBooks">·</span><span class="sub" id="sBooksSub">every side, every game</span></div>
-        <div class="stat pending"><span class="k">Straight-up accuracy</span>
-          <span class="v" id="sAcc">·</span><span class="sub" id="sAccSub">picking winners</span></div>
-        <div class="stat pending"><span class="k">Against the spread</span>
-          <span class="v" id="sAts">·</span><span class="sub" id="sAtsSub">vs 52.38% break-even</span></div>
-        <div class="stat pending"><span class="k">Graded decisions</span>
-          <span class="v" id="sN">·</span><span class="sub" id="sNSub">walk-forward</span></div>
+      <!-- ============ TONIGHT'S BOARD ============
+           The landing surface answers "what is worth looking at today", which
+           is what Branden asked for on 2026-08-28 and what the phone layout
+           has always done. The desktop dashboard used to open on Brier score
+           and calibration error - two numbers describing how well the model is
+           calibrated, neither of which a visitor can act on, both above the
+           fold. Those now sit under PROOF at the bottom of this page.
+
+           This section is not a second implementation of the phone's rails:
+           it calls the same desk.js eventCard() and sportRail() that /market
+           uses, off the same board.json. -->
+      <section aria-labelledby="dBoardH">
+        <div class="sec-h"><span class="tl" id="dBoardH">NEXT UP</span>
+          <span class="sub" id="dGames">reading the board</span>
+          <a class="more" href="/market">SEE ALL &rsaquo;</a></div>
+        <!-- ALL sits OUTSIDE #sportRail on purpose. desk.js sportRail() rebuilds
+             that element's innerHTML and scopes its queries to it, so a sibling
+             button is untouched by it. Adding "all" to the shared component
+             instead would have reached /market, whose pick() has no branch for
+             it. Without this control, choosing a league is a one-way door -
+             the phone rail has always had ALL and the dashboard must agree. -->
+        <div class="d-rail">
+          <button type="button" class="sp" id="dAll" aria-selected="true"
+            aria-label="All sports"><span class="d"></span>ALL<span class="c n" id="dAllN"></span></button>
+          <div id="sportRail" role="tablist" aria-label="Sports"></div>
+        </div>
+        <div class="panels" id="dBoard">
+          <div class="panel"><div class="panel-b"><div class="pstate">
+            <span class="tl">LOADING THE BOARD</span>
+            Every book&rsquo;s price on tonight&rsquo;s games, arriving now.</div></div></div>
+        </div>
       </section>
 
-      <!-- ============ PANELS ============ -->
+      <!-- The number this product exists to surface. Ranked by what shopping
+           is worth on that game, never by what the model thinks of it. -->
+      <section aria-labelledby="dGapH">
+        <div class="sec-h"><span class="tl" id="dGapH">BIGGEST GAPS</span>
+          <span class="sub">Where shopping pays most &mdash; the best price beats the worst by the widest margin</span>
+          <a class="more" href="/edges">SEE ALL &rsaquo;</a></div>
+        <div class="panels" id="dGaps">
+          <div class="panel"><div class="panel-b"><div class="pstate">
+            <span class="tl">RANKING THE GAPS</span>
+            Where the best number beats the worst by the most.</div></div></div>
+        </div>
+      </section>
+
+      <!-- ============ MOVEMENT ============ -->
       <section class="panels">
 
         <!-- Replaces "AI Model Confidence". The concept art's four sub-bars
@@ -520,15 +544,6 @@
              no defined measure behind them. These four are the actual
              published measurements of whether a probability model can be
              trusted, which is what that panel was reaching for. -->
-        <div class="panel">
-          <div class="panel-h"><h2>Model calibration</h2>
-            <a class="more" href="/methodology">Method</a></div>
-          <div class="panel-b" id="calib">
-            <div class="pstate"><span class="tl">READING THE FIGURES</span>
-              Measured on the published walk-forward evaluation.</div>
-          </div>
-        </div>
-
         <div class="panel">
           <div class="panel-h"><h2>Top market movers</h2>
             <a class="more" href="/edges">All movement</a></div>
@@ -552,6 +567,50 @@
           </div>
         </div>
 
+      </section>
+
+      <!-- ============ PROOF ============
+           Demoted, not hidden. These are the numbers that say our model does
+           not beat the closing line, and they stay on the landing page in
+           words a non-quant can read. The heading exists so a visitor knows
+           what they are looking at before they meet a Brier score. -->
+      <section class="proof-blk" aria-labelledby="dProofH">
+        <div class="sec-h"><span class="tl" id="dProofH">PROOF</span>
+          <span class="sub">How our own prediction model actually performs. It loses to the closing line, and we publish that.</span>
+          <a class="more" href="/trust">SEE THE RECORD &rsaquo;</a></div>
+      <!-- ============ STAT STRIP ============
+           Five figures, every one of them from a published file, and two of
+           them deliberately unflattering. The concept art carried "Avg. ROI
+           +12.4%", "Record 14,327-8,102" and "18,392 active users"; none of
+           the three exists in any feed, and the first two assert a winning
+           model directly above a compliance footer stating we lose to the
+           close. The one real number in that row was 63.7%, which is genuine
+           STRAIGHT-UP accuracy and is labelled as such here, because printed
+           bare it reads as profitability. -->
+      <section class="stats" id="stats" aria-label="Published figures">
+        <div class="stat pending"><span class="k">Games on the board</span>
+          <span class="v" id="sGames">·</span><span class="sub" id="sGamesSub">loading</span></div>
+        <div class="stat pending"><span class="k">Books compared</span>
+          <span class="v" id="sBooks">·</span><span class="sub" id="sBooksSub">every side, every game</span></div>
+        <div class="stat pending"><span class="k">Straight-up accuracy</span>
+          <span class="v" id="sAcc">·</span><span class="sub" id="sAccSub">picking winners</span></div>
+        <div class="stat pending"><span class="k">Against the spread</span>
+          <span class="v" id="sAts">·</span><span class="sub" id="sAtsSub">vs 52.38% break-even</span></div>
+        <div class="stat pending"><span class="k">Graded decisions</span>
+          <span class="v" id="sN">·</span><span class="sub" id="sNSub">walk-forward</span></div>
+      </section>
+
+        <section class="panels">
+        <div class="panel">
+          <div class="panel-h"><h2>Model calibration</h2>
+            <a class="more" href="/methodology">Method</a></div>
+          <div class="panel-b" id="calib">
+            <div class="pstate"><span class="tl">READING THE FIGURES</span>
+              Measured on the published walk-forward evaluation.</div>
+          </div>
+        </div>
+
+        </section>
       </section>
 
       <p class="note" style="color:var(--dim);font:500 11px/1.6 var(--mono);
@@ -953,6 +1012,69 @@ D.load("/data/figures.json").then(function(r){
   $("calib").innerHTML=html;
 });
 
+/* ---------- tonight's board ----------
+   The dashboard never fetched board.json at all. The phone shell and this one
+   are mutually exclusive IIFEs, and only the phone asked for the games, so on
+   a desktop the landing page could not show a single price - it opened on the
+   model's calibration instead. Same feed, same renderers as /market. */
+var BD={rows:[],sport:"all",board:null};
+function upcoming(rows){
+  var now=Date.now();
+  return rows.filter(function(r){
+    var ts=Date.parse(r.e.starts); return !isNaN(ts)&&ts>now;});
+}
+function shown(){
+  return upcoming(BD.rows).filter(function(r){
+    return BD.sport==="all"||r.sport===BD.sport;});
+}
+function cards(id,rows,emptyTitle,emptyMsg){
+  var el=$(id); if(!el) return;
+  el.innerHTML=rows.length
+    ? rows.map(function(r){return D.eventCard(r.e,D.sportLabel(r.sport));}).join("")
+    : '<div class="panel"><div class="panel-b"><div class="pstate"><span class="tl">'
+      +esc(emptyTitle)+'</span>'+esc(emptyMsg)+'</div></div></div>';
+  if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
+}
+function drawBoard(){
+  var where=BD.sport==="all"?"on the board":"in "+D.sportLabel(BD.sport);
+  var soon=shown().slice().sort(function(a,b){
+    return Date.parse(a.e.starts)-Date.parse(b.e.starts);});
+  cards("dBoard",soon.slice(0,4),"NOTHING UPCOMING",
+    "Every game "+where+" has already started. The board refills as the next slate opens.");
+  /* Ranked by what shopping is worth, never by what the model thinks. */
+  var gaps=shown().slice().sort(function(a,b){
+    return (b.e.max_gain_pts||0)-(a.e.max_gain_pts||0);})
+    .filter(function(r){return (r.e.max_gain_pts||0)>=0.5;});
+  cards("dGaps",gaps.slice(0,4),"NO GAP WORTH SHOPPING",
+    "No game "+where+" has half a point of implied probability between the best and worst "
+    +"price right now. That is the market agreeing, not a missing figure.");
+  var g=$("dGames");
+  if(g) g.textContent=soon.length+(soon.length===1?" game":" games")+" "+where;
+}
+D.load("/data/board.json").then(function(r){
+  if(!r.ok){ fail($("dBoard"),"BOARD"); fail($("dGaps"),"GAPS"); return; }
+  var b=r.data, rows=[];
+  (b.boards||[]).forEach(function(bd){
+    (bd.events||[]).forEach(function(e){ rows.push({e:e,sport:bd.sport}); });});
+  BD.rows=rows; BD.board=b;
+  function pick(sp){
+    BD.sport=sp;
+    D.sportRail(b,sp,pick);
+    var all=$("dAll");
+    if(all) all.setAttribute("aria-selected",sp==="all"?"true":"false");
+    var lbl=$("sportLbl");
+    if(lbl) lbl.textContent="Market: "+(sp==="all"?"All":D.sportLabel(sp));
+    drawBoard();
+  }
+  var allBtn=$("dAll");
+  if(allBtn){
+    allBtn.addEventListener("click",function(){ pick("all"); });
+    var n=$("dAllN");
+    if(n) n.textContent=upcoming(rows).length;
+  }
+  pick("all");
+});
+
 /* ---------- movers + divergence + pulse ---------- */
 D.load("/data/moves.json").then(function(r){
   if(!r.ok){ fail($("movers"),"TAPE"); fail($("diverge"),"BOOKS"); return; }
@@ -972,6 +1094,13 @@ D.load("/data/moves.json").then(function(r){
     });
     return Object.keys(best).map(function(k){return best[k];});
   }
+  function sideName(x){
+    /* side_a / side_b are schema field names, and this panel was printing them
+       raw to visitors on the landing page. edges.html, game.html and
+       market.html all swap them for the teams; this one never did. */
+    var s=String(x.selection||"");
+    return s.replace(/side_a/g,x.home||"home").replace(/side_b/g,x.away||"away");
+  }
   var mag=function(x){return Math.abs(x.move_pts||0);};
   var pos=function(x){return x.move_pts||0;};
   drift=byEvent(drift,mag).sort(function(a,b){return mag(b)-mag(a);});
@@ -988,7 +1117,7 @@ D.load("/data/moves.json").then(function(r){
       return '<div class="prow"><div class="nm">'
         +'<b>'+crest(x.away,x.sport,14)+' <span style="color:var(--dim)">at</span> '
         +crest(x.home,x.sport,14)+'</b>'
-        +'<i>'+esc(D.sportLabel(x.sport))+' · '+esc(x.selection||"")+'</i></div>'
+        +'<i>'+esc(D.sportLabel(x.sport))+' · '+esc(sideName(x))+'</i></div>'
         +'<div class="rt"><b class="'+v.cls+'">'+esc(v.txt)+'</b>'
         +'<i>'+esc(subFn(x))+'</i></div></div>';
     }).join("");
@@ -1021,8 +1150,16 @@ D.load("/data/moves.json").then(function(r){
    control that looks like a filter and does nothing is worse than no control,
    so this navigates rather than pretending. */
 (function(){
+  /* This used to navigate to /market: the dashboard had no board to filter, so
+     a control that looked like a filter and did nothing was replaced with one
+     that at least went somewhere honest. There is a board here now, so it
+     scrolls to the rail that does the filtering. */
   var b=$("sportBtn"); if(!b) return;
-  b.addEventListener("click",function(){ location.href="/market"; });
+  b.addEventListener("click",function(){
+    var h=$("dBoardH");
+    if(h) h.scrollIntoView({behavior:D.reduced&&D.reduced()?"auto":"smooth",block:"start"});
+    else location.href="/market";
+  });
 })();
 })();
 </script>
