@@ -143,6 +143,30 @@ def test_methodology_does_not_deny_the_features_the_model_uses():
         )
 
 
+def test_no_page_promises_live_prices_in_static_copy():
+    """Freshness is a measurement; a static label must not claim it.
+
+    /market was headed "MARKET INTELLIGENCE DESK · LIVE PRICING" while the
+    board is rebuilt by capture.yml - which through late August 2026 was
+    landing about three runs a day, mean gap 4.2h and max 10.5h. desk.js calls
+    a feed stale past three hours, so for roughly half the wall clock the
+    page's own status strip read DELAYED directly beneath a label promising
+    LIVE. The strip is the honest surface because it is computed from
+    generated_at; the label is a promise nothing checks.
+    """
+    offenders = []
+    for page in sorted((ROOT / "site/public").glob("*.html")):
+        for i, line in enumerate(page.read_text(encoding="utf-8").splitlines(), 1):
+            if line.lstrip().startswith(("<!--", "*", "/*")):
+                continue                      # commentary about the rule itself
+            if re.search(r"LIVE\s+(PRICING|PRICES|ODDS)", line, re.I):
+                offenders.append(f"{page.name}:{i}: {line.strip()[:90]}")
+    assert not offenders, (
+        "a page states in static copy that its prices are live. The board "
+        "refreshes when capture.yml runs, which is not continuous; let the "
+        "generated_at stamp say how old the numbers are: " + "; ".join(offenders))
+
+
 # --- "last updated" must not lie ------------------------------------------
 # /methodology said "Last updated 2026-08-06" and /disclaimers "2026-08-02";
 # both had in fact been edited on 2026-08-27. A freshness date is a claim like

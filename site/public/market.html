@@ -226,7 +226,15 @@
     <span class="tl" id="es-mkt"></span>
     <span class="tl" style="margin-left:auto">FAIR VS BEST · EVERY BOOK WE TRACK</span></div>
   <div class="page-head" style="padding:26px 0 0">
-    <span class="tl slab-lb">MARKET INTELLIGENCE DESK · LIVE PRICING</span>
+    <!-- Not "LIVE PRICING". The board is rebuilt by capture.yml, which through
+         late August 2026 was landing about three runs a day, and desk.js:317
+         calls a feed stale past three hours - so for roughly half the wall
+         clock this page's own status strip said DELAYED directly underneath a
+         label promising LIVE. Freshness is a measurement, and the strip below
+         already makes it ("UPDATED <ago>" / "DELAYED - UPDATED <ago>"); a
+         static label must not claim it. See docs/plans/capture-cadence.md for
+         the cadence itself, which is Branden's decision and is untouched. -->
+    <span class="tl slab-lb">MARKET INTELLIGENCE DESK · PRICES AS LAST CAPTURED</span>
     <h1 style="font:700 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
       The best sports betting research analyzer on the market.</h1>
     <p style="color:var(--mut);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:66ch">
