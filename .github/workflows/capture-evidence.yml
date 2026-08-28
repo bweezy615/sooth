@@ -52,22 +52,40 @@ jobs:
         with:
           python-version: "3.12"
 
-      # engine.capture's only dependency. Deliberately not the full board
-      # install - nothing here touches pandas, numpy or the Odds API.
+      # engine.capture imports adapters.nfl for its schedule lookup, which
+      # pulls pandas. The first version of this workflow installed requests
+      # alone on the theory that the free path was dependency-light; both
+      # capture steps died on ModuleNotFoundError and the run still reported
+      # success, because continue-on-error was masking them. Hence the guard
+      # at the end of this job.
       - name: Install deps
-        run: pip install --quiet requests
+        run: pip install --quiet requests pandas numpy
 
       # Each sport is continue-on-error so one league's endpoint having a bad
       # morning cannot cost us the other league's evidence. capture exits
       # non-zero on a short page AFTER writing its rows, so a partial slate is
       # still committed and still reported as partial.
       - name: Capture NFL game lines (free, ESPN)
+        id: nfl
         run: python -m engine.capture --season 2026 --weeks 3
         continue-on-error: true
 
       - name: Capture college football game lines (free, ESPN)
+        id: ncaaf
         run: python -m engine.capture --sport ncaaf --season 2026 --weeks 2
         continue-on-error: true
+
+      # continue-on-error above is per sport on purpose: one league's endpoint
+      # having a bad morning must not cost us the other league's evidence. But
+      # it also means a run in which NOTHING was captured reports success, and
+      # a green tick over an empty archive is worse than a red one - it is the
+      # failure you do not go looking for. If both sports failed, so did this
+      # job.
+      - name: Fail if neither sport was captured
+        if: steps.nfl.outcome == 'failure' && steps.ncaaf.outcome == 'failure'
+        run: |
+          echo "both capture steps failed - no evidence was collected this run"
+          exit 1
 
       - name: Commit captured odds
         if: always()
