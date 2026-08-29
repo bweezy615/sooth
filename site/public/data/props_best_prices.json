@@ -1,119 +1,149 @@
 {
- "generated_at": "2026-08-29T02:47:24.476502+00:00",
+ "generated_at": "2026-08-29T11:00:01.994002+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 8,
+ "n_considered": 194,
  "best_prices": [
+  {
+   "sport": "mlb",
+   "matchup": "Chicago White Sox @ Minnesota Twins",
+   "starts": "2026-08-29T18:11:00Z",
+   "player": "Kody Clemens",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "under",
+   "best_price": 170,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": 165,
+   "price_edge_pts": 0.72,
+   "book_spread_pts": 4.63,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 8
+   },
+   "hit_season": {
+    "n": 118,
+    "over": 72
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
   {
    "sport": "mlb",
    "matchup": "Los Angeles Dodgers @ Detroit Tigers",
    "starts": "2026-08-29T17:11:00Z",
-   "player": "Blake Snell",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "under",
-   "best_price": 103,
-   "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": 106,
-   "price_edge_pts": -0.72,
-   "book_spread_pts": 3.12,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
-   "model_p_over": 0.5317,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Cincinnati Reds @ Chicago Cubs",
-   "starts": "2026-08-29T18:21:00Z",
-   "player": "Kevin Gausman",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
+   "player": "Alek Thomas",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
    "side": "over",
-   "best_price": 118,
-   "best_book": "FanDuel",
-   "n_books": 3,
-   "fair_price": 129,
-   "price_edge_pts": -2.2,
-   "book_spread_pts": 0.64,
+   "best_price": -125,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": -127,
+   "price_edge_pts": 0.47,
+   "book_spread_pts": 5.98,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 2
    },
    "hit_l10": {
     "n": 10,
     "over": 4
    },
    "hit_season": {
-    "n": 27,
-    "over": 9
+    "n": 34,
+    "over": 16
    },
-   "model_p_over": 0.3975,
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Chicago White Sox @ Minnesota Twins",
+   "starts": "2026-08-29T18:11:00Z",
+   "player": "Josh Bell",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 138,
+   "best_book": "BetMGM",
+   "n_books": 5,
+   "fair_price": 135,
+   "price_edge_pts": 0.47,
+   "book_spread_pts": 4.07,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Boston Red Sox @ New York Yankees",
+   "starts": "2026-08-29T17:06:00Z",
+   "player": "Jake Bennett",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": 100,
+   "best_book": "DraftKings",
+   "n_books": 6,
+   "fair_price": -102,
+   "price_edge_pts": 0.41,
+   "book_spread_pts": 4.55,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 15,
+    "over": 6
+   },
+   "model_p_over": 0.6436,
    "model_version": "kpoisson-v1"
   },
   {
    "sport": "mlb",
-   "matchup": "Los Angeles Dodgers @ Detroit Tigers",
-   "starts": "2026-08-29T17:11:00Z",
-   "player": "Keider Montero",
+   "matchup": "Chicago White Sox @ Minnesota Twins",
+   "starts": "2026-08-29T18:11:00Z",
+   "player": "Bailey Ober",
    "market": "pitcher_strikeouts",
    "market_label": "Pitcher strikeouts",
    "line": 3.5,
    "side": "over",
-   "best_price": -105,
-   "best_book": "Fanatics",
+   "best_price": -140,
+   "best_book": "BetMGM",
    "n_books": 4,
-   "fair_price": 104,
-   "price_edge_pts": -2.26,
-   "book_spread_pts": 2.27,
+   "fair_price": -142,
+   "price_edge_pts": 0.39,
+   "book_spread_pts": 4.63,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 2
    },
    "hit_l10": {
     "n": 10,
     "over": 4
    },
    "hit_season": {
-    "n": 27,
-    "over": 11
+    "n": 20,
+    "over": 8
    },
-   "model_p_over": 0.2655,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Miami Marlins @ Washington Nationals",
-   "starts": "2026-08-29T20:06:00Z",
-   "player": "Cade Cavalli",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "over",
-   "best_price": 100,
-   "best_book": "FanDuel",
-   "n_books": 3,
-   "fair_price": 113,
-   "price_edge_pts": -3.06,
-   "book_spread_pts": 0.0,
-   "hit_l5": {
-    "n": 5,
-    "over": 4
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 28,
-    "over": 13
-   },
-   "model_p_over": 0.5635,
+   "model_p_over": 0.4319,
    "model_version": "kpoisson-v1"
   }
  ]
