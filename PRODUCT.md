@@ -189,9 +189,24 @@ The only other conversion on the site is the free, opt-in alert list at
 
 ## Coverage
 
-NFL, MLB, NHL, NBA, UFC. NFL is the priority — highest volume, widest gaps near
+NFL, CFB, MLB, NHL, NBA. NFL is the priority — highest volume, widest gaps near
 kickoff, and the season the business is built around. Other sports keep the
 board populated year-round.
+
+College football replaced UFC on 2026-08-27 (Branden's call, recorded in
+`engine/lines.py`) rather than being added alongside it, which held the board
+at five Odds API credits per run. Captured UFC history stays on disk under
+`data/capture/ufc/`; we stopped publishing it, we did not delete it. This
+section still said UFC on 2026-08-29, two days after every shipped surface had
+stopped saying it — the drift this document is repeatedly warned about, found
+by grepping the site for what the section claimed.
+
+**CFB is line shopping only.** It is on the board and on /market and /edges; it
+has no prediction model and no sealed slate, and `data/ledger/` holds NFL
+slates alone. Per `docs/plans/college-football.md` the CFB model is Phase 3 and
+deliberately deferred, so any CFB prediction that ever ships carries the "in
+calibration" label /disclaimers §7 already promises, gets its own slate id
+(`2026-W01-ncaaf`) and its own root, and never enters the NFL record.
 
 ## Hard constraints
 
