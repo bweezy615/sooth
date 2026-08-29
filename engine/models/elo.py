@@ -108,3 +108,33 @@ class EloModel:
         delta = c.k * mov_mult * (actual - p_home)
         self.ratings[home] = self.rating(home) + delta
         self.ratings[away] = self.rating(away) - delta
+
+
+# --------------------------------------------------------------------------
+# Sport-specific configurations
+# --------------------------------------------------------------------------
+# EloConfig's defaults are the NFL's: they were chosen for a 32-team league
+# with a draft and a salary cap, and docs/plans/college-football.md is explicit
+# that reusing them on college football and publishing the output "would be a
+# fabricated model".
+#
+# These constants are the output of scripts/refit_elo_ncaaf.py, chosen by grid
+# search on 2002-2015 FBS-vs-FBS games ONLY, then frozen and evaluated once on
+# 2016-2025. Every one of them moved, in the direction the sport's structure
+# predicts: a bigger k because ~12 games a season with no parity mechanism
+# needs faster adaptation than 17 with a draft, a larger home advantage, and
+# ~18 rather than 25 Elo points per point of margin because college margins
+# are wider.
+#
+# Frozen-config evaluation, 2016-2025, n=7,294 FBS-vs-FBS:
+#   Brier 0.18816   log loss 0.55374   accuracy 0.7051   ECE 0.02146
+#
+# There is NO market comparison attached to those numbers and there cannot be
+# one from this data: cfbfastR-data carries no betting lines. The model is
+# unproven against the market, not shown to beat it. See adapters/ncaaf.py.
+NCAAF_ELO = EloConfig(
+    k=36.0,
+    home_advantage=60.0,
+    season_carryover=0.80,
+    elo_per_point=17.9,
+)

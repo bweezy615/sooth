@@ -210,3 +210,108 @@ page that states plainly that these predictions are unproven and ungraded.
 
 Sealing CFB predictions. Alerts on CFB. CFB props. Any comparison of the CFB
 model to the NFL model. Touching 2026-W01-nfl in any way.
+
+---
+
+# Phase 3 — started early, partially, on 2026-08-29
+
+**This contradicts the line above that says "Do not start it before November."**
+Branden authorised the exception in session on 2026-08-29 after being shown
+that line. What was authorised is narrow, and the rest of the deferral stands:
+
+- **Done:** the history adapter and the Elo refit.
+- **Not done, still out of scope:** sealing CFB predictions, any CFB slate,
+  any change to `engine/pipeline/weekly.py`. The pipeline remains hardcoded to
+  NFL, so nothing in this repo can publish a college prediction. That was
+  deliberate — the "Out of scope" section below was not overridden.
+
+## What shipped
+
+`engine/adapters/ncaaf.py` — `NCAAFAdapter`, on `cfbfastR-data` schedules
+(`schedules/csv/cfb_schedules_{season}.csv`, 2002-2025, no API key, so the
+backtest is reproducible from this repo alone). 19,135 FBS-involved games.
+
+`engine/models/elo.py` — `NCAAF_ELO`, the refit config. `EloConfig`'s NFL
+defaults are untouched.
+
+`scripts/refit_elo_ncaaf.py` — the refit, re-runnable, ~3 minutes.
+
+`tests/test_ncaaf_adapter.py` — 17 tests, no network.
+
+## The finding that constrains everything downstream
+
+**cfbfastR-data carries no betting lines.** Not a spread, not a total, not a
+moneyline, opening or closing — verified column by column against the 2024
+file. Consequences, all of them forced rather than chosen:
+
+- `load_historical_lines` returns `[]`. It does not fabricate or backdate.
+- **No CLV and no ATS record can be computed for CFB from this source.** The
+  `EDGE_THRESHOLD = 4.0` selectivity rule has no college equivalent, and
+  inheriting the NFL number would be the fabrication this plan warns about.
+- CFB cannot become "Live" on this data, by the README's own rule. It is
+  in calibration, as /disclaimers §7 already promises.
+
+Our own capture is the series that will eventually grade CFB. On 2026-08-29 it
+was two days old. `current_lines` reads it; `load_historical_lines`
+deliberately does not, so a 2002-2025 backtest cannot appear to have market
+data for two days of 2026.
+
+## The refit, as this plan required
+
+Hyperparameters searched on **2002-2015 FBS-vs-FBS only**, then frozen and
+evaluated once on **2016-2025**. Choosing a config by its walk-forward score
+over the whole span would have made the reported score no longer out of sample.
+
+| | NFL default | CFB refit |
+|---|---|---|
+| `k` | 20.0 | **36.0** |
+| `home_advantage` | 48.0 | **60.0** |
+| `season_carryover` | 0.75 | **0.80** |
+| `elo_per_point` | 25.0 | **17.9** |
+
+Every constant moved, in the direction the sport's structure predicts. The
+plan's warning that `elo.py` "will run on CFB as-is — that is a trap" is
+confirmed rather than assumed.
+
+Frozen-config evaluation, 2016-2025:
+
+| | n | Brier | log loss | acc | ECE |
+|---|---|---|---|---|---|
+| FBS vs FBS | 7,294 | 0.18816 | 0.55374 | 0.7051 | 0.02146 |
+| all FBS-involved | 8,367 | 0.17118 | 0.50988 | 0.7353 | 0.01860 |
+
+FBS-vs-FBS is the headline; the pooled-FCS games are ~11% of rows and near-free
+to predict, so including them measures scheduling rather than skill.
+
+**There is no market comparison in that table and there cannot be one from this
+source.** The model is unproven against the market, not shown to beat it.
+Publishing any of these numbers still goes through `scripts/published_figures.py`
+per the rule above — none of them are on a page yet.
+
+## Two defects found while building, both silent
+
+1. **Negative rest days.** College week numbers are not chronological — a
+   week-2 game can kick off before a week-1 game. Computing rest in
+   (season, week) order recorded some teams' "previous" game as one not yet
+   played: 157 negative values across 2002-2025, in a column nobody eyeballs.
+   The pass now runs in kickoff order and asserts non-negativity.
+
+2. **The capture join matched nothing, then matched the wrong school.** Capture
+   carries ESPN's full names ("North Dakota State Bison"), cfbfastR the short
+   form ("North Dakota State"), so exact matching returned `[]` for every game
+   — indistinguishable from "no prices captured yet". A bare prefix rule then
+   left 18 of 188 captured names ambiguous, and worse, could match uniquely and
+   wrongly: "Ohio State Buckeyes" prefixes `Ohio`, so in a week where Ohio
+   plays and Ohio State does not, the price files against the wrong game.
+   Requiring the remainder to look like a mascot rather than a school qualifier
+   leaves 4, all resolved correctly by specificity.
+
+## What November still has to do
+
+- Decide whether CFB predictions publish at all, and if so build the
+  publishing path — `weekly.py` is NFL-only by design and was not touched.
+- Measure a CFB selectivity threshold, which needs the line archive our own
+  capture is accumulating. It cannot be done from cfbfastR.
+- Consider an opponent-adjusted efficiency feature. The NFL model's EPA
+  features have no cfbfastR schedule equivalent; the CFB feature set is
+  currently Elo, rest, neutral site, conference game, division gap.
