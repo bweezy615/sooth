@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-30T08:10:39.437185+00:00",
+ "generated_at": "2026-08-30T13:57:28.845778+00:00",
  "slate_id": "2026-W01-nfl",
  "source": "the-odds-api, US books, moneyline",
  "note": "Best available price for the side our model prefers. Shopping the best number is +EV on its own, whatever the pick.",
@@ -74,7 +74,7 @@
    "best_price": -180,
    "best_book": "DraftKings",
    "worst_price": -200,
-   "worst_book": "BetRivers",
+   "worst_book": "BetMGM",
    "n_books": 11,
    "edge_pts": 2.38,
    "quotes": [
@@ -99,15 +99,11 @@
      "price": -180
     },
     {
-     "book": "williamhill_us",
-     "price": -182
-    },
-    {
      "book": "fanatics",
      "price": -190
     },
     {
-     "book": "betmgm",
+     "book": "williamhill_us",
      "price": -190
     },
     {
@@ -120,6 +116,10 @@
     },
     {
      "book": "betrivers",
+     "price": -200
+    },
+    {
+     "book": "betmgm",
      "price": -200
     }
    ]
@@ -267,6 +267,10 @@
      "price": -390
     },
     {
+     "book": "mybookieag",
+     "price": -391
+    },
+    {
      "book": "betrivers",
      "price": -400
     },
@@ -281,10 +285,6 @@
     {
      "book": "bovada",
      "price": -400
-    },
-    {
-     "book": "mybookieag",
-     "price": -410
     },
     {
      "book": "fanduel",
@@ -359,13 +359,17 @@
    "kickoff": "2026-09-09T20:20:00+00:00",
    "pick": "SEA",
    "our_prob": 0.6466,
-   "best_price": -175,
-   "best_book": "DraftKings",
+   "best_price": -170,
+   "best_book": "Bovada",
    "worst_price": -200,
    "worst_book": "BetRivers",
    "n_books": 11,
-   "edge_pts": 3.03,
+   "edge_pts": 3.7,
    "quotes": [
+    {
+     "book": "bovada",
+     "price": -170
+    },
     {
      "book": "draftkings",
      "price": -175
@@ -375,20 +379,16 @@
      "price": -180
     },
     {
+     "book": "fanatics",
+     "price": -180
+    },
+    {
      "book": "lowvig",
      "price": -180
     },
     {
      "book": "betonlineag",
      "price": -180
-    },
-    {
-     "book": "bovada",
-     "price": -185
-    },
-    {
-     "book": "fanatics",
-     "price": -190
     },
     {
      "book": "williamhill_us",
@@ -473,7 +473,7 @@
    ]
   }
  ],
- "avg_edge_pts": 2.48,
- "max_edge_pts": 3.03,
+ "avg_edge_pts": 2.57,
+ "max_edge_pts": 3.7,
  "n_books": 11
 }
