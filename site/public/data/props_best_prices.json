@@ -1,126 +1,66 @@
 {
- "generated_at": "2026-08-31T05:22:39.416355+00:00",
+ "generated_at": "2026-08-31T13:33:28.962054+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 70,
+ "n_considered": 244,
  "best_prices": [
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ Atlanta Braves",
-   "starts": "2026-08-31T22:05:00Z",
-   "player": "Bryce Elder",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": -114,
-   "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": -129,
-   "price_edge_pts": 3.06,
-   "book_spread_pts": 6.73,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 25,
-    "over": 12
-   },
-   "model_p_over": 0.4235,
-   "model_version": "kpoisson-v1"
-  },
   {
    "sport": "mlb",
    "matchup": "Seattle Mariners @ Boston Red Sox",
    "starts": "2026-08-31T22:46:00Z",
-   "player": "Caleb Durbin",
+   "player": "Dominic Canzone",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "over",
+   "best_price": -148,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": -155,
+   "price_edge_pts": 1.12,
+   "book_spread_pts": 6.99,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 121,
+    "over": 67
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Francisco Giants @ Atlanta Braves",
+   "starts": "2026-08-31T22:05:00Z",
+   "player": "Jung Hoo Lee",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 149,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 151,
-   "price_edge_pts": -0.28,
-   "book_spread_pts": 3.32,
+   "best_price": 150,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 145,
+   "price_edge_pts": 0.85,
+   "book_spread_pts": 5.45,
    "hit_l5": {
     "n": 5,
     "over": 1
    },
    "hit_l10": {
     "n": 10,
-    "over": 2
+    "over": 1
    },
    "hit_season": {
-    "n": 130,
-    "over": 44
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "New York Mets @ Tampa Bay Rays",
-   "starts": "2026-08-31T22:41:00Z",
-   "player": "Jonny Deluca",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 161,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 167,
-   "price_edge_pts": -0.83,
-   "book_spread_pts": 2.34,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 89,
-    "over": 32
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "New York Mets @ Tampa Bay Rays",
-   "starts": "2026-08-31T22:41:00Z",
-   "player": "Yandy Diaz",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 124,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 128,
-   "price_edge_pts": -0.86,
-   "book_spread_pts": 2.53,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 131,
-    "over": 62
+    "n": 125,
+    "over": 49
    },
    "model_p_over": null,
    "model_version": null
@@ -134,12 +74,12 @@
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 152,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 159,
-   "price_edge_pts": -1.08,
-   "book_spread_pts": 2.69,
+   "best_price": 160,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 156,
+   "price_edge_pts": 0.63,
+   "book_spread_pts": 4.09,
    "hit_l5": {
     "n": 5,
     "over": 2
@@ -151,6 +91,66 @@
    "hit_season": {
     "n": 80,
     "over": 29
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Seattle Mariners @ Boston Red Sox",
+   "starts": "2026-08-31T22:46:00Z",
+   "player": "Willson Contreras",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 0.5,
+   "side": "under",
+   "best_price": 175,
+   "best_book": "BetMGM",
+   "n_books": 3,
+   "fair_price": 171,
+   "price_edge_pts": 0.56,
+   "book_spread_pts": 5.65,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 5
+   },
+   "hit_season": {
+    "n": 125,
+    "over": 80
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Seattle Mariners @ Boston Red Sox",
+   "starts": "2026-08-31T22:46:00Z",
+   "player": "Caleb Durbin",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 155,
+   "best_book": "BetOnline",
+   "n_books": 5,
+   "fair_price": 154,
+   "price_edge_pts": 0.11,
+   "book_spread_pts": 3.34,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 2
+   },
+   "hit_season": {
+    "n": 130,
+    "over": 44
    },
    "model_p_over": null,
    "model_version": null
