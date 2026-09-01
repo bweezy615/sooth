@@ -1,36 +1,117 @@
 {
- "generated_at": "2026-09-01T04:57:04.726282+00:00",
+ "generated_at": "2026-09-01T11:33:38.230918+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 68,
+ "n_considered": 268,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "New York Mets @ Tampa Bay Rays",
+   "matchup": "San Diego Padres @ Cincinnati Reds",
    "starts": "2026-09-01T22:41:00Z",
-   "player": "Chandler Simpson",
+   "player": "Austin Hays",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
    "best_price": 155,
-   "best_book": "BetOnline",
+   "best_book": "BetRivers",
+   "n_books": 5,
+   "fair_price": 144,
+   "price_edge_pts": 1.72,
+   "book_spread_pts": 6.24,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Diego Padres @ Cincinnati Reds",
+   "starts": "2026-09-01T22:41:00Z",
+   "player": "Xander Bogaerts",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 145,
+   "best_book": "BetMGM",
+   "n_books": 6,
+   "fair_price": 137,
+   "price_edge_pts": 1.39,
+   "book_spread_pts": 4.85,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 2
+   },
+   "hit_season": {
+    "n": 131,
+    "over": 37
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Diego Padres @ Cincinnati Reds",
+   "starts": "2026-09-01T22:41:00Z",
+   "player": "Fernando Tatis Jr.",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 165,
+   "best_book": "BetMGM",
    "n_books": 4,
    "fair_price": 159,
-   "price_edge_pts": -0.57,
-   "book_spread_pts": 2.98,
+   "price_edge_pts": 0.88,
+   "book_spread_pts": 4.11,
+   "hit_l5": {
+    "n": 5,
+    "over": 0
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 136,
+    "over": 38
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Diego Padres @ Cincinnati Reds",
+   "starts": "2026-09-01T22:41:00Z",
+   "player": "Elly De La Cruz",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 128,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 125,
+   "price_edge_pts": 0.67,
+   "book_spread_pts": 6.14,
    "hit_l5": {
     "n": 5,
     "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 5
+    "over": 6
    },
    "hit_season": {
-    "n": 129,
-    "over": 52
+    "n": 119,
+    "over": 54
    },
    "model_p_over": null,
    "model_version": null
@@ -39,121 +120,31 @@
    "sport": "mlb",
    "matchup": "Toronto Blue Jays @ Cleveland Guardians",
    "starts": "2026-09-01T22:41:00Z",
-   "player": "Gavin Williams",
+   "player": "Spencer Arrighetti",
    "market": "pitcher_strikeouts",
    "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "under",
-   "best_price": -140,
-   "best_book": "DraftKings",
-   "n_books": 5,
-   "fair_price": -134,
-   "price_edge_pts": -1.06,
-   "book_spread_pts": 3.93,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 7
-   },
-   "hit_season": {
-    "n": 27,
-    "over": 16
-   },
-   "model_p_over": 0.3346,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ Pittsburgh Pirates",
-   "starts": "2026-09-01T22:41:00Z",
-   "player": "Brandon Lowe",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
+   "line": 3.5,
    "side": "over",
-   "best_price": 134,
-   "best_book": "BetOnline",
-   "n_books": 4,
-   "fair_price": 140,
-   "price_edge_pts": -1.11,
-   "book_spread_pts": 2.31,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 4
-   },
-   "hit_season": {
-    "n": 128,
-    "over": 57
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "New York Mets @ Tampa Bay Rays",
-   "starts": "2026-09-01T22:41:00Z",
-   "player": "Sean Manaea",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": 108,
-   "best_book": "DraftKings",
-   "n_books": 4,
-   "fair_price": 113,
-   "price_edge_pts": -1.12,
-   "book_spread_pts": 3.14,
+   "best_price": -106,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": -108,
+   "price_edge_pts": 0.41,
+   "book_spread_pts": 5.99,
    "hit_l5": {
     "n": 5,
     "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 5
+    "over": 8
    },
    "hit_season": {
-    "n": 28,
-    "over": 9
+    "n": 19,
+    "over": 14
    },
-   "model_p_over": 0.5962,
+   "model_p_over": 0.4247,
    "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "New York Mets @ Tampa Bay Rays",
-   "starts": "2026-09-01T22:41:00Z",
-   "player": "Yandy Diaz",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 193,
-   "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": 204,
-   "price_edge_pts": -1.27,
-   "book_spread_pts": 0.96,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 3
-   },
-   "hit_season": {
-    "n": 132,
-    "over": 45
-   },
-   "model_p_over": null,
-   "model_version": null
   }
  ]
 }
