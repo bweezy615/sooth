@@ -12,7 +12,7 @@
 // a stale shell now turns the gate red instead of quietly surviving in
 // somebody's browser. The value below is what that test expects; when it
 // fails it prints the string to paste.
-const CACHE = 'sooth-e49527175d9c';
+const CACHE = 'sooth-99ecef011c7b';
 const SHELL = ['/', '/props', '/edges', '/research', '/trust',
                '/tools', '/engine', '/gamelog', '/ledger', '/methodology', '/whales'];
 

@@ -29,7 +29,9 @@ SHELL = ("site/public/assets/desk.js", "site/public/assets/desk.css")
 def shell_fingerprint() -> str:
     h = hashlib.sha256()
     for rel in SHELL:
-        h.update((ROOT / rel).read_bytes())
+        # ponytail: read_text folds CRLF to LF, so a Windows checkout and CI
+        # fingerprint the same shell to the same name.
+        h.update((ROOT / rel).read_text(encoding="utf-8").encode("utf-8"))
     return h.hexdigest()[:12]
 
 
