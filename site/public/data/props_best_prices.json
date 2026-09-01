@@ -1,55 +1,145 @@
 {
- "generated_at": "2026-08-30T19:17:05.173061+00:00",
+ "generated_at": "2026-08-31T23:45:47.361477+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 208,
+ "n_considered": 282,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Philadelphia Phillies @ Los Angeles Angels",
-   "starts": "2026-08-30T20:07:00Z",
-   "player": "Yusei Kikuchi",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 5.5,
+   "matchup": "Baltimore Orioles @ Colorado Rockies",
+   "starts": "2026-09-01T00:41:00Z",
+   "player": "Jake McCarthy",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 1.5,
    "side": "over",
-   "best_price": 112,
-   "best_book": "BetRivers",
-   "n_books": 7,
-   "fair_price": 104,
-   "price_edge_pts": 1.82,
-   "book_spread_pts": 6.32,
+   "best_price": 160,
+   "best_book": "BetMGM",
+   "n_books": 4,
+   "fair_price": 144,
+   "price_edge_pts": 2.56,
+   "book_spread_pts": 6.99,
    "hit_l5": {
     "n": 5,
     "over": 1
    },
    "hit_l10": {
-    "n": 8,
+    "n": 10,
     "over": 2
    },
    "hit_season": {
-    "n": 8,
-    "over": 2
+    "n": 122,
+    "over": 35
    },
-   "model_p_over": 0.2474,
-   "model_version": "kpoisson-v1"
+   "model_p_over": null,
+   "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Philadelphia Phillies @ Los Angeles Angels",
-   "starts": "2026-08-30T20:07:00Z",
-   "player": "Zack Wheeler",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 7.5,
-   "side": "under",
-   "best_price": -118,
-   "best_book": "DraftKings",
+   "matchup": "Baltimore Orioles @ Colorado Rockies",
+   "starts": "2026-09-01T00:41:00Z",
+   "player": "Jackson Holliday",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 180,
+   "best_book": "BetRivers",
+   "n_books": 5,
+   "fair_price": 168,
+   "price_edge_pts": 1.63,
+   "book_spread_pts": 4.29,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 2
+   },
+   "hit_season": {
+    "n": 85,
+    "over": 15
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Athletics @ Texas Rangers",
+   "starts": "2026-09-01T00:06:00Z",
+   "player": "Jeff McNeil",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 170,
+   "best_book": "BetRivers",
    "n_books": 6,
-   "fair_price": -124,
-   "price_edge_pts": 1.22,
-   "book_spread_pts": 7.7,
+   "fair_price": 160,
+   "price_edge_pts": 1.45,
+   "book_spread_pts": 5.88,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 120,
+    "over": 38
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Chicago White Sox @ Houston Astros",
+   "starts": "2026-09-01T00:11:00Z",
+   "player": "Sam Antonacci",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 160,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 152,
+   "price_edge_pts": 1.27,
+   "book_spread_pts": 4.46,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 116,
+    "over": 43
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Baltimore Orioles @ Colorado Rockies",
+   "starts": "2026-09-01T00:41:00Z",
+   "player": "Pete Alonso",
+   "market": "batter_hits",
+   "market_label": "Hits",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 155,
+   "best_book": "BetRivers",
+   "n_books": 4,
+   "fair_price": 148,
+   "price_edge_pts": 1.16,
+   "book_spread_pts": 5.03,
    "hit_l5": {
     "n": 5,
     "over": 0
@@ -59,98 +149,8 @@
     "over": 4
    },
    "hit_season": {
-    "n": 22,
-    "over": 8
-   },
-   "model_p_over": 0.3429,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Baltimore Orioles @ Athletics",
-   "starts": "2026-08-30T20:06:00Z",
-   "player": "Tommy White",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 202,
-   "best_book": "DraftKings",
-   "n_books": 3,
-   "fair_price": 199,
-   "price_edge_pts": 0.38,
-   "book_spread_pts": 6.1,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 37,
-    "over": 21
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Baltimore Orioles @ Athletics",
-   "starts": "2026-08-30T20:06:00Z",
-   "player": "Carlos Cortes",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "over",
-   "best_price": -152,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": -153,
-   "price_edge_pts": 0.11,
-   "book_spread_pts": 5.2,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 7
-   },
-   "hit_season": {
-    "n": 103,
-    "over": 54
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Cincinnati Reds @ Chicago Cubs",
-   "starts": "2026-08-30T23:21:00Z",
-   "player": "Ian Happ",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 135,
-   "best_book": "Fanatics",
-   "n_books": 4,
-   "fair_price": 134,
-   "price_edge_pts": 0.11,
-   "book_spread_pts": 5.07,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 6
-   },
-   "hit_season": {
-    "n": 132,
-    "over": 74
+    "n": 137,
+    "over": 37
    },
    "model_p_over": null,
    "model_version": null
