@@ -27,12 +27,18 @@ from __future__ import annotations
 import io
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
 
 from ..schema import Event, Line, Market, Result, Sport, Status
 from .base import SportAdapter
+
+# nflverse publishes gameday/gametime in the stadium-agnostic league clock,
+# which is US/Eastern. Stamping it as UTC puts every kickoff four hours early
+# in summer and five in winter, so the conversion is not optional.
+ET = ZoneInfo("America/New_York")
 
 GAMES_URL = (
     "https://github.com/nflverse/nflverse-data/releases/download/"
@@ -86,18 +92,15 @@ class NFLAdapter(SportAdapter):
 
     @staticmethod
     def _kickoff(row) -> datetime:
-        """Best-effort UTC kickoff. gametime is local ET in the source."""
+        """UTC kickoff. gameday/gametime are US/Eastern in the source."""
         day = row["gameday"]
         t = row.get("gametime")
         if pd.isna(day):
             return datetime(1970, 1, 1, tzinfo=timezone.utc)
-        if isinstance(t, str) and ":" in t:
-            hh, mm = t.split(":")[:2]
-            # ET -> UTC, ignoring DST edge cases; refined by the live feed.
-            return datetime(
-                day.year, day.month, day.day, int(hh), int(mm), tzinfo=timezone.utc
-            )
-        return datetime(day.year, day.month, day.day, tzinfo=timezone.utc)
+        hh, mm = (t.split(":")[:2] if isinstance(t, str) and ":" in t else (0, 0))
+        return datetime(
+            day.year, day.month, day.day, int(hh), int(mm), tzinfo=ET
+        ).astimezone(timezone.utc)
 
     @staticmethod
     def _is_final(row) -> bool:

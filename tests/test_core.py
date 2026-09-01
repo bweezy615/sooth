@@ -279,3 +279,30 @@ def test_clv_provenance_is_restricted():
     assert CLV_PROVENANCE == {"own_capture", "oddsapi_historical_close"}
     for untrusted in ("espn_open", "espn_close", "nflverse_consensus"):
         assert untrusted not in CLV_PROVENANCE
+
+
+def test_kickoff_converts_eastern_gametime_to_utc():
+    """nflverse gametime is the Eastern league clock, not UTC.
+
+    Stamping it as UTC shipped every NFL kickoff four hours early in summer
+    (2026 W1 TB-CIN read 8 AM Central on /picks against noon on /market) and
+    would have been five hours early in January. Both halves are asserted so a
+    hardcoded -4 offset fails here too.
+    """
+    summer = {"gameday": pd.Timestamp("2026-09-13"), "gametime": "13:00"}
+    winter = {"gameday": pd.Timestamp("2027-01-03"), "gametime": "13:00"}
+
+    assert NFLAdapter._kickoff(summer) == datetime(
+        2026, 9, 13, 17, 0, tzinfo=timezone.utc)      # EDT, UTC-4
+    assert NFLAdapter._kickoff(winter) == datetime(
+        2027, 1, 3, 18, 0, tzinfo=timezone.utc)       # EST, UTC-5
+
+    # A late kickoff crosses midnight into the next UTC day.
+    night = {"gameday": pd.Timestamp("2026-09-09"), "gametime": "20:20"}
+    assert NFLAdapter._kickoff(night) == datetime(
+        2026, 9, 10, 0, 20, tzinfo=timezone.utc)
+
+    # Missing gametime still lands on the right Eastern date.
+    dateonly = {"gameday": pd.Timestamp("2026-09-13"), "gametime": None}
+    assert NFLAdapter._kickoff(dateonly) == datetime(
+        2026, 9, 13, 4, 0, tzinfo=timezone.utc)
