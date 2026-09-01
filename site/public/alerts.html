@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Alerts</title>
+<title>Market Alerts | Sooth</title>
 <meta name="description" content="Email only when something actually happens: a slate is sealed, a week is graded, a book prices away from the market, or a team you follow is about to play. Free, opt-in, and never a pick.">
 <meta property="og:title" content="Sooth — Alerts">
 <meta property="og:description" content="We'll tell you when something happened. Never what to do about it.">
@@ -294,23 +294,28 @@
   .band .bm{font-family:var(--mono);font-size:11.5px;color:var(--mut);
     letter-spacing:.02em;white-space:nowrap}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
 </head>
 <body>
 <a class="skip" href="#form">Skip to the form</a>
-<main id="main" class="wrap" style="max-width:1040px">
+<main id="main" class="wrap" style="max-width:1200px">
 
   <div class="scr-strip"><span class="nm">ALERTS</span>
-    <span class="tl">FREE · OPT-IN · NEVER A PICK</span>
+    <span class="tl">FREE. OPT-IN. NEVER A PICK.</span>
     <span class="tl" style="margin-left:auto"><a href="/trust" style="color:var(--mut)">PROOF LEDGER →</a></span></div>
 
   <div class="page-head" style="padding:26px 0 0">
-    <h1>We'll tell you when something happened.<br>Never what to do about it.</h1>
+    <h1>Sooth looks when you aren't.</h1>
     <p class="sub">
-      Four things are worth an email, and none of them is a tip. A slate got sealed before
-      kickoff. A week got graded, win or lose. A book is pricing away from the rest of the
-      market right now. A team you follow is about to play. Everything here is free — alerts
-      are not the paid tier and never were.</p>
+      Continuous market monitoring, without a pick attached. See what changed, at which book,
+      when it moved, and how far that price sits from the market. Everything here is free.</p>
   </div>
+
+  <section class="market-tape" aria-labelledby="watchingH">
+    <div class="sec-h"><span class="tl" id="watchingH">WHAT SOOTH IS WATCHING</span>
+      <span class="sub">Latest detected sportsbook movement from the same captured market data.</span></div>
+    <div id="alertTape" class="tape-rows" aria-live="polite"><p class="state">Loading recent movement.</p></div>
+  </section>
 
   <div class="msg" id="banner" hidden role="status" aria-live="polite"></div>
 
@@ -471,6 +476,28 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script>
+(function(){
+  var D=window.Desk, host=document.getElementById("alertTape");
+  Promise.all([D.load("/data/moves.json"),D.load("/data/board.json")]).then(function(rs){
+    if(!rs[0].ok){ host.innerHTML='<p class="state">Movement feed unavailable.</p>'; return; }
+    var ranges={};
+    if(rs[1].ok) (rs[1].data.boards||[]).forEach(function(b){(b.events||[]).forEach(function(e){
+      (e.sides||[]).forEach(function(s){ ranges[e.id+"|"+s.name]={best:s.best_price,worst:s.worst_price,fair:s.fair_price}; });
+    });});
+    host.innerHTML=(rs[0].data.drift||[]).slice(0,4).map(function(m){
+      var selection=m.selection==="side_a"?m.home:m.selection==="side_b"?m.away:m.selection;
+      var range=ranges[m.event_id+"|"+selection];
+      return '<div class="tape-row"><div class="tape-book"><span>SPORTSBOOK</span><b>'+D.esc(m.book)+'</b></div>'
+        +'<div class="tape-selection"><span>'+D.esc(selection)+' MONEYLINE</span><b>'+D.esc(m.away)+' at '+D.esc(m.home)+'</b></div>'
+        +'<div class="tape-change"><span>PRICE CHANGED</span><b>'+D.am(m.from_price)+' → '+D.am(m.to_price)+'</b></div>'
+        +'<div class="tape-context"><span>'+D.ago(m.observed_at)+'</span><b>'
+        +(range?'Fair market '+D.am(range.fair):'Not on current board')+'</b><small>'
+        +(range?'Range '+D.am(range.worst)+' to '+D.am(range.best):'')+'</small></div></div>';
+    }).join('')||'<p class="state">No movement currently exceeds the alert threshold.</p>';
+  });
+})();
+</script>
 <script>
 (function(){
   window.Desk.mount("alerts");

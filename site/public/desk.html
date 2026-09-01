@@ -415,6 +415,8 @@
 
   @media (max-width:859px){
     body{overflow:auto}
+    .ws-labels{justify-content:flex-start;overflow-x:auto;max-width:100vw;scrollbar-width:none}
+    .ws-labels button{flex:0 0 auto}
     /* Only .hero now. This used to hide .deskwrap too, because the phone
        shell replaced the desk wholesale and carried its own byte-identical
        copy of the compliance language — showing both would have been the one
@@ -436,7 +438,7 @@
     #desk::after{display:none}
     #stagewrap{flex:1}
     .monitor{position:relative;left:auto;top:auto;margin:0;transform:none!important;
-      opacity:1!important;flex:0 0 100vw;width:100vw;height:100%;
+      opacity:1!important;flex:0 0 100%;width:100%;height:100%;box-sizing:border-box;
       scroll-snap-align:center;padding:8px 10px 0}
     .bezel{position:relative;width:100%;height:100%;padding:8px;border-radius:4px}
     .screen{width:100%;height:100%}

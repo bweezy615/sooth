@@ -336,6 +336,7 @@ SHELL = """<!doctype html>
 <style>
 {css}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
 </head>
 <body>
 <div class="wrap"><div class="prose{prose_class}">

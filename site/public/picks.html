@@ -201,6 +201,7 @@
   .embedded .scr-creed{display:block;margin:0 0 10px;max-width:92ch}
   .embedded .strip{margin-top:8px}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
 </head>
 <body>
 <a class="skip" href="#main">Skip to the slate</a>
@@ -767,7 +768,8 @@ fetch(SRC,{cache:"no-store"})
     $("board").innerHTML='<div class="state"><span class="tl">THE ENGINE IS UNREACHABLE'
       +'</span>This is where the sealed slate stands — every game, both models, under '
       +'the week\'s Merkle root. Nothing came back for it just now. Try again shortly; '
-      +'slates seal Wednesdays in season.</div>';
+      +'slates seal Wednesdays in season.<br><a href="/ledger">OPEN SEALED LEDGER →</a>'
+      +' &nbsp; <a href="/record">OPEN PUBLIC RECORD →</a></div>';
     settled();
   });
 })();

@@ -46,6 +46,15 @@
   .page-head .sub{color:var(--ink2);font-size:14px;line-height:1.65;
     max-width:74ch;margin:0}
   .page-head .sub b{color:var(--ink)}
+  .ask-context{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(110px,.65fr));
+    margin-top:22px;border-top:1px solid var(--hair2);border-bottom:1px solid var(--hair)}
+  .ask-context>div{padding:14px 16px;min-width:0}.ask-context>div+div{border-left:1px solid var(--hair)}
+  .ask-context .tl{display:block;margin-bottom:7px;color:var(--mut)}
+  .ask-context-match{font:600 17px/1.25 var(--sans);color:var(--ink)}
+  .ask-context-side{display:block;margin-top:5px;font:500 11px/1.3 var(--mono);color:var(--ink2)}
+  .ask-context-price{font:700 24px/1 var(--mono);letter-spacing:-.04em;color:var(--ink)}
+  .ask-context-best .ask-context-price,.ask-context-gap .ask-context-price{color:var(--brand)}
+  .ask-context-book{display:block;margin-top:6px;font:600 10px/1 var(--mono);color:var(--ink2)}
 
   /* the field label: mono caps, like every other label on the site */
   .ask-lb{display:block;margin-bottom:10px}
@@ -94,6 +103,10 @@
   /* on a phone the label and the key stop sharing a line; the key takes the
      full width rather than sitting as a small target in the corner */
   @media (max-width:560px){
+    .ask-context{grid-template-columns:1fr 1fr}.ask-context>div{padding:12px}
+    .ask-context>div+div{border-left:0}.ask-context>div:nth-child(even){border-left:1px solid var(--hair)}
+    .ask-context>div:nth-child(n+3){border-top:1px solid var(--hair)}
+    .ask-context-match{font-size:15px}.ask-context-price{font-size:22px}
     .ask-row{align-items:stretch}
     .ask-row .keys{width:100%;justify-content:space-between}
     #go{flex:1;max-width:none}}
@@ -127,6 +140,12 @@
   .an-out.is-idle{border-left-color:var(--hair2);color:var(--mut)}
   .an-out.is-idle .lb{display:block;margin-bottom:9px}
   .an-out.is-idle .fo{display:block;margin-top:11px;line-height:1.5}
+  .read-contract{margin:12px 0 0;border-top:1px solid var(--hair)}
+  .read-contract div{display:grid;grid-template-columns:150px 1fr;gap:18px;
+    padding:10px 0;border-bottom:1px solid var(--hair)}
+  .read-contract b{font:600 10px/1.3 var(--mono);letter-spacing:.1em;color:var(--ink2)}
+  .read-contract span{font:400 13px/1.4 var(--sans);color:var(--mut)}
+  @media (max-width:560px){.read-contract div{grid-template-columns:1fr;gap:4px}}
   .an-out .shimmer{margin:11px 0 0}
   .an-out .shimmer:first-of-type{margin-top:13px}
 
@@ -141,7 +160,15 @@
     color:var(--dim);max-width:none}
   /* .tl carries its own colour, so the late state has to reach the spans */
   .an-out p.asof.late,.an-out p.asof.late .tl{color:var(--amber)}
+  .answer-head,.answer-next{display:flex;align-items:center;justify-content:space-between;
+    gap:12px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--hair)}
+  .answer-next{justify-content:flex-start;margin:14px 0 0;padding:10px 0 0;
+    border-top:1px solid var(--hair);border-bottom:0}
+  .answer-next a{font:600 10px/1 var(--mono);letter-spacing:.1em;color:var(--mut)}
+  .answer-next a:hover{color:var(--ink)}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
+<link rel="stylesheet" href="/assets/market-tape.css?v=signature-market">
 </head>
 <body>
 <a class="skip" href="#ask">Skip to the analyst</a>
@@ -163,6 +190,10 @@
       will not pick a side.</b></p>
   </div>
 
+  <div class="ask-context" id="askContext" aria-label="Current market context">
+    <div><span class="tl">CURRENT MARKET CONTEXT</span><span class="ask-context-match">Loading published board…</span></div>
+  </div>
+
   <div class="mkt rimlit" style="margin-top:22px">
     <label class="tl ask-lb" for="q">YOUR BET</label>
     <textarea id="q" class="ask-ta" maxlength="500"
@@ -180,11 +211,13 @@
   </div>
 
   <div id="out" class="an-out is-idle" aria-live="polite">
-    <span class="tl lb">THE READ</span>
-    <p>Nothing read yet. Ask about a game or a prop on tonight's board and the answer lands
-      here: the fair price with the book's cut stripped out, which book is posting the best
-      number, and the points you gain by taking it there.</p>
-    <span class="tl fo">WILL NOT NAME A SIDE · SAYS SO WHEN NOTHING IS LIVE</span>
+    <span class="tl lb">WHAT THE READ RETURNS</span>
+    <div class="read-contract">
+      <div><b>MARKET FAIR PRICE</b><span>The consensus price with sportsbook margin removed.</span></div>
+      <div><b>BEST AVAILABLE</b><span>The strongest captured price and the book posting it.</span></div>
+      <div><b>MARKET GAP</b><span>How far the best price sits from the rest of the market.</span></div>
+    </div>
+    <span class="tl fo">MARKET FACTS · CAPTURE TIME · NO SIDE PICKED</span>
   </div>
 
   <p class="ft">Sooth reads odds; it is not a
@@ -196,6 +229,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/market-tape.js?v=signature-market"></script>
 <script>
 (function(){
 "use strict";
@@ -203,7 +237,26 @@ var D=window.Desk, busy=false;
 D.mount("ask");
 if(!D.embedded){ /* the rail lives in the site header; embedded, neither exists */
   D.load("/data/board.json").then(function(r){
-    D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});});
+    D.sportRail(r.ok?r.data:null,"",function(){location.href="/";});
+    var host=document.getElementById("askContext");
+    if(!r.ok){host.innerHTML='<div><span class="tl">CURRENT MARKET CONTEXT</span><span class="ask-context-match">Published board unavailable</span></div>';return;}
+    var events=[];(r.data.boards||[]).forEach(function(b){(b.events||[]).forEach(function(e){
+      if(Date.parse(e.starts)>Date.now()) events.push({sport:b.sport,event:e});});});
+    events.sort(function(a,b){
+      function gap(x){return Math.max.apply(null,x.event.sides.map(function(s){return s.gain_pts||0;}));}
+      return gap(b)-gap(a);
+    });
+    if(!events.length){host.innerHTML='<div><span class="tl">CURRENT MARKET CONTEXT</span><span class="ask-context-match">No upcoming market published</span></div>';return;}
+    var hit=events[0], ev=hit.event, best=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+    host.innerHTML='<div><span class="tl">CURRENT MARKET CONTEXT · '+D.esc(D.sportLabel(hit.sport))+'</span>'
+      +'<span class="ask-context-match">'+D.esc(ev.away)+' at '+D.esc(ev.home)+'</span>'
+      +'<span class="ask-context-side">'+D.esc(best.name)+' MONEYLINE</span></div>'
+      +'<div><span class="tl">MARKET FAIR</span><span class="ask-context-price">'+D.am(best.fair_price)+'</span></div>'
+      +'<div class="ask-context-best"><span class="tl">BEST AVAILABLE</span><span class="ask-context-price">'+D.am(best.best_price)+'</span>'
+      +'<span class="ask-context-book">'+D.bk(best.best_book)+'</span></div>'
+      +'<div class="ask-context-gap"><span class="tl">GAP</span><span class="ask-context-price">'+D.pts(best.gain_pts)+'</span>'
+      +'<span class="ask-context-book">PTS VS FAIR</span></div>';
+  });
 }
 function $(id){return document.getElementById(id);}
 var EX=[
@@ -238,7 +291,11 @@ function render(text,isErr,asOf){
   out.classList.remove("is-idle");
   out.removeAttribute("aria-busy");
   out.style.borderLeftColor=isErr?"var(--amber)":"var(--brand)";
-  out.innerHTML=D.answer(text)+(isErr?"":stamp(asOf));
+  out.innerHTML='<div class="answer-head"><span class="tl">'
+    +(isErr?'READ UNAVAILABLE':'MARKET READ')+'</span></div>'
+    +D.answer(text)+(isErr?'':stamp(asOf)
+      +'<div class="answer-next"><a href="/">OPEN BOARD →</a>'
+      +'<a href="/research">OPEN RESEARCH →</a></div>');
   D.tick();
 }
 function pending(){

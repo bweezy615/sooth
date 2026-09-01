@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>sooth.bet — sports betting research and analysis</title>
-<meta name="description" content="Every figure on one surface: what the board is showing, where books disagree, and how the model actually measures — straight-up accuracy, calibration error, and its losing record against the spread.">
+<title>sooth.bet | Compare sportsbook prices</title>
+<meta name="description" content="Every sportsbook prices the same bet differently. Sooth compares live odds, removes vig, shows fair-market context, and finds the best available price.">
 <link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="sooth.bet — dashboard">
-<meta property="og:description" content="The board, the movement, and the model's real measurements in one place. Analysis, never picks.">
+<meta property="og:title" content="sooth.bet | Compare sportsbook prices">
+<meta property="og:description" content="Live sportsbook prices, fair-market context, movement, and a public record that includes the losses.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="https://sooth.bet/">
@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/desk.css">
-<link rel="stylesheet" href="/assets/app.css">
+<link rel="stylesheet" href="/assets/app.css?v=market-interface">
 <style>
   /* This page mounts its own shell, so the shared room plate would sit behind
      a full-height sidebar and a sticky top bar and never be seen. */
@@ -100,7 +100,7 @@
      this one either. */
   .m-top{position:relative;isolation:isolate;overflow:hidden;
     display:flex;align-items:center;flex-wrap:wrap;gap:9px;
-    min-height:126px;padding:18px var(--pad) 15px}
+    min-height:92px;padding:16px var(--pad) 14px;border-bottom:1px solid var(--line)}
   .m-top::before{content:"";position:absolute;inset:0;z-index:-2;
     background:var(--bg) 72% 58%/cover no-repeat;
     background-image:url("/assets/hero-phone.jpg")}
@@ -113,6 +113,7 @@
         rgba(6,8,10,.24) 58%, transparent 78%),
       linear-gradient(to bottom, rgba(6,8,10,.42) 0%, transparent 32%,
         rgba(6,8,10,.88) 86%, var(--bg) 100%)}
+  .m-top::before,.m-top::after{display:none}
   .m-mark{width:9px;height:9px;flex:0 0 auto;border-radius:50%;background:var(--accent);
     box-shadow:0 0 10px rgba(45,212,167,.55)}
   .m-top b{font:600 18px/1 var(--sans);letter-spacing:-.02em;color:var(--ink)}
@@ -121,7 +122,7 @@
      the lit face of the block — small mono caps in --mut on ice, which is the
      one combination the scrim cannot rescue. */
   .m-sub{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;
-    color:var(--mut);flex:0 0 100%;margin-top:5px;white-space:nowrap}
+    color:var(--ink2);flex:0 0 100%;margin-top:5px;white-space:normal;line-height:1.45}
 
   /* --- sport rail ---
      Tiles are 44px tall so they are actually tappable, and the rail carries a
@@ -195,10 +196,8 @@
     justify-content:center;min-height:176px}
 
   /* --- one game, one card --- */
-  .m-g{flex:0 0 84%;max-width:330px;display:flex;flex-direction:column;
-    border:1px solid var(--hair);padding:12px 13px;
-    background:linear-gradient(180deg,#0E151B,#080D11);
-    box-shadow:inset 0 1px 0 rgba(190,240,245,.07)}
+  .m-g{flex:0 0 calc(100% - 38px);max-width:358px;display:flex;flex-direction:column;
+    border:1px solid var(--hair);padding:16px;background:var(--g1)}
   .m-g:active{border-color:var(--accent)}
   .m-gh{display:flex;align-items:center;gap:8px;padding-bottom:9px;flex:0 0 auto;
     border-bottom:1px solid var(--hair)}
@@ -206,26 +205,27 @@
     font:600 11px var(--mono);letter-spacing:.08em;color:var(--mut)}
   /* the season has not started: say so on the card, not just in the date */
   .m-up{font-style:normal;color:var(--accent);letter-spacing:.1em}
-  .m-gt{margin-left:auto;flex:0 0 auto;font:500 11px var(--mono);color:var(--mut);
+  .m-gt{margin-left:auto;flex:0 0 auto;font:500 12px var(--mono);color:var(--mut);
     white-space:nowrap}
   /* flex:1 on the sides: every card in a rail is stretched to the tallest one,
      and without this the slack piled up as dead space under the last row. */
-  .m-side{display:grid;grid-template-columns:1fr auto auto;gap:9px;flex:1;
-    align-items:center;padding:10px 0;border-bottom:1px solid var(--hair)}
+  .m-side{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;flex:1;
+    align-items:center;padding:14px 0;border-bottom:1px solid var(--hair)}
   .m-side:last-child{border-bottom:0}
-  .m-nm{font:600 13.5px var(--sans);color:var(--ink);line-height:1.25;min-width:0;
+  .m-nm{font:600 16px var(--sans);color:var(--ink);line-height:1.2;min-width:0;
     display:grid;grid-template-columns:18px minmax(0,1fr);column-gap:8px;
     align-items:center}
   .m-nm .crest{grid-column:1;grid-row:1/3;align-self:center;object-fit:contain}
   .m-nm .m-tn{grid-column:2;min-width:0;overflow-wrap:anywhere}
   .m-nm .m-bk{grid-column:2}
-  .m-bk{display:block;font:500 11px var(--mono);color:var(--mut);letter-spacing:0;
+  .m-bk{display:block;font:500 12px var(--sans);color:var(--mut);letter-spacing:0;
     margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .m-px,.m-fair,.m-seal .v{font-variant-numeric:tabular-nums}
-  .m-px{font:700 16px var(--mono);color:var(--ink);text-align:right;min-width:4.5ch}
-  .m-fair{font:500 11px var(--mono);color:var(--mut);text-align:right;min-width:9ch}
-  .m-fair i{display:block;font-style:normal;color:var(--dim);font-size:11px;
-    letter-spacing:.02em;margin-top:3px}
+  .m-px{grid-row:1/3;grid-column:2;font:700 27px/1 var(--mono);color:var(--brand);
+    text-align:right;min-width:4.5ch;letter-spacing:-.04em}
+  .m-fair{grid-column:1/3;font:500 13px var(--mono);color:var(--mut);text-align:right}
+  .m-fair i{display:inline;font-style:normal;color:var(--dim);font-size:13px;
+    letter-spacing:.02em;margin-left:8px}
   .m-fair i.m-gain{color:var(--accent)}
 
   /* --- the sealed slate card --- */
@@ -313,6 +313,7 @@
     #mob{display:block}
   }
 </style>
+<link rel="stylesheet" href="/assets/market-tape.css?v=signature-market">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -332,7 +333,7 @@
   <header class="m-top">
     <span class="m-mark"></span>
     <b>sooth<i>.bet</i></b>
-    <span class="m-sub">Market intelligence</span>
+    <span class="m-sub">Every book prices it differently. We show you the best one.</span>
   </header>
 
   <!-- Sport rail. Driven by the board, never hardcoded: a league with no
@@ -425,21 +426,20 @@
   <aside class="sb">
     <a class="sb-mark" href="/desk" aria-label="sooth.bet — the desk"><span class="pip"></span><b>sooth<i>.bet</i></b></a>
     <nav class="sb-nav" aria-label="Sections">
-      <span class="sb-sec">Tonight</span>
+      <span class="sb-sec">Markets</span>
       <a href="/" aria-current="page"><span class="ic ic-grid"></span>Tonight&rsquo;s board</a>
       <a href="/market"><span class="ic ic-live"></span>Compare prices</a>
-      <a href="/picks"><span class="ic ic-engine"></span>Picks</a>
       <a href="/props"><span class="ic ic-watch"></span>Player props</a>
       <a href="/edges"><span class="ic ic-perf"></span>Line moves</a>
-      <span class="sb-sec">Proof</span>
-      <a href="/trust"><span class="ic ic-grade"></span>Proof</a>
-      <a href="/record"><span class="ic ic-grade"></span>Track record</a>
-      <a href="/ledger"><span class="ic ic-perf"></span>Sealed slates</a>
-      <span class="sb-sec">More</span>
-      <a href="/ask"><span class="ic ic-ai"></span>Analyst</a>
-      <a href="/research"><span class="ic ic-lab"></span>Research</a>
-      <a href="/whales"><span class="ic ic-perf"></span>Big bets</a>
       <a href="/alerts"><span class="ic ic-bell"></span>Alerts</a>
+      <a href="/picks"><span class="ic ic-engine"></span>Picks</a>
+      <span class="sb-sec sb-sec-secondary">Research &amp; proof</span>
+      <a class="sb-secondary" href="/ask"><span class="ic ic-ai"></span>Analyst</a>
+      <a class="sb-secondary" href="/research"><span class="ic ic-lab"></span>Research</a>
+      <a class="sb-secondary" href="/whales"><span class="ic ic-perf"></span>Big bets</a>
+      <a class="sb-secondary" href="/trust"><span class="ic ic-grade"></span>Proof</a>
+      <a class="sb-secondary" href="/record"><span class="ic ic-grade"></span>Track record</a>
+      <a class="sb-secondary" href="/ledger"><span class="ic ic-perf"></span>Sealed slates</a>
     </nav>
     <div class="sb-foot">
       <a class="tb-chip" href="/learn" style="width:100%;justify-content:center">
@@ -465,36 +465,23 @@
 
     <main class="app-body" id="main">
 
-      <!-- ============ HERO ============ -->
-      <section class="dash-hero">
-        <div>
-          <h1>Tonight&rsquo;s games.<span>Every book&rsquo;s price.</span></h1>
-          <p class="lede">We check eleven sportsbooks on every game and show you which one
-            is paying the most. Same bet, better number, more money back — and it doesn&rsquo;t
-            depend on anyone predicting the game correctly. Free, no account.</p>
+      <!-- The market is the hero. Every visible number is populated from
+           board.json; the holding state is explicit rather than fabricated. -->
+      <section class="market-hero" aria-labelledby="marketHeroTitle">
+        <div class="market-hero-copy">
+          <span class="market-kicker">LIVE MARKET</span>
+          <h1 id="marketHeroTitle">Every sportsbook prices the same bet differently.</h1>
+          <p class="market-promise">We show you the best one.</p>
           <div class="dash-cta">
-            <a class="btn btn-p" href="#dBoardH">See tonight&rsquo;s board <span aria-hidden="true">&darr;</span></a>
-            <a class="btn btn-s" href="/learn">How it works</a>
+            <a class="btn btn-p" href="#dBoardH">View live board</a>
+            <a class="btn btn-s" href="/learn">How Sooth works</a>
           </div>
-          <p class="dash-trust"><span class="dash-shield" aria-hidden="true"></span>
-            <span><b>Verifiable. Transparent. Backtested.</b><br>
-            No hype, just data — and the data says our model does not beat the close.</span></p>
+          <p class="market-support">11 sportsbooks <span aria-hidden="true">/</span>
+            live odds <span aria-hidden="true">/</span> fair-market context</p>
         </div>
-        <!-- The plate is decorative (aria-hidden); the words on the screen are
-             real text in the document, so they are selectable, scale to any DPI,
-             and are read out rather than described. -->
-        <div class="dash-art" aria-hidden="true">
-          <div class="hero-screen">
-            <span class="hs-mark">sooth<i>.bet</i></span>
-            <span class="hs-sub">Market intelligence &middot; Honest edge</span>
-            <ul>
-              <li>Tonight&rsquo;s board</li>
-              <li>Compare prices</li>
-              <li>Picks</li>
-              <li>Line moves</li>
-              <li>Proof</li>
-            </ul>
-          </div>
+        <div class="market-terminal" id="marketHero" aria-live="polite">
+          <div class="market-hold"><span>READING THE MARKET</span>
+            Finding the clearest live price comparison.</div>
         </div>
       </section>
 
@@ -550,6 +537,31 @@
           <div class="panel"><div class="panel-b"><div class="pstate">
             <span class="tl">RANKING THE GAPS</span>
             Where the best number beats the worst by the most.</div></div></div>
+        </div>
+      </section>
+
+      <section class="price-principle" aria-labelledby="pricePrincipleH">
+        <div>
+          <span class="market-kicker">WHY PRICE MATTERS</span>
+          <h2 id="pricePrincipleH">You cannot control the result.<br>You can control the price.</h2>
+        </div>
+        <div class="return-compare" aria-label="Example return comparison for the same 100 dollar wager">
+          <div><span class="rc-label">$100 AT -115</span><strong>$186.96</strong><small>total return</small></div>
+          <div><span class="rc-label">$100 AT +102</span><strong>$202.00</strong><small>total return</small></div>
+          <p>Same exact outcome. <b>$15.04 more returned</b> at the better price.</p>
+        </div>
+      </section>
+
+      <section class="watch-section" aria-labelledby="watchH">
+        <div class="watch-copy">
+          <span class="market-kicker">MARKET ALERTS</span>
+          <h2 id="watchH">The market moves when you are not watching.</h2>
+          <p>Sooth monitors price movement and sends the changes you choose to follow. Free and opt-in.</p>
+          <a class="btn btn-p" href="/alerts">Set a free alert</a>
+        </div>
+        <div class="alert-terminal" id="alertPreview">
+          <span class="alert-label">READING THE TAPE</span>
+          <p>Checking the latest sportsbook movement.</p>
         </div>
       </section>
 
@@ -619,6 +631,17 @@
           <span class="v" id="sN">·</span><span class="sub" id="sNSub">walk-forward</span></div>
       </section>
 
+      <section class="record-gateway" aria-labelledby="recordGatewayH">
+        <div class="record-number"><strong id="originAts">49.8%</strong>
+          <span>HISTORICAL ATS MODEL WIN RATE</span></div>
+        <div class="record-copy">
+          <h2 id="recordGatewayH">We tried to beat the market.<br>The market won.</h2>
+          <p>Most betting products would bury that result. Sooth publishes it. That failure is why the product focuses on prices the market actually offers.</p>
+          <div class="dash-cta"><a class="btn btn-p" href="/methodology">Read the methodology</a>
+            <a class="btn btn-s" href="/record">Open public record</a></div>
+        </div>
+      </section>
+
         <section class="panels">
         <div class="panel">
           <div class="panel-h"><h2>Model calibration</h2>
@@ -632,10 +655,18 @@
         </section>
       </section>
 
+      <section class="final-action" aria-labelledby="finalActionH">
+        <span class="market-kicker">SOOTH IS FREE</span>
+        <h2 id="finalActionH">Find the best available price now.</h2>
+        <p>No account. No subscription. No claim that we know who will win.</p>
+        <div class="dash-cta"><a class="btn btn-p" href="/market">Open full board</a>
+          <a class="btn btn-s" href="/verify">Verify Sooth</a></div>
+      </section>
+
       <p class="note" style="color:var(--dim);font:500 11px/1.6 var(--mono);
          letter-spacing:.04em;max-width:96ch">
         Entertainment and analysis only. We do not accept, place, or facilitate wagers.
-        Past performance does not indicate future results — our published backtest shows
+        Past performance does not indicate future results. Our published backtest shows
         a loss against the closing market. Nothing here is a recommendation to bet.
         21+, where lawful. Problem gambling help: 1-800-522-4700, 24/7.
       </p>
@@ -924,7 +955,8 @@ MOBILE.addEventListener?MOBILE.addEventListener("change",function(){location.rel
   :MOBILE.addListener(function(){location.reload();});
 })();
 </script>
-<script src="/assets/desk.js"></script>
+<script src="/assets/desk.js?v=market-interface"></script>
+<script src="/assets/market-tape.js?v=signature-market"></script>
 <script src="/assets/crest.js"></script>
 <script>
 (function(){
@@ -959,20 +991,6 @@ function fail(el,what){
     +'estimated in the meantime.</div>';
 }
 
-/* ---------- the hero plate ----------
-   Set from JS rather than CSS so the phone gets the small crop. The desktop
-   plate is 2000px wide and a phone has no use for it. */
-(function art(){
-  var el=document.querySelector(".dash-art");
-  if(!el) return;
-  /* slab.jpg is the landscape plate with the screen cavity the overlay sits
-     in. hero-phone.jpg is the portrait crop of the OTHER render and has no
-     cavity — which is why the overlay hides below 620px rather than trying to
-     land on a plate that has nowhere to put it. */
-  var small=window.matchMedia("(max-width:620px)").matches;
-  el.style.backgroundImage='url("/assets/'+(small?"hero-phone.jpg":"slab.jpg")+'")';
-})();
-
 /* ---------- stat strip ---------- */
 function lift(id){var s=$(id); if(s) s.closest(".stat").classList.remove("pending");}
 
@@ -997,6 +1015,7 @@ D.load("/data/figures.json").then(function(r){
   lift("sAcc");
 
   $("sAts").textContent=pct(ats); $("sAts").className="v dn";
+  if($("originAts")) $("originAts").textContent=pct(ats);
   $("sAtsSub").textContent="below the "+pct(be,2)+" break-even";
   lift("sAts");
 
@@ -1054,10 +1073,56 @@ function shown(){
 function cards(id,rows,emptyTitle,emptyMsg){
   var el=$(id); if(!el) return;
   el.innerHTML=rows.length
-    ? rows.map(function(r){return D.eventCard(r.e,D.sportLabel(r.sport));}).join("")
+    ? rows.map(function(r){
+      var e=r.e, best=e.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+      var probs=(best.quotes||[]).map(function(q){return D.implied(q.price);});
+      var lo=Math.min.apply(null,probs.concat([best.fair_prob]));
+      var hi=Math.max.apply(null,probs.concat([best.fair_prob]));
+      function pos(v){return hi===lo?50:Math.max(4,Math.min(96,(v-lo)/(hi-lo)*100));}
+      return '<a class="market-scan-row" href="/game?e='+encodeURIComponent(e.id)+'&s='+r.sport+'">'
+        +'<span class="scan-time">'+esc(D.when(e.starts))+'</span>'
+        +'<span class="scan-match"><b>'+crest(e.away,r.sport,18)+'</b><i>at</i><b>'+crest(e.home,r.sport,18)+'</b></span>'
+        +'<span class="scan-market"><i>'+esc(best.name.split(" ").pop())+' MONEYLINE</i><span><em>FAIR</em><b>'+am(best.fair_price)+'</b></span></span>'
+        +'<span class="scan-disagree"><span class="scan-best"><em>BEST AVAILABLE</em><b>'+am(best.best_price)+'</b><i>'+esc(D.bk(best.best_book))+'</i></span>'
+          +'<strong>'+D.pts(best.gain_pts)+' PTS GAP</strong></span>'
+        +'<span class="scan-range"><span class="range-label"><i>'+am(best.worst_price)+'</i><em>BOOK RANGE</em><i>'+am(best.best_price)+'</i></span>'
+          +'<span class="range-line"><i class="fair-mark" style="left:'+pos(best.fair_prob).toFixed(1)+'%"></i>'
+          +'<i class="best-mark" style="left:'+pos(D.implied(best.best_price)).toFixed(1)+'%"></i></span></span>'
+        +'<span class="scan-open" aria-hidden="true">→</span></a>';
+    }).join("")
     : '<div class="panel"><div class="panel-b"><div class="pstate"><span class="tl">'
       +esc(emptyTitle)+'</span>'+esc(emptyMsg)+'</div></div></div>';
+  el.classList.toggle("market-scanner",rows.length>0);
   if(window.Crest&&Crest.hydrate) Crest.hydrate(el);
+}
+function am(n){return n==null?"·":(n>0?"+"+n:String(n));}
+function renderMarketHero(row){
+  var el=$("marketHero"); if(!el) return;
+  if(!row||!row.e||!row.e.sides||!row.e.sides.length){
+    el.innerHTML='<div class="market-hold"><span>NO LIVE COMPARISON</span>'
+      +'The market board will repopulate when the next prices arrive.</div>';
+    return;
+  }
+  var ev=row.e;
+  var side=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+  var quotes=(side.quotes||[]).slice(0,6);
+  var when=new Date(ev.starts).toLocaleString([],{weekday:"short",month:"short",day:"numeric",
+    hour:"numeric",minute:"2-digit"});
+  var qhtml=quotes.map(function(q,i){
+    return '<div class="mh-quote'+(i===0?' best':'')+'"><span>'
+      +esc(D.bk(q.book))+'</span><b>'+esc(am(q.price))+'</b></div>';
+  }).join("");
+  el.innerHTML='<div class="mh-top"><div><span class="mh-league">'
+    +esc(D.sportLabel(row.sport))+' MONEYLINE</span><div class="mh-match">'
+    +esc(ev.away)+' at '+esc(ev.home)+'</div></div><div class="mh-time">'
+    +esc(when)+'<br>'+esc(ev.n_books||side.n_books||quotes.length)+' books</div></div>'
+    +'<div class="mh-context"><div><span>MARKET FAIR PRICE</span><strong>'+esc(am(side.fair_price))
+    +'</strong></div><em>'+esc(side.name)+' moneyline</em></div>'
+    +'<div class="mh-best"><span>BEST AVAILABLE</span><b>'
+    +esc(am(side.best_price))+'</b><i>'+esc(side.best_book||"")+'</i></div>'
+    +'<div class="mh-quotes">'+qhtml+'</div><div class="mh-foot"><b>'
+    +esc((side.gain_pts||0).toFixed(2))+' pts</b> between best and worst'
+    +'<a href="/game?e='+encodeURIComponent(ev.id)+'">Full market</a></div>';
 }
 function drawBoard(){
   var where=BD.sport==="all"?"on the board":"in "+D.sportLabel(BD.sport);
@@ -1074,6 +1139,11 @@ function drawBoard(){
     +"price right now. That is the market agreeing, not a missing figure.");
   var g=$("dGames");
   if(g) g.textContent=soon.length+(soon.length===1?" game":" games")+" "+where;
+  if(BD.sport==="all"){
+    var hero=soon.slice().sort(function(a,b){
+      return (b.e.max_gain_pts||0)-(a.e.max_gain_pts||0);})[0];
+    renderMarketHero(hero);
+  }
 }
 D.load("/data/board.json").then(function(r){
   if(!r.ok){ fail($("dBoard"),"BOARD"); fail($("dGaps"),"GAPS"); return; }
@@ -1158,6 +1228,21 @@ D.load("/data/moves.json").then(function(r){
     function(x){return {txt:"+"+(x.move_pts||0).toFixed(2)+" pts",cls:"up"};},
     function(x){return (x.book||"")+" over consensus";},
     "Every book is inside the consensus right now.");
+
+  var alert=drift[0]||div[0], ah=$("alertPreview");
+  if(ah&&alert){
+    var mv=alert.move_pts||0;
+    ah.innerHTML='<span class="alert-label">SOOTH ALERT</span>'
+      +'<div class="alert-move"><span>'+esc(D.sportLabel(alert.sport))+'<br>'
+      +esc(alert.away)+' at '+esc(alert.home)+'</span><b>'
+      +esc((mv>0?"+":"")+mv.toFixed(2)+' pts')+'</b></div>'
+      +'<div class="alert-move"><span>Sportsbook</span><b>'+esc(alert.book||"Market")+'</b></div>'
+      +'<div class="alert-meta"><span>'+esc(alert.detail||"Price movement detected")+'</span>'
+      +'<span>'+esc(ago(alert.observed_at))+'</span></div>';
+  }else if(ah){
+    ah.innerHTML='<span class="alert-label">MARKET QUIET</span>'
+      +'<p>No qualifying movement has appeared since the latest capture.</p>';
+  }
 
   /* The pulse takes the freshest observations of both kinds, newest first, and
      quotes the detail line the engine already wrote — so the ticker can never

@@ -86,6 +86,11 @@
   .itab .state span.tl{display:block;margin-bottom:8px}
 
   @media (max-width:720px){
+    #board tbody tr.mobile-extra{display:none!important}
+    #board tbody.research-all tr.mobile-extra{display:grid!important}
+    .research-more{display:flex;width:100%;min-height:44px;align-items:center;
+      justify-content:center;margin-top:10px;color:var(--ink2);background:var(--g1);
+      border:1px solid var(--hair2);font:600 11px/1 var(--mono);letter-spacing:.1em}
     .rpin{padding:16px 0 18px!important}
     .grid{grid-template-columns:1fr;gap:20px}
     /* a 32px search field and a 35px select are mouse targets. Fingers get 44,
@@ -105,6 +110,7 @@
     .status .live{margin-left:0;flex:0 0 100%}
   }
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -368,10 +374,26 @@ function render(){
     +'the board covers upcoming games only, so a finished game or a team on a bye '
     +'will not appear. Clear the team filter, or choose another week.</div>';
   $("board").innerHTML=html;
-  $("count").textContent=rows.length+" SHOWN";
+  var mobile=matchMedia("(max-width:720px)").matches, initial=12;
+  if(mobile&&rows.length>initial){
+    var body=$("board").querySelector("tbody");
+    [].forEach.call(body.querySelectorAll("tr.g"),function(row,i){
+      if(i>=initial) row.classList.add("mobile-extra");});
+    $("board").insertAdjacentHTML("beforeend",'<button class="research-more" type="button" data-research-more>'
+      +'SHOW ALL '+rows.length+' MATCHUPS</button>');
+    $("count").textContent=initial+" OF "+rows.length+" SHOWN";
+  }else $("count").textContent=rows.length+" SHOWN";
 }
 
 document.addEventListener("click",function(e){
+  var more=e.target.closest("[data-research-more]");
+  if(more){
+    var body=$("board").querySelector("tbody"), total=body.querySelectorAll("tr.g").length;
+    var all=body.classList.toggle("research-all");
+    more.textContent=all?"SHOW FIRST 12 MATCHUPS":"SHOW ALL "+total+" MATCHUPS";
+    $("count").textContent=(all?total:12)+" OF "+total+" SHOWN";
+    return;
+  }
   var th=e.target.closest("th.s");
   if(th){var k=th.dataset.k;
     if(SORT===k){DIR=-DIR;}else{SORT=k;DIR=(k==="game"||k==="kick")?1:-1;}
@@ -416,7 +438,7 @@ function bootData(){
   DATA=rs[0].data; TL=rs[1].ok?rs[1].data:null;
   if(!D.embedded) D.sportRail(null,"nfl",function(){location.href="/";});
   var weeks=[]; (DATA.reports||[]).forEach(function(r){
-    if(weeks.indexOf(r.week)<0) weeks.push(r.week);});
+    if(r.week!=null && weeks.indexOf(r.week)<0) weeks.push(r.week);});
   weeks.sort(function(a,b){return a-b;});
   $("wk").innerHTML='<option value="">ALL WEEKS</option>'
     +weeks.map(function(w){return '<option value="'+w+'">WEEK '+w+'</option>';}).join("");

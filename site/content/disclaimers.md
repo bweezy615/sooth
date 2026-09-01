@@ -35,9 +35,8 @@ prizes, or anything of value based on the outcome of a sporting event. We hold
 no gaming licence in any jurisdiction because we conduct no activity that
 requires one.
 
-The only money that changes hands between you and us is a subscription fee for
-access to software tools and data, described in section 9. That fee is not a
-stake, is not pooled, and does not vary with any sporting result.
+Sooth is currently free to use. We do not operate a checkout, sell a paid tier,
+or charge for access to the analytical tools and data published here.
 
 ## 3. Past performance does not indicate future results
 
@@ -172,10 +171,9 @@ have with us. We do not use stock imagery or invented personas to represent
 customers. We do not publish screenshots of winnings, ours or anyone else's, as
 evidence of anything.
 
-**Our own commercial interest.** We sell subscriptions to analytical tools. That
-is a material connection between us and everything we publish, and you should
-read this site with that in mind - which is precisely why the underlying
-prediction record is cryptographically verifiable rather than self-reported.
+**Our own interest.** We build and publish Sooth. You should still verify our
+claims rather than take them on trust, which is why the underlying prediction
+record is cryptographically verifiable rather than self-reported.
 
 **Artificial intelligence claims.** We describe our system accurately. It is an
 Elo rating model with isotonic probability calibration, and we call it that. We
@@ -183,37 +181,12 @@ do not describe it as artificial intelligence, machine learning, or a neural
 network, because it is none of those, and we do not attribute capabilities to it
 that we have not measured and published.
 
-## 9. Subscriptions, automatic renewal, and cancellation
+## 9. Current access
 
-Paid subscriptions on this site provide access to analytical tools and data. They
-do not provide picks that we claim will win, because we make no such claim about
-any prediction, free or paid.
-
-**Before you are charged, we disclose clearly and conspicuously:** the full
-price, the billing frequency, that the subscription renews automatically until
-cancelled, the date of the first renewal charge, and how to cancel. You must
-give separate affirmative consent to the automatic-renewal terms by ticking a
-box specific to those terms. Consent to renewal is never bundled into acceptance
-of general terms of service, and the box is never pre-ticked.
-
-**One-click cancellation, same medium.** You can cancel online, at any time, in
-the same place you subscribed, in one step, without speaking to anyone, without
-a retention call, without an email request, and without navigating a sequence of
-offers. The cancel control is in your account settings. Cancelling takes effect
-at the end of the current billing period, and you keep access until then.
-
-**Renewal reminders.** For subscription terms of one year or longer, and before
-any material change to price or terms, we send an advance reminder by email
-stating what is about to be charged, when, and how to cancel.
-
-**Refunds.** If you are charged after cancelling, or charged an amount that does
-not match what was disclosed to you, contact us and we will refund it. We do not
-require you to dispute a charge with your bank to get an error corrected.
-
-These practices are our implementation of the Restore Online Shoppers'
-Confidence Act (ROSCA) and California's automatic-renewal requirements under
-AB 2863. Where the law of your jurisdiction gives you stronger rights than the
-paragraphs above, those rights apply.
+Every customer-facing product on Sooth is currently free. There is no paid
+subscription, automatic renewal, checkout, or account-only feature. If that
+product state changes, this disclosure and the product documentation must change
+before any charge is offered.
 
 ---
 
@@ -224,4 +197,4 @@ misleading - including anything on this page - tell us and we will correct it
 and publish the correction. A site whose entire proposition is verifiability has
 no defensible reason to leave an error standing.
 
-*Last updated 2026-08-28.*
+*Last updated 2026-08-31.*

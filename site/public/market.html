@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sooth — Sports Betting Research</title>
+<title>Market Board | Sooth</title>
 <meta name="description" content="Every sportsbook's price on one instrument: fair lines, book disagreement, movement, and research. Analysis only.">
 <meta property="og:title" content="Sooth — Sports Betting Research">
 <meta property="og:description" content="Form, availability, prices and movement — composed into one read per game. Every figure computed. No picks.">
@@ -67,9 +67,11 @@
        the page and it is the first thing read on every card. */
     #games tbody td:not([data-l]){padding:0 0 5px;border-bottom:0;
       font:600 11px/1.3 var(--mono);letter-spacing:.1em;color:var(--dim)}
-    #games tbody td[data-l="GAME"]{display:block;text-align:left;
+    #games tbody td[data-l="MATCHUP"]{display:block;text-align:left;
       padding:0 0 9px;border-bottom:1px solid var(--hair)}
-    #games tbody td[data-l="GAME"]::before{content:none}
+    #games tbody td[data-l="MATCHUP"]::before{content:none}
+    #games tbody td[data-l="MARKET"]{display:none}
+    #games tbody td[data-l="BEST PRICE"] .up{font-size:17px}
   }
 
   /* ---- the analyzer: instrument controls on dark glass ------------------
@@ -216,16 +218,18 @@
   .embedded .stat .v{font-size:18px}
   .embedded .sec{padding-bottom:14px}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
+<link rel="stylesheet" href="/assets/market-tape.css?v=signature-market">
 </head>
-<body>
+<body class="market-page">
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
 
   <!-- what this is, in one line — then the market -->
   <div class="scr-strip"><span class="nm">MARKET BOARD</span>
     <span class="tl" id="es-mkt"></span>
-    <span class="tl" style="margin-left:auto">FAIR VS BEST · EVERY BOOK WE TRACK</span></div>
-  <div class="page-head" style="padding:26px 0 0">
+    <span class="tl" style="margin-left:auto">FAIR VS BEST. EVERY BOOK WE TRACK</span></div>
+  <div class="page-head market-page-head">
     <!-- Not "LIVE PRICING". The board is rebuilt by capture.yml, which through
          late August 2026 was landing about three runs a day, and desk.js:317
          calls a feed stale past three hours - so for roughly half the wall
@@ -234,37 +238,36 @@
          already makes it ("UPDATED <ago>" / "DELAYED - UPDATED <ago>"); a
          static label must not claim it. See docs/plans/capture-cadence.md for
          the cadence itself, which is Branden's decision and is untouched. -->
-    <span class="tl slab-lb">MARKET INTELLIGENCE DESK · PRICES AS LAST CAPTURED</span>
-    <h1 style="font:700 clamp(21px,3vw,27px)/1.25 var(--sans);letter-spacing:-.02em;margin:0">
-      The best sports betting research analyzer on the market.</h1>
+    <span class="tl slab-lb">MARKET INTELLIGENCE. PRICES AS LAST CAPTURED</span>
+    <h1>Market board</h1>
     <p style="color:var(--mut);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:66ch">
-      Form, availability, prices and movement — composed into one read per game,
-      every figure computed from real data, nothing written by a model's memory.
-      <b style="color:var(--ink2)">No picks, no predictions to trust.</b></p>
+      Best available prices, fair-market context, range, and movement.
+      <b style="color:var(--ink2)">Real captured prices. No picks.</b></p>
   </div>
   <div class="status" id="status" aria-live="polite" style="padding:18px 0 16px"></div>
   <div id="notice"></div>
 
-  <!-- ANALYZE — the product, on landing -->
+  <!-- MARKET CONTROL -->
   <div id="sportRailLocal"></div>
+
+  <!-- TODAY'S MARKET -->
+  <section class="sec market-list" aria-labelledby="gmH">
+    <div class="sec-h"><span class="tl" id="gmH">TODAY'S GAMES</span>
+      <span class="sub" id="gmSub"></span></div>
+    <div class="itab" id="games"></div>
+  </section>
+
   <section class="sec" id="analyzer" aria-labelledby="anH">
-    <div class="sec-h"><span class="tl" id="anH">ANALYZE A GAME</span>
-      <span class="sub">ask anything on tonight's slate — answers use only the captured numbers, and it will not pick a side</span>
+    <div class="sec-h"><span class="tl" id="anH">ASK SOOTH ABOUT THE BOARD</span>
+      <span class="sub">answers use only the captured numbers and never pick a side</span>
       <span class="more tl" id="anterms"></span></div>
     <label class="vh" for="anq">Ask a question about tonight's board</label>
     <div class="an-in" style="max-width:720px">
-      <input id="anq" maxlength="500" placeholder="e.g. Analyze tonight's Mets game — what's the number doing?">
+      <input id="anq" maxlength="500" placeholder="e.g. Analyze tonight's Mets game - what's the number doing?">
       <button id="ango">ANALYZE</button>
     </div>
     <div class="an-chips" id="anchips"></div>
     <div class="an-out" id="anout"></div>
-  </section>
-
-  <!-- TODAY'S MARKET -->
-  <section class="sec" aria-labelledby="gmH">
-    <div class="sec-h"><span class="tl" id="gmH">TODAY'S GAMES</span>
-      <span class="sub" id="gmSub"></span></div>
-    <div class="itab" id="games"></div>
   </section>
 
   <!-- MARKET RADAR -->
@@ -278,10 +281,11 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/market-tape.js?v=signature-market"></script>
 <script src="/assets/crest.js"></script>
 <script>
 (function(){
-var D=window.Desk, SP="mlb", BOARD=null;
+var D=window.Desk, SP="mlb", BOARD=null, MOVES={};
 D.mount("market");
 
 function sideName(a,txt){
@@ -313,14 +317,10 @@ function renderStatus(state){
       prices+=(s.quotes||[]).length;});});
   });
   var today=new Date().toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"}).toUpperCase();
-  document.getElementById("status").innerHTML=
-    '<span class="tl" style="align-self:center">'+today+'</span>'
-    +'<span class="stat"><span class="v n">'+games+'</span><span class="tl">GAMES ON THE BOARD</span></span>'
-    +'<span class="stat"><span class="v n">'+books+'</span><span class="tl">BOOKS COMPARED</span></span>'
-    +'<span class="live"><span class="pulse '+(state==="live"?"on":state)+'"></span>'
-    +'<span class="tl">'+(state==="dead"?"FEED UNAVAILABLE":state==="stale"?"DELAYED — UPDATED ":"UPDATED ")
-    +'</span><span class="tl" data-ago="'+D.esc(BOARD.generated_at)+'">'
-    +D.ago(BOARD.generated_at)+'</span></span>';
+  document.getElementById("status").innerHTML='<div class="market-context-line">'
+    +'<b>'+today+'</b><span>'+games+' markets</span><span>'+books+' books</span>'
+    +'<span class="fresh '+state+'">'+(state==="dead"?"FEED UNAVAILABLE":state==="stale"?"DELAYED, UPDATED ":"UPDATED ")
+    +'<i data-ago="'+D.esc(BOARD.generated_at)+'">'+D.ago(BOARD.generated_at)+'</i></span></div>';
   if(state==="stale") document.getElementById("notice").innerHTML=
     '<p class="notice"><b>Delayed data.</b> The board last refreshed '
     +D.ago(BOARD.generated_at).toLowerCase()+'; prices shown may have moved. '
@@ -382,41 +382,33 @@ function renderGames(){
     +' — NO OPEN BOARD</span>Out of season or outside the pricing window. '
     +'The rail shows what is live.</div>'; return; }
   var evs=b.events.slice().sort(function(a,c){return Date.parse(a.starts)-Date.parse(c.starts);});
+  function pos(v,lo,hi){return hi===lo?50:Math.max(4,Math.min(96,(v-lo)/(hi-lo)*100));}
   var rows=evs.map(function(e){
     var isOn=started(e);
-    var fav=e.sides.slice().sort(function(a,c){return (c.fair_prob||0)-(a.fair_prob||0);})[0];
     var best=e.sides.slice().sort(function(a,c){return (c.gain_pts||0)-(a.gain_pts||0);})[0];
     var single=(e.n_books||0)<2;
-    var gapW=Math.min((best.gain_pts||0)/4,1)*100;
-    return '<tr data-href="/game?e='+D.esc(e.id)+'&s='+SP+'" tabindex="0">'
-      +'<td class="l dim">'+(isOn?'<span class="tl" style="color:var(--amber)">CLOSING SNAPSHOT</span>'
-        :D.esc(D.when(e.starts)))+'</td>'
-      +'<td class="l"><span class="mu">'+window.Crest.team(e.away,{size:14})
-        +'<span class="at">AT</span>'+window.Crest.team(e.home,{size:14})+'</span></td>'
-      +'<td>'+D.esc(fav.name.split(" ").pop())+' '+D.am(fav.fair_price)+'</td>'
-      /* the single-book variants keep the width of the book code and of the
-         gain track, so one thin row cannot knock the whole column's right
-         edge out of line */
-      +'<td>'+(single?'<span class="dim">·</span><span class="bkk"></span>'
-        :'<span class="up">'+D.am(best.best_price)+'</span><span class="bkk">'
-          +D.bk(best.best_book)+'</span>')+'</td>'
-      +'<td>'+(single?'<span class="dim">—</span>'
-        +'<span class="gaptrk void" aria-hidden="true"></span>'
-        :'<span class="up">'+D.pts(best.gain_pts)+'</span>'
-        +'<span class="gaptrk"><i style="width:'+gapW.toFixed(0)+'%"></i></span>')+'</td>'
-      +'<td class="dim">'+e.n_books+'</td></tr>';
+    var move=MOVES[e.id];
+    var quotes=best.quotes||[], probs=quotes.map(function(q){return D.implied(q.price);});
+    var lo=Math.min.apply(null,probs.concat([best.fair_prob])),hi=Math.max.apply(null,probs.concat([best.fair_prob]));
+    var fairAt=pos(best.fair_prob,lo,hi),bestAt=pos(D.implied(best.best_price),lo,hi);
+    return '<a class="market-scan-row" href="/game?e='+D.esc(e.id)+'&s='+SP+'">'
+      +'<span class="scan-time">'+(isOn?'CLOSING SNAPSHOT':D.esc(D.when(e.starts)))+'</span>'
+      +'<span class="scan-match"><b>'+window.Crest.team(e.away,{size:18})+'</b><i>at</i><b>'
+        +window.Crest.team(e.home,{size:18})+'</b></span>'
+      +'<span class="scan-market"><i>'+D.esc(best.name.split(" ").pop())+' MONEYLINE</i>'
+        +'<span><em>FAIR</em><b>'+D.am(best.fair_price)+'</b></span></span>'
+      +'<span class="scan-disagree"><span class="scan-best"><em>BEST AVAILABLE</em><b>'
+        +D.am(best.best_price)+'</b><i>'+D.esc(D.bk(best.best_book))+'</i></span>'
+        +'<strong>'+D.pts(best.gain_pts)+' PTS GAP</strong></span>'
+      +'<span class="scan-range"><span class="range-label"><i>'+D.am(best.worst_price)+'</i><em>BOOK RANGE</em><i>'
+        +D.am(best.best_price)+'</i></span><span class="range-line"><i class="fair-mark" style="left:'+fairAt.toFixed(1)
+        +'%"></i><i class="best-mark" style="left:'+bestAt.toFixed(1)+'%"></i></span></span>'
+      +'<span class="scan-meta">'+(move?((move.move_pts>0?'+':'')+move.move_pts.toFixed(2)+' PTS MOVE'):'NO MOVE')
+        +'<i>'+D.ago((move&&move.observed_at)||BOARD.generated_at)+'</i></span><span class="scan-arrow">→</span></a>';
   }).join("");
-  el.innerHTML='<div class="scr"><table>'
-    +'<thead><tr><th class="l">TIME</th><th class="l">GAME</th>'
-    +'<th>FAIR PRICE</th><th>BEST PRICE</th><th>YOU GAIN</th><th>BOOKS</th></tr></thead>'
-    +'<tbody>'+rows+'</tbody></table></div>';
+  el.className="market-scanner";
+  el.innerHTML=rows;
 }
-
-document.getElementById("games").addEventListener("click",function(e){
-  var tr=e.target.closest("tr[data-href]"); if(tr) D.go(tr.dataset.href);});
-document.getElementById("games").addEventListener("keydown",function(e){
-  if(e.key!=="Enter")return;
-  var tr=e.target.closest("tr[data-href]"); if(tr) D.go(tr.dataset.href);});
 
 /* ---- the analyzer ---- */
 function mountAnalyzer(){
@@ -492,7 +484,8 @@ document.getElementById("anq").addEventListener("keydown",function(e){
 ["radar","games"].forEach(function(id){document.getElementById(id).classList.add("ld");});
 D.connecting(document.getElementById("radar"));
 D.connecting(document.getElementById("games"),"PRICE FEED");
-D.load("/data/board.json").then(function(bd){
+Promise.all([D.load("/data/board.json"),D.load("/data/moves.json")]).then(function(rs){
+  var bd=rs[0], mv=rs[1];
   if(!bd.ok){
     document.getElementById("status").innerHTML=
       '<span class="live"><span class="pulse dead"></span><span class="tl">FEED UNAVAILABLE</span></span>';
@@ -504,6 +497,10 @@ D.load("/data/board.json").then(function(bd){
     return;
   }
   BOARD=bd.data;
+  if(mv.ok) (mv.data.drift||[]).forEach(function(m){
+    var prev=MOVES[m.event_id];
+    if(!prev||Date.parse(m.observed_at)>Date.parse(prev.observed_at)) MOVES[m.event_id]=m;
+  });
   SP=defaultSport();
   renderStatus(D.feedState(bd,3));
   var es=document.getElementById("es-mkt");

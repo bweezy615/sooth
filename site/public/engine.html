@@ -156,6 +156,7 @@
     .legend{gap:10px 16px;font-size:11.5px}
   }
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
 </head>
 <body data-page="trust">
 <a class="skip" href="#main">Skip to main content</a>
@@ -164,7 +165,7 @@
   <h1>What 27 seasons of data actually buys us.</h1>
   <p class="sub">The archive does not exist to make hero picks. It exists to measure everything:
   it trained the model, then proved the market prices games better than the model does. That
-  measurement is the product — honest calibration, a no-vig (margin-removed) consensus, and
+  measurement is the product: honest calibration, a no-vig (margin-removed) consensus, and
   the one edge that survives scrutiny: never paying a worse price than you have to.</p>
   <span class="live" role="status"><i aria-hidden="true"></i>READING LIVE ENGINE OUTPUT</span>
 </header>
@@ -172,7 +173,7 @@
 <h2>The pipeline this data runs</h2>
 <div class="card">
   <div class="pipe">
-    <div class="stage"><span class="num">STAGE 1</span>
+    <div class="stage"><span class="num">SOURCE ARCHIVE</span>
       <!-- "68,120 per-book closing prices" was removed on 2026-08-11: no file
            under site/public/data or data/ contains that number or anything it
            could be derived from, which breaks this project's own rule that a
@@ -182,16 +183,16 @@
            figure rather than restated with one. -->
       <h3>Archive</h3><p>7,548 games since '99, plus our own per-book price capture.</p>
       <code>backfill/ · raw/</code></div>
-    <div class="stage"><span class="num">STAGE 2</span>
+    <div class="stage"><span class="num">WALK-FORWARD FIT</span>
       <h3>Calibrate</h3><p>Elo + independent models fit walk-forward, never on future games.</p>
       <code>calibrate.py · features.py</code></div>
-    <div class="stage"><span class="num">STAGE 3</span>
+    <div class="stage"><span class="num">OUT-OF-SAMPLE TEST</span>
       <h3>Backtest</h3><p>2,671 graded ATS calls (2,608 decided), 2016–25 — model vs market, no cherry-picks.</p>
       <code>backtest.py</code></div>
-    <div class="stage"><span class="num">STAGE 4</span>
+    <div class="stage"><span class="num">MARKET NORMALIZATION</span>
       <h3>De-vig &amp; shop</h3><p>Strip the juice (margin) from every book, surface the best price per side.</p>
       <code>lines.py · closing.py</code></div>
-    <div class="stage"><span class="num">STAGE 5</span>
+    <div class="stage"><span class="num">PUBLIC RECORD</span>
       <h3>Commit &amp; grade</h3><p>Hash-committed before kickoff, graded and revealed after.</p>
       <code>commit.py · grade.py</code></div>
   </div>

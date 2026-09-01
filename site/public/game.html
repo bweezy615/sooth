@@ -37,6 +37,27 @@
   .ws-cell .v.up{text-shadow:0 0 14px rgba(45,212,167,.30)}
   .ws-cell .v small{color:var(--dim)}
 
+  .ws-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 28px;
+    align-items:end;padding:22px 0 18px;border-bottom:1px solid var(--hair)}
+  .ws-match{min-width:0}
+  .ws-match .tl{display:block;margin-bottom:8px;color:var(--mut)}
+  .ws-matchup{font:700 clamp(24px,4vw,42px)/1.08 var(--sans);
+    letter-spacing:-.035em;color:var(--ink)}
+  .ws-matchup .at{font:500 .56em/1 var(--mono);letter-spacing:.08em;
+    color:var(--mut);margin:0 .34em}
+  .ws-records{display:block;margin-top:9px;font:500 11px/1.4 var(--mono);
+    letter-spacing:.07em;color:var(--mut)}
+  .ws-fair{text-align:right;padding-left:22px;border-left:1px solid var(--hair)}
+  .ws-fair .tl{display:block;margin-bottom:7px;color:var(--mut)}
+  .ws-fair .fair-big{font:700 clamp(24px,3.2vw,36px)/1 var(--mono);
+    letter-spacing:-.04em;color:var(--ink)}
+  .ws-time{grid-column:1/-1;margin:0;color:var(--mut)}
+  .workspace-nav{display:flex;gap:4px;padding:10px 0;border-bottom:1px solid var(--hair)}
+  .workspace-nav a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;
+    font:600 10px/1 var(--mono);letter-spacing:.12em;color:var(--mut)}
+  .workspace-nav a:hover,.workspace-nav a:focus-visible{color:var(--ink);background:var(--g2)}
+  .compare-more{display:none}
+
   /* per-side market slabs: the fair price in the header is a reading, not a
      caption, so it comes up out of metadata grey */
   .mkt .sec-h .more{color:var(--ink2)}
@@ -128,7 +149,43 @@
     min-height:70px}
   .ws-cell .tl{line-height:1.3}
 
+  .open-market{margin-top:4px;padding:22px 0 18px;border-top:1px solid var(--hair2);border-bottom:1px solid var(--hair);background:var(--g1)}
+  .open-meta{display:flex;justify-content:space-between;gap:20px;padding:0 18px 16px;color:var(--mut)}
+  .open-matchup{display:flex;align-items:center;justify-content:center;gap:.34em;padding:4px 18px 22px;font:700 clamp(30px,5vw,58px)/1 var(--sans);letter-spacing:-.045em;color:var(--ink)}
+  .open-matchup .at{font:500 .34em/1 var(--mono);letter-spacing:.12em;color:var(--mut)}
+  .open-read{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.15fr) minmax(210px,1fr);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .open-quote{padding:18px;min-width:0}.open-quote+.open-quote{border-left:1px solid var(--hair)}
+  .open-quote .tl{display:block;margin-bottom:9px;color:var(--mut)}
+  .open-side{font:600 14px/1.2 var(--sans);color:var(--ink2)}
+  .open-price{margin-top:5px;font:700 clamp(30px,3.8vw,48px)/1 var(--mono);letter-spacing:-.05em;color:var(--ink)}
+  .open-best .open-price{color:var(--brand);text-shadow:0 0 18px rgba(45,212,167,.2)}
+  .open-book{display:block;margin-top:8px;font:600 11px/1.3 var(--mono);letter-spacing:.08em;color:var(--ink2)}
+  .open-gap{display:block;margin-top:6px;font:600 11px/1.3 var(--mono);color:var(--brand)}
+  .open-range{padding:18px}.open-range-head{display:flex;justify-content:space-between;gap:12px;color:var(--mut)}
+  .open-range-line{position:relative;height:24px;margin:10px 5px 4px;border-top:1px solid var(--hair2)}
+  .open-range-line::before,.open-range-line::after{content:"";position:absolute;top:-4px;width:1px;height:8px;background:var(--dim)}
+  .open-range-line::before{left:0}.open-range-line::after{right:0}
+  .open-range-fair,.open-range-best{position:absolute;top:-5px;width:2px;height:10px;background:var(--ink2);transform:translateX(-1px)}
+  .open-range-best{width:7px;height:7px;top:-4px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px rgba(45,212,167,.55)}
+  .open-range-labels{display:flex;justify-content:space-between;font:500 10px/1 var(--mono);color:var(--mut)}
+
   @media (max-width:720px){
+    .open-market{padding-top:14px}.open-meta{padding:0 12px 13px;font-size:10px}
+    .open-matchup{justify-content:flex-start;flex-wrap:wrap;padding:5px 12px 18px;font-size:28px}
+    .open-read{grid-template-columns:1fr 1fr}.open-quote{padding:14px 12px}
+    .open-price{font-size:30px}.open-range{grid-column:1/-1;padding:14px 12px;border-top:1px solid var(--hair)}
+    .workspace-nav{position:sticky;top:91px;z-index:8;background:rgba(7,11,15,.96)}
+    .workspace-nav a[aria-current="page"]{color:var(--brand);background:var(--brand-dim)}
+    [data-pane][hidden]{display:none!important}
+    .ws-head{grid-template-columns:1fr;gap:16px;padding-top:12px;align-items:start}
+    .ws-fair{text-align:left;padding:14px 0 0;border-left:0;border-top:1px solid var(--hair)}
+    .ws-time{grid-column:auto}
+    .workspace-nav{overflow-x:auto;scrollbar-width:none}
+    .workspace-nav a{min-height:44px;white-space:nowrap}
+    .compare-sec.compact tbody tr:nth-child(n+5){display:none!important}
+    .compare-more{display:flex;width:100%;min-height:44px;align-items:center;
+      justify-content:center;margin-top:10px;color:var(--ink2);background:var(--g1);
+      border:1px solid var(--hair2);font:600 11px/1 var(--mono);letter-spacing:.1em}
     /* a section header on a phone is a label, a sentence and sometimes a
        control; in one non-wrapping row the control wins and the sentence is
        crushed. It wraps. */
@@ -145,8 +202,10 @@
     .sec-h #tlRange{margin-left:0;width:100%}
   }
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
+<link rel="stylesheet" href="/assets/market-tape.css?v=signature-market">
 </head>
-<body>
+<body class="game-page">
 <a class="skip" href="#main">Skip to content</a>
 <main id="main" class="wrap">
   <div class="ws-crumb"><a class="tl" href="/">← MARKET</a></div>
@@ -163,6 +222,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/market-tape.js?v=signature-market"></script>
 <!-- The matchup workspace is the deepest surface on the site and the one
      page that never loaded this: both team names rendered as bare text on
      every sport, while the board row you arrived from had crests. -->
@@ -217,38 +277,38 @@ function render(hit,moves,research,timeline){
       ? Crest.team(name,{size:24,sport:sp,after:name===ev.away})
       : D.esc(name);
   }
-  var html='<div class="ws-head">'
-    +'<div class="side a"><div class="nm">'+side(ev.away)+'</div>'
-      +'<span class="rl">AWAY'+(rep&&rep.records[ev.away]?' · '+D.esc(rep.records[ev.away]):'')+'</span></div>'
-    +'<div class="ws-mid"><div class="fair-big n">'+D.esc(fav.name.split(" ").pop())
-      +' '+D.am(fav.fair_price)+'</div>'
-      +'<span class="tl">CONSENSUS FAIR · MONEYLINE</span></div>'
-    +'<div class="side h"><div class="nm">'+side(ev.home)+'</div>'
-      +'<span class="rl">HOME'+(rep&&rep.records[ev.home]?' · '+D.esc(rep.records[ev.home]):'')+'</span></div>'
-    +'</div>'
-    +'<p class="tl" style="text-align:center">'+D.esc(SPORT_LABEL[sp]||sp)+' · '
-    +(isOn?'<b style="color:var(--amber)">CLOSING SNAPSHOT — GAME STARTED</b>'
-          :D.esc(D.when(ev.starts)).toUpperCase())+'</p>'
-    /* the workspace's hero surface gets the coin's single lit rim */
-    +'<div class="ws-grid rimlit">'
-    +cell("FAIR "+D.esc(fav.name.split(" ").pop()),D.am(fav.fair_price))
-    +cell("IMPLIED",D.pct(fav.fair_prob))
-    +cell("BEST AVAILABLE",single?"·":D.am(best.best_price)
-      +' <small>'+D.bk(best.best_book)+'</small>',single?"":"up")
-    +cell("PRICE SPREAD",single?"—":(function(){
-        var w=0; ev.sides.forEach(function(s){ if((s.quotes||[]).length>1){
-          var ips=s.quotes.map(function(q){return D.implied(q.price);});
-          w=Math.max(w,(Math.max.apply(null,ips)-Math.min.apply(null,ips))*100);}});
-        return w.toFixed(2)+" <small>PTS</small>";})())
-    +cell("YOU GAIN",single?"—":D.pts(best.gain_pts)+" <small>PTS</small>",single?"":"up")
-    +cell("BOOKS",String(ev.n_books))
-    +'</div>';
+  var quoteProbs=(best.quotes||[]).map(function(q){return D.implied(q.price);});
+  var rangeMin=Math.min.apply(null,quoteProbs.concat([best.fair_prob]));
+  var rangeMax=Math.max.apply(null,quoteProbs.concat([best.fair_prob]));
+  var rangeSpan=Math.max(.0001,rangeMax-rangeMin);
+  function rangePos(v){return Math.max(0,Math.min(100,(v-rangeMin)/rangeSpan*100)).toFixed(1);}
+  var bestProb=D.implied(best.best_price);
+  var html='<section class="open-market rimlit" aria-label="Opening market view">'
+    +'<div class="open-meta tl"><span>'+D.esc(SPORT_LABEL[sp]||sp)+' · MONEYLINE</span><span>'
+      +(isOn?'CLOSING SNAPSHOT · GAME STARTED':D.esc(D.when(ev.starts)).toUpperCase())
+      +' · '+D.esc(String(ev.n_books))+' BOOKS</span></div>'
+    +'<div class="open-matchup">'+side(ev.away)+'<span class="at">AT</span>'+side(ev.home)+'</div>'
+    +'<div class="open-read">'
+      +'<div class="open-quote"><span class="tl">MARKET FAIR PRICE</span><span class="open-side">'
+        +D.esc(best.name)+' MONEYLINE</span><div class="open-price">'+D.am(best.fair_price)+'</div></div>'
+      +'<div class="open-quote open-best"><span class="tl">BEST AVAILABLE</span><span class="open-side">'
+        +D.esc(best.name)+' MONEYLINE</span><div class="open-price">'+(single?'·':D.am(best.best_price))+'</div>'
+        +(single?'':'<span class="open-book">'+D.bk(best.best_book)+'</span><span class="open-gap">'
+          +D.pts(best.gain_pts)+' PTS VS FAIR</span>')+'</div>'
+      +'<div class="open-range"><div class="open-range-head tl"><span>MARKET RANGE</span><span>IMPLIED PROBABILITY</span></div>'
+        +'<div class="open-range-line"><i class="open-range-fair" style="left:'+rangePos(best.fair_prob)+'%"></i>'
+        +'<i class="open-range-best" style="left:'+rangePos(bestProb)+'%"></i></div>'
+        +'<div class="open-range-labels"><span>'+D.pct(rangeMin)+'</span><span>FAIR '+D.pct(best.fair_prob)+'</span><span>'+D.pct(rangeMax)+'</span></div></div>'
+    +'</div></section>'
+    +'<nav class="workspace-nav" aria-label="Game research sections">'
+      +'<a href="#prices" data-pane-target="prices">PRICES</a><a href="#movement" data-pane-target="movement">MOVE</a>'
+      +'<a href="#research" data-pane-target="research">RESEARCH</a><a href="#analyst" data-pane-target="analyst">ASK</a></nav>';
 
   /* one spectrum per side. The pair was the only block on the page arriving
      without a section of its own, so it read as two loose slabs between the
      grid and the ladder; it takes the same rule and header as everything
      else and the page keeps one rhythm all the way down. */
-  html+='<div class="sec"><div class="sec-h"><span class="tl">PRICE BY BOOK</span>'
+  html+='<div class="sec" id="prices" data-pane="prices"><div class="sec-h"><span class="tl">PRICE BY BOOK</span>'
     +'<span class="sub">every book on one scale, per side, against the de-vigged fair price</span></div>'
     +ev.sides.map(function(s){
     return '<div class="mkt">'
@@ -282,7 +342,7 @@ function render(hit,moves,research,timeline){
        called VS FAIR are four lines with no way to tell which side each
        belongs to; carrying the team name into the label fixes the card and
        leaves the desktop header short. */
-    html+='<div class="sec"><div class="sec-h"><span class="tl">SPORTSBOOK COMPARISON</span>'
+    html+='<div class="sec compare-sec compact" data-pane="prices"><div class="sec-h"><span class="tl">SPORTSBOOK COMPARISON</span>'
       +'<span class="sub">implied probability per book, against the de-vigged fair price</span></div>'
       +'<div class="itab"><div class="scr"><table><thead><tr><th class="l">BOOK</th>'
       +'<th>'+D.esc(n0)+'</th><th>IMPLIED</th><th>VS FAIR</th>'
@@ -302,7 +362,8 @@ function render(hit,moves,research,timeline){
         return '<tr data-stacked="1"><td class="l">'+D.bk(b)+'</td>'
           +c(s0,n0)+c(s1,n1)+'</tr>';
       }).join("")
-      +'</tbody></table></div></div></div>';
+      +'</tbody></table></div></div><button class="compare-more" type="button">SHOW ALL '
+      +names.length+' BOOKS</button></div>';
   }
 
   /* movement — our own capture only */
@@ -312,7 +373,7 @@ function render(hit,moves,research,timeline){
   mvRows.sort(function(a,b){return String(b.observed_at).localeCompare(String(a.observed_at));});
   var tlEv=(timeline&&(timeline.events||[]).filter(function(t){
     return String(t.event_id)===String(ID);})[0])||null;
-  html+='<div class="sec"><div class="sec-h"><span class="tl">MARKET TIMELINE</span>'
+  html+='<div class="sec" id="movement" data-pane="movement"><div class="sec-h"><span class="tl">MARKET TIMELINE</span>'
     +'<span class="sub">our capture, hourly — a line change starts a new series</span>'
     +(tlEv?'<span class="more" id="tlRange" role="group" aria-label="Timeline window">'
       +[6,24,72].map(function(h){return '<button class="an-chip" data-h="'+h
@@ -326,7 +387,7 @@ function render(hit,moves,research,timeline){
       +'</span>The timeline publishes from the next capture cycle.</div></div>';
   }
   html+='</div>';
-  html+='<div class="sec"><div class="sec-h"><span class="tl">DETECTED MOVES</span>'
+  html+='<div class="sec" data-pane="movement"><div class="sec-h"><span class="tl">DETECTED MOVES</span>'
     +'<span class="sub">drift and divergence above threshold, points of implied probability</span></div>';
   if(mvRows.length){
     html+='<div class="feed">'+mvRows.slice(0,6).map(function(a,i){
@@ -345,16 +406,20 @@ function render(hit,moves,research,timeline){
 
   /* NFL research report facts, when the researcher covers this game */
   if(rep){
-    html+='<div class="sec"><div class="sec-h"><span class="tl">RESEARCH</span>'
+    html+='<div class="sec" id="research" data-pane="research"><div class="sec-h"><span class="tl">RESEARCH</span>'
       +'<span class="sub">computed from the matchup report — nothing generated</span>'
       +'<a class="more" href="/research">FULL REPORT →</a></div>'
       +'<div class="feed">'+rep.facts.map(function(f,i){
         return D.feedRow(i,D.esc(f.kind).replace(/_/g," ").toUpperCase(),D.esc(f.text),"");
       }).join("")+'</div></div>';
+  }else{
+    html+='<div class="sec" id="research" data-pane="research"><div class="sec-h"><span class="tl">RESEARCH</span></div>'
+      +'<div class="feed"><div class="state"><span class="tl">NO MATCHUP REPORT</span>'
+      +'The market is live, but no published matchup report covers this game.</div></div></div>';
   }
 
   /* analyst */
-  html+='<div class="sec"><div class="sec-h"><span class="tl">ANALYST</span>'
+  html+='<div class="sec" id="analyst" data-pane="analyst"><div class="sec-h"><span class="tl">ANALYST</span>'
     +'<span class="sub">answers may only use the numbers on this page — it will not pick a side</span></div>'
     /* the chips are questions, not labels — mono caps is the label voice, so
        they were shouting a sentence. Sentence case, same as the board's. */
@@ -371,6 +436,23 @@ function render(hit,moves,research,timeline){
 
   ws.innerHTML=html;
   document.title="Sooth — "+ev.away+" at "+ev.home;
+  var compare=document.querySelector(".compare-sec"), compareMore=document.querySelector(".compare-more");
+  if(compareMore) compareMore.addEventListener("click",function(){
+    var compact=compare.classList.toggle("compact");
+    this.textContent=compact?"SHOW ALL "+names.length+" BOOKS":"SHOW FEWER BOOKS";
+  });
+
+  var paneLinks=[].slice.call(document.querySelectorAll("[data-pane-target]"));
+  function setPane(name){
+    [].forEach.call(document.querySelectorAll("[data-pane]"),function(p){p.hidden=p.dataset.pane!==name;});
+    paneLinks.forEach(function(a){a.setAttribute("aria-current",a.dataset.paneTarget===name?"page":"false");});
+  }
+  paneLinks.forEach(function(a){a.addEventListener("click",function(e){
+    if(innerWidth>720) return;
+    e.preventDefault(); setPane(a.dataset.paneTarget);
+    document.querySelector(".workspace-nav").scrollIntoView({block:"start"});
+  });});
+  if(innerWidth<=720) setPane("prices");
 
   if(tlEv){
     var tlH=72;

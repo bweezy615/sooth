@@ -53,6 +53,13 @@
     font-variant-numeric:tabular-nums}
   .embedded .stance{display:none}
   .pick{font:600 12.5px var(--sans);color:var(--ink)}
+  .proof-path{display:grid;grid-template-columns:repeat(4,1fr);margin:18px 0 8px;
+    border:1px solid var(--hair);background:var(--g1)}
+  .proof-path a,.proof-path span{padding:14px;border-right:1px solid var(--hair)}
+  .proof-path :last-child{border-right:0}
+  .proof-path b{display:block;font:600 11px/1 var(--mono);letter-spacing:.1em;color:var(--ink)}
+  .proof-path small{display:block;margin-top:6px;font:500 10px/1.35 var(--mono);
+    letter-spacing:.06em;color:var(--mut)}
 
   /* the graded verdict — one rule, one differing property */
   .vd{font:600 11px/1 var(--mono);letter-spacing:.12em}
@@ -70,6 +77,9 @@
     transition:opacity var(--t-hover) ease}
   .root:hover{opacity:1;color:var(--frost)}
   @media (max-width:720px){
+    .proof-path{grid-template-columns:1fr 1fr}
+    .proof-path :nth-child(2){border-right:0}
+    .proof-path :nth-child(-n+2){border-bottom:1px solid var(--hair)}
     /* the target grows to 44px without the underline drifting away from the
        text: the hit area is a transparent overlay, not extra padding */
     .root::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;
@@ -136,6 +146,8 @@
   #proofSec .rimlit::after{z-index:2}
   @media (max-width:720px){#proofSec .rimlit::after{display:none}}
 </style>
+<link rel="stylesheet" href="/assets/market-system.css?v=market-interface">
+<link rel="stylesheet" href="/assets/market-tape.css?v=signature-market">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -144,6 +156,20 @@
   <div class="scr-strip"><span class="nm">PROOF</span>
     <span class="tl">SEALED → REVEALED → GRADED · LOSSES PUBLISH LIKE WINS</span>
     <span class="tl" style="margin-left:auto"><a href="/verify" style="color:var(--mut)">VERIFY THE ROOT →</a></span></div>
+
+  <div class="page-head" style="padding:30px 0 0">
+    <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 6px">
+      Every number we publish, and where to check it.</h1>
+    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:78ch;line-height:1.6;margin:0">
+      Every figure on this site can be recomputed from published data — including the
+      ones that argue against us. This page is the index of the receipts.</p>
+  </div>
+  <div class="proof-path" aria-label="How Sooth publishes proof">
+    <a href="/ledger"><b>01 · SEALED</b><small>BEFORE THE RESULT</small></a>
+    <span><b>02 · GRADED</b><small>WINS AND LOSSES</small></span>
+    <a href="/record"><b>03 · PUBLIC</b><small>THE FULL RECORD</small></a>
+    <a href="/verify"><b>04 · VERIFY</b><small>RECOMPUTE THE ROOT</small></a>
+  </div>
 
   <section class="sec" id="proofSec" style="display:none;border-top:0"
     aria-labelledby="pfH">
@@ -157,14 +183,6 @@
       <tbody id="pfRows"></tbody></table></div></div>
     <p class="note" id="pfFoot"></p>
   </section>
-
-  <div class="page-head" style="padding:30px 0 0">
-    <h1 style="font:760 clamp(22px,3.2vw,29px)/1.2 var(--sans);letter-spacing:-.02em;margin:0 0 6px">
-      Every number we publish, and where to check it.</h1>
-    <p class="sub" style="color:var(--mut);font-size:13.5px;max-width:78ch;line-height:1.6;margin:0">
-      Every figure on this site can be recomputed from published data — including the
-      ones that argue against us. This page is the index of the receipts.</p>
-  </div>
 
   <section class="sec" style="border-top:0;padding-top:4px">
     <div class="sec-h"><span class="tl">CLOSING-LINE VALUE ON SEALED PICKS</span>
@@ -195,6 +213,7 @@
 </main>
 
 <script src="/assets/desk.js"></script>
+<script src="/assets/market-tape.js?v=signature-market"></script>
 <script>
 (function(){
 var D=window.Desk;
