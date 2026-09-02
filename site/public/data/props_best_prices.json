@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-02T16:29:24.257320+00:00",
+ "generated_at": "2026-09-02T20:58:02.699851+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
@@ -7,29 +7,59 @@
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Athletics @ Texas Rangers",
-   "starts": "2026-09-02T18:36:00Z",
-   "player": "Ezequiel Duran",
+   "matchup": "Toronto Blue Jays @ Cleveland Guardians",
+   "starts": "2026-09-02T22:41:00Z",
+   "player": "Chase DeLauter",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 180,
+   "best_price": 185,
    "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 159,
-   "price_edge_pts": 2.96,
-   "book_spread_pts": 6.84,
+   "n_books": 4,
+   "fair_price": 166,
+   "price_edge_pts": 2.56,
+   "book_spread_pts": 6.41,
    "hit_l5": {
     "n": 5,
     "over": 1
    },
    "hit_l10": {
     "n": 10,
-    "over": 4
+    "over": 2
    },
    "hit_season": {
-    "n": 130,
+    "n": 116,
+    "over": 52
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "San Francisco Giants @ Pittsburgh Pirates",
+   "starts": "2026-09-02T22:41:00Z",
+   "player": "Jung Hoo Lee",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 145,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 138,
+   "price_edge_pts": 1.17,
+   "book_spread_pts": 4.64,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 1
+   },
+   "hit_season": {
+    "n": 127,
     "over": 49
    },
    "model_p_over": null,
@@ -37,120 +67,90 @@
   },
   {
    "sport": "mlb",
-   "matchup": "San Diego Padres @ Cincinnati Reds",
-   "starts": "2026-09-02T16:41:00Z",
-   "player": "Tyler Stephenson",
+   "matchup": "Toronto Blue Jays @ Cleveland Guardians",
+   "starts": "2026-09-02T22:41:00Z",
+   "player": "Alejandro Kirk",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 163,
+   "best_price": 170,
    "best_book": "BetRivers",
    "n_books": 4,
-   "fair_price": 151,
-   "price_edge_pts": 1.76,
-   "book_spread_pts": 6.42,
+   "fair_price": 163,
+   "price_edge_pts": 1.04,
+   "book_spread_pts": 5.52,
    "hit_l5": {
     "n": 5,
-    "over": 3
+    "over": 1
    },
    "hit_l10": {
     "n": 10,
-    "over": 5
+    "over": 1
    },
    "hit_season": {
-    "n": 109,
-    "over": 35
+    "n": 62,
+    "over": 18
    },
    "model_p_over": null,
    "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Athletics @ Texas Rangers",
-   "starts": "2026-09-02T18:36:00Z",
-   "player": "Cody Bradford",
+   "matchup": "Milwaukee Brewers @ Chicago Cubs",
+   "starts": "2026-09-02T23:41:00Z",
+   "player": "Jacob Misiorowski",
    "market": "pitcher_strikeouts",
    "market_label": "Pitcher strikeouts",
-   "line": 4.5,
+   "line": 7.5,
    "side": "under",
-   "best_price": -120,
+   "best_price": 105,
    "best_book": "BetMGM",
-   "n_books": 5,
-   "fair_price": -128,
-   "price_edge_pts": 1.65,
-   "book_spread_pts": 5.45,
+   "n_books": 7,
+   "fair_price": 101,
+   "price_edge_pts": 1.01,
+   "book_spread_pts": 4.71,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 2
    },
    "hit_l10": {
-    "n": 5,
-    "over": 1
+    "n": 10,
+    "over": 6
    },
    "hit_season": {
-    "n": 5,
-    "over": 1
+    "n": 25,
+    "over": 18
    },
-   "model_p_over": 0.1424,
+   "model_p_over": 0.4963,
    "model_version": "kpoisson-v1"
   },
   {
    "sport": "mlb",
-   "matchup": "Athletics @ Texas Rangers",
-   "starts": "2026-09-02T18:36:00Z",
-   "player": "Alika Williams",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "over",
-   "best_price": -113,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": -121,
-   "price_edge_pts": 1.62,
-   "book_spread_pts": 6.95,
-   "hit_l5": {
-    "n": 5,
-    "over": 4
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 69,
-    "over": 33
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Athletics @ Texas Rangers",
-   "starts": "2026-09-02T18:36:00Z",
-   "player": "Alika Williams",
+   "matchup": "Toronto Blue Jays @ Cleveland Guardians",
+   "starts": "2026-09-02T22:41:00Z",
+   "player": "Ernie Clement",
    "market": "batter_total_bases",
    "market_label": "Total bases",
-   "line": 0.5,
+   "line": 1.5,
    "side": "over",
-   "best_price": -114,
+   "best_price": 165,
    "best_book": "BetRivers",
    "n_books": 4,
-   "fair_price": -121,
-   "price_edge_pts": 1.47,
-   "book_spread_pts": 6.73,
+   "fair_price": 159,
+   "price_edge_pts": 0.95,
+   "book_spread_pts": 5.74,
    "hit_l5": {
     "n": 5,
-    "over": 4
+    "over": 0
    },
    "hit_l10": {
     "n": 10,
-    "over": 5
+    "over": 1
    },
    "hit_season": {
-    "n": 69,
-    "over": 33
+    "n": 135,
+    "over": 52
    },
    "model_p_over": null,
    "model_version": null
