@@ -108,7 +108,8 @@ function handler(req, res, opts) {
   // otherwise for a while, so: commit-reveal integrity rests on the hash being
   // published and externally timestamped BEFORE the event, not on when the
   // contents are shown. 2026-W01's root was anchored to a public GitHub commit
-  // five weeks before its first kickoff. Revealing early proves exactly as
+  // before its first kickoff, and re-anchored ahead of kickoff on every
+  // re-seal. Revealing early proves exactly as
   // much. {slate_id}.reveal.json has in fact carried every prediction in the
   // clear the whole time.
   //

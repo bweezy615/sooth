@@ -54,6 +54,18 @@ MODEL_INDEPENDENT = "elo+epa-v1+iso"
 MODEL_CONSENSUS = "elo+epa+market-v1+iso"
 
 
+
+def _newest_version(paths) -> Path | None:
+    """The highest-numbered version, not the last one alphabetically.
+
+    `sorted()` on these filenames is lexicographic, so v10 sorts BEFORE v2 and
+    a tenth seal would publish the ninth. The published un-versioned pair is
+    what /verify tells readers to curl, so getting this wrong hands them a root
+    that disagrees with /ledger - the exact "you caught us" the page promises.
+    """
+    return max(paths, key=lambda p: int(p.stem.rsplit(".v", 1)[1]), default=None)
+
+
 def _fit_models(hist: pd.DataFrame):
     """Fit both models and their calibrators on all completed history.
 
@@ -405,14 +417,12 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
     # Re-sealing MUST refresh both, or the published pair stops matching and
     # the flagship check fails for anyone who runs it.
     ledger_dir = root / "data/ledger"
-    versions = sorted(ledger_dir.glob(f"{slate_id}.commitment.v*.json"))
-    if versions:
-        (site_dir / f"{slate_id}.commitment.json").write_text(
-            versions[-1].read_text())
-    reveals = sorted(ledger_dir.glob(f"{slate_id}.reveal.v*.json"))
-    if reveals:
-        (site_dir / f"{slate_id}.reveal.json").write_text(
-            reveals[-1].read_text())
+    newest = _newest_version(ledger_dir.glob(f"{slate_id}.commitment.v*.json"))
+    if newest:
+        (site_dir / f"{slate_id}.commitment.json").write_text(newest.read_text())
+    newest_reveal = _newest_version(ledger_dir.glob(f"{slate_id}.reveal.v*.json"))
+    if newest_reveal:
+        (site_dir / f"{slate_id}.reveal.json").write_text(newest_reveal.read_text())
 
     # The board's Picks tab discovers slates through this index.
     idx_path = site_dir / "slates.json"
