@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install --quiet requests
+        run: pip install --quiet requests numpy
 
       - name: Capture pitcher-K prop closes
         run: python -m engine.props_capture --max-credits 20
@@ -60,12 +60,17 @@ jobs:
       # last live board captured before first pitch IS the closing snapshot,
       # and index.html already labels a board whose games have all started.
       # engine.props_board stays in the tree for manual rebuilds and backfills.
+      - name: Regenerate the props model artifact
+        run: python scripts/props_model_note.py
+
       - name: Commit captured props
         run: |
           git config user.name  "sooth-capture"
           git config user.email "capture@users.noreply.github.com"
           mkdir -p data/capture/mlb-props   # empty-slate ticks write nothing; keep add from erroring
           git add data/capture/mlb-props
+          git add site/public/data/props_model_note.json
+          git add site/public/props-model.html
           if git diff --staged --quiet; then
             echo "no new prop observations"
           else
