@@ -203,3 +203,79 @@ def test_the_edge_bar_is_the_same_number_in_all_three_places():
         f"published measurement say {published:g}. The page would describe a "
         f"bar it is not applying."
     )
+
+
+# --- /verify's walkthrough has to reproduce --------------------------------
+# /verify hand-typed every figure in its worked example until 2026-09-01, when
+# the v4 re-seal left all of them disagreeing with the files the page itself
+# tells the reader to download: it printed the v3 root, its sample output
+# contradicted its own JSON block two screens higher, and its inclusion proof
+# was still the v1 sixteen-prediction tree. On the page whose argument is "a
+# mismatch means you caught us", that is the worst place on the site to carry a
+# number nobody regenerates.
+#
+# scripts/build_site.slate_figures() now computes them from data/ledger and
+# raises rather than publish one it cannot verify. These hold that in place.
+
+VERIFY_MD = ROOT / "site/content/verify.md"
+VERIFY_HTML = ROOT / "site/public/verify.html"
+
+
+def _verify_page() -> str:
+    """The rendered page as a READER sees it. Inside a code block the JSON
+    quotes are stored as &quot;, so comparing against the raw markup would
+    miss the canonical string that is plainly on the page."""
+    import html
+
+    return html.unescape(VERIFY_HTML.read_text(encoding="utf-8"))
+
+
+def test_verify_types_no_hash_of_its_own():
+    """A 64-character hex literal in the markdown is a figure nothing updates."""
+    typed = re.findall(r"\b[0-9a-f]{64}\b", VERIFY_MD.read_text(encoding="utf-8"))
+    assert not typed, (
+        f"verify.md types {len(typed)} hash(es) by hand: {typed}. Use a "
+        f"{{{{fig:slate....}}}} token so build_site.py recomputes it from "
+        f"data/ledger on every build."
+    )
+
+
+def test_the_verify_page_walks_through_the_committed_slate():
+    """slate_figures() raises if data/ledger, the reveal and the served
+    commitment disagree, so calling it is half the check. The rest is that the
+    published page actually carries what it returned."""
+    from scripts.build_site import slate_figures
+
+    s = slate_figures()
+    html = _verify_page()
+    for what, value in (("merkle root", s["merkle_root"]),
+                        ("first leaf hash", s["first_leaf"]),
+                        ("canonical string", s["first_canonical"]),
+                        ("slate id", s["id"])):
+        assert str(value) in html, (
+            f"/verify does not show the current {what} ({value}). Rebuild with "
+            f"scripts/build_site.py."
+        )
+
+
+def test_verify_never_shows_an_orphaned_superseded_root():
+    """A root from an older seal, left on the page, reads as the current one.
+
+    The latest root is expected, and so is the one it names in `supersedes` -
+    the commitment block prints it. Any earlier root is a leftover.
+    """
+    from engine.commit import commitment_history
+    from scripts.build_site import LEDGER, slate_figures
+
+    history = commitment_history(slate_figures()["id"], LEDGER)
+    latest = history[-1]
+    allowed = {latest["merkle_root"], latest.get("supersedes")}
+    html = _verify_page()
+    stale = [(h.get("version"), h["merkle_root"]) for h in history[:-1]
+             if h["merkle_root"] not in allowed]
+    for version, root in stale:
+        assert root not in html, (
+            f"/verify still shows the v{version} root {root}, but the slate is "
+            f"committed at v{latest.get('version')}. A reader comparing the page "
+            f"against the file it links would see a mismatch."
+        )

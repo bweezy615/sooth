@@ -14,6 +14,7 @@ they can download and verify themselves, or it is just another claim.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from datetime import datetime, timezone
@@ -23,12 +24,18 @@ import markdown
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from engine.commit import commitment_history
+from engine.commit import (canonical, commitment_history, merkle_proof,
+                           merkle_root, verify_proof)
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "site/content"
 PUBLIC = ROOT / "site/public"
 LEDGER = ROOT / "data/ledger"
+# What sooth.bet actually serves. Deliberately NOT derived from PUBLIC:
+# tests/test_build_site.py redirects PUBLIC to a temp directory to rebuild
+# without touching the site, and this is a build INPUT - the payload the
+# seal pipeline published and that /verify tells a reader to download.
+SERVED = ROOT / "site/public/data"
 
 BRAND = "Sooth"
 DOMAIN = "https://sooth.bet"
@@ -604,6 +611,150 @@ def _derive(figures):
     })
 
 
+# ---------------------------------------------------------------------------
+# The live commitment, for /verify.
+#
+# /verify is the page that teaches a reader to download two files, re-hash them
+# themselves, and treat a mismatch as having caught us. Every figure on it was
+# hand-typed, and after the 2026-09-01 re-seal every one of them disagreed with
+# the files the page hands the reader: it printed the v3 root while
+# /data/2026-W01-nfl.commitment.json served v4, its sample output contradicted
+# its own JSON block, and its worked inclusion proof was still the v1
+# sixteen-prediction tree. A walkthrough that does not reproduce is worse on
+# that page than on any other.
+#
+# So the walkthrough is COMPUTED here, on every build, from data/ledger: the
+# canonical string, the leaf, the inclusion proof and the tampered root are all
+# re-derived from the published predictions rather than pasted from a terminal.
+# Hard rule 5 applied to the page that argues hardest for it.
+#
+# Resolved from the VERSIONED commitment history, never from the unversioned
+# data/ledger/<slate>.commitment.json, which is a legacy pointer and is
+# currently two versions behind the seal the site actually serves.
+# ---------------------------------------------------------------------------
+
+_MONTHS = ("January", "February", "March", "April", "May", "June", "July",
+           "August", "September", "October", "November", "December")
+
+
+def _human_date(iso: str) -> str:
+    """'2026-09-01T23:28:44+00:00' -> '1 September 2026'.
+
+    Assembled by hand rather than with strftime("%-d %B %Y"): %-d is a glibc
+    extension that raises ValueError on Windows, where this generator also has
+    to run. engine/alert_lifecycle.py already carries that bug.
+    """
+    d = datetime.fromisoformat(iso)
+    return f"{d.day} {_MONTHS[d.month - 1]} {d.year}"
+
+
+def _leaf(prediction: dict) -> str:
+    return hashlib.sha256(b"\x00" + canonical(prediction)).hexdigest()
+
+
+def _level_sizes(n: int) -> list[int]:
+    """Node counts at each level, odd levels duplicating their tail."""
+    sizes = [n]
+    while sizes[-1] > 1:
+        sizes.append((sizes[-1] + sizes[-1] % 2) // 2)
+    return sizes
+
+
+def slate_figures() -> dict:
+    """Everything /verify prints, recomputed from the newest sealed slate.
+
+    Raises rather than returning a stale or unverifiable figure. A page that
+    tells a reader "a mismatch means you caught us" may not itself ship a
+    mismatch.
+    """
+    ids = sorted({p.name.split(".commitment")[0]
+                  for p in LEDGER.glob("*.commitment.v*.json")})
+    if not ids:
+        raise FigureError(
+            "data/ledger holds no versioned commitment, so /verify has no "
+            "slate to walk through. Seal one before building the site.")
+    slate_id = ids[-1]
+    history = commitment_history(slate_id, LEDGER)
+    c = history[-1]
+    version = int(c["version"])
+
+    reveal_path = LEDGER / f"{slate_id}.reveal.v{version}.json"
+    if not reveal_path.exists():
+        raise FigureError(f"{slate_id} is committed at v{version} but "
+                          f"{reveal_path.name} is missing")
+    reveal = json.loads(reveal_path.read_text(encoding="utf-8"))
+    preds = reveal["predictions"]
+    leaves = [_leaf(p) for p in preds]
+
+    # The page's own claim, checked before the page is allowed to make it.
+    if leaves != reveal["leaves"]:
+        raise FigureError(f"{slate_id} v{version}: the leaf hashes we recompute "
+                          f"are not the ones published in the reveal file")
+    root = merkle_root(leaves)
+    if root != c["merkle_root"] or root != reveal.get("merkle_root", root):
+        raise FigureError(f"{slate_id} v{version}: recomputed root {root} is "
+                          f"not the committed root {c['merkle_root']}")
+    if len(preds) != c["n_predictions"]:
+        raise FigureError(f"{slate_id} v{version}: {len(preds)} predictions "
+                          f"revealed, {c['n_predictions']} committed")
+
+    # ...and the copy a reader downloads must BE that commitment. This is the
+    # check that /ledger did not have on 2026-09-01, when the site served v4
+    # while every page rendered from it still said v3.
+    served = json.loads((SERVED / f"{slate_id}.commitment.json")
+                        .read_text(encoding="utf-8"))
+    if served.get("merkle_root") != root or int(served.get("version", 0)) != version:
+        raise FigureError(
+            f"/data/{slate_id}.commitment.json serves root "
+            f"{served.get('merkle_root')} (v{served.get('version')}), but the "
+            f"ledger's latest commitment is {root} (v{version}). /verify would "
+            f"tell a reader to download a file that disagrees with the page.")
+
+    proof = merkle_proof(leaves, 0)
+    if not verify_proof(leaves[0], proof, root):
+        raise FigureError("the worked inclusion proof does not chain to the root")
+
+    tampered = merkle_root([_leaf(dict(p, probability=0.99)) if i == 0 else lh
+                            for i, (p, lh) in enumerate(zip(preds, leaves))])
+    first = canonical(preds[0]).decode()
+    sizes = _level_sizes(len(leaves))
+
+    return {
+        "id": slate_id,
+        "version": version,
+        "n_predictions": len(preds),
+        "merkle_root": root,
+        "root_abbrev": root[:7] + "...",
+        "committed_at": c["committed_at"],
+        "earliest_kickoff": c["earliest_kickoff"],
+        "sealed_human": _human_date(c["committed_at"]),
+        "days_before_kickoff": (datetime.fromisoformat(c["earliest_kickoff"])
+                                - datetime.fromisoformat(c["committed_at"])).days,
+        "commitment_json": json.dumps(c, indent=2, sort_keys=True),
+        "sample_output": "\n".join([
+            f"predictions revealed : {len(preds)}",
+            f"predictions committed: {c['n_predictions']}",
+            f"committed at         : {c['committed_at']}",
+            f"earliest kickoff     : {c['earliest_kickoff']}",
+            "",
+            f"published root       : {c['merkle_root']}",
+            f"recomputed root      : {root}",
+            "",
+            "VERIFIED",
+        ]),
+        "first_canonical": first,
+        "first_canonical_len": len(first),
+        "first_leaf": leaves[0],
+        "first_probability": preds[0]["probability"],
+        "tampered_root_abbrev": tampered[:10] + "...",
+        "proof_json": "[\n" + ",\n".join(
+            "  " + json.dumps(s, separators=(", ", ": ")) for s in proof) + "\n]",
+        "proof_len": len(proof),
+        "proof_shrink": ", ".join(f"{a} becomes {b}"
+                                  for a, b in zip(sizes, sizes[1:])),
+    }
+
+
 def substitute(text, figures):
     """Resolve every {{fig:}} and {{table:}} token, or raise FigureError."""
     figures = _derive(figures)
@@ -625,6 +776,11 @@ def build_markdown_pages() -> list[str]:
         extensions=["tables", "fenced_code", "sane_lists", "attr_list"]
     )
     figures = json.loads(FIGURES.read_text(encoding="utf-8"))
+    if "slate" in figures:
+        raise FigureError(
+            "_figures.json now has a 'slate' key, which would shadow the live "
+            "commitment /verify is built from. Rename one of them.")
+    figures = dict(figures, slate=slate_figures())
     built = []
     for slug, src, title, desc in PAGES:
         path = CONTENT / src

@@ -1,7 +1,7 @@
 ---
 title: "How to verify our prediction record yourself"
 description: "A plain-English guide to checking that our published record is complete and unedited, using a 30-line script that does not trust any of our code."
-last_updated: 2026-08-02
+last_updated: 2026-09-01
 ---
 
 # How to verify our record
@@ -72,25 +72,16 @@ commit that is already public, and you can look at the commit history yourself.
 Two files, both plain JSON.
 
 **`/data/<slate-id>.commitment.json`** goes up before the first kickoff. It
-contains only the root fingerprint and the counts. For NFL Week 1 of 2026 it
-reads:
+contains only the root fingerprint and the counts. For the slate below,
+{{fig:slate.id}}, it reads:
 
 ``` {.json .frosted}
-{
-  "algorithm": "sha256-merkle-v1",
-  "committed_at": "2026-08-06T05:36:17.176614+00:00",
-  "earliest_kickoff": "2026-09-09T20:20:00+00:00",
-  "merkle_root": "438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec",
-  "n_predictions": 32,
-  "slate_id": "2026-W01-nfl",
-  "sport": "nfl",
-  "supersedes": "4136512cf38a8074783b00f89026f6a015d88145e17fa699a3944b5b5c60709b",
-  "version": 3
-}
+{{fig:slate.commitment_json}}
 ```
 
-Note that `committed_at` is over a month before `earliest_kickoff`. Note also
-that this file tells you nothing about who we picked. That is the point.
+Note that `committed_at` is {{fig:slate.days_before_kickoff}} days before
+`earliest_kickoff`. Note also that this file tells you nothing about who we
+picked. That is the point.
 
 **`/data/<slate-id>.reveal.json`** is published alongside the commitment. It
 contains the same root, every prediction in full, and the individual leaf
@@ -106,8 +97,8 @@ Both files are also in the public code repository under `data/ledger/`.
 ### Step 1: get the two files
 
 ```
-curl -O https://sooth.bet/data/2026-W01-nfl.commitment.json
-curl -O https://sooth.bet/data/2026-W01-nfl.reveal.json
+curl -O https://sooth.bet/data/{{fig:slate.id}}.commitment.json
+curl -O https://sooth.bet/data/{{fig:slate.id}}.reveal.json
 ```
 
 ### Step 2: save this script as `verify.py`
@@ -169,38 +160,33 @@ print("VERIFIED" if ok else "MISMATCH - the record does not match the commitment
 ### Step 3: run it
 
 ```
-python3 verify.py 2026-W01-nfl.commitment.json 2026-W01-nfl.reveal.json
+python3 verify.py {{fig:slate.id}}.commitment.json {{fig:slate.id}}.reveal.json
 ```
 
-Output for NFL Week 1 of 2026:
+Output for {{fig:slate.id}}:
 
 ``` {.frosted}
-predictions revealed : 32
-predictions committed: 32
-committed at         : 2026-08-03T02:50:37.265208+00:00
-earliest kickoff     : 2026-09-09T20:20:00+00:00
-
-published root       : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
-recomputed root      : 438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec
-
-VERIFIED
+{{fig:slate.sample_output}}
 ```
 
-The two roots match, so the thirty-two predictions in the reveal file are exactly
-the thirty-two we sealed on 6 August 2026, five weeks before kickoff. The
+The two roots match, so the {{fig:slate.n_predictions}} predictions in the reveal
+file are exactly the {{fig:slate.n_predictions}} we sealed on
+{{fig:slate.sealed_human}}, {{fig:slate.days_before_kickoff}} days before the
+first kickoff. The
 `version`/`supersedes` fields chain this seal to the earlier ones on the
 ledger; re-sealing before kickoff is allowed, silent editing is not.
 
 ### Step 4: prove to yourself that it would catch us
 
 Do not take our word for the fact that the check is sensitive. Break something
-and watch it fail. Open the reveal file in a text editor, find any prediction,
-change its `probability` from `0.6615` to `0.99`, save, and run the script
-again. The recomputed root becomes a completely different string
-(`13a070aa9e...` in our test) and the script prints `MISMATCH`.
+and watch it fail. Open the reveal file in a text editor, find the **first**
+prediction, change its `probability` from `{{fig:slate.first_probability}}` to
+`0.99`, save, and run the script again. The recomputed root becomes a completely
+different string (`{{fig:slate.tampered_root_abbrev}}` when we do it) and the
+script prints `MISMATCH`.
 
-That is the entire security argument. One digit in one of thirty-two predictions
-is enough to break the match. There is no way for us to quietly improve the
+That is the entire security argument. One digit in one of
+{{fig:slate.n_predictions}} predictions is enough to break the match. There is no way for us to quietly improve the
 record after the fact.
 
 ---
@@ -217,33 +203,28 @@ first sibling, combine that result with the second sibling, and keep going. If
 you end up at the published root, your prediction was definitely in the
 committed slate.
 
-For a 16-prediction slate the proof is four hashes long. Sixteen becomes eight,
-eight becomes four, four becomes two, two becomes one.
+This slate holds {{fig:slate.n_predictions}} predictions, so its proofs are
+{{fig:slate.proof_len}} hashes long: {{fig:slate.proof_shrink}}.
 
 ### Worked example
 
-The first prediction in the Week 1 slate, in canonical form, is this exact
-string of 281 characters:
+The first prediction in the {{fig:slate.id}} slate, in canonical form, is this
+exact string of {{fig:slate.first_canonical_len}} characters:
 
 ``` {.frosted}
-{"created_at":"2026-09-09T20:20:00+00:00","event_id":"2026_01_NE_SEA","line":null,"market":"moneyline","model_version":"elo+epa-v1+iso","probability":0.6615,"rationale":"elo 1692 vs 1604, rest diff +0","reference_line":3.5,"reference_price":-198,"selection":"side_a","sport":"nfl"}
+{{fig:slate.first_canonical}}
 ```
 
 Its leaf fingerprint is:
 
 ``` {.frosted}
-2ee7fb4740fafe6bbadab1e45bd2f3e9ce0578ced2f1628a82cba5d4b8b2f5bc
+{{fig:slate.first_leaf}}
 ```
 
-And its inclusion proof, four steps, is:
+And its inclusion proof, {{fig:slate.proof_len}} steps, is:
 
 ``` {.json .frosted}
-[
-  {"side": "right", "hash": "4d433651a9f54a1fdf0ee279a08911cd66ad0b1f35dcf309eb45e68af3beccaa"},
-  {"side": "right", "hash": "259bd611b859eb91d815444c743cf6129d0e122116e79285f18f5a8f7b79c2c8"},
-  {"side": "right", "hash": "27c786e1d14b4dd9c47b0f5bee0d4d685c1cfb7e9a886299d4a2c9d6e40c26ad"},
-  {"side": "right", "hash": "9a0355b99163949c25926e550389102e8c5786d9c0aa987885a2fb33c11d369b"}
-]
+{{fig:slate.proof_json}}
 ```
 
 `"side": "right"` means the sibling goes on the right of your running value;
@@ -262,8 +243,8 @@ def check_proof(leaf_hash, proof, expected_root):
     return node == expected_root
 ```
 
-Feed it the leaf, the four proof steps, and the published root
-`438f360...`, and it returns `True`.
+Feed it the leaf, the {{fig:slate.proof_len}} proof steps, and the published
+root `{{fig:slate.root_abbrev}}`, and it returns `True`.
 
 ---
 

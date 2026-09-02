@@ -89,10 +89,34 @@ running the page's own script against the live v4 pair: 32/32 VERIFIED. Only the
 printed values are stale, and the inclusion-proof example is two versions stale
 (v1, 16 predictions, four proof steps; the live slate is 32, so five).
 
-Hard rule 5 applies: no published number is ever hand-typed. These get wired to
-the `{{fig:...}}` substitution in `build_site.py`, resolving from `data/ledger/`
-and the published reveal at build time, so a stale figure raises at build rather
-than shipping.
+Hard rule 5 applies: no published number is ever hand-typed. These are wired to
+the `{{fig:...}}` substitution in `build_site.py` via a new `slate_figures()`,
+which resolves them from `data/ledger/` at build time. No change to
+`scripts/published_figures.py` and no change to `_figures.json` — the `slate`
+namespace is merged in alongside it, so regenerating backtests was not needed
+and no unrelated value churned.
+
+`slate_figures()` recomputes rather than reads: the leaf hashes, the root, the
+inclusion proof and the tampered root are all derived from the published
+predictions on every build, and it raises rather than publish a figure it cannot
+verify. Three of its checks are the ones this whole session was about — the
+recomputed leaves must equal the published ones, the recomputed root must equal
+the committed root, and the commitment the site *serves* must be the ledger's
+latest. That last one is the Fix 1 defect, now caught at build time.
+
+Measured, not assumed: the canonical string is **296** characters, not the 281
+the page claimed, and the proof is **five** steps for a 32-prediction tree, not
+four.
+
+### The trap to know about
+
+`data/ledger/2026-W01-nfl.commitment.json` and `.reveal.json` — the
+**unversioned** files — are stale at **v2** (root `4136512c…`). Only the
+`*.v4.json` pair is current. Anything reading the unversioned names gets a root
+two seals old. `build_ledger()` and `slate_figures()` both go through
+`commitment_history()`, which globs `*.commitment.v*.json`, so both are correct;
+the unversioned files are a legacy fallback. Left alone under hard rule 2 (never
+hand-edit `data/ledger/`) — flagged for Branden.
 
 ---
 
@@ -101,3 +125,19 @@ than shipping.
 `bash scripts/check.sh` must print `green` on its last line before any push,
 read bare — not through a pipe, which returns the pipe's status. After each
 push, `curl` the live URL and confirm the specific value changed.
+
+---
+
+## Found, not fixed — for Branden
+
+1. **`engine/alert_lifecycle.py` cannot run its own selfcheck on Windows.**
+   `_when()` formats with `%-d`, a glibc extension; MSVC's `strftime` raises
+   `ValueError: Invalid format string`. Pre-existing, and harmless in production
+   (the workflows run on ubuntu). But it means `python -m engine.alert_lifecycle
+   --selfcheck`, which docs/alerts-runbook.md tells you to run, dies on your
+   machine before reaching any assertion. Fixing it changes the date text in a
+   published email ("Sep 9" vs "Sep 09"), so it was left for a decision.
+
+2. **The unversioned `data/ledger/2026-W01-nfl.{commitment,reveal}.json` are
+   stale at v2.** See above. Nothing currently reads them, but the next thing
+   that does will read a root two seals old.
