@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install --quiet requests pandas numpy cryptography
+        run: pip install --quiet requests pandas numpy cryptography markdown
 
       - name: Grade and publish
         id: g
@@ -55,11 +55,23 @@ jobs:
           python -m engine.grade --slate "$SLATE" --publish
           python scripts/publish_record.py
 
+      # Grading writes data/ledger, and site/public/ledger.html is GENERATED
+      # from it by scripts/build_site.py. Without this step every grade run
+      # publishes a stale trust page and leaves the repo's own gate red
+      # (tests/test_build_site.py, and check.sh's "site build is reproducible").
+      - name: Rebuild the pages generated from data/ledger
+        run: python scripts/build_site.py
+
       - name: Commit once
         run: |
           git config user.name "sooth-grade"
           git config user.email "actions@users.noreply.github.com"
           git add site/public/data data/ledger
+          # The four pages below are named one at a time on purpose. They are
+          # everything build_site.py writes, and `site/public/*.html` would
+          # also sweep the twenty hand-written pages the generator does not own.
+          git add site/public/ledger.html site/public/methodology.html
+          git add site/public/verify.html site/public/disclaimers.html
           if git diff --cached --quiet; then
             echo "nothing newly settled - no commit"
             exit 0

@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: pip install --quiet requests pandas numpy scikit-learn cryptography
+        run: pip install --quiet requests pandas numpy scikit-learn cryptography markdown
 
       - name: Find the next sealable week
         id: wk
@@ -61,12 +61,28 @@ jobs:
           read -r SEASON WEEK <<< "${{ steps.wk.outputs.target }}"
           python -m engine.pipeline.weekly --season "$SEASON" --week "$WEEK"
 
+      # data/ledger just changed, and site/public/ledger.html is GENERATED from
+      # it by scripts/build_site.py. Without this step the seal publishes a
+      # trust page still showing the PREVIOUS root while linking the new
+      # commitment file - which is what shipped on 2026-09-01 - and leaves the
+      # repo's own gate red (tests/test_build_site.py, and check.sh's "site
+      # build is reproducible"). It runs before the commit so the regenerated
+      # page lands INSIDE the timestamp anchor rather than trailing it.
+      - name: Rebuild the pages generated from data/ledger
+        if: steps.wk.outputs.target != ''
+        run: python scripts/build_site.py
+
       - name: Commit once (the timestamp anchor)
         if: steps.wk.outputs.target != ''
         run: |
           git config user.name "sooth-seal"
           git config user.email "actions@users.noreply.github.com"
           git add data/ledger data/pro site/public/data
+          # The four pages below are named one at a time on purpose. They are
+          # everything build_site.py writes, and `site/public/*.html` would
+          # also sweep the twenty hand-written pages the generator does not own.
+          git add site/public/ledger.html site/public/methodology.html
+          git add site/public/verify.html site/public/disclaimers.html
           if git diff --cached --quiet; then
             echo "identical root - nothing new to anchor"; exit 0
           fi
