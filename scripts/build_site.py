@@ -803,18 +803,19 @@ def build_markdown_pages() -> list[str]:
 
 def build_ledger() -> None:
     """Render every committed slate straight from data/ledger/."""
+    # Versioned files only. The unversioned legacy pair was deleted on
+    # 2026-09-02; falling back to it rendered a two-seal-stale root onto the
+    # one page whose job is proving roots do not quietly change.
     slate_ids = sorted({p.name.split(".commitment")[0]
                         for p in LEDGER.glob("*.commitment.v*.json")})
-    if not slate_ids:  # legacy unversioned layout
-        slate_ids = sorted({p.name.split(".commitment")[0]
-                            for p in LEDGER.glob("*.commitment.json")})
 
     slates = []
     now = datetime.now(timezone.utc)
     for slate_id in slate_ids:
         history = commitment_history(slate_id, LEDGER)
         if not history:
-            history = [json.loads((LEDGER / f"{slate_id}.commitment.json").read_text(encoding="utf-8"))]
+            raise FileNotFoundError(
+                f"{slate_id} has versioned commitment files that do not parse")
         c = history[-1]
         kickoff = datetime.fromisoformat(c["earliest_kickoff"])
         public_state = "revealed" if kickoff < now else "sealed"

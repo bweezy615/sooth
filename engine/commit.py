@@ -244,9 +244,19 @@ def verify_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
         commitment = target
         reveal = json.loads((d / f"{slate_id}.reveal.v{v}.json").read_text())
     else:
-        # Legacy unversioned layout, retained so old published roots verify.
-        commitment = json.loads((d / f"{slate_id}.commitment.json").read_text())
-        reveal = json.loads((d / f"{slate_id}.reveal.json").read_text())
+        # There is no unversioned fallback any more. The legacy
+        # <slate>.commitment.json / .reveal.json pair was deleted on
+        # 2026-09-02: commit_slate has only ever written versioned files, so
+        # nothing refreshed that pair, and the copy in the repo had sat two
+        # seals stale while the site served v4. Reading it verified a
+        # superseded slate under the current label, which is the one thing
+        # this function exists to make impossible.
+        raise FileNotFoundError(
+            f"{slate_id} has no versioned commitment in {d}. Every seal writes "
+            f"{slate_id}.commitment.v<N>.json; if only an unversioned pair "
+            f"exists it is pre-2026-09 legacy data and its version is unknown, "
+            f"so it cannot be verified against a version label."
+        )
 
     if len(reveal["predictions"]) != commitment["n_predictions"]:
         return False

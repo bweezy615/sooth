@@ -245,7 +245,11 @@ picked. That is the point.</p>
 contains the same root, every prediction in full, and the individual leaf
 fingerprints — so the check below works before kickoff, not only after.
 Grading is added once the games settle.</p>
-<p>Both files are also in the public code repository under <code>data/ledger/</code>.</p>
+<p>Both files are also in the public code repository under <code>data/ledger/</code>, one
+pair per commitment version. The current seal is
+<code>2026-W01-nfl.commitment.v4.json</code> and
+<code>2026-W01-nfl.reveal.v4.json</code>, and every superseded
+version is kept beside it rather than overwritten.</p>
 <hr />
 <h2>The check, step by step</h2>
 <h3>Step 1: get the two files</h3>

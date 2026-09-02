@@ -306,3 +306,63 @@ def test_kickoff_converts_eastern_gametime_to_utc():
     dateonly = {"gameday": pd.Timestamp("2026-09-13"), "gametime": None}
     assert NFLAdapter._kickoff(dateonly) == datetime(
         2026, 9, 13, 4, 0, tzinfo=timezone.utc)
+
+
+# --------------------------------------------------------------------------
+# the ledger has one layout, and no reader may guess at the other
+# --------------------------------------------------------------------------
+# data/ledger/<slate>.commitment.json and .reveal.json - the UNVERSIONED pair -
+# were deleted on 2026-09-02. commit_slate has only ever written versioned
+# files, so nothing ever refreshed them: the pair in the repo held v2's root
+# and predictions while the site served v4, and it carried no version field of
+# its own. engine.grade.load_reveal returned it labelled "version 1", which
+# would have published one seal's predictions under another seal's label.
+# scripts/verify_core.py records a second incident: a demo tampered with
+# production data through that same unversioned filename.
+#
+# Both readers now refuse rather than fall back. These two tests fail if
+# either the files or the fallbacks come back.
+
+def test_the_ledger_holds_no_unversioned_commitment():
+    from pathlib import Path
+
+    ledger = Path(__file__).resolve().parents[1] / "data/ledger"
+    strays = sorted(p.name for p in ledger.glob("*.commitment.json")) + \
+        sorted(p.name for p in ledger.glob("*.reveal.json"))
+    assert not strays, (
+        f"unversioned ledger files are back: {strays}. Nothing writes them, so "
+        f"they go stale the moment a slate is re-sealed - which is exactly how "
+        f"a two-seal-old root ended up being served as current."
+    )
+
+
+def test_a_ledger_with_only_unversioned_files_is_refused(tmp_path):
+    """The legacy pair is internally valid, and still must not be accepted.
+
+    The old fallbacks would have verified this slate happily and graded it as
+    "version 1". Restore either one and this goes red.
+    """
+    import hashlib
+
+    from engine.commit import canonical
+    from engine.grade import load_reveal
+
+    preds = [{"event_id": f"E{i}", "probability": 0.5} for i in range(4)]
+    leaves = [hashlib.sha256(b"\x00" + canonical(p)).hexdigest() for p in preds]
+    root = merkle_root(leaves)
+    (tmp_path / "LEGACY.commitment.json").write_text(json.dumps({
+        "slate_id": "LEGACY", "sport": "nfl", "algorithm": "sha256-merkle-v1",
+        "merkle_root": root, "n_predictions": len(preds),
+        "committed_at": "2026-01-01T00:00:00+00:00",
+        "earliest_kickoff": "2026-01-02T00:00:00+00:00"}))
+    (tmp_path / "LEGACY.reveal.json").write_text(json.dumps({
+        "slate_id": "LEGACY", "merkle_root": root,
+        "predictions": preds, "leaves": leaves}))
+
+    # Sanity: the pair really is self-consistent, so a fallback would accept it.
+    assert merkle_root(leaves) == root
+
+    with pytest.raises(FileNotFoundError):
+        verify_slate("LEGACY", tmp_path)
+    with pytest.raises(FileNotFoundError):
+        load_reveal("LEGACY", tmp_path)

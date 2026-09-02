@@ -108,7 +108,15 @@ def load_reveal(slate_id: str, ledger_dir: Path | str = "data/ledger",
                             if int(c.get("version", 0)) == version))
         v = int(target["version"])
         return json.loads((d / f"{slate_id}.reveal.v{v}.json").read_text()), v
-    return json.loads((d / f"{slate_id}.reveal.json").read_text()), 1
+    # No unversioned fallback. This used to return the legacy
+    # <slate>.reveal.json with a hardcoded version of 1 - while the file that
+    # actually sat there held v2's predictions. Publishing one version's picks
+    # under another version's label is a false public claim, and grade output
+    # is public, so this fails instead of guessing.
+    raise FileNotFoundError(
+        f"{slate_id} has no versioned commitment in {d}, so the reveal to "
+        f"grade cannot be identified. Grading refuses to guess a version."
+    )
 
 
 def _results_for(event_ids: set[str], adapter: NFLAdapter) -> dict[str, float]:

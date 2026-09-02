@@ -88,7 +88,11 @@ contains the same root, every prediction in full, and the individual leaf
 fingerprints — so the check below works before kickoff, not only after.
 Grading is added once the games settle.
 
-Both files are also in the public code repository under `data/ledger/`.
+Both files are also in the public code repository under `data/ledger/`, one
+pair per commitment version. The current seal is
+`{{fig:slate.id}}.commitment.v{{fig:slate.version}}.json` and
+`{{fig:slate.id}}.reveal.v{{fig:slate.version}}.json`, and every superseded
+version is kept beside it rather than overwritten.
 
 ---
 
