@@ -61,7 +61,7 @@ jobs:
       # and index.html already labels a board whose games have all started.
       # engine.props_board stays in the tree for manual rebuilds and backfills.
       - name: Regenerate the props model artifact
-        run: python scripts/props_model_note.py
+        run: python scripts/props_model_note.py --render
 
       - name: Commit captured props
         run: |
