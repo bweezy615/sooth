@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>sooth.bet | Compare sportsbook prices</title>
-<meta name="description" content="Every sportsbook prices the same bet differently. Sooth compares live odds, removes vig, shows fair-market context, and finds the best available price.">
+<title>sooth.bet | Sports betting research analyzer</title>
+<meta name="description" content="Ask Sooth about a game and get analysis assembled from published, checkable numbers, including sportsbook prices and fair-market context.">
 <link rel="canonical" href="https://sooth.bet/">
-<meta property="og:title" content="sooth.bet | Compare sportsbook prices">
-<meta property="og:description" content="Live sportsbook prices, fair-market context, movement, and a public record that includes the losses.">
+<meta property="og:title" content="sooth.bet | Sports betting research analyzer">
+<meta property="og:description" content="Ask about a game. Sooth analyzes published sportsbook prices, fair-market context, movement, and its public record.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://sooth.bet/og.jpg">
 <meta property="og:url" content="https://sooth.bet/">
@@ -333,7 +333,7 @@
   <header class="m-top">
     <span class="m-mark"></span>
     <b>sooth<i>.bet</i></b>
-    <span class="m-sub">Every book prices it differently. We show you the best one.</span>
+    <span class="m-sub">Ask about a game. Every answer uses published, checkable numbers.</span>
   </header>
 
   <!-- Sport rail. Driven by the board, never hardcoded: a league with no
@@ -347,9 +347,9 @@
        which puts its prompt behind a signup. -->
   <form class="m-ask" id="mAsk" action="/ask" method="get">
     <span class="m-ask-i" aria-hidden="true"></span>
-    <label class="vh" for="mAskQ">Ask the analyst about tonight's board</label>
+    <label class="vh" for="mAskQ">Ask the analyst about a game</label>
     <input name="q" id="mAskQ" type="text" autocomplete="off"
-      placeholder="Ask about tonight's board">
+      placeholder="Ask about a game">
     <button type="submit" aria-label="Ask">&rarr;</button>
   </form>
 
@@ -465,19 +465,19 @@
 
     <main class="app-body" id="main">
 
-      <!-- The market is the hero. Every visible number is populated from
-           board.json; the holding state is explicit rather than fabricated. -->
+      <!-- The analyst is the product; the market terminal is the evidence it
+           reads. Every visible number is populated from board.json. -->
       <section class="market-hero" aria-labelledby="marketHeroTitle">
         <div class="market-hero-copy">
-          <span class="market-kicker">LIVE MARKET</span>
-          <h1 id="marketHeroTitle">Every sportsbook prices the same bet differently.</h1>
-          <p class="market-promise">We show you the best one.</p>
+          <span class="market-kicker">SPORTS RESEARCH</span>
+          <h1 id="marketHeroTitle">Ask Sooth about a game.</h1>
+          <p class="market-promise">Get an answer assembled from published, checkable numbers.</p>
           <div class="dash-cta">
-            <a class="btn btn-p" href="#dBoardH">View live board</a>
-            <a class="btn btn-s" href="/learn">How Sooth works</a>
+            <a class="btn btn-p" href="/ask">Ask the analyst</a>
+            <a class="btn btn-s" href="#dBoardH">View tonight&rsquo;s board</a>
           </div>
-          <p class="market-support">11 sportsbooks <span aria-hidden="true">/</span>
-            live odds <span aria-hidden="true">/</span> fair-market context</p>
+          <p class="market-support">Published prices <span aria-hidden="true">/</span>
+            best available price <span aria-hidden="true">/</span> fair-market context</p>
         </div>
         <div class="market-terminal" id="marketHero" aria-live="polite">
           <div class="market-hold"><span>READING THE MARKET</span>

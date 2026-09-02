@@ -26,9 +26,27 @@ ROOT = Path(__file__).resolve().parents[1]
 METHODOLOGY = ROOT / "site/content/methodology.md"
 DESK_JS = ROOT / "site/public/assets/desk.js"
 BOARD = ROOT / "site/public/data/board.json"
+INDEX = ROOT / "site/public/index.html"
 
 _NUMBER_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
                  7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+
+
+def test_homepage_leads_with_the_analyzer():
+    """PRODUCT.md defines analysis—not the price board—as the product."""
+    html = INDEX.read_text(encoding="utf-8")
+    assert "<title>sooth.bet | Sports betting research analyzer</title>" in html
+    assert '<h1 id="marketHeroTitle">Ask Sooth about a game.</h1>' in html
+    assert ("Ask about a game. Every answer uses published, checkable numbers."
+            in html)
+    assert "Ask the analyst about a game</label>" in html
+
+    cta = re.search(r'<div class="dash-cta">(.*?)</div>', html, re.S)
+    assert cta, "homepage no longer has its primary CTA group"
+    links = re.findall(r'<a class="btn [^"]+" href="([^"]+)">(.*?)</a>',
+                       cta.group(1), re.S)
+    assert links[:2] == [("/ask", "Ask the analyst"),
+                        ("#dBoardH", "View tonight&rsquo;s board")]
 
 
 def _sports() -> set[str]:
