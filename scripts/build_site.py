@@ -893,9 +893,19 @@ def main() -> None:
     try:
         build_ledger()
     except Exception as e:                       # noqa: BLE001
-        # A ledger-render bug must not halt every deploy: keep the previous
-        # ledger.html on disk and say so loudly in the log.
+        # A ledger-render bug must not halt the REST of the build, so the
+        # markdown pages above are already written and a human can inspect
+        # them. But it must not ship either: seal.yml and grade.yml run this
+        # and then commit, so exiting 0 here published the previous
+        # ledger.html as if it were current - a stale trust page, silently,
+        # on the one page whose whole job is to be checkable. The gate only
+        # notices hours later. Fail closed, the way api/picks.js does on a
+        # decryption error: say what broke and refuse to be committed.
         print(f"  LEDGER BUILD FAILED — keeping previous ledger.html: {e!r}")
+        raise SystemExit(
+            "refusing to exit clean with a stale ledger.html: a caller that "
+            "commits what this wrote would publish a superseded root. Fix the "
+            "ledger build, or revert this page deliberately and say why.")
     print("done")
 
 
