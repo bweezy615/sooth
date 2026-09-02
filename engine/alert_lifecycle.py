@@ -119,6 +119,17 @@ def graded_content(record: dict) -> tuple[str, str, str, str, str] | None:
     if not weeks:
         return None
     w = weeks[0]
+    # A week enters the record the moment it is SEALED, carrying n_settled 0
+    # until it has actually been played. Without this guard the graded email
+    # announces "games settled: 0" for a week nobody has played yet - and
+    # worse, burns the watermark on the way out (it is saved on both the
+    # zero-recipient path and the send path), so the REAL results email can
+    # never send afterwards. That is what happened to 2026-W01-nfl on
+    # 2026-09-01. Fail closed: a week whose settled count does not read as a
+    # positive number is not a result, and silence is the safe answer.
+    n = w.get("n_settled")
+    if not isinstance(n, (int, float)) or n <= 0:
+        return None
     slate = str(w.get("slate_id", ""))
     models = w.get("by_model") or {}
     lines = ""
@@ -277,6 +288,14 @@ def _selfcheck() -> int:
     # rehearsals only => nothing to announce
     assert graded_content({"weeks": [{"slate_id": "R", "rehearsal": True}]}) is None
     assert graded_content({"weeks": []}) is None
+
+    # A sealed but UNPLAYED week is not a result. 2026-W01-nfl sat in the
+    # record with n_settled 0 for eight days before its first kickoff, and
+    # announcing it burned the watermark that suppressed the real results
+    # email. Both shapes below must stay silent.
+    assert graded_content({"weeks": [{"slate_id": "2026-W01-nfl",
+                                      "n_settled": 0, "by_model": {}}]}) is None
+    assert graded_content({"weeks": [{"slate_id": "2026-W01-nfl"}]}) is None
 
     # watermark round-trip
     import tempfile
