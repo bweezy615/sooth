@@ -228,17 +228,17 @@ contains only the root fingerprint and the counts. For the slate below,
 2026-W01-nfl, it reads:</p>
 <pre class="frosted"><code class="language-json">{
   &quot;algorithm&quot;: &quot;sha256-merkle-v1&quot;,
-  &quot;committed_at&quot;: &quot;2026-09-01T23:28:44.264413+00:00&quot;,
+  &quot;committed_at&quot;: &quot;2026-09-02T16:57:43.908424+00:00&quot;,
   &quot;earliest_kickoff&quot;: &quot;2026-09-10T00:20:00+00:00&quot;,
-  &quot;merkle_root&quot;: &quot;<span class="ice">bc4cfd1fef233f9706d9a9c028d68276f79858cd91e302e260a77544232be58c</span>&quot;,
+  &quot;merkle_root&quot;: &quot;<span class="ice">7ba32f76ef374f3e4b52cc0588f01c20643a8acef2135dbe90640577e9ec6958</span>&quot;,
   &quot;n_predictions&quot;: 32,
   &quot;slate_id&quot;: &quot;2026-W01-nfl&quot;,
   &quot;sport&quot;: &quot;nfl&quot;,
-  &quot;supersedes&quot;: &quot;438f36072c2aa64b4d68de5feb6e4a45c085c8b7eff4d1c0e835741e2bb976ec&quot;,
-  &quot;version&quot;: 4
+  &quot;supersedes&quot;: &quot;bc4cfd1fef233f9706d9a9c028d68276f79858cd91e302e260a77544232be58c&quot;,
+  &quot;version&quot;: 5
 }
 </code></pre>
-<p>Note that <code>committed_at</code> is 8 days before
+<p>Note that <code>committed_at</code> is 7 days before
 <code>earliest_kickoff</code>. Note also that this file tells you nothing about who we
 picked. That is the point.</p>
 <p><strong><code>/data/&lt;slate-id&gt;.reveal.json</code></strong> is published alongside the commitment. It
@@ -247,8 +247,8 @@ fingerprints — so the check below works before kickoff, not only after.
 Grading is added once the games settle.</p>
 <p>Both files are also in the public code repository under <code>data/ledger/</code>, one
 pair per commitment version. The current seal is
-<code>2026-W01-nfl.commitment.v4.json</code> and
-<code>2026-W01-nfl.reveal.v4.json</code>, and every superseded
+<code>2026-W01-nfl.commitment.v5.json</code> and
+<code>2026-W01-nfl.reveal.v5.json</code>, and every superseded
 version is kept beside it rather than overwritten.</p>
 <hr />
 <h2>The check, step by step</h2>
@@ -314,17 +314,17 @@ print(&quot;VERIFIED&quot; if ok else &quot;MISMATCH - the record does not match
 <p>Output for 2026-W01-nfl:</p>
 <pre class="frosted"><code>predictions revealed : 32
 predictions committed: 32
-committed at         : 2026-09-01T23:28:44.264413+00:00
+committed at         : 2026-09-02T16:57:43.908424+00:00
 earliest kickoff     : 2026-09-10T00:20:00+00:00
 
-published root       : <span class="ice">bc4cfd1fef233f9706d9a9c028d68276f79858cd91e302e260a77544232be58c</span>
-recomputed root      : <span class="ice">bc4cfd1fef233f9706d9a9c028d68276f79858cd91e302e260a77544232be58c</span>
+published root       : <span class="ice">7ba32f76ef374f3e4b52cc0588f01c20643a8acef2135dbe90640577e9ec6958</span>
+recomputed root      : <span class="ice">7ba32f76ef374f3e4b52cc0588f01c20643a8acef2135dbe90640577e9ec6958</span>
 
 <span class="ok">VERIFIED</span>
 </code></pre>
 <p>The two roots match, so the 32 predictions in the reveal
 file are exactly the 32 we sealed on
-1 September 2026, 8 days before the
+2 September 2026, 7 days before the
 first kickoff. The
 <code>version</code>/<code>supersedes</code> fields chain this seal to the earlier ones on the
 ledger; re-sealing before kickoff is allowed, silent editing is not.</p>
@@ -333,7 +333,7 @@ ledger; re-sealing before kickoff is allowed, silent editing is not.</p>
 and watch it fail. Open the reveal file in a text editor, find the <strong>first</strong>
 prediction, change its <code>probability</code> from <code>0.6581</code> to
 <code>0.99</code>, save, and run the script again. The recomputed root becomes a completely
-different string (<code>ef9e0fd495...</code> when we do it) and the
+different string (<code>e3014e98b0...</code> when we do it) and the
 script prints <code>MISMATCH</code>.</p>
 <p>That is the entire security argument. One digit in one of
 32 predictions is enough to break the match. There is no way for us to quietly improve the
@@ -353,17 +353,17 @@ committed slate.</p>
 <h3>Worked example</h3>
 <p>The first prediction in the 2026-W01-nfl slate, in canonical form, is this
 exact string of 296 characters:</p>
-<pre class="frosted"><code>{&quot;created_at&quot;:&quot;2026-09-10T00:20:00+00:00&quot;,&quot;event_id&quot;:&quot;2026_01_NE_SEA&quot;,&quot;line&quot;:null,&quot;market&quot;:&quot;moneyline&quot;,&quot;model_version&quot;:&quot;elo+epa-v1+iso&quot;,&quot;probability&quot;:0.6581,&quot;rationale&quot;:&quot;independent: elo 1692 vs 1604, epa_edge 0.011&quot;,&quot;reference_line&quot;:3.5,&quot;reference_price&quot;:-180,&quot;selection&quot;:&quot;side_a&quot;,&quot;sport&quot;:&quot;nfl&quot;}
+<pre class="frosted"><code>{&quot;created_at&quot;:&quot;2026-09-10T00:20:00+00:00&quot;,&quot;event_id&quot;:&quot;2026_01_NE_SEA&quot;,&quot;line&quot;:null,&quot;market&quot;:&quot;moneyline&quot;,&quot;model_version&quot;:&quot;elo+epa-v1+iso&quot;,&quot;probability&quot;:0.6581,&quot;rationale&quot;:&quot;independent: elo 1692 vs 1604, epa_edge 0.011&quot;,&quot;reference_line&quot;:3.5,&quot;reference_price&quot;:-175,&quot;selection&quot;:&quot;side_a&quot;,&quot;sport&quot;:&quot;nfl&quot;}
 </code></pre>
 <p>Its leaf fingerprint is:</p>
-<pre class="frosted"><code><span class="ice">94f3271208d39bf06f92556d8c26eb7f349e9a91c2e07366a8a3cab4a090315b</span>
+<pre class="frosted"><code><span class="ice">97604aff6067d3fa6ce35d14bd3cf10cafc6ad413d779648d642e92701b66201</span>
 </code></pre>
 <p>And its inclusion proof, 5 steps, is:</p>
 <pre class="frosted"><code class="language-json">[
-  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;cd0e26e793843869e3babe8750a8e1631cebdcd4eb8bc03aec0a6199d821e299&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;2f1872ec56e019593604be5d998145f0c09c989f5000a0ef034dfb170342552b&quot;},
   {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;4ee6cdf105c2d3c88b91b79777014749a91fae5752f57323e71a33b4a5dba09a&quot;},
-  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;e9aafe18a09813d09c9fe4ce7dc8533cf39c4e48350ef503c07c413c06bfa881&quot;},
-  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;c5aa5c679eaa5ae5af09396f8b8ea3d4914ead437e9fa894968cf07f30865b65&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;b69e64a1aebe193cfb26ef70a9097f46b9a63805d18f87eb9cc828d1f4d9c0cc&quot;},
+  {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;59fdb0fdcb31fa120a477e75ccea05bcd24053456bd51aadc603bfe5336a18a8&quot;},
   {&quot;side&quot;: &quot;right&quot;, &quot;hash&quot;: &quot;4e2bc15523a84f9e5d00877929cba471504e326dcf9e4d8376da880a123d7747&quot;}
 ]
 </code></pre>
@@ -380,7 +380,7 @@ exact string of 296 characters:</p>
     return node == expected_root
 </code></pre>
 <p>Feed it the leaf, the 5 proof steps, and the published
-root <code>bc4cfd1...</code>, and it returns <code>True</code>.</p>
+root <code>7ba32f7...</code>, and it returns <code>True</code>.</p>
 <hr />
 <h2>The technical specification, for anyone writing their own checker</h2>
 <p>You do not have to use Python. Any language with SHA-256 will do. The rules are:</p>

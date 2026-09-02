@@ -19,8 +19,8 @@
     }
   },
   "confidence_cap": 0.85,
-  "merkle_root": "bc4cfd1fef233f9706d9a9c028d68276f79858cd91e302e260a77544232be58c",
-  "committed_at": "2026-09-01T23:28:44.264413+00:00",
+  "merkle_root": "7ba32f76ef374f3e4b52cc0588f01c20643a8acef2135dbe90640577e9ec6958",
+  "committed_at": "2026-09-02T16:57:43.908424+00:00",
   "earliest_kickoff": "2026-09-10T00:20:00+00:00",
   "n_predictions": 32,
   "games": [
@@ -271,25 +271,25 @@
       "models_disagree": false,
       "independent_vs_market": false,
       "divergence": 0.0663,
-      "best_price": -195,
+      "best_price": -190,
       "best_book": "BetOnline",
       "n_books": 11,
-      "edge_pts": 1.43,
+      "edge_pts": 2.02,
       "quotes": [
         {
           "book": "betonlineag",
-          "price": -195
+          "price": -190
         },
         {
           "book": "lowvig",
-          "price": -195
-        },
-        {
-          "book": "bovada",
-          "price": -195
+          "price": -190
         },
         {
           "book": "betus",
+          "price": -190
+        },
+        {
+          "book": "bovada",
           "price": -195
         },
         {
@@ -301,11 +301,11 @@
           "price": -198
         },
         {
-          "book": "betmgm",
-          "price": -200
+          "book": "fanduel",
+          "price": -198
         },
         {
-          "book": "fanduel",
+          "book": "betmgm",
           "price": -200
         },
         {
@@ -322,6 +322,86 @@
         }
       ],
       "divergence_rank": 6,
+      "ats_rank": null
+    },
+    {
+      "game_id": "2026_01_NE_SEA",
+      "kickoff": "2026-09-10T00:20:00+00:00",
+      "home": "SEA",
+      "away": "NE",
+      "independent": {
+        "pick": "SEA",
+        "prob": 0.6581,
+        "fair_odds": -192
+      },
+      "consensus": {
+        "pick": "SEA",
+        "prob": 0.6433,
+        "fair_odds": -180
+      },
+      "ats": {
+        "pred_margin": 4.98,
+        "edge": 1.48,
+        "pick": "SEA",
+        "underdog": false,
+        "qualified": false
+      },
+      "market_prob": 0.6092,
+      "spread_line": 3.5,
+      "models_disagree": false,
+      "independent_vs_market": false,
+      "divergence": 0.0489,
+      "best_price": -175,
+      "best_book": "DraftKings",
+      "n_books": 11,
+      "edge_pts": 3.03,
+      "quotes": [
+        {
+          "book": "draftkings",
+          "price": -175
+        },
+        {
+          "book": "betus",
+          "price": -180
+        },
+        {
+          "book": "lowvig",
+          "price": -182
+        },
+        {
+          "book": "betonlineag",
+          "price": -182
+        },
+        {
+          "book": "bovada",
+          "price": -185
+        },
+        {
+          "book": "williamhill_us",
+          "price": -190
+        },
+        {
+          "book": "fanatics",
+          "price": -195
+        },
+        {
+          "book": "mybookieag",
+          "price": -195
+        },
+        {
+          "book": "fanduel",
+          "price": -198
+        },
+        {
+          "book": "betrivers",
+          "price": -200
+        },
+        {
+          "book": "betmgm",
+          "price": -200
+        }
+      ],
+      "divergence_rank": 7,
       "ats_rank": null
     },
     {
@@ -356,7 +436,7 @@
       "n_books": null,
       "edge_pts": null,
       "quotes": null,
-      "divergence_rank": 7,
+      "divergence_rank": 8,
       "ats_rank": null
     },
     {
@@ -391,86 +471,6 @@
       "n_books": null,
       "edge_pts": null,
       "quotes": null,
-      "divergence_rank": 8,
-      "ats_rank": null
-    },
-    {
-      "game_id": "2026_01_NE_SEA",
-      "kickoff": "2026-09-10T00:20:00+00:00",
-      "home": "SEA",
-      "away": "NE",
-      "independent": {
-        "pick": "SEA",
-        "prob": 0.6581,
-        "fair_odds": -192
-      },
-      "consensus": {
-        "pick": "SEA",
-        "prob": 0.6433,
-        "fair_odds": -180
-      },
-      "ats": {
-        "pred_margin": 4.98,
-        "edge": 1.48,
-        "pick": "SEA",
-        "underdog": false,
-        "qualified": false
-      },
-      "market_prob": 0.6164,
-      "spread_line": 3.5,
-      "models_disagree": false,
-      "independent_vs_market": false,
-      "divergence": 0.0417,
-      "best_price": -180,
-      "best_book": "DraftKings",
-      "n_books": 11,
-      "edge_pts": 2.38,
-      "quotes": [
-        {
-          "book": "draftkings",
-          "price": -180
-        },
-        {
-          "book": "betus",
-          "price": -180
-        },
-        {
-          "book": "lowvig",
-          "price": -182
-        },
-        {
-          "book": "betonlineag",
-          "price": -182
-        },
-        {
-          "book": "bovada",
-          "price": -185
-        },
-        {
-          "book": "fanatics",
-          "price": -190
-        },
-        {
-          "book": "williamhill_us",
-          "price": -190
-        },
-        {
-          "book": "fanduel",
-          "price": -196
-        },
-        {
-          "book": "mybookieag",
-          "price": -197
-        },
-        {
-          "book": "betrivers",
-          "price": -200
-        },
-        {
-          "book": "betmgm",
-          "price": -200
-        }
-      ],
       "divergence_rank": 9,
       "ats_rank": null
     },
@@ -626,20 +626,20 @@
           "price": -102
         },
         {
-          "book": "fanduel",
-          "price": -102
-        },
-        {
           "book": "betmgm",
           "price": -102
         },
         {
-          "book": "williamhill_us",
-          "price": -105
-        },
-        {
           "book": "betrivers",
           "price": -107
+        },
+        {
+          "book": "williamhill_us",
+          "price": -107
+        },
+        {
+          "book": "fanduel",
+          "price": -108
         },
         {
           "book": "fanatics",
@@ -655,6 +655,41 @@
         }
       ],
       "divergence_rank": 12,
+      "ats_rank": null
+    },
+    {
+      "game_id": "2026_01_NO_DET",
+      "kickoff": "2026-09-13T17:00:00+00:00",
+      "home": "DET",
+      "away": "NO",
+      "independent": {
+        "pick": "DET",
+        "prob": 0.7345,
+        "fair_odds": -277
+      },
+      "consensus": {
+        "pick": "DET",
+        "prob": 0.7644,
+        "fair_odds": -324
+      },
+      "ats": {
+        "pred_margin": 7.19,
+        "edge": 0.19,
+        "pick": "DET",
+        "underdog": false,
+        "qualified": false
+      },
+      "market_prob": 0.718,
+      "spread_line": 7.0,
+      "models_disagree": false,
+      "independent_vs_market": false,
+      "divergence": 0.0165,
+      "best_price": null,
+      "best_book": null,
+      "n_books": null,
+      "edge_pts": null,
+      "quotes": null,
+      "divergence_rank": 13,
       "ats_rank": null
     },
     {
@@ -687,7 +722,7 @@
       "best_price": -390,
       "best_book": "BetUS",
       "n_books": 11,
-      "edge_pts": 2.58,
+      "edge_pts": 0.8,
       "quotes": [
         {
           "book": "betus",
@@ -726,15 +761,15 @@
           "price": -400
         },
         {
-          "book": "bovada",
-          "price": -410
+          "book": "mybookieag",
+          "price": -400
         },
         {
-          "book": "mybookieag",
-          "price": -461
+          "book": "bovada",
+          "price": -410
         }
       ],
-      "divergence_rank": 13,
+      "divergence_rank": 14,
       "ats_rank": null
     },
     {
@@ -759,27 +794,19 @@
         "underdog": true,
         "qualified": false
       },
-      "market_prob": 0.4066,
+      "market_prob": 0.417,
       "spread_line": -2.5,
       "models_disagree": false,
       "independent_vs_market": false,
-      "divergence": 0.0138,
+      "divergence": 0.0034,
       "best_price": -150,
-      "best_book": "BetUS",
+      "best_book": "Bovada",
       "n_books": 11,
       "edge_pts": 2.26,
       "quotes": [
         {
-          "book": "betus",
-          "price": -150
-        },
-        {
           "book": "bovada",
           "price": -150
-        },
-        {
-          "book": "fanduel",
-          "price": -152
         },
         {
           "book": "lowvig",
@@ -794,6 +821,14 @@
           "price": -154
         },
         {
+          "book": "betus",
+          "price": -155
+        },
+        {
+          "book": "fanduel",
+          "price": -156
+        },
+        {
           "book": "betrivers",
           "price": -157
         },
@@ -803,7 +838,7 @@
         },
         {
           "book": "mybookieag",
-          "price": -160
+          "price": -161
         },
         {
           "book": "draftkings",
@@ -814,41 +849,6 @@
           "price": -165
         }
       ],
-      "divergence_rank": 14,
-      "ats_rank": null
-    },
-    {
-      "game_id": "2026_01_NO_DET",
-      "kickoff": "2026-09-13T17:00:00+00:00",
-      "home": "DET",
-      "away": "NO",
-      "independent": {
-        "pick": "DET",
-        "prob": 0.7345,
-        "fair_odds": -277
-      },
-      "consensus": {
-        "pick": "DET",
-        "prob": 0.7644,
-        "fair_odds": -324
-      },
-      "ats": {
-        "pred_margin": 7.19,
-        "edge": 0.19,
-        "pick": "DET",
-        "underdog": false,
-        "qualified": false
-      },
-      "market_prob": 0.7221,
-      "spread_line": 7.0,
-      "models_disagree": false,
-      "independent_vs_market": false,
-      "divergence": 0.0124,
-      "best_price": null,
-      "best_book": null,
-      "n_books": null,
-      "edge_pts": null,
-      "quotes": null,
       "divergence_rank": 15,
       "ats_rank": null
     },
@@ -879,22 +879,22 @@
       "models_disagree": false,
       "independent_vs_market": false,
       "divergence": 0.0014,
-      "best_price": -160,
+      "best_price": -165,
       "best_book": "BetOnline",
       "n_books": 11,
-      "edge_pts": 2.36,
+      "edge_pts": 1.63,
       "quotes": [
         {
           "book": "betonlineag",
-          "price": -160
+          "price": -165
         },
         {
           "book": "lowvig",
-          "price": -160
+          "price": -165
         },
         {
           "book": "betus",
-          "price": -160
+          "price": -165
         },
         {
           "book": "betmgm",
@@ -905,15 +905,15 @@
           "price": -168
         },
         {
-          "book": "fanatics",
-          "price": -170
-        },
-        {
           "book": "williamhill_us",
           "price": -170
         },
         {
           "book": "draftkings",
+          "price": -175
+        },
+        {
+          "book": "fanatics",
           "price": -175
         },
         {
