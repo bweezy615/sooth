@@ -17,16 +17,16 @@
   "board.market_sigma": "1.9",
   "slope.flat_n": "2,499",
   "slope.flat": "+0.50",
-  "slope.typical_n": "2,473",
+  "slope.typical_n": "2,477",
   "slope.typical": "+0.19",
   "slope.board_n": "286",
   "slope.board": "-0.11",
   "slope.board_ci": "-0.46 to +0.24",
-  "slope.board_typical": "+0.10",
-  "slope.board_typical_n": "282",
-  "slope.z_line": "4.7",
-  "slope.z_select": "0.5",
-  "slope.z_posted": "0.8",
+  "slope.board_typical": "+0.06",
+  "slope.board_typical_n": "283",
+  "slope.z_line": "4.8",
+  "slope.z_select": "0.7",
+  "slope.z_posted": "0.7",
   "salvage.folds": "5",
   "salvage.raw_ece": "15.8 pts",
   "salvage.raw_brier": "0.2750",
@@ -39,7 +39,7 @@
   "salvage.fit_slopes": "-0.19 and -0.04",
   "cover.pitchers": "152",
   "cover.starts": "8\u201327",
-  "cover.k_quotes": "3,903",
+  "cover.k_quotes": "3,927",
   "cover.tb_quotes": "160",
   "cover.league_line": "4.5",
   "nfl.ats": "49.8%",
@@ -47,7 +47,7 @@
   "nfl.breakeven": "52.4%"
  },
  "detail": {
-  "generated_at": "2026-08-31T23:17:43-05:00",
+  "generated_at": "2026-09-01T19:29:47-05:00",
   "method": {
    "board_filter": "3+ books pricing both sides",
    "walk_forward": "projection uses only appearances before the game",
@@ -89,24 +89,24 @@
     "ece": 6.372541172556429
    },
    "typical_line": {
-    "n": 2473,
-    "slope": 0.19226473681385678,
-    "se": 0.049606568422246644,
-    "ece": 11.17725570777611
+    "n": 2477,
+    "slope": 0.18760766562911663,
+    "se": 0.04940191937138949,
+    "ece": 11.408277674498859
    },
    "board_typical_line": {
-    "n": 282,
-    "slope": 0.09843373093352557,
-    "se": 0.18131891063878042
+    "n": 283,
+    "slope": 0.06273411520318498,
+    "se": 0.18275953994588492
    },
    "board_posted_line": {
     "n": 286,
     "slope": -0.11001491368464084,
     "se": 0.1762274980383228
    },
-   "z_line_specification": 4.732627943981842,
-   "z_game_selection": 0.49914799139312976,
-   "z_posted_line": 0.8243993219885869
+   "z_line_specification": 4.817232119304817,
+   "z_game_selection": 0.65959411334255,
+   "z_posted_line": 0.6804245305646781
   },
   "salvage": {
    "folds": 5,
@@ -133,7 +133,7 @@
    "pitchers": 152,
    "starts_p10": 8,
    "starts_p90": 27,
-   "quotes_strikeouts": 3903,
+   "quotes_strikeouts": 3927,
    "quotes_total_bases": 160
   },
   "nfl": {
