@@ -30,6 +30,7 @@ from __future__ import annotations
 import os
 from datetime import datetime, timezone
 
+from engine import timefmt
 from engine.xkit import (BG, BRAND, DIM, INK, INK2, LOSS, PANEL, PANEL2, PUSH,
                          STROKE, Card, body, crest, display, headshot, load, mono,
                          team_abbr)
@@ -69,7 +70,7 @@ def am(price) -> str:
 def clock(iso: str) -> str:
     try:
         t = datetime.fromisoformat((iso or "").replace("Z", "+00:00"))
-        return t.astimezone().strftime("%a %-I:%M%p").upper()
+        return timefmt.strftime(t.astimezone(), "%a %-I:%M%p").upper()
     except Exception:
         return "—"
 

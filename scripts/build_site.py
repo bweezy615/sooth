@@ -24,6 +24,7 @@ import markdown
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from engine import timefmt
 from engine.commit import (canonical, commitment_history, merkle_proof,
                            merkle_root, verify_proof)
 
@@ -633,19 +634,15 @@ def _derive(figures):
 # currently two versions behind the seal the site actually serves.
 # ---------------------------------------------------------------------------
 
-_MONTHS = ("January", "February", "March", "April", "May", "June", "July",
-           "August", "September", "October", "November", "December")
-
-
 def _human_date(iso: str) -> str:
     """'2026-09-01T23:28:44+00:00' -> '1 September 2026'.
 
-    Assembled by hand rather than with strftime("%-d %B %Y"): %-d is a glibc
-    extension that raises ValueError on Windows, where this generator also has
-    to run. engine/alert_lifecycle.py already carries that bug.
+    %-d is a glibc extension that raises ValueError on Windows, where this
+    generator also has to run. This used to assemble the string by hand to dodge
+    that; engine/timefmt.py now holds that knowledge in one place, so the format
+    string can say what it means again.
     """
-    d = datetime.fromisoformat(iso)
-    return f"{d.day} {_MONTHS[d.month - 1]} {d.year}"
+    return timefmt.strftime(datetime.fromisoformat(iso), "%-d %B %Y")
 
 
 def _leaf(prediction: dict) -> str:

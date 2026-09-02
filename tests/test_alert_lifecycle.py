@@ -8,11 +8,13 @@ not happened. Worse, the watermark is saved on BOTH the zero-recipient path and
 the successful-send path, so the key graded:2026-W01-nfl was burned and the real
 results email could never send - the run would just print "already announced".
 
-engine/alert_lifecycle._selfcheck() carries the same logic assertions, but
-nothing runs it: it appears only in docs/alerts-runbook.md, and on Windows it
-cannot run at all, because seal_content formats dates with the glibc-only %-d
-that MSVC's strftime rejects. So the check lives here too, where
-scripts/check.sh runs it on every platform.
+engine/alert_lifecycle._selfcheck() carries the same logic assertions, and
+until engine/timefmt.py landed it could not run on Windows at all: seal_content
+formatted dates with the glibc-only %-d that MSVC's strftime rejects, so the
+runbook command died before reaching a single assertion. It runs everywhere
+now, and test_the_modules_own_selfcheck_passes below puts it inside
+scripts/check.sh so it is no longer a check that depends on someone
+remembering to type it.
 
 The second test is the one that would have caught the actual damage. The first
 only proves the logic; this one reads the real watermark against the real record.
@@ -22,7 +24,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from engine.alert_lifecycle import graded_content, load_sent
+from engine.alert_lifecycle import _selfcheck, graded_content, load_sent
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD = ROOT / "site/public/data/pickengine-record.json"
@@ -61,3 +63,13 @@ def test_no_graded_watermark_for_a_week_the_record_calls_unplayed():
             f"{key} is watermarked as already announced, but the published "
             f"record says {slate} has n_settled={n!r}. The results email for "
             f"that week is now permanently suppressed.")
+
+
+def test_the_modules_own_selfcheck_passes():
+    """The command docs/alerts-runbook.md tells you to run, actually run.
+
+    It asserts the seal email carries the root and the anchor commit, that a
+    rehearsal never mails, and that CLV which was not measured never prints as
+    0.00. Every one of those was a real defect once.
+    """
+    assert _selfcheck() == 0

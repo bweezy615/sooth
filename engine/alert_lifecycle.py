@@ -30,7 +30,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from . import alert_token, mailer, subscribers
+from . import alert_token, mailer, subscribers, timefmt
 
 WATERMARK = "data/lifecycle_sent.json"
 META = "data/pro/latest.meta.json"
@@ -60,7 +60,7 @@ def _when(iso: str) -> str:
         d = dt.datetime.fromisoformat(str(iso).replace("Z", "+00:00"))
     except ValueError:
         return str(iso)
-    return d.strftime("%a %b %-d, %H:%M UTC")
+    return timefmt.strftime(d, "%a %b %-d, %H:%M UTC")
 
 
 def seal_content(meta: dict, commit: str | None) -> tuple[str, str, str, str, str]:
