@@ -334,6 +334,7 @@ it appears. Never mark a sport Live without that evidence.
 |---|---|---|
 | NFL spread + total | Live-ready | graded vs purchased 17-book closes |
 | NFL moneyline | In calibration | needs a season of our own capture |
+| CFB spread + total | Board only | prices shipped; adapter built, no closing-line history yet |
 | EPL 1X2 | In calibration | documented closing odds, better provenance than NFL |
 | NBA / NHL | Not built | strong free closing-line history available |
 | MLB | Not built | **source licence is NOASSERTION — legal review before any paid use** |
@@ -344,6 +345,26 @@ Adding a sport = implement `engine/adapters/base.py`. Nothing else. Adding EPL
 required **zero** engine changes, which is the evidence the interface holds.
 Note EPL emits a third `draw` selection — code assuming two outcomes will be
 wrong there and should fail loudly rather than renormalise.
+
+That claim holds for the model and backtest path. It does **not** hold for
+`engine/pipeline/weekly.py`, which seals a slate: it imports `NFLAdapter`
+concretely, reads `adapter.games` and `adapter._kickoff` rather than the
+interface, and hardcodes `Sport.NFL` and the `-nfl` slate id. Sealing a second
+sport means generalising that module first, and it writes the ledger, so it is
+the one place where a hasty change is expensive — a root that moves or
+disappears is indistinguishable from tampering (rule 6).
+
+`engine/adapters/ncaaf.py` is implemented and tested against the cfbfastR
+schedule mirror (free, no key, 2016-present). It deliberately reports **no**
+lines, because a schedule feed holds none and `base.py` is explicit that
+guessing `is_closing` corrupts CLV downstream — so college football cannot be
+graded and stays off Live under the rule above. It also models FBS-vs-FBS
+only: an opponent-adjusted rating for an FCS team that plays the division once
+is an estimate of nothing, and those games cluster on exactly the opening
+weekend where the board is busiest. Its team names do NOT match the odds
+board's ("Akron" vs "Akron Zips", "San José State" vs "San Jose State
+Spartans"); join on the ESPN `game_id`, which our own `data/capture/ncaaf/`
+already carries.
 
 Full per-sport research: `docs/multisport-data-plan.md`.
 
