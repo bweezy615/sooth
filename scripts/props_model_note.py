@@ -91,7 +91,17 @@ MARKET = "pitcher_strikeouts"
 # the diff, and if the numbers move, the page says they moved. A test fails
 # once the capture has run a month past this date, so a pinned window cannot
 # quietly become a stale one.
-WINDOW_THROUGH = "2026-08-26"
+#
+# Extended 2026-09-03 from 2026-08-26. Routine refresh, not a correction:
+# 32 of 45 figures moved, all small, and the page's conclusion is unchanged
+# (won 44.7% of 237 disagreements, board slope CI still straddles zero), so
+# nothing was withdrawn and the correction record below is untouched.
+# The pin is the newest CLOSED game date, not the newest capture file. A game
+# date runs to observed_at + MLB_DAY_OFFSET, so at the time of the move the
+# 2026-09-02 file was still accumulating rows; pinning into it would have let
+# a routine capture commit move a published figure, which is the one thing
+# this pin exists to prevent.
+WINDOW_THROUGH = "2026-09-01"
 STALE_AFTER_DAYS = 30
 
 # A game's official MLB date is its local date. Every start in the majors falls

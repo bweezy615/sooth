@@ -155,10 +155,10 @@
 
   <div class="stance">
     <p><b>Our model disagrees loudly with the prices books actually post, and it is
-    wrong about as often as a coin.</b> Across <span class="n" data-f="board.n">286</span>
+    wrong about as often as a coin.</b> Across <span class="n" data-f="board.n">296</span>
     real prop lines it disagreed with the market by
-    <span class="n" data-f="board.mean_delta_bare">11.2</span> points on average and its
-    side won <span class="n" data-f="board.won_pct">44.8%</span> of the time. We are not
+    <span class="n" data-f="board.mean_delta_bare">11.1</span> points on average and its
+    side won <span class="n" data-f="board.won_pct">44.7%</span> of the time. We are not
     selling it, and this page exists because the measurement is worth more than the
     model was.</p>
   </div>
@@ -188,20 +188,20 @@
     <div class="prose">
       <p>We reconstructed every strikeout prop our capture actually saw between
       <span data-f="window.first">8 August 2026</span> and
-      <span data-f="window.last">26 August 2026</span> — real lines, real
+      <span data-f="window.last">1 September 2026</span> — real lines, real
       prices from three or more books on both sides, outcomes known. That is
-      <span class="n" data-f="board.n">286</span> props with a gradeable result.</p>
+      <span class="n" data-f="board.n">296</span> props with a gradeable result.</p>
 
       <!-- the one lit rim on the page. .rimlit is the promo's single teal arc,
            and it belongs on the surface carrying the result we published. -->
       <div class="fig rimlit">
         <table>
           <tr><th scope="col">On the real board props</th><th scope="col">Model</th><th scope="col">Market</th></tr>
-          <tr><td>Predicted the over</td><td data-f="board.model_over">47.0%</td><td data-f="board.market_over">49.1%</td></tr>
-          <tr><td>Actually went over</td><td data-f="board.actual_over">43.7%</td><td data-f="board.actual_over">43.7%</td></tr>
-          <tr><td>Average disagreement with the price</td><td class="hi" data-f="board.mean_delta">11.2 pts</td><td>—</td></tr>
-          <tr><td>Props where we disagreed by 3+ points</td><td data-f="board.disagree_of">230 of 286</td><td>—</td></tr>
-          <tr><td>Our side won those</td><td class="bad" data-f="board.won_pct">44.8%</td><td>—</td></tr>
+          <tr><td>Predicted the over</td><td data-f="board.model_over">46.8%</td><td data-f="board.market_over">49.1%</td></tr>
+          <tr><td>Actually went over</td><td data-f="board.actual_over">44.3%</td><td data-f="board.actual_over">44.3%</td></tr>
+          <tr><td>Average disagreement with the price</td><td class="hi" data-f="board.mean_delta">11.1 pts</td><td>—</td></tr>
+          <tr><td>Props where we disagreed by 3+ points</td><td data-f="board.disagree_of">237 of 296</td><td>—</td></tr>
+          <tr><td>Our side won those</td><td class="bad" data-f="board.won_pct">44.7%</td><td>—</td></tr>
         </table>
         <p class="cap">A coin flip is 50%. Breaking even at standard prop pricing needs
         more than that.</p>
@@ -214,9 +214,9 @@
       would be unmissable if it were real.</p>
 
       <p>Stated honestly, because it matters: with
-      <span class="n" data-f="board.n_disagree">230</span> decisions the margin of error
-      is about <span class="n" data-f="board.se">3.3</span> points, so
-      <span class="n" data-f="board.won_pct">44.8%</span> is close enough to a coin flip
+      <span class="n" data-f="board.n_disagree">237</span> decisions the margin of error
+      is about <span class="n" data-f="board.se">3.2</span> points, so
+      <span class="n" data-f="board.won_pct">44.7%</span> is close enough to a coin flip
       that we cannot claim the model is actively bad. What this sample does rule out is
       the large edge the model was advertising.</p>
     </div>
@@ -237,13 +237,13 @@
       <div class="fig">
         <table>
           <tr><th scope="col">What the model was graded against</th><th scope="col">Sample</th><th scope="col">Information in the model</th></tr>
-          <tr><td>Every start, one league-median line for every pitcher</td><td data-f="slope.flat_n">2,499</td><td class="hi" data-f="slope.flat">+0.50</td></tr>
-          <tr><td>Every start, the line that pitcher usually gets</td><td data-f="slope.typical_n">2,477</td><td data-f="slope.typical">+0.19</td></tr>
-          <tr><td>Only games books posted a prop on, at the price they hung</td><td data-f="slope.board_n">286</td><td class="bad" data-f="slope.board">-0.11</td></tr>
+          <tr><td>Every start, one league-median line for every pitcher</td><td data-f="slope.flat_n">2,647</td><td class="hi" data-f="slope.flat">+0.51</td></tr>
+          <tr><td>Every start, the line that pitcher usually gets</td><td data-f="slope.typical_n">2,624</td><td data-f="slope.typical">+0.22</td></tr>
+          <tr><td>Only games books posted a prop on, at the price they hung</td><td data-f="slope.board_n">296</td><td class="bad" data-f="slope.board">-0.10</td></tr>
         </table>
         <p class="cap">95% interval on the last figure is
-        <span data-f="slope.board_ci">-0.46 to +0.24</span>. Wide, because
-        <span data-f="board.n">286</span> is not many, but it excludes the values the
+        <span data-f="slope.board_ci">-0.44 to +0.24</span>. Wide, because
+        <span data-f="board.n">296</span> is not many, but it excludes the values the
         model would need to be worth publishing.</p>
       </div>
 
@@ -253,17 +253,17 @@
       out at different rates, and the number a book hangs is built around exactly that.
       Withhold that from the line and hand it only to the model, and the model looks
       informed. Give it to both and four fifths of the effect disappears. That single
-      step is worth <span class="n" data-f="slope.z_line">4.8</span> standard errors.</p>
+      step is worth <span class="n" data-f="slope.z_line">4.6</span> standard errors.</p>
 
       <p>The rest of the fall is not established. Holding the line rule fixed and
       comparing the games books posted a prop on
       (<span class="n" data-f="slope.board_typical">+0.09</span> on
-      <span class="n" data-f="slope.board_typical_n">283</span> of them) against every
-      other start moves the figure by <span class="n" data-f="slope.z_select">0.5</span>
+      <span class="n" data-f="slope.board_typical_n">293</span> of them) against every
+      other start moves the figure by <span class="n" data-f="slope.z_select">0.6</span>
       standard errors. Swapping that pitcher's usual line for the exact price the book
       actually hung moves it by another
       <span class="n" data-f="slope.z_posted">0.8</span>. At
-      <span class="n" data-f="board.n">286</span> props neither of those is a finding,
+      <span class="n" data-f="board.n">296</span> props neither of those is a finding,
       and we are not going to present them as one.</p>
 
       <p><em>Our edge existed where no market existed.</em> What we got wrong for eight
@@ -292,9 +292,9 @@
       <div class="fig">
         <table>
           <tr><th scope="col"></th><th scope="col">Calibration error</th><th scope="col">Brier score</th></tr>
-          <tr><td>The model as built</td><td class="bad" data-f="salvage.raw_ece">15.8 pts</td><td data-f="salvage.raw_brier">0.2750</td></tr>
-          <tr><td>After recalibration</td><td class="hi" data-f="salvage.recal_ece">4.2 pts</td><td data-f="salvage.recal_brier">0.2470</td></tr>
-          <tr><td>The market itself</td><td data-f="salvage.market_ece">8.3 pts</td><td data-f="salvage.market_brier">0.2454</td></tr>
+          <tr><td>The model as built</td><td class="bad" data-f="salvage.raw_ece">15.1 pts</td><td data-f="salvage.raw_brier">0.2742</td></tr>
+          <tr><td>After recalibration</td><td class="hi" data-f="salvage.recal_ece">6.4 pts</td><td data-f="salvage.recal_brier">0.2476</td></tr>
+          <tr><td>The market itself</td><td data-f="salvage.market_ece">7.7 pts</td><td data-f="salvage.market_brier">0.2454</td></tr>
         </table>
         <p class="cap">Lower is better on both. Scored out of sample, in
         <span data-f="salvage.folds">5</span> folds, so no prop is graded by a
@@ -303,10 +303,10 @@
 
       <p>The correction the fit chooses is to stop listening. Across the folds the
       weight it puts on the model's own opinion lands between
-      <span class="n" data-f="salvage.fit_slopes">-0.19 and -0.04</span>: nought, to
+      <span class="n" data-f="salvage.fit_slopes">-0.17 and -0.03</span>: nought, to
       within the noise. What comes out the other side sits between
-      <span class="n" data-f="salvage.band">37% and 54%</span> on every prop, averaging
-      <span class="n" data-f="salvage.mean">43.7%</span>, which is the base rate. It
+      <span class="n" data-f="salvage.band">38% and 54%</span> on every prop, averaging
+      <span class="n" data-f="salvage.mean">44.3%</span>, which is the base rate. It
       scores well because predicting the base rate always scores well. It is a constant
       wearing a model's clothes, and publishing it would be publishing the base rate
       with extra steps.</p>
@@ -329,7 +329,7 @@
       <h3>1. "Per-player error swamps the signal."</h3>
       <p>Measured in-sample and over-read. Separating out the noise you would expect
       from small samples, per-player deviation in both models is entirely consistent
-      with chance. At <span class="n" data-f="cover.starts">8–27</span> starts per
+      with chance. At <span class="n" data-f="cover.starts">8–28</span> starts per
       pitcher this simply cannot be measured. Withdrawn.</p>
 
       <h3>2. "The probabilities are too extreme because we ignore uncertainty."</h3>
@@ -364,7 +364,7 @@
       <p>So the daily post will tell you where the best number is, and what a player
       has actually done in his last five, last ten and season starts. It will not tell
       you a prop is mispriced, because we measured our ability to know that and it came
-      back at <span class="n" data-f="board.won_pct">44.8%</span>. Where our model
+      back at <span class="n" data-f="board.won_pct">44.7%</span>. Where our model
       probability appears it is labelled as context, not as a forecast.</p>
 
       <p>Worth being blunt about what a price edge is and is not: the vig means the
@@ -383,7 +383,7 @@
 
       <p>If you want the bar for reopening this: a model would have to show real
       information against the prices books actually post, on a sample larger than
-      <span class="n" data-f="board.n">286</span>. That is the current sample, it is
+      <span class="n" data-f="board.n">296</span>. That is the current sample, it is
       written down, and it moves only when this page is regenerated from the capture,
       so nobody — including us — gets to move it quietly.</p>
     </div>
@@ -395,10 +395,10 @@
       <p>Recorded so they are not later rediscovered as news.</p>
       <p>The market itself predicted
       <span class="n" data-f="board.market_over">49.1%</span> against a
-      <span class="n" data-f="board.actual_over">43.7%</span> actual on this sample.
+      <span class="n" data-f="board.actual_over">44.3%</span> actual on this sample.
       That looks like a bias toward the under. At
-      <span class="n" data-f="board.n">286</span> props it is about
-      <span class="n" data-f="board.market_sigma">1.9</span> standard deviations: noise,
+      <span class="n" data-f="board.n">296</span> props it is about
+      <span class="n" data-f="board.market_sigma">1.7</span> standard deviations: noise,
       not a finding, and we are not trading on it.</p>
       <p>We built a total-bases model too, and it points the same way, but it was never
       tested on a board population. We captured
@@ -435,8 +435,8 @@
       <p><em>The sample grew and the result got slightly worse.</em> The original run
       graded <span class="n" data-was>194</span> props and reported our side winning
       <span class="n" data-was>48.1%</span> of its disagreements. This
-      one grades <span class="n" data-f="board.n">286</span> and reports
-      <span class="n" data-f="board.won_pct">44.8%</span>. Part of the difference is
+      one grades <span class="n" data-f="board.n">296</span> and reports
+      <span class="n" data-f="board.won_pct">44.7%</span>. Part of the difference is
       five more days of capture; part is that the original could not resolve about a
       dozen pitchers whose names are shared with another player, so working starters
       were silently dropped. The conclusion is unchanged.</p>
