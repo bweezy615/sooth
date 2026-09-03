@@ -18,15 +18,15 @@
   "slope.flat_n": "2,647",
   "slope.flat": "+0.51",
   "slope.typical_n": "2,624",
-  "slope.typical": "+0.22",
+  "slope.typical": "+0.21",
   "slope.board_n": "296",
   "slope.board": "-0.10",
   "slope.board_ci": "-0.44 to +0.24",
   "slope.board_typical": "+0.09",
   "slope.board_typical_n": "293",
-  "slope.z_line": "4.6",
-  "slope.z_select": "0.6",
-  "slope.z_posted": "0.8",
+  "slope.z_line": "4.7",
+  "slope.z_select": "0.7",
+  "slope.z_posted": "0.7",
   "salvage.folds": "5",
   "salvage.raw_ece": "15.1 pts",
   "salvage.raw_brier": "0.2742",
@@ -39,7 +39,7 @@
   "salvage.fit_slopes": "-0.17 and -0.03",
   "cover.pitchers": "153",
   "cover.starts": "8\u201328",
-  "cover.k_quotes": "3,961",
+  "cover.k_quotes": "3,977",
   "cover.tb_quotes": "160",
   "cover.league_line": "4.5",
   "nfl.ats": "49.8%",
@@ -47,7 +47,7 @@
   "nfl.breakeven": "52.4%"
  },
  "detail": {
-  "generated_at": "2026-09-03T11:19:50+00:00",
+  "generated_at": "2026-09-03T16:29:05+00:00",
   "method": {
    "board_filter": "3+ books pricing both sides",
    "walk_forward": "projection uses only appearances before the game",
@@ -72,8 +72,8 @@
    "won": 106,
    "won_pct": 0.4472573839662447,
    "se_pts": 3.2478490123081545,
-   "slope": -0.09869590987668367,
-   "slope_se": 0.17500333218685626,
+   "slope": -0.09869590987668368,
+   "slope_se": 0.1750033321868563,
    "brier_model": 0.27415796586650926,
    "brier_market": 0.24539213604440088,
    "ece_model": 15.130665873758318,
@@ -85,41 +85,41 @@
    "flat_line": {
     "n": 2647,
     "slope": 0.5062584237681893,
-    "se": 0.03963727419049241,
+    "se": 0.03963727419049237,
     "ece": 6.320994145276881
    },
    "typical_line": {
     "n": 2624,
-    "slope": 0.21560608919781912,
-    "se": 0.04869477097082335,
-    "ece": 10.695606735603977
+    "slope": 0.21421255125341956,
+    "se": 0.04850177578179793,
+    "ece": 10.674922307312587
    },
    "board_typical_line": {
     "n": 293,
-    "slope": 0.09498505095129808,
-    "se": 0.1813959600293087
+    "slope": 0.08533734770557845,
+    "se": 0.17793911941245805
    },
    "board_posted_line": {
     "n": 296,
-    "slope": -0.09869590987668367,
-    "se": 0.17500333218685626
+    "slope": -0.09869590987668368,
+    "se": 0.1750033321868563
    },
-   "z_line_specification": 4.629129162789413,
-   "z_game_selection": 0.642222320979347,
-   "z_posted_line": 0.7684139584625317
+   "z_line_specification": 4.662429362687348,
+   "z_game_selection": 0.6987723417817532,
+   "z_posted_line": 0.7373817582840647
   },
   "salvage": {
    "folds": 5,
    "n_test": 296,
    "fit_slope_min": -0.17394406522862207,
-   "fit_slope_max": -0.02900018994946558,
+   "fit_slope_max": -0.029000189949465634,
    "raw": {
     "ece": 15.130665873758318,
     "brier": 0.27415796586650926
    },
    "recalibrated": {
     "ece": 6.3782921061454445,
-    "brier": 0.2476118039578526,
+    "brier": 0.24761180395785265,
     "min": 0.3806456215522763,
     "max": 0.5386451058455517,
     "mean": 0.4425428430381494
@@ -133,7 +133,7 @@
    "pitchers": 153,
    "starts_p10": 8,
    "starts_p90": 28,
-   "quotes_strikeouts": 3961,
+   "quotes_strikeouts": 3977,
    "quotes_total_bases": 160
   },
   "nfl": {
