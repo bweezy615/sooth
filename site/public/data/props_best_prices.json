@@ -1,115 +1,25 @@
 {
- "generated_at": "2026-09-03T00:05:58.594252+00:00",
+ "generated_at": "2026-09-03T04:14:47.635236+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 200,
+ "n_considered": 54,
  "best_prices": [
   {
    "sport": "mlb",
    "matchup": "Chicago White Sox @ Houston Astros",
-   "starts": "2026-09-03T00:11:00Z",
-   "player": "Drew Romo",
+   "starts": "2026-09-03T18:10:00Z",
+   "player": "Isaac Paredes",
    "market": "batter_total_bases",
    "market_label": "Total bases",
-   "line": 0.5,
+   "line": 1.5,
    "side": "over",
-   "best_price": 100,
-   "best_book": "BetRivers",
+   "best_price": 158,
+   "best_book": "BetOnline",
    "n_books": 4,
-   "fair_price": -103,
-   "price_edge_pts": 0.77,
-   "book_spread_pts": 5.56,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 59,
-    "over": 22
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Chicago White Sox @ Houston Astros",
-   "starts": "2026-09-03T00:11:00Z",
-   "player": "Drew Romo",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "over",
-   "best_price": 102,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": -101,
-   "price_edge_pts": 0.65,
-   "book_spread_pts": 6.05,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 59,
-    "over": 22
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "St. Louis Cardinals @ Los Angeles Dodgers",
-   "starts": "2026-09-03T02:11:00Z",
-   "player": "Yoshinobu Yamamoto",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "over",
-   "best_price": -115,
-   "best_book": "BetMGM",
-   "n_books": 7,
-   "fair_price": -118,
-   "price_edge_pts": 0.59,
-   "book_spread_pts": 5.36,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 24,
-    "over": 12
-   },
-   "model_p_over": 0.4359,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "New York Yankees @ Los Angeles Angels",
-   "starts": "2026-09-03T01:39:00Z",
-   "player": "Reid Detmers",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 6.5,
-   "side": "under",
-   "best_price": -104,
-   "best_book": "DraftKings",
-   "n_books": 7,
-   "fair_price": -104,
-   "price_edge_pts": 0.03,
-   "book_spread_pts": 5.54,
+   "fair_price": 157,
+   "price_edge_pts": 0.15,
+   "book_spread_pts": 3.98,
    "hit_l5": {
     "n": 5,
     "over": 1
@@ -119,39 +29,120 @@
     "over": 3
    },
    "hit_season": {
-    "n": 27,
-    "over": 11
+    "n": 133,
+    "over": 54
    },
-   "model_p_over": 0.5291,
-   "model_version": "kpoisson-v1"
+   "model_p_over": null,
+   "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "St. Louis Cardinals @ Los Angeles Dodgers",
-   "starts": "2026-09-03T02:11:00Z",
-   "player": "Kyle Tucker",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 142,
+   "matchup": "Boston Red Sox @ Baltimore Orioles",
+   "starts": "2026-09-03T23:15:00Z",
+   "player": "Jake Bennett",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": -120,
    "best_book": "DraftKings",
-   "n_books": 4,
-   "fair_price": 143,
-   "price_edge_pts": -0.21,
-   "book_spread_pts": 6.3,
+   "n_books": 5,
+   "fair_price": -120,
+   "price_edge_pts": -0.09,
+   "book_spread_pts": 4.64,
    "hit_l5": {
     "n": 5,
-    "over": 2
+    "over": 4
    },
    "hit_l10": {
     "n": 10,
     "over": 5
    },
    "hit_season": {
-    "n": 130,
-    "over": 75
+    "n": 16,
+    "over": 7
    },
+   "model_p_over": 0.6739,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Chicago White Sox @ Houston Astros",
+   "starts": "2026-09-03T18:10:00Z",
+   "player": "Yainer Diaz",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 164,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 168,
+   "price_edge_pts": -0.53,
+   "book_spread_pts": 3.1,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 76,
+    "over": 25
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Boston Red Sox @ Baltimore Orioles",
+   "starts": "2026-09-03T23:15:00Z",
+   "player": "Jarren Duran",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 144,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 149,
+   "price_edge_pts": -0.87,
+   "book_spread_pts": 2.49,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 3
+   },
+   "hit_season": {
+    "n": 131,
+    "over": 40
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Chicago White Sox @ Houston Astros",
+   "starts": "2026-09-03T18:10:00Z",
+   "player": "Luis Castillo",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": 110,
+   "best_book": "Fanatics",
+   "n_books": 5,
+   "fair_price": 115,
+   "price_edge_pts": -1.09,
+   "book_spread_pts": 2.38,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
    "model_p_over": null,
    "model_version": null
   }
