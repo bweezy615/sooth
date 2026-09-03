@@ -150,3 +150,12 @@ an honest "not done, here is the blocker" beats a plausible summary.
   measurement says there is nothing left worth cutting. Guard
   (`test_movement_carries_only_line_history`) made to FAIL by injecting a
   movement series. Spec closed.
+- **2026-09-03 01:55** — Task 2 of this plan: the worded-quantity guard is in.
+  `test_no_worded_quantities_left_in_the_prose` catches spelled-out fractions,
+  ratios, multipliers and counts on /props-model against a reviewed 18-phrase
+  allowlist; "four fifths" sits on it marked DISPUTED so the debt is visible
+  and the gate stays green. A sibling test turns four of those allowlist
+  reasons into real checks against the payload — and found a live one nobody
+  was watching: "an eleven-point edge" tracks board.mean_abs_delta_pts and sits
+  in the same sentence as a generated 80%. Both tests watched FAILING against
+  four injected faults before being kept.

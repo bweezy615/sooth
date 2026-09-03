@@ -142,17 +142,37 @@ times), then `bash scripts/check.sh`, then commit.
    arguably belongs there rather than being quietly swapped. That is an editorial
    judgement about our own honesty surface and I am not making it unattended.
 
-## Guard — queued, not yet in
+## Guard — in, and watched failing
 
 The reason this went six days unnoticed is that
 `test_no_hand_typed_numbers_left_in_the_prose` matches `\d`, so every
-spelled-out quantity on the page is unguarded. Task 2 of
-`docs/plans/2026-09-03-overnight.md` is a sibling test that catches worded
-quantities, with "four fifths" on its reviewed allowlist marked `DISPUTED`
-pointing at this document — so the gate stays green and the debt stays visible
-instead of silent.
+spelled-out quantity on the page was unguarded — and that test's own failure
+message says "or spell them out".
 
-As of this commit that guard is **not written yet** (Branden reprioritised the
-night's work ahead of it). Until it lands, nothing stops a second worded
-quantity being typed onto this page. When the guard does land and the sentence
-above is fixed, the allowlist entry must be deleted with it.
+`tests/test_props_model_note.py::test_no_worded_quantities_left_in_the_prose`
+now scans the same visible prose for worded fractions, ratios, multipliers and
+counts, and fails on any phrase not on an explicitly reviewed list. Eighteen
+phrases are on that list, each with the reason a human decided it may stay.
+**"four fifths" is on it, marked DISPUTED, pointing at this document, with an
+instruction to delete the entry when the sentence is fixed.** The gate stays
+green and the debt is visible in the test file rather than nowhere.
+
+A sibling test, `test_the_worded_quantities_that_track_a_figure_still_match`,
+turns four of those allowlist reasons into actual checks — because "checked
+against board.won_pct" written in a comment is not a check. It pins "an
+eleven-point edge" to `board.mean_abs_delta_pts`, "fewer than half" to
+`board.won_pct`, "five equal-sized buckets" to `salvage.folds`, and "three or
+more books" to `method.board_filter`.
+
+Both were confirmed failing before being kept:
+
+| Fault injected | Result |
+|---|---|
+| typed "Nine tenths of the remainder is noise" into the prose | **FAILED**, naming `nine tenths` |
+| typed "twice as large" into the prose | **FAILED**, naming `twice` |
+| set `board.mean_abs_delta_pts` to 8.4 in the payload | **FAILED**: "the page says … 'an eleven-point edge' but board.mean_abs_delta_pts is now 8.4" |
+| set `board.won_pct` to 0.61 | **FAILED**: "the page says the model won 'fewer than half' … but board.won_pct is now 0.610" |
+
+Note what the second pair means: "an eleven-point edge" is a hand-typed worded
+number sitting in the same sentence as a generated one (`80%` is a `data-f`
+span). It was correct, and nothing was watching it. It is now watched.
