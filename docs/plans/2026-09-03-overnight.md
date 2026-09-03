@@ -106,3 +106,16 @@ Append what shipped to
 in the style of the existing entries: commit SHA, what moved, what was
 verified BY RUNNING, and what is left open. If a task is abandoned, say why —
 an honest "not done, here is the blocker" beats a plausible summary.
+
+## Progress
+
+- **2026-09-03 00:15** — Task 1 settled by archaeology. "four fifths" traces to a
+  single commit (`b0b15fe9`, 2026-08-28) and was wrong the day it was written:
+  60.5% on the reading a reader applies, 77.5% on the standard-error reading,
+  57% today. NEITHER was ~80%, so this is the plan's second branch — written up
+  with evidence and a gate-verified diff in `docs/plans/2026-09-03-four-fifths.md`
+  and LEFT FOR BRANDEN. No published prose changed. Baseline gate green before
+  and after.
+- **2026-09-03 00:20** — Branden reprioritised: four backlog specs from
+  `docs/plans/` (methodology-figures, ledger-nav-collision, w02-dry-run,
+  research-payload-size) now run ahead of Tasks 2–4 above.
