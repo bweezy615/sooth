@@ -17,10 +17,11 @@ Sources, both official or long-stable public CDNs:
   NCAAF https://a.espncdn.com/i/teamlogos/ncaa/500/{teamId}.png — addressed by
         ESPN's own numeric team id, not an abbreviation. This one is NOT a
         table: FBS is ~136 teams and its membership changes every year, so a
-        hand table would be stale by November. ESPN's group-80 roster
-        (group 80 is FBS, the same filter engine/capture.py uses and for the
-        same reason) is one request for the roster plus one per team, run
-        offline like the rest of this script.
+        hand table would be stale by November. ESPN's group rosters (80 is
+        FBS, 81 is FCS) are one request each plus one per team, run offline
+        like the rest of this script. Both divisions are read because the odds
+        feed does not stop at the FBS line — books price the FBS-vs-FCS
+        openers, so those visitors reach the board and need crests too.
   NHL   https://a.espncdn.com/i/teamlogos/nhl/500/{abbr}.png — same CDN. ESPN's
         JSON teams API (site.api.espn.com) answers 403 to server-side callers,
         so the name -> abbreviation bridge is a table here rather than a fetch.
@@ -60,8 +61,18 @@ NFL_LOGO = "https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png"
 ESPN_LOGO = "https://a.espncdn.com/i/teamlogos/{league}/500/{abbr}.png"
 NCAAF_LOGO = "https://a.espncdn.com/i/teamlogos/ncaa/500/{id}.png"
 NCAAF_ROSTER = ("http://sports.core.api.espn.com/v2/sports/football/leagues/"
-                "college-football/seasons/{season}/types/2/groups/80/teams"
+                "college-football/seasons/{season}/types/2/groups/{group}/teams"
                 "?limit=400")
+# 80 is FBS, 81 is FCS, and the board needs both. engine/capture.py filters
+# schedules to group 80 because an FBS week is what we model, but the ODDS feed
+# does not respect that line: books price the FBS-vs-FCS openers, so those
+# visitors reach the board. Measured on the 2026-09-03 board, 9 of the 34
+# college teams carried no crest — Merrimack, Albany, Bethune-Cookman,
+# Arkansas Pine Bluff, Eastern Illinois, North Carolina A&T, UMass, Idaho and
+# West Georgia — every one an FCS visitor, on the opening weekend where those
+# games are most of the slate. FBS is fetched first so it wins any name
+# collision between the divisions.
+NCAAF_GROUPS = (80, 81)
 PAUSE = 0.2  # polite guest on an undocumented free endpoint, as in capture.py
 
 # Full name -> ESPN abbreviation. The name side must match what the odds feed
@@ -166,17 +177,23 @@ def espn_league(session: requests.Session, league: str, table: dict) -> dict:
 
 
 def ncaaf(session: requests.Session, season: int = 2026) -> dict:
-    """FBS crests, read from ESPN's roster rather than typed into this file.
+    """College crests, read from ESPN's rosters rather than typed into this file.
 
     Returns {} on any failure rather than raising: a crest is an aid to
     scanning and never carries a fact, so the worst case is the board we
-    already ship, with college teams named in text.
+    already ship, with college teams named in text. A division that fails to
+    list drops only its own teams — the other still contributes.
     """
-    try:
-        r = session.get(NCAAF_ROSTER.format(season=season), timeout=25)
-        r.raise_for_status()
-        items = r.json().get("items") or []
-    except (requests.RequestException, ValueError):
+    items: list = []
+    for group in NCAAF_GROUPS:
+        try:
+            r = session.get(NCAAF_ROSTER.format(season=season, group=group),
+                            timeout=25)
+            r.raise_for_status()
+            items.extend(r.json().get("items") or [])
+        except (requests.RequestException, ValueError):
+            continue
+    if not items:
         return {}
 
     out: dict = {}
@@ -195,9 +212,12 @@ def ncaaf(session: requests.Session, season: int = 2026) -> dict:
         url = NCAAF_LOGO.format(id=tid)
         if not ok(session, url):
             continue
-        out[norm(name)] = {"sport": "ncaaf", "name": name,
-                           "abbr": str(t.get("abbreviation") or "").upper(),
-                           "logo": url}
+        key = norm(name)
+        if key in out:
+            continue          # FBS is fetched first and keeps the name
+        out[key] = {"sport": "ncaaf", "name": name,
+                    "abbr": str(t.get("abbreviation") or "").upper(),
+                    "logo": url}
     return out
 
 

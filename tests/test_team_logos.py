@@ -96,3 +96,97 @@ def test_the_crest_map_is_not_fetched_with_force_cache():
         "player-headshots.json would never reach a returning visitor."
     )
     assert set(calls) == {"default"}, f"unexpected cache modes: {sorted(set(calls))}"
+
+
+# --------------------------------------------------------------- FCS crests
+
+"""The board's college teams are not only FBS.
+
+engine/capture.py filters schedules to ESPN group 80 because an FBS week is
+what the model covers. The ODDS feed does not respect that line: books price
+the FBS-vs-FCS openers, so those visitors reach the board. On the 2026-09-03
+board, 9 of 34 college teams had no crest — Merrimack, Albany, Bethune-Cookman,
+Arkansas Pine Bluff, Eastern Illinois, North Carolina A&T, UMass, Idaho and
+West Georgia — every one an FCS visitor, on the weekend those games ARE the
+slate.
+"""
+
+import engine.team_logos as tl
+
+
+class _Head:
+    status_code = 200
+    headers = {"content-type": "image/png"}
+
+
+class _Json:
+    status_code = 200
+
+    def __init__(self, payload):
+        self._payload = payload
+
+    def json(self):
+        return self._payload
+
+    def raise_for_status(self):
+        return None
+
+
+class _RosterSession:
+    """Serves a two-team roster per group and a valid HEAD for every logo."""
+
+    def __init__(self, by_group):
+        self.by_group = by_group
+        self.roster_urls = []
+
+    def get(self, url, timeout=None):
+        if "/teams?" in url:
+            self.roster_urls.append(url)
+            group = url.split("/groups/")[1].split("/")[0]
+            return _Json({"items": [{"$ref": f"team://{group}/{n}"}
+                                    for n in self.by_group.get(int(group), [])]})
+        group, name = url.replace("team://", "").split("/")
+        return _Json({"displayName": name, "id": f"{group}{len(name)}",
+                      "abbreviation": name[:3].upper()})
+
+    def head(self, url, timeout=None, allow_redirects=True):
+        return _Head()
+
+
+def test_both_college_divisions_reach_the_crest_map(monkeypatch):
+    monkeypatch.setattr(tl, "PAUSE", 0)
+    sess = _RosterSession({80: ["Rutgers Scarlet Knights"],
+                           81: ["Merrimack Warriors"]})
+    out = tl.ncaaf(sess, season=2026)
+    assert [u.split("/groups/")[1].split("/")[0] for u in sess.roster_urls] == \
+        ["80", "81"], "FBS must be fetched first, then FCS"
+    assert _norm("Rutgers Scarlet Knights") in out
+    assert _norm("Merrimack Warriors") in out, (
+        "an FCS visitor books price must still get a crest")
+
+
+def test_fbs_keeps_a_name_both_divisions_claim(monkeypatch):
+    """A duplicate display name must resolve to the FBS team, not the last one
+    fetched. A wrong crest is worse than no crest."""
+    monkeypatch.setattr(tl, "PAUSE", 0)
+    sess = _RosterSession({80: ["Charleston Cougars"], 81: ["Charleston Cougars"]})
+    out = tl.ncaaf(sess, season=2026)
+    assert out[_norm("Charleston Cougars")]["logo"].endswith("/8018.png"), (
+        "the group-80 team id must win the collision")
+
+
+def test_one_division_failing_does_not_drop_the_other(monkeypatch):
+    """A crest is an aid to scanning, never a fact. Partial is fine; empty is
+    what the module promises only when nothing at all listed."""
+    monkeypatch.setattr(tl, "PAUSE", 0)
+
+    class _HalfDown(_RosterSession):
+        def get(self, url, timeout=None):
+            if "/groups/81/" in url:
+                raise tl.requests.RequestException("FCS roster down")
+            return super().get(url, timeout=timeout)
+
+    out = _HalfDown({80: ["Rutgers Scarlet Knights"], 81: ["Merrimack Warriors"]})
+    got = tl.ncaaf(out, season=2026)
+    assert _norm("Rutgers Scarlet Knights") in got
+    assert _norm("Merrimack Warriors") not in got
