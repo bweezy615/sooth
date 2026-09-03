@@ -159,3 +159,12 @@ an honest "not done, here is the blocker" beats a plausible summary.
   was watching: "an eleven-point edge" tracks board.mean_abs_delta_pts and sits
   in the same sentence as a generated 80%. Both tests watched FAILING against
   four injected faults before being kept.
+- **2026-09-03 02:20** — Task 3 sweep done, written up in
+  `docs/plans/2026-09-03-unguarded-quantities.md`. Answer: every hand-written
+  HTML page except /props-model can carry an unguarded quantity; the three
+  markdown pages are better placed because an unresolved `{{fig:}}` token fails
+  the build. Two gaps fixed because they were cheap and unambiguous — the edge
+  bar spelled out on /picks and /methodology (DEMONSTRATED: moved the bar to 5
+  in all three places the digit test looks, that test PASSED while both
+  sentences still said four), and three unpinned figures on /disclaimers (sample
+  size, market Brier, break-even). Four gaps listed and deliberately not fixed.

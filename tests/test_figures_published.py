@@ -47,6 +47,19 @@ def test_the_record_quoted_in_prose_matches_the_generated_figures():
         f"{ind['ats_pct'] * 100:.2f}%"
     )
 
+    # The same sentence quotes three more generated figures, and until
+    # 2026-09-03 only the three above were pinned. A model change that moved
+    # the sample size or the market's Brier would have left /disclaimers -- the
+    # page that states our record for legal purposes -- quietly wrong, with the
+    # three checked figures around it still passing. Found by the Task 3 sweep
+    # in docs/plans/2026-09-03-overnight.md.
+    mkt = fig["evaluation_a"]["results"]["market"]
+    for value, what in ((f"{ind['n']:,}", "sample size"),
+                        (f"{mkt['brier']}", "market's Brier score"),
+                        (f"{fig['breakeven_ats'] * 100:.2f}%", "break-even")):
+        assert value in prose, (
+            f"disclaimers.md does not quote the current {what} {value}")
+
 
 def _owned_figures(fig: dict) -> set[str]:
     """Every string form of a number that _figures.json is the source of.
@@ -279,3 +292,45 @@ def test_verify_never_shows_an_orphaned_superseded_root():
             f"committed at v{latest.get('version')}. A reader comparing the page "
             f"against the file it links would see a mismatch."
         )
+
+
+# --- the bar, spelled out --------------------------------------------------
+# test_the_edge_bar_is_the_same_number_in_all_three_places holds the digit 4
+# together across picks.html's `var EDGE_BAR`, ensemble.EDGE_THRESHOLD and
+# _figures.json. Two pages also state the bar in WORDS, and nothing held those:
+# move the bar to five and that test goes red naming `var EDGE_BAR`, someone
+# fixes the three digits, the gate goes green, and /picks still tells a reader
+# "the bar is four points of disagreement" while the engine applies five.
+#
+# Same lesson as "four fifths" on /props-model, found by the same sweep: a
+# digit test does not see a number that is spelled out.
+# See docs/plans/2026-09-03-overnight.md, Task 3.
+
+_BAR_IN_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
+                 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+
+# (file, the phrase it must contain, with {w} standing in for the bar)
+_BAR_PHRASES = [
+    (ROOT / "site/content/methodology.md", "{w}-point bar"),
+    (ROOT / "site/public/picks.html", "bar is {w} points of disagreement"),
+]
+
+
+def test_the_edge_bar_is_spelled_the_same_way_in_the_copy():
+    fig = json.loads(CONTENT.read_text(encoding="utf-8"))
+    published = float(fig["selectivity"]["rule_threshold_pts"])
+    assert published == int(published) and int(published) in _BAR_IN_WORDS, (
+        f"the bar is now {published}, which this test has no word for. Add it "
+        f"to _BAR_IN_WORDS and reword the two sentences below.")
+    word = _BAR_IN_WORDS[int(published)]
+
+    wrong = []
+    for path, template in _BAR_PHRASES:
+        want = template.format(w=word)
+        if want not in path.read_text(encoding="utf-8"):
+            wrong.append(f"{path.name} does not say {want!r}")
+    assert not wrong, (
+        f"the published bar is {published:g} points but the copy does not spell "
+        f"it that way:\n  " + "\n  ".join(wrong) +
+        f"\nEdit the sentence (methodology.md is the SOURCE — rebuild after), "
+        f"or update the expected phrase here if it was deliberately reworded.")
