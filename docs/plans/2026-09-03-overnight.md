@@ -143,3 +143,10 @@ an honest "not done, here is the blocker" beats a plausible summary.
   4:15 PM Eastern, the new one is the 8:15 PM Thursday slot. Root moved with it
   because kickoff is inside the merkle leaf. Findings 1 and 2 of that spec are
   closed by tests; finding 3 (spread play not in the commitment) stays Branden's.
+- **2026-09-03 01:30** — Backlog item 4 (`research-payload-size.md`): shipped in
+  `1224a756`; re-measured live rather than assumed. research.json is now 740,104
+  on disk / 36,636 over the wire, down from 1,373,763 / 58,612 — and it is no
+  longer the biggest payload, whales.json is (40,377). NOTHING CUT: the
+  measurement says there is nothing left worth cutting. Guard
+  (`test_movement_carries_only_line_history`) made to FAIL by injecting a
+  movement series. Spec closed.

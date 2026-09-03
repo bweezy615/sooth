@@ -2,6 +2,10 @@
 
 *Backlog item 2. Written 2026-08-27 before any code.*
 
+> **STATUS: CLOSED — shipped in `1224a756`, re-measured against production
+> 2026-09-03.** The cut landed and the numbers below are confirmed. Nothing
+> further should be trimmed here; the evidence is under "Re-measured".
+
 ## First: the premise in the backlog was partly wrong, so measure before cutting
 
 The backlog said `research.json` is "roughly 3× the next-largest payload, and
@@ -108,3 +112,60 @@ Nothing becomes uncheckable. If it did, this change would not be made.
   saving that no longer exists.
 - **Not touching `injuries` (23%).** It is read: `research.html:266-269` renders
   the per-player list in the expanded panel.
+
+---
+
+## Re-measured — 2026-09-03, overnight run
+
+Re-opened with the instruction to cut nothing without re-measuring first. The
+measurement says there is nothing left to cut here, so nothing was cut. Every
+figure below is a fresh fetch from sooth.bet tonight, not a re-derivation:
+
+| payload | on disk | over the wire (brotli) |
+|---|---|---|
+| whales.json | 323,009 | **40,377** |
+| **research.json** | **740,104** | **36,636** |
+| timeline.json | 251,557 | 25,990 |
+| injuries.json | 158,391 | 19,143 |
+| moves.json | 218,746 | 17,740 |
+| nflboard.json | 277,633 | 10,320 |
+| board.json | 90,052 | 10,222 |
+| props.json | 25,441 | 3,612 |
+| best_lines.json | 7,788 | 1,215 |
+
+```
+curl -s -o /dev/null -w "%{size_download}" https://sooth.bet/data/<p>.json
+curl -s -H "Accept-Encoding: br" -o /dev/null -w "%{size_download}" https://sooth.bet/data/<p>.json
+```
+
+Against the 2026-08-27 baseline in this file, `research.json` went
+**1,373,763 → 740,104 bytes on disk (−46%)** and **58,612 → 36,636 over the
+wire (−37%)**. The parse-and-memory cost this plan actually cared about is
+roughly halved on `/research` and `/game`, which was the stated goal.
+
+**It is no longer the largest payload the site serves.** `whales.json` now
+downloads more (40,377 vs 36,636), and `research.json` sits in the same band as
+timeline, injuries and moves. The premise that started this item — an outlier
+worth special treatment — is gone. Both "deliberately not doing" items stand
+unchanged and should stay not-done: compacting the JSON buys nothing over the
+wire and makes a file that churns every 30 minutes produce unreadable diffs,
+and splitting per game would cost the instant expand-a-row behaviour for a
+saving that no longer exists.
+
+### The guard, watched failing
+
+`tests/test_research.py::TestPublishedPayload::test_movement_carries_only_line_history`
+is the check from step 4. Injected a `movement.spread` series into the first
+report in the published `site/public/data/research.json` and it **FAILED**,
+naming the offending key and pointing back at this file. Reverted immediately;
+`git status` clean. `movement()` itself is gone from `engine/research.py`, so
+the series cannot be produced by the generator either — the test guards against
+it coming back by another route.
+
+### Noted, not acted on
+
+`whales.json` is now the largest payload at 40 KB over the wire. That is an
+observation, not a finding: nobody has checked whether any of it is unread, and
+this plan's whole lesson is that the on-disk number is not the cost and that
+the question is "does anything read it", not "how big is it". If it is ever
+worth pursuing it needs its own read-audit, not a size argument.
