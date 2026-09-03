@@ -2,6 +2,12 @@
 
 *Backlog item 3. Written 2026-08-27 before any code.*
 
+> **STATUS: CLOSED — shipped 2026-08-27 in `05f1d479`, re-verified live
+> 2026-09-03.** Everything below was implemented, including the three items
+> under "Found while reading". The verification is at the bottom of this file
+> under "Closure". Nothing here is outstanding; do not re-do it. The one gap
+> that survived is recorded there.
+
 ## The rule being broken
 
 Hard rule 1: no published number is ever hand-typed. Every figure comes from
@@ -115,3 +121,73 @@ theatre. Same for the model version strings.
   One of the two is false; the limitation bullet is the stale one.
 - `site/public/trust.html`'s `.stance` block hand-types the backtest record.
   Checked today: correct, but pinned by nothing.
+
+---
+
+## Closure — verified 2026-09-03, overnight run
+
+Re-opened as the night's highest-priority backlog item on the understanding
+that /methodology and /record still disagreed on all nine reliability rows.
+**They do not.** That was true when this file was written on 2026-08-27 and was
+fixed the same evening by `05f1d479`. Measured rather than assumed:
+
+- `site/content/_figures.json` and the served `site/public/data/figures.json`
+  hold byte-identical `reliability_independent` arrays (9 rows).
+- The built `site/public/methodology.html` renders all 9 rows equal to
+  `_figures.json`, field by field.
+- **Live**: fetched `https://sooth.bet/data/figures.json` and
+  `https://sooth.bet/methodology`. The live payload `/record` fetches at
+  runtime matches the repo's `_figures.json`, and all 9 rows rendered on the
+  live /methodology match that live payload. The two pages agree in
+  production.
+
+All four prose numbers that read the table are tokens now, including the
+spelled-out one — "the 0.9-1.0 band holds **twelve** games" is
+`{{fig:reliability_independent.8.n|int}}`. The `reliability_mid` figures
+(`n`, `min_gap`, `max_gap`) are derived in `build_site.py::_derive`.
+
+The three "Found while reading" items are all fixed: methodology.md now says
+"The other **four** sports", the play-level bullet now reads "The model **does**
+use expected points added", and `trust.html` is pinned by
+`test_the_hand_written_pages_quote_the_generated_figures` along with six other
+hand-written pages.
+
+### The guards, watched failing
+
+A guard nobody has seen fail is not a guard, so each was made to fail before
+this file was closed. Every injection was reverted immediately.
+
+| Guard | Fault injected | Result |
+|---|---|---|
+| `test_methodology_does_not_type_its_figures` | typed the current ATS record `1298-1310-63` into methodology.md prose | **FAILED** correctly, naming the value |
+| `test_the_served_figures_are_the_generated_figures` | changed one `n` in `site/public/data/figures.json` | **FAILED** correctly |
+| `build_site.py` unresolved-token rule | replaced `{{table:reliability}}` with `{{fig:...no_such_field}}` | **raised `FigureError`**, build aborted |
+
+### The gap that survived, and why it is not being closed tonight
+
+`_owned_figures()` in `tests/test_figures_published.py` builds its watch-list
+from the values `_figures.json` holds **right now**, and matches them as
+substrings of the markdown. Two consequences:
+
+1. It catches a figure typed in while correct — which is enough, because such a
+   line can never be committed, so it can never later go stale. This is the
+   sound part and it is why the bug class is genuinely closed.
+2. It does **not** watch the reliability row counts or the derived
+   `reliability_mid` values. Adding them would mean substring-matching bare
+   integers like `27` and `2,290` against 488 lines of prose, which would fire
+   on unrelated text. The fix is not obviously cheap and the plan says not to
+   rewrite copy to fit a test, so this is reported, not patched.
+
+### One unguarded worded quantity found on this page
+
+`methodology.md` line ~307: "An earlier, larger evaluation of the raw Elo
+baseline showed the opposite problem: roughly **eight** points of
+overconfidence at the top of the range."
+
+Spelled out, so no digit test sees it; and it describes a one-off historical
+diagnostic that is not in `_figures.json`, so no figure test can back it. It is
+the same class as "four fifths" on /props-model (see
+`docs/plans/2026-09-03-four-fifths.md`) and it feeds into Task 3 of the
+overnight plan. Not touched: it is a claim about a past evaluation that I
+cannot verify from the published data, which makes it a report-not-rewrite
+item.

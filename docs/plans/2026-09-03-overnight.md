@@ -119,3 +119,12 @@ an honest "not done, here is the blocker" beats a plausible summary.
 - **2026-09-03 00:20** — Branden reprioritised: four backlog specs from
   `docs/plans/` (methodology-figures, ledger-nav-collision, w02-dry-run,
   research-payload-size) now run ahead of Tasks 2–4 above.
+- **2026-09-03 00:35** — Backlog item 1 (`methodology-figures.md`) was already
+  done: shipped 2026-08-27 in `05f1d479`. Verified live, not assumed —
+  sooth.bet/methodology and the sooth.bet/data/figures.json payload /record
+  fetches now agree on all nine reliability rows. Made all three guards FAIL by
+  fault injection before believing them. Spec marked CLOSED with the evidence.
+  Two gaps reported, not patched: `_owned_figures()` does not watch the
+  reliability row counts (substring-matching bare ints would fire on unrelated
+  prose), and methodology.md carries one unguarded worded quantity ("roughly
+  eight points of overconfidence") describing a diagnostic not in _figures.json.
