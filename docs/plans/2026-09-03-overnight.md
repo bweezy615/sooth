@@ -134,3 +134,12 @@ an honest "not done, here is the blocker" beats a plausible summary.
   the nav, and the live desk.js nav slot reads PROOF. Made all three guards FAIL
   by fault injection. Spec marked CLOSED. Its "not in scope" item (trust.html's
   hand-typed record) is pinned too.
+- **2026-09-03 01:10** — Backlog item 3 (`w02-dry-run.md`): re-ran the READ-ONLY
+  probe. NOTHING SEALED, seal.yml not dispatched, data/ledger byte-identical by
+  my own independent sha256 before and after (`3c760418…`). The play is
+  unchanged to the decimal — CIN at HOU, edge +4.35, 1 of 16 qualified. One
+  figure moved: first kickoff shifted 4 hours (2026-09-17T20:15Z ->
+  2026-09-18T00:15Z) because of `0f16972a`, the timezone fix; the old value was
+  4:15 PM Eastern, the new one is the 8:15 PM Thursday slot. Root moved with it
+  because kickoff is inside the merkle leaf. Findings 1 and 2 of that spec are
+  closed by tests; finding 3 (spread play not in the commitment) stays Branden's.

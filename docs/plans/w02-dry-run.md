@@ -2,6 +2,10 @@
 
 *Backlog item 4. Run 2026-08-27. **Nothing was sealed.***
 
+> **RE-RUN 2026-09-03, read-only. Still nothing sealed.** The payload is
+> unchanged except for one figure that moved for a known and correct reason —
+> the kickoff timezone fix. See "Re-run" at the bottom.
+
 ## Why
 
 `2026-W02-nfl` seals the Wednesday after W01's 2026-09-09 kickoff and is the
@@ -94,3 +98,94 @@ No console errors beyond a `/favicon.ico` 404 that production returns too.
 
 Nothing was sealed, no commitment was written outside the temp root, and
 `data/ledger` is byte-identical to where it started.
+
+---
+
+## Re-run — 2026-09-03, overnight, read-only
+
+`python scripts/slate_probe.py --season 2026 --week 2 --mocks`, six days before
+W02 seals. Nothing was sealed, `seal.yml` was not dispatched, and `data/ledger`
+was fingerprinted independently of the probe's own check — `sha256` over every
+file in the tree, taken before and after by hand, both
+`3c760418ef3c8312…`. Byte-identical. The probe's internal check also passed.
+The four `_mock-w02*.json` fixtures it writes are gitignored and `git status`
+came back clean.
+
+### What is unchanged from 2026-08-27
+
+Everything that decides the play:
+
+```
+slate       : 2026-W02-nfl  (16 games, 32 sealed predictions)
+qualified   : 1 of 16
+  PLAY CIN at HOU  line 2.5  margin 6.85  edge +4.35  HOU
+       MIA at SF   line 10.5 margin 6.64  edge -3.86  MIA (dog)
+       IND at KC   line 6.5  margin 3.27  edge -3.23  IND (dog)
+```
+
+The qualified play, its margin and its edge are identical to the first run, to
+the last decimal. So are the two next-widest edges, so the 4-point boundary
+still behaves the same way. Both sign-convention spot checks reproduce exactly:
+`PHI at TEN, line −4.5, margin −6.97, edge −2.47` picks the away side and
+does not mark it a dog; `SEA at ARI, line −10.0, edge +0.41` picks the home
+side and marks it a dog. The probe is still deterministic — two runs on the
+same evening produced the same root.
+
+### What moved, and why it is right
+
+| | 2026-08-27 | 2026-09-03 |
+|---|---|---|
+| first kick | `2026-09-17T20:15:00+00:00` | `2026-09-18T00:15:00+00:00` |
+| throwaway root | `7983be56…8971` | `4ac77cf8…42dd` |
+
+Four hours, and the fix is `0f16972a` ("kickoffs were the Eastern league clock
+wearing a UTC label", 2026-09-01). nflverse publishes `gameday`/`gametime` in
+US/Eastern and `_kickoff` was stamping them `tzinfo=utc` with no conversion, so
+every NFL kickoff was four hours early in summer. The old value read Thu
+2026-09-17 **4:15 PM** Eastern; the new one reads **8:15 PM** Eastern, which is
+the Thursday-night slot. The first run's kickoff was wrong and this one is
+right.
+
+The root moved because `_kickoff` feeds `Prediction.created_at`, which is inside
+the merkle leaf. That is expected, not alarming: the root here is a throwaway
+built with a random `PRO_PAYLOAD_KEY` and anchored to nothing.
+
+The same fix already worked its way through the real ledger by the versioning
+path rather than by an edit. `2026-W01-nfl` now carries five commitment
+versions, and v4 is where the correction lands:
+
+```
+v1  root d081c00f…  kick 2026-09-09T20:20:00+00:00
+v2  root 4136512c…  kick 2026-09-09T20:20:00+00:00
+v3  root 438f3607…  kick 2026-09-09T20:20:00+00:00
+v4  root bc4cfd1f…  kick 2026-09-10T00:20:00+00:00   <- timezone fix
+v5  root 7ba32f76…  kick 2026-09-10T00:20:00+00:00
+```
+
+W01's corrected kickoff is Wed 2026-09-09 8:20 PM Eastern. Superseding a root
+with a new version is the path this system was built for; editing v3 in place
+would have looked exactly like the tampering the tree exists to disprove.
+
+### The three "found while doing it" items
+
+1. **`EDGE_BAR = 4` hand-typed in `picks.html`** — **closed**.
+   `tests/test_figures_published.py::test_the_edge_bar_is_the_same_number_in_all_three_places`
+   now ties the page's `var EDGE_BAR`, `engine.models.ensemble.EDGE_THRESHOLD`
+   and `_figures.json`'s `selectivity.rule_threshold_pts` together.
+2. **`picks.html` hand-types 49.8%, 2,608, 52.38%, 53.2%** — **closed**.
+   `picks.html` is one of the seven pages pinned by
+   `test_the_hand_written_pages_quote_the_generated_figures`.
+3. **The spread play is not in the Merkle commitment** — **still open, still
+   Branden's**. The 32 sealed leaves are moneyline predictions; `ats` lives only
+   in the display payload and the encrypted pro blob. Unchanged by this re-run
+   and unchanged by the timezone fix. Nobody should act on it without Branden,
+   because the fix would change what a commitment contains.
+
+### Read this before W02 seals
+
+The payload is correct as of tonight and W02 seals the Wednesday after the
+2026-09-09 kickoff. The one thing worth knowing is that the timezone fix has
+not yet been through a W02 seal, only through W01's re-commitments — so the
+first W02 seal will be the first time a slate is sealed with correct kickoffs
+from the start. Nothing about the probe suggests that is a problem; it is
+simply the thing that is new.
