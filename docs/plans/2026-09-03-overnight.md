@@ -128,3 +128,9 @@ an honest "not done, here is the blocker" beats a plausible summary.
   reliability row counts (substring-matching bare ints would fire on unrelated
   prose), and methodology.md carries one unguarded worded quantity ("roughly
   eight points of overconfidence") describing a diagnostic not in _figures.json.
+- **2026-09-03 00:50** — Backlog item 2 (`ledger-nav-collision.md`) was also
+  already done — all four phases. Live-verified on sooth.bet: /trust is "Proof",
+  /ledger is "Ledger", /ledger now mounts "proof" so the sealed ledger lights
+  the nav, and the live desk.js nav slot reads PROOF. Made all three guards FAIL
+  by fault injection. Spec marked CLOSED. Its "not in scope" item (trust.html's
+  hand-typed record) is pinned too.

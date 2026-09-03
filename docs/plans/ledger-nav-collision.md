@@ -2,6 +2,10 @@
 
 *Backlog item 1. Written 2026-08-27 before any code.*
 
+> **STATUS: CLOSED — all four phases shipped, re-verified live 2026-09-03.**
+> Including the "not in scope" item at the bottom, which was picked up by the
+> methodology pass. Evidence under "Closure". Do not re-do it.
+
 ## The defect
 
 Two different pages answer to the same name, and the one a skeptic most needs
@@ -110,3 +114,43 @@ rule 1 ("no published number is ever hand-typed") and exactly the shape of the
 19-day-stale `figures.json` failure. Belongs with backlog item 3, which wires
 `methodology.md`'s hand-typed figures to `_figures.json`; `trust.html` should be
 pinned in the same pass.
+
+---
+
+## Closure — verified 2026-09-03, overnight run
+
+All four phases are in, and the word "Ledger" now labels exactly one
+destination. Verified in production, not from the git log — fetched from
+sooth.bet:
+
+| what | live value |
+|---|---|
+| `/trust` `<title>` | `Proof — Sooth` |
+| `/ledger` `<title>` | `Ledger — Sooth` |
+| `/ledger` mount call | `Desk.mount("proof")` — the sealed ledger lights the nav |
+| live `desk.js` nav slot | `href:"/trust", key:"proof", label:"PROOF"` |
+
+Phase 4's checks both exist: `tests/test_page_names.py` (four tests) and the
+one-label-one-destination block in `tests/frontend/desk.selfcheck.js`.
+
+### The guards, watched failing
+
+Each was made to fail and then reverted:
+
+| Guard | Fault injected | Result |
+|---|---|---|
+| `test_no_two_pages_share_a_name` + `test_the_ledger_is_the_page_that_is_called_the_ledger` | retitled `/trust` back to `Sooth — Ledger` | **2 FAILED** — and note the brand-affix regex did its job: it saw "Sooth — Ledger" and "Ledger — Sooth" as the same name, which is exactly how the original collision survived review |
+| `test_the_ledger_lights_the_nav_entry_that_leads_to_it` | emptied `MOUNT` in `build_site.py` and rebuilt | **FAILED**, with a message pointing at the generator rather than the HTML |
+| `desk.selfcheck.js` one-label-one-destination | relabelled the `/trust` nav slot `ALERTS`, colliding with `/alerts` | **FAILED** (assert.fail, non-zero exit) |
+
+The generator was restored and the site rebuilt after fault B; `git status` is
+clean.
+
+### The "not in scope" item is also closed
+
+`trust.html`'s `.stance` block still hand-types the backtest record, as this
+file predicted it would. It is no longer unpinned:
+`tests/test_figures_published.py::test_the_hand_written_pages_quote_the_generated_figures`
+now checks all six of those values against `_figures.json`, along with six
+other hand-written pages. Confirmed failing in the same session by injecting a
+stale record into methodology.md's sibling guard.
