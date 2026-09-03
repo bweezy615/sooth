@@ -32,10 +32,17 @@ NOTE = (
 def _load_slate(data_dir: Path) -> tuple[str, list[dict]]:
     """Return (slate_id, games) from the latest slate.
 
-    The opinion lives in the encrypted pro payload; the public file is
-    redacted until first kickoff. Prefer the decrypted payload when the key
-    is available (CI holds it as a secret), else fall back to the public
-    games — whose null opinions the caller now skips instead of pricing.
+    Prefer the encrypted pro payload, else the public file. Since 2026-08-22
+    the public file is NOT redacted — weekly.py builds it from the same
+    pro_doc["games"] plus two rank fields — so both paths carry the same
+    opinions and the fallback costs nothing. (The older docstring here still
+    claimed the public opinions were null; they have not been since.)
+
+    Only "cannot attempt" is caught. capture.yml scopes PRO_PAYLOAD_KEY to
+    the engine.lines step, so this step runs without it on EVERY production
+    run and that path must stay quiet. A key that is present and still fails
+    to decrypt means a wrong key or a tampered blob: that raises, per the
+    fail-closed rule prosec's own docstring states and api/picks.js follows.
     """
     slates = json.loads((data_dir / "slates.json").read_text())
     slate_id: str = slates["latest"]
@@ -44,8 +51,8 @@ def _load_slate(data_dir: Path) -> tuple[str, list[dict]]:
         try:
             from . import prosec
             return slate_id, json.loads(prosec.decrypt(enc.read_text()))["games"]
-        except Exception:
-            pass  # no key here -> public fallback below, honestly thinner
+        except (ImportError, RuntimeError):
+            pass  # no key / no cryptography here -> public file below
     slate = json.loads((data_dir / f"{slate_id}.json").read_text())
     return slate_id, slate["games"]
 
