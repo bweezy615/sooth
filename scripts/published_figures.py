@@ -113,7 +113,15 @@ def _score(frame: pd.DataFrame, prob_col: str, margin_col: str,
     }
 
 
-def main() -> None:
+def main(out: Path = OUT, public_out: Path = PUBLIC_OUT) -> None:
+    """Recompute every published figure and write it to `out`.
+
+    The two paths are arguments rather than constants so the run can be
+    pointed at a scratch directory and compared with what is committed.
+    Hard-coding them made the one claim this script exists to support --
+    that anyone who clones the repo reproduces our figures -- the one
+    thing no test could check. See tests/test_figures_published.py.
+    """
     print("regenerating published figures (this rebuilds the walk-forward run)...")
     comparison = ensemble_run()
     frame = comparison.frame.copy()
@@ -182,10 +190,9 @@ def main() -> None:
     }
 
     payload = json.dumps(figures, indent=2)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(payload)
-    PUBLIC_OUT.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_OUT.write_text(payload)
+    for path in (out, public_out):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(payload)
 
     # ---- human-readable summary -------------------------------------------
     def table(ev, spread_label):
@@ -231,8 +238,12 @@ def main() -> None:
     for k, v in prov.items():
         print(f"  {k}: {v}")
     print()
-    print(f"written: {OUT.relative_to(ROOT)}")
-    print(f"written: {PUBLIC_OUT.relative_to(ROOT)}")
+    for path in (out, public_out):
+        try:
+            shown = path.relative_to(ROOT)
+        except ValueError:      # pointed at a scratch directory by a test
+            shown = path
+        print(f"written: {shown}")
 
 
 if __name__ == "__main__":

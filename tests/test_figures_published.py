@@ -334,3 +334,43 @@ def test_the_edge_bar_is_spelled_the_same_way_in_the_copy():
         f"it that way:\n  " + "\n  ".join(wrong) +
         f"\nEdit the sentence (methodology.md is the SOURCE — rebuild after), "
         f"or update the expected phrase here if it was deliberately reworded.")
+
+
+# --- the claim the whole site rests on -------------------------------------
+# Everything else in this file holds the published figures against EACH OTHER:
+# the two JSON copies must agree, the pages must quote them, the markdown must
+# not retype them. None of it asks the question a skeptic actually asks --
+# can these numbers be REPRODUCED from the data in this repo?
+#
+# /props-model has had that check since 2026-08-28
+# (test_payload_rebuilds_from_committed_evidence). The site's headline record
+# -- 1298-1310-63, 49.77%, the Brier scores, the whole calibration table -- did
+# not. scripts/published_figures.py is not run by any workflow, so between
+# model changes nothing re-derived it and nothing compared it.
+#
+# It reproduces in about 11 seconds, offline, from committed data. That is
+# cheap enough to simply check. Found by the Task 4 sweep,
+# docs/plans/2026-09-03-overnight.md.
+
+def test_the_published_figures_rebuild_from_committed_data(tmp_path):
+    """Clone the repo, run one command, get our numbers. That is the claim."""
+    import scripts.published_figures as published_figures
+
+    before = (CONTENT.read_bytes(), PUBLIC.read_bytes())
+    published_figures.main(out=tmp_path / "_figures.json",
+                           public_out=tmp_path / "figures.json")
+    assert (CONTENT.read_bytes(), PUBLIC.read_bytes()) == before, (
+        "the reproduction run wrote over the published figures — it must only "
+        "ever write inside tmp_path")
+
+    fresh = json.loads((tmp_path / "_figures.json").read_text(encoding="utf-8"))
+    committed = json.loads(CONTENT.read_text(encoding="utf-8"))
+    # the only field that is a timestamp rather than a measurement
+    fresh.pop("generated_at", None)
+    committed.pop("generated_at", None)
+
+    assert fresh == committed, (
+        "recomputing from the committed nflverse cache and our own backfill no "
+        "longer reproduces site/content/_figures.json. Run `python "
+        "scripts/published_figures.py`, read the diff, and publish the move — "
+        "the change IS the finding. Do not regenerate around it.")

@@ -168,3 +168,16 @@ an honest "not done, here is the blocker" beats a plausible summary.
   in all three places the digit test looks, that test PASSED while both
   sentences still said four), and three unpinned figures on /disclaimers (sample
   size, market Brier, break-even). Four gaps listed and deliberately not fixed.
+- **2026-09-03 02:55** — Task 4. (a) Re-audited all 12 workflows for the
+  "writes an input, never regenerates the artifact" class: **no new instances**.
+  None uses `git add -A`; every one names explicit paths; capture-props.yml
+  still carries its `--render`; grade.yml and seal.yml still run build_site.py
+  before staging the four generated pages. Recorded limit:
+  `test_workflows_regenerate.py` is path-literal, so it only fires when a
+  workflow names the artifact — a workflow staging a *directory* containing a
+  generated page would slip past. None does today.
+  (b) Found and closed a bigger one: **`_figures.json` had no reproduction
+  check.** No workflow runs `published_figures.py`, and every existing test only
+  held the published figures against each other. Demonstrated by changing the
+  site's headline Brier score in BOTH copies — every existing test stayed green.
+  It reproduces exactly in 11s offline, so now it is checked. Gate 25s total.
