@@ -211,15 +211,6 @@ REVIEWED_WORDED_QUANTITIES = {
                   "below",
     "three or": "'three or more books on both sides' — checked against "
                 "method.board_filter below",
-
-    # ---- DISPUTED -------------------------------------------------------
-    "four fifths": "WRONG since it was written on 2026-08-28 and still live. "
-                   "It reads 80%; the effect it describes is 57%. Kept here "
-                   "rather than silently rewritten because correcting prose on "
-                   "this page is Branden's call, not an unattended agent's. "
-                   "Evidence and a gate-verified diff: "
-                   "docs/plans/2026-09-03-four-fifths.md. DELETE THIS ENTRY "
-                   "when the sentence is fixed.",
 }
 
 
