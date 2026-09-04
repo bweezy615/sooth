@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-04T06:27:01.407063+00:00",
+ "generated_at": "2026-09-04T11:39:58.423540+00:00",
  "slate_id": "2026-W01-nfl",
  "source": "the-odds-api, US books, moneyline",
  "note": "Best available price for the side our model prefers. Shopping the best number is +EV on its own, whatever the pick.",
@@ -91,6 +91,10 @@
      "price": -198
     },
     {
+     "book": "betmgm",
+     "price": -200
+    },
+    {
      "book": "fanatics",
      "price": -200
     },
@@ -109,10 +113,6 @@
     {
      "book": "betus",
      "price": -205
-    },
-    {
-     "book": "betmgm",
-     "price": -210
     },
     {
      "book": "mybookieag",
@@ -191,27 +191,31 @@
    "kickoff": "2026-09-13T17:00:00+00:00",
    "pick": "BAL",
    "our_prob": 0.5684,
-   "best_price": -175,
-   "best_book": "DraftKings",
+   "best_price": -170,
+   "best_book": "BetUS",
    "worst_price": -190,
    "worst_book": "BetRivers",
    "n_books": 11,
-   "edge_pts": 1.88,
+   "edge_pts": 2.55,
    "quotes": [
+    {
+     "book": "betus",
+     "price": -170
+    },
+    {
+     "book": "lowvig",
+     "price": -171
+    },
+    {
+     "book": "betonlineag",
+     "price": -171
+    },
     {
      "book": "draftkings",
      "price": -175
     },
     {
-     "book": "betus",
-     "price": -175
-    },
-    {
-     "book": "lowvig",
-     "price": -175
-    },
-    {
-     "book": "betonlineag",
+     "book": "betmgm",
      "price": -175
     },
     {
@@ -229,10 +233,6 @@
     {
      "book": "williamhill_us",
      "price": -182
-    },
-    {
-     "book": "betmgm",
-     "price": -185
     },
     {
      "book": "mybookieag",
@@ -473,7 +473,7 @@
    ]
   }
  ],
- "avg_edge_pts": 1.98,
+ "avg_edge_pts": 2.07,
  "max_edge_pts": 2.56,
  "n_books": 11
 }
