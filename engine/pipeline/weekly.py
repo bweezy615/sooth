@@ -52,6 +52,9 @@ from ..schema import (Market, Prediction, Sport, american_to_prob, devig,
 CONFIDENCE_CAP = 0.85
 MODEL_INDEPENDENT = "elo+epa-v1+iso"
 MODEL_CONSENSUS = "elo+epa+market-v1+iso"
+# The margin model behind the spread play. It grades under its own name so an
+# ATS record can never be mistaken for, or averaged into, a moneyline one.
+MODEL_MARGIN = "ridge-margin-v1"
 
 
 
@@ -340,6 +343,22 @@ def build_slate(season: int, week: int, out_root: Path | str = ".") -> dict:
                 "underdog": bool(sl < 0 if picks_home else sl > 0),
                 "qualified": bool(abs(edge) >= EDGE_THRESHOLD),
             }
+            # ...and seal it. Until 2026-09-04 the spread play was the one
+            # claim on /picks that lived only in the display payload, so it
+            # was also the only claim we could have edited after kickoff
+            # without breaking the published root. Every game with a posted
+            # number is committed, not just the qualified ones: that leaves
+            # WHICH games qualified inside the commitment too, recomputable
+            # by any reader as abs(predicted_margin - line) >= EDGE_THRESHOLD.
+            predictions.append(Prediction(
+                event_id=eid, sport=Sport.NFL, market=Market.SPREAD,
+                selection="side_a" if picks_home else "side_b",
+                line=sl, probability=None, predicted_margin=round(pm, 2),
+                model_version=MODEL_MARGIN, created_at=kickoff,
+                reference_price=None, reference_line=sl,
+                rationale=f"margin model {pm:+.2f} vs posted {sl:+.1f}, "
+                          f"edge {edge:+.2f} pts",
+            ))
 
         display.append({
             "game_id": eid, "kickoff": kickoff.isoformat(),
@@ -445,7 +464,9 @@ def main() -> None:
     p = build_slate(args.season, args.week)
     print(f"slate       : {p['slate_id']}")
     print(f"games       : {len(p['games'])}")
-    print(f"predictions : {p['n_predictions']} (2 models x {len(p['games'])} games)")
+    _ats_sealed = sum(1 for g in p["games"] if g.get("spread_line") is not None)
+    print(f"predictions : {p['n_predictions']} "
+          f"(2 models x {len(p['games'])} games + {_ats_sealed} spread)")
     print(f"merkle root : {p['merkle_root']}")
     print()
     hdr = (f"{'matchup':<12} {'independent':<18} {'consensus':<18} {'mkt':>6} "

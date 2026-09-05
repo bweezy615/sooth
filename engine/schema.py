@@ -104,7 +104,17 @@ class Prediction:
     """Our forecast. Written once, never edited.
 
     ``probability`` is a calibrated probability, validated by reliability
-    curve and Brier score before a sport is allowed to ship as Live.
+    curve and Brier score before a sport is allowed to ship as Live. It is
+    ``None`` on a market where we hold no calibrated probability - the spread
+    play is a predicted margin against a posted number, and inventing a cover
+    probability to fill this field would be exactly the calibration claim this
+    project refuses to make.
+
+    ``predicted_margin`` carries that number, in points on the home basis, so
+    a sealed spread play is not merely a label: a reader recomputes
+    ``edge = predicted_margin - line`` and the selectivity threshold from the
+    leaf itself, and can therefore check that a play we later call qualified
+    was qualified when we committed it.
     """
 
     event_id: str
@@ -112,13 +122,14 @@ class Prediction:
     market: Market
     selection: str
     line: float | None
-    probability: float
+    probability: float | None
     model_version: str
     created_at: datetime
     # the market quote we saw when we predicted - the CLV baseline
     reference_price: int | None = None
     reference_line: float | None = None
     rationale: str | None = None
+    predicted_margin: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)

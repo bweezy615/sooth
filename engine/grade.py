@@ -42,18 +42,46 @@ from .schema import american_to_prob, devig
 CLV_PROVENANCE = frozenset({"own_capture", "oddsapi_historical_close"})
 
 
+def settle(market: str, selection: str, line: float | None,
+           margin: float | None) -> bool | None:
+    """Did this prediction win? ``None`` means it does not count.
+
+    ``margin`` is side_a minus side_b. A moneyline tie and a spread push both
+    return None, because neither is a win or a loss and both are excluded from
+    a record rather than scored as one.
+
+    The spread arm uses the same sign convention as
+    ``engine.models.ensemble.ats_frame``, which is where the published ATS
+    figures come from: ``line`` is on the home basis and positive when the
+    home side lays points, so side_a covers exactly when ``margin - line > 0``.
+    The two are held together by a test; they must never drift, because a
+    sealed play graded under an inverted sign would be a false public record.
+    """
+    if margin is None:
+        return None
+    if market == "spread":
+        if line is None:
+            return None
+        cover = float(margin) - float(line)
+        return None if cover == 0 else (cover > 0) == (selection == "side_a")
+    if margin == 0:
+        return None
+    return (selection == "side_a") == (margin > 0)
+
+
 @dataclass
 class GradedPrediction:
     event_id: str
     model_version: str
     selection: str
-    probability: float
-    won: bool | None            # None if the game is not settled
+    probability: float | None   # None on a market we do not price, e.g. spread
+    won: bool | None            # None if unsettled, or a spread push
     brier: float | None
     reference_price: int | None  # price we saw when we predicted
     closing_price: int | None    # qualifying close, if we hold one
     clv: float | None            # our implied prob minus closing implied prob
     clv_blocked_reason: str | None = None
+    market: str = "moneyline"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -215,22 +243,33 @@ def grade_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
     for p in preds:
         eid = str(p["event_id"])
         sel = str(p["selection"])
-        prob = float(p["probability"])
+        raw_prob = p.get("probability")
+        prob = None if raw_prob is None else float(raw_prob)
+        market = str(p.get("market", "moneyline"))
         margin = margins.get(eid)
 
-        if margin is None or margin == 0:
-            won = None
-            brier = None
-        else:
-            home_won = margin > 0
-            won = (sel == "side_a") == home_won
-            brier = float((prob - (1.0 if won else 0.0)) ** 2)
+        won = settle(market, sel, p.get("line"), margin)
+
+        # A Brier score needs a probability. The spread play does not carry
+        # one, so it reports a record and no Brier rather than a Brier
+        # computed from a number we made up.
+        brier = (None if won is None or prob is None
+                 else float((prob - (1.0 if won else 0.0)) ** 2))
 
         ref = p.get("reference_price")
-        close = closes.get((eid, sel))
+        # _closing_prices holds MONEYLINE closes and is keyed only by
+        # (game, selection), so a spread row asking for (game, "side_a") would
+        # be handed the moneyline close and silently report a CLV computed
+        # across two different markets. Spread CLV is also a move in the
+        # number, not only in the price, so it is reported as unavailable
+        # rather than approximated.
+        close = closes.get((eid, sel)) if market == "moneyline" else None
         clv = None
         reason = None
-        if ref is None:
+        if market != "moneyline":
+            reason = (f"CLV not computed for the {market} market: we hold "
+                      f"closing prices for moneyline only")
+        elif ref is None:
             reason = "no reference price recorded at prediction time"
         elif close is None:
             reason = ("no qualifying closing price held for this selection "
@@ -244,6 +283,7 @@ def grade_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
         graded.append(GradedPrediction(
             event_id=eid, model_version=str(p["model_version"]),
             selection=sel, probability=prob, won=won, brier=brier,
+            market=market,
             reference_price=ref, closing_price=close, clv=clv,
             clv_blocked_reason=reason,
         ))
@@ -255,18 +295,24 @@ def grade_slate(slate_id: str, ledger_dir: Path | str = "data/ledger",
             continue
         wins = sum(1 for g in rows if g.won)
         clvs = [g.clv for g in rows if g.clv is not None]
+        briers = [g.brier for g in rows if g.brier is not None]
         by_model[name] = {
             "n": len(rows),
             "record": f"{wins}-{len(rows) - wins}",
             "win_pct": round(wins / len(rows), 4),
-            "brier": round(float(np.mean([g.brier for g in rows])), 5),
+            "brier": (round(float(np.mean(briers)), 5) if briers else None),
             "mean_clv": (round(float(np.mean(clvs)), 5) if clvs else None),
             "clv_n": len(clvs),
         }
 
     settled = [g for g in graded if g.won is not None]
-    with_clv = [g for g in settled if g.clv is not None]
-    coverage = (len(with_clv) / len(settled)) if settled else 0.0
+    # Coverage is measured against the rows CLV is even defined for. Counting
+    # spread rows in the denominator would make sealing them look like a
+    # regression in CLV coverage, when nothing about the moneyline record
+    # changed.
+    eligible = [g for g in settled if g.market == "moneyline"]
+    with_clv = [g for g in eligible if g.clv is not None]
+    coverage = (len(with_clv) / len(eligible)) if eligible else 0.0
     note = ("CLV computed only from prices we captured ourselves or paid for. "
             if with_clv else
             "CLV unavailable: we hold no qualifying pre-close reference price "
