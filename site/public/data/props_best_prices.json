@@ -1,28 +1,37 @@
 {
- "generated_at": "2026-09-05T10:28:39.938325+00:00",
+ "generated_at": "2026-09-05T15:05:10.733702+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 54,
+ "n_considered": 260,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Detroit Tigers @ Cleveland Guardians",
-   "starts": "2026-09-05T22:11:00Z",
-   "player": "Jose Ramirez",
+   "matchup": "Chicago Cubs @ Miami Marlins",
+   "starts": "2026-09-05T20:11:00Z",
+   "player": "Pedro Ramirez",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 135,
+   "best_price": 175,
    "best_book": "BetRivers",
    "n_books": 5,
-   "fair_price": 123,
-   "price_edge_pts": 2.25,
-   "book_spread_pts": 6.71,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
+   "fair_price": 152,
+   "price_edge_pts": 3.29,
+   "book_spread_pts": 6.19,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 63,
+    "over": 20
+   },
    "model_p_over": null,
    "model_version": null
   },
@@ -30,27 +39,57 @@
    "sport": "mlb",
    "matchup": "Chicago Cubs @ Miami Marlins",
    "starts": "2026-09-05T20:11:00Z",
-   "player": "Seiya Suzuki",
+   "player": "Javier Sanoja",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 150,
+   "best_price": 175,
    "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": 137,
-   "price_edge_pts": 2.21,
-   "book_spread_pts": 5.45,
+   "n_books": 5,
+   "fair_price": 160,
+   "price_edge_pts": 2.04,
+   "book_spread_pts": 5.3,
    "hit_l5": {
     "n": 5,
-    "over": 1
+    "over": 4
    },
    "hit_l10": {
     "n": 10,
-    "over": 4
+    "over": 6
    },
    "hit_season": {
     "n": 124,
+    "over": 49
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Chicago Cubs @ Miami Marlins",
+   "starts": "2026-09-05T20:11:00Z",
+   "player": "Alex Bregman",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 163,
+   "best_book": "BetRivers",
+   "n_books": 6,
+   "fair_price": 153,
+   "price_edge_pts": 1.46,
+   "book_spread_pts": 5.46,
+   "hit_l5": {
+    "n": 5,
+    "over": 4
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 7
+   },
+   "hit_season": {
+    "n": 139,
     "over": 56
    },
    "model_p_over": null,
@@ -67,10 +106,10 @@
    "side": "over",
    "best_price": 155,
    "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 149,
-   "price_edge_pts": 0.91,
-   "book_spread_pts": 5.03,
+   "n_books": 6,
+   "fair_price": 147,
+   "price_edge_pts": 1.27,
+   "book_spread_pts": 6.24,
    "hit_l5": {
     "n": 5,
     "over": 2
@@ -88,52 +127,31 @@
   },
   {
    "sport": "mlb",
-   "matchup": "Detroit Tigers @ Cleveland Guardians",
-   "starts": "2026-09-05T22:11:00Z",
-   "player": "Jo Adell",
+   "matchup": "San Francisco Giants @ New York Mets",
+   "starts": "2026-09-05T20:11:00Z",
+   "player": "Jared Young",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 148,
+   "best_price": 170,
    "best_book": "BetRivers",
-   "n_books": 5,
-   "fair_price": 145,
-   "price_edge_pts": 0.47,
-   "book_spread_pts": 4.12,
+   "n_books": 4,
+   "fair_price": 161,
+   "price_edge_pts": 1.21,
+   "book_spread_pts": 4.63,
    "hit_l5": {
     "n": 5,
     "over": 1
    },
    "hit_l10": {
     "n": 10,
-    "over": 2
+    "over": 3
    },
    "hit_season": {
-    "n": 139,
-    "over": 48
+    "n": 92,
+    "over": 27
    },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "San Francisco Giants @ New York Mets",
-   "starts": "2026-09-05T20:11:00Z",
-   "player": "Zach Thornton",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": 102,
-   "best_book": "DraftKings",
-   "n_books": 5,
-   "fair_price": 104,
-   "price_edge_pts": -0.42,
-   "book_spread_pts": 3.98,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
    "model_p_over": null,
    "model_version": null
   }
