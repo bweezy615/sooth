@@ -238,7 +238,7 @@
         <table>
           <tr><th scope="col">What the model was graded against</th><th scope="col">Sample</th><th scope="col">Information in the model</th></tr>
           <tr><td>Every start, one league-median line for every pitcher</td><td data-f="slope.flat_n">2,647</td><td class="hi" data-f="slope.flat">+0.51</td></tr>
-          <tr><td>Every start, the line that pitcher usually gets</td><td data-f="slope.typical_n">2,631</td><td data-f="slope.typical">+0.22</td></tr>
+          <tr><td>Every start, the line that pitcher usually gets</td><td data-f="slope.typical_n">2,629</td><td data-f="slope.typical">+0.22</td></tr>
           <tr><td>Only games books posted a prop on, at the price they hung</td><td data-f="slope.board_n">296</td><td class="bad" data-f="slope.board">-0.10</td></tr>
         </table>
         <p class="cap">95% interval on the last figure is
@@ -252,15 +252,15 @@
       looked like the model's information was knowing that different pitchers strike
       out at different rates, and the number a book hangs is built around exactly that.
       Withhold that from the line and hand it only to the model, and the model looks
-      informed. Give it to both and <span class="n" data-f="slope.line_share">56%</span>
+      informed. Give it to both and <span class="n" data-f="slope.line_share">57%</span>
       of the effect disappears. That single
       step is worth <span class="n" data-f="slope.z_line">4.6</span> standard errors.</p>
 
       <p>The rest of the fall is not established. Holding the line rule fixed and
       comparing the games books posted a prop on
-      (<span class="n" data-f="slope.board_typical">+0.09</span> on
-      <span class="n" data-f="slope.board_typical_n">293</span> of them) against every
-      other start moves the figure by <span class="n" data-f="slope.z_select">0.7</span>
+      (<span class="n" data-f="slope.board_typical">+0.07</span> on
+      <span class="n" data-f="slope.board_typical_n">292</span> of them) against every
+      other start moves the figure by <span class="n" data-f="slope.z_select">0.8</span>
       standard errors. Swapping that pitcher's usual line for the exact price the book
       actually hung moves it by another
       <span class="n" data-f="slope.z_posted">0.7</span>. At
@@ -404,7 +404,7 @@
       <p>We built a total-bases model too, and it points the same way, but it was never
       tested on a board population. We captured
       <span class="n" data-f="cover.tb_quotes">160</span> total-bases rows against
-      <span class="n" data-f="cover.k_quotes">4,029</span> for strikeouts. Its exclusion
+      <span class="n" data-f="cover.k_quotes">4,073</span> for strikeouts. Its exclusion
       rests on weaker evidence than the strikeout case and should not inherit the
       strikeout case's certainty.</p>
     </div>
