@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-05T17:31:24.984909+00:00",
+ "generated_at": "2026-09-05T20:12:25.308716+00:00",
  "slate_id": "2026-W01-nfl",
  "source": "the-odds-api, US books, moneyline",
  "note": "Best available price for the side our model prefers. Shopping the best number is +EV on its own, whatever the pick.",
@@ -71,13 +71,21 @@
    "kickoff": "2026-09-11T00:35:00+00:00",
    "pick": "LA",
    "our_prob": 0.5706,
-   "best_price": -190,
-   "best_book": "BetOnline",
-   "worst_price": -208,
-   "worst_book": "MyBookie",
+   "best_price": -185,
+   "best_book": "DraftKings",
+   "worst_price": -205,
+   "worst_book": "BetRivers",
    "n_books": 11,
-   "edge_pts": 2.02,
+   "edge_pts": 2.3,
    "quotes": [
+    {
+     "book": "draftkings",
+     "price": -185
+    },
+    {
+     "book": "betmgm",
+     "price": -190
+    },
     {
      "book": "betonlineag",
      "price": -190
@@ -87,8 +95,12 @@
      "price": -190
     },
     {
-     "book": "draftkings",
-     "price": -192
+     "book": "bovada",
+     "price": -195
+    },
+    {
+     "book": "betus",
+     "price": -195
     },
     {
      "book": "fanduel",
@@ -99,28 +111,16 @@
      "price": -197
     },
     {
-     "book": "betmgm",
-     "price": -200
-    },
-    {
-     "book": "bovada",
-     "price": -200
-    },
-    {
      "book": "fanatics",
      "price": -200
     },
     {
-     "book": "betus",
-     "price": -200
+     "book": "mybookieag",
+     "price": -202
     },
     {
      "book": "betrivers",
      "price": -205
-    },
-    {
-     "book": "mybookieag",
-     "price": -208
     }
    ]
   },
@@ -473,7 +473,7 @@
    ]
   }
  ],
- "avg_edge_pts": 2.43,
+ "avg_edge_pts": 2.46,
  "max_edge_pts": 3.48,
  "n_books": 11
 }
