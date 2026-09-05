@@ -2,7 +2,7 @@
  "generated_at": "2026-09-04T23:58:02.403756+00:00",
  "window_hours": 30.0,
  "credits_spent": 12,
- "credits_remaining": 19522,
+ "credits_remaining": 19513,
  "note": "Same-line player props only: best available price per side and the de-vigged median consensus across books. A prop needs 3+ books on both sides to appear.",
  "boards": [
   {
@@ -5655,5 +5655,6 @@
   "aggregate_bias_pts": -1.2,
   "bucket_miscalibration_pts": 13.1,
   "bias_note": "aggregate calibration is good (-1.2pts) but that is cancellation. Bucketed by predicted probability both this and kpoisson-v1 are wrong by 7-17pts. Cause is mean scaling, not variance: held-out regression slope 0.63 for K and 0.21 for TB, so projections over-spread. Slope correction fixes the centre but is unvalidated at tail lines. Neither market is cleared to post."
- }
+ },
+ "checked_at": "2026-09-05T04:16:46.286894+00:00"
 }
