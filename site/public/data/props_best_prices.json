@@ -1,55 +1,115 @@
 {
- "generated_at": "2026-09-05T22:02:22.322224+00:00",
+ "generated_at": "2026-09-06T04:26:51.270962+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 270,
+ "n_considered": 34,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "Atlanta Braves @ Philadelphia Phillies",
-   "starts": "2026-09-05T22:06:00Z",
-   "player": "Michael Harris II",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
+   "matchup": "Milwaukee Brewers @ Cincinnati Reds",
+   "starts": "2026-09-06T16:10:00Z",
+   "player": "Brady Singer",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
    "side": "over",
-   "best_price": 160,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 144,
-   "price_edge_pts": 2.6,
-   "book_spread_pts": 6.99,
+   "best_price": 117,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": 118,
+   "price_edge_pts": -0.16,
+   "book_spread_pts": 2.94,
    "hit_l5": {
     "n": 5,
     "over": 2
    },
    "hit_l10": {
     "n": 10,
+    "over": 6
+   },
+   "hit_season": {
+    "n": 27,
+    "over": 16
+   },
+   "model_p_over": 0.394,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Atlanta Braves @ Philadelphia Phillies",
+   "starts": "2026-09-06T17:10:00Z",
+   "player": "Kyle Schwarber",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 124,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 130,
+   "price_edge_pts": -1.1,
+   "book_spread_pts": 2.31,
+   "hit_l5": {
+    "n": 5,
+    "over": 1
+   },
+   "hit_l10": {
+    "n": 10,
     "over": 4
    },
    "hit_season": {
-    "n": 135,
-    "over": 60
+    "n": 136,
+    "over": 58
    },
    "model_p_over": null,
    "model_version": null
   },
   {
    "sport": "mlb",
-   "matchup": "Milwaukee Brewers @ Cincinnati Reds",
-   "starts": "2026-09-05T22:41:00Z",
-   "player": "Cooper Pratt",
+   "matchup": "Atlanta Braves @ Philadelphia Phillies",
+   "starts": "2026-09-06T17:10:00Z",
+   "player": "Ronald Acuna Jr.",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 163,
-   "best_book": "BetRivers",
+   "best_price": 134,
+   "best_book": "BetOnline",
    "n_books": 4,
-   "fair_price": 148,
-   "price_edge_pts": 2.26,
-   "book_spread_pts": 5.46,
+   "fair_price": 140,
+   "price_edge_pts": -1.11,
+   "book_spread_pts": 2.72,
+   "hit_l5": {
+    "n": 5,
+    "over": 3
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 5
+   },
+   "hit_season": {
+    "n": 89,
+    "over": 34
+   },
+   "model_p_over": null,
+   "model_version": null
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Atlanta Braves @ Philadelphia Phillies",
+   "starts": "2026-09-06T17:10:00Z",
+   "player": "Luis Arraez",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 139,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 147,
+   "price_edge_pts": -1.3,
+   "book_spread_pts": 1.83,
    "hit_l5": {
     "n": 5,
     "over": 3
@@ -59,68 +119,8 @@
     "over": 4
    },
    "hit_season": {
-    "n": 56,
-    "over": 16
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Los Angeles Angels @ Pittsburgh Pirates",
-   "starts": "2026-09-05T22:41:00Z",
-   "player": "Oneil Cruz",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 139,
-   "best_book": "BetOnline",
-   "n_books": 5,
-   "fair_price": 132,
-   "price_edge_pts": 1.21,
-   "book_spread_pts": 4.89,
-   "hit_l5": {
-    "n": 5,
-    "over": 2
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 79,
-    "over": 40
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Detroit Tigers @ Cleveland Guardians",
-   "starts": "2026-09-05T22:11:00Z",
-   "player": "Jo Adell",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 150,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 147,
-   "price_edge_pts": 0.49,
-   "book_spread_pts": 3.67,
-   "hit_l5": {
-    "n": 5,
-    "over": 1
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 2
-   },
-   "hit_season": {
-    "n": 139,
-    "over": 48
+    "n": 134,
+    "over": 64
    },
    "model_p_over": null,
    "model_version": null
@@ -128,29 +128,29 @@
   {
    "sport": "mlb",
    "matchup": "Atlanta Braves @ Philadelphia Phillies",
-   "starts": "2026-09-05T22:06:00Z",
-   "player": "Edmundo Sosa",
-   "market": "batter_hits",
-   "market_label": "Hits",
-   "line": 0.5,
-   "side": "under",
-   "best_price": 160,
-   "best_book": "BetMGM",
-   "n_books": 3,
-   "fair_price": 157,
-   "price_edge_pts": 0.48,
-   "book_spread_pts": 5.4,
+   "starts": "2026-09-06T17:10:00Z",
+   "player": "Bryce Harper",
+   "market": "batter_total_bases",
+   "market_label": "Total bases",
+   "line": 1.5,
+   "side": "over",
+   "best_price": 141,
+   "best_book": "BetOnline",
+   "n_books": 4,
+   "fair_price": 150,
+   "price_edge_pts": -1.51,
+   "book_spread_pts": 2.37,
    "hit_l5": {
     "n": 5,
-    "over": 5
+    "over": 3
    },
    "hit_l10": {
     "n": 10,
-    "over": 9
+    "over": 6
    },
    "hit_season": {
-    "n": 72,
-    "over": 37
+    "n": 142,
+    "over": 62
    },
    "model_p_over": null,
    "model_version": null
