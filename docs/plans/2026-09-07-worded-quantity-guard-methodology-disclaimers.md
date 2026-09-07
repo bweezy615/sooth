@@ -115,6 +115,23 @@ the tradeoff `2026-09-03-unguarded-quantities.md` already discusses), not
 something to do unattended. Recorded here so the next sweep does not
 re-derive it from zero.
 
+## W02 health check (read-only, nothing sealed)
+
+Also ran `PYTHONPATH=. python scripts/slate_probe.py --season 2026 --week 2
+--mocks` ahead of W02's seal (due the Wednesday after 2026-09-09). Read-only:
+the script fingerprints the real `data/ledger` before and after and aborts if
+it moved — it reported `real data/ledger unchanged` — and the four
+`_mock-w02*.json` fixtures it writes are gitignored; deleted them after.
+
+Confirms the spread-in-commitment fix (`bc47f6bc`, 2026-09-04) produces the
+predicted shape for W02: **48 sealed predictions**, up from 32, matching
+`docs/plans/2026-09-04-spread-in-commitment.md`'s "2 moneyline + 1 spread per
+game with a line, 16 games". The qualified play and the two next-widest edges
+are identical to the 2026-09-03 dry run down to the last decimal (CIN at HOU,
+line 2.5, edge +4.35), so the pipeline is stable going into the seal. Not
+sealed, not touched further — sealing stays Branden's to run via
+`.github/workflows/seal.yml`.
+
 ## Verification
 
 - `PYTHONPATH=. python -m pytest tests/test_props_model_note.py tests/test_worded_quantities_prose_pages.py -q`
