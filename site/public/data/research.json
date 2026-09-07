@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-09-07T05:13:31.199196+00:00",
- "checked_at": "2026-09-07T05:13:31.199196+00:00",
+ "generated_at": "2026-09-07T13:00:51.922693+00:00",
+ "checked_at": "2026-09-07T13:00:51.922693+00:00",
  "sport": "nfl",
  "n_reports": 56,
  "n_shoppable": 8,
  "sources": {
   "prices": "own_capture observations (ESPN game lines)",
-  "board": "2026-09-07T01:16:03.201210+00:00",
-  "teamstats": "2026-09-07T05:13:22.299215+00:00",
-  "injuries": "2026-09-07T05:13:21.355056+00:00"
+  "board": "2026-09-07T06:34:48.146940+00:00",
+  "teamstats": "2026-09-07T13:00:41.562628+00:00",
+  "injuries": "2026-09-07T13:00:40.540113+00:00"
  },
  "note": "Research only, not advice and not a pick. Every figure in facts is computed from the data in this file.",
  "tracking": {
@@ -167,8 +167,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -248,7 +248,8 @@
        "return_date": "2026-09-09",
        "updated_at": "2026-09-07T00:02Z",
        "note": "questionable",
-       "source": "espn"
+       "source": "nflverse+espn",
+       "practice_status": null
       }
      ],
      "not_shown": 4,
@@ -358,7 +359,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 3.5,
+     "vig_pts": 4.0,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -379,14 +380,14 @@
         "Caesars": 157,
         "LowVig": 155,
         "BetOnline": 155,
-        "FanDuel": 152,
+        "FanDuel": 154,
         "BetUS": 150,
         "MyBookie": 150,
         "DraftKings": 150,
         "Fanatics": 150
        },
-       "fair_prob": 0.3789,
-       "gain_pts": -0.57
+       "fair_prob": 0.3771,
+       "gain_pts": -0.76
       },
       "Seattle Seahawks": {
        "selection": "Seattle Seahawks",
@@ -397,22 +398,22 @@
        "worst_price": -200,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.6429,
+       "consensus_prob": 0.6479,
        "prices": {
         "BetUS": -175,
         "LowVig": -177,
         "BetOnline": -177,
         "DraftKings": -180,
-        "FanDuel": -180,
         "Fanatics": -180,
+        "FanDuel": -184,
         "Bovada": -185,
         "MyBookie": -186,
         "BetMGM": -190,
         "Caesars": -190,
         "BetRivers": -200
        },
-       "fair_prob": 0.6211,
-       "gain_pts": -1.53
+       "fair_prob": 0.6229,
+       "gain_pts": -1.34
       }
      }
     }
@@ -438,18 +439,18 @@
    "live_board": {
     "max_gain_pts": 3.03,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on New England Patriots (moneyline) is +160 at Bovada, against +150 at the worst of 11 books \u2014 0.57 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on New England Patriots (moneyline) is +160 at Bovada, against +150 at the worst of 11 books \u2014 0.76 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 160,
       "best_book": "Bovada",
       "worst_price": 150,
       "n_books": 11,
-      "gain_pts": -0.57,
+      "gain_pts": -0.76,
       "market": "moneyline",
       "line": null,
       "selection": "New England Patriots"
@@ -502,7 +503,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872656",
@@ -653,8 +654,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -734,7 +735,8 @@
        "return_date": "2026-09-09",
        "updated_at": "2026-09-07T00:02Z",
        "note": "questionable",
-       "source": "espn"
+       "source": "nflverse+espn",
+       "practice_status": null
       }
      ],
      "not_shown": 4,
@@ -834,7 +836,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.71,
+     "vig_pts": 4.62,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -842,32 +844,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -3.5,
-       "best_price": -105,
+       "best_price": -102,
        "best_book": "DraftKings",
-       "worst_price": -105,
+       "worst_price": -102,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5122,
+       "consensus_prob": 0.505,
        "prices": {
-        "DraftKings": -105
+        "DraftKings": -102
        },
-       "fair_prob": 0.4892,
+       "fair_prob": 0.4826,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 3.5,
-       "best_price": -115,
+       "best_price": -118,
        "best_book": "DraftKings",
-       "worst_price": -115,
+       "worst_price": -118,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5349,
+       "consensus_prob": 0.5413,
        "prices": {
-        "DraftKings": -115
+        "DraftKings": -118
        },
-       "fair_prob": 0.5108,
+       "fair_prob": 0.5174,
        "gain_pts": null
       }
      }
@@ -976,20 +978,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 3.03,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
@@ -1031,7 +1033,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "acc580d74344ea3b31bbcdd057fe6a9c",
@@ -1182,8 +1184,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -1373,7 +1375,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 4.53,
+     "vig_pts": 4.64,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -1389,9 +1391,9 @@
        "consensus_prob": 0.3831,
        "prices": {
         "Bovada": 170,
+        "FanDuel": 168,
         "BetUS": 167,
         "Fanatics": 165,
-        "FanDuel": 164,
         "Caesars": 164,
         "BetOnline": 161,
         "LowVig": 161,
@@ -1400,8 +1402,8 @@
         "DraftKings": 160,
         "MyBookie": 152
        },
-       "fair_prob": 0.3665,
-       "gain_pts": -0.38
+       "fair_prob": 0.3661,
+       "gain_pts": -0.42
       },
       "Los Angeles Rams": {
        "selection": "Los Angeles Rams",
@@ -1412,22 +1414,22 @@
        "worst_price": -205,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.6622,
+       "consensus_prob": 0.6633,
        "prices": {
         "BetOnline": -185,
         "LowVig": -185,
-        "BetMGM": -190,
         "DraftKings": -192,
         "BetUS": -195,
-        "FanDuel": -196,
         "Caesars": -197,
         "MyBookie": -197,
+        "BetMGM": -200,
+        "FanDuel": -200,
         "Bovada": -200,
         "Fanatics": -200,
         "BetRivers": -205
        },
-       "fair_prob": 0.6335,
-       "gain_pts": -1.57
+       "fair_prob": 0.6339,
+       "gain_pts": -1.53
       }
      }
     }
@@ -1453,18 +1455,18 @@
    "live_board": {
     "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on San Francisco 49ers (moneyline) is +170 at Bovada, against +152 at the worst of 11 books \u2014 0.38 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on San Francisco 49ers (moneyline) is +170 at Bovada, against +152 at the worst of 11 books \u2014 0.42 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 170,
       "best_book": "Bovada",
       "worst_price": 152,
       "n_books": 11,
-      "gain_pts": -0.38,
+      "gain_pts": -0.42,
       "market": "moneyline",
       "line": null,
       "selection": "San Francisco 49ers"
@@ -1517,7 +1519,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872657",
@@ -1668,8 +1670,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -1939,7 +1941,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.21,
+     "vig_pts": 4.28,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -1947,32 +1949,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -192,
+       "best_price": -185,
        "best_book": "DraftKings",
-       "worst_price": -192,
+       "worst_price": -185,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6575,
+       "consensus_prob": 0.6491,
        "prices": {
-        "DraftKings": -192
+        "DraftKings": -185
        },
-       "fair_prob": 0.6309,
+       "fair_prob": 0.6225,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 160,
+       "best_price": 154,
        "best_book": "DraftKings",
-       "worst_price": 160,
+       "worst_price": 154,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3846,
+       "consensus_prob": 0.3937,
        "prices": {
-        "DraftKings": 160
+        "DraftKings": 154
        },
-       "fair_prob": 0.3691,
+       "fair_prob": 0.3775,
        "gain_pts": null
       }
      }
@@ -1991,20 +1993,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
@@ -2046,7 +2048,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "ed6d24ff979f9c71979fead577b0b3f7",
@@ -2197,8 +2199,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 7,
      "shown": [
@@ -2388,7 +2390,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 4.51,
+     "vig_pts": 4.64,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -2398,51 +2400,51 @@
        "line": null,
        "best_price": -200,
        "best_book": "BetMGM",
-       "worst_price": -220,
+       "worst_price": -225,
        "worst_book": "Bovada",
        "n_books": 11,
        "consensus_prob": 0.6774,
        "prices": {
         "BetMGM": -200,
+        "FanDuel": -200,
         "DraftKings": -205,
         "Caesars": -205,
-        "FanDuel": -205,
         "LowVig": -210,
         "BetUS": -210,
         "BetOnline": -210,
         "BetRivers": -215,
         "Fanatics": -215,
         "MyBookie": -216,
-        "Bovada": -220
+        "Bovada": -225
        },
-       "fair_prob": 0.6482,
-       "gain_pts": -1.85
+       "fair_prob": 0.6474,
+       "gain_pts": -1.93
       },
       "Tampa Bay Buccaneers": {
        "selection": "Tampa Bay Buccaneers",
        "label": "Tampa Bay Buccaneers",
        "line": null,
-       "best_price": 180,
+       "best_price": 185,
        "best_book": "Bovada",
        "worst_price": 165,
        "worst_book": "BetMGM",
        "n_books": 11,
-       "consensus_prob": 0.3676,
+       "consensus_prob": 0.369,
        "prices": {
-        "Bovada": 180,
+        "Bovada": 185,
         "LowVig": 180,
         "BetUS": 180,
         "BetOnline": 180,
         "Fanatics": 175,
-        "FanDuel": 172,
         "Caesars": 171,
         "DraftKings": 170,
         "BetRivers": 170,
+        "FanDuel": 168,
         "MyBookie": 166,
         "BetMGM": 165
        },
-       "fair_prob": 0.3518,
-       "gain_pts": -0.53
+       "fair_prob": 0.3526,
+       "gain_pts": 0.18
       }
      }
     }
@@ -2466,20 +2468,20 @@
    },
    "movement": {},
    "live_board": {
-    "max_gain_pts": 2.08,
+    "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Tampa Bay Buccaneers (moneyline) is +180 at Bovada, against +165 at the worst of 11 books \u2014 0.53 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Tampa Bay Buccaneers (moneyline) is +185 at Bovada, against +165 at the worst of 11 books \u2014 0.18 points of implied probability versus the de-vigged fair price.",
      "numbers": {
-      "best_price": 180,
+      "best_price": 185,
       "best_book": "Bovada",
       "worst_price": 165,
       "n_books": 11,
-      "gain_pts": -0.53,
+      "gain_pts": 0.18,
       "market": "moneyline",
       "line": null,
       "selection": "Tampa Bay Buccaneers"
@@ -2525,14 +2527,14 @@
     },
     {
      "kind": "dispersion",
-     "text": "11 books quote -200 down to -220 on the same side \u2014 2.08 points between the best and worst number.",
+     "text": "11 books quote +185 down to +165 on the same side \u2014 2.65 points between the best and worst number.",
      "numbers": {
-      "spread_pts": 2.08,
+      "spread_pts": 2.65,
       "n_books": 11
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "7e09efed7e12c659b82740b67ce2f9a1",
@@ -2683,8 +2685,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 16,
      "shown": [
@@ -2871,7 +2873,7 @@
       "Fanatics",
       "MyBookie"
      ],
-     "vig_pts": 4.3,
+     "vig_pts": 4.07,
      "fair_basis": "consensus of 8 books",
      "shoppable": true,
      "sides": {
@@ -2884,33 +2886,33 @@
        "worst_price": -115,
        "worst_book": "MyBookie",
        "n_books": 8,
-       "consensus_prob": 0.5181,
+       "consensus_prob": 0.5157,
        "prices": {
         "DraftKings": -102,
         "BetMGM": -105,
-        "BetRivers": -107,
+        "BetRivers": -106,
+        "FanDuel": -106,
         "Caesars": -107,
-        "FanDuel": -108,
         "Bovada": -110,
         "Fanatics": -110,
         "MyBookie": -115
        },
-       "fair_prob": 0.4967,
-       "gain_pts": -0.82
+       "fair_prob": 0.4956,
+       "gain_pts": -0.94
       },
       "Buffalo Bills": {
        "selection": "Buffalo Bills",
        "label": "Buffalo Bills",
        "line": null,
-       "best_price": -108,
-       "best_book": "FanDuel",
+       "best_price": -110,
+       "best_book": "Caesars",
        "worst_price": -118,
        "worst_book": "DraftKings",
        "n_books": 8,
        "consensus_prob": 0.5249,
        "prices": {
-        "FanDuel": -108,
         "Caesars": -110,
+        "FanDuel": -110,
         "Bovada": -110,
         "Fanatics": -110,
         "MyBookie": -111,
@@ -2918,8 +2920,8 @@
         "BetRivers": -117,
         "DraftKings": -118
        },
-       "fair_prob": 0.5033,
-       "gain_pts": -1.59
+       "fair_prob": 0.5044,
+       "gain_pts": -1.94
       }
      }
     }
@@ -2942,18 +2944,18 @@
    "live_board": {
     "max_gain_pts": 2.99,
     "n_books": 8,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Houston Texans (moneyline) is -102 at DraftKings, against -115 at the worst of 8 books \u2014 0.82 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Houston Texans (moneyline) is -102 at DraftKings, against -115 at the worst of 8 books \u2014 0.94 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": -102,
       "best_book": "DraftKings",
       "worst_price": -115,
       "n_books": 8,
-      "gain_pts": -0.82,
+      "gain_pts": -0.94,
       "market": "moneyline",
       "line": null,
       "selection": "Houston Texans"
@@ -3006,7 +3008,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "b6cfdcbafa61ce220ba87dc2d9b80c77",
@@ -3157,8 +3159,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -3348,7 +3350,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 4.03,
+     "vig_pts": 4.29,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -3361,22 +3363,22 @@
        "worst_price": -190,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.6403,
+       "consensus_prob": 0.6429,
        "prices": {
         "BetUS": -170,
         "LowVig": -171,
         "BetOnline": -171,
         "DraftKings": -175,
         "Caesars": -176,
-        "FanDuel": -178,
         "Bovada": -180,
+        "FanDuel": -180,
         "Fanatics": -180,
         "MyBookie": -183,
         "BetMGM": -185,
         "BetRivers": -190
        },
-       "fair_prob": 0.6155,
-       "gain_pts": -1.41
+       "fair_prob": 0.6164,
+       "gain_pts": -1.32
       },
       "Indianapolis Colts": {
        "selection": "Indianapolis Colts",
@@ -3391,9 +3393,9 @@
        "prices": {
         "BetRivers": 155,
         "Bovada": 155,
+        "FanDuel": 152,
         "LowVig": 150,
         "BetOnline": 150,
-        "FanDuel": 150,
         "BetMGM": 150,
         "Fanatics": 150,
         "Caesars": 149,
@@ -3401,8 +3403,8 @@
         "DraftKings": 145,
         "MyBookie": 142
        },
-       "fair_prob": 0.3845,
-       "gain_pts": -0.76
+       "fair_prob": 0.3836,
+       "gain_pts": -0.86
       }
      }
     }
@@ -3428,18 +3430,18 @@
    "live_board": {
     "max_gain_pts": 2.55,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Indianapolis Colts (moneyline) is +155 at BetRivers, against +142 at the worst of 11 books \u2014 0.76 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Indianapolis Colts (moneyline) is +155 at BetRivers, against +142 at the worst of 11 books \u2014 0.86 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 155,
       "best_book": "BetRivers",
       "worst_price": 142,
       "n_books": 11,
-      "gain_pts": -0.76,
+      "gain_pts": -0.86,
       "market": "moneyline",
       "line": null,
       "selection": "Indianapolis Colts"
@@ -3492,7 +3494,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "e55c6fe19fce094ce214c8b0e5b504e9",
@@ -3643,8 +3645,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -3854,11 +3856,11 @@
         "BetOnline": -390,
         "LowVig": -390,
         "Caesars": -390,
-        "FanDuel": -400,
         "BetRivers": -400,
+        "Fanatics": -400,
         "Bovada": -410,
         "DraftKings": -410,
-        "Fanatics": -425,
+        "FanDuel": -420,
         "MyBookie": -469
        },
        "fair_prob": 0.7664,
@@ -3868,27 +3870,27 @@
        "selection": "Cleveland Browns",
        "label": "Cleveland Browns",
        "line": null,
-       "best_price": 325,
-       "best_book": "Fanatics",
+       "best_price": 330,
+       "best_book": "FanDuel",
        "worst_price": 295,
        "worst_book": "BetRivers",
        "n_books": 11,
        "consensus_prob": 0.2439,
        "prices": {
-        "Fanatics": 325,
+        "FanDuel": 330,
         "DraftKings": 320,
         "MyBookie": 320,
-        "FanDuel": 315,
         "BetUS": 312,
         "BetOnline": 310,
         "LowVig": 310,
+        "Fanatics": 310,
         "Caesars": 305,
         "Bovada": 305,
         "BetMGM": 300,
         "BetRivers": 295
        },
        "fair_prob": 0.2336,
-       "gain_pts": -0.16
+       "gain_pts": 0.11
       }
      }
     }
@@ -3914,18 +3916,18 @@
    "live_board": {
     "max_gain_pts": 3.48,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Cleveland Browns (moneyline) is +325 at Fanatics, against +295 at the worst of 11 books \u2014 0.16 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Cleveland Browns (moneyline) is +330 at FanDuel, against +295 at the worst of 11 books \u2014 0.11 points of implied probability versus the de-vigged fair price.",
      "numbers": {
-      "best_price": 325,
-      "best_book": "Fanatics",
+      "best_price": 330,
+      "best_book": "FanDuel",
       "worst_price": 295,
       "n_books": 11,
-      "gain_pts": -0.16,
+      "gain_pts": 0.11,
       "market": "moneyline",
       "line": null,
       "selection": "Cleveland Browns"
@@ -3978,7 +3980,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "95c01d1bb797d6df14824b106c5a9130",
@@ -4129,8 +4131,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -4320,7 +4322,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 4.29,
+     "vig_pts": 3.66,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -4328,53 +4330,53 @@
        "selection": "Pittsburgh Steelers",
        "label": "Pittsburgh Steelers",
        "line": null,
-       "best_price": -177,
-       "best_book": "BetRivers",
-       "worst_price": -188,
-       "worst_book": "MyBookie",
+       "best_price": -175,
+       "best_book": "BetMGM",
+       "worst_price": -190,
+       "worst_book": "Fanatics",
        "n_books": 11,
        "consensus_prob": 0.6429,
        "prices": {
+        "BetMGM": -175,
+        "FanDuel": -176,
         "BetRivers": -177,
-        "FanDuel": -178,
-        "Caesars": -179,
         "BetOnline": -180,
         "LowVig": -180,
         "BetUS": -180,
-        "Bovada": -180,
-        "Fanatics": -180,
-        "BetMGM": -185,
+        "Caesars": -182,
+        "Bovada": -185,
         "DraftKings": -185,
-        "MyBookie": -188
+        "MyBookie": -188,
+        "Fanatics": -190
        },
-       "fair_prob": 0.6164,
-       "gain_pts": -2.26
+       "fair_prob": 0.6202,
+       "gain_pts": -1.62
       },
       "Atlanta Falcons": {
        "selection": "Atlanta Falcons",
        "label": "Atlanta Falcons",
        "line": null,
-       "best_price": 157,
-       "best_book": "BetOnline",
+       "best_price": 160,
+       "best_book": "Bovada",
        "worst_price": 140,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.4,
+       "consensus_prob": 0.3937,
        "prices": {
+        "Bovada": 160,
         "BetOnline": 157,
         "LowVig": 157,
-        "Bovada": 155,
         "BetUS": 155,
+        "Fanatics": 155,
         "DraftKings": 154,
-        "BetMGM": 150,
-        "Caesars": 150,
-        "FanDuel": 150,
-        "Fanatics": 150,
+        "Caesars": 152,
+        "FanDuel": 148,
         "MyBookie": 146,
+        "BetMGM": 145,
         "BetRivers": 140
        },
-       "fair_prob": 0.3836,
-       "gain_pts": -0.55
+       "fair_prob": 0.3798,
+       "gain_pts": -0.48
       }
      }
     }
@@ -4398,20 +4400,20 @@
    },
    "movement": {},
    "live_board": {
-    "max_gain_pts": 2.76,
+    "max_gain_pts": 3.21,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Atlanta Falcons (moneyline) is +157 at BetOnline, against +140 at the worst of 11 books \u2014 0.55 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Atlanta Falcons (moneyline) is +160 at Bovada, against +140 at the worst of 11 books \u2014 0.48 points of implied probability versus the de-vigged fair price.",
      "numbers": {
-      "best_price": 157,
-      "best_book": "BetOnline",
+      "best_price": 160,
+      "best_book": "Bovada",
       "worst_price": 140,
       "n_books": 11,
-      "gain_pts": -0.55,
+      "gain_pts": -0.48,
       "market": "moneyline",
       "line": null,
       "selection": "Atlanta Falcons"
@@ -4457,14 +4459,14 @@
     },
     {
      "kind": "dispersion",
-     "text": "11 books quote +157 down to +140 on the same side \u2014 2.76 points between the best and worst number.",
+     "text": "11 books quote +160 down to +140 on the same side \u2014 3.21 points between the best and worst number.",
      "numbers": {
-      "spread_pts": 2.76,
+      "spread_pts": 3.21,
       "n_books": 11
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "fc362aff0d889ec52d358307a70c32ed",
@@ -4615,8 +4617,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 14,
      "shown": [
@@ -4806,7 +4808,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 4.26,
+     "vig_pts": 4.07,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -4823,18 +4825,18 @@
        "prices": {
         "LowVig": -152,
         "BetOnline": -152,
-        "FanDuel": -154,
+        "FanDuel": -152,
         "Caesars": -154,
         "BetUS": -155,
         "DraftKings": -155,
-        "Fanatics": -155,
         "BetRivers": -157,
         "BetMGM": -160,
         "MyBookie": -161,
-        "Bovada": -165
+        "Bovada": -165,
+        "Fanatics": -165
        },
-       "fair_prob": 0.583,
-       "gain_pts": -2.02
+       "fair_prob": 0.584,
+       "gain_pts": -1.91
       },
       "Carolina Panthers": {
        "selection": "Carolina Panthers",
@@ -4845,22 +4847,22 @@
        "worst_price": 126,
        "worst_book": "MyBookie",
        "n_books": 11,
-       "consensus_prob": 0.4348,
+       "consensus_prob": 0.4329,
        "prices": {
         "Bovada": 140,
+        "Fanatics": 135,
         "BetUS": 134,
         "LowVig": 132,
         "BetOnline": 132,
         "Caesars": 131,
         "BetMGM": 130,
         "DraftKings": 130,
-        "FanDuel": 130,
-        "Fanatics": 130,
         "BetRivers": 128,
+        "FanDuel": 128,
         "MyBookie": 126
        },
-       "fair_prob": 0.417,
-       "gain_pts": 0.03
+       "fair_prob": 0.416,
+       "gain_pts": -0.07
       }
      }
     }
@@ -4886,18 +4888,18 @@
    "live_board": {
     "max_gain_pts": 2.58,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Carolina Panthers (moneyline) is +140 at Bovada, against +126 at the worst of 11 books \u2014 0.03 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Carolina Panthers (moneyline) is +140 at Bovada, against +126 at the worst of 11 books \u2014 0.07 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 140,
       "best_book": "Bovada",
       "worst_price": 126,
       "n_books": 11,
-      "gain_pts": 0.03,
+      "gain_pts": -0.07,
       "market": "moneyline",
       "line": null,
       "selection": "Carolina Panthers"
@@ -4950,7 +4952,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872925",
@@ -5101,8 +5103,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 7,
      "shown": [
@@ -5372,7 +5374,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.25,
+     "vig_pts": 4.32,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -5380,32 +5382,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -205,
+       "best_price": -198,
        "best_book": "DraftKings",
-       "worst_price": -205,
+       "worst_price": -198,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6721,
+       "consensus_prob": 0.6644,
        "prices": {
-        "DraftKings": -205
+        "DraftKings": -198
        },
-       "fair_prob": 0.6447,
+       "fair_prob": 0.6369,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 170,
+       "best_price": 164,
        "best_book": "DraftKings",
-       "worst_price": 170,
+       "worst_price": 164,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3704,
+       "consensus_prob": 0.3788,
        "prices": {
-        "DraftKings": 170
+        "DraftKings": 164
        },
-       "fair_prob": 0.3553,
+       "fair_prob": 0.3631,
        "gain_pts": null
       }
      }
@@ -5424,20 +5426,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 50.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
-    "max_gain_pts": 2.08,
+    "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
@@ -5448,7 +5450,7 @@
       "current": 50.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -5491,7 +5493,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872923",
@@ -5642,8 +5644,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 14,
      "shown": [
@@ -5823,7 +5825,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.71,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -5831,32 +5833,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -7.0,
-       "best_price": -110,
+       "best_price": -105,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5122,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -105
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4892,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 7.0,
-       "best_price": -110,
+       "best_price": -115,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -115,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5349,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -115
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5108,
        "gain_pts": null
       }
      }
@@ -5913,7 +5915,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.29,
+     "vig_pts": 4.21,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -5921,32 +5923,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -305,
+       "best_price": -290,
        "best_book": "DraftKings",
-       "worst_price": -305,
+       "worst_price": -290,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7531,
+       "consensus_prob": 0.7436,
        "prices": {
-        "DraftKings": -305
+        "DraftKings": -290
        },
-       "fair_prob": 0.7221,
+       "fair_prob": 0.7136,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 245,
+       "best_price": 235,
        "best_book": "DraftKings",
-       "worst_price": 245,
+       "worst_price": 235,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2899,
+       "consensus_prob": 0.2985,
        "prices": {
-        "DraftKings": 245
+        "DraftKings": 235
        },
-       "fair_prob": 0.2779,
+       "fair_prob": 0.2864,
        "gain_pts": null
       }
      }
@@ -5965,14 +5967,14 @@
      "current": -7.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 49.5,
      "moved": 2.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -5985,7 +5987,7 @@
       "current": 49.5,
       "moved": 2.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -6028,7 +6030,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872924",
@@ -6179,8 +6181,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -6450,7 +6452,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.14,
+     "vig_pts": 4.34,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -6458,32 +6460,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -130,
+       "best_price": -125,
        "best_book": "DraftKings",
-       "worst_price": -130,
+       "worst_price": -125,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5652,
+       "consensus_prob": 0.5556,
        "prices": {
-        "DraftKings": -130
+        "DraftKings": -125
        },
-       "fair_prob": 0.5427,
+       "fair_prob": 0.5325,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 110,
+       "best_price": 105,
        "best_book": "DraftKings",
-       "worst_price": 110,
+       "worst_price": 105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4762,
+       "consensus_prob": 0.4878,
        "prices": {
-        "DraftKings": 110
+        "DraftKings": 105
        },
-       "fair_prob": 0.4573,
+       "fair_prob": 0.4675,
        "gain_pts": null
       }
      }
@@ -6502,14 +6504,14 @@
      "current": -1.5,
      "moved": 1.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 38.5,
      "current": 39.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -6522,7 +6524,7 @@
       "current": -1.5,
       "moved": 1.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
      }
     },
@@ -6534,7 +6536,7 @@
       "current": 39.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -6577,7 +6579,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872659",
@@ -6728,8 +6730,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -6999,7 +7001,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.45,
+     "vig_pts": 4.2,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -7007,32 +7009,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 145,
+       "best_price": 136,
        "best_book": "DraftKings",
-       "worst_price": 145,
+       "worst_price": 136,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4082,
+       "consensus_prob": 0.4237,
        "prices": {
-        "DraftKings": 145
+        "DraftKings": 136
        },
-       "fair_prob": 0.3908,
+       "fair_prob": 0.4066,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -175,
+       "best_price": -162,
        "best_book": "DraftKings",
-       "worst_price": -175,
+       "worst_price": -162,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6364,
+       "consensus_prob": 0.6183,
        "prices": {
-        "DraftKings": -175
+        "DraftKings": -162
        },
-       "fair_prob": 0.6092,
+       "fair_prob": 0.5934,
        "gain_pts": null
       }
      }
@@ -7048,25 +7050,49 @@
    "movement": {
     "spread_line": {
      "opened": 3.5,
-     "current": 3.5,
-     "moved": 0.0,
+     "current": 3.0,
+     "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 48.5,
-     "current": 48.5,
-     "moved": 0.0,
+     "current": 47.5,
+     "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.55,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
+    {
+     "kind": "line_move",
+     "text": "The spread opened 3.5 in our capture and sits at 3 now (-0.5).",
+     "numbers": {
+      "opened": 3.5,
+      "current": 3.0,
+      "moved": -0.5,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "spread"
+     }
+    },
+    {
+     "kind": "line_move",
+     "text": "The total opened 48.5 in our capture and sits at 47.5 now (-1).",
+     "numbers": {
+      "opened": 48.5,
+      "current": 47.5,
+      "moved": -1.0,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "total"
+     }
+    },
     {
      "kind": "efficiency",
      "text": "On 2025 form, Indianapolis Colts net +0.079 EPA/play and Baltimore Ravens net +0.034 \u2014 Indianapolis Colts by 0.045.",
@@ -7106,7 +7132,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872658",
@@ -7257,8 +7283,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -7580,20 +7606,20 @@
      "current": -3.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 41.5,
-     "current": 41.5,
-     "moved": 0.0,
+     "current": 42.5,
+     "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
-    "max_gain_pts": 2.76,
+    "max_gain_pts": 3.21,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
@@ -7604,8 +7630,20 @@
       "current": -3.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
+     }
+    },
+    {
+     "kind": "line_move",
+     "text": "The total opened 41.5 in our capture and sits at 42.5 now (+1).",
+     "numbers": {
+      "opened": 41.5,
+      "current": 42.5,
+      "moved": 1.0,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "total"
      }
     },
     {
@@ -7647,7 +7685,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872661",
@@ -7798,8 +7836,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 14,
      "shown": [
@@ -8024,7 +8062,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.71,
+     "vig_pts": 4.62,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8032,32 +8070,32 @@
        "selection": "over",
        "label": "over",
        "line": 46.5,
-       "best_price": -115,
+       "best_price": -118,
        "best_book": "DraftKings",
-       "worst_price": -115,
+       "worst_price": -118,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5349,
+       "consensus_prob": 0.5413,
        "prices": {
-        "DraftKings": -115
+        "DraftKings": -118
        },
-       "fair_prob": 0.5108,
+       "fair_prob": 0.5174,
        "gain_pts": null
       },
       "under": {
        "selection": "under",
        "label": "under",
        "line": 46.5,
-       "best_price": -105,
+       "best_price": -102,
        "best_book": "DraftKings",
-       "worst_price": -105,
+       "worst_price": -102,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5122,
+       "consensus_prob": 0.505,
        "prices": {
-        "DraftKings": -105
+        "DraftKings": -102
        },
-       "fair_prob": 0.4892,
+       "fair_prob": 0.4826,
        "gain_pts": null
       }
      }
@@ -8069,7 +8107,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.26,
+     "vig_pts": 4.32,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8077,32 +8115,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 130,
+       "best_price": 124,
        "best_book": "DraftKings",
-       "worst_price": 130,
+       "worst_price": 124,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4348,
+       "consensus_prob": 0.4464,
        "prices": {
-        "DraftKings": 130
+        "DraftKings": 124
        },
-       "fair_prob": 0.417,
+       "fair_prob": 0.4279,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -155,
+       "best_price": -148,
        "best_book": "DraftKings",
-       "worst_price": -155,
+       "worst_price": -148,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6078,
+       "consensus_prob": 0.5968,
        "prices": {
-        "DraftKings": -155
+        "DraftKings": -148
        },
-       "fair_prob": 0.583,
+       "fair_prob": 0.5721,
        "gain_pts": null
       }
      }
@@ -8118,35 +8156,35 @@
    "movement": {
     "spread_line": {
      "opened": 2.5,
-     "current": 2.5,
-     "moved": 0.0,
+     "current": 3.0,
+     "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
-     "current": 47.5,
-     "moved": 1.0,
+     "current": 46.5,
+     "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.58,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
      "kind": "line_move",
-     "text": "The total opened 46.5 in our capture and sits at 47.5 now (+1).",
+     "text": "The spread opened 2.5 in our capture and sits at 3 now (+0.5).",
      "numbers": {
-      "opened": 46.5,
-      "current": 47.5,
-      "moved": 1.0,
+      "opened": 2.5,
+      "current": 3.0,
+      "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
-      "market": "total"
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "spread"
      }
     },
     {
@@ -8188,7 +8226,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872922",
@@ -8339,8 +8377,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -8520,7 +8558,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.71,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8528,32 +8566,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -7.5,
-       "best_price": -110,
+       "best_price": -115,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -115,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5349,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -115
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5108,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 7.5,
-       "best_price": -110,
+       "best_price": -105,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5122,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -105
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4892,
        "gain_pts": null
       }
      }
@@ -8610,7 +8648,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.2,
+     "vig_pts": 4.21,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8618,32 +8656,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -410,
+       "best_price": -440,
        "best_book": "DraftKings",
-       "worst_price": -410,
+       "worst_price": -440,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8039,
+       "consensus_prob": 0.8148,
        "prices": {
-        "DraftKings": -410
+        "DraftKings": -440
        },
-       "fair_prob": 0.7715,
+       "fair_prob": 0.7819,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 320,
+       "best_price": 340,
        "best_book": "DraftKings",
-       "worst_price": 320,
+       "worst_price": 340,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2381,
+       "consensus_prob": 0.2273,
        "prices": {
-        "DraftKings": 320
+        "DraftKings": 340
        },
-       "fair_prob": 0.2285,
+       "fair_prob": 0.2181,
        "gain_pts": null
       }
      }
@@ -8662,20 +8700,20 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 40.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 3.48,
     "n_books": 11,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
     {
@@ -8717,7 +8755,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872660",
@@ -8868,8 +8906,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 16,
      "shown": [
@@ -9044,45 +9082,45 @@
    "odds": {
     "spread": {
      "market": "spread",
-     "line": 1.5,
+     "line": -1.5,
      "n_books": 1,
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.71,
+     "vig_pts": 4.46,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
       "side_a": {
        "selection": "side_a",
        "label": "home",
-       "line": 1.5,
-       "best_price": -115,
+       "line": -1.5,
+       "best_price": 102,
        "best_book": "DraftKings",
-       "worst_price": -115,
+       "worst_price": 102,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5349,
+       "consensus_prob": 0.495,
        "prices": {
-        "DraftKings": -115
+        "DraftKings": 102
        },
-       "fair_prob": 0.5108,
+       "fair_prob": 0.4739,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
-       "line": -1.5,
-       "best_price": -105,
+       "line": 1.5,
+       "best_price": -122,
        "best_book": "DraftKings",
-       "worst_price": -105,
+       "worst_price": -122,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5122,
+       "consensus_prob": 0.5495,
        "prices": {
-        "DraftKings": -105
+        "DraftKings": -122
        },
-       "fair_prob": 0.4892,
+       "fair_prob": 0.5261,
        "gain_pts": null
       }
      }
@@ -9139,7 +9177,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.62,
+     "vig_pts": 4.76,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -9147,32 +9185,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -102,
+       "best_price": -110,
        "best_book": "DraftKings",
-       "worst_price": -102,
+       "worst_price": -110,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.505,
+       "consensus_prob": 0.5238,
        "prices": {
-        "DraftKings": -102
+        "DraftKings": -110
        },
-       "fair_prob": 0.4826,
+       "fair_prob": 0.5,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -118,
+       "best_price": -110,
        "best_book": "DraftKings",
-       "worst_price": -118,
+       "worst_price": -110,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5413,
+       "consensus_prob": 0.5238,
        "prices": {
-        "DraftKings": -118
+        "DraftKings": -110
        },
-       "fair_prob": 0.5174,
+       "fair_prob": 0.5,
        "gain_pts": null
       }
      }
@@ -9188,25 +9226,37 @@
    "movement": {
     "spread_line": {
      "opened": 1.5,
-     "current": 1.5,
-     "moved": 0.0,
+     "current": -1.5,
+     "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.99,
     "n_books": 8,
-    "generated_at": "2026-09-07T01:16:03.201210+00:00"
+    "generated_at": "2026-09-07T06:34:48.146940+00:00"
    },
    "facts": [
+    {
+     "kind": "line_move",
+     "text": "The spread opened 1.5 in our capture and sits at -1.5 now (-3).",
+     "numbers": {
+      "opened": 1.5,
+      "current": -1.5,
+      "moved": -3.0,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "spread"
+     }
+    },
     {
      "kind": "efficiency",
      "text": "On 2025 form, Houston Texans net +0.121 EPA/play and Buffalo Bills net +0.143 \u2014 Buffalo Bills by 0.022.",
@@ -9246,7 +9296,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872928",
@@ -9397,8 +9447,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 8,
      "shown": [
@@ -9578,7 +9628,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.71,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -9586,32 +9636,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -3.5,
-       "best_price": -110,
+       "best_price": -105,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5122,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -105
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4892,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 3.5,
-       "best_price": -110,
+       "best_price": -115,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -115,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5349,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -115
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5108,
        "gain_pts": null
       }
      }
@@ -9668,7 +9718,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.32,
+     "vig_pts": 4.28,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -9676,32 +9726,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -198,
+       "best_price": -185,
        "best_book": "DraftKings",
-       "worst_price": -198,
+       "worst_price": -185,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6644,
+       "consensus_prob": 0.6491,
        "prices": {
-        "DraftKings": -198
+        "DraftKings": -185
        },
-       "fair_prob": 0.6369,
+       "fair_prob": 0.6225,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 164,
+       "best_price": 154,
        "best_book": "DraftKings",
-       "worst_price": 164,
+       "worst_price": 154,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3788,
+       "consensus_prob": 0.3937,
        "prices": {
-        "DraftKings": 164
+        "DraftKings": 154
        },
-       "fair_prob": 0.3631,
+       "fair_prob": 0.3775,
        "gain_pts": null
       }
      }
@@ -9720,14 +9770,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 40.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -9771,7 +9821,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872927",
@@ -9922,8 +9972,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -10245,14 +10295,14 @@
      "current": -1.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 46.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -10265,7 +10315,7 @@
       "current": -1.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
      }
     },
@@ -10277,7 +10327,7 @@
       "current": 46.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -10320,7 +10370,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872929",
@@ -10471,8 +10521,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -10652,7 +10702,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.75,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -10660,32 +10710,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -4.5,
-       "best_price": -110,
+       "best_price": -112,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -112,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5283,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -112
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5043,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 4.5,
-       "best_price": -110,
+       "best_price": -108,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -108,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5192,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -108
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4957,
        "gain_pts": null
       }
      }
@@ -10742,7 +10792,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.27,
+     "vig_pts": 4.25,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -10750,32 +10800,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -218,
+       "best_price": -205,
        "best_book": "DraftKings",
-       "worst_price": -218,
+       "worst_price": -205,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6855,
+       "consensus_prob": 0.6721,
        "prices": {
-        "DraftKings": -218
+        "DraftKings": -205
        },
-       "fair_prob": 0.6575,
+       "fair_prob": 0.6447,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 180,
+       "best_price": 170,
        "best_book": "DraftKings",
-       "worst_price": 180,
+       "worst_price": 170,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3571,
+       "consensus_prob": 0.3704,
        "prices": {
-        "DraftKings": 180
+        "DraftKings": 170
        },
-       "fair_prob": 0.3425,
+       "fair_prob": 0.3553,
        "gain_pts": null
       }
      }
@@ -10791,33 +10841,21 @@
    "movement": {
     "spread_line": {
      "opened": -4.5,
-     "current": -5.5,
-     "moved": -1.0,
+     "current": -4.5,
+     "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 44.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
    "facts": [
-    {
-     "kind": "line_move",
-     "text": "The spread opened -4.5 in our capture and sits at -5.5 now (-1).",
-     "numbers": {
-      "opened": -4.5,
-      "current": -5.5,
-      "moved": -1.0,
-      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
-      "market": "spread"
-     }
-    },
     {
      "kind": "line_move",
      "text": "The total opened 47.5 in our capture and sits at 44.5 now (-3).",
@@ -10826,7 +10864,7 @@
       "current": 44.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -10869,7 +10907,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872926",
@@ -11020,8 +11058,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -11291,7 +11329,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.22,
+     "vig_pts": 4.17,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -11299,32 +11337,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -550,
+       "best_price": -500,
        "best_book": "DraftKings",
-       "worst_price": -550,
+       "worst_price": -500,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8462,
+       "consensus_prob": 0.8333,
        "prices": {
-        "DraftKings": -550
+        "DraftKings": -500
        },
-       "fair_prob": 0.8119,
+       "fair_prob": 0.8,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 410,
+       "best_price": 380,
        "best_book": "DraftKings",
-       "worst_price": 410,
+       "worst_price": 380,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.1961,
+       "consensus_prob": 0.2083,
        "prices": {
-        "DraftKings": 410
+        "DraftKings": 380
        },
-       "fair_prob": 0.1881,
+       "fair_prob": 0.2,
        "gain_pts": null
       }
      }
@@ -11340,31 +11378,43 @@
    "movement": {
     "spread_line": {
      "opened": -11.5,
-     "current": -10.5,
-     "moved": 1.0,
+     "current": -10.0,
+     "moved": 1.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
-     "current": 46.5,
-     "moved": 0.0,
+     "current": 47.5,
+     "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
    "facts": [
     {
      "kind": "line_move",
-     "text": "The spread opened -11.5 in our capture and sits at -10.5 now (+1).",
+     "text": "The spread opened -11.5 in our capture and sits at -10 now (+1.5).",
      "numbers": {
       "opened": -11.5,
-      "current": -10.5,
+      "current": -10.0,
+      "moved": 1.5,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "spread"
+     }
+    },
+    {
+     "kind": "line_move",
+     "text": "The total opened 46.5 in our capture and sits at 47.5 now (+1).",
+     "numbers": {
+      "opened": 46.5,
+      "current": 47.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
-      "market": "spread"
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "total"
      }
     },
     {
@@ -11406,7 +11456,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872930",
@@ -11557,8 +11607,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -11783,7 +11833,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.71,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -11791,32 +11841,32 @@
        "selection": "over",
        "label": "over",
        "line": 48.5,
-       "best_price": -110,
+       "best_price": -105,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5122,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -105
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4892,
        "gain_pts": null
       },
       "under": {
        "selection": "under",
        "label": "under",
        "line": 48.5,
-       "best_price": -110,
+       "best_price": -115,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -115,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5349,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -115
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5108,
        "gain_pts": null
       }
      }
@@ -11828,7 +11878,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.32,
+     "vig_pts": 4.2,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -11836,32 +11886,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 124,
+       "best_price": 136,
        "best_book": "DraftKings",
-       "worst_price": 124,
+       "worst_price": 136,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4464,
+       "consensus_prob": 0.4237,
        "prices": {
-        "DraftKings": 124
+        "DraftKings": 136
        },
-       "fair_prob": 0.4279,
+       "fair_prob": 0.4066,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -148,
+       "best_price": -162,
        "best_book": "DraftKings",
-       "worst_price": -148,
+       "worst_price": -162,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5968,
+       "consensus_prob": 0.6183,
        "prices": {
-        "DraftKings": -148
+        "DraftKings": -162
        },
-       "fair_prob": 0.5721,
+       "fair_prob": 0.5934,
        "gain_pts": null
       }
      }
@@ -11877,21 +11927,33 @@
    "movement": {
     "spread_line": {
      "opened": 2.5,
-     "current": 2.5,
-     "moved": 0.0,
+     "current": 3.0,
+     "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
    "facts": [
+    {
+     "kind": "line_move",
+     "text": "The spread opened 2.5 in our capture and sits at 3 now (+0.5).",
+     "numbers": {
+      "opened": 2.5,
+      "current": 3.0,
+      "moved": 0.5,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "spread"
+     }
+    },
     {
      "kind": "efficiency",
      "text": "On 2025 form, New York Giants net -0.061 EPA/play and Dallas Cowboys net -0.075 \u2014 New York Giants by 0.014.",
@@ -11931,7 +11993,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872931",
@@ -12082,8 +12144,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -12353,7 +12415,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.13,
+     "vig_pts": 4.32,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -12361,32 +12423,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -142,
+       "best_price": -148,
        "best_book": "DraftKings",
-       "worst_price": -142,
+       "worst_price": -148,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5868,
+       "consensus_prob": 0.5968,
        "prices": {
-        "DraftKings": -142
+        "DraftKings": -148
        },
-       "fair_prob": 0.5635,
+       "fair_prob": 0.5721,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 120,
+       "best_price": 124,
        "best_book": "DraftKings",
-       "worst_price": 120,
+       "worst_price": 124,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4545,
+       "consensus_prob": 0.4464,
        "prices": {
-        "DraftKings": 120
+        "DraftKings": 124
        },
-       "fair_prob": 0.4365,
+       "fair_prob": 0.4279,
        "gain_pts": null
       }
      }
@@ -12405,18 +12467,30 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
-     "current": 42.5,
-     "moved": 0.0,
+     "current": 43.5,
+     "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
    "facts": [
+    {
+     "kind": "line_move",
+     "text": "The total opened 42.5 in our capture and sits at 43.5 now (+1).",
+     "numbers": {
+      "opened": 42.5,
+      "current": 43.5,
+      "moved": 1.0,
+      "first_seen": "2026-08-03T03:53:21.595907+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
+      "market": "total"
+     }
+    },
     {
      "kind": "efficiency",
      "text": "On 2025 form, Kansas City Chiefs net +0.066 EPA/play and Denver Broncos net +0.115 \u2014 Denver Broncos by 0.049.",
@@ -12456,7 +12530,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872932",
@@ -12607,8 +12681,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 8,
      "shown": [
@@ -12878,7 +12952,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.2,
+     "vig_pts": 4.26,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -12886,32 +12960,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -162,
+       "best_price": -155,
        "best_book": "DraftKings",
-       "worst_price": -162,
+       "worst_price": -155,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6183,
+       "consensus_prob": 0.6078,
        "prices": {
-        "DraftKings": -162
+        "DraftKings": -155
        },
-       "fair_prob": 0.5934,
+       "fair_prob": 0.583,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 136,
+       "best_price": 130,
        "best_book": "DraftKings",
-       "worst_price": 136,
+       "worst_price": 130,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4237,
+       "consensus_prob": 0.4348,
        "prices": {
-        "DraftKings": 136
+        "DraftKings": 130
        },
-       "fair_prob": 0.4066,
+       "fair_prob": 0.417,
        "gain_pts": null
       }
      }
@@ -12930,14 +13004,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 52.5,
      "current": 52.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -12981,7 +13055,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872933",
@@ -13132,8 +13206,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -13455,14 +13529,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 44.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -13475,7 +13549,7 @@
       "current": 44.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -13518,7 +13592,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872937",
@@ -13669,8 +13743,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 15,
      "shown": [
@@ -13940,7 +14014,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.32,
+     "vig_pts": 4.21,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -13948,32 +14022,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -198,
+       "best_price": -192,
        "best_book": "DraftKings",
-       "worst_price": -198,
+       "worst_price": -192,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6644,
+       "consensus_prob": 0.6575,
        "prices": {
-        "DraftKings": -198
+        "DraftKings": -192
        },
-       "fair_prob": 0.6369,
+       "fair_prob": 0.6309,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 164,
+       "best_price": 160,
        "best_book": "DraftKings",
-       "worst_price": 164,
+       "worst_price": 160,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3788,
+       "consensus_prob": 0.3846,
        "prices": {
-        "DraftKings": 164
+        "DraftKings": 160
        },
-       "fair_prob": 0.3631,
+       "fair_prob": 0.3691,
        "gain_pts": null
       }
      }
@@ -13992,14 +14066,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -14043,7 +14117,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872939",
@@ -14194,8 +14268,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -14517,14 +14591,14 @@
      "current": 4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -14568,7 +14642,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872946",
@@ -14719,8 +14793,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -15042,14 +15116,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -15093,7 +15167,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872936",
@@ -15244,8 +15318,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 13,
      "shown": [
@@ -15515,7 +15589,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.22,
+     "vig_pts": 4.35,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -15523,32 +15597,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 205,
+       "best_price": 200,
        "best_book": "DraftKings",
-       "worst_price": 205,
+       "worst_price": 200,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3279,
+       "consensus_prob": 0.3333,
        "prices": {
-        "DraftKings": 205
+        "DraftKings": 200
        },
-       "fair_prob": 0.3146,
+       "fair_prob": 0.3194,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -250,
+       "best_price": -245,
        "best_book": "DraftKings",
-       "worst_price": -250,
+       "worst_price": -245,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7143,
+       "consensus_prob": 0.7101,
        "prices": {
-        "DraftKings": -250
+        "DraftKings": -245
        },
-       "fair_prob": 0.6854,
+       "fair_prob": 0.6806,
        "gain_pts": null
       }
      }
@@ -15567,14 +15641,14 @@
      "current": 5.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -15587,7 +15661,7 @@
       "current": 5.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
      }
     },
@@ -15630,7 +15704,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872935",
@@ -15781,8 +15855,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -16052,7 +16126,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.33,
+     "vig_pts": 4.31,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -16060,32 +16134,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -285,
+       "best_price": -278,
        "best_book": "DraftKings",
-       "worst_price": -285,
+       "worst_price": -278,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7403,
+       "consensus_prob": 0.7354,
        "prices": {
-        "DraftKings": -285
+        "DraftKings": -278
        },
-       "fair_prob": 0.7095,
+       "fair_prob": 0.705,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 230,
+       "best_price": 225,
        "best_book": "DraftKings",
-       "worst_price": 230,
+       "worst_price": 225,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.303,
+       "consensus_prob": 0.3077,
        "prices": {
-        "DraftKings": 230
+        "DraftKings": 225
        },
-       "fair_prob": 0.2905,
+       "fair_prob": 0.295,
        "gain_pts": null
       }
      }
@@ -16104,14 +16178,14 @@
      "current": -6.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -16124,7 +16198,7 @@
       "current": -6.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
      }
     },
@@ -16167,7 +16241,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872938",
@@ -16318,8 +16392,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -16589,7 +16663,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.19,
+     "vig_pts": 4.23,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -16597,32 +16671,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -345,
+       "best_price": -360,
        "best_book": "DraftKings",
-       "worst_price": -345,
+       "worst_price": -360,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7753,
+       "consensus_prob": 0.7826,
        "prices": {
-        "DraftKings": -345
+        "DraftKings": -360
        },
-       "fair_prob": 0.7441,
+       "fair_prob": 0.7508,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 275,
+       "best_price": 285,
        "best_book": "DraftKings",
-       "worst_price": 275,
+       "worst_price": 285,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2667,
+       "consensus_prob": 0.2597,
        "prices": {
-        "DraftKings": 275
+        "DraftKings": 285
        },
-       "fair_prob": 0.2559,
+       "fair_prob": 0.2492,
        "gain_pts": null
       }
      }
@@ -16641,14 +16715,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -16692,7 +16766,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872934",
@@ -16843,8 +16917,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 16,
      "shown": [
@@ -17166,14 +17240,14 @@
      "current": -2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -17217,7 +17291,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872940",
@@ -17368,8 +17442,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -17691,14 +17765,14 @@
      "current": -3.0,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -17711,7 +17785,7 @@
       "current": -3.0,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "spread"
      }
     },
@@ -17754,7 +17828,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872941",
@@ -17905,8 +17979,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -18228,14 +18302,14 @@
      "current": -8.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -18279,7 +18353,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872944",
@@ -18430,8 +18504,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 7,
      "shown": [
@@ -18753,14 +18827,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -18804,7 +18878,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872943",
@@ -18955,8 +19029,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -19121,7 +19195,8 @@
        "return_date": "2026-09-09",
        "updated_at": "2026-09-07T00:02Z",
        "note": "questionable",
-       "source": "espn"
+       "source": "nflverse+espn",
+       "practice_status": null
       }
      ],
      "not_shown": 4,
@@ -19226,7 +19301,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.22,
+     "vig_pts": 4.25,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -19234,32 +19309,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 410,
+       "best_price": 400,
        "best_book": "DraftKings",
-       "worst_price": 410,
+       "worst_price": 400,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.1961,
+       "consensus_prob": 0.2,
        "prices": {
-        "DraftKings": 410
+        "DraftKings": 400
        },
-       "fair_prob": 0.1881,
+       "fair_prob": 0.1918,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -550,
+       "best_price": -535,
        "best_book": "DraftKings",
-       "worst_price": -550,
+       "worst_price": -535,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8462,
+       "consensus_prob": 0.8425,
        "prices": {
-        "DraftKings": -550
+        "DraftKings": -535
        },
-       "fair_prob": 0.8119,
+       "fair_prob": 0.8082,
        "gain_pts": null
       }
      }
@@ -19278,14 +19353,14 @@
      "current": 10.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -19329,7 +19404,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872942",
@@ -19480,8 +19555,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 17,
      "shown": [
@@ -19803,14 +19878,14 @@
      "current": -10.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -19854,7 +19929,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872945",
@@ -20005,8 +20080,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -20276,7 +20351,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.3,
+     "vig_pts": 4.25,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -20284,32 +20359,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -340,
+       "best_price": -325,
        "best_book": "DraftKings",
-       "worst_price": -340,
+       "worst_price": -325,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7727,
+       "consensus_prob": 0.7647,
        "prices": {
-        "DraftKings": -340
+        "DraftKings": -325
        },
-       "fair_prob": 0.7409,
+       "fair_prob": 0.7335,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 270,
+       "best_price": 260,
        "best_book": "DraftKings",
-       "worst_price": 270,
+       "worst_price": 260,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2703,
+       "consensus_prob": 0.2778,
        "prices": {
-        "DraftKings": 270
+        "DraftKings": 260
        },
-       "fair_prob": 0.2591,
+       "fair_prob": 0.2665,
        "gain_pts": null
       }
      }
@@ -20328,14 +20403,14 @@
      "current": -6.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 47.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -20379,7 +20454,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872947",
@@ -20530,8 +20605,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -20801,7 +20876,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.17,
+     "vig_pts": 4.19,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -20809,32 +20884,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -380,
+       "best_price": -395,
        "best_book": "DraftKings",
-       "worst_price": -380,
+       "worst_price": -395,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7917,
+       "consensus_prob": 0.798,
        "prices": {
-        "DraftKings": -380
+        "DraftKings": -395
        },
-       "fair_prob": 0.76,
+       "fair_prob": 0.7659,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 300,
+       "best_price": 310,
        "best_book": "DraftKings",
-       "worst_price": 300,
+       "worst_price": 310,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.25,
+       "consensus_prob": 0.2439,
        "prices": {
-        "DraftKings": 300
+        "DraftKings": 310
        },
-       "fair_prob": 0.24,
+       "fair_prob": 0.2341,
        "gain_pts": null
       }
      }
@@ -20853,14 +20928,14 @@
      "current": -8.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -20904,7 +20979,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872948",
@@ -21055,8 +21130,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -21326,7 +21401,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.26,
+     "vig_pts": 4.17,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -21334,32 +21409,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -375,
+       "best_price": -380,
        "best_book": "DraftKings",
-       "worst_price": -375,
+       "worst_price": -380,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7895,
+       "consensus_prob": 0.7917,
        "prices": {
-        "DraftKings": -375
+        "DraftKings": -380
        },
-       "fair_prob": 0.7572,
+       "fair_prob": 0.76,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 295,
+       "best_price": 300,
        "best_book": "DraftKings",
-       "worst_price": 295,
+       "worst_price": 300,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2532,
+       "consensus_prob": 0.25,
        "prices": {
-        "DraftKings": 295
+        "DraftKings": 300
        },
-       "fair_prob": 0.2428,
+       "fair_prob": 0.24,
        "gain_pts": null
       }
      }
@@ -21378,14 +21453,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -21429,7 +21504,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872953",
@@ -21580,8 +21655,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 8,
      "shown": [
@@ -21903,14 +21978,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -21954,7 +22029,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872949",
@@ -22105,8 +22180,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -22428,14 +22503,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 39.5,
      "current": 39.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -22479,7 +22554,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872954",
@@ -22630,8 +22705,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 14,
      "shown": [
@@ -22901,7 +22976,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.21,
+     "vig_pts": 4.2,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -22909,32 +22984,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -425,
+       "best_price": -410,
        "best_book": "DraftKings",
-       "worst_price": -425,
+       "worst_price": -410,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8095,
+       "consensus_prob": 0.8039,
        "prices": {
-        "DraftKings": -425
+        "DraftKings": -410
        },
-       "fair_prob": 0.7768,
+       "fair_prob": 0.7715,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 330,
+       "best_price": 320,
        "best_book": "DraftKings",
-       "worst_price": 330,
+       "worst_price": 320,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2326,
+       "consensus_prob": 0.2381,
        "prices": {
-        "DraftKings": 330
+        "DraftKings": 320
        },
-       "fair_prob": 0.2232,
+       "fair_prob": 0.2285,
        "gain_pts": null
       }
      }
@@ -22953,14 +23028,14 @@
      "current": -9.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -23004,7 +23079,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872951",
@@ -23155,8 +23230,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -23426,7 +23501,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.34,
+     "vig_pts": 4.46,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -23434,32 +23509,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 105,
+       "best_price": 102,
        "best_book": "DraftKings",
-       "worst_price": 105,
+       "worst_price": 102,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.4878,
+       "consensus_prob": 0.495,
        "prices": {
-        "DraftKings": 105
+        "DraftKings": 102
        },
-       "fair_prob": 0.4675,
+       "fair_prob": 0.4739,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -125,
+       "best_price": -122,
        "best_book": "DraftKings",
-       "worst_price": -125,
+       "worst_price": -122,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5556,
+       "consensus_prob": 0.5495,
        "prices": {
-        "DraftKings": -125
+        "DraftKings": -122
        },
-       "fair_prob": 0.5325,
+       "fair_prob": 0.5261,
        "gain_pts": null
       }
      }
@@ -23478,14 +23553,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -23529,7 +23604,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872952",
@@ -23680,8 +23755,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -24003,14 +24078,14 @@
      "current": 7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -24054,7 +24129,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872956",
@@ -24205,8 +24280,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 12,
      "shown": [
@@ -24528,14 +24603,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -24579,7 +24654,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872950",
@@ -24730,8 +24805,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -25053,14 +25128,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 46.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -25073,7 +25148,7 @@
       "current": 46.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T04:05:43.934720+00:00",
-      "last_seen": "2026-09-07T01:15:34.520434+00:00",
+      "last_seen": "2026-09-07T12:24:54.532975+00:00",
       "market": "total"
      }
     },
@@ -25116,7 +25191,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872955",
@@ -25267,8 +25342,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 13,
      "shown": [
@@ -25433,7 +25508,8 @@
        "return_date": "2026-09-09",
        "updated_at": "2026-09-07T00:02Z",
        "note": "questionable",
-       "source": "espn"
+       "source": "nflverse+espn",
+       "practice_status": null
       }
      ],
      "not_shown": 4,
@@ -25590,14 +25666,14 @@
      "current": 3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -25641,7 +25717,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872957",
@@ -25792,8 +25868,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 10,
      "shown": [
@@ -26115,14 +26191,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -26166,7 +26242,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872958",
@@ -26317,8 +26393,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 17,
      "shown": [
@@ -26588,7 +26664,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.05,
+     "vig_pts": 4.21,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -26596,32 +26672,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -675,
+       "best_price": -650,
        "best_book": "DraftKings",
-       "worst_price": -675,
+       "worst_price": -650,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.871,
+       "consensus_prob": 0.8667,
        "prices": {
-        "DraftKings": -675
+        "DraftKings": -650
        },
-       "fair_prob": 0.8371,
+       "fair_prob": 0.8316,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 490,
+       "best_price": 470,
        "best_book": "DraftKings",
-       "worst_price": 490,
+       "worst_price": 470,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.1695,
+       "consensus_prob": 0.1754,
        "prices": {
-        "DraftKings": 490
+        "DraftKings": 470
        },
-       "fair_prob": 0.1629,
+       "fair_prob": 0.1684,
        "gain_pts": null
       }
      }
@@ -26640,14 +26716,14 @@
      "current": -11.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -26691,7 +26767,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872959",
@@ -26842,8 +26918,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 9,
      "shown": [
@@ -27120,7 +27196,7 @@
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -27164,7 +27240,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872960",
@@ -27315,8 +27391,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 7,
      "shown": [
@@ -27638,14 +27714,14 @@
      "current": 2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -27689,7 +27765,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872961",
@@ -27840,8 +27916,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 13,
      "shown": [
@@ -28163,14 +28239,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -28214,7 +28290,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872962",
@@ -28365,8 +28441,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 11,
      "shown": [
@@ -28688,14 +28764,14 @@
      "current": 3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -28739,7 +28815,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   },
   {
    "event_id": "401872963",
@@ -28890,8 +28966,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-07T05:13:21.355056+00:00",
-    "espn_timestamp": "2026-09-07T05:13:16Z",
+    "updated_at": "2026-09-07T13:00:40.540113+00:00",
+    "espn_timestamp": "2026-09-07T13:00:31Z",
     "home": {
      "n": 15,
      "shown": [
@@ -29213,14 +29289,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-07T01:15:34.520434+00:00"
+     "last_seen": "2026-09-07T12:24:54.532975+00:00"
     }
    },
    "live_board": null,
@@ -29264,7 +29340,7 @@
      }
     }
    ],
-   "asof": "2026-09-07T05:13:31.199196+00:00"
+   "asof": "2026-09-07T13:00:51.922693+00:00"
   }
  ]
 }
