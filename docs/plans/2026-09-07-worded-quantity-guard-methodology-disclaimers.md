@@ -83,6 +83,38 @@ Nothing was wrong. This closes a gap in coverage, not a live defect.
 - The spread-play-outside-the-Merkle-commitment item, `seal.yml`, and
   `WINDOW_THROUGH` — untouched per standing instructions.
 
+## Read-only sweep of other hand-written pages (no guard added, no defect found)
+
+With the fixed pattern in hand, ran it (read-only, nothing committed to a
+guard) over the other hand-written public pages —
+`trust/record/engine/predictor/index/picks/learn/props/verify/ledger.html` —
+to check for a live wrong-figure defect before treating this as done for the
+day. Every hit found reads correctly against its own immediate context:
+
+- `record.html`: "three samples" / "three models" — section headers ("THE
+  THREE SAMPLES", "THE THREE MODELS") that name what follows.
+- `picks.html`: "a third [of the games]" — already noted in
+  `docs/plans/2026-09-03-unguarded-quantities.md` as describing a competitor,
+  not a Sooth measurement; "four points [of disagreement]" — already pinned
+  by `test_the_edge_bar_is_the_same_number_in_all_three_places` in
+  `tests/test_figures_published.py`.
+- `learn.html`: "two even [sides at -110 each]" — definitional, explaining
+  vig, not a measurement.
+- `props.html`: "two books" — definitional (an arbitrage example); "three or
+  [more books]" — the board filter, matches `method.board_filter` already
+  tracked in `tests/test_props_model_note.py`; "ten games" — "his last ten
+  games", a UI label matching `/props`'s own last-N display, already reviewed
+  as "five last"/"ten and" on /props-model.
+- `verify.html`: "two files" (×2), "two roots", "two child [hashes]" — all
+  self-evident from the two sentences around them (the walkthrough literally
+  names both files/roots/hashes it means).
+
+No new guard added for these pages — that would be a larger, separate
+decision (whether every hand-written page gets the exhaustive treatment, per
+the tradeoff `2026-09-03-unguarded-quantities.md` already discusses), not
+something to do unattended. Recorded here so the next sweep does not
+re-derive it from zero.
+
 ## Verification
 
 - `PYTHONPATH=. python -m pytest tests/test_props_model_note.py tests/test_worded_quantities_prose_pages.py -q`
