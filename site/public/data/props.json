@@ -1,126 +1,48 @@
 {
- "generated_at": "2026-09-06T22:05:36.362915+00:00",
+ "generated_at": "2026-09-07T04:25:32.012828+00:00",
  "window_hours": 30.0,
- "credits_spent": 6,
- "credits_remaining": 19294,
+ "credits_spent": 12,
+ "credits_remaining": 19271,
  "note": "Same-line player props only: best available price per side and the de-vigged median consensus across books. A prop needs 3+ books on both sides to appear.",
  "boards": [
   {
    "sport": "mlb",
    "label": "MLB",
-   "n_events": 2,
-   "n_props": 18,
-   "avg_gain_pts": 2.23,
-   "max_gain_pts": 4.51,
+   "n_events": 4,
+   "n_props": 23,
+   "avg_gain_pts": 1.22,
+   "max_gain_pts": 2.39,
    "events": [
     {
-     "id": "855005fb1370a5252daf5699bd5fce84",
-     "home": "Chicago White Sox",
-     "away": "Minnesota Twins",
-     "starts": "2026-09-06T22:20:00Z",
+     "id": "ce94c6d5ef8ae9f29d29223e386beee1",
+     "home": "Philadelphia Phillies",
+     "away": "Atlanta Braves",
+     "starts": "2026-09-07T17:06:00Z",
      "props": [
       {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Luke Keaschall",
-       "line": 1.5,
+       "market": "pitcher_strikeouts",
+       "market_label": "Pitcher strikeouts",
+       "player": "Grant Holmes",
+       "line": 3.5,
        "over": {
-        "best_price": 143,
-        "best_book": "BetRivers",
-        "worst_price": 127,
-        "n_books": 5,
-        "gain_pts": 2.9,
-        "fair_price": 145,
-        "edge_vs_fair_pts": -0.31
+        "best_price": 110,
+        "best_book": "Fanatics",
+        "worst_price": 104,
+        "n_books": 4,
+        "gain_pts": 1.4,
+        "fair_price": 118,
+        "edge_vs_fair_pts": -1.8
        },
        "under": {
-        "best_price": -169,
-        "best_book": "BetOnline",
-        "worst_price": -173,
+        "best_price": -132,
+        "best_book": "DraftKings",
+        "worst_price": -145,
         "n_books": 4,
-        "gain_pts": 0.54,
-        "fair_price": -145,
-        "edge_vs_fair_pts": -3.67
+        "gain_pts": 2.29,
+        "fair_price": -118,
+        "edge_vs_fair_pts": -2.72
        },
-       "gain_pts": 2.9,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 3
-        },
-        "l10": {
-         "n": 10,
-         "over": 6
-        },
-        "season": {
-         "n": 133,
-         "over": 48
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Brooks Lee",
-       "line": 1.5,
-       "over": {
-        "best_price": 143,
-        "best_book": "BetRivers",
-        "worst_price": 129,
-        "n_books": 5,
-        "gain_pts": 2.52,
-        "fair_price": 149,
-        "edge_vs_fair_pts": -1.0
-       },
-       "under": {
-        "best_price": -170,
-        "best_book": "Bovada",
-        "worst_price": -179,
-        "n_books": 4,
-        "gain_pts": 1.19,
-        "fair_price": -149,
-        "edge_vs_fair_pts": -3.12
-       },
-       "gain_pts": 2.52,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 2
-        },
-        "l10": {
-         "n": 10,
-         "over": 6
-        },
-        "season": {
-         "n": 136,
-         "over": 52
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Sam Antonacci",
-       "line": 1.5,
-       "over": {
-        "best_price": 140,
-        "best_book": "Bovada",
-        "worst_price": 130,
-        "n_books": 5,
-        "gain_pts": 1.81,
-        "fair_price": 154,
-        "edge_vs_fair_pts": -2.28
-       },
-       "under": {
-        "best_price": -176,
-        "best_book": "Caesars",
-        "worst_price": -185,
-        "n_books": 4,
-        "gain_pts": 1.14,
-        "fair_price": -154,
-        "edge_vs_fair_pts": -3.15
-       },
-       "gain_pts": 1.81,
+       "gain_pts": 2.29,
        "hit": {
         "l5": {
          "n": 5,
@@ -128,38 +50,101 @@
         },
         "l10": {
          "n": 10,
-         "over": 2
+         "over": 4
         },
         "season": {
-         "n": 122,
-         "over": 43
+         "n": 27,
+         "over": 17
         }
+       },
+       "model": {
+        "proj_k": 2.6,
+        "p_over": 0.263,
+        "market_over": 0.4587,
+        "delta_pts": -19.6,
+        "n_starts": 27,
+        "version": "kpoisson-v1"
        }
       },
       {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Miguel Vargas",
-       "line": 1.5,
+       "market": "pitcher_strikeouts",
+       "market_label": "Pitcher strikeouts",
+       "player": "Jesus Luzardo",
+       "line": 7.5,
        "over": {
-        "best_price": 115,
-        "best_book": "BetOnline",
-        "worst_price": 107,
-        "n_books": 5,
-        "gain_pts": 1.8,
-        "fair_price": 127,
-        "edge_vs_fair_pts": -2.43
+        "best_price": 124,
+        "best_book": "FanDuel",
+        "worst_price": 118,
+        "n_books": 3,
+        "gain_pts": 1.23,
+        "fair_price": 135,
+        "edge_vs_fair_pts": -2.16
        },
        "under": {
-        "best_price": -148,
-        "best_book": "Caesars",
-        "worst_price": -150,
-        "n_books": 4,
-        "gain_pts": 0.32,
-        "fair_price": -127,
-        "edge_vs_fair_pts": -3.76
+        "best_price": -150,
+        "best_book": "DraftKings",
+        "worst_price": -160,
+        "n_books": 3,
+        "gain_pts": 1.54,
+        "fair_price": -135,
+        "edge_vs_fair_pts": -2.48
        },
-       "gain_pts": 1.8,
+       "gain_pts": 1.54,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 4
+        },
+        "l10": {
+         "n": 10,
+         "over": 6
+        },
+        "season": {
+         "n": 28,
+         "over": 14
+        }
+       },
+       "model": {
+        "proj_k": 8.38,
+        "p_over": 0.599,
+        "market_over": 0.4255,
+        "delta_pts": 17.3,
+        "n_starts": 28,
+        "version": "kpoisson-v1"
+       }
+      }
+     ]
+    },
+    {
+     "id": "4645b2d34e3503155b3ff308836621dc",
+     "home": "Miami Marlins",
+     "away": "New York Mets",
+     "starts": "2026-09-07T17:11:00Z",
+     "props": [
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Otto Lopez",
+       "line": 1.5,
+       "over": {
+        "best_price": 130,
+        "best_book": "Bovada",
+        "worst_price": 118,
+        "n_books": 3,
+        "gain_pts": 2.39,
+        "fair_price": 144,
+        "edge_vs_fair_pts": -2.42
+       },
+       "under": {
+        "best_price": -157,
+        "best_book": "Caesars",
+        "worst_price": -170,
+        "n_books": 3,
+        "gain_pts": 1.87,
+        "fair_price": -144,
+        "edge_vs_fair_pts": -2.15
+       },
+       "gain_pts": 2.39,
        "hit": {
         "l5": {
          "n": 5,
@@ -171,98 +156,120 @@
         },
         "season": {
          "n": 140,
-         "over": 56
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Josh Bell",
-       "line": 1.5,
-       "over": {
-        "best_price": 145,
-        "best_book": "Bovada",
-        "worst_price": 136,
-        "n_books": 4,
-        "gain_pts": 1.56,
-        "fair_price": 160,
-        "edge_vs_fair_pts": -2.28
-       },
-       "under": {
-        "best_price": -182,
-        "best_book": "Caesars",
-        "worst_price": -190,
-        "n_books": 3,
-        "gain_pts": 0.98,
-        "fair_price": -160,
-        "edge_vs_fair_pts": -3.07
-       },
-       "gain_pts": 1.56
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Tristan Peters",
-       "line": 0.5,
-       "over": {
-        "best_price": -154,
-        "best_book": "Caesars",
-        "worst_price": -160,
-        "n_books": 3,
-        "gain_pts": 0.91,
-        "fair_price": -134,
-        "edge_vs_fair_pts": -3.35
-       },
-       "under": {
-        "best_price": 120,
-        "best_book": "BetOnline",
-        "worst_price": 115,
-        "n_books": 3,
-        "gain_pts": 1.06,
-        "fair_price": 134,
-        "edge_vs_fair_pts": -2.73
-       },
-       "gain_pts": 1.06,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 3
-        },
-        "l10": {
-         "n": 10,
-         "over": 6
-        },
-        "season": {
-         "n": 137,
-         "over": 72
+         "over": 64
         }
        }
       },
       {
        "market": "pitcher_strikeouts",
        "market_label": "Pitcher strikeouts",
-       "player": "Bailey Ober",
-       "line": 3.5,
+       "player": "Jonah Tong",
+       "line": 4.5,
        "over": {
-        "best_price": -137,
+        "best_price": -110,
         "best_book": "DraftKings",
-        "worst_price": -140,
+        "worst_price": -120,
         "n_books": 4,
-        "gain_pts": 0.53,
-        "fair_price": -119,
-        "edge_vs_fair_pts": -3.51
+        "gain_pts": 2.16,
+        "fair_price": -104,
+        "edge_vs_fair_pts": -1.37
        },
        "under": {
-        "best_price": 108,
-        "best_book": "DraftKings",
-        "worst_price": 104,
+        "best_price": -108,
+        "best_book": "FanDuel",
+        "worst_price": -116,
         "n_books": 4,
-        "gain_pts": 0.94,
-        "fair_price": 119,
+        "gain_pts": 1.78,
+        "fair_price": 104,
+        "edge_vs_fair_pts": -2.94
+       },
+       "gain_pts": 2.16,
+       "hit": {
+        "l5": {
+         "n": 3,
+         "over": 0
+        },
+        "l10": {
+         "n": 3,
+         "over": 0
+        },
+        "season": {
+         "n": 3,
+         "over": 0
+        }
+       },
+       "model": {
+        "proj_k": 2.49,
+        "p_over": 0.107,
+        "market_over": 0.5098,
+        "delta_pts": -40.3,
+        "n_starts": 3,
+        "version": "kpoisson-v1"
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Francisco Lindor",
+       "line": 1.5,
+       "over": {
+        "best_price": 135,
+        "best_book": "Bovada",
+        "worst_price": 124,
+        "n_books": 3,
+        "gain_pts": 2.09,
+        "fair_price": 149,
         "edge_vs_fair_pts": -2.37
        },
-       "gain_pts": 0.94,
+       "under": {
+        "best_price": -170,
+        "best_book": "Caesars",
+        "worst_price": -180,
+        "n_books": 3,
+        "gain_pts": 1.32,
+        "fair_price": -149,
+        "edge_vs_fair_pts": -3.14
+       },
+       "gain_pts": 2.09,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 2
+        },
+        "l10": {
+         "n": 10,
+         "over": 4
+        },
+        "season": {
+         "n": 86,
+         "over": 31
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Bo Bichette",
+       "line": 1.5,
+       "over": {
+        "best_price": 130,
+        "best_book": "Bovada",
+        "worst_price": 122,
+        "n_books": 3,
+        "gain_pts": 1.57,
+        "fair_price": 145,
+        "edge_vs_fair_pts": -2.63
+       },
+       "under": {
+        "best_price": -164,
+        "best_book": "Caesars",
+        "worst_price": -174,
+        "n_books": 3,
+        "gain_pts": 1.38,
+        "fair_price": -145,
+        "edge_vs_fair_pts": -2.97
+       },
+       "gain_pts": 1.57,
        "hit": {
         "l5": {
          "n": 5,
@@ -273,43 +280,60 @@
          "over": 5
         },
         "season": {
-         "n": 21,
-         "over": 9
+         "n": 141,
+         "over": 50
         }
-       },
-       "model": {
-        "proj_k": 3.55,
-        "p_over": 0.4745,
-        "market_over": 0.5434,
-        "delta_pts": -6.9,
-        "n_starts": 21,
-        "version": "kpoisson-v1"
        }
+      },
+      {
+       "market": "pitcher_strikeouts",
+       "market_label": "Pitcher strikeouts",
+       "player": "Eury Perez",
+       "line": 5.5,
+       "over": {
+        "best_price": -113,
+        "best_book": "FanDuel",
+        "worst_price": -115,
+        "n_books": 3,
+        "gain_pts": 0.44,
+        "fair_price": 100,
+        "edge_vs_fair_pts": -3.05
+       },
+       "under": {
+        "best_price": -112,
+        "best_book": "DraftKings",
+        "worst_price": -115,
+        "n_books": 3,
+        "gain_pts": 0.66,
+        "fair_price": 100,
+        "edge_vs_fair_pts": -2.83
+       },
+       "gain_pts": 0.66
       },
       {
        "market": "batter_total_bases",
        "market_label": "Total bases",
-       "player": "Ryan Jeffers",
+       "player": "Kyle Stowers",
        "line": 1.5,
        "over": {
-        "best_price": 126,
-        "best_book": "DraftKings",
-        "worst_price": 123,
-        "n_books": 5,
-        "gain_pts": 0.6,
-        "fair_price": 141,
-        "edge_vs_fair_pts": -2.76
+        "best_price": 115,
+        "best_book": "Bovada",
+        "worst_price": 115,
+        "n_books": 3,
+        "gain_pts": 0.0,
+        "fair_price": 130,
+        "edge_vs_fair_pts": -2.97
        },
        "under": {
-        "best_price": -164,
-        "best_book": "BetOnline",
-        "worst_price": -170,
-        "n_books": 4,
-        "gain_pts": 0.84,
-        "fair_price": -141,
-        "edge_vs_fair_pts": -3.61
+        "best_price": -150,
+        "best_book": "Bovada",
+        "worst_price": -153,
+        "n_books": 3,
+        "gain_pts": 0.47,
+        "fair_price": -130,
+        "edge_vs_fair_pts": -3.54
        },
-       "gain_pts": 0.84,
+       "gain_pts": 0.47,
        "hit": {
         "l5": {
          "n": 5,
@@ -317,46 +341,118 @@
         },
         "l10": {
          "n": 10,
-         "over": 5
+         "over": 6
         },
         "season": {
-         "n": 78,
-         "over": 33
+         "n": 106,
+         "over": 42
         }
        }
       }
      ]
     },
     {
-     "id": "35484b18fe129394ebc819752a8b92c1",
-     "home": "Los Angeles Dodgers",
-     "away": "Washington Nationals",
-     "starts": "2026-09-07T02:11:00Z",
+     "id": "0a5522c3b427e5162e8c13c1ddb05dd7",
+     "home": "Baltimore Orioles",
+     "away": "Cleveland Guardians",
+     "starts": "2026-09-07T17:36:00Z",
      "props": [
       {
        "market": "pitcher_strikeouts",
        "market_label": "Pitcher strikeouts",
-       "player": "Justin Wrobleski",
+       "player": "Trevor Rogers",
        "line": 4.5,
        "over": {
-        "best_price": 108,
-        "best_book": "BetRivers",
-        "worst_price": -107,
-        "n_books": 5,
-        "gain_pts": 3.61,
-        "fair_price": 112,
-        "edge_vs_fair_pts": -0.97
+        "best_price": -125,
+        "best_book": "DraftKings",
+        "worst_price": -136,
+        "n_books": 3,
+        "gain_pts": 2.07,
+        "fair_price": -118,
+        "edge_vs_fair_pts": -1.48
        },
        "under": {
-        "best_price": -119,
-        "best_book": "DraftKings",
-        "worst_price": -143,
-        "n_books": 5,
-        "gain_pts": 4.51,
-        "fair_price": -112,
-        "edge_vs_fair_pts": -1.45
+        "best_price": 106,
+        "best_book": "FanDuel",
+        "worst_price": -102,
+        "n_books": 3,
+        "gain_pts": 1.95,
+        "fair_price": 118,
+        "edge_vs_fair_pts": -2.62
        },
-       "gain_pts": 4.51,
+       "gain_pts": 2.07,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 4
+        },
+        "l10": {
+         "n": 10,
+         "over": 8
+        },
+        "season": {
+         "n": 26,
+         "over": 14
+        }
+       },
+       "model": {
+        "proj_k": 6.0,
+        "p_over": 0.7153,
+        "market_over": 0.5413,
+        "delta_pts": 17.4,
+        "n_starts": 26,
+        "version": "kpoisson-v1"
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Jose Ramirez",
+       "line": 1.5,
+       "over": {
+        "best_price": -105,
+        "best_book": "Bovada",
+        "worst_price": -112,
+        "n_books": 3,
+        "gain_pts": 1.61,
+        "fair_price": 108,
+        "edge_vs_fair_pts": -3.25
+       },
+       "under": {
+        "best_price": -120,
+        "best_book": "Caesars",
+        "worst_price": -126,
+        "n_books": 3,
+        "gain_pts": 1.21,
+        "fair_price": -108,
+        "edge_vs_fair_pts": -2.51
+       },
+       "gain_pts": 1.61
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Pete Alonso",
+       "line": 1.5,
+       "over": {
+        "best_price": 130,
+        "best_book": "Bovada",
+        "worst_price": 122,
+        "n_books": 3,
+        "gain_pts": 1.57,
+        "fair_price": 145,
+        "edge_vs_fair_pts": -2.63
+       },
+       "under": {
+        "best_price": -164,
+        "best_book": "Caesars",
+        "worst_price": -173,
+        "n_books": 3,
+        "gain_pts": 1.25,
+        "fair_price": -145,
+        "edge_vs_fair_pts": -2.97
+       },
+       "gain_pts": 1.57,
        "hit": {
         "l5": {
          "n": 5,
@@ -364,46 +460,38 @@
         },
         "l10": {
          "n": 10,
-         "over": 6
+         "over": 2
         },
         "season": {
-         "n": 22,
-         "over": 10
+         "n": 144,
+         "over": 62
         }
-       },
-       "model": {
-        "proj_k": 3.98,
-        "p_over": 0.3663,
-        "market_over": 0.4717,
-        "delta_pts": -10.5,
-        "n_starts": 22,
-        "version": "kpoisson-v1"
        }
       },
       {
        "market": "batter_total_bases",
        "market_label": "Total bases",
-       "player": "Tommy Edman",
+       "player": "Christian Encarnacion-Strand",
        "line": 1.5,
        "over": {
-        "best_price": 132,
-        "best_book": "BetRivers",
-        "worst_price": 113,
-        "n_books": 5,
-        "gain_pts": 3.84,
-        "fair_price": 132,
-        "edge_vs_fair_pts": 0.0
+        "best_price": 145,
+        "best_book": "Bovada",
+        "worst_price": 136,
+        "n_books": 3,
+        "gain_pts": 1.56,
+        "fair_price": 159,
+        "edge_vs_fair_pts": -2.24
        },
        "under": {
-        "best_price": -150,
-        "best_book": "Bovada",
-        "worst_price": -159,
-        "n_books": 4,
-        "gain_pts": 1.39,
-        "fair_price": -132,
-        "edge_vs_fair_pts": -3.11
+        "best_price": -182,
+        "best_book": "Caesars",
+        "worst_price": -191,
+        "n_books": 3,
+        "gain_pts": 1.1,
+        "fair_price": -159,
+        "edge_vs_fair_pts": -3.12
        },
-       "gain_pts": 3.84,
+       "gain_pts": 1.56,
        "hit": {
         "l5": {
          "n": 5,
@@ -411,266 +499,163 @@
         },
         "l10": {
          "n": 10,
-         "over": 4
+         "over": 3
         },
         "season": {
-         "n": 65,
-         "over": 23
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Will Smith",
-       "line": 1.5,
-       "over": {
-        "best_price": 138,
-        "best_book": "BetRivers",
-        "worst_price": 120,
-        "n_books": 5,
-        "gain_pts": 3.44,
-        "fair_price": 141,
-        "edge_vs_fair_pts": -0.58
-       },
-       "under": {
-        "best_price": -159,
-        "best_book": "DraftKings",
-        "worst_price": -179,
-        "n_books": 4,
-        "gain_pts": 2.77,
-        "fair_price": -141,
-        "edge_vs_fair_pts": -2.83
-       },
-       "gain_pts": 3.44
-      },
-      {
-       "market": "batter_hits",
-       "market_label": "Hits",
-       "player": "Kyle Tucker",
-       "line": 0.5,
-       "over": {
-        "best_price": -143,
-        "best_book": "BetRivers",
-        "worst_price": -165,
-        "n_books": 4,
-        "gain_pts": 3.42,
-        "fair_price": -133,
-        "edge_vs_fair_pts": -1.74
-       },
-       "under": {
-        "best_price": 124,
-        "best_book": "DraftKings",
-        "worst_price": 113,
-        "n_books": 3,
-        "gain_pts": 2.31,
-        "fair_price": 133,
-        "edge_vs_fair_pts": -1.75
-       },
-       "gain_pts": 3.42,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 2
-        },
-        "l10": {
-         "n": 10,
-         "over": 4
-        },
-        "season": {
-         "n": 134,
-         "over": 77
+         "n": 42,
+         "over": 15
         }
        }
       },
       {
        "market": "pitcher_strikeouts",
        "market_label": "Pitcher strikeouts",
-       "player": "Andrew Alvarez",
-       "line": 3.5,
+       "player": "Joey Cantillo",
+       "line": 5.5,
        "over": {
-        "best_price": -120,
-        "best_book": "BetRivers",
-        "worst_price": -130,
-        "n_books": 5,
-        "gain_pts": 1.98,
-        "fair_price": -109,
-        "edge_vs_fair_pts": -2.4
+        "best_price": -128,
+        "best_book": "FanDuel",
+        "worst_price": -133,
+        "n_books": 4,
+        "gain_pts": 0.94,
+        "fair_price": -113,
+        "edge_vs_fair_pts": -3.08
        },
        "under": {
-        "best_price": 102,
+        "best_price": 104,
         "best_book": "DraftKings",
-        "worst_price": -112,
-        "n_books": 5,
-        "gain_pts": 3.33,
-        "fair_price": 109,
-        "edge_vs_fair_pts": -1.65
+        "worst_price": 100,
+        "n_books": 4,
+        "gain_pts": 0.98,
+        "fair_price": 113,
+        "edge_vs_fair_pts": -2.08
        },
-       "gain_pts": 3.33,
+       "gain_pts": 0.98,
        "hit": {
         "l5": {
          "n": 5,
-         "over": 4
+         "over": 2
         },
         "l10": {
          "n": 10,
          "over": 5
         },
         "season": {
-         "n": 21,
-         "over": 14
+         "n": 29,
+         "over": 13
         }
        },
        "model": {
-        "proj_k": 4.42,
-        "p_over": 0.6444,
-        "market_over": 0.5215,
-        "delta_pts": 12.3,
-        "n_starts": 21,
+        "proj_k": 5.84,
+        "p_over": 0.528,
+        "market_over": 0.5305,
+        "delta_pts": -0.2,
+        "n_starts": 29,
         "version": "kpoisson-v1"
        }
       },
       {
        "market": "batter_total_bases",
        "market_label": "Total bases",
-       "player": "Freddie Freeman",
+       "player": "Jo Adell",
        "line": 1.5,
        "over": {
-        "best_price": 143,
-        "best_book": "BetRivers",
-        "worst_price": 130,
-        "n_books": 5,
-        "gain_pts": 2.33,
-        "fair_price": 152,
-        "edge_vs_fair_pts": -1.47
-       },
-       "under": {
-        "best_price": -176,
+        "best_price": 127,
         "best_book": "Caesars",
-        "worst_price": -185,
-        "n_books": 4,
-        "gain_pts": 1.14,
-        "fair_price": -152,
-        "edge_vs_fair_pts": -3.45
-       },
-       "gain_pts": 2.33,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 2
-        },
-        "l10": {
-         "n": 10,
-         "over": 4
-        },
-        "season": {
-         "n": 137,
-         "over": 61
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Mookie Betts",
-       "line": 1.5,
-       "over": {
-        "best_price": 135,
-        "best_book": "BetRivers",
-        "worst_price": 123,
-        "n_books": 5,
-        "gain_pts": 2.29,
-        "fair_price": 140,
-        "edge_vs_fair_pts": -0.87
+        "worst_price": 125,
+        "n_books": 3,
+        "gain_pts": 0.39,
+        "fair_price": 142,
+        "edge_vs_fair_pts": -2.67
        },
        "under": {
-        "best_price": -164,
-        "best_book": "DraftKings",
-        "worst_price": -169,
-        "n_books": 4,
-        "gain_pts": 0.7,
-        "fair_price": -140,
-        "edge_vs_fair_pts": -3.8
-       },
-       "gain_pts": 2.29,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 4
-        },
-        "l10": {
-         "n": 10,
-         "over": 6
-        },
-        "season": {
-         "n": 105,
-         "over": 35
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "Jacob Young",
-       "line": 0.5,
-       "over": {
-        "best_price": -148,
-        "best_book": "Caesars",
-        "worst_price": -154,
-        "n_books": 3,
-        "gain_pts": 0.95,
-        "fair_price": -129,
-        "edge_vs_fair_pts": -3.35
-       },
-       "under": {
-        "best_price": 118,
-        "best_book": "BetOnline",
-        "worst_price": 111,
-        "n_books": 3,
-        "gain_pts": 1.52,
-        "fair_price": 129,
-        "edge_vs_fair_pts": -2.2
-       },
-       "gain_pts": 1.52,
-       "hit": {
-        "l5": {
-         "n": 5,
-         "over": 2
-        },
-        "l10": {
-         "n": 10,
-         "over": 5
-        },
-        "season": {
-         "n": 125,
-         "over": 70
-        }
-       }
-      },
-      {
-       "market": "batter_total_bases",
-       "market_label": "Total bases",
-       "player": "James Wood",
-       "line": 1.5,
-       "over": {
-        "best_price": 135,
+        "best_price": -165,
         "best_book": "Bovada",
-        "worst_price": 129,
-        "n_books": 5,
-        "gain_pts": 1.11,
-        "fair_price": 150,
-        "edge_vs_fair_pts": -2.5
+        "worst_price": -170,
+        "n_books": 3,
+        "gain_pts": 0.7,
+        "fair_price": -142,
+        "edge_vs_fair_pts": -3.64
+       },
+       "gain_pts": 0.7,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 0
+        },
+        "l10": {
+         "n": 10,
+         "over": 2
+        },
+        "season": {
+         "n": 141,
+         "over": 48
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Blaze Alexander",
+       "line": 1.5,
+       "over": {
+        "best_price": 115,
+        "best_book": "Bovada",
+        "worst_price": 112,
+        "n_books": 3,
+        "gain_pts": 0.66,
+        "fair_price": 128,
+        "edge_vs_fair_pts": -2.73
        },
        "under": {
-        "best_price": -173,
-        "best_book": "Caesars",
-        "worst_price": -180,
-        "n_books": 4,
-        "gain_pts": 0.92,
-        "fair_price": -150,
-        "edge_vs_fair_pts": -3.42
+        "best_price": -150,
+        "best_book": "Bovada",
+        "worst_price": -152,
+        "n_books": 3,
+        "gain_pts": 0.32,
+        "fair_price": -128,
+        "edge_vs_fair_pts": -3.78
        },
-       "gain_pts": 1.11,
+       "gain_pts": 0.66,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 2
+        },
+        "l10": {
+         "n": 10,
+         "over": 3
+        },
+        "season": {
+         "n": 91,
+         "over": 29
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Angel Genao",
+       "line": 1.5,
+       "over": {
+        "best_price": 150,
+        "best_book": "Bovada",
+        "worst_price": 146,
+        "n_books": 3,
+        "gain_pts": 0.65,
+        "fair_price": 164,
+        "edge_vs_fair_pts": -2.1
+       },
+       "under": {
+        "best_price": -197,
+        "best_book": "DraftKings",
+        "worst_price": -200,
+        "n_books": 3,
+        "gain_pts": 0.34,
+        "fair_price": -164,
+        "edge_vs_fair_pts": -4.23
+       },
+       "gain_pts": 0.65,
        "hit": {
         "l5": {
          "n": 5,
@@ -681,7 +666,249 @@
          "over": 2
         },
         "season": {
-         "n": 117,
+         "n": 28,
+         "over": 9
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Angel Martinez",
+       "line": 1.5,
+       "over": {
+        "best_price": 115,
+        "best_book": "Bovada",
+        "worst_price": 113,
+        "n_books": 3,
+        "gain_pts": 0.44,
+        "fair_price": 128,
+        "edge_vs_fair_pts": -2.73
+       },
+       "under": {
+        "best_price": -150,
+        "best_book": "Bovada",
+        "worst_price": -152,
+        "n_books": 3,
+        "gain_pts": 0.32,
+        "fair_price": -128,
+        "edge_vs_fair_pts": -3.78
+       },
+       "gain_pts": 0.44,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 0
+        },
+        "l10": {
+         "n": 10,
+         "over": 3
+        },
+        "season": {
+         "n": 100,
+         "over": 38
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Gunnar Henderson",
+       "line": 1.5,
+       "over": {
+        "best_price": 135,
+        "best_book": "Bovada",
+        "worst_price": 135,
+        "n_books": 3,
+        "gain_pts": 0.0,
+        "fair_price": 151,
+        "edge_vs_fair_pts": -2.72
+       },
+       "under": {
+        "best_price": -180,
+        "best_book": "Bovada",
+        "worst_price": -182,
+        "n_books": 3,
+        "gain_pts": 0.25,
+        "fair_price": -151,
+        "edge_vs_fair_pts": -4.12
+       },
+       "gain_pts": 0.25,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 1
+        },
+        "l10": {
+         "n": 10,
+         "over": 2
+        },
+        "season": {
+         "n": 143,
+         "over": 48
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "22430c880f9e9118f74aacf0b720b7ee",
+     "home": "Boston Red Sox",
+     "away": "Los Angeles Angels",
+     "starts": "2026-09-07T17:36:00Z",
+     "props": [
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Vaughn Grissom",
+       "line": 1.5,
+       "over": {
+        "best_price": 140,
+        "best_book": "Bovada",
+        "worst_price": 133,
+        "n_books": 3,
+        "gain_pts": 1.25,
+        "fair_price": 155,
+        "edge_vs_fair_pts": -2.47
+       },
+       "under": {
+        "best_price": -179,
+        "best_book": "Caesars",
+        "worst_price": -186,
+        "n_books": 3,
+        "gain_pts": 0.88,
+        "fair_price": -155,
+        "edge_vs_fair_pts": -3.35
+       },
+       "gain_pts": 1.25,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 1
+        },
+        "l10": {
+         "n": 10,
+         "over": 2
+        },
+        "season": {
+         "n": 100,
+         "over": 31
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Mike Trout",
+       "line": 1.5,
+       "over": {
+        "best_price": 136,
+        "best_book": "DraftKings",
+        "worst_price": 131,
+        "n_books": 3,
+        "gain_pts": 0.92,
+        "fair_price": 151,
+        "edge_vs_fair_pts": -2.54
+       },
+       "under": {
+        "best_price": -176,
+        "best_book": "Caesars",
+        "worst_price": -181,
+        "n_books": 3,
+        "gain_pts": 0.64,
+        "fair_price": -151,
+        "edge_vs_fair_pts": -3.6
+       },
+       "gain_pts": 0.92,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 2
+        },
+        "l10": {
+         "n": 10,
+         "over": 4
+        },
+        "season": {
+         "n": 124,
+         "over": 47
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Zach Neto",
+       "line": 1.5,
+       "over": {
+        "best_price": 136,
+        "best_book": "DraftKings",
+        "worst_price": 131,
+        "n_books": 3,
+        "gain_pts": 0.92,
+        "fair_price": 151,
+        "edge_vs_fair_pts": -2.54
+       },
+       "under": {
+        "best_price": -176,
+        "best_book": "Caesars",
+        "worst_price": -182,
+        "n_books": 3,
+        "gain_pts": 0.77,
+        "fair_price": -151,
+        "edge_vs_fair_pts": -3.6
+       },
+       "gain_pts": 0.92,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 2
+        },
+        "l10": {
+         "n": 10,
+         "over": 3
+        },
+        "season": {
+         "n": 138,
+         "over": 52
+        }
+       }
+      },
+      {
+       "market": "batter_total_bases",
+       "market_label": "Total bases",
+       "player": "Wilyer Abreu",
+       "line": 1.5,
+       "over": {
+        "best_price": 116,
+        "best_book": "DraftKings",
+        "worst_price": 115,
+        "n_books": 3,
+        "gain_pts": 0.22,
+        "fair_price": 131,
+        "edge_vs_fair_pts": -3.0
+       },
+       "under": {
+        "best_price": -150,
+        "best_book": "Bovada",
+        "worst_price": -155,
+        "n_books": 3,
+        "gain_pts": 0.78,
+        "fair_price": -131,
+        "edge_vs_fair_pts": -3.3
+       },
+       "gain_pts": 0.78,
+       "hit": {
+        "l5": {
+         "n": 5,
+         "over": 2
+        },
+        "l10": {
+         "n": 10,
+         "over": 6
+        },
+        "season": {
+         "n": 140,
          "over": 57
         }
        }
@@ -689,27 +916,27 @@
       {
        "market": "batter_total_bases",
        "market_label": "Total bases",
-       "player": "Teoscar Hernandez",
+       "player": "Adley Rutschman",
        "line": 1.5,
        "over": {
-        "best_price": 140,
+        "best_price": 120,
         "best_book": "Bovada",
-        "worst_price": 135,
-        "n_books": 4,
-        "gain_pts": 0.89,
-        "fair_price": 154,
-        "edge_vs_fair_pts": -2.37
+        "worst_price": 118,
+        "n_books": 3,
+        "gain_pts": 0.42,
+        "fair_price": 134,
+        "edge_vs_fair_pts": -2.8
        },
        "under": {
-        "best_price": -182,
-        "best_book": "Caesars",
-        "worst_price": -185,
+        "best_price": -157,
+        "best_book": "DraftKings",
+        "worst_price": -160,
         "n_books": 3,
-        "gain_pts": 0.37,
-        "fair_price": -154,
-        "edge_vs_fair_pts": -3.83
+        "gain_pts": 0.45,
+        "fair_price": -134,
+        "edge_vs_fair_pts": -3.74
        },
-       "gain_pts": 0.89,
+       "gain_pts": 0.45,
        "hit": {
         "l5": {
          "n": 5,
@@ -717,11 +944,11 @@
         },
         "l10": {
          "n": 10,
-         "over": 6
+         "over": 3
         },
         "season": {
-         "n": 106,
-         "over": 35
+         "n": 85,
+         "over": 29
         }
        }
       }
@@ -731,21 +958,21 @@
   }
  ],
  "totals": {
-  "events": 2,
-  "props": 18,
-  "max_gain_pts": 4.51
+  "events": 4,
+  "props": 23,
+  "max_gain_pts": 2.39
  },
  "hitrates": {
   "source": "statsapi.mlb.com gameLog",
   "season": 2026,
-  "annotated": 16,
-  "eligible": 18
+  "annotated": 21,
+  "eligible": 23
  },
  "props_model": {
   "version": "kpoisson-v1",
   "season": 2026,
-  "modeled": 3,
-  "eligible": 3,
+  "modeled": 5,
+  "eligible": 6,
   "method": "poisson over expected BF x blended K/BF x opponent K% factor; free MLB StatsAPI"
  },
  "props_model_tb": {
