@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-09-06T20:49:45.358829+00:00",
- "checked_at": "2026-09-06T20:49:45.358829+00:00",
+ "generated_at": "2026-09-07T05:13:31.199196+00:00",
+ "checked_at": "2026-09-07T05:13:31.199196+00:00",
  "sport": "nfl",
  "n_reports": 56,
  "n_shoppable": 8,
  "sources": {
   "prices": "own_capture observations (ESPN game lines)",
-  "board": "2026-09-06T18:34:56.440017+00:00",
-  "teamstats": "2026-09-06T20:49:34.416119+00:00",
-  "injuries": "2026-09-06T20:49:33.356478+00:00"
+  "board": "2026-09-07T01:16:03.201210+00:00",
+  "teamstats": "2026-09-07T05:13:22.299215+00:00",
+  "injuries": "2026-09-07T05:13:21.355056+00:00"
  },
  "note": "Research only, not advice and not a pick. Every figure in facts is computed from the data in this file.",
  "tracking": {
@@ -167,10 +167,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
-     "n": 11,
+     "n": 10,
      "shown": [
       {
        "player": "Terrion Arnold",
@@ -212,19 +212,6 @@
        "source": "espn"
       },
       {
-       "player": "Bud Clark",
-       "position": "S",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Ankle",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:06Z",
-       "note": "The Seahawks placed Clark (ankle) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
-       "source": "espn"
-      },
-      {
        "player": "Irv Charles",
        "position": "WR",
        "status": "Injured Reserve",
@@ -238,24 +225,37 @@
        "source": "espn"
       },
       {
-       "player": "Jake Bobo",
-       "position": "WR",
+       "player": "Mason Richman",
+       "position": "G",
        "status": "Injured Reserve",
        "abbr": "IR",
-       "body_part": "Knee",
+       "body_part": "Leg",
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T17:45Z",
-       "note": "The Seahawks placed Bobo (knee) on injured reserve Saturday, John Boyle of the team's official site reports.",
+       "updated_at": "2026-08-26T00:13Z",
+       "note": "The Seahawks placed Richman (leg) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Anthony Bradford",
+       "position": "G",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Knee",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-09",
+       "updated_at": "2026-09-07T00:02Z",
+       "note": "questionable",
        "source": "espn"
       }
      ],
-     "not_shown": 5,
-     "n_out": 8
+     "not_shown": 4,
+     "n_out": 5
     },
     "away": {
-     "n": 8,
+     "n": 10,
      "shown": [
       {
        "player": "Brenden Schooler",
@@ -336,7 +336,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 4,
      "n_out": 7
     }
    },
@@ -358,7 +358,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 3.32,
+     "vig_pts": 3.5,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -368,51 +368,51 @@
        "line": null,
        "best_price": 160,
        "best_book": "Bovada",
-       "worst_price": 145,
-       "worst_book": "DraftKings",
+       "worst_price": 150,
+       "worst_book": "BetUS",
        "n_books": 11,
-       "consensus_prob": 0.3891,
+       "consensus_prob": 0.3922,
        "prices": {
         "Bovada": 160,
         "BetRivers": 160,
         "BetMGM": 160,
-        "LowVig": 158,
-        "BetOnline": 158,
         "Caesars": 157,
-        "BetUS": 155,
+        "LowVig": 155,
+        "BetOnline": 155,
         "FanDuel": 152,
-        "Fanatics": 150,
-        "MyBookie": 147,
-        "DraftKings": 145
+        "BetUS": 150,
+        "MyBookie": 150,
+        "DraftKings": 150,
+        "Fanatics": 150
        },
-       "fair_prob": 0.3766,
-       "gain_pts": -0.8
+       "fair_prob": 0.3789,
+       "gain_pts": -0.57
       },
       "Seattle Seahawks": {
        "selection": "Seattle Seahawks",
        "label": "Seattle Seahawks",
        "line": null,
        "best_price": -175,
-       "best_book": "DraftKings",
+       "best_book": "BetUS",
        "worst_price": -200,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.6441,
+       "consensus_prob": 0.6429,
        "prices": {
-        "DraftKings": -175,
+        "BetUS": -175,
+        "LowVig": -177,
+        "BetOnline": -177,
+        "DraftKings": -180,
         "FanDuel": -180,
-        "BetUS": -180,
         "Fanatics": -180,
-        "LowVig": -181,
-        "BetOnline": -181,
         "Bovada": -185,
+        "MyBookie": -186,
         "BetMGM": -190,
         "Caesars": -190,
-        "MyBookie": -190,
         "BetRivers": -200
        },
-       "fair_prob": 0.6234,
-       "gain_pts": -1.3
+       "fair_prob": 0.6211,
+       "gain_pts": -1.53
       }
      }
     }
@@ -438,18 +438,18 @@
    "live_board": {
     "max_gain_pts": 3.03,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on New England Patriots (moneyline) is +160 at Bovada, against +145 at the worst of 11 books \u2014 0.80 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on New England Patriots (moneyline) is +160 at Bovada, against +150 at the worst of 11 books \u2014 0.57 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 160,
       "best_book": "Bovada",
-      "worst_price": 145,
+      "worst_price": 150,
       "n_books": 11,
-      "gain_pts": -0.8,
+      "gain_pts": -0.57,
       "market": "moneyline",
       "line": null,
       "selection": "New England Patriots"
@@ -477,20 +477,20 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "New England Patriots: 7 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
       "n_out": 7,
-      "n_listed": 8
+      "n_listed": 10
      }
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 8 listed Out or on injured reserve, 11 on the report.",
+     "text": "Seattle Seahawks: 5 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 8,
-      "n_listed": 11
+      "n_out": 5,
+      "n_listed": 10
      }
     },
     {
@@ -502,7 +502,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872656",
@@ -653,10 +653,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
-     "n": 11,
+     "n": 10,
      "shown": [
       {
        "player": "Terrion Arnold",
@@ -698,19 +698,6 @@
        "source": "espn"
       },
       {
-       "player": "Bud Clark",
-       "position": "S",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Ankle",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:06Z",
-       "note": "The Seahawks placed Clark (ankle) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
-       "source": "espn"
-      },
-      {
        "player": "Irv Charles",
        "position": "WR",
        "status": "Injured Reserve",
@@ -724,24 +711,37 @@
        "source": "espn"
       },
       {
-       "player": "Jake Bobo",
-       "position": "WR",
+       "player": "Mason Richman",
+       "position": "G",
        "status": "Injured Reserve",
        "abbr": "IR",
-       "body_part": "Knee",
+       "body_part": "Leg",
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T17:45Z",
-       "note": "The Seahawks placed Bobo (knee) on injured reserve Saturday, John Boyle of the team's official site reports.",
+       "updated_at": "2026-08-26T00:13Z",
+       "note": "The Seahawks placed Richman (leg) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Anthony Bradford",
+       "position": "G",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Knee",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-09",
+       "updated_at": "2026-09-07T00:02Z",
+       "note": "questionable",
        "source": "espn"
       }
      ],
-     "not_shown": 5,
-     "n_out": 8
+     "not_shown": 4,
+     "n_out": 5
     },
     "away": {
-     "n": 8,
+     "n": 10,
      "shown": [
       {
        "player": "Brenden Schooler",
@@ -822,7 +822,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 4,
      "n_out": 7
     }
    },
@@ -976,20 +976,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 3.03,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -1014,24 +1014,24 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "New England Patriots: 7 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
       "n_out": 7,
-      "n_listed": 8
+      "n_listed": 10
      }
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 8 listed Out or on injured reserve, 11 on the report.",
+     "text": "Seattle Seahawks: 5 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 8,
-      "n_listed": 11
+      "n_out": 5,
+      "n_listed": 10
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "acc580d74344ea3b31bbcdd057fe6a9c",
@@ -1182,8 +1182,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 12,
      "shown": [
@@ -1373,7 +1373,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 3.98,
+     "vig_pts": 4.53,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -1381,53 +1381,53 @@
        "selection": "San Francisco 49ers",
        "label": "San Francisco 49ers",
        "line": null,
-       "best_price": 167,
-       "best_book": "BetUS",
+       "best_price": 170,
+       "best_book": "Bovada",
        "worst_price": 152,
        "worst_book": "MyBookie",
        "n_books": 11,
-       "consensus_prob": 0.3788,
+       "consensus_prob": 0.3831,
        "prices": {
+        "Bovada": 170,
         "BetUS": 167,
-        "BetOnline": 165,
-        "LowVig": 165,
-        "Bovada": 165,
         "Fanatics": 165,
         "FanDuel": 164,
         "Caesars": 164,
+        "BetOnline": 161,
+        "LowVig": 161,
         "BetRivers": 160,
         "BetMGM": 160,
         "DraftKings": 160,
         "MyBookie": 152
        },
-       "fair_prob": 0.3643,
-       "gain_pts": -1.02
+       "fair_prob": 0.3665,
+       "gain_pts": -0.38
       },
       "Los Angeles Rams": {
        "selection": "Los Angeles Rams",
        "label": "Los Angeles Rams",
        "line": null,
-       "best_price": -190,
-       "best_book": "BetMGM",
+       "best_price": -185,
+       "best_book": "BetOnline",
        "worst_price": -205,
        "worst_book": "BetRivers",
        "n_books": 11,
-       "consensus_prob": 0.661,
+       "consensus_prob": 0.6622,
        "prices": {
+        "BetOnline": -185,
+        "LowVig": -185,
         "BetMGM": -190,
-        "BetOnline": -190,
-        "LowVig": -190,
         "DraftKings": -192,
         "BetUS": -195,
-        "Bovada": -195,
         "FanDuel": -196,
         "Caesars": -197,
         "MyBookie": -197,
+        "Bovada": -200,
         "Fanatics": -200,
         "BetRivers": -205
        },
-       "fair_prob": 0.6357,
-       "gain_pts": -1.95
+       "fair_prob": 0.6335,
+       "gain_pts": -1.57
       }
      }
     }
@@ -1451,20 +1451,20 @@
    },
    "movement": {},
    "live_board": {
-    "max_gain_pts": 2.23,
+    "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on San Francisco 49ers (moneyline) is +167 at BetUS, against +152 at the worst of 11 books \u2014 1.02 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on San Francisco 49ers (moneyline) is +170 at Bovada, against +152 at the worst of 11 books \u2014 0.38 points of implied probability versus the de-vigged fair price.",
      "numbers": {
-      "best_price": 167,
-      "best_book": "BetUS",
+      "best_price": 170,
+      "best_book": "Bovada",
       "worst_price": 152,
       "n_books": 11,
-      "gain_pts": -1.02,
+      "gain_pts": -0.38,
       "market": "moneyline",
       "line": null,
       "selection": "San Francisco 49ers"
@@ -1510,14 +1510,14 @@
     },
     {
      "kind": "dispersion",
-     "text": "11 books quote +167 down to +152 on the same side \u2014 2.23 points between the best and worst number.",
+     "text": "11 books quote +170 down to +152 on the same side \u2014 2.65 points between the best and worst number.",
      "numbers": {
-      "spread_pts": 2.23,
+      "spread_pts": 2.65,
       "n_books": 11
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872657",
@@ -1668,8 +1668,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 12,
      "shown": [
@@ -1991,20 +1991,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
-    "max_gain_pts": 2.23,
+    "max_gain_pts": 2.65,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -2046,7 +2046,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "ed6d24ff979f9c71979fead577b0b3f7",
@@ -2197,8 +2197,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 7,
      "shown": [
@@ -2405,12 +2405,12 @@
        "prices": {
         "BetMGM": -200,
         "DraftKings": -205,
-        "BetRivers": -205,
         "Caesars": -205,
         "FanDuel": -205,
         "LowVig": -210,
         "BetUS": -210,
         "BetOnline": -210,
+        "BetRivers": -215,
         "Fanatics": -215,
         "MyBookie": -216,
         "Bovada": -220
@@ -2424,8 +2424,8 @@
        "line": null,
        "best_price": 180,
        "best_book": "Bovada",
-       "worst_price": 163,
-       "worst_book": "BetRivers",
+       "worst_price": 165,
+       "worst_book": "BetMGM",
        "n_books": 11,
        "consensus_prob": 0.3676,
        "prices": {
@@ -2437,9 +2437,9 @@
         "FanDuel": 172,
         "Caesars": 171,
         "DraftKings": 170,
+        "BetRivers": 170,
         "MyBookie": 166,
-        "BetMGM": 165,
-        "BetRivers": 163
+        "BetMGM": 165
        },
        "fair_prob": 0.3518,
        "gain_pts": -0.53
@@ -2466,18 +2466,18 @@
    },
    "movement": {},
    "live_board": {
-    "max_gain_pts": 2.31,
+    "max_gain_pts": 2.08,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Tampa Bay Buccaneers (moneyline) is +180 at Bovada, against +163 at the worst of 11 books \u2014 0.53 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Tampa Bay Buccaneers (moneyline) is +180 at Bovada, against +165 at the worst of 11 books \u2014 0.53 points of implied probability versus the de-vigged fair price.",
      "numbers": {
       "best_price": 180,
       "best_book": "Bovada",
-      "worst_price": 163,
+      "worst_price": 165,
       "n_books": 11,
       "gain_pts": -0.53,
       "market": "moneyline",
@@ -2525,14 +2525,14 @@
     },
     {
      "kind": "dispersion",
-     "text": "11 books quote +180 down to +163 on the same side \u2014 2.31 points between the best and worst number.",
+     "text": "11 books quote -200 down to -220 on the same side \u2014 2.08 points between the best and worst number.",
      "numbers": {
-      "spread_pts": 2.31,
+      "spread_pts": 2.08,
       "n_books": 11
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "7e09efed7e12c659b82740b67ce2f9a1",
@@ -2683,8 +2683,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 16,
      "shown": [
@@ -2942,7 +2942,7 @@
    "live_board": {
     "max_gain_pts": 2.99,
     "n_books": 8,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -3006,7 +3006,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "b6cfdcbafa61ce220ba87dc2d9b80c77",
@@ -3157,8 +3157,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -3428,7 +3428,7 @@
    "live_board": {
     "max_gain_pts": 2.55,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -3492,7 +3492,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "e55c6fe19fce094ce214c8b0e5b504e9",
@@ -3643,8 +3643,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 10,
      "shown": [
@@ -3834,7 +3834,7 @@
       "LowVig",
       "MyBookie"
      ],
-     "vig_pts": 3.98,
+     "vig_pts": 4.39,
      "fair_basis": "consensus of 11 books",
      "shoppable": true,
      "sides": {
@@ -3843,13 +3843,12 @@
        "label": "Jacksonville Jaguars",
        "line": null,
        "best_price": -375,
-       "best_book": "DraftKings",
+       "best_book": "BetMGM",
        "worst_price": -469,
        "worst_book": "MyBookie",
        "n_books": 11,
-       "consensus_prob": 0.7959,
+       "consensus_prob": 0.8,
        "prices": {
-        "DraftKings": -375,
         "BetMGM": -375,
         "BetUS": -390,
         "BetOnline": -390,
@@ -3857,38 +3856,39 @@
         "Caesars": -390,
         "FanDuel": -400,
         "BetRivers": -400,
-        "Fanatics": -400,
         "Bovada": -410,
+        "DraftKings": -410,
+        "Fanatics": -425,
         "MyBookie": -469
        },
-       "fair_prob": 0.7654,
-       "gain_pts": -2.4
+       "fair_prob": 0.7664,
+       "gain_pts": -2.31
       },
       "Cleveland Browns": {
        "selection": "Cleveland Browns",
        "label": "Cleveland Browns",
        "line": null,
-       "best_price": 320,
-       "best_book": "MyBookie",
+       "best_price": 325,
+       "best_book": "Fanatics",
        "worst_price": 295,
-       "worst_book": "DraftKings",
+       "worst_book": "BetRivers",
        "n_books": 11,
        "consensus_prob": 0.2439,
        "prices": {
+        "Fanatics": 325,
+        "DraftKings": 320,
         "MyBookie": 320,
         "FanDuel": 315,
         "BetUS": 312,
         "BetOnline": 310,
         "LowVig": 310,
-        "Fanatics": 310,
         "Caesars": 305,
         "Bovada": 305,
         "BetMGM": 300,
-        "DraftKings": 295,
         "BetRivers": 295
        },
-       "fair_prob": 0.2346,
-       "gain_pts": -0.35
+       "fair_prob": 0.2336,
+       "gain_pts": -0.16
       }
      }
     }
@@ -3914,18 +3914,18 @@
    "live_board": {
     "max_gain_pts": 3.48,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
      "kind": "price_gap",
-     "text": "Best number on Cleveland Browns (moneyline) is +320 at MyBookie, against +295 at the worst of 11 books \u2014 0.35 points of implied probability versus the de-vigged fair price.",
+     "text": "Best number on Cleveland Browns (moneyline) is +325 at Fanatics, against +295 at the worst of 11 books \u2014 0.16 points of implied probability versus the de-vigged fair price.",
      "numbers": {
-      "best_price": 320,
-      "best_book": "MyBookie",
+      "best_price": 325,
+      "best_book": "Fanatics",
       "worst_price": 295,
       "n_books": 11,
-      "gain_pts": -0.35,
+      "gain_pts": -0.16,
       "market": "moneyline",
       "line": null,
       "selection": "Cleveland Browns"
@@ -3978,7 +3978,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "95c01d1bb797d6df14824b106c5a9130",
@@ -4129,8 +4129,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -4400,7 +4400,7 @@
    "live_board": {
     "max_gain_pts": 2.76,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -4464,7 +4464,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "fc362aff0d889ec52d358307a70c32ed",
@@ -4615,8 +4615,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 14,
      "shown": [
@@ -4823,8 +4823,8 @@
        "prices": {
         "LowVig": -152,
         "BetOnline": -152,
-        "Caesars": -152,
         "FanDuel": -154,
+        "Caesars": -154,
         "BetUS": -155,
         "DraftKings": -155,
         "Fanatics": -155,
@@ -4851,11 +4851,11 @@
         "BetUS": 134,
         "LowVig": 132,
         "BetOnline": 132,
+        "Caesars": 131,
         "BetMGM": 130,
         "DraftKings": 130,
         "FanDuel": 130,
         "Fanatics": 130,
-        "Caesars": 129,
         "BetRivers": 128,
         "MyBookie": 126
        },
@@ -4886,7 +4886,7 @@
    "live_board": {
     "max_gain_pts": 2.58,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -4950,7 +4950,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872925",
@@ -5101,8 +5101,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 7,
      "shown": [
@@ -5424,20 +5424,20 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 50.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
-    "max_gain_pts": 2.31,
+    "max_gain_pts": 2.08,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -5448,7 +5448,7 @@
       "current": 50.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -5491,7 +5491,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872923",
@@ -5642,8 +5642,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 14,
      "shown": [
@@ -5913,7 +5913,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.18,
+     "vig_pts": 4.29,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -5921,32 +5921,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -310,
+       "best_price": -305,
        "best_book": "DraftKings",
-       "worst_price": -310,
+       "worst_price": -305,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7561,
+       "consensus_prob": 0.7531,
        "prices": {
-        "DraftKings": -310
+        "DraftKings": -305
        },
-       "fair_prob": 0.7258,
+       "fair_prob": 0.7221,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 250,
+       "best_price": 245,
        "best_book": "DraftKings",
-       "worst_price": 250,
+       "worst_price": 245,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2857,
+       "consensus_prob": 0.2899,
        "prices": {
-        "DraftKings": 250
+        "DraftKings": 245
        },
-       "fair_prob": 0.2742,
+       "fair_prob": 0.2779,
        "gain_pts": null
       }
      }
@@ -5965,14 +5965,14 @@
      "current": -7.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 49.5,
      "moved": 2.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -5985,7 +5985,7 @@
       "current": 49.5,
       "moved": 2.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -6028,7 +6028,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872924",
@@ -6179,8 +6179,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 12,
      "shown": [
@@ -6502,14 +6502,14 @@
      "current": -1.5,
      "moved": 1.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 38.5,
      "current": 39.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -6522,7 +6522,7 @@
       "current": -1.5,
       "moved": 1.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -6534,7 +6534,7 @@
       "current": 39.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -6577,7 +6577,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872659",
@@ -6728,8 +6728,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -7051,20 +7051,20 @@
      "current": 3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.55,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -7106,7 +7106,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872658",
@@ -7257,8 +7257,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -7580,20 +7580,20 @@
      "current": -3.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 41.5,
-     "current": 42.5,
-     "moved": 1.0,
+     "current": 41.5,
+     "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.76,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -7604,20 +7604,8 @@
       "current": -3.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
-     }
-    },
-    {
-     "kind": "line_move",
-     "text": "The total opened 41.5 in our capture and sits at 42.5 now (+1).",
-     "numbers": {
-      "opened": 41.5,
-      "current": 42.5,
-      "moved": 1.0,
-      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
-      "market": "total"
      }
     },
     {
@@ -7659,7 +7647,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872661",
@@ -7810,8 +7798,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 14,
      "shown": [
@@ -8133,20 +8121,20 @@
      "current": 2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 47.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.58,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -8157,7 +8145,7 @@
       "current": 47.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -8200,7 +8188,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872922",
@@ -8351,8 +8339,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 10,
      "shown": [
@@ -8622,7 +8610,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.26,
+     "vig_pts": 4.2,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8630,32 +8618,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -375,
+       "best_price": -410,
        "best_book": "DraftKings",
-       "worst_price": -375,
+       "worst_price": -410,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7895,
+       "consensus_prob": 0.8039,
        "prices": {
-        "DraftKings": -375
+        "DraftKings": -410
        },
-       "fair_prob": 0.7572,
+       "fair_prob": 0.7715,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 295,
+       "best_price": 320,
        "best_book": "DraftKings",
-       "worst_price": 295,
+       "worst_price": 320,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2532,
+       "consensus_prob": 0.2381,
        "prices": {
-        "DraftKings": 295
+        "DraftKings": 320
        },
-       "fair_prob": 0.2428,
+       "fair_prob": 0.2285,
        "gain_pts": null
       }
      }
@@ -8674,20 +8662,20 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 40.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 3.48,
     "n_books": 11,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -8729,7 +8717,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872660",
@@ -8880,8 +8868,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 16,
      "shown": [
@@ -9203,20 +9191,20 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": {
     "max_gain_pts": 2.99,
     "n_books": 8,
-    "generated_at": "2026-09-06T18:34:56.440017+00:00"
+    "generated_at": "2026-09-07T01:16:03.201210+00:00"
    },
    "facts": [
     {
@@ -9258,7 +9246,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872928",
@@ -9409,8 +9397,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 8,
      "shown": [
@@ -9680,7 +9668,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.21,
+     "vig_pts": 4.32,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -9688,32 +9676,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -192,
+       "best_price": -198,
        "best_book": "DraftKings",
-       "worst_price": -192,
+       "worst_price": -198,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6575,
+       "consensus_prob": 0.6644,
        "prices": {
-        "DraftKings": -192
+        "DraftKings": -198
        },
-       "fair_prob": 0.6309,
+       "fair_prob": 0.6369,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 160,
+       "best_price": 164,
        "best_book": "DraftKings",
-       "worst_price": 160,
+       "worst_price": 164,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3846,
+       "consensus_prob": 0.3788,
        "prices": {
-        "DraftKings": 160
+        "DraftKings": 164
        },
-       "fair_prob": 0.3691,
+       "fair_prob": 0.3631,
        "gain_pts": null
       }
      }
@@ -9732,14 +9720,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 40.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -9783,7 +9771,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872927",
@@ -9934,8 +9922,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -10257,14 +10245,14 @@
      "current": -1.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 46.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -10277,7 +10265,7 @@
       "current": -1.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -10289,7 +10277,7 @@
       "current": 46.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -10332,7 +10320,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872929",
@@ -10483,8 +10471,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -10806,14 +10794,14 @@
      "current": -5.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 44.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -10826,7 +10814,7 @@
       "current": -5.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -10838,7 +10826,7 @@
       "current": 44.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -10881,7 +10869,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872926",
@@ -11032,8 +11020,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -11355,14 +11343,14 @@
      "current": -10.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -11375,7 +11363,7 @@
       "current": -10.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -11418,7 +11406,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872930",
@@ -11569,10 +11557,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
-     "n": 13,
+     "n": 12,
      "shown": [
       {
        "player": "Calvin Austin III",
@@ -11585,19 +11573,6 @@
        "return_date": "2027-02-15",
        "updated_at": "2026-08-27T22:48Z",
        "note": "The Giants placed Austin (knee) on injured reserve Thursday, Patricia Traina of SI.com reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Jarrick Bernard-Converse",
-       "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
        "source": "espn"
       },
       {
@@ -11651,10 +11626,23 @@
        "updated_at": "2026-08-19T12:07Z",
        "note": "questionable",
        "source": "espn"
+      },
+      {
+       "player": "Francis Mauigoa",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Upper Body",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-08-21T02:03Z",
+       "note": "Mauigoa (upper body) had to leave Thursday's joint practice with the Dolphins due to a stinger, Dan Benton of USA Today reports.",
+       "source": "espn"
       }
      ],
-     "not_shown": 7,
-     "n_out": 4
+     "not_shown": 6,
+     "n_out": 3
     },
     "away": {
      "n": 7,
@@ -11892,14 +11880,14 @@
      "current": 2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -11935,15 +11923,15 @@
     },
     {
      "kind": "availability",
-     "text": "New York Giants: 4 listed Out or on injured reserve, 13 on the report.",
+     "text": "New York Giants: 3 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "New York Giants",
-      "n_out": 4,
-      "n_listed": 13
+      "n_out": 3,
+      "n_listed": 12
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872931",
@@ -12094,8 +12082,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -12417,14 +12405,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -12468,7 +12456,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872932",
@@ -12619,8 +12607,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 8,
      "shown": [
@@ -12942,14 +12930,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 52.5,
      "current": 52.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -12993,7 +12981,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872933",
@@ -13144,8 +13132,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -13467,14 +13455,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 44.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -13487,7 +13475,7 @@
       "current": 44.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -13530,7 +13518,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872937",
@@ -13681,8 +13669,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 15,
      "shown": [
@@ -14004,14 +13992,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -14055,7 +14043,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872939",
@@ -14206,8 +14194,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 12,
      "shown": [
@@ -14529,14 +14517,14 @@
      "current": 4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -14580,7 +14568,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872946",
@@ -14731,10 +14719,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
-     "n": 8,
+     "n": 10,
      "shown": [
       {
        "player": "Brenden Schooler",
@@ -14815,7 +14803,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 4,
      "n_out": 7
     },
     "away": {
@@ -15054,14 +15042,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -15097,15 +15085,15 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "New England Patriots: 7 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
       "n_out": 7,
-      "n_listed": 8
+      "n_listed": 10
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872936",
@@ -15256,8 +15244,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 13,
      "shown": [
@@ -15579,14 +15567,14 @@
      "current": 5.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -15599,7 +15587,7 @@
       "current": 5.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -15642,7 +15630,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872935",
@@ -15793,8 +15781,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -16116,14 +16104,14 @@
      "current": -6.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -16136,7 +16124,7 @@
       "current": -6.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -16179,7 +16167,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872938",
@@ -16330,8 +16318,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -16653,14 +16641,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -16704,7 +16692,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872934",
@@ -16855,8 +16843,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 16,
      "shown": [
@@ -17178,14 +17166,14 @@
      "current": -2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -17229,7 +17217,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872940",
@@ -17380,8 +17368,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -17703,14 +17691,14 @@
      "current": -3.0,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -17723,7 +17711,7 @@
       "current": -3.0,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "spread"
      }
     },
@@ -17766,7 +17754,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872941",
@@ -17917,8 +17905,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -18240,14 +18228,14 @@
      "current": -8.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -18291,7 +18279,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872944",
@@ -18442,8 +18430,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 7,
      "shown": [
@@ -18765,14 +18753,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -18816,7 +18804,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872943",
@@ -18967,8 +18955,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -19055,7 +19043,7 @@
      "n_out": 5
     },
     "away": {
-     "n": 11,
+     "n": 10,
      "shown": [
       {
        "player": "Terrion Arnold",
@@ -19097,19 +19085,6 @@
        "source": "espn"
       },
       {
-       "player": "Bud Clark",
-       "position": "S",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Ankle",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:06Z",
-       "note": "The Seahawks placed Clark (ankle) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
-       "source": "espn"
-      },
-      {
        "player": "Irv Charles",
        "position": "WR",
        "status": "Injured Reserve",
@@ -19123,21 +19098,34 @@
        "source": "espn"
       },
       {
-       "player": "Jake Bobo",
-       "position": "WR",
+       "player": "Mason Richman",
+       "position": "G",
        "status": "Injured Reserve",
        "abbr": "IR",
-       "body_part": "Knee",
+       "body_part": "Leg",
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T17:45Z",
-       "note": "The Seahawks placed Bobo (knee) on injured reserve Saturday, John Boyle of the team's official site reports.",
+       "updated_at": "2026-08-26T00:13Z",
+       "note": "The Seahawks placed Richman (leg) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Anthony Bradford",
+       "position": "G",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Knee",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-09",
+       "updated_at": "2026-09-07T00:02Z",
+       "note": "questionable",
        "source": "espn"
       }
      ],
-     "not_shown": 5,
-     "n_out": 8
+     "not_shown": 4,
+     "n_out": 5
     }
    },
    "odds": {
@@ -19238,7 +19226,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.25,
+     "vig_pts": 4.22,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -19246,32 +19234,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 400,
+       "best_price": 410,
        "best_book": "DraftKings",
-       "worst_price": 400,
+       "worst_price": 410,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2,
+       "consensus_prob": 0.1961,
        "prices": {
-        "DraftKings": 400
+        "DraftKings": 410
        },
-       "fair_prob": 0.1918,
+       "fair_prob": 0.1881,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -535,
+       "best_price": -550,
        "best_book": "DraftKings",
-       "worst_price": -535,
+       "worst_price": -550,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8425,
+       "consensus_prob": 0.8462,
        "prices": {
-        "DraftKings": -535
+        "DraftKings": -550
        },
-       "fair_prob": 0.8082,
+       "fair_prob": 0.8119,
        "gain_pts": null
       }
      }
@@ -19290,14 +19278,14 @@
      "current": 10.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -19324,11 +19312,11 @@
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 8 listed Out or on injured reserve, 11 on the report.",
+     "text": "Seattle Seahawks: 5 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 8,
-      "n_listed": 11
+      "n_out": 5,
+      "n_listed": 10
      }
     },
     {
@@ -19341,7 +19329,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872942",
@@ -19492,8 +19480,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 17,
      "shown": [
@@ -19815,14 +19803,14 @@
      "current": -10.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -19866,7 +19854,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872945",
@@ -20017,8 +20005,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -20340,14 +20328,14 @@
      "current": -6.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 47.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -20391,7 +20379,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872947",
@@ -20542,8 +20530,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 12,
      "shown": [
@@ -20630,7 +20618,7 @@
      "n_out": 7
     },
     "away": {
-     "n": 13,
+     "n": 12,
      "shown": [
       {
        "player": "Calvin Austin III",
@@ -20643,19 +20631,6 @@
        "return_date": "2027-02-15",
        "updated_at": "2026-08-27T22:48Z",
        "note": "The Giants placed Austin (knee) on injured reserve Thursday, Patricia Traina of SI.com reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Jarrick Bernard-Converse",
-       "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
        "source": "espn"
       },
       {
@@ -20709,10 +20684,23 @@
        "updated_at": "2026-08-19T12:07Z",
        "note": "questionable",
        "source": "espn"
+      },
+      {
+       "player": "Francis Mauigoa",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Upper Body",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-08-21T02:03Z",
+       "note": "Mauigoa (upper body) had to leave Thursday's joint practice with the Dolphins due to a stinger, Dan Benton of USA Today reports.",
+       "source": "espn"
       }
      ],
-     "not_shown": 7,
-     "n_out": 4
+     "not_shown": 6,
+     "n_out": 3
     }
    },
    "odds": {
@@ -20865,14 +20853,14 @@
      "current": -8.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -20899,11 +20887,11 @@
     },
     {
      "kind": "availability",
-     "text": "New York Giants: 4 listed Out or on injured reserve, 13 on the report.",
+     "text": "New York Giants: 3 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "New York Giants",
-      "n_out": 4,
-      "n_listed": 13
+      "n_out": 3,
+      "n_listed": 12
      }
     },
     {
@@ -20916,7 +20904,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872948",
@@ -21067,8 +21055,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -21390,14 +21378,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -21441,7 +21429,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872953",
@@ -21592,8 +21580,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 8,
      "shown": [
@@ -21915,14 +21903,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -21966,7 +21954,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872949",
@@ -22117,8 +22105,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -22440,14 +22428,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 39.5,
      "current": 39.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -22491,7 +22479,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872954",
@@ -22642,8 +22630,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 14,
      "shown": [
@@ -22965,14 +22953,14 @@
      "current": -9.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -23016,7 +23004,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872951",
@@ -23167,8 +23155,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -23490,14 +23478,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -23541,7 +23529,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872952",
@@ -23692,8 +23680,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -24015,14 +24003,14 @@
      "current": 7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -24066,7 +24054,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872956",
@@ -24217,10 +24205,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
-     "n": 13,
+     "n": 12,
      "shown": [
       {
        "player": "Calvin Austin III",
@@ -24233,19 +24221,6 @@
        "return_date": "2027-02-15",
        "updated_at": "2026-08-27T22:48Z",
        "note": "The Giants placed Austin (knee) on injured reserve Thursday, Patricia Traina of SI.com reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Jarrick Bernard-Converse",
-       "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
        "source": "espn"
       },
       {
@@ -24299,10 +24274,23 @@
        "updated_at": "2026-08-19T12:07Z",
        "note": "questionable",
        "source": "espn"
+      },
+      {
+       "player": "Francis Mauigoa",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Upper Body",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-08-21T02:03Z",
+       "note": "Mauigoa (upper body) had to leave Thursday's joint practice with the Dolphins due to a stinger, Dan Benton of USA Today reports.",
+       "source": "espn"
       }
      ],
-     "not_shown": 7,
-     "n_out": 4
+     "not_shown": 6,
+     "n_out": 3
     },
     "away": {
      "n": 12,
@@ -24540,14 +24528,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -24583,15 +24571,15 @@
     },
     {
      "kind": "availability",
-     "text": "New York Giants: 4 listed Out or on injured reserve, 13 on the report.",
+     "text": "New York Giants: 3 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "New York Giants",
-      "n_out": 4,
-      "n_listed": 13
+      "n_out": 3,
+      "n_listed": 12
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872950",
@@ -24742,8 +24730,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -25065,14 +25053,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 46.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -25085,7 +25073,7 @@
       "current": 46.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T04:05:43.934720+00:00",
-      "last_seen": "2026-09-06T19:08:03.316479+00:00",
+      "last_seen": "2026-09-07T01:15:34.520434+00:00",
       "market": "total"
      }
     },
@@ -25128,7 +25116,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872955",
@@ -25279,8 +25267,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 13,
      "shown": [
@@ -25367,7 +25355,7 @@
      "n_out": 8
     },
     "away": {
-     "n": 11,
+     "n": 10,
      "shown": [
       {
        "player": "Terrion Arnold",
@@ -25409,19 +25397,6 @@
        "source": "espn"
       },
       {
-       "player": "Bud Clark",
-       "position": "S",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Ankle",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:06Z",
-       "note": "The Seahawks placed Clark (ankle) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
-       "source": "espn"
-      },
-      {
        "player": "Irv Charles",
        "position": "WR",
        "status": "Injured Reserve",
@@ -25435,21 +25410,34 @@
        "source": "espn"
       },
       {
-       "player": "Jake Bobo",
-       "position": "WR",
+       "player": "Mason Richman",
+       "position": "G",
        "status": "Injured Reserve",
        "abbr": "IR",
-       "body_part": "Knee",
+       "body_part": "Leg",
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T17:45Z",
-       "note": "The Seahawks placed Bobo (knee) on injured reserve Saturday, John Boyle of the team's official site reports.",
+       "updated_at": "2026-08-26T00:13Z",
+       "note": "The Seahawks placed Richman (leg) on injured reserve Tuesday, Brady Henderson of ESPN.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Anthony Bradford",
+       "position": "G",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Knee",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-09",
+       "updated_at": "2026-09-07T00:02Z",
+       "note": "questionable",
        "source": "espn"
       }
      ],
-     "not_shown": 5,
-     "n_out": 8
+     "not_shown": 4,
+     "n_out": 5
     }
    },
    "odds": {
@@ -25602,14 +25590,14 @@
      "current": 3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -25636,11 +25624,11 @@
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 8 listed Out or on injured reserve, 11 on the report.",
+     "text": "Seattle Seahawks: 5 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 8,
-      "n_listed": 11
+      "n_out": 5,
+      "n_listed": 10
      }
     },
     {
@@ -25653,7 +25641,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872957",
@@ -25804,8 +25792,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 10,
      "shown": [
@@ -25892,7 +25880,7 @@
      "n_out": 6
     },
     "away": {
-     "n": 8,
+     "n": 10,
      "shown": [
       {
        "player": "Brenden Schooler",
@@ -25973,7 +25961,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 4,
      "n_out": 7
     }
    },
@@ -26127,14 +26115,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -26161,11 +26149,11 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "New England Patriots: 7 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
       "n_out": 7,
-      "n_listed": 8
+      "n_listed": 10
      }
     },
     {
@@ -26178,7 +26166,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872958",
@@ -26329,8 +26317,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 17,
      "shown": [
@@ -26652,14 +26640,14 @@
      "current": -11.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -26703,7 +26691,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872959",
@@ -26854,8 +26842,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 9,
      "shown": [
@@ -27132,7 +27120,7 @@
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -27176,7 +27164,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872960",
@@ -27327,8 +27315,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 7,
      "shown": [
@@ -27650,14 +27638,14 @@
      "current": 2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -27701,7 +27689,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872961",
@@ -27852,8 +27840,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 13,
      "shown": [
@@ -28175,14 +28163,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -28226,7 +28214,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872962",
@@ -28377,8 +28365,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 11,
      "shown": [
@@ -28700,14 +28688,14 @@
      "current": 3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -28751,7 +28739,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   },
   {
    "event_id": "401872963",
@@ -28902,8 +28890,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-06T20:49:33.356478+00:00",
-    "espn_timestamp": "2026-09-06T20:49:33Z",
+    "updated_at": "2026-09-07T05:13:21.355056+00:00",
+    "espn_timestamp": "2026-09-07T05:13:16Z",
     "home": {
      "n": 15,
      "shown": [
@@ -29225,14 +29213,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-06T19:08:03.316479+00:00"
+     "last_seen": "2026-09-07T01:15:34.520434+00:00"
     }
    },
    "live_board": null,
@@ -29276,7 +29264,7 @@
      }
     }
    ],
-   "asof": "2026-09-06T20:49:45.358829+00:00"
+   "asof": "2026-09-07T05:13:31.199196+00:00"
   }
  ]
 }
