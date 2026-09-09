@@ -334,7 +334,7 @@ it appears. Never mark a sport Live without that evidence.
 |---|---|---|
 | NFL spread + total | Live-ready | graded vs purchased 17-book closes |
 | NFL moneyline | In calibration | needs a season of our own capture |
-| CFB spread + total | Board only | prices shipped; adapter built, no closing-line history yet |
+| CFB spread + total | Board only | prices shipped; adapter built. Own capture is not a close: median 55 min to kickoff, only 27% inside 30 min — `docs/plans/2026-09-09-cfb-closing-line-evidence.md` |
 | EPL 1X2 | In calibration | documented closing odds, better provenance than NFL |
 | NBA / NHL | Not built | strong free closing-line history available |
 | MLB | Not built | **source licence is NOASSERTION — legal review before any paid use** |

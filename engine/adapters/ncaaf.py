@@ -217,6 +217,18 @@ class NCAAFAdapter(SportAdapter):
         The alternative — inventing an is_closing=True line from a schedule
         feed that never claimed to hold one — is precisely what base.py warns
         silently corrupts every CLV number downstream.
+
+        Wiring data/capture/ncaaf/ in here looks like the obvious fix and was
+        measured on 2026-09-09 before being rejected. Across the 197 college
+        games we had both observed and seen played, the median gap between our
+        last price and kickoff is 55 minutes and 95% are inside three hours —
+        healthy, and still not a close. Only 27% have a price inside thirty
+        minutes, against a purchased NFL backfill that caught every game within
+        5-28. Scoring a model against a line an hour stale flatters it, with no
+        dishonest field anywhere in the payload. The numbers, the cause
+        (scheduled runs land 10-18 times a day, not the 48 the cron asks for)
+        and the fixes are in
+        docs/plans/2026-09-09-cfb-closing-line-evidence.md.
         """
         return []
 
