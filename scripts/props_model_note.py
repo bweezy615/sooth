@@ -596,6 +596,7 @@ def build(through: str = WINDOW_THROUGH) -> dict:
                           f"{b_board + 1.96 * se_board:+.2f}",
         "slope.board_typical": f"{b_ctrl:+.2f}",
         "slope.board_typical_n": f"{len(ctrl):,}",
+        "slope.line_share": f"{(b_flat - b_typ) / b_flat * 100:.0f}%",
         "slope.z_line": f"{abs(z_line):.1f}",
         "slope.z_select": f"{abs(z_select):.1f}",
         "slope.z_posted": f"{abs(z_posted):.1f}",

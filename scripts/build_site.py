@@ -711,6 +711,19 @@ def slate_figures() -> dict:
     if not verify_proof(leaves[0], proof, root):
         raise FigureError("the worked inclusion proof does not chain to the root")
 
+    # /verify walks the reader through leaf 0 and quotes its probability. A
+    # slate now seals spread plays too and those carry no probability, so if
+    # leaf 0 ever stopped being a moneyline row the page would print "None" as
+    # a published forecast. weekly.py appends both moneyline rows for a game
+    # before that game's spread row, which keeps leaf 0 moneyline; this fails
+    # the build rather than trusting that to stay true.
+    if preds[0].get("probability") is None:
+        raise FigureError(
+            f"{slate_id} v{version}: leaf 0 is a "
+            f"{preds[0].get('market', 'unknown')} prediction with no "
+            f"probability, but /verify's worked example quotes leaf 0's "
+            f"probability as a published forecast")
+
     tampered = merkle_root([_leaf(dict(p, probability=0.99)) if i == 0 else lh
                             for i, (p, lh) in enumerate(zip(preds, leaves))])
     first = canonical(preds[0]).decode()

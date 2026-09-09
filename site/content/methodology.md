@@ -303,12 +303,12 @@ of what the model outputs.**
 The honest reason is sample size. In the current out-of-sample record the
 0.9-1.0 band holds {{fig:reliability_independent.8.n|int}} games — far too few
 to demonstrate that the model
-deserves that much confidence. An earlier, larger evaluation of the raw Elo
-baseline showed the opposite problem: roughly eight points of overconfidence
-at the top of the range. Between a band too thin to trust and a history of
-overconfidence exactly where the industry sells its "locks", the conservative
-policy is a hard cap, and we keep it as a design rule rather than a measured
-finding. If the extreme bands ever accumulate enough games to be measured
+deserves that much confidence. The band where the industry sells its "locks" is
+the one band we cannot measure — and in the bands we can, the model already runs
+overconfident by {{fig:reliability_mid.min_gap|pts1_bare}} to
+{{fig:reliability_mid.max_gap|pts1_bare}} points. Between those two facts the
+conservative policy is a hard cap, and we keep it as a design rule rather than a
+measured finding. If the extreme bands ever accumulate enough games to be measured
 properly, we will publish that table and revisit the cap in the open.
 
 ---

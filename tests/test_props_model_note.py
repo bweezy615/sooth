@@ -29,6 +29,7 @@ import pytest
 
 from scripts.props_model_note import (CAPTURE, STALE_AFTER_DAYS,
                                       WINDOW_THROUGH, build, page_figures)
+from tests._worded_quantities import worded_quantities as _worded
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "site/public/props-model.html"
@@ -154,19 +155,9 @@ def test_no_hand_typed_numbers_left_in_the_prose():
 #
 # So: the same allowlist discipline the digit test uses, applied to quantities
 # spelled in words. A phrase is allowed only if it is on the reviewed list
-# below WITH a reason. Anything new fails until a human reads it.
-
-_N = (r"(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dozen)")
-_FRAC = (r"(?:halves|half|thirds?|quarters?|fifths?|sixths?|sevenths?"
-         r"|eighths?|ninths?|tenths?)")
-_WORDED = [
-    rf"\b(?:a|one|{_N})[\s-]{_FRAC}\b",              # four fifths, a third
-    r"\b(?:half|most|nearly all|almost all)\s+of\b",  # half of, most of
-    rf"\b(?:a|one|{_N})\s+(?:in|out\s+of)\s+(?:every|{_N})\b",  # three in five
-    r"\b(?:twice|thrice|doubles?|doubled|triples?|tripled|quadrupled"
-    r"|tenfold|orders?\s+of\s+magnitude)\b",          # multipliers
-    rf"\b{_N}\b\W{{0,3}}\w+",                         # eleven-point, five more
-]
+# below WITH a reason. Anything new fails until a human reads it. The pattern
+# list itself lives in tests/_worded_quantities.py, shared with the guard on
+# /methodology and /disclaimers in test_worded_quantities_prose_pages.py.
 
 # phrase -> why a human decided it may stay. Keys are the matched words plus
 # the word after them, lowercased, punctuation collapsed to single spaces.
@@ -211,26 +202,7 @@ REVIEWED_WORDED_QUANTITIES = {
                   "below",
     "three or": "'three or more books on both sides' — checked against "
                 "method.board_filter below",
-
-    # ---- DISPUTED -------------------------------------------------------
-    "four fifths": "WRONG since it was written on 2026-08-28 and still live. "
-                   "It reads 80%; the effect it describes is 57%. Kept here "
-                   "rather than silently rewritten because correcting prose on "
-                   "this page is Branden's call, not an unattended agent's. "
-                   "Evidence and a gate-verified diff: "
-                   "docs/plans/2026-09-03-four-fifths.md. DELETE THIS ENTRY "
-                   "when the sentence is fixed.",
 }
-
-
-def _worded(text: str) -> dict[str, str]:
-    """Every worded quantity in the prose, keyed by its normalised phrase."""
-    out: dict[str, str] = {}
-    for pattern in _WORDED:
-        for m in re.finditer(pattern, text, re.I):
-            phrase = re.sub(r"\W+", " ", m.group(0).strip().lower()).strip()
-            out.setdefault(m.start(), phrase)
-    return out
 
 
 def test_no_worded_quantities_left_in_the_prose():

@@ -175,11 +175,20 @@ would have looked exactly like the tampering the tree exists to disprove.
 2. **`picks.html` hand-types 49.8%, 2,608, 52.38%, 53.2%** — **closed**.
    `picks.html` is one of the seven pages pinned by
    `test_the_hand_written_pages_quote_the_generated_figures`.
-3. **The spread play is not in the Merkle commitment** — **still open, still
-   Branden's**. The 32 sealed leaves are moneyline predictions; `ats` lives only
-   in the display payload and the encrypted pro blob. Unchanged by this re-run
-   and unchanged by the timezone fix. Nobody should act on it without Branden,
-   because the fix would change what a commitment contains.
+3. **The spread play is not in the Merkle commitment** — **closed 2026-09-04**,
+   authorised by Branden. A slate now seals one `Market.SPREAD` prediction per
+   game that has a posted number, alongside the two moneyline rows: 48 leaves
+   for a 16-game week, not 32. Every game is sealed rather than only the
+   qualified plays, so which games qualified is inside the commitment too and
+   a reader recomputes it as `abs(predicted_margin - line) >= 4.0`. The play
+   carries no probability, because we hold no calibrated cover probability and
+   will not mint one; it grades under `ridge-margin-v1` against the cover rule,
+   never the moneyline rule. See `2026-09-04-spread-in-commitment.md`.
+
+   **W01 is sealed at v5 and its spread play is outside that commitment.** A v6
+   would be legitimate — kickoff is 2026-09-09, so a re-seal is still
+   pre-kickoff — but sealing is Branden's to run. Until he does, Week 1 ships
+   with the defect this closes.
 
 ### Read this before W02 seals
 

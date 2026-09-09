@@ -1,25 +1,136 @@
 {
- "generated_at": "2026-09-03T16:20:25.285982+00:00",
+ "generated_at": "2026-09-07T04:25:32.012828+00:00",
  "selection": "edge_vs_fair_pts",
  "selection_note": "ranked by best available price against de-vigged consensus, NOT by model edge \u2014 the model measured no edge on props books post",
  "disclaimer": "Best available price at time of posting, not a prediction. Prices move and nothing here is guaranteed. Our own prop model showed no edge on props books post \u2014 sooth.bet/props-model.",
- "n_considered": 256,
+ "n_considered": 46,
  "best_prices": [
   {
    "sport": "mlb",
-   "matchup": "San Francisco Giants @ Pittsburgh Pirates",
-   "starts": "2026-09-03T16:35:00Z",
-   "player": "Spencer Horwitz",
+   "matchup": "New York Mets @ Miami Marlins",
+   "starts": "2026-09-07T17:11:00Z",
+   "player": "Jonah Tong",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": -110,
+   "best_book": "DraftKings",
+   "n_books": 4,
+   "fair_price": -104,
+   "price_edge_pts": -1.37,
+   "book_spread_pts": 2.16,
+   "hit_l5": null,
+   "hit_l10": null,
+   "hit_season": null,
+   "model_p_over": 0.107,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Cleveland Guardians @ Baltimore Orioles",
+   "starts": "2026-09-07T17:36:00Z",
+   "player": "Trevor Rogers",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 4.5,
+   "side": "over",
+   "best_price": -125,
+   "best_book": "DraftKings",
+   "n_books": 3,
+   "fair_price": -118,
+   "price_edge_pts": -1.48,
+   "book_spread_pts": 2.07,
+   "hit_l5": {
+    "n": 5,
+    "over": 4
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 8
+   },
+   "hit_season": {
+    "n": 26,
+    "over": 14
+   },
+   "model_p_over": 0.7153,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Atlanta Braves @ Philadelphia Phillies",
+   "starts": "2026-09-07T17:06:00Z",
+   "player": "Grant Holmes",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 3.5,
+   "side": "over",
+   "best_price": 110,
+   "best_book": "Fanatics",
+   "n_books": 4,
+   "fair_price": 118,
+   "price_edge_pts": -1.8,
+   "book_spread_pts": 1.4,
+   "hit_l5": {
+    "n": 5,
+    "over": 0
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 4
+   },
+   "hit_season": {
+    "n": 27,
+    "over": 17
+   },
+   "model_p_over": 0.263,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Cleveland Guardians @ Baltimore Orioles",
+   "starts": "2026-09-07T17:36:00Z",
+   "player": "Joey Cantillo",
+   "market": "pitcher_strikeouts",
+   "market_label": "Pitcher strikeouts",
+   "line": 5.5,
+   "side": "under",
+   "best_price": 104,
+   "best_book": "DraftKings",
+   "n_books": 4,
+   "fair_price": 113,
+   "price_edge_pts": -2.08,
+   "book_spread_pts": 0.98,
+   "hit_l5": {
+    "n": 5,
+    "over": 2
+   },
+   "hit_l10": {
+    "n": 10,
+    "over": 5
+   },
+   "hit_season": {
+    "n": 29,
+    "over": 13
+   },
+   "model_p_over": 0.528,
+   "model_version": "kpoisson-v1"
+  },
+  {
+   "sport": "mlb",
+   "matchup": "Cleveland Guardians @ Baltimore Orioles",
+   "starts": "2026-09-07T17:36:00Z",
+   "player": "Angel Genao",
    "market": "batter_total_bases",
    "market_label": "Total bases",
    "line": 1.5,
    "side": "over",
-   "best_price": 145,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 130,
-   "price_edge_pts": 2.72,
-   "book_spread_pts": 9.18,
+   "best_price": 150,
+   "best_book": "Bovada",
+   "n_books": 3,
+   "fair_price": 164,
+   "price_edge_pts": -2.1,
+   "book_spread_pts": 0.65,
    "hit_l5": {
     "n": 5,
     "over": 1
@@ -29,119 +140,8 @@
     "over": 2
    },
    "hit_season": {
-    "n": 97,
-    "over": 33
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Toronto Blue Jays @ Cleveland Guardians",
-   "starts": "2026-09-03T17:10:00Z",
-   "player": "Ernie Clement",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 175,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 157,
-   "price_edge_pts": 2.51,
-   "book_spread_pts": 5.65,
-   "hit_l5": {
-    "n": 5,
-    "over": 0
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 1
-   },
-   "hit_season": {
-    "n": 136,
-    "over": 52
-   },
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Toronto Blue Jays @ Cleveland Guardians",
-   "starts": "2026-09-03T17:10:00Z",
-   "player": "Brett Bateman",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 175,
-   "best_book": "BetRivers",
-   "n_books": 6,
-   "fair_price": 157,
-   "price_edge_pts": 2.5,
-   "book_spread_pts": 5.65,
-   "hit_l5": null,
-   "hit_l10": null,
-   "hit_season": null,
-   "model_p_over": null,
-   "model_version": null
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Boston Red Sox @ Baltimore Orioles",
-   "starts": "2026-09-03T23:15:00Z",
-   "player": "Jake Bennett",
-   "market": "pitcher_strikeouts",
-   "market_label": "Pitcher strikeouts",
-   "line": 4.5,
-   "side": "under",
-   "best_price": 129,
-   "best_book": "DraftKings",
-   "n_books": 6,
-   "fair_price": 119,
-   "price_edge_pts": 1.96,
-   "book_spread_pts": 6.33,
-   "hit_l5": {
-    "n": 5,
-    "over": 4
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 5
-   },
-   "hit_season": {
-    "n": 16,
-    "over": 7
-   },
-   "model_p_over": 0.674,
-   "model_version": "kpoisson-v1"
-  },
-  {
-   "sport": "mlb",
-   "matchup": "Boston Red Sox @ Baltimore Orioles",
-   "starts": "2026-09-03T23:15:00Z",
-   "player": "Mickey Gasper",
-   "market": "batter_total_bases",
-   "market_label": "Total bases",
-   "line": 1.5,
-   "side": "over",
-   "best_price": 163,
-   "best_book": "BetRivers",
-   "n_books": 4,
-   "fair_price": 150,
-   "price_edge_pts": 1.96,
-   "book_spread_pts": 5.46,
-   "hit_l5": {
-    "n": 5,
-    "over": 3
-   },
-   "hit_l10": {
-    "n": 10,
-    "over": 7
-   },
-   "hit_season": {
-    "n": 48,
-    "over": 17
+    "n": 28,
+    "over": 9
    },
    "model_p_over": null,
    "model_version": null
