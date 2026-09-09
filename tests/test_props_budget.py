@@ -15,7 +15,18 @@ that had been the entire props product for a week.
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 import engine.props as props
+
+# Relative to now, never a literal date. The first version of this file pinned
+# "2026-09-04T00:00:00Z" as the kickoff, which was inside the 30-hour window on
+# the day it was written and silently outside it six days later —
+# upcoming_events filtered every event away and all three budget assertions
+# failed against code that had not changed. A fixture that expires is a test
+# that reports the calendar, not the behaviour.
+SOON = (datetime.now(timezone.utc) + timedelta(hours=2)).strftime(
+    "%Y-%m-%dT%H:%M:%SZ")
 
 
 class _Resp:
@@ -46,7 +57,7 @@ class _Session:
     def get(self, url, params=None, timeout=None):
         if url.endswith("/events"):
             self.events_for.append(url)
-            return _Resp([{"id": f"e{i}", "commence_time": "2026-09-04T00:00:00Z",
+            return _Resp([{"id": f"e{i}", "commence_time": SOON,
                            "home_team": "H", "away_team": "A"} for i in range(20)])
         return _Resp([], {})
 
