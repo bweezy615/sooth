@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-09-10T21:12:39.773259+00:00",
- "checked_at": "2026-09-10T21:12:39.773259+00:00",
+ "generated_at": "2026-09-11T05:15:14.133178+00:00",
+ "checked_at": "2026-09-11T05:15:14.133178+00:00",
  "sport": "nfl",
- "n_reports": 54,
- "n_shoppable": 7,
+ "n_reports": 52,
+ "n_shoppable": 6,
  "sources": {
   "prices": "own_capture observations (ESPN game lines)",
   "board": "2026-09-07T06:34:48.146940+00:00",
-  "teamstats": "2026-09-10T21:12:30.547644+00:00",
-  "injuries": "2026-09-10T21:12:29.688682+00:00"
+  "teamstats": "2026-09-11T05:15:08.342930+00:00",
+  "injuries": "2026-09-11T05:15:07.547330+00:00"
  },
  "note": "Research only, not advice and not a pick. Every figure in facts is computed from the data in this file.",
  "tracking": {
@@ -18,1001 +18,6 @@
  },
  "unresolved_teams": [],
  "reports": [
-  {
-   "event_id": "acc580d74344ea3b31bbcdd057fe6a9c",
-   "sport": "nfl",
-   "home": "Los Angeles Rams",
-   "away": "San Francisco 49ers",
-   "kickoff": "2026-09-11T00:35:00Z",
-   "season": null,
-   "week": null,
-   "records": {
-    "Los Angeles Rams": null,
-    "San Francisco 49ers": null
-   },
-   "stats": {
-    "basis_season": 2025,
-    "metrics": [
-     {
-      "key": "off_epa_pp",
-      "label": "Off EPA/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "def_epa_pp",
-      "label": "Def EPA/play",
-      "better": "low",
-      "dp": 3
-     },
-     {
-      "key": "net_epa_pp",
-      "label": "Net EPA/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "yards_pp",
-      "label": "Yards/play",
-      "better": "high",
-      "dp": 2
-     },
-     {
-      "key": "pass_rate",
-      "label": "Pass rate",
-      "better": null,
-      "dp": 3
-     },
-     {
-      "key": "cpoe",
-      "label": "CPOE",
-      "better": "high",
-      "dp": 2
-     },
-     {
-      "key": "first_down_rate",
-      "label": "1st downs/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "explosive_rate",
-      "label": "Explosive/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "turnover_rate",
-      "label": "Giveaways/play",
-      "better": "low",
-      "dp": 4
-     }
-    ],
-    "home": {
-     "abbr": "LA",
-     "name": "Los Angeles Rams",
-     "record": null,
-     "basis_season": 2025,
-     "season": {
-      "off_epa_pp": 0.127,
-      "def_epa_pp": -0.022,
-      "net_epa_pp": 0.149,
-      "yards_pp": 6.46,
-      "pass_rate": 0.579,
-      "cpoe": 0.97,
-      "first_down_rate": 0.33,
-      "explosive_rate": 0.077,
-      "turnover_rate": 0.0117,
-      "games": 20
-     },
-     "last5": {
-      "off_epa_pp": 0.111,
-      "def_epa_pp": 0.048,
-      "net_epa_pp": 0.063,
-      "yards_pp": 6.4,
-      "pass_rate": 0.611,
-      "cpoe": -2.82,
-      "first_down_rate": 0.309,
-      "explosive_rate": 0.081,
-      "turnover_rate": 0.0126,
-      "games": 5
-     },
-     "rating": {
-      "off": 0.0764,
-      "def": -0.0097,
-      "net": 0.086,
-      "games_seen": 461
-     }
-    },
-    "away": {
-     "abbr": "SF",
-     "name": "San Francisco 49ers",
-     "record": null,
-     "basis_season": 2025,
-     "season": {
-      "off_epa_pp": 0.048,
-      "def_epa_pp": 0.066,
-      "net_epa_pp": -0.017,
-      "yards_pp": 5.77,
-      "pass_rate": 0.563,
-      "cpoe": 5.01,
-      "first_down_rate": 0.322,
-      "explosive_rate": 0.049,
-      "turnover_rate": 0.0202,
-      "games": 19
-     },
-     "last5": {
-      "off_epa_pp": -0.0,
-      "def_epa_pp": 0.104,
-      "net_epa_pp": -0.104,
-      "yards_pp": 5.9,
-      "pass_rate": 0.573,
-      "cpoe": 2.98,
-      "first_down_rate": 0.328,
-      "explosive_rate": 0.054,
-      "turnover_rate": 0.0243,
-      "games": 5
-     },
-     "rating": {
-      "off": 0.0574,
-      "def": 0.0449,
-      "net": 0.0125,
-      "games_seen": 461
-     }
-    },
-    "league": {
-     "pass_rate": 0.565,
-     "net_epa_pp": -0.016,
-     "yards_pp": 5.753
-    }
-   },
-   "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
-    "home": {
-     "n": 6,
-     "shown": [
-      {
-       "player": "Aaron Donald",
-       "position": "DT",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Not injury related - resting player",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-09-21",
-       "updated_at": "2026-09-08T20:14Z",
-       "note": "Head coach Sean McVay said that Donald won't travel to Melbourne, Australia and will be inactive Thursday for the Rams' season opener versus the 49ers, Stu Jackson of the team's official site reports.",
-       "source": "nflverse+espn",
-       "practice_status": "Did Not Participate In Practice"
-      },
-      {
-       "player": "Daniel Rickert",
-       "position": "DE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:54Z",
-       "note": "Rickert (knee) reverted to the Rams' injured reserve Tuesday, per the NFL's transaction log.",
-       "source": "espn"
-      },
-      {
-       "player": "Justin Dedich",
-       "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:42Z",
-       "note": "Dedich (undisclosed) was put on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Keagen Trost",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Hamstring",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:31Z",
-       "note": "Trost (hamstring) was placed on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Keir Thomas II",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
-       "source": "espn"
-      },
-      {
-       "player": "Matthew Caldwell",
-       "position": "QB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-29T22:20Z",
-       "note": "The Rams placed Caldwell (undisclosed) on injured reserve Saturday, Aaron Wilson of KPRC 2 Houston reports.",
-       "source": "espn"
-      }
-     ],
-     "not_shown": 0,
-     "n_out": 6
-    },
-    "away": {
-     "n": 5,
-     "shown": [
-      {
-       "player": "Alfred Collins",
-       "position": "DT",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-09T21:07Z",
-       "note": "Collins will miss the entire 2026 season after suffering a torn patellar tendon during Tuesday's practice, Nick Wagoner of ESPN.com reports.",
-       "source": "nflverse+espn",
-       "practice_status": "Did Not Participate In Practice"
-      },
-      {
-       "player": "Mykel Williams",
-       "position": "DE",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee - ACL",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "out",
-       "source": "espn"
-      },
-      {
-       "player": "Nate Hobbs",
-       "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
-       "source": "espn"
-      },
-      {
-       "player": "Sam Okuayinonu",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Foot",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-12-17",
-       "updated_at": "2026-09-07T23:14Z",
-       "note": "Okuayinonu broke his foot in practice last week and is set to have surgery to repair the issue, Matt Barrows of The Athletic reports.",
-       "source": "espn"
-      },
-      {
-       "player": "James Thompson Jr.",
-       "position": "DT",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Hamstring",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-09-10",
-       "updated_at": "2026-09-08T23:55Z",
-       "note": "questionable",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
-      }
-     ],
-     "not_shown": 0,
-     "n_out": 4
-    }
-   },
-   "odds": {
-    "moneyline": {
-     "market": "moneyline",
-     "line": null,
-     "n_books": 11,
-     "books": [
-      "BetMGM",
-      "BetOnline",
-      "BetRivers",
-      "BetUS",
-      "Bovada",
-      "Caesars",
-      "DraftKings",
-      "FanDuel",
-      "Fanatics",
-      "LowVig",
-      "MyBookie"
-     ],
-     "vig_pts": 4.64,
-     "fair_basis": "consensus of 11 books",
-     "shoppable": true,
-     "sides": {
-      "San Francisco 49ers": {
-       "selection": "San Francisco 49ers",
-       "label": "San Francisco 49ers",
-       "line": null,
-       "best_price": 170,
-       "best_book": "Bovada",
-       "worst_price": 152,
-       "worst_book": "MyBookie",
-       "n_books": 11,
-       "consensus_prob": 0.3831,
-       "prices": {
-        "Bovada": 170,
-        "FanDuel": 168,
-        "BetUS": 167,
-        "Fanatics": 165,
-        "Caesars": 164,
-        "BetOnline": 161,
-        "LowVig": 161,
-        "BetRivers": 160,
-        "BetMGM": 160,
-        "DraftKings": 160,
-        "MyBookie": 152
-       },
-       "fair_prob": 0.3661,
-       "gain_pts": -0.42
-      },
-      "Los Angeles Rams": {
-       "selection": "Los Angeles Rams",
-       "label": "Los Angeles Rams",
-       "line": null,
-       "best_price": -185,
-       "best_book": "BetOnline",
-       "worst_price": -205,
-       "worst_book": "BetRivers",
-       "n_books": 11,
-       "consensus_prob": 0.6633,
-       "prices": {
-        "BetOnline": -185,
-        "LowVig": -185,
-        "DraftKings": -192,
-        "BetUS": -195,
-        "Caesars": -197,
-        "MyBookie": -197,
-        "BetMGM": -200,
-        "FanDuel": -200,
-        "Bovada": -200,
-        "Fanatics": -200,
-        "BetRivers": -205
-       },
-       "fair_prob": 0.6339,
-       "gain_pts": -1.53
-      }
-     }
-    }
-   },
-   "market": {
-    "shoppable": true,
-    "n_books": 11,
-    "books": [
-     "BetMGM",
-     "BetOnline",
-     "BetRivers",
-     "BetUS",
-     "Bovada",
-     "Caesars",
-     "DraftKings",
-     "FanDuel",
-     "Fanatics",
-     "LowVig",
-     "MyBookie"
-    ]
-   },
-   "movement": {},
-   "live_board": {
-    "max_gain_pts": 2.65,
-    "n_books": 11,
-    "generated_at": "2026-09-07T06:34:48.146940+00:00"
-   },
-   "facts": [
-    {
-     "kind": "price_gap",
-     "text": "Best number on San Francisco 49ers (moneyline) is +170 at Bovada, against +152 at the worst of 11 books \u2014 0.42 points of implied probability versus the de-vigged fair price.",
-     "numbers": {
-      "best_price": 170,
-      "best_book": "Bovada",
-      "worst_price": 152,
-      "n_books": 11,
-      "gain_pts": -0.42,
-      "market": "moneyline",
-      "line": null,
-      "selection": "San Francisco 49ers"
-     }
-    },
-    {
-     "kind": "efficiency",
-     "text": "On 2025 form, Los Angeles Rams net +0.149 EPA/play and San Francisco 49ers net -0.017 \u2014 Los Angeles Rams by 0.166.",
-     "numbers": {
-      "home_net": 0.149,
-      "away_net": -0.017,
-      "basis_season": 2025,
-      "difference": 0.166
-     }
-    },
-    {
-     "kind": "tendency",
-     "text": "Combined pass rate 0.571 against a league average of 0.565 (Los Angeles Rams 0.579, San Francisco 49ers 0.563).",
-     "numbers": {
-      "combined": 0.571,
-      "league": 0.565,
-      "home": 0.579,
-      "away": 0.563
-     }
-    },
-    {
-     "kind": "availability",
-     "text": "San Francisco 49ers: 4 listed Out or on injured reserve, 5 on the report.",
-     "numbers": {
-      "team": "San Francisco 49ers",
-      "n_out": 4,
-      "n_listed": 5
-     }
-    },
-    {
-     "kind": "availability",
-     "text": "Los Angeles Rams: 6 listed Out or on injured reserve, 6 on the report.",
-     "numbers": {
-      "team": "Los Angeles Rams",
-      "n_out": 6,
-      "n_listed": 6
-     }
-    },
-    {
-     "kind": "dispersion",
-     "text": "11 books quote +170 down to +152 on the same side \u2014 2.65 points between the best and worst number.",
-     "numbers": {
-      "spread_pts": 2.65,
-      "n_books": 11
-     }
-    }
-   ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
-  },
-  {
-   "event_id": "401872657",
-   "sport": "nfl",
-   "home": "Los Angeles Rams",
-   "away": "San Francisco 49ers",
-   "kickoff": "2026-09-11T00:35Z",
-   "season": 2026,
-   "week": 1,
-   "records": {
-    "Los Angeles Rams": null,
-    "San Francisco 49ers": null
-   },
-   "stats": {
-    "basis_season": 2025,
-    "metrics": [
-     {
-      "key": "off_epa_pp",
-      "label": "Off EPA/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "def_epa_pp",
-      "label": "Def EPA/play",
-      "better": "low",
-      "dp": 3
-     },
-     {
-      "key": "net_epa_pp",
-      "label": "Net EPA/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "yards_pp",
-      "label": "Yards/play",
-      "better": "high",
-      "dp": 2
-     },
-     {
-      "key": "pass_rate",
-      "label": "Pass rate",
-      "better": null,
-      "dp": 3
-     },
-     {
-      "key": "cpoe",
-      "label": "CPOE",
-      "better": "high",
-      "dp": 2
-     },
-     {
-      "key": "first_down_rate",
-      "label": "1st downs/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "explosive_rate",
-      "label": "Explosive/play",
-      "better": "high",
-      "dp": 3
-     },
-     {
-      "key": "turnover_rate",
-      "label": "Giveaways/play",
-      "better": "low",
-      "dp": 4
-     }
-    ],
-    "home": {
-     "abbr": "LA",
-     "name": "Los Angeles Rams",
-     "record": null,
-     "basis_season": 2025,
-     "season": {
-      "off_epa_pp": 0.127,
-      "def_epa_pp": -0.022,
-      "net_epa_pp": 0.149,
-      "yards_pp": 6.46,
-      "pass_rate": 0.579,
-      "cpoe": 0.97,
-      "first_down_rate": 0.33,
-      "explosive_rate": 0.077,
-      "turnover_rate": 0.0117,
-      "games": 20
-     },
-     "last5": {
-      "off_epa_pp": 0.111,
-      "def_epa_pp": 0.048,
-      "net_epa_pp": 0.063,
-      "yards_pp": 6.4,
-      "pass_rate": 0.611,
-      "cpoe": -2.82,
-      "first_down_rate": 0.309,
-      "explosive_rate": 0.081,
-      "turnover_rate": 0.0126,
-      "games": 5
-     },
-     "rating": {
-      "off": 0.0764,
-      "def": -0.0097,
-      "net": 0.086,
-      "games_seen": 461
-     }
-    },
-    "away": {
-     "abbr": "SF",
-     "name": "San Francisco 49ers",
-     "record": null,
-     "basis_season": 2025,
-     "season": {
-      "off_epa_pp": 0.048,
-      "def_epa_pp": 0.066,
-      "net_epa_pp": -0.017,
-      "yards_pp": 5.77,
-      "pass_rate": 0.563,
-      "cpoe": 5.01,
-      "first_down_rate": 0.322,
-      "explosive_rate": 0.049,
-      "turnover_rate": 0.0202,
-      "games": 19
-     },
-     "last5": {
-      "off_epa_pp": -0.0,
-      "def_epa_pp": 0.104,
-      "net_epa_pp": -0.104,
-      "yards_pp": 5.9,
-      "pass_rate": 0.573,
-      "cpoe": 2.98,
-      "first_down_rate": 0.328,
-      "explosive_rate": 0.054,
-      "turnover_rate": 0.0243,
-      "games": 5
-     },
-     "rating": {
-      "off": 0.0574,
-      "def": 0.0449,
-      "net": 0.0125,
-      "games_seen": 461
-     }
-    },
-    "league": {
-     "pass_rate": 0.565,
-     "net_epa_pp": -0.016,
-     "yards_pp": 5.753
-    }
-   },
-   "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
-    "home": {
-     "n": 6,
-     "shown": [
-      {
-       "player": "Aaron Donald",
-       "position": "DT",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Not injury related - resting player",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-09-21",
-       "updated_at": "2026-09-08T20:14Z",
-       "note": "Head coach Sean McVay said that Donald won't travel to Melbourne, Australia and will be inactive Thursday for the Rams' season opener versus the 49ers, Stu Jackson of the team's official site reports.",
-       "source": "nflverse+espn",
-       "practice_status": "Did Not Participate In Practice"
-      },
-      {
-       "player": "Daniel Rickert",
-       "position": "DE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:54Z",
-       "note": "Rickert (knee) reverted to the Rams' injured reserve Tuesday, per the NFL's transaction log.",
-       "source": "espn"
-      },
-      {
-       "player": "Justin Dedich",
-       "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:42Z",
-       "note": "Dedich (undisclosed) was put on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Keagen Trost",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Hamstring",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:31Z",
-       "note": "Trost (hamstring) was placed on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Keir Thomas II",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
-       "source": "espn"
-      },
-      {
-       "player": "Matthew Caldwell",
-       "position": "QB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-29T22:20Z",
-       "note": "The Rams placed Caldwell (undisclosed) on injured reserve Saturday, Aaron Wilson of KPRC 2 Houston reports.",
-       "source": "espn"
-      }
-     ],
-     "not_shown": 0,
-     "n_out": 6
-    },
-    "away": {
-     "n": 5,
-     "shown": [
-      {
-       "player": "Alfred Collins",
-       "position": "DT",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-09T21:07Z",
-       "note": "Collins will miss the entire 2026 season after suffering a torn patellar tendon during Tuesday's practice, Nick Wagoner of ESPN.com reports.",
-       "source": "nflverse+espn",
-       "practice_status": "Did Not Participate In Practice"
-      },
-      {
-       "player": "Mykel Williams",
-       "position": "DE",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee - ACL",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "out",
-       "source": "espn"
-      },
-      {
-       "player": "Nate Hobbs",
-       "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
-       "source": "espn"
-      },
-      {
-       "player": "Sam Okuayinonu",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Foot",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-12-17",
-       "updated_at": "2026-09-07T23:14Z",
-       "note": "Okuayinonu broke his foot in practice last week and is set to have surgery to repair the issue, Matt Barrows of The Athletic reports.",
-       "source": "espn"
-      },
-      {
-       "player": "James Thompson Jr.",
-       "position": "DT",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Hamstring",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-09-10",
-       "updated_at": "2026-09-08T23:55Z",
-       "note": "questionable",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
-      }
-     ],
-     "not_shown": 0,
-     "n_out": 4
-    }
-   },
-   "odds": {
-    "spread": {
-     "market": "spread",
-     "line": -3.5,
-     "n_books": 1,
-     "books": [
-      "DraftKings"
-     ],
-     "vig_pts": 4.75,
-     "fair_basis": "single book, margin removed",
-     "shoppable": false,
-     "sides": {
-      "side_a": {
-       "selection": "side_a",
-       "label": "home",
-       "line": -3.5,
-       "best_price": -112,
-       "best_book": "DraftKings",
-       "worst_price": -112,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.5283,
-       "prices": {
-        "DraftKings": -112
-       },
-       "fair_prob": 0.5043,
-       "gain_pts": null
-      },
-      "side_b": {
-       "selection": "side_b",
-       "label": "away",
-       "line": 3.5,
-       "best_price": -108,
-       "best_book": "DraftKings",
-       "worst_price": -108,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.5192,
-       "prices": {
-        "DraftKings": -108
-       },
-       "fair_prob": 0.4957,
-       "gain_pts": null
-      }
-     }
-    },
-    "total": {
-     "market": "total",
-     "line": 48.5,
-     "n_books": 1,
-     "books": [
-      "DraftKings"
-     ],
-     "vig_pts": 4.71,
-     "fair_basis": "single book, margin removed",
-     "shoppable": false,
-     "sides": {
-      "over": {
-       "selection": "over",
-       "label": "over",
-       "line": 48.5,
-       "best_price": -105,
-       "best_book": "DraftKings",
-       "worst_price": -105,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.5122,
-       "prices": {
-        "DraftKings": -105
-       },
-       "fair_prob": 0.4892,
-       "gain_pts": null
-      },
-      "under": {
-       "selection": "under",
-       "label": "under",
-       "line": 48.5,
-       "best_price": -115,
-       "best_book": "DraftKings",
-       "worst_price": -115,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.5349,
-       "prices": {
-        "DraftKings": -115
-       },
-       "fair_prob": 0.5108,
-       "gain_pts": null
-      }
-     }
-    },
-    "moneyline": {
-     "market": "moneyline",
-     "line": null,
-     "n_books": 1,
-     "books": [
-      "DraftKings"
-     ],
-     "vig_pts": 4.32,
-     "fair_basis": "single book, margin removed",
-     "shoppable": false,
-     "sides": {
-      "side_a": {
-       "selection": "side_a",
-       "label": "home",
-       "line": null,
-       "best_price": -198,
-       "best_book": "DraftKings",
-       "worst_price": -198,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.6644,
-       "prices": {
-        "DraftKings": -198
-       },
-       "fair_prob": 0.6369,
-       "gain_pts": null
-      },
-      "side_b": {
-       "selection": "side_b",
-       "label": "away",
-       "line": null,
-       "best_price": 164,
-       "best_book": "DraftKings",
-       "worst_price": 164,
-       "worst_book": "DraftKings",
-       "n_books": 1,
-       "consensus_prob": 0.3788,
-       "prices": {
-        "DraftKings": 164
-       },
-       "fair_prob": 0.3631,
-       "gain_pts": null
-      }
-     }
-    }
-   },
-   "market": {
-    "shoppable": false,
-    "n_books": 1,
-    "books": [
-     "DraftKings"
-    ]
-   },
-   "movement": {
-    "spread_line": {
-     "opened": -3.5,
-     "current": -3.5,
-     "moved": 0.0,
-     "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
-    },
-    "total_line": {
-     "opened": 48.5,
-     "current": 48.5,
-     "moved": 0.0,
-     "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
-    }
-   },
-   "live_board": {
-    "max_gain_pts": 2.65,
-    "n_books": 11,
-    "generated_at": "2026-09-07T06:34:48.146940+00:00"
-   },
-   "facts": [
-    {
-     "kind": "efficiency",
-     "text": "On 2025 form, Los Angeles Rams net +0.149 EPA/play and San Francisco 49ers net -0.017 \u2014 Los Angeles Rams by 0.166.",
-     "numbers": {
-      "home_net": 0.149,
-      "away_net": -0.017,
-      "basis_season": 2025,
-      "difference": 0.166
-     }
-    },
-    {
-     "kind": "tendency",
-     "text": "Combined pass rate 0.571 against a league average of 0.565 (Los Angeles Rams 0.579, San Francisco 49ers 0.563).",
-     "numbers": {
-      "combined": 0.571,
-      "league": 0.565,
-      "home": 0.579,
-      "away": 0.563
-     }
-    },
-    {
-     "kind": "availability",
-     "text": "San Francisco 49ers: 4 listed Out or on injured reserve, 5 on the report.",
-     "numbers": {
-      "team": "San Francisco 49ers",
-      "n_out": 4,
-      "n_listed": 5
-     }
-    },
-    {
-     "kind": "availability",
-     "text": "Los Angeles Rams: 6 listed Out or on injured reserve, 6 on the report.",
-     "numbers": {
-      "team": "Los Angeles Rams",
-      "n_out": 6,
-      "n_listed": 6
-     }
-    }
-   ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
-  },
   {
    "event_id": "ed6d24ff979f9c71979fead577b0b3f7",
    "sport": "nfl",
@@ -1162,8 +167,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 4,
      "shown": [
@@ -1202,8 +207,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:31Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "Turner was limited in practice Thursday due to a hamstring issue, Jay Morrison of SI.com reports.",
        "source": "espn"
       },
       {
@@ -1215,8 +220,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:30Z",
-       "note": "questionable",
+       "updated_at": "2026-09-11T00:49Z",
+       "note": "Stewart (knee) was a limited participant at practice Thursday, Jay Morrison of SI.com reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -1288,8 +293,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T01:25Z",
-       "note": "Rozeboom (foot) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
+       "updated_at": "2026-09-10T23:26Z",
+       "note": "Rozeboom (foot) was a limited participant at the Buccaneers' practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -1302,8 +307,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:00Z",
-       "note": "McMillan (knee) practiced in a limited capacity Wednesday.",
+       "updated_at": "2026-09-10T21:32Z",
+       "note": "McMillan (knee) was a limited practice participant Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -1474,7 +479,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "7e09efed7e12c659b82740b67ce2f9a1",
@@ -1625,8 +630,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 10,
      "shown": [
@@ -1713,7 +718,7 @@
      "n_out": 9
     },
     "away": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Dorian Strong",
@@ -1795,7 +800,7 @@
        "practice_status": "Did Not Participate In Practice"
       }
      ],
-     "not_shown": 3,
+     "not_shown": 2,
      "n_out": 3
     }
    },
@@ -1924,11 +929,11 @@
     },
     {
      "kind": "availability",
-     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 9 on the report.",
+     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Buffalo Bills",
       "n_out": 3,
-      "n_listed": 9
+      "n_listed": 8
      }
     },
     {
@@ -1949,7 +954,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "b6cfdcbafa61ce220ba87dc2d9b80c77",
@@ -2100,8 +1105,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 7,
      "shown": [
@@ -2252,8 +1257,8 @@
        "location": "Groin",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T22:03Z",
-       "note": "Walker (groin) was limited at practice Wednesday.",
+       "updated_at": "2026-09-10T23:14Z",
+       "note": "Walker (groin) was listed as a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -2266,8 +1271,8 @@
        "location": "Head",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:18Z",
+       "note": "Madubuike (neck) was considered to be a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -2438,7 +1443,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "e55c6fe19fce094ce214c8b0e5b504e9",
@@ -2589,8 +1594,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -2706,6 +1711,19 @@
        "source": "espn"
       },
       {
+       "player": "Alex Wright",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Achilles",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2027-02-15",
+       "updated_at": "2026-08-23T18:39Z",
+       "note": "The Browns placed Wright on injured reserve Sunday due to a ruptured Achilles, Adam Schefter of ESPN reports.",
+       "source": "espn"
+      },
+      {
        "player": "Dillon Gabriel",
        "position": "QB",
        "status": "Injured Reserve",
@@ -2743,23 +1761,10 @@
        "updated_at": "2026-09-01T01:04Z",
        "note": "The Browns reverted Chatman (quadriceps) to IR on Monday, per the NFL's transaction log.",
        "source": "espn"
-      },
-      {
-       "player": "Kalia Davis",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Quadriceps",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:39Z",
-       "note": "The Browns placed Davis on injured reserve Tuesday due to a quadriceps injury.",
-       "source": "espn"
       }
      ],
      "not_shown": 4,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -2899,10 +1904,10 @@
     },
     {
      "kind": "availability",
-     "text": "Cleveland Browns: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Cleveland Browns: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Cleveland Browns",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 10
      }
     },
@@ -2924,7 +1929,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "95c01d1bb797d6df14824b106c5a9130",
@@ -3075,8 +2080,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 4,
      "shown": [
@@ -3386,7 +2391,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "fc362aff0d889ec52d358307a70c32ed",
@@ -3537,8 +2542,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -3707,7 +2712,7 @@
       }
      ],
      "not_shown": 6,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -3847,10 +2852,10 @@
     },
     {
      "kind": "availability",
-     "text": "Chicago Bears: 7 listed Out or on injured reserve, 12 on the report.",
+     "text": "Chicago Bears: 8 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "Chicago Bears",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 12
      }
     },
@@ -3872,7 +2877,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872925",
@@ -4023,8 +3028,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 4,
      "shown": [
@@ -4063,8 +3068,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:31Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "Turner was limited in practice Thursday due to a hamstring issue, Jay Morrison of SI.com reports.",
        "source": "espn"
       },
       {
@@ -4076,8 +3081,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:30Z",
-       "note": "questionable",
+       "updated_at": "2026-09-11T00:49Z",
+       "note": "Stewart (knee) was a limited participant at practice Thursday, Jay Morrison of SI.com reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -4149,8 +3154,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T01:25Z",
-       "note": "Rozeboom (foot) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
+       "updated_at": "2026-09-10T23:26Z",
+       "note": "Rozeboom (foot) was a limited participant at the Buccaneers' practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -4163,8 +3168,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:00Z",
-       "note": "McMillan (knee) practiced in a limited capacity Wednesday.",
+       "updated_at": "2026-09-10T21:32Z",
+       "note": "McMillan (knee) was a limited practice participant Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -4323,14 +3328,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 50.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -4347,7 +3352,7 @@
       "current": 50.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -4390,7 +3395,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872923",
@@ -4541,10 +3546,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Brian Branch",
@@ -4599,19 +3604,6 @@
        "source": "espn"
       },
       {
-       "player": "Damone Clark",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:11Z",
-       "note": "Detroit placed Clark (undisclosed) on its injured reserve list Tuesday.",
-       "source": "espn"
-      },
-      {
        "player": "Isiah Pacheco",
        "position": "RB",
        "status": "Injured Reserve",
@@ -4623,10 +3615,23 @@
        "updated_at": "2026-09-02T15:10Z",
        "note": "Lions GM Brad Holmes said Wednesday that Pacheco (back) doesn't have a clear timetable for return, Colton Pouncy of The Athletic reports.",
        "source": "espn"
+      },
+      {
+       "player": "Payton Turner",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2027-02-15",
+       "updated_at": "2026-09-08T20:42Z",
+       "note": "ir",
+       "source": "espn"
       }
      ],
-     "not_shown": 3,
-     "n_out": 7
+     "not_shown": 2,
+     "n_out": 6
     },
     "away": {
      "n": 10,
@@ -4865,27 +3870,27 @@
      "current": -7.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 47.5,
-     "current": 50.5,
-     "moved": 3.0,
+     "current": 49.5,
+     "moved": 2.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
    "facts": [
     {
      "kind": "line_move",
-     "text": "The total opened 47.5 in our capture and sits at 50.5 now (+3).",
+     "text": "The total opened 47.5 in our capture and sits at 49.5 now (+2).",
      "numbers": {
       "opened": 47.5,
-      "current": 50.5,
-      "moved": 3.0,
+      "current": 49.5,
+      "moved": 2.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -4920,15 +3925,15 @@
     },
     {
      "kind": "availability",
-     "text": "Detroit Lions: 7 listed Out or on injured reserve, 9 on the report.",
+     "text": "Detroit Lions: 6 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Detroit Lions",
-      "n_out": 7,
-      "n_listed": 9
+      "n_out": 6,
+      "n_listed": 8
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872924",
@@ -5079,8 +4084,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -5402,14 +4407,14 @@
      "current": -1.5,
      "moved": 1.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 38.5,
      "current": 38.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -5422,7 +4427,7 @@
       "current": -1.5,
       "moved": 1.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -5465,7 +4470,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872659",
@@ -5616,8 +4621,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 7,
      "shown": [
@@ -5768,8 +4773,8 @@
        "location": "Groin",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T22:03Z",
-       "note": "Walker (groin) was limited at practice Wednesday.",
+       "updated_at": "2026-09-10T23:14Z",
+       "note": "Walker (groin) was listed as a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -5782,8 +4787,8 @@
        "location": "Head",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:18Z",
+       "note": "Madubuike (neck) was considered to be a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -5942,14 +4947,14 @@
      "current": 3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 47.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -5966,7 +4971,7 @@
       "current": 47.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -6009,7 +5014,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872658",
@@ -6160,8 +5165,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 4,
      "shown": [
@@ -6459,14 +5464,14 @@
      "current": -5.5,
      "moved": -2.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 41.5,
      "current": 41.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -6483,7 +5488,7 @@
       "current": -5.5,
       "moved": -2.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -6526,7 +5531,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872661",
@@ -6677,8 +5682,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -6847,7 +5852,7 @@
       }
      ],
      "not_shown": 6,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -7000,14 +6005,14 @@
      "current": 3.0,
      "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -7024,7 +6029,7 @@
       "current": 3.0,
       "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -7050,10 +6055,10 @@
     },
     {
      "kind": "availability",
-     "text": "Chicago Bears: 7 listed Out or on injured reserve, 12 on the report.",
+     "text": "Chicago Bears: 8 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "Chicago Bears",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 12
      }
     },
@@ -7067,7 +6072,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872922",
@@ -7218,8 +6223,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -7335,6 +6340,19 @@
        "source": "espn"
       },
       {
+       "player": "Alex Wright",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Achilles",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2027-02-15",
+       "updated_at": "2026-08-23T18:39Z",
+       "note": "The Browns placed Wright on injured reserve Sunday due to a ruptured Achilles, Adam Schefter of ESPN reports.",
+       "source": "espn"
+      },
+      {
        "player": "Dillon Gabriel",
        "position": "QB",
        "status": "Injured Reserve",
@@ -7372,23 +6390,10 @@
        "updated_at": "2026-09-01T01:04Z",
        "note": "The Browns reverted Chatman (quadriceps) to IR on Monday, per the NFL's transaction log.",
        "source": "espn"
-      },
-      {
-       "player": "Kalia Davis",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Quadriceps",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:39Z",
-       "note": "The Browns placed Davis on injured reserve Tuesday due to a quadriceps injury.",
-       "source": "espn"
       }
      ],
      "not_shown": 4,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -7489,7 +6494,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.18,
+     "vig_pts": 4.2,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -7497,32 +6502,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -485,
+       "best_price": -470,
        "best_book": "DraftKings",
-       "worst_price": -485,
+       "worst_price": -470,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.8291,
+       "consensus_prob": 0.8246,
        "prices": {
-        "DraftKings": -485
+        "DraftKings": -470
        },
-       "fair_prob": 0.7958,
+       "fair_prob": 0.7914,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 370,
+       "best_price": 360,
        "best_book": "DraftKings",
-       "worst_price": 370,
+       "worst_price": 360,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2128,
+       "consensus_prob": 0.2174,
        "prices": {
-        "DraftKings": 370
+        "DraftKings": 360
        },
-       "fair_prob": 0.2042,
+       "fair_prob": 0.2086,
        "gain_pts": null
       }
      }
@@ -7541,14 +6546,14 @@
      "current": -8.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 39.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -7565,7 +6570,7 @@
       "current": -8.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -7577,7 +6582,7 @@
       "current": 39.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -7603,10 +6608,10 @@
     },
     {
      "kind": "availability",
-     "text": "Cleveland Browns: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Cleveland Browns: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Cleveland Browns",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 10
      }
     },
@@ -7620,7 +6625,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872660",
@@ -7771,8 +6776,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 10,
      "shown": [
@@ -7859,7 +6864,7 @@
      "n_out": 9
     },
     "away": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Dorian Strong",
@@ -7941,7 +6946,7 @@
        "practice_status": "Did Not Participate In Practice"
       }
      ],
-     "not_shown": 3,
+     "not_shown": 2,
      "n_out": 3
     }
    },
@@ -8043,7 +7048,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.55,
+     "vig_pts": 4.46,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -8051,32 +7056,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": 100,
+       "best_price": 102,
        "best_book": "DraftKings",
-       "worst_price": 100,
+       "worst_price": 102,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5,
+       "consensus_prob": 0.495,
        "prices": {
-        "DraftKings": 100
+        "DraftKings": 102
        },
-       "fair_prob": 0.4783,
+       "fair_prob": 0.4739,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": -120,
+       "best_price": -122,
        "best_book": "DraftKings",
-       "worst_price": -120,
+       "worst_price": -122,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5455,
+       "consensus_prob": 0.5495,
        "prices": {
-        "DraftKings": -120
+        "DraftKings": -122
        },
-       "fair_prob": 0.5217,
+       "fair_prob": 0.5261,
        "gain_pts": null
       }
      }
@@ -8095,14 +7100,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": {
@@ -8133,11 +7138,11 @@
     },
     {
      "kind": "availability",
-     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 9 on the report.",
+     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Buffalo Bills",
       "n_out": 3,
-      "n_listed": 9
+      "n_listed": 8
      }
     },
     {
@@ -8150,7 +7155,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872928",
@@ -8301,11 +7306,25 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
+      {
+       "player": "Brock Bowers",
+       "position": "TE",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Knee - Meniscus",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T22:00Z",
+       "note": "Bowers (knee) remained a non-participant in Thursday's practice, Anthony Galaviz of The Fresno Bee reports.",
+       "source": "nflverse+espn",
+       "practice_status": "Did Not Participate In Practice"
+      },
       {
        "player": "Brennan Jackson",
        "position": "LB",
@@ -8370,26 +7389,13 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
-      },
-      {
-       "player": "Justin Pickett",
-       "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
-       "source": "espn"
       }
      ],
      "not_shown": 2,
-     "n_out": 7
+     "n_out": 8
     },
     "away": {
-     "n": 8,
+     "n": 7,
      "shown": [
       {
        "player": "Darrell Baker Jr.",
@@ -8415,19 +7421,6 @@
        "return_date": "2026-10-11",
        "updated_at": "2026-08-31T18:22Z",
        "note": "Duck (knee) was moved to the reserve/PUP list by Miami on Sunday.",
-       "source": "espn"
-      },
-      {
-       "player": "Ben Sims",
-       "position": "TE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:44Z",
-       "note": "Sims (undisclosed) reverted to the Dolphins' injured reserve Tuesday, per the NFL's transaction log.",
        "source": "espn"
       },
       {
@@ -8468,10 +7461,23 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
+      },
+      {
+       "player": "Ronnie Harrison Jr.",
+       "position": "LB",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Hamstring",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T00:55Z",
+       "note": "questionable",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
-     "n_out": 6
+     "not_shown": 1,
+     "n_out": 5
     }
    },
    "odds": {
@@ -8624,14 +7630,14 @@
      "current": -3.0,
      "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 40.5,
      "current": 40.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -8644,7 +7650,7 @@
       "current": -3.0,
       "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -8670,24 +7676,24 @@
     },
     {
      "kind": "availability",
-     "text": "Miami Dolphins: 6 listed Out or on injured reserve, 8 on the report.",
+     "text": "Miami Dolphins: 5 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Miami Dolphins",
-      "n_out": 6,
-      "n_listed": 8
+      "n_out": 5,
+      "n_listed": 7
      }
     },
     {
      "kind": "availability",
-     "text": "Las Vegas Raiders: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "Las Vegas Raiders: 8 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Las Vegas Raiders",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 8
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872927",
@@ -8838,8 +7844,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -8926,7 +7932,7 @@
      "n_out": 5
     },
     "away": {
-     "n": 14,
+     "n": 13,
      "shown": [
       {
        "player": "Jordon Riley",
@@ -9007,8 +8013,8 @@
        "source": "espn"
       }
      ],
-     "not_shown": 8,
-     "n_out": 6
+     "not_shown": 7,
+     "n_out": 7
     }
    },
    "odds": {
@@ -9161,14 +8167,14 @@
      "current": -1.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 46.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -9181,7 +8187,7 @@
       "current": -1.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -9193,7 +8199,7 @@
       "current": 46.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -9219,11 +8225,11 @@
     },
     {
      "kind": "availability",
-     "text": "Green Bay Packers: 6 listed Out or on injured reserve, 14 on the report.",
+     "text": "Green Bay Packers: 7 listed Out or on injured reserve, 13 on the report.",
      "numbers": {
       "team": "Green Bay Packers",
-      "n_out": 6,
-      "n_listed": 14
+      "n_out": 7,
+      "n_listed": 13
      }
     },
     {
@@ -9236,7 +8242,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872929",
@@ -9387,8 +8393,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 6,
      "shown": [
@@ -9453,8 +8459,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:09Z",
-       "note": "Stowers (hamstring) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-10T22:14Z",
+       "note": "Stowers (hamstring) practiced in a limited capacity Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -9467,8 +8473,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T00:34Z",
-       "note": "Greenard (pectoral) was limited during Wednesday's practice, Tim McManus of ESPN.com reports.",
+       "updated_at": "2026-09-11T00:02Z",
+       "note": "Greenard (pectoral) did not participate at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -9477,7 +8483,7 @@
      "n_out": 4
     },
     "away": {
-     "n": 8,
+     "n": 9,
      "shown": [
       {
        "player": "Deatrich Wise Jr.",
@@ -9545,21 +8551,20 @@
        "source": "espn"
       },
       {
-       "player": "Jacory Croskey-Merritt",
-       "position": "RB",
+       "player": "Daron Payne",
+       "position": "DT",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Groin",
-       "location": "Groin",
+       "body_part": "Knee",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:45Z",
-       "note": "Croskey-Merritt practiced in a limited capacity Wednesday due to a groin injury.",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
+       "updated_at": "2026-09-10T23:50Z",
+       "note": "Payne (knee) was a limited participant at the Commanders' practice Thursday.",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 3,
      "n_out": 5
     }
    },
@@ -9661,7 +8666,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.27,
+     "vig_pts": 4.31,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -9669,32 +8674,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -218,
+       "best_price": -238,
        "best_book": "DraftKings",
-       "worst_price": -218,
+       "worst_price": -238,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6855,
+       "consensus_prob": 0.7041,
        "prices": {
-        "DraftKings": -218
+        "DraftKings": -238
        },
-       "fair_prob": 0.6575,
+       "fair_prob": 0.675,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 180,
+       "best_price": 195,
        "best_book": "DraftKings",
-       "worst_price": 180,
+       "worst_price": 195,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3571,
+       "consensus_prob": 0.339,
        "prices": {
-        "DraftKings": 180
+        "DraftKings": 195
        },
-       "fair_prob": 0.3425,
+       "fair_prob": 0.325,
        "gain_pts": null
       }
      }
@@ -9710,30 +8715,30 @@
    "movement": {
     "spread_line": {
      "opened": -4.5,
-     "current": -5.5,
-     "moved": -1.0,
+     "current": -6.0,
+     "moved": -1.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 44.5,
      "moved": -3.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
    "facts": [
     {
      "kind": "line_move",
-     "text": "The spread opened -4.5 in our capture and sits at -5.5 now (-1).",
+     "text": "The spread opened -4.5 in our capture and sits at -6 now (-1.5).",
      "numbers": {
       "opened": -4.5,
-      "current": -5.5,
-      "moved": -1.0,
+      "current": -6.0,
+      "moved": -1.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -9745,7 +8750,7 @@
       "current": 44.5,
       "moved": -3.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -9771,11 +8776,11 @@
     },
     {
      "kind": "availability",
-     "text": "Washington Commanders: 5 listed Out or on injured reserve, 8 on the report.",
+     "text": "Washington Commanders: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Washington Commanders",
       "n_out": 5,
-      "n_listed": 8
+      "n_listed": 9
      }
     },
     {
@@ -9788,7 +8793,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872926",
@@ -9939,10 +8944,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 9,
      "shown": [
       {
        "player": "Isaiah World",
@@ -10014,17 +9019,17 @@
        "position": "WR",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Undisclosed",
-       "location": "Other",
+       "body_part": "Hip",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:38Z",
-       "note": "Thompson (undisclosed) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-11T00:09Z",
+       "note": "Thompson (hip) was a limited participant at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 3,
      "n_out": 5
     },
     "away": {
@@ -10104,8 +9109,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-08-23T02:45Z",
-       "note": "Taylor-Demerson is questionable to return to Saturday's preseason game against the Cowboys due to a rib injury.",
+       "updated_at": "2026-09-11T00:20Z",
+       "note": "Taylor-Demerson (ribs) did not participate in practice Thursday, Zach Gershman of the Cardinals' official site reports.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -10264,14 +9269,14 @@
      "current": -9.5,
      "moved": 2.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 47.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -10284,7 +9289,7 @@
       "current": -9.5,
       "moved": 2.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -10296,7 +9301,7 @@
       "current": 47.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -10331,15 +9336,15 @@
     },
     {
      "kind": "availability",
-     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 10 on the report.",
+     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Los Angeles Chargers",
       "n_out": 5,
-      "n_listed": 10
+      "n_listed": 9
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872930",
@@ -10490,8 +9495,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 5,
      "shown": [
@@ -10556,8 +9561,8 @@
        "location": "Leg",
        "side": "Right",
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T19:40Z",
-       "note": "Nabers (knee) logged another full practice Thursday, Connor Hughes of SNY.tv reports.",
+       "updated_at": "2026-09-10T20:20Z",
+       "note": "Nabers (knee) said Thursday that he feels good but declined to commit publicly to playing Sunday against the Cowboys, Art Stapleton of USA Today reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -10801,14 +9806,14 @@
      "current": 3.0,
      "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -10821,7 +9826,7 @@
       "current": 3.0,
       "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -10864,7 +9869,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872931",
@@ -11015,10 +10020,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 5,
      "shown": [
       {
        "player": "Omarr Norman-Lott",
@@ -11060,50 +10065,37 @@
        "source": "espn"
       },
       {
-       "player": "Matt Waletzko",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T00:32Z",
-       "note": "Waletzko (undisclosed) reverted from waivers to Kansas City's injured reserve list Friday, Aaron Wilson of KPRC 2 Houston reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Alohi Gilman",
+       "player": "Chamarri Conner",
        "position": "S",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": null,
-       "location": null,
-       "side": null,
-       "return_date": null,
-       "updated_at": "2026-08-22T23:54Z",
-       "note": "Gilman has been ruled out for the rest of Saturday's preseason game against the Buccaneers due to a back injury.",
-       "source": "espn"
-      },
-      {
-       "player": "Ashton Gillotte",
-       "position": "DE",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Foot",
+       "body_part": "Knee",
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-14",
-       "updated_at": "2026-08-21T01:43Z",
-       "note": "Gillotte has a ruptured plantar fascia, but the injury is not considered serious, Matt Derrick of ChiefsDigest.com reports.",
+       "updated_at": "2026-09-08T23:27Z",
+       "note": "Conner (knee) is not expected to be available for Monday night's contest against the Broncos, Charles Goldman of AtoZSports.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Josh Simmons",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-14",
+       "updated_at": "2026-09-09T00:44Z",
+       "note": "Simmons (back) is in danger of missing Kansas City's matchup versus the Broncos on Monday, Matt McMullen of the team's official site reports.",
        "source": "espn"
       }
      ],
-     "not_shown": 4,
-     "n_out": 4
+     "not_shown": 0,
+     "n_out": 3
     },
     "away": {
-     "n": 10,
+     "n": 7,
      "shown": [
       {
        "player": "Jonathon Cooper",
@@ -11184,7 +10176,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 1,
      "n_out": 7
     }
    },
@@ -11338,14 +10330,14 @@
      "current": -2.5,
      "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 43.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -11358,7 +10350,7 @@
       "current": -2.5,
       "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -11370,7 +10362,7 @@
       "current": 43.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -11396,24 +10388,24 @@
     },
     {
      "kind": "availability",
-     "text": "Denver Broncos: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Denver Broncos: 7 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Denver Broncos",
       "n_out": 7,
-      "n_listed": 10
+      "n_listed": 7
      }
     },
     {
      "kind": "availability",
-     "text": "Kansas City Chiefs: 4 listed Out or on injured reserve, 10 on the report.",
+     "text": "Kansas City Chiefs: 3 listed Out or on injured reserve, 5 on the report.",
      "numbers": {
       "team": "Kansas City Chiefs",
-      "n_out": 4,
-      "n_listed": 10
+      "n_out": 3,
+      "n_listed": 5
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872932",
@@ -11564,10 +10556,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Dorian Strong",
@@ -11649,11 +10641,11 @@
        "practice_status": "Did Not Participate In Practice"
       }
      ],
-     "not_shown": 3,
+     "not_shown": 2,
      "n_out": 3
     },
     "away": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Brian Branch",
@@ -11708,19 +10700,6 @@
        "source": "espn"
       },
       {
-       "player": "Damone Clark",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:11Z",
-       "note": "Detroit placed Clark (undisclosed) on its injured reserve list Tuesday.",
-       "source": "espn"
-      },
-      {
        "player": "Isiah Pacheco",
        "position": "RB",
        "status": "Injured Reserve",
@@ -11732,10 +10711,23 @@
        "updated_at": "2026-09-02T15:10Z",
        "note": "Lions GM Brad Holmes said Wednesday that Pacheco (back) doesn't have a clear timetable for return, Colton Pouncy of The Athletic reports.",
        "source": "espn"
+      },
+      {
+       "player": "Payton Turner",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2027-02-15",
+       "updated_at": "2026-09-08T20:42Z",
+       "note": "ir",
+       "source": "espn"
       }
      ],
-     "not_shown": 3,
-     "n_out": 7
+     "not_shown": 2,
+     "n_out": 6
     }
    },
    "odds": {
@@ -11888,14 +10880,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 52.5,
      "current": 51.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -11908,7 +10900,7 @@
       "current": 51.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -11934,24 +10926,24 @@
     },
     {
      "kind": "availability",
-     "text": "Detroit Lions: 7 listed Out or on injured reserve, 9 on the report.",
+     "text": "Detroit Lions: 6 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Detroit Lions",
-      "n_out": 7,
-      "n_listed": 9
+      "n_out": 6,
+      "n_listed": 8
      }
     },
     {
      "kind": "availability",
-     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 9 on the report.",
+     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Buffalo Bills",
       "n_out": 3,
-      "n_listed": 9
+      "n_listed": 8
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872933",
@@ -12102,8 +11094,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 14,
      "shown": [
@@ -12426,14 +11418,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -12477,7 +11469,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872937",
@@ -12628,8 +11620,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 12,
      "shown": [
@@ -12713,7 +11705,7 @@
       }
      ],
      "not_shown": 6,
-     "n_out": 7
+     "n_out": 8
     },
     "away": {
      "n": 9,
@@ -12951,14 +11943,14 @@
      "current": -3.0,
      "moved": 0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -12971,7 +11963,7 @@
       "current": -3.0,
       "moved": 0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -13006,15 +11998,15 @@
     },
     {
      "kind": "availability",
-     "text": "Chicago Bears: 7 listed Out or on injured reserve, 12 on the report.",
+     "text": "Chicago Bears: 8 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "Chicago Bears",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 12
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872939",
@@ -13165,8 +12157,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -13316,8 +12308,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:09Z",
-       "note": "Stowers (hamstring) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-10T22:14Z",
+       "note": "Stowers (hamstring) practiced in a limited capacity Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -13330,8 +12322,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T00:34Z",
-       "note": "Greenard (pectoral) was limited during Wednesday's practice, Tim McManus of ESPN.com reports.",
+       "updated_at": "2026-09-11T00:02Z",
+       "note": "Greenard (pectoral) did not participate at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -13490,14 +12482,14 @@
      "current": 5.5,
      "moved": 1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -13510,7 +12502,7 @@
       "current": 5.5,
       "moved": 1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -13553,7 +12545,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872946",
@@ -13704,10 +12696,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 12,
+     "n": 10,
      "shown": [
       {
        "player": "Behren Morton",
@@ -13789,8 +12781,8 @@
        "source": "espn"
       }
      ],
-     "not_shown": 6,
-     "n_out": 11
+     "not_shown": 4,
+     "n_out": 9
     },
     "away": {
      "n": 4,
@@ -13861,7 +12853,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.76,
+     "vig_pts": 4.71,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -13869,32 +12861,32 @@
        "selection": "side_a",
        "label": "home",
        "line": -4.5,
-       "best_price": -110,
+       "best_price": -105,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -105,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5122,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -105
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.4892,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": 4.5,
-       "best_price": -110,
+       "best_price": -115,
        "best_book": "DraftKings",
-       "worst_price": -110,
+       "worst_price": -115,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.5238,
+       "consensus_prob": 0.5349,
        "prices": {
-        "DraftKings": -110
+        "DraftKings": -115
        },
-       "fair_prob": 0.5,
+       "fair_prob": 0.5108,
        "gain_pts": null
       }
      }
@@ -13951,7 +12943,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.27,
+     "vig_pts": 4.25,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -13959,32 +12951,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -218,
+       "best_price": -205,
        "best_book": "DraftKings",
-       "worst_price": -218,
+       "worst_price": -205,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.6855,
+       "consensus_prob": 0.6721,
        "prices": {
-        "DraftKings": -218
+        "DraftKings": -205
        },
-       "fair_prob": 0.6575,
+       "fair_prob": 0.6447,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 180,
+       "best_price": 170,
        "best_book": "DraftKings",
-       "worst_price": 180,
+       "worst_price": 170,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.3571,
+       "consensus_prob": 0.3704,
        "prices": {
-        "DraftKings": 180
+        "DraftKings": 170
        },
-       "fair_prob": 0.3425,
+       "fair_prob": 0.3553,
        "gain_pts": null
       }
      }
@@ -14003,14 +12995,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -14046,15 +13038,15 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 11 listed Out or on injured reserve, 12 on the report.",
+     "text": "New England Patriots: 9 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
-      "n_out": 11,
-      "n_listed": 12
+      "n_out": 9,
+      "n_listed": 10
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872936",
@@ -14205,8 +13197,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -14293,7 +13285,7 @@
      "n_out": 6
     },
     "away": {
-     "n": 14,
+     "n": 13,
      "shown": [
       {
        "player": "Jordon Riley",
@@ -14374,8 +13366,8 @@
        "source": "espn"
       }
      ],
-     "not_shown": 8,
-     "n_out": 6
+     "not_shown": 7,
+     "n_out": 7
     }
    },
    "odds": {
@@ -14528,14 +13520,14 @@
      "current": 5.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -14548,7 +13540,7 @@
       "current": 5.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -14574,11 +13566,11 @@
     },
     {
      "kind": "availability",
-     "text": "Green Bay Packers: 6 listed Out or on injured reserve, 14 on the report.",
+     "text": "Green Bay Packers: 7 listed Out or on injured reserve, 13 on the report.",
      "numbers": {
       "team": "Green Bay Packers",
-      "n_out": 6,
-      "n_listed": 14
+      "n_out": 7,
+      "n_listed": 13
      }
     },
     {
@@ -14591,7 +13583,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872935",
@@ -14742,8 +13734,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -14808,8 +13800,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T01:25Z",
-       "note": "Rozeboom (foot) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
+       "updated_at": "2026-09-10T23:26Z",
+       "note": "Rozeboom (foot) was a limited participant at the Buccaneers' practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -14822,8 +13814,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:00Z",
-       "note": "McMillan (knee) practiced in a limited capacity Wednesday.",
+       "updated_at": "2026-09-10T21:32Z",
+       "note": "McMillan (knee) was a limited practice participant Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -14858,6 +13850,19 @@
        "return_date": "2026-10-11",
        "updated_at": "2026-08-30T21:32Z",
        "note": "The Browns placed Royer (personal) on the reserve/non-football illness list Sunday, Scott Petrak of the Elyria Chronicle-Telegram reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Alex Wright",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Achilles",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2027-02-15",
+       "updated_at": "2026-08-23T18:39Z",
+       "note": "The Browns placed Wright on injured reserve Sunday due to a ruptured Achilles, Adam Schefter of ESPN reports.",
        "source": "espn"
       },
       {
@@ -14898,23 +13903,10 @@
        "updated_at": "2026-09-01T01:04Z",
        "note": "The Browns reverted Chatman (quadriceps) to IR on Monday, per the NFL's transaction log.",
        "source": "espn"
-      },
-      {
-       "player": "Kalia Davis",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Quadriceps",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:39Z",
-       "note": "The Browns placed Davis on injured reserve Tuesday due to a quadriceps injury.",
-       "source": "espn"
       }
      ],
      "not_shown": 4,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -15067,14 +14059,14 @@
      "current": -6.5,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -15087,7 +14079,7 @@
       "current": -6.5,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -15113,10 +14105,10 @@
     },
     {
      "kind": "availability",
-     "text": "Cleveland Browns: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Cleveland Browns: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Cleveland Browns",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 10
      }
     },
@@ -15130,7 +14122,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872938",
@@ -15281,8 +14273,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 7,
      "shown": [
@@ -15347,8 +14339,8 @@
        "location": "Groin",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T22:03Z",
-       "note": "Walker (groin) was limited at practice Wednesday.",
+       "updated_at": "2026-09-10T23:14Z",
+       "note": "Walker (groin) was listed as a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -15361,8 +14353,8 @@
        "location": "Head",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:18Z",
+       "note": "Madubuike (neck) was considered to be a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -15555,7 +14547,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.34,
+     "vig_pts": 4.26,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -15563,32 +14555,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -355,
+       "best_price": -375,
        "best_book": "DraftKings",
-       "worst_price": -355,
+       "worst_price": -375,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7802,
+       "consensus_prob": 0.7895,
        "prices": {
-        "DraftKings": -355
+        "DraftKings": -375
        },
-       "fair_prob": 0.7478,
+       "fair_prob": 0.7572,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 280,
+       "best_price": 295,
        "best_book": "DraftKings",
-       "worst_price": 280,
+       "worst_price": 295,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2632,
+       "consensus_prob": 0.2532,
        "prices": {
-        "DraftKings": 280
+        "DraftKings": 295
        },
-       "fair_prob": 0.2522,
+       "fair_prob": 0.2428,
        "gain_pts": null
       }
      }
@@ -15607,14 +14599,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -15658,7 +14650,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872934",
@@ -15809,8 +14801,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 10,
      "shown": [
@@ -15934,8 +14926,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:31Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "Turner was limited in practice Thursday due to a hamstring issue, Jay Morrison of SI.com reports.",
        "source": "espn"
       },
       {
@@ -15947,8 +14939,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:30Z",
-       "note": "questionable",
+       "updated_at": "2026-09-11T00:49Z",
+       "note": "Stewart (knee) was a limited participant at practice Thursday, Jay Morrison of SI.com reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -16107,14 +15099,14 @@
      "current": -2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 45.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -16127,7 +15119,7 @@
       "current": 45.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -16170,7 +15162,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872940",
@@ -16321,10 +15313,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 7,
      "shown": [
       {
        "player": "Jonathon Cooper",
@@ -16405,7 +15397,7 @@
        "source": "espn"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 1,
      "n_out": 7
     },
     "away": {
@@ -16644,14 +15636,14 @@
      "current": -3.0,
      "moved": -0.5,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 43.5,
      "current": 43.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -16664,7 +15656,7 @@
       "current": -3.0,
       "moved": -0.5,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -16699,15 +15691,15 @@
     },
     {
      "kind": "availability",
-     "text": "Denver Broncos: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Denver Broncos: 7 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Denver Broncos",
       "n_out": 7,
-      "n_listed": 10
+      "n_listed": 7
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872941",
@@ -16858,10 +15850,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 9,
      "shown": [
       {
        "player": "Isaiah World",
@@ -16933,22 +15925,36 @@
        "position": "WR",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Undisclosed",
-       "location": "Other",
+       "body_part": "Hip",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:38Z",
-       "note": "Thompson (undisclosed) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-11T00:09Z",
+       "note": "Thompson (hip) was a limited participant at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 3,
      "n_out": 5
     },
     "away": {
      "n": 8,
      "shown": [
+      {
+       "player": "Brock Bowers",
+       "position": "TE",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Knee - Meniscus",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T22:00Z",
+       "note": "Bowers (knee) remained a non-participant in Thursday's practice, Anthony Galaviz of The Fresno Bee reports.",
+       "source": "nflverse+espn",
+       "practice_status": "Did Not Participate In Practice"
+      },
       {
        "player": "Brennan Jackson",
        "position": "LB",
@@ -17013,23 +16019,10 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
-      },
-      {
-       "player": "Justin Pickett",
-       "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
-       "source": "espn"
       }
      ],
      "not_shown": 2,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -17182,14 +16175,14 @@
      "current": -9.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -17202,7 +16195,7 @@
       "current": -9.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -17228,24 +16221,24 @@
     },
     {
      "kind": "availability",
-     "text": "Las Vegas Raiders: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "Las Vegas Raiders: 8 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Las Vegas Raiders",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 8
      }
     },
     {
      "kind": "availability",
-     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 10 on the report.",
+     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Los Angeles Chargers",
       "n_out": 5,
-      "n_listed": 10
+      "n_listed": 9
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872944",
@@ -17396,8 +16389,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -17484,7 +16477,7 @@
      "n_out": 7
     },
     "away": {
-     "n": 8,
+     "n": 9,
      "shown": [
       {
        "player": "Deatrich Wise Jr.",
@@ -17552,21 +16545,20 @@
        "source": "espn"
       },
       {
-       "player": "Jacory Croskey-Merritt",
-       "position": "RB",
+       "player": "Daron Payne",
+       "position": "DT",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Groin",
-       "location": "Groin",
+       "body_part": "Knee",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:45Z",
-       "note": "Croskey-Merritt practiced in a limited capacity Wednesday due to a groin injury.",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
+       "updated_at": "2026-09-10T23:50Z",
+       "note": "Payne (knee) was a limited participant at the Commanders' practice Thursday.",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 3,
      "n_out": 5
     }
    },
@@ -17720,14 +16712,14 @@
      "current": -4.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -17754,11 +16746,11 @@
     },
     {
      "kind": "availability",
-     "text": "Washington Commanders: 5 listed Out or on injured reserve, 8 on the report.",
+     "text": "Washington Commanders: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Washington Commanders",
       "n_out": 5,
-      "n_listed": 8
+      "n_listed": 9
      }
     },
     {
@@ -17771,7 +16763,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872943",
@@ -17922,8 +16914,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -18001,8 +16993,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-08-23T02:45Z",
-       "note": "Taylor-Demerson is questionable to return to Saturday's preseason game against the Cowboys due to a rib injury.",
+       "updated_at": "2026-09-11T00:20Z",
+       "note": "Taylor-Demerson (ribs) did not participate in practice Thursday, Zach Gershman of the Cardinals' official site reports.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -18011,7 +17003,7 @@
      "n_out": 5
     },
     "away": {
-     "n": 9,
+     "n": 7,
      "shown": [
       {
        "player": "Beau Stephens",
@@ -18053,19 +17045,6 @@
        "source": "espn"
       },
       {
-       "player": "Nick Kallerup",
-       "position": "TE",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Coach's Decision",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-09-20",
-       "updated_at": "2026-09-09T22:55Z",
-       "note": "inactive",
-       "source": "espn"
-      },
-      {
        "player": "Ty Okada",
        "position": "S",
        "status": "Out",
@@ -18080,21 +17059,35 @@
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Zach Charbonnet",
-       "position": "RB",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee - ACL",
+       "player": "Sam Darnold",
+       "position": "QB",
+       "status": "Doubtful",
+       "abbr": "D",
+       "body_part": "Hip",
        "location": "Leg",
-       "side": "Left",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-07T20:53Z",
-       "note": "Coach Mike Macdonald said Monday that Charbonnet (knee) looks \"awesome\" in his rehab from a torn ACL, Gregg Bell of The Tacoma News Tribune reports.",
+       "side": "Right",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T18:23Z",
+       "note": "Darnold (hip) received \"really, really good news\" regarding his injury, according to coach Mike McDonald, ESPN.com reports. \"His hip is intact, and it's good,\" McDonald said Thursday.",
        "source": "espn"
+      },
+      {
+       "player": "Nick Emmanwori",
+       "position": "S",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Ankle",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-09T23:15Z",
+       "note": "Emmanwori (ankle) is inactive for Wednesday's game against the Patriots.",
+       "source": "nflverse+espn",
+       "practice_status": "Limited Participation in Practice"
       }
      ],
-     "not_shown": 3,
-     "n_out": 6
+     "not_shown": 1,
+     "n_out": 4
     }
    },
    "odds": {
@@ -18247,14 +17240,14 @@
      "current": 10.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -18281,11 +17274,11 @@
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 6 listed Out or on injured reserve, 9 on the report.",
+     "text": "Seattle Seahawks: 4 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 6,
-      "n_listed": 9
+      "n_out": 4,
+      "n_listed": 7
      }
     },
     {
@@ -18298,7 +17291,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872942",
@@ -18449,10 +17442,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 5,
+     "n": 9,
      "shown": [
       {
        "player": "Alfred Collins",
@@ -18463,70 +17456,82 @@
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-09-09T21:07Z",
-       "note": "Collins will miss the entire 2026 season after suffering a torn patellar tendon during Tuesday's practice, Nick Wagoner of ESPN.com reports.",
+       "updated_at": "2026-09-10T23:28Z",
+       "note": "San Francisco placed Collins (knee) on injured reserve Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Mykel Williams",
-       "position": "DE",
+       "player": "Enrique Cruz Jr.",
+       "position": "OT",
        "status": "Out",
        "abbr": "O",
-       "body_part": "Knee - ACL",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "out",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "inactive",
        "source": "espn"
       },
       {
-       "player": "Nate Hobbs",
+       "player": "Ephesians Prysock",
        "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:48Z",
+       "note": "Prysock (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
        "source": "espn"
       },
       {
-       "player": "Sam Okuayinonu",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Foot",
-       "location": "Leg",
+       "player": "Jordan James",
+       "position": "RB",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-12-17",
-       "updated_at": "2026-09-07T23:14Z",
-       "note": "Okuayinonu broke his foot in practice last week and is set to have surgery to repair the issue, Matt Barrows of The Athletic reports.",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:34Z",
+       "note": "James (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
        "source": "espn"
       },
       {
-       "player": "James Thompson Jr.",
-       "position": "DT",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Hamstring",
-       "location": "Leg",
+       "player": "Jordan Watkins",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-09-10",
-       "updated_at": "2026-09-08T23:55Z",
-       "note": "questionable",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:38Z",
+       "note": "Watkins (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Kurtis Rourke",
+       "position": "QB",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "inactive",
+       "source": "espn"
       }
      ],
-     "not_shown": 0,
-     "n_out": 4
+     "not_shown": 3,
+     "n_out": 7
     },
     "away": {
-     "n": 8,
+     "n": 7,
      "shown": [
       {
        "player": "Darrell Baker Jr.",
@@ -18552,19 +17557,6 @@
        "return_date": "2026-10-11",
        "updated_at": "2026-08-31T18:22Z",
        "note": "Duck (knee) was moved to the reserve/PUP list by Miami on Sunday.",
-       "source": "espn"
-      },
-      {
-       "player": "Ben Sims",
-       "position": "TE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:44Z",
-       "note": "Sims (undisclosed) reverted to the Dolphins' injured reserve Tuesday, per the NFL's transaction log.",
        "source": "espn"
       },
       {
@@ -18605,10 +17597,23 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
+      },
+      {
+       "player": "Ronnie Harrison Jr.",
+       "position": "LB",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Hamstring",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T00:55Z",
+       "note": "questionable",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
-     "n_out": 6
+     "not_shown": 1,
+     "n_out": 5
     }
    },
    "odds": {
@@ -18761,14 +17766,14 @@
      "current": -10.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -18795,24 +17800,24 @@
     },
     {
      "kind": "availability",
-     "text": "Miami Dolphins: 6 listed Out or on injured reserve, 8 on the report.",
+     "text": "Miami Dolphins: 5 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Miami Dolphins",
-      "n_out": 6,
-      "n_listed": 8
+      "n_out": 5,
+      "n_listed": 7
      }
     },
     {
      "kind": "availability",
-     "text": "San Francisco 49ers: 4 listed Out or on injured reserve, 5 on the report.",
+     "text": "San Francisco 49ers: 7 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "San Francisco 49ers",
-      "n_out": 4,
-      "n_listed": 5
+      "n_out": 7,
+      "n_listed": 9
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872945",
@@ -18963,10 +17968,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 5,
      "shown": [
       {
        "player": "Omarr Norman-Lott",
@@ -19008,47 +18013,34 @@
        "source": "espn"
       },
       {
-       "player": "Matt Waletzko",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T00:32Z",
-       "note": "Waletzko (undisclosed) reverted from waivers to Kansas City's injured reserve list Friday, Aaron Wilson of KPRC 2 Houston reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Alohi Gilman",
+       "player": "Chamarri Conner",
        "position": "S",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": null,
-       "location": null,
-       "side": null,
-       "return_date": null,
-       "updated_at": "2026-08-22T23:54Z",
-       "note": "Gilman has been ruled out for the rest of Saturday's preseason game against the Buccaneers due to a back injury.",
-       "source": "espn"
-      },
-      {
-       "player": "Ashton Gillotte",
-       "position": "DE",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Foot",
+       "body_part": "Knee",
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-14",
-       "updated_at": "2026-08-21T01:43Z",
-       "note": "Gillotte has a ruptured plantar fascia, but the injury is not considered serious, Matt Derrick of ChiefsDigest.com reports.",
+       "updated_at": "2026-09-08T23:27Z",
+       "note": "Conner (knee) is not expected to be available for Monday night's contest against the Broncos, Charles Goldman of AtoZSports.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Josh Simmons",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-14",
+       "updated_at": "2026-09-09T00:44Z",
+       "note": "Simmons (back) is in danger of missing Kansas City's matchup versus the Broncos on Monday, Matt McMullen of the team's official site reports.",
        "source": "espn"
       }
      ],
-     "not_shown": 4,
-     "n_out": 4
+     "not_shown": 0,
+     "n_out": 3
     },
     "away": {
      "n": 7,
@@ -19235,7 +18227,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.25,
+     "vig_pts": 4.18,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -19243,32 +18235,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -325,
+       "best_price": -310,
        "best_book": "DraftKings",
-       "worst_price": -325,
+       "worst_price": -310,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.7647,
+       "consensus_prob": 0.7561,
        "prices": {
-        "DraftKings": -325
+        "DraftKings": -310
        },
-       "fair_prob": 0.7335,
+       "fair_prob": 0.7258,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 260,
+       "best_price": 250,
        "best_book": "DraftKings",
-       "worst_price": 260,
+       "worst_price": 250,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.2778,
+       "consensus_prob": 0.2857,
        "prices": {
-        "DraftKings": 260
+        "DraftKings": 250
        },
-       "fair_prob": 0.2665,
+       "fair_prob": 0.2742,
        "gain_pts": null
       }
      }
@@ -19287,14 +18279,14 @@
      "current": -6.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 47.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -19330,15 +18322,15 @@
     },
     {
      "kind": "availability",
-     "text": "Kansas City Chiefs: 4 listed Out or on injured reserve, 10 on the report.",
+     "text": "Kansas City Chiefs: 3 listed Out or on injured reserve, 5 on the report.",
      "numbers": {
       "team": "Kansas City Chiefs",
-      "n_out": 4,
-      "n_listed": 10
+      "n_out": 3,
+      "n_listed": 5
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872947",
@@ -19489,10 +18481,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 6,
+     "n": 10,
      "shown": [
       {
        "player": "Aaron Donald",
@@ -19503,79 +18495,79 @@
        "location": "Other",
        "side": null,
        "return_date": "2026-09-21",
-       "updated_at": "2026-09-08T20:14Z",
-       "note": "Head coach Sean McVay said that Donald won't travel to Melbourne, Australia and will be inactive Thursday for the Rams' season opener versus the 49ers, Stu Jackson of the team's official site reports.",
+       "updated_at": "2026-09-10T23:25Z",
+       "note": "out",
        "source": "nflverse+espn",
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Daniel Rickert",
-       "position": "DE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:54Z",
-       "note": "Rickert (knee) reverted to the Rams' injured reserve Tuesday, per the NFL's transaction log.",
-       "source": "espn"
-      },
-      {
-       "player": "Justin Dedich",
+       "player": "Bill Murray",
        "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
        "location": "Other",
        "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:42Z",
-       "note": "Dedich (undisclosed) was put on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:24Z",
+       "note": "inactive",
        "source": "espn"
       },
       {
-       "player": "Keagen Trost",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Hamstring",
-       "location": "Leg",
+       "player": "CJ Daniels",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:31Z",
-       "note": "Trost (hamstring) was placed on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-11T00:02Z",
+       "note": "Daniels (coach's decision) is a healthy scratch for Thursday's matchup versus San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       },
       {
-       "player": "Keir Thomas II",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
+       "player": "Max Klare",
+       "position": "TE",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-11T00:07Z",
+       "note": "Klare (coach's decision) is inactive for Thursday's season-opener versus San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       },
       {
-       "player": "Matthew Caldwell",
+       "player": "Tutu Atwell",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:53Z",
+       "note": "Atwell (coach's decision) is inactive for Thursday's tilt against the 49ers in Melbourne, Australia, Nate Atkins of The Athletic reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Ty Simpson",
        "position": "QB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
        "location": "Other",
        "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-29T22:20Z",
-       "note": "The Rams placed Caldwell (undisclosed) on injured reserve Saturday, Aaron Wilson of KPRC 2 Houston reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:47Z",
+       "note": "Simpson is inactive as the Rams' emergency third quarterback for Thursday's matchup against San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       }
      ],
-     "not_shown": 0,
-     "n_out": 6
+     "not_shown": 4,
+     "n_out": 8
     },
     "away": {
      "n": 5,
@@ -19641,8 +18633,8 @@
        "location": "Leg",
        "side": "Right",
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T19:40Z",
-       "note": "Nabers (knee) logged another full practice Thursday, Connor Hughes of SNY.tv reports.",
+       "updated_at": "2026-09-10T20:20Z",
+       "note": "Nabers (knee) said Thursday that he feels good but declined to commit publicly to playing Sunday against the Cowboys, Art Stapleton of USA Today reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -19801,14 +18793,14 @@
      "current": -9.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T03:53:21.595907+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -19821,7 +18813,7 @@
       "current": -9.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T03:53:21.595907+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "spread"
      }
     },
@@ -19856,15 +18848,15 @@
     },
     {
      "kind": "availability",
-     "text": "Los Angeles Rams: 6 listed Out or on injured reserve, 6 on the report.",
+     "text": "Los Angeles Rams: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Los Angeles Rams",
-      "n_out": 6,
-      "n_listed": 6
+      "n_out": 8,
+      "n_listed": 10
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872948",
@@ -20015,10 +19007,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 14,
+     "n": 13,
      "shown": [
       {
        "player": "Jordon Riley",
@@ -20099,8 +19091,8 @@
        "source": "espn"
       }
      ],
-     "not_shown": 8,
-     "n_out": 6
+     "not_shown": 7,
+     "n_out": 7
     },
     "away": {
      "n": 14,
@@ -20339,14 +19331,14 @@
      "current": -7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -20382,15 +19374,15 @@
     },
     {
      "kind": "availability",
-     "text": "Green Bay Packers: 6 listed Out or on injured reserve, 14 on the report.",
+     "text": "Green Bay Packers: 7 listed Out or on injured reserve, 13 on the report.",
      "numbers": {
       "team": "Green Bay Packers",
-      "n_out": 6,
-      "n_listed": 14
+      "n_out": 7,
+      "n_listed": 13
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872953",
@@ -20541,10 +19533,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Dorian Strong",
@@ -20626,11 +19618,11 @@
        "practice_status": "Did Not Participate In Practice"
       }
      ],
-     "not_shown": 3,
+     "not_shown": 2,
      "n_out": 3
     },
     "away": {
-     "n": 10,
+     "n": 9,
      "shown": [
       {
        "player": "Isaiah World",
@@ -20702,17 +19694,17 @@
        "position": "WR",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Undisclosed",
-       "location": "Other",
+       "body_part": "Hip",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:38Z",
-       "note": "Thompson (undisclosed) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-11T00:09Z",
+       "note": "Thompson (hip) was a limited participant at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 3,
      "n_out": 5
     }
    },
@@ -20866,14 +19858,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 48.5,
      "current": 48.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -20900,24 +19892,24 @@
     },
     {
      "kind": "availability",
-     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 10 on the report.",
+     "text": "Los Angeles Chargers: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Los Angeles Chargers",
       "n_out": 5,
-      "n_listed": 10
+      "n_listed": 9
      }
     },
     {
      "kind": "availability",
-     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 9 on the report.",
+     "text": "Buffalo Bills: 3 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Buffalo Bills",
       "n_out": 3,
-      "n_listed": 9
+      "n_listed": 8
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872949",
@@ -21068,8 +20060,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 10,
      "shown": [
@@ -21097,6 +20089,19 @@
        "return_date": "2026-10-11",
        "updated_at": "2026-08-30T21:32Z",
        "note": "The Browns placed Royer (personal) on the reserve/non-football illness list Sunday, Scott Petrak of the Elyria Chronicle-Telegram reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Alex Wright",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Achilles",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2027-02-15",
+       "updated_at": "2026-08-23T18:39Z",
+       "note": "The Browns placed Wright on injured reserve Sunday due to a ruptured Achilles, Adam Schefter of ESPN reports.",
        "source": "espn"
       },
       {
@@ -21137,23 +20142,10 @@
        "updated_at": "2026-09-01T01:04Z",
        "note": "The Browns reverted Chatman (quadriceps) to IR on Monday, per the NFL's transaction log.",
        "source": "espn"
-      },
-      {
-       "player": "Kalia Davis",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Quadriceps",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:39Z",
-       "note": "The Browns placed Davis on injured reserve Tuesday due to a quadriceps injury.",
-       "source": "espn"
       }
      ],
      "not_shown": 4,
-     "n_out": 7
+     "n_out": 8
     },
     "away": {
      "n": 8,
@@ -21391,14 +20383,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 39.5,
      "current": 39.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -21434,15 +20426,15 @@
     },
     {
      "kind": "availability",
-     "text": "Cleveland Browns: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Cleveland Browns: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Cleveland Browns",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 10
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872954",
@@ -21593,10 +20585,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 9,
+     "n": 8,
      "shown": [
       {
        "player": "Brian Branch",
@@ -21651,19 +20643,6 @@
        "source": "espn"
       },
       {
-       "player": "Damone Clark",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:11Z",
-       "note": "Detroit placed Clark (undisclosed) on its injured reserve list Tuesday.",
-       "source": "espn"
-      },
-      {
        "player": "Isiah Pacheco",
        "position": "RB",
        "status": "Injured Reserve",
@@ -21675,10 +20654,23 @@
        "updated_at": "2026-09-02T15:10Z",
        "note": "Lions GM Brad Holmes said Wednesday that Pacheco (back) doesn't have a clear timetable for return, Colton Pouncy of The Athletic reports.",
        "source": "espn"
+      },
+      {
+       "player": "Payton Turner",
+       "position": "DE",
+       "status": "Injured Reserve",
+       "abbr": "IR",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2027-02-15",
+       "updated_at": "2026-09-08T20:42Z",
+       "note": "ir",
+       "source": "espn"
       }
      ],
-     "not_shown": 3,
-     "n_out": 7
+     "not_shown": 2,
+     "n_out": 6
     },
     "away": {
      "n": 9,
@@ -21916,14 +20908,14 @@
      "current": -9.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -21959,15 +20951,15 @@
     },
     {
      "kind": "availability",
-     "text": "Detroit Lions: 7 listed Out or on injured reserve, 9 on the report.",
+     "text": "Detroit Lions: 6 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Detroit Lions",
-      "n_out": 7,
-      "n_listed": 9
+      "n_out": 6,
+      "n_listed": 8
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872951",
@@ -22118,8 +21110,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 7,
      "shown": [
@@ -22442,14 +21434,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -22493,7 +21485,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872952",
@@ -22644,10 +21636,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 8,
+     "n": 7,
      "shown": [
       {
        "player": "Darrell Baker Jr.",
@@ -22673,19 +21665,6 @@
        "return_date": "2026-10-11",
        "updated_at": "2026-08-31T18:22Z",
        "note": "Duck (knee) was moved to the reserve/PUP list by Miami on Sunday.",
-       "source": "espn"
-      },
-      {
-       "player": "Ben Sims",
-       "position": "TE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-01T23:44Z",
-       "note": "Sims (undisclosed) reverted to the Dolphins' injured reserve Tuesday, per the NFL's transaction log.",
        "source": "espn"
       },
       {
@@ -22726,13 +21705,26 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
+      },
+      {
+       "player": "Ronnie Harrison Jr.",
+       "position": "LB",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Hamstring",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T00:55Z",
+       "note": "questionable",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
-     "n_out": 6
+     "not_shown": 1,
+     "n_out": 5
     },
     "away": {
-     "n": 10,
+     "n": 5,
      "shown": [
       {
        "player": "Omarr Norman-Lott",
@@ -22774,47 +21766,34 @@
        "source": "espn"
       },
       {
-       "player": "Matt Waletzko",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-22T00:32Z",
-       "note": "Waletzko (undisclosed) reverted from waivers to Kansas City's injured reserve list Friday, Aaron Wilson of KPRC 2 Houston reports.",
-       "source": "espn"
-      },
-      {
-       "player": "Alohi Gilman",
+       "player": "Chamarri Conner",
        "position": "S",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": null,
-       "location": null,
-       "side": null,
-       "return_date": null,
-       "updated_at": "2026-08-22T23:54Z",
-       "note": "Gilman has been ruled out for the rest of Saturday's preseason game against the Buccaneers due to a back injury.",
-       "source": "espn"
-      },
-      {
-       "player": "Ashton Gillotte",
-       "position": "DE",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Foot",
+       "body_part": "Knee",
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-14",
-       "updated_at": "2026-08-21T01:43Z",
-       "note": "Gillotte has a ruptured plantar fascia, but the injury is not considered serious, Matt Derrick of ChiefsDigest.com reports.",
+       "updated_at": "2026-09-08T23:27Z",
+       "note": "Conner (knee) is not expected to be available for Monday night's contest against the Broncos, Charles Goldman of AtoZSports.com reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Josh Simmons",
+       "position": "OT",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Back",
+       "location": "Torso",
+       "side": null,
+       "return_date": "2026-09-14",
+       "updated_at": "2026-09-09T00:44Z",
+       "note": "Simmons (back) is in danger of missing Kansas City's matchup versus the Broncos on Monday, Matt McMullen of the team's official site reports.",
        "source": "espn"
       }
      ],
-     "not_shown": 4,
-     "n_out": 4
+     "not_shown": 0,
+     "n_out": 3
     }
    },
    "odds": {
@@ -22967,14 +21946,14 @@
      "current": 7.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -23001,24 +21980,24 @@
     },
     {
      "kind": "availability",
-     "text": "Kansas City Chiefs: 4 listed Out or on injured reserve, 10 on the report.",
+     "text": "Kansas City Chiefs: 3 listed Out or on injured reserve, 5 on the report.",
      "numbers": {
       "team": "Kansas City Chiefs",
-      "n_out": 4,
-      "n_listed": 10
+      "n_out": 3,
+      "n_listed": 5
      }
     },
     {
      "kind": "availability",
-     "text": "Miami Dolphins: 6 listed Out or on injured reserve, 8 on the report.",
+     "text": "Miami Dolphins: 5 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Miami Dolphins",
-      "n_out": 6,
-      "n_listed": 8
+      "n_out": 5,
+      "n_listed": 7
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872956",
@@ -23169,8 +22148,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 5,
      "shown": [
@@ -23235,8 +22214,8 @@
        "location": "Leg",
        "side": "Right",
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T19:40Z",
-       "note": "Nabers (knee) logged another full practice Thursday, Connor Hughes of SNY.tv reports.",
+       "updated_at": "2026-09-10T20:20Z",
+       "note": "Nabers (knee) said Thursday that he feels good but declined to commit publicly to playing Sunday against the Cowboys, Art Stapleton of USA Today reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -23480,14 +22459,14 @@
      "current": -3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 44.5,
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -23531,7 +22510,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872950",
@@ -23682,8 +22661,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 4,
      "shown": [
@@ -23782,8 +22761,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:31Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "Turner was limited in practice Thursday due to a hamstring issue, Jay Morrison of SI.com reports.",
        "source": "espn"
       },
       {
@@ -23795,8 +22774,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T20:30Z",
-       "note": "questionable",
+       "updated_at": "2026-09-11T00:49Z",
+       "note": "Stewart (knee) was a limited participant at practice Thursday, Jay Morrison of SI.com reports.",
        "source": "nflverse+espn",
        "practice_status": "Full Participation in Practice"
       }
@@ -23955,14 +22934,14 @@
      "current": 1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 47.5,
      "current": 46.5,
      "moved": -1.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -23975,7 +22954,7 @@
       "current": 46.5,
       "moved": -1.0,
       "first_seen": "2026-08-03T04:05:43.934720+00:00",
-      "last_seen": "2026-09-10T19:41:26.788548+00:00",
+      "last_seen": "2026-09-11T05:05:00.245145+00:00",
       "market": "total"
      }
     },
@@ -24018,7 +22997,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872955",
@@ -24169,10 +23148,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 8,
+     "n": 9,
      "shown": [
       {
        "player": "Deatrich Wise Jr.",
@@ -24240,25 +23219,24 @@
        "source": "espn"
       },
       {
-       "player": "Jacory Croskey-Merritt",
-       "position": "RB",
+       "player": "Daron Payne",
+       "position": "DT",
        "status": "Questionable",
        "abbr": "Q",
-       "body_part": "Groin",
-       "location": "Groin",
+       "body_part": "Knee",
+       "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:45Z",
-       "note": "Croskey-Merritt practiced in a limited capacity Wednesday due to a groin injury.",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
+       "updated_at": "2026-09-10T23:50Z",
+       "note": "Payne (knee) was a limited participant at the Commanders' practice Thursday.",
+       "source": "espn"
       }
      ],
-     "not_shown": 2,
+     "not_shown": 3,
      "n_out": 5
     },
     "away": {
-     "n": 9,
+     "n": 7,
      "shown": [
       {
        "player": "Beau Stephens",
@@ -24300,19 +23278,6 @@
        "source": "espn"
       },
       {
-       "player": "Nick Kallerup",
-       "position": "TE",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Coach's Decision",
-       "location": "Other",
-       "side": null,
-       "return_date": "2026-09-20",
-       "updated_at": "2026-09-09T22:55Z",
-       "note": "inactive",
-       "source": "espn"
-      },
-      {
        "player": "Ty Okada",
        "position": "S",
        "status": "Out",
@@ -24327,21 +23292,35 @@
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Zach Charbonnet",
-       "position": "RB",
-       "status": "Out",
-       "abbr": "O",
-       "body_part": "Knee - ACL",
+       "player": "Sam Darnold",
+       "position": "QB",
+       "status": "Doubtful",
+       "abbr": "D",
+       "body_part": "Hip",
        "location": "Leg",
-       "side": "Left",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-07T20:53Z",
-       "note": "Coach Mike Macdonald said Monday that Charbonnet (knee) looks \"awesome\" in his rehab from a torn ACL, Gregg Bell of The Tacoma News Tribune reports.",
+       "side": "Right",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T18:23Z",
+       "note": "Darnold (hip) received \"really, really good news\" regarding his injury, according to coach Mike McDonald, ESPN.com reports. \"His hip is intact, and it's good,\" McDonald said Thursday.",
        "source": "espn"
+      },
+      {
+       "player": "Nick Emmanwori",
+       "position": "S",
+       "status": "Questionable",
+       "abbr": "Q",
+       "body_part": "Ankle",
+       "location": "Leg",
+       "side": "Right",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-09T23:15Z",
+       "note": "Emmanwori (ankle) is inactive for Wednesday's game against the Patriots.",
+       "source": "nflverse+espn",
+       "practice_status": "Limited Participation in Practice"
       }
      ],
-     "not_shown": 3,
-     "n_out": 6
+     "not_shown": 1,
+     "n_out": 4
     }
    },
    "odds": {
@@ -24494,14 +23473,14 @@
      "current": 3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -24528,24 +23507,24 @@
     },
     {
      "kind": "availability",
-     "text": "Seattle Seahawks: 6 listed Out or on injured reserve, 9 on the report.",
+     "text": "Seattle Seahawks: 4 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Seattle Seahawks",
-      "n_out": 6,
-      "n_listed": 9
+      "n_out": 4,
+      "n_listed": 7
      }
     },
     {
      "kind": "availability",
-     "text": "Washington Commanders: 5 listed Out or on injured reserve, 8 on the report.",
+     "text": "Washington Commanders: 5 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "Washington Commanders",
       "n_out": 5,
-      "n_listed": 8
+      "n_listed": 9
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872957",
@@ -24696,8 +23675,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 9,
      "shown": [
@@ -24784,7 +23763,7 @@
      "n_out": 6
     },
     "away": {
-     "n": 12,
+     "n": 10,
      "shown": [
       {
        "player": "Behren Morton",
@@ -24866,8 +23845,8 @@
        "source": "espn"
       }
      ],
-     "not_shown": 6,
-     "n_out": 11
+     "not_shown": 4,
+     "n_out": 9
     }
    },
    "odds": {
@@ -25020,14 +23999,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -25054,11 +24033,11 @@
     },
     {
      "kind": "availability",
-     "text": "New England Patriots: 11 listed Out or on injured reserve, 12 on the report.",
+     "text": "New England Patriots: 9 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "New England Patriots",
-      "n_out": 11,
-      "n_listed": 12
+      "n_out": 9,
+      "n_listed": 10
      }
     },
     {
@@ -25071,7 +24050,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872958",
@@ -25222,10 +24201,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 5,
+     "n": 9,
      "shown": [
       {
        "player": "Alfred Collins",
@@ -25236,67 +24215,79 @@
        "location": "Leg",
        "side": null,
        "return_date": "2027-02-15",
-       "updated_at": "2026-09-09T21:07Z",
-       "note": "Collins will miss the entire 2026 season after suffering a torn patellar tendon during Tuesday's practice, Nick Wagoner of ESPN.com reports.",
+       "updated_at": "2026-09-10T23:28Z",
+       "note": "San Francisco placed Collins (knee) on injured reserve Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Mykel Williams",
-       "position": "DE",
+       "player": "Enrique Cruz Jr.",
+       "position": "OT",
        "status": "Out",
        "abbr": "O",
-       "body_part": "Knee - ACL",
-       "location": "Leg",
-       "side": "Right",
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "out",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "inactive",
        "source": "espn"
       },
       {
-       "player": "Nate Hobbs",
+       "player": "Ephesians Prysock",
        "position": "CB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-10-11",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:48Z",
+       "note": "Prysock (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
        "source": "espn"
       },
       {
-       "player": "Sam Okuayinonu",
-       "position": "DT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Foot",
-       "location": "Leg",
+       "player": "Jordan James",
+       "position": "RB",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-12-17",
-       "updated_at": "2026-09-07T23:14Z",
-       "note": "Okuayinonu broke his foot in practice last week and is set to have surgery to repair the issue, Matt Barrows of The Athletic reports.",
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:34Z",
+       "note": "James (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
        "source": "espn"
       },
       {
-       "player": "James Thompson Jr.",
-       "position": "DT",
-       "status": "Questionable",
-       "abbr": "Q",
-       "body_part": "Hamstring",
-       "location": "Leg",
+       "player": "Jordan Watkins",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-09-10",
-       "updated_at": "2026-09-08T23:55Z",
-       "note": "questionable",
-       "source": "nflverse+espn",
-       "practice_status": "Limited Participation in Practice"
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:38Z",
+       "note": "Watkins (coach's decision) is officially inactive for Thursday's game against the Rams, Matt Maiocco of NBC Sports Bay Area reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Kurtis Rourke",
+       "position": "QB",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-20",
+       "updated_at": "2026-09-10T23:21Z",
+       "note": "inactive",
+       "source": "espn"
       }
      ],
-     "not_shown": 0,
-     "n_out": 4
+     "not_shown": 3,
+     "n_out": 7
     },
     "away": {
      "n": 9,
@@ -25375,8 +24366,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-08-23T02:45Z",
-       "note": "Taylor-Demerson is questionable to return to Saturday's preseason game against the Cowboys due to a rib injury.",
+       "updated_at": "2026-09-11T00:20Z",
+       "note": "Taylor-Demerson (ribs) did not participate in practice Thursday, Zach Gershman of the Cardinals' official site reports.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -25483,7 +24474,7 @@
      "books": [
       "DraftKings"
      ],
-     "vig_pts": 4.05,
+     "vig_pts": 4.21,
      "fair_basis": "single book, margin removed",
      "shoppable": false,
      "sides": {
@@ -25491,32 +24482,32 @@
        "selection": "side_a",
        "label": "home",
        "line": null,
-       "best_price": -675,
+       "best_price": -650,
        "best_book": "DraftKings",
-       "worst_price": -675,
+       "worst_price": -650,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.871,
+       "consensus_prob": 0.8667,
        "prices": {
-        "DraftKings": -675
+        "DraftKings": -650
        },
-       "fair_prob": 0.8371,
+       "fair_prob": 0.8316,
        "gain_pts": null
       },
       "side_b": {
        "selection": "side_b",
        "label": "away",
        "line": null,
-       "best_price": 490,
+       "best_price": 470,
        "best_book": "DraftKings",
-       "worst_price": 490,
+       "worst_price": 470,
        "worst_book": "DraftKings",
        "n_books": 1,
-       "consensus_prob": 0.1695,
+       "consensus_prob": 0.1754,
        "prices": {
-        "DraftKings": 490
+        "DraftKings": 470
        },
-       "fair_prob": 0.1629,
+       "fair_prob": 0.1684,
        "gain_pts": null
       }
      }
@@ -25535,14 +24526,14 @@
      "current": -11.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -25578,15 +24569,15 @@
     },
     {
      "kind": "availability",
-     "text": "San Francisco 49ers: 4 listed Out or on injured reserve, 5 on the report.",
+     "text": "San Francisco 49ers: 7 listed Out or on injured reserve, 9 on the report.",
      "numbers": {
       "team": "San Francisco 49ers",
-      "n_out": 4,
-      "n_listed": 5
+      "n_out": 7,
+      "n_listed": 9
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872959",
@@ -25737,8 +24728,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -25803,8 +24794,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T01:25Z",
-       "note": "Rozeboom (foot) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
+       "updated_at": "2026-09-10T23:26Z",
+       "note": "Rozeboom (foot) was a limited participant at the Buccaneers' practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -25817,8 +24808,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T21:00Z",
-       "note": "McMillan (knee) practiced in a limited capacity Wednesday.",
+       "updated_at": "2026-09-10T21:32Z",
+       "note": "McMillan (knee) was a limited practice participant Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -26017,7 +25008,7 @@
      "current": 44.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -26061,7 +25052,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872960",
@@ -26212,8 +25203,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 8,
      "shown": [
@@ -26363,8 +25354,8 @@
        "location": "Groin",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T22:03Z",
-       "note": "Walker (groin) was limited at practice Wednesday.",
+       "updated_at": "2026-09-10T23:14Z",
+       "note": "Walker (groin) was listed as a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -26377,8 +25368,8 @@
        "location": "Head",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "questionable",
+       "updated_at": "2026-09-10T23:18Z",
+       "note": "Madubuike (neck) was considered to be a limited participant at the Ravens' walkthrough practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -26537,14 +25528,14 @@
      "current": 2.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 51.5,
      "current": 51.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -26588,7 +25579,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872961",
@@ -26739,8 +25730,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 10,
      "shown": [
@@ -26831,6 +25822,20 @@
      "n": 8,
      "shown": [
       {
+       "player": "Brock Bowers",
+       "position": "TE",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Knee - Meniscus",
+       "location": "Leg",
+       "side": null,
+       "return_date": "2026-09-13",
+       "updated_at": "2026-09-10T22:00Z",
+       "note": "Bowers (knee) remained a non-participant in Thursday's practice, Anthony Galaviz of The Fresno Bee reports.",
+       "source": "nflverse+espn",
+       "practice_status": "Did Not Participate In Practice"
+      },
+      {
        "player": "Brennan Jackson",
        "position": "LB",
        "status": "Injured Reserve",
@@ -26894,23 +25899,10 @@
        "updated_at": "2026-09-08T20:42Z",
        "note": "ir",
        "source": "espn"
-      },
-      {
-       "player": "Justin Pickett",
-       "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
-       "location": "Other",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-19T12:07Z",
-       "note": "ir",
-       "source": "espn"
       }
      ],
      "not_shown": 2,
-     "n_out": 7
+     "n_out": 8
     }
    },
    "odds": {
@@ -27063,14 +26055,14 @@
      "current": -3.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 42.5,
      "current": 42.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -27097,10 +26089,10 @@
     },
     {
      "kind": "availability",
-     "text": "Las Vegas Raiders: 7 listed Out or on injured reserve, 8 on the report.",
+     "text": "Las Vegas Raiders: 8 listed Out or on injured reserve, 8 on the report.",
      "numbers": {
       "team": "Las Vegas Raiders",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 8
      }
     },
@@ -27114,7 +26106,7 @@
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872962",
@@ -27265,10 +26257,10 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
-     "n": 10,
+     "n": 7,
      "shown": [
       {
        "player": "Jonathon Cooper",
@@ -27349,11 +26341,11 @@
        "source": "espn"
       }
      ],
-     "not_shown": 4,
+     "not_shown": 1,
      "n_out": 7
     },
     "away": {
-     "n": 6,
+     "n": 10,
      "shown": [
       {
        "player": "Aaron Donald",
@@ -27364,79 +26356,79 @@
        "location": "Other",
        "side": null,
        "return_date": "2026-09-21",
-       "updated_at": "2026-09-08T20:14Z",
-       "note": "Head coach Sean McVay said that Donald won't travel to Melbourne, Australia and will be inactive Thursday for the Rams' season opener versus the 49ers, Stu Jackson of the team's official site reports.",
+       "updated_at": "2026-09-10T23:25Z",
+       "note": "out",
        "source": "nflverse+espn",
        "practice_status": "Did Not Participate In Practice"
       },
       {
-       "player": "Daniel Rickert",
-       "position": "DE",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Knee",
-       "location": "Leg",
-       "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-26T00:54Z",
-       "note": "Rickert (knee) reverted to the Rams' injured reserve Tuesday, per the NFL's transaction log.",
-       "source": "espn"
-      },
-      {
-       "player": "Justin Dedich",
+       "player": "Bill Murray",
        "position": "G",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
        "location": "Other",
        "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:42Z",
-       "note": "Dedich (undisclosed) was put on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:24Z",
+       "note": "inactive",
        "source": "espn"
       },
       {
-       "player": "Keagen Trost",
-       "position": "OT",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Hamstring",
-       "location": "Leg",
+       "player": "CJ Daniels",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2026-10-12",
-       "updated_at": "2026-08-31T23:31Z",
-       "note": "Trost (hamstring) was placed on injured reserve with a designation to return by the Rams on Sunday, Cameron DaSilva of USA Today reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-11T00:02Z",
+       "note": "Daniels (coach's decision) is a healthy scratch for Thursday's matchup versus San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       },
       {
-       "player": "Keir Thomas II",
-       "position": "LB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Groin",
-       "location": "Groin",
+       "player": "Max Klare",
+       "position": "TE",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
        "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-09-08T20:42Z",
-       "note": "ir",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-11T00:07Z",
+       "note": "Klare (coach's decision) is inactive for Thursday's season-opener versus San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       },
       {
-       "player": "Matthew Caldwell",
+       "player": "Tutu Atwell",
+       "position": "WR",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
+       "location": "Other",
+       "side": null,
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:53Z",
+       "note": "Atwell (coach's decision) is inactive for Thursday's tilt against the 49ers in Melbourne, Australia, Nate Atkins of The Athletic reports.",
+       "source": "espn"
+      },
+      {
+       "player": "Ty Simpson",
        "position": "QB",
-       "status": "Injured Reserve",
-       "abbr": "IR",
-       "body_part": "Undisclosed",
+       "status": "Out",
+       "abbr": "O",
+       "body_part": "Coach's Decision",
        "location": "Other",
        "side": null,
-       "return_date": "2027-02-15",
-       "updated_at": "2026-08-29T22:20Z",
-       "note": "The Rams placed Caldwell (undisclosed) on injured reserve Saturday, Aaron Wilson of KPRC 2 Houston reports.",
+       "return_date": "2026-09-21",
+       "updated_at": "2026-09-10T23:47Z",
+       "note": "Simpson is inactive as the Rams' emergency third quarterback for Thursday's matchup against San Francisco in Melbourne, Australia, Nate Atkins of The Athletic reports.",
        "source": "espn"
       }
      ],
-     "not_shown": 0,
-     "n_out": 6
+     "not_shown": 4,
+     "n_out": 8
     }
    },
    "odds": {
@@ -27589,14 +26581,14 @@
      "current": 3.0,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 45.5,
      "current": 45.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -27623,24 +26615,24 @@
     },
     {
      "kind": "availability",
-     "text": "Los Angeles Rams: 6 listed Out or on injured reserve, 6 on the report.",
+     "text": "Los Angeles Rams: 8 listed Out or on injured reserve, 10 on the report.",
      "numbers": {
       "team": "Los Angeles Rams",
-      "n_out": 6,
-      "n_listed": 6
+      "n_out": 8,
+      "n_listed": 10
      }
     },
     {
      "kind": "availability",
-     "text": "Denver Broncos: 7 listed Out or on injured reserve, 10 on the report.",
+     "text": "Denver Broncos: 7 listed Out or on injured reserve, 7 on the report.",
      "numbers": {
       "team": "Denver Broncos",
       "n_out": 7,
-      "n_listed": 10
+      "n_listed": 7
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   },
   {
    "event_id": "401872963",
@@ -27791,8 +26783,8 @@
     }
    },
    "injuries": {
-    "updated_at": "2026-09-10T21:12:29.688682+00:00",
-    "espn_timestamp": "2026-09-10T21:12:21Z",
+    "updated_at": "2026-09-11T05:15:07.547330+00:00",
+    "espn_timestamp": "2026-09-11T05:15:01Z",
     "home": {
      "n": 12,
      "shown": [
@@ -27876,7 +26868,7 @@
       }
      ],
      "not_shown": 6,
-     "n_out": 7
+     "n_out": 8
     },
     "away": {
      "n": 6,
@@ -27942,8 +26934,8 @@
        "location": "Leg",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-09T23:09Z",
-       "note": "Stowers (hamstring) was a limited participant in Wednesday's practice.",
+       "updated_at": "2026-09-10T22:14Z",
+       "note": "Stowers (hamstring) practiced in a limited capacity Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       },
@@ -27956,8 +26948,8 @@
        "location": "Torso",
        "side": null,
        "return_date": "2026-09-13",
-       "updated_at": "2026-09-10T00:34Z",
-       "note": "Greenard (pectoral) was limited during Wednesday's practice, Tim McManus of ESPN.com reports.",
+       "updated_at": "2026-09-11T00:02Z",
+       "note": "Greenard (pectoral) did not participate at practice Thursday.",
        "source": "nflverse+espn",
        "practice_status": "Limited Participation in Practice"
       }
@@ -28116,14 +27108,14 @@
      "current": -1.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     },
     "total_line": {
      "opened": 46.5,
      "current": 46.5,
      "moved": 0.0,
      "first_seen": "2026-08-03T04:05:43.934720+00:00",
-     "last_seen": "2026-09-10T19:41:26.788548+00:00"
+     "last_seen": "2026-09-11T05:05:00.245145+00:00"
     }
    },
    "live_board": null,
@@ -28159,15 +27151,15 @@
     },
     {
      "kind": "availability",
-     "text": "Chicago Bears: 7 listed Out or on injured reserve, 12 on the report.",
+     "text": "Chicago Bears: 8 listed Out or on injured reserve, 12 on the report.",
      "numbers": {
       "team": "Chicago Bears",
-      "n_out": 7,
+      "n_out": 8,
       "n_listed": 12
      }
     }
    ],
-   "asof": "2026-09-10T21:12:39.773259+00:00"
+   "asof": "2026-09-11T05:15:14.133178+00:00"
   }
  ]
 }
