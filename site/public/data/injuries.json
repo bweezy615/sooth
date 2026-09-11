@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-10T11:49:24.912517+00:00",
- "checked_at": "2026-09-10T11:49:24.912517+00:00",
+ "generated_at": "2026-09-10T21:12:29.688682+00:00",
+ "checked_at": "2026-09-10T21:12:29.688682+00:00",
  "last_fetch_failed": false,
  "note": "Injury designations as published by ESPN, overlaid with the league's official practice report where it exists. Status changes; check the team's report before acting on it.",
  "sports": {
@@ -8,14 +8,14 @@
    "sport": "nfl",
    "label": "NFL",
    "season": 2026,
-   "espn_timestamp": "2026-09-10T11:49:23Z",
+   "espn_timestamp": "2026-09-10T21:12:21Z",
    "official": {
     "week": "1",
-    "rows": 29,
-    "matched": 9
+    "rows": 139,
+    "matched": 73
    },
    "n_teams": 32,
-   "n_players": 281,
+   "n_players": 276,
    "teams": {
     "Arizona Cardinals": [
      {
@@ -94,7 +94,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-08-23T02:45Z",
       "note": "Taylor-Demerson is questionable to return to Saturday's preseason game against the Cowboys due to a rib injury.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Garrett Williams",
@@ -107,7 +108,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:28Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Isaiah Adams",
@@ -120,7 +122,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:28Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Jeremiyah Love",
@@ -131,9 +134,10 @@
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-10T00:23Z",
-      "note": "Love (ankle) was a limited practice participant Wednesday, Bo Brack of GoPHNX.com reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T20:48Z",
+      "note": "Love (ankle) is warming up ahead of Thursday's practice, Dani Sureck of the Cardinals' official site reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Atlanta Falcons": [
@@ -161,7 +165,8 @@
       "return_date": "2026-09-20",
       "updated_at": "2026-09-07T15:00Z",
       "note": "Falcons head coach Kevin Stefanski said that Penix (knee) will be inactive for Sunday's season opener in Pittsburgh, Marc Raimondi of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Full Participation in Practice"
      },
      {
       "player": "Storm Norton",
@@ -203,19 +208,6 @@
       "source": "espn"
      },
      {
-      "player": "Malik Verdon",
-      "position": "LB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-08-19T12:07Z",
-      "note": "ir",
-      "source": "espn"
-     },
-     {
       "player": "Trey Sermon",
       "position": "RB",
       "status": "Injured Reserve",
@@ -229,19 +221,6 @@
       "source": "espn"
      },
      {
-      "player": "James Pearce Jr.",
-      "position": "LB",
-      "status": "Suspension",
-      "abbr": "SUSP",
-      "body_part": "Suspension",
-      "location": "Other",
-      "side": null,
-      "return_date": "2026-11-08",
-      "updated_at": "2026-08-19T12:07Z",
-      "note": "reserve-sus",
-      "source": "espn"
-     },
-     {
       "player": "Billy Bowman Jr.",
       "position": "CB",
       "status": "Questionable",
@@ -252,7 +231,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:05Z",
       "note": "Bowman (Achilles) was a limited participant in Wednesday's practice, Will McFadden of the Falcons' official site reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Brandon Dorlus",
@@ -265,19 +245,59 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:43Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
-      "player": "Kyle Hinton",
-      "position": "G",
+      "player": "Da'Shawn Hand",
+      "position": "DT",
       "status": "Questionable",
       "abbr": "Q",
       "body_part": "Knee",
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T23:44Z",
+      "updated_at": "2026-09-10T19:52Z",
       "note": "questionable",
+      "source": "espn"
+     },
+     {
+      "player": "Jawaan Taylor",
+      "position": "OT",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Knee",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-10T19:51Z",
+      "note": "questionable",
+      "source": "espn"
+     },
+     {
+      "player": "Kendal Daniels",
+      "position": "LB",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Achilles",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-10T19:51Z",
+      "note": "questionable",
+      "source": "espn"
+     },
+     {
+      "player": "Tua Tagovailoa",
+      "position": "QB",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Oblique",
+      "location": "Torso",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-10T20:00Z",
+      "note": "Tagovailoa was limited at Thursday's practice by an oblique injury, according to the Falcons' official site.",
       "source": "espn"
      },
      {
@@ -291,7 +311,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:44Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Zachariah Branch",
@@ -302,9 +323,10 @@
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T20:22Z",
-      "note": "Branch (hamstring) was limited in Wednesday's practice, Daniel Flick of The Atlanta Journal-Constitution reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T19:59Z",
+      "note": "Branch (hamstring) remained limited at practice Thursday, Tori McElhaney of the Falcons' official site reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Baltimore Ravens": [
@@ -371,7 +393,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T22:03Z",
       "note": "Walker (groin) was limited at practice Wednesday.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Nnamdi Madubuike",
@@ -384,7 +407,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-08T20:42Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Teddye Buchanan",
@@ -397,20 +421,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:01Z",
       "note": "Buchanan (knee) was a limited participant at practice Wednesday, Ryan Mink of the Ravens' official site reports.",
-      "source": "espn"
-     },
-     {
-      "player": "Zay Flowers",
-      "position": "WR",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Hamstring",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T21:02Z",
-      "note": "The Ravens listed Flowers as a limited participant in Wednesday's practice due to a hamstring injury.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Buffalo Bills": [
@@ -490,7 +502,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:52Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Jude Bowry",
@@ -516,7 +529,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:52Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Ty Johnson",
@@ -527,9 +541,10 @@
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T18:50Z",
-      "note": "Johnson (lower leg) isn't participating in Wednesday's practice, Joe Buscaglia of The Athletic reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T18:51Z",
+      "note": "Johnson (lower leg) did not practice Thursday, Matt Parrino of The Syracuse Post-Standard reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Carolina Panthers": [
@@ -612,19 +627,6 @@
       "source": "espn"
      },
      {
-      "player": "Bobby Brown III",
-      "position": "DT",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Back",
-      "location": "Torso",
-      "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T19:45Z",
-      "note": "questionable",
-      "source": "espn"
-     },
-     {
       "player": "Jonathon Brooks",
       "position": "RB",
       "status": "Questionable",
@@ -633,9 +635,10 @@
       "location": "Groin",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T19:39Z",
-      "note": "Brooks (groin) was listed as a limited participant in Wednesday's practice.",
-      "source": "espn"
+      "updated_at": "2026-09-10T19:47Z",
+      "note": "Brooks (groin) was a limited participant in Thursday's practice.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Patrick Jones II",
@@ -648,7 +651,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T19:44Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Chicago Bears": [
@@ -744,16 +748,16 @@
       "source": "espn"
      },
      {
-      "player": "Tony Fields II",
-      "position": "LB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
+      "player": "Marlen Sewell",
+      "position": "S",
+      "status": "Questionable",
+      "abbr": "Q",
       "body_part": "Undisclosed",
       "location": "Other",
       "side": null,
-      "return_date": "2026-10-11",
-      "updated_at": "2026-08-31T23:12Z",
-      "note": "The Bears placed Fields (undisclosed) on injured reserve Sunday with a designation to return.",
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-10T17:20Z",
+      "note": "questionable",
       "source": "espn"
      },
      {
@@ -763,11 +767,12 @@
       "abbr": "Q",
       "body_part": "Knee",
       "location": "Leg",
-      "side": null,
+      "side": "Left",
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T20:17Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Rome Odunze",
@@ -778,9 +783,10 @@
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T20:29Z",
-      "note": "Odunze (calf) was limited in Wednesday's practice.",
-      "source": "espn"
+      "updated_at": "2026-09-10T19:31Z",
+      "note": "Odunze (calf) was listed as a limited participant for Thursday's practice.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Tyson Bagent",
@@ -793,6 +799,20 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T20:17Z",
       "note": "questionable",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
+     },
+     {
+      "player": "Xavier Woods",
+      "position": "S",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Groin",
+      "location": "Groin",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-09T23:07Z",
+      "note": "Woods (groin) was not listed on the Bears' official injury report Wednesday.",
       "source": "espn"
      }
     ],
@@ -822,6 +842,33 @@
       "updated_at": "2026-08-31T22:51Z",
       "note": "The Bengals placed Taylor (undisclosed) on injured reserve Sunday with a designation to return, Geoff Hobson of the team's official site reports.",
       "source": "espn"
+     },
+     {
+      "player": "DJ Turner II",
+      "position": "CB",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Hamstring",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-10T20:31Z",
+      "note": "questionable",
+      "source": "espn"
+     },
+     {
+      "player": "Shemar Stewart",
+      "position": "DE",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Knee",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-10T20:30Z",
+      "note": "questionable",
+      "source": "nflverse+espn",
+      "practice_status": "Full Participation in Practice"
      }
     ],
     "Cleveland Browns": [
@@ -917,19 +964,6 @@
       "source": "espn"
      },
      {
-      "player": "Travis Bell",
-      "position": "DT",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Eye",
-      "location": "Head",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-09-01T00:57Z",
-      "note": "Bell (eye) reverted to Cleveland's injured reserve Monday, per the NFL's transaction log.",
-      "source": "espn"
-     },
-     {
       "player": "Maliek Collins",
       "position": "DT",
       "status": "Questionable",
@@ -940,7 +974,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T20:33Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Teven Jenkins",
@@ -952,6 +987,20 @@
       "side": null,
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T20:34Z",
+      "note": "questionable",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
+     },
+     {
+      "player": "Travis Bell",
+      "position": "DT",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Eye",
+      "location": "Head",
+      "side": null,
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-10T20:27Z",
       "note": "questionable",
       "source": "espn"
      }
@@ -1059,7 +1108,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:35Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Denver Broncos": [
@@ -1297,7 +1347,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T01:07Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Derrick Moore",
@@ -1310,7 +1361,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-08T20:42Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Green Bay Packers": [
@@ -1336,8 +1388,8 @@
       "location": "Other",
       "side": null,
       "return_date": "2026-09-27",
-      "updated_at": "2026-09-04T18:34Z",
-      "note": "Jacobs' next court date has been moved up from Nov. 17 to Sept. 10, Michael Gross of Fox 11 Green Bay reports. Jacobs is expected to be represented by his attorney and won't personally appear at the hearing.",
+      "updated_at": "2026-09-10T16:12Z",
+      "note": "Jacobs (personal) appeared in court in Green Bay on Thursday and pleaded no contest to misdemeanor charges of battery and criminal damage to property, Matt Schneidman of The Athletic reports.",
       "source": "espn"
      },
      {
@@ -1393,19 +1445,6 @@
       "source": "espn"
      },
      {
-      "player": "Trey Dean III",
-      "position": "S",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-09-01T01:04Z",
-      "note": "Dean (undisclosed) reverted to the Packers' injured-reserve list Monday, per the NFL's transaction log.",
-      "source": "espn"
-     },
-     {
       "player": "Aaron Banks",
       "position": "G",
       "status": "Questionable",
@@ -1416,7 +1455,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:10Z",
       "note": "Banks (knee) was limited during Wednesday's practice, Ryan Wood of USA Today reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Barryn Sorrell",
@@ -1429,7 +1469,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:49Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Devonte Wyatt",
@@ -1442,7 +1483,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:49Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Javon Hargrave",
@@ -1455,7 +1497,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:48Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jordan Morgan",
@@ -1467,6 +1510,20 @@
       "side": null,
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:48Z",
+      "note": "questionable",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
+     },
+     {
+      "player": "Pierre Strong Jr.",
+      "position": "RB",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Hamstring",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-10T15:50Z",
       "note": "questionable",
       "source": "espn"
      },
@@ -1481,7 +1538,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:48Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Zach Bako-Bewele",
@@ -1494,7 +1552,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:57Z",
       "note": "Bako-Bewele (knee) was a limited participant in Wednesday's practice, Ryan Wood of USA Today reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Houston Texans": [
@@ -1626,7 +1685,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:55Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Indianapolis Colts": [
@@ -1696,19 +1756,6 @@
       "source": "espn"
      },
      {
-      "player": "A.J. Haulcy",
-      "position": "S",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Ankle",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-08T20:42Z",
-      "note": "questionable",
-      "source": "espn"
-     },
-     {
       "player": "Alec Pierce",
       "position": "WR",
       "status": "Questionable",
@@ -1717,22 +1764,10 @@
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T20:48Z",
-      "note": "Pierce was a limited participant in Wednesday's practice due to a heel injury.",
-      "source": "espn"
-     },
-     {
-      "player": "Drew Ogletree",
-      "position": "TE",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Neck",
-      "location": "Head",
-      "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T22:25Z",
-      "note": "Ogletree (neck) was limited at Wednesday's practice.",
-      "source": "espn"
+      "updated_at": "2026-09-10T20:08Z",
+      "note": "Pierce (heel) was a limited participant at Thursday's practice.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Sean McKeon",
@@ -1744,19 +1779,6 @@
       "side": null,
       "return_date": "2027-02-15",
       "updated_at": "2026-09-08T20:42Z",
-      "note": "questionable",
-      "source": "espn"
-     },
-     {
-      "player": "Sedrick Van Pran-Granger",
-      "position": "C",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Illness",
-      "location": "Other",
-      "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T20:42Z",
       "note": "questionable",
       "source": "espn"
      }
@@ -1851,7 +1873,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:28Z",
       "note": "Van Lanen (knee) was a limited participant in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jakobi Meyers",
@@ -1862,9 +1885,10 @@
       "location": "Arm",
       "side": "Right",
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T16:28Z",
-      "note": "Meyers (hand) was spotted practicing Wednesday while wearing a non-contact jersey, Ryan O'Halloran of The Florida Times-Union reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T16:22Z",
+      "note": "Meyers (thumb) was spotted in a non-contact jersey at Thursday's practice, Ryan O'Halloran of The Florida Times-Union reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "LeQuint Allen Jr.",
@@ -1877,7 +1901,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T16:42Z",
       "note": "Allen was present for Wednesday's practice but was a non-participant due to a hip injury, Ryan O'Halloran of The Florida Times-Union reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Kansas City Chiefs": [
@@ -1938,10 +1963,10 @@
       "position": "S",
       "status": "Questionable",
       "abbr": "Q",
-      "body_part": "Back",
-      "location": "Torso",
+      "body_part": null,
+      "location": null,
       "side": null,
-      "return_date": "2026-09-14",
+      "return_date": null,
       "updated_at": "2026-08-22T23:54Z",
       "note": "Gilman has been ruled out for the rest of Saturday's preseason game against the Buccaneers due to a back injury.",
       "source": "espn"
@@ -1983,19 +2008,6 @@
       "return_date": "2026-09-14",
       "updated_at": "2026-09-09T00:44Z",
       "note": "Simmons (back) is in danger of missing Kansas City's matchup versus the Broncos on Monday, Matt McMullen of the team's official site reports.",
-      "source": "espn"
-     },
-     {
-      "player": "Patrick Mahomes",
-      "position": "QB",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Knee - ACL",
-      "location": "Leg",
-      "side": "Left",
-      "return_date": "2026-09-14",
-      "updated_at": "2026-09-08T17:14Z",
-      "note": "Kansas City head coach Andy Reid said Tuesday that Mahomes (knee) has a \"pretty good chance\" to start next Monday's season opener versus the Broncos, Sam McDowell of The Kansas City Star reports.",
       "source": "espn"
      },
      {
@@ -2128,7 +2140,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T20:04Z",
       "note": "Bowers underwent a meniscus trim procedure Tuesday and is expected to miss \"a game or two,\" Adam Schefter of ESPN reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Los Angeles Chargers": [
@@ -2208,7 +2221,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:38Z",
       "note": "Thompson (undisclosed) was a limited participant in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Deane Leonard",
@@ -2221,7 +2235,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:27Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Keaton Mitchell",
@@ -2234,7 +2249,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T21:58Z",
       "note": "Mitchell (hamstring) was limited in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "RJ Mickens",
@@ -2260,7 +2276,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:43Z",
       "note": "Tuipulotu (hip) was a limited participant in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Los Angeles Rams": [
@@ -2269,14 +2286,14 @@
       "position": "DT",
       "status": "Out",
       "abbr": "O",
-      "body_part": "Coach's Decision",
+      "body_part": "Not injury related - resting player",
       "location": "Other",
       "side": null,
       "return_date": "2026-09-21",
       "updated_at": "2026-09-08T20:14Z",
       "note": "Head coach Sean McVay said that Donald won't travel to Melbourne, Australia and will be inactive Thursday for the Rams' season opener versus the 49ers, Stu Jackson of the team's official site reports.",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Daniel Rickert",
@@ -2342,20 +2359,6 @@
       "updated_at": "2026-08-29T22:20Z",
       "note": "The Rams placed Caldwell (undisclosed) on injured reserve Saturday, Aaron Wilson of KPRC 2 Houston reports.",
       "source": "espn"
-     },
-     {
-      "player": "Jaylen Watson",
-      "position": "CB",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Toe",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-10",
-      "updated_at": "2026-09-10T01:50Z",
-      "note": "Watson (toe) was a limited participant on the Rams' estimated practice report.",
-      "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Miami Dolphins": [
@@ -2461,7 +2464,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T01:16Z",
       "note": "Kacmarek (calf) was limited during Wednesday's practice, David Furones of the South Florida Sun Sentinel reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Minnesota Vikings": [
@@ -2554,7 +2558,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-08-19T12:07Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jacob Thomas",
@@ -2567,7 +2572,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-08-29T15:21Z",
       "note": "Thomas suffered an ankle sprain during Friday night's preseason finale against the Broncos, Kevin Seifert of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jakobe Thomas",
@@ -2580,7 +2586,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-08T20:42Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "New England Patriots": [
@@ -2648,19 +2655,6 @@
       "return_date": "2026-09-20",
       "updated_at": "2026-09-09T22:54Z",
       "note": "inactive",
-      "source": "espn"
-     },
-     {
-      "player": "Harold Landry III",
-      "position": "LB",
-      "status": "Out",
-      "abbr": "O",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2026-10-11",
-      "updated_at": "2026-08-31T18:30Z",
-      "note": "Landry (undisclosed) was moved to the reserve/PUP list by the Patriots on Sunday.",
       "source": "espn"
      },
      {
@@ -2751,8 +2745,8 @@
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-20",
-      "updated_at": "2026-09-10T03:43Z",
-      "note": "Coach Mike Vrabel didn't have an update on Brown (ankle) after Wednesday's loss at Seattle in which the wide receiver left early due to injury, Taylor Kyles of CLNSMedia.com reports.",
+      "updated_at": "2026-09-10T14:04Z",
+      "note": "Brown received a preliminary diagnosis of a right high-ankle sprain after exiting Wednesday's 13-10 loss to the Seahawks, Ian Rapoport and Mike Garafolo of NFL Network report.",
       "source": "espn"
      }
     ],
@@ -2768,7 +2762,8 @@
       "return_date": "2026-09-20",
       "updated_at": "2026-09-09T23:28Z",
       "note": "Coach Kellen Moore said Wednesday that Jordan (hamstring) will not play Sunday against the Lions, Katherine Terrell of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Mason Tipton",
@@ -2857,9 +2852,10 @@
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T20:54Z",
-      "note": "Kamara (knee) returned to practice Wednesday, Mike Triplett of NewOrleans.Football reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T20:37Z",
+      "note": "Kamara (knee) remained limited at practice Thursday, Mike Triplett of NewOrleans.Football reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Audric Estime",
@@ -2885,7 +2881,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:24Z",
       "note": "Delp (hamstring) did not participate in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "New York Giants": [
@@ -2950,9 +2947,10 @@
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-13",
-      "updated_at": "2026-09-09T17:51Z",
-      "note": "Nabers (knee) participated in drills at Wednesday's practice, Connor Hughes of SNY.tv reports.",
-      "source": "espn"
+      "updated_at": "2026-09-10T19:40Z",
+      "note": "Nabers (knee) logged another full practice Thursday, Connor Hughes of SNY.tv reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Full Participation in Practice"
      }
     ],
     "New York Jets": [
@@ -3045,7 +3043,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-08-31T21:46Z",
       "note": "Head coach Aaron Glenn said Monday that Ponds (calf) is on track to play against the Titans in Week 1, Zack Rosenblatt of The Athletic reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Joseph Ossai",
@@ -3058,7 +3057,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-08T20:42Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Tim Patrick",
@@ -3071,7 +3071,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:03Z",
       "note": "Patrick (groin) did not practice Wednesday, Rich Cimini of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Philadelphia Eagles": [
@@ -3138,7 +3139,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:09Z",
       "note": "Stowers (hamstring) was a limited participant in Wednesday's practice.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jonathan Greenard",
@@ -3151,7 +3153,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:34Z",
       "note": "Greenard (pectoral) was limited during Wednesday's practice, Tim McManus of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Pittsburgh Steelers": [
@@ -3205,7 +3208,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T00:07Z",
       "note": "Porter (back) was a limited participant in Wednesday's practice, Mike DeFabo of The Athletic reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "San Francisco 49ers": [
@@ -3221,7 +3225,7 @@
       "updated_at": "2026-09-09T21:07Z",
       "note": "Collins will miss the entire 2026 season after suffering a torn patellar tendon during Tuesday's practice, Nick Wagoner of ESPN.com reports.",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Mykel Williams",
@@ -3274,7 +3278,7 @@
       "updated_at": "2026-09-08T23:55Z",
       "note": "questionable",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Seattle Seahawks": [
@@ -3358,6 +3362,19 @@
       "source": "espn"
      },
      {
+      "player": "Sam Darnold",
+      "position": "QB",
+      "status": "Doubtful",
+      "abbr": "D",
+      "body_part": "Hip",
+      "location": "Leg",
+      "side": "Right",
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-10T18:23Z",
+      "note": "Darnold (hip) received \"really, really good news\" regarding his injury, according to coach Mike McDonald, ESPN.com reports. \"His hip is intact, and it's good,\" McDonald said Thursday.",
+      "source": "espn"
+     },
+     {
       "player": "Nick Emmanwori",
       "position": "S",
       "status": "Questionable",
@@ -3370,19 +3387,6 @@
       "note": "Emmanwori (ankle) is inactive for Wednesday's game against the Patriots.",
       "source": "nflverse+espn",
       "practice_status": "Limited Participation in Practice"
-     },
-     {
-      "player": "Sam Darnold",
-      "position": "QB",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Hip",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-20",
-      "updated_at": "2026-09-10T03:53Z",
-      "note": "Darnold underwent a CT scan on his hip and is expected to undergo an MRI on Thursday after the quarterback didn't return to Wednesday's win against the Patriots, Adam Schefter of ESPN.com reports.",
-      "source": "espn"
      },
      {
       "player": "Tory Horton",
@@ -3463,7 +3467,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T01:25Z",
       "note": "Rozeboom (foot) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Jalen McMillan",
@@ -3476,7 +3481,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T21:00Z",
       "note": "McMillan (knee) practiced in a limited capacity Wednesday.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Justin Skule",
@@ -3489,20 +3495,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T01:17Z",
       "note": "questionable",
-      "source": "espn"
-     },
-     {
-      "player": "Rueben Bain Jr.",
-      "position": "LB",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Shoulder - AC Joint",
-      "location": "Arm",
-      "side": "Right",
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-10T01:29Z",
-      "note": "Bain (shoulder) was a limited participant in Wednesday's practice, Brianna Dix of the Buccaneers' official site reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Sean Tucker",
@@ -3515,7 +3509,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T21:05Z",
       "note": "Tucker (hamstring) did not practice Wednesday.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Tennessee Titans": [
@@ -3634,7 +3629,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-07T23:52Z",
       "note": "Gray got in a UTV accident over the weekend and had to enter the NFL's concussion protocol, Turron Davenport of ESPN.com reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Washington Commanders": [
@@ -3714,7 +3710,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T21:45Z",
       "note": "Croskey-Merritt practiced in a limited capacity Wednesday due to a groin injury.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "K'Lavon Chaisson",
@@ -3727,7 +3724,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-10T01:21Z",
       "note": "questionable",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Odafe Oweh",
@@ -3740,7 +3738,8 @@
       "return_date": "2026-09-13",
       "updated_at": "2026-09-07T23:27Z",
       "note": "Oweh (calf) took part in the Commanders' walk-through session Monday, JP Finlay of NBC Sports Washington reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      }
     ]
    }
