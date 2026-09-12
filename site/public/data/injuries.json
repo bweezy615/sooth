@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-12T11:15:04.554844+00:00",
- "checked_at": "2026-09-12T11:15:04.554844+00:00",
+ "generated_at": "2026-09-12T20:56:58.895311+00:00",
+ "checked_at": "2026-09-12T20:56:58.895311+00:00",
  "last_fetch_failed": false,
  "note": "Injury designations as published by ESPN, overlaid with the league's official practice report where it exists. Status changes; check the team's report before acting on it.",
  "sports": {
@@ -8,14 +8,14 @@
    "sport": "nfl",
    "label": "NFL",
    "season": 2026,
-   "espn_timestamp": "2026-09-12T11:15:03Z",
+   "espn_timestamp": "2026-09-12T20:56:58Z",
    "official": {
     "week": "1",
-    "rows": 167,
-    "matched": 54
+    "rows": 182,
+    "matched": 58
    },
    "n_teams": 32,
-   "n_players": 235,
+   "n_players": 227,
    "teams": {
     "Arizona Cardinals": [
      {
@@ -176,17 +176,18 @@
       "body_part": "Ankle",
       "location": "Leg",
       "side": null,
-      "return_date": "2026-09-20",
+      "return_date": "2026-10-11",
       "updated_at": "2026-09-12T00:35Z",
       "note": "Williams (ankle) has been ruled out ahead of Sunday's game against the Steelers, Tori McElhaney of the Falcons' official site reports.",
-      "source": "espn"
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Michael Penix Jr.",
       "position": "QB",
       "status": "Out",
       "abbr": "O",
-      "body_part": "Knee - ACL",
+      "body_part": "Knee",
       "location": "Leg",
       "side": "Left",
       "return_date": "2026-09-20",
@@ -220,7 +221,7 @@
       "updated_at": "2026-09-11T17:36Z",
       "note": "Tagovailoa (oblique) has been ruled out for Sunday's game at Pittsburgh, Tori McElhaney of the Falcons' official site reports.",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Beaux Collins",
@@ -262,6 +263,19 @@
       "source": "espn"
      },
      {
+      "player": "Cooper Rush",
+      "position": "QB",
+      "status": "Questionable",
+      "abbr": "Q",
+      "body_part": "Back",
+      "location": "Torso",
+      "side": null,
+      "return_date": "2026-09-13",
+      "updated_at": "2026-09-12T20:08Z",
+      "note": "Rush (back) experienced back spasms Saturday but still will start Sunday's game at Pittsburgh, Adam Schefter of ESPN reports.",
+      "source": "espn"
+     },
+     {
       "player": "Za'Darius Smith",
       "position": "DE",
       "status": "Questionable",
@@ -273,7 +287,7 @@
       "updated_at": "2026-09-11T23:31Z",
       "note": "Smith (shoulder) is questionable for Sunday's game against the Steelers, Tori McElhaney of the Falcons' official site reports.",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Full Participation in Practice"
      }
     ],
     "Baltimore Ravens": [
@@ -296,7 +310,7 @@
       "position": "LB",
       "status": "Out",
       "abbr": "O",
-      "body_part": "Knee - ACL",
+      "body_part": "Knee",
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-20",
@@ -342,19 +356,6 @@
       "return_date": "2027-02-15",
       "updated_at": "2026-08-26T23:36Z",
       "note": "Pinter (knee) was placed on injured reserve by the Ravens on Wednesday, Clifton Brown of the team's official website reports.",
-      "source": "espn"
-     },
-     {
-      "player": "Jahquez Robinson",
-      "position": "S",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-08-20T00:15Z",
-      "note": "Robinson (undisclosed) reverted to the Ravens' injured reserve list Wednesday, Aaron Wilson of KPRC 2 Houston reports.",
       "source": "espn"
      },
      {
@@ -413,19 +414,6 @@
       "source": "espn"
      },
      {
-      "player": "Phidarian Mathis",
-      "position": "DT",
-      "status": "Suspension",
-      "abbr": "SUSP",
-      "body_part": "Suspension",
-      "location": "Other",
-      "side": null,
-      "return_date": "2026-10-04",
-      "updated_at": "2026-08-19T12:07Z",
-      "note": "reserve-sus",
-      "source": "espn"
-     },
-     {
       "player": "Jedrick Wills Jr.",
       "position": "OT",
       "status": "Questionable",
@@ -443,14 +431,14 @@
       "position": "CB",
       "status": "Questionable",
       "abbr": "Q",
-      "body_part": "Quadriceps",
+      "body_part": "Quadricep",
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
       "updated_at": "2026-09-09T23:52Z",
       "note": "questionable",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Full Participation in Practice"
      },
      {
       "player": "T.J. Sanders",
@@ -464,7 +452,7 @@
       "updated_at": "2026-09-10T23:28Z",
       "note": "Sanders (knee) did not participate at practice Thursday.",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Ty Johnson",
@@ -478,7 +466,7 @@
       "updated_at": "2026-09-11T18:22Z",
       "note": "Johnson (hamstring) is questionable for Sunday's game at Houston, Joe Buscaglia of The Athletic reports.",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Limited Participation in Practice"
      }
     ],
     "Carolina Panthers": [
@@ -655,32 +643,6 @@
       "source": "espn"
      },
      {
-      "player": "Ruben Hyppolite II",
-      "position": "LB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Shoulder",
-      "location": "Arm",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-09-01T00:58Z",
-      "note": "Hyppolite (shoulder) reverted to Chicago's injured reserve Monday, per the NFL's transaction log.",
-      "source": "espn"
-     },
-     {
-      "player": "Tony Fields II",
-      "position": "LB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2026-10-11",
-      "updated_at": "2026-08-31T23:12Z",
-      "note": "The Bears placed Fields (undisclosed) on injured reserve Sunday with a designation to return.",
-      "source": "espn"
-     },
-     {
       "player": "Ozzy Trapilo",
       "position": "OT",
       "status": "Questionable",
@@ -776,7 +738,7 @@
       "updated_at": "2026-09-11T23:10Z",
       "note": "Stewart (knee) is officially designated as doubtful for Sunday's game versus the Buccaneers, Charlie Goldsmith of the Dayton Daily News reports.",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Cleveland Browns": [
@@ -908,10 +870,11 @@
       "body_part": "Hip",
       "location": "Leg",
       "side": null,
-      "return_date": "2026-10-08",
-      "updated_at": "2026-09-12T01:09Z",
-      "note": "Davis is slated to have surgery on his injured hip Saturday and is expected to be placed on IR, Todd Archer of ESPN.com reports.",
-      "source": "espn"
+      "return_date": "2027-02-15",
+      "updated_at": "2026-09-12T18:20Z",
+      "note": "The Cowboys placed Davis (hip) on injured reserve Saturday, Adam Schefter of ESPN reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "DJ Rogers",
@@ -1233,19 +1196,6 @@
       "source": "espn"
      },
      {
-      "player": "Micah Parsons",
-      "position": "DE",
-      "status": "Out",
-      "abbr": "O",
-      "body_part": "Knee - ACL",
-      "location": "Leg",
-      "side": "Left",
-      "return_date": "2026-10-11",
-      "updated_at": "2026-09-01T14:45Z",
-      "note": "Packers general manager Brian Gutekunst said Tuesday that Parsons (knee) could return from the PUP list when first eligible in Week 5, Ryan Wood of USA Today reports. \"We have a pretty good idea once we get out of that four-game window we're going to be pretty close,\" Gutekunst said.",
-      "source": "espn"
-     },
-     {
       "player": "Warren Brinson",
       "position": "DT",
       "status": "Out",
@@ -1311,7 +1261,7 @@
       "updated_at": "2026-09-10T00:48Z",
       "note": "questionable",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Zach Bako-Bewele",
@@ -1522,10 +1472,11 @@
       "body_part": "Hamstring",
       "location": "Leg",
       "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-12T00:43Z",
-      "note": "Ajiake (hamstring) is questionable for Sunday's game against the Ravens, Nathan Brown of The Indianapolis Star reports.",
-      "source": "espn"
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-12T17:24Z",
+      "note": "Ajiake (hamstring) has been downgraded to out for Sunday's game with the Ravens.",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      },
      {
       "player": "Sean McKeon",
@@ -1542,19 +1493,6 @@
      }
     ],
     "Jacksonville Jaguars": [
-     {
-      "player": "Garrett DiGiorgio",
-      "position": "OT",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-08-19T12:07Z",
-      "note": "ir",
-      "source": "espn"
-     },
      {
       "player": "Jared Bartlett",
       "position": "LB",
@@ -1637,6 +1575,34 @@
     ],
     "Kansas City Chiefs": [
      {
+      "player": "Chamarri Conner",
+      "position": "S",
+      "status": "Out",
+      "abbr": "O",
+      "body_part": "Knee",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-12T18:12Z",
+      "note": "Connor (knee) has been ruled out ahead of Monday's game against the Broncos, Matt Derrick of ChiefsDigest.com reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
+     },
+     {
+      "player": "Josh Simmons",
+      "position": "OT",
+      "status": "Out",
+      "abbr": "O",
+      "body_part": "Back",
+      "location": "Torso",
+      "side": null,
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-12T18:14Z",
+      "note": "Simmons (back) has been ruled out ahead of Monday's game against the Broncos, Matt Derrick of ChiefsDigest.com reports.",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
+     },
+     {
       "player": "Omarr Norman-Lott",
       "position": "DT",
       "status": "Out",
@@ -1674,47 +1640,6 @@
       "updated_at": "2026-08-31T17:40Z",
       "note": "Holiday (undisclosed) was placed on injured reserve by the Chiefs on Sunday.",
       "source": "espn"
-     },
-     {
-      "player": "Chamarri Conner",
-      "position": "S",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Knee",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-14",
-      "updated_at": "2026-09-08T23:27Z",
-      "note": "Conner (knee) is not expected to be available for Monday night's contest against the Broncos, Charles Goldman of AtoZSports.com reports.",
-      "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
-     },
-     {
-      "player": "Chris Jones",
-      "position": "DT",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Calf",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-14",
-      "updated_at": "2026-09-12T00:43Z",
-      "note": "Jones was a limited participant in Friday's practice due to a calf injury.",
-      "source": "espn"
-     },
-     {
-      "player": "Josh Simmons",
-      "position": "OT",
-      "status": "Questionable",
-      "abbr": "Q",
-      "body_part": "Back",
-      "location": "Torso",
-      "side": null,
-      "return_date": "2026-09-14",
-      "updated_at": "2026-09-09T00:44Z",
-      "note": "Simmons (back) is in danger of missing Kansas City's matchup versus the Broncos on Monday, Matt McMullen of the team's official site reports.",
-      "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Las Vegas Raiders": [
@@ -1723,7 +1648,7 @@
       "position": "TE",
       "status": "Out",
       "abbr": "O",
-      "body_part": "Knee - Meniscus",
+      "body_part": "Knee",
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-20",
@@ -1769,19 +1694,6 @@
       "return_date": "2027-02-15",
       "updated_at": "2026-08-22T20:31Z",
       "note": "The Raiders placed Anusiem (knee) on injured reserve Saturday, Adam Schefter of ESPN reports.",
-      "source": "espn"
-     },
-     {
-      "player": "Chris Collier",
-      "position": "RB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Undisclosed",
-      "location": "Other",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-08-02T23:52Z",
-      "note": "Collier (undisclosed) reverted to injured reserve with the Raiders on Sunday, Sam Warren of The Athletic reports.",
       "source": "espn"
      },
      {
@@ -2204,19 +2116,6 @@
     ],
     "New Orleans Saints": [
      {
-      "player": "Audric Estime",
-      "position": "RB",
-      "status": "Out",
-      "abbr": "O",
-      "body_part": "Thigh",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2026-09-20",
-      "updated_at": "2026-09-11T23:33Z",
-      "note": "Estime (thigh) has been ruled out for Sunday's game against the Lions.",
-      "source": "espn"
-     },
-     {
       "player": "Cameron Jordan",
       "position": "DE",
       "status": "Out",
@@ -2228,7 +2127,7 @@
       "updated_at": "2026-09-09T23:28Z",
       "note": "Coach Kellen Moore said Wednesday that Jordan (hamstring) will not play Sunday against the Lions, Katherine Terrell of ESPN.com reports.",
       "source": "nflverse+espn",
-      "practice_status": "Did Not Participate In Practice"
+      "practice_status": "Limited Participation in Practice"
      },
      {
       "player": "Mason Tipton",
@@ -2256,6 +2155,19 @@
       "note": "Delp (hamstring) has been ruled out for Sunday's game against the Lions.",
       "source": "nflverse+espn",
       "practice_status": "Did Not Participate In Practice"
+     },
+     {
+      "player": "Audric Estime",
+      "position": "RB",
+      "status": "Injured Reserve",
+      "abbr": "IR",
+      "body_part": "Thigh",
+      "location": "Leg",
+      "side": null,
+      "return_date": "2026-10-11",
+      "updated_at": "2026-09-12T18:18Z",
+      "note": "The Saints placed Estime (thigh) on injured reserve Saturday, Ross Jackson of WWL Louisiana reports.",
+      "source": "espn"
      },
      {
       "player": "David Long Jr.",
@@ -2327,14 +2239,14 @@
       "position": "RB",
       "status": "Questionable",
       "abbr": "Q",
-      "body_part": "Knee - MCL",
+      "body_part": "Knee",
       "location": "Leg",
       "side": null,
       "return_date": "2026-09-13",
       "updated_at": "2026-09-11T18:26Z",
       "note": "Coach Kellen Moore said Friday that Kamara (knee) will be questionable for Sunday's game in Pittsburgh, Mike Triplett of NewOrleans.Football reports.",
       "source": "nflverse+espn",
-      "practice_status": "Limited Participation in Practice"
+      "practice_status": "Full Participation in Practice"
      }
     ],
     "New York Giants": [
@@ -2349,19 +2261,6 @@
       "return_date": "2027-02-15",
       "updated_at": "2026-08-27T22:48Z",
       "note": "The Giants placed Austin (knee) on injured reserve Thursday, Patricia Traina of SI.com reports.",
-      "source": "espn"
-     },
-     {
-      "player": "Jarrick Bernard-Converse",
-      "position": "CB",
-      "status": "Injured Reserve",
-      "abbr": "IR",
-      "body_part": "Knee",
-      "location": "Leg",
-      "side": null,
-      "return_date": "2027-02-15",
-      "updated_at": "2026-08-19T12:07Z",
-      "note": "ir",
       "source": "espn"
      },
      {
@@ -2395,7 +2294,7 @@
       "position": "WR",
       "status": "Questionable",
       "abbr": "Q",
-      "body_part": "Knee - ACL",
+      "body_part": "Knee",
       "location": "Leg",
       "side": "Right",
       "return_date": "2026-09-13",
@@ -2428,9 +2327,9 @@
       "body_part": "Groin",
       "location": "Groin",
       "side": null,
-      "return_date": "2026-09-20",
-      "updated_at": "2026-09-11T23:08Z",
-      "note": "Patrick (groin) has been ruled out ahead of Sunday's game against the Titans, Brian Costello of the New York Post reports.",
+      "return_date": "2026-10-11",
+      "updated_at": "2026-09-12T18:56Z",
+      "note": "The Jets placed Patrick (groin) on injured reserve Saturday, Zack Rosenblatt of The Athletic reports.",
       "source": "nflverse+espn",
       "practice_status": "Did Not Participate In Practice"
      },
@@ -2534,10 +2433,11 @@
       "body_part": "Back",
       "location": "Torso",
       "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-11T23:08Z",
-      "note": "Nwangwu (back) is doubtful for Sunday's game against the Titans, Zack Rosenblatt of The Athletic reports.",
-      "source": "espn"
+      "return_date": "2026-09-20",
+      "updated_at": "2026-09-12T18:53Z",
+      "note": "Nwangwu (back) has been ruled out ahead of Sunday's game against the Titans.",
+      "source": "nflverse+espn",
+      "practice_status": "Did Not Participate In Practice"
      }
     ],
     "Philadelphia Eagles": [
@@ -2615,9 +2515,9 @@
       "body_part": "Hamstring",
       "location": "Leg",
       "side": null,
-      "return_date": "2026-09-13",
-      "updated_at": "2026-09-11T21:15Z",
-      "note": "Stowers (hamstring) is listed as questionable for Sunday's game versus the Commanders.",
+      "return_date": "2026-10-11",
+      "updated_at": "2026-09-12T20:06Z",
+      "note": "The Eagles placed Stowers (quadriceps/hamstring) on injured reserve Saturday.",
       "source": "nflverse+espn",
       "practice_status": "Limited Participation in Practice"
      }
