@@ -162,15 +162,28 @@ def _number(node: Any) -> float | None:
 
 
 
-def minutes_to_next_kickoff(season: int, now: datetime) -> float | None:
+def minutes_to_next_kickoff(season: int, now: datetime,
+                            sport: str = "nfl") -> float | None:
     """Minutes until the next unplayed kickoff, from LOCAL data only.
 
-    Deliberately does no HTTP. The 15-minute workflow fires ~96 times a day
-    and would otherwise hammer an undocumented free endpoint around the clock
-    to discover that the next game is four days away. nflverse gametime is
-    US/Eastern; converting it properly matters, because an hour of drift turns
-    a closing-line capture into a mid-afternoon one.
+    Reads a cached schedule rather than an odds endpoint. The 15-minute
+    workflow fires ~96 times a day and would otherwise hammer an undocumented
+    free endpoint around the clock to discover that the next game is four days
+    away.
+
+    College football was measured into this on 2026-09-09. Only 27% of played
+    college games had a price inside thirty minutes of kickoff, against a
+    purchased NFL backfill that managed 5-28 minutes for every game, and
+    docs/plans/2026-09-09-cfb-closing-line-evidence.md names a kickoff-triggered
+    capture as the cheapest fix — impossible while this function could only see
+    the NFL calendar. It is the schedule half of that fix; the workflow that
+    would call it with --within-minutes is a separate, operational decision.
     """
+    if sport == "ncaaf":
+        return _minutes_to_next_ncaaf_kickoff(season, now)
+    if sport != "nfl":
+        raise ValueError(f"no kickoff schedule wired up for {sport!r}")
+
     from zoneinfo import ZoneInfo
     import pandas as _pd
 
@@ -190,6 +203,50 @@ def minutes_to_next_kickoff(season: int, now: datetime) -> float | None:
                           tzinfo=et).astimezone(timezone.utc)
         except ValueError:
             continue
+        if ko < now:
+            continue
+        delta = (ko - now).total_seconds() / 60.0
+        if best is None or delta < best:
+            best = delta
+    return best
+
+
+def _minutes_to_next_ncaaf_kickoff(season: int, now: datetime) -> float | None:
+    """The college half. Kickoffs come from the cfbfastR schedule mirror.
+
+    No timezone arithmetic, unlike the NFL branch: that source states an
+    explicit UTC instant, and NCAAFAdapter asserts it is tz-aware.
+
+    Either team being FBS is enough. engine.capture reads ESPN group 80 for
+    this sport, which carries an FBS host's game whoever the visitor is, and
+    the FBS-vs-FCS openers are exactly the games that cluster on the weekends
+    this gate would be used. Being slightly inclusive here can only cause a
+    capture to run; being narrow would skip one, and a kickoff we do not
+    observe cannot be bought back afterwards.
+    """
+    import pandas as _pd
+
+    from .adapters.ncaaf import FBS, NCAAFAdapter
+
+    try:
+        df = NCAAFAdapter().seasons(season, season)
+    except Exception:
+        # A schedule we cannot read must not take the capture down with it:
+        # None simply means "no gate opinion", and the caller skips.
+        return None
+    if df.empty:
+        return None
+
+    fbs = (df["home_division"].astype(str) == FBS) | \
+          (df["away_division"].astype(str) == FBS)
+    unplayed = ~df["completed"].fillna(False).astype(bool)
+    sub = df[fbs & unplayed & df["start_time"].notna()]
+
+    best = None
+    for ko in sub["start_time"]:
+        if _pd.isna(ko):
+            continue
+        ko = ko.to_pydatetime()
         if ko < now:
             continue
         delta = (ko - now).total_seconds() / 60.0
@@ -416,17 +473,18 @@ def main() -> None:
     ap.add_argument("--sport", default="nfl", choices=sorted(LEAGUES))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--within-minutes", type=float, default=None,
-                    help="only capture if a kickoff is within N minutes; "
-                         "otherwise exit doing nothing (NFL only)")
+                    help="only capture if a kickoff for THIS sport is within "
+                         "N minutes; otherwise exit doing nothing")
     args = ap.parse_args()
 
     if args.within_minutes is not None:
-        # minutes_to_next_kickoff reads the nflverse schedule. Letting another
-        # sport through would silently gate its capture on the NFL calendar.
-        if args.sport != "nfl":
-            raise SystemExit("--within-minutes is NFL-only: it reads the "
-                             "nflverse schedule and knows no other sport")
-        mins = minutes_to_next_kickoff(args.season, datetime.now(timezone.utc))
+        # Each sport is gated on its OWN calendar. This used to refuse
+        # everything but the NFL, because the lookup could only read the
+        # nflverse schedule and gating college football on the NFL's kickoffs
+        # would have been silently wrong. It now dispatches per sport, and
+        # still refuses a sport it has no schedule for rather than guessing.
+        mins = minutes_to_next_kickoff(args.season, datetime.now(timezone.utc),
+                                       sport=args.sport)
         if mins is None or mins > args.within_minutes:
             nxt = "none scheduled" if mins is None else f"{mins:.0f} min away"
             print(f"skip: next kickoff {nxt}, window is "

@@ -327,6 +327,31 @@ function renderStatus(state){
     +'The feed rebuilds automatically.</p>';
 }
 
+/* Which market this row is ABOUT.
+   Football is a spread sport and college football emphatically so: this
+   board carried Miami at Stanford -3000/+1500, UMass at Rutgers,
+   Bethune-Cookman at UCF. Labelling those rows "MONEYLINE" and ranking them
+   by moneyline price gap describes a market almost nobody in the sport is
+   betting. Where we buy a spread, the spread leads; everywhere else the row
+   is unchanged.
+
+   Line-market sides publish the same field names as moneyline sides
+   (fair_price, best_price, best_book, gain_pts, worst_price, quotes), so
+   only the label and the choice of side differ — the row below reads
+   whichever it is handed. */
+function headline(e){
+  var spread=(e.markets||[]).filter(function(m){return m.market==="spread";})[0];
+  if(spread){
+    var s=spread.sides.slice().sort(function(a,c){
+      return (c.gain_pts||0)-(a.gain_pts||0);})[0];
+    return {side:s, label:D.esc(s.name.split(" ").pop()).toUpperCase()
+      +" "+(s.line>0?"+":"")+s.line};
+  }
+  var m=e.sides.slice().sort(function(a,c){
+    return (c.gain_pts||0)-(a.gain_pts||0);})[0];
+  return {side:m, label:D.esc(m.name.split(" ").pop()).toUpperCase()+" MONEYLINE"};
+}
+
 /* ---- radar: the widest disagreement among games not yet started ---- */
 function renderRadar(){
   var pool=[];
@@ -346,12 +371,11 @@ function renderRadar(){
   var top=(attested[0]||pool[0]);
   var sp=top.sp, ev=top.e;
   /* the interesting side = the one carrying the max gap */
-  var side=ev.sides.slice().sort(function(a,b){return (b.gain_pts||0)-(a.gain_pts||0);})[0];
+  var rHead=headline(ev), side=rHead.side;
   var single=(side.n_books||0)<2;
   el.innerHTML=
     '<div class="radar-main">'
-    +'<span class="tl">'+D.esc(SPORT_LABEL[sp]||sp)+' · MONEYLINE · '
-      +D.esc(side.name).toUpperCase()+' SIDE</span>'
+    +'<span class="tl">'+D.esc(SPORT_LABEL[sp]||sp)+' · '+rHead.label+'</span>'
     +'<div class="radar-mu"><span class="tm">'+window.Crest.team(ev.away,{size:15})+'</span>'
     +'<span class="at">AT</span><span class="tm">'+window.Crest.team(ev.home,{size:15})+'</span>'
     +'<span class="ko">'+D.esc(D.when(ev.starts))+'</span></div>'
@@ -383,9 +407,10 @@ function renderGames(){
     +'The rail shows what is live.</div>'; return; }
   var evs=b.events.slice().sort(function(a,c){return Date.parse(a.starts)-Date.parse(c.starts);});
   function pos(v,lo,hi){return hi===lo?50:Math.max(4,Math.min(96,(v-lo)/(hi-lo)*100));}
+
   var rows=evs.map(function(e){
     var isOn=started(e);
-    var best=e.sides.slice().sort(function(a,c){return (c.gain_pts||0)-(a.gain_pts||0);})[0];
+    var head=headline(e), best=head.side;
     var single=(e.n_books||0)<2;
     var move=MOVES[e.id];
     var quotes=best.quotes||[], probs=quotes.map(function(q){return D.implied(q.price);});
@@ -395,7 +420,7 @@ function renderGames(){
       +'<span class="scan-time">'+(isOn?'CLOSING SNAPSHOT':D.esc(D.when(e.starts)))+'</span>'
       +'<span class="scan-match"><b>'+window.Crest.team(e.away,{size:18})+'</b><i>at</i><b>'
         +window.Crest.team(e.home,{size:18})+'</b></span>'
-      +'<span class="scan-market"><i>'+D.esc(best.name.split(" ").pop())+' MONEYLINE</i>'
+      +'<span class="scan-market"><i>'+head.label+'</i>'
         +'<span><em>FAIR</em><b>'+D.am(best.fair_price)+'</b></span></span>'
       +'<span class="scan-disagree"><span class="scan-best"><em>BEST AVAILABLE</em><b>'
         +D.am(best.best_price)+'</b><i>'+D.esc(D.bk(best.best_book))+'</i></span>'

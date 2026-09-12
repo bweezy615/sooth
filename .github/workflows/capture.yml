@@ -45,7 +45,11 @@ jobs:
       - name: Capture free ESPN game lines
         run: python -m engine.capture --season 2026 --weeks 3
 
+      # continue-on-error stays: the free ESPN capture steps in this same job
+      # must not lose an observation to an Odds API hiccup. The guard at the
+      # bottom of the job is what keeps that from being silent.
       - name: Refresh multi-sport line board (Odds API, ~4 credits/run)
+        id: board
         run: python -m engine.lines --window-hours 36 --max-credits 40
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
@@ -88,3 +92,25 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push
           fi
+
+      # scheduled-runs-and-silent-green.md swept this workflow on 2026-08-28
+      # and ruled it "fine, deliberately", because the two unguarded ESPN steps
+      # mean a TOTAL failure is already red. The 401 outage that began
+      # 2026-09-07 06:36 UTC was not a total failure, and that is the gap: the
+      # Odds API rejected every call for days, ESPN kept answering, so this job
+      # reported green every 30 minutes with board.json frozen. It sat at
+      # 2026-09-07T06:34Z through NFL week 1, and nobody could have seen that
+      # from the Actions tab — only by reading the file's own generated_at.
+      #
+      # So the same treatment edges.yml and props-live.yml got. This sits AFTER
+      # the commit on purpose, per that doc: whatever was captured is saved
+      # first, and only then does the run go red. Green on this workflow now
+      # means the board actually refreshed.
+      - name: Fail if the line board did not refresh
+        if: always() && steps.board.outcome == 'failure'
+        run: |
+          echo "engine.lines failed - site/public/data/board.json was NOT refreshed."
+          echo "The ESPN capture above still committed; only the Odds API half is missing."
+          echo "A sustained run of these means the key or the account, not the code:"
+          echo "  docs/plans/2026-09-07-odds-api-key-401.md"
+          exit 1

@@ -52,7 +52,13 @@ concurrency:
 
 env:
   PROPS_MAX_AGE_H: "3"
-  PROPS_MAX_CREDITS: "12"
+  # 18, not 12, because two sports now have games inside the window at once.
+  # engine.props caps any single sport at half the run, so 18 buys three
+  # events each for college football and baseball rather than four for
+  # whichever one the dict reached first. This is a ceiling, not a quota: a
+  # night with one sport in season still spends 9. Twelve runs a day puts the
+  # worst case at 216 credits against a 20,000/month pool, up from 144.
+  PROPS_MAX_CREDITS: "18"
 
 jobs:
   props:
