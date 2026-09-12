@@ -62,6 +62,14 @@
      caption, so it comes up out of metadata grey */
   .mkt .sec-h .more{color:var(--ink2)}
 
+  /* a better NUMBER on offer at some book. Deliberately typed as a note and
+     not as a price cell: it is a different bet from the one the spectrum
+     above ranks, and giving it the same visual weight would read as "this is
+     the best price", which is the one thing it is not. */
+  .mkt-note{margin-top:9px;padding:7px 9px;border-radius:var(--r);
+    background:var(--g2);border:1px solid var(--hair);
+    color:var(--ink2);line-height:1.5}
+
   /* the waterline — a live table's header rule is chrome that belongs to
      us, so it is the one hue. Matches the board on /market. */
   .itab thead th{border-bottom:1px solid rgba(45,212,167,.30)}
@@ -318,6 +326,56 @@ function render(hit,moves,research,timeline){
         label:"Prices for "+s.name})
       +'</div>';
   }).join("")+'</div>';
+
+  /* ---- spread and total ----
+     College football is why this block exists. That sport is defined by the
+     mismatch — the board on 2026-09-03 carried Miami at Stanford priced
+     -3000/+1500 — and nobody bets those games on the moneyline. A page that
+     showed only the moneyline was showing the wrong market for half the
+     slate. Football buys spreads and totals; sports we only buy h2h for have
+     no ev.markets at all, so this renders nothing and costs them nothing.
+
+     The two numbers on offer are deliberately NOT merged. Price shopping at
+     the consensus number is a strictly better version of the same bet, and it
+     is what the spectrum ranks. A book hanging a different NUMBER is a
+     different bet — better only when the game lands in the gap — so it is
+     stated separately, in words, rather than folded into a "best" that would
+     imply an equivalence we have never measured. */
+  function signed(n){return (n>0?"+":"")+n;}
+  function sideNum(m,s,line){
+    return m.market==="spread" ? signed(line) : String(line);}
+  function sideHead(m,s,line){
+    return m.market==="spread"
+      ? D.esc(s.name).toUpperCase()+" "+signed(line)
+      : D.esc(s.name).toUpperCase()+" "+line;}
+  (ev.markets||[]).forEach(function(m){
+    /* A spread is meaningless without the team it belongs to: "SPREAD -6.5"
+       does not say who is laying it. The consensus number is stated from the
+       home side, so the home team names it. */
+    var title=m.market==="spread"
+      ? 'SPREAD · '+D.esc(ev.home).toUpperCase()+' '+signed(m.consensus_line)
+      : 'TOTAL · '+m.consensus_line;
+    html+='<div class="sec" data-pane="prices"><div class="sec-h"><span class="tl">'
+      +title
+      +'</span><span class="sub">the number most books are on, and what each '
+      +'charges for it</span></div>'
+      +m.sides.map(function(s){
+        var better="";
+        if(s.off_consensus) better='<div class="mkt-note tl">BETTER NUMBER · '
+          +D.esc(sideNum(m,s,s.best_line))+' at '+D.bk(s.best_line_book)
+          +' ('+D.am(s.best_line_price)+') — a different bet, not a cheaper '
+          +'price for this one.</div>';
+        return '<div class="mkt">'
+          +'<div class="sec-h"><span class="tl">'+sideHead(m,s,s.line)
+          +'</span><span class="more tl">FAIR '+D.am(s.fair_price)+'</span></div>'
+          +D.spectrum({quotes:s.quotes,fairProb:s.fair_prob,
+            fairPrice:s.fair_price,
+            label:"Prices for "+s.name+" "+sideNum(m,s,s.line)})
+          +better
+          +'</div>';
+      }).join("")
+      +'</div>';
+  });
 
   /* sportsbook comparison — both sides, one ladder */
   var books={};

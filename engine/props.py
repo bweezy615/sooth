@@ -46,6 +46,19 @@ PROP_MARKETS = {
             "player_receptions": "Receptions",
         },
     },
+    # Same three market keys as the NFL entry, deliberately: those are known
+    # to work against this API, and an unverified key would cost credits to
+    # discover. If college props turn out to be posted under different keys,
+    # the failure is already bounded — _event_props returns nothing on a
+    # non-200, and the empties counter stops paying after two events.
+    "americanfootball_ncaaf": {
+        "label": "CFB", "slug": "ncaaf",
+        "markets": {
+            "player_pass_yds": "Passing yards",
+            "player_rush_yds": "Rushing yards",
+            "player_receptions": "Receptions",
+        },
+    },
     "baseball_mlb": {
         "label": "MLB", "slug": "mlb",
         "markets": {
@@ -181,11 +194,23 @@ def collect(window_hours: float = 30, max_credits: int = 20,
         if sport_key not in live:
             continue
         cost_per_event = len(meta["markets"])   # x 1 region
+        # No single sport may take the whole run. Until college football was
+        # added this loop was first-come-first-served over one shared budget,
+        # and the sport that happened to have games inside the window ate all
+        # of it: every props run from 2026-08-31 to 2026-09-03 spent the full
+        # 12 credits and published MLB alone, because NFL week 1 was still
+        # outside the 30h window and MLB, next in the dict, took the rest.
+        # Adding a fifth sport to that scheme would not have shared the
+        # budget, only changed which sport won it.
+        sport_cap = max(cost_per_event, max_credits // 2)
+        sport_spent = 0
         events = upcoming_events(sport_key, key, session, window, now)
         rows = []
         empties = 0
         for ev in events:
             if spent + cost_per_event > max_credits:
+                break
+            if sport_spent + cost_per_event > sport_cap:
                 break
             if empties >= 2:
                 # Books aren't posting props for this sport right now
@@ -194,6 +219,7 @@ def collect(window_hours: float = 30, max_credits: int = 20,
             props, used, rem = _event_props(
                 sport_key, ev, key, session, meta["markets"])
             spent += used
+            sport_spent += used
             if rem >= 0:
                 remaining = rem
             if not props:

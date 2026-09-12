@@ -42,8 +42,25 @@ import requests
 from .schema import canonical_book
 
 API = "https://api.the-odds-api.com/v4"
-MARKETS = "h2h"           # 1 credit per sport per call
 REGIONS = "us"
+
+# The Odds API bills one credit per market per sport per call, so the market
+# list is a per-sport decision, not a global one.
+#
+# Moneyline alone is close to useless for college football and always was. The
+# sport's defining feature is the mismatch: on 2026-09-03 the board carried
+# Miami at Stanford priced -3000/+1500, UMass at Rutgers, Bethune-Cookman at
+# UCF. Shopping a -3000 moneyline moves a bettor's implied probability by a
+# fraction of a point and no one bets those games that way — they bet the
+# number. A CFB board without spreads is a board about the wrong market.
+#
+# Football therefore buys all three markets and the rest stay on moneyline.
+# That is 9 credits per run rather than 5. Measured burn over the cycle that
+# opened 2026-09-01 was ~120 credits/day against a 20,000/month pool, so the
+# increase lands near 260/day (~8k/month) with room to spare, and
+# --max-credits still bounds any single run.
+DEFAULT_MARKETS = ("h2h",)
+LINE_MARKETS = ("h2h", "spreads", "totals")
 
 # NFL is the priority; the rest fill the calendar so the board is never empty.
 # How many future games to carry for a sport with nothing inside the window,
@@ -58,12 +75,19 @@ LOOKAHEAD_EVENTS = 8
 # have been. UFC capture history stays on disk under data/capture/ufc/ - we
 # stopped publishing it, we did not delete it.
 SPORTS = {
-    "americanfootball_nfl":   {"label": "NFL", "slug": "nfl"},
-    "americanfootball_ncaaf": {"label": "CFB", "slug": "ncaaf"},
+    "americanfootball_nfl":   {"label": "NFL", "slug": "nfl",
+                               "markets": LINE_MARKETS},
+    "americanfootball_ncaaf": {"label": "CFB", "slug": "ncaaf",
+                               "markets": LINE_MARKETS},
     "baseball_mlb":           {"label": "MLB", "slug": "mlb"},
     "icehockey_nhl":          {"label": "NHL", "slug": "nhl"},
     "basketball_nba":         {"label": "NBA", "slug": "nba"},
 }
+
+
+def markets_for(meta: dict[str, Any]) -> tuple[str, ...]:
+    """Markets to buy for one sport. Absent key means moneyline only."""
+    return tuple(meta.get("markets") or DEFAULT_MARKETS)
 
 BOOK_NAMES = {
     "betus": "BetUS", "betrivers": "BetRivers", "draftkings": "DraftKings",
@@ -120,6 +144,122 @@ def _fair_prices(quotes: dict[str, list[dict]]) -> dict[str, float]:
     return {side: p / total for side, p in med.items()}
 
 
+def _key_line(point: float) -> float:
+    """A book's number, rounded to a value that compares equal across books.
+
+    Books post halves and the occasional quarter. Raw floats out of JSON do
+    not group reliably (-7.0 and -6.999999 are the same number to a bettor and
+    different keys to a dict), and a consensus computed on ungrouped floats
+    silently splits one line into several one-book lines.
+    """
+    return round(float(point), 2)
+
+
+def _consensus_line(quotes: list[dict]) -> float | None:
+    """The number the market is actually on, as one side posts it.
+
+    The MODE, not the median. Half the books on -7 and half on -7.5 has a
+    median of -7.25, which is a line no book offers and no one can bet. The
+    mode is always a real, shoppable number. Ties break toward the line more
+    books can be compared at, then toward the bettor-friendlier number so the
+    tiebreak can never quietly pick the worse of two equally-common lines.
+    """
+    if not quotes:
+        return None
+    counts: dict[float, int] = {}
+    for q in quotes:
+        counts[q["line"]] = counts.get(q["line"], 0) + 1
+    return max(counts, key=lambda ln: (counts[ln], ln))
+
+
+def _line_side(name: str, line: float, quotes: list[dict],
+               better_is_higher: bool) -> dict:
+    """One side of a line market: price shopping AT the consensus number,
+    plus the best number available anywhere.
+
+    These are two genuinely different edges and the board states both rather
+    than blending them, because they cannot be compared without a model of
+    where the game lands. Taking -105 instead of -115 on the same spread is a
+    strictly better version of the same bet. Taking +7.5 where the market is
+    +7 is a DIFFERENT bet — better whenever the game lands on 7 and identical
+    otherwise. Collapsing the two into one "best" number would be inventing a
+    cross-line equivalence we have no basis for, which is exactly the kind of
+    claim this project does not make.
+    """
+    at_line = [q for q in quotes if q["line"] == line]
+    ranked = sorted(at_line, key=lambda q: implied(q["price"]))
+    out: dict[str, Any] = {
+        "name": name,
+        "line": line,
+        "quotes": ranked,
+        "n_books": len(ranked),
+    }
+    if ranked:
+        best, worst = ranked[0], ranked[-1]
+        gain = round((implied(worst["price"]) - implied(best["price"])) * 100, 2)
+        assert gain >= 0, f"gain must be non-negative, got {gain}"
+        out.update({
+            "best_price": best["price"],
+            "best_book": canonical_book(best["book"]),
+            "worst_price": worst["price"],
+            "worst_book": canonical_book(worst["book"]),
+            "gain_pts": gain,
+        })
+
+    # The best NUMBER on offer, whatever it costs. For a spread, and for an
+    # Under, a higher line is the friendlier one; for an Over, a lower one is.
+    if quotes:
+        pick = (max if better_is_higher else min)(
+            quotes, key=lambda q: (q["line"], -implied(q["price"])))
+        out["best_line"] = pick["line"]
+        out["best_line_price"] = pick["price"]
+        out["best_line_book"] = canonical_book(pick["book"])
+        out["off_consensus"] = pick["line"] != line
+    return out
+
+
+def _line_market(kind: str, sides: dict[str, list[dict]],
+                 better_is_higher: dict[str, bool]) -> dict | None:
+    """Assemble one spread or total market for one event.
+
+    The consensus number is taken from a single named side and the opposite
+    side is read at the number that pairs with it, so the two halves always
+    describe the same bet. Deriving each side's consensus independently would
+    let a total publish Over 44.5 beside Under 45.5 — two different markets
+    presented as one, and a de-vig across them would be meaningless.
+    """
+    if len(sides) != 2 or not all(sides.values()):
+        return None
+    first, second = list(sides)
+    line = _consensus_line(sides[first])
+    if line is None:
+        return None
+    # Spread: the sides are mirrored (home -7 pairs with away +7).
+    # Total: both sides quote the same number.
+    other = -line if kind == "spread" else line
+
+    built = [_line_side(first, line, sides[first], better_is_higher[first]),
+             _line_side(second, other, sides[second], better_is_higher[second])]
+    if not all(s["n_books"] for s in built):
+        return None
+
+    fair = _fair_prices({s["name"]: s["quotes"] for s in built})
+    for s in built:
+        fp = fair.get(s["name"])
+        s["fair_prob"] = round(fp, 4) if fp else None
+        s["fair_price"] = to_american(fp) if fp else None
+        s["edge_vs_fair_pts"] = (
+            round((fp - implied(s["best_price"])) * 100, 2) if fp else None)
+
+    return {
+        "market": kind,
+        "consensus_line": line,
+        "n_books": max(s["n_books"] for s in built),
+        "max_gain_pts": max(s.get("gain_pts", 0) for s in built),
+        "sides": built,
+    }
+
+
 def _balance(headers) -> tuple[int, int]:
     """Account balance from a response we already paid for.
 
@@ -140,10 +280,11 @@ def _balance(headers) -> tuple[int, int]:
 
 def _one_sport(sport_key: str, key: str, session: requests.Session,
                window: timedelta, now: datetime,
+               markets: tuple[str, ...] = DEFAULT_MARKETS,
                ) -> tuple[list[dict], int, tuple[int, int]]:
     """Return (events, credits_spent, (balance_remaining, balance_used))."""
     r = session.get(f"{API}/sports/{sport_key}/odds", params={
-        "apiKey": key, "regions": REGIONS, "markets": MARKETS,
+        "apiKey": key, "regions": REGIONS, "markets": ",".join(markets),
         "oddsFormat": "american"}, timeout=35)
     spent = int(r.headers.get("x-requests-last", 0) or 0)
     balance = _balance(r.headers)
@@ -162,16 +303,29 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
 
         home, away = g.get("home_team", ""), g.get("away_team", "")
         quotes: dict[str, list[dict]] = {}
+        spread: dict[str, list[dict]] = {}
+        total: dict[str, list[dict]] = {}
         for b in g.get("bookmakers", []):
+            book = b.get("key", "?")
             for m in b.get("markets", []):
-                if m.get("key") != "h2h":
-                    continue
+                mkey = m.get("key")
                 for o in m.get("outcomes", []):
                     name, price = o.get("name"), o.get("price")
                     if name is None or price is None:
                         continue
-                    quotes.setdefault(name, []).append(
-                        {"book": b.get("key", "?"), "price": int(price)})
+                    if mkey == "h2h":
+                        quotes.setdefault(name, []).append(
+                            {"book": book, "price": int(price)})
+                        continue
+                    point = o.get("point")
+                    if point is None:
+                        continue
+                    q = {"book": book, "line": _key_line(point),
+                         "price": int(price)}
+                    if mkey == "spreads":
+                        spread.setdefault(name, []).append(q)
+                    elif mkey == "totals":
+                        total.setdefault(name, []).append(q)
 
         if len(quotes) < 2:
             continue
@@ -203,14 +357,38 @@ def _one_sport(sport_key: str, key: str, session: requests.Session,
                     round((fp - implied(best["price"])) * 100, 2) if fp else None),
             })
 
-        out.append({
+        # Spread and total ride alongside the moneyline rather than replacing
+        # it. `sides` is the published contract a dozen readers already parse
+        # (the desk, the game page, alerts, the X cards), and a sport we buy
+        # only h2h for has no line markets at all, so `markets` is additive
+        # and absent rather than empty when there is nothing to say.
+        built = []
+        if spread:
+            m = _line_market(
+                "spread",
+                {home: spread.get(home, []), away: spread.get(away, [])},
+                {home: True, away: True})
+            if m:
+                built.append(m)
+        if total:
+            m = _line_market(
+                "total",
+                {"Over": total.get("Over", []), "Under": total.get("Under", [])},
+                {"Over": False, "Under": True})
+            if m:
+                built.append(m)
+
+        event = {
             "id": g.get("id", ""), "home": home, "away": away,
             "starts": g["commence_time"],
             "in_window": starts <= now + window,
             "sides": sorted(sides, key=lambda s: -(s["gain_pts"] or 0)),
             "max_gain_pts": max((s["gain_pts"] for s in sides), default=0),
             "n_books": max((s["n_books"] for s in sides), default=0),
-        })
+        }
+        if built:
+            event["markets"] = built
+        out.append(event)
 
     chosen = _choose(out)
     return chosen, spent, balance
@@ -313,9 +491,11 @@ def collect(window_hours: float = 36, max_credits: int = 60,
     for sport_key, meta in SPORTS.items():
         if sport_key not in live:
             continue
-        if spent + len(MARKETS.split(",")) > max_credits:
+        markets = markets_for(meta)
+        if spent + len(markets) > max_credits:
             break
-        events, used, balance = _one_sport(sport_key, key, session, window, now)
+        events, used, balance = _one_sport(
+            sport_key, key, session, window, now, markets)
         spent += used
         if balance[0] >= 0:
             bal = balance
